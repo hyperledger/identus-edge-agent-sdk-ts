@@ -35,7 +35,6 @@ describe("Apollo Tests", () => {
     }
     // with great probability we'll see at least 75% of words after 3600 draws from 2048 possible
     expect(2048 - seenWords.length).to.be.lessThan(512);
-<<<<<<< HEAD
   });
 
   it("Should compute the right binary seed", () => {
@@ -126,7 +125,5 @@ describe("Apollo Tests", () => {
         ).to.equal(true);
       });
     });
-=======
->>>>>>> master
   });
 });
