@@ -1,0 +1,15 @@
+{
+  "name": "Kotlin-DateTime-library-kotlinx-datetime-js-ir",
+  "version": "0.4.0",
+  "main": "Kotlin-DateTime-library-kotlinx-datetime-js-ir.js",
+  "types": "Kotlin-DateTime-library-kotlinx-datetime-js-ir.d.ts",
+  "devDependencies": {
+    "dukat": "0.5.8-rc.4"
+  },
+  "dependencies": {
+    "@js-joda/core": "3.2.0"
+  },
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "bundledDependencies": []
+}

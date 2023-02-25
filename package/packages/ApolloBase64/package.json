@@ -1,0 +1,12 @@
+{
+  "name": "ApolloBase64",
+  "version": "1.6.0-alpha",
+  "main": "kotlin/ApolloBase64.js",
+  "devDependencies": {
+    "source-map-support": "0.5.21"
+  },
+  "dependencies": {},
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "bundledDependencies": []
+}

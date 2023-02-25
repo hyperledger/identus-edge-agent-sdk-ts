@@ -1,0 +1,11 @@
+{
+  "name": "kotlin-test",
+  "version": "1.7.21",
+  "customFields": {},
+  "main": "kotlin-test.js",
+  "devDependencies": {},
+  "dependencies": {},
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "bundledDependencies": []
+}

@@ -1,0 +1,17 @@
+{
+  "name": "ApolloHashing",
+  "version": "1.6.0-alpha",
+  "main": "kotlin/ApolloHashing.js",
+  "devDependencies": {
+    "source-map-support": "0.5.21",
+    "dukat": "0.5.8-rc.4"
+  },
+  "dependencies": {
+    "hash.js": "1.1.7",
+    "stream-browserify": "3.0.0",
+    "buffer": "6.0.3"
+  },
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "bundledDependencies": []
+}

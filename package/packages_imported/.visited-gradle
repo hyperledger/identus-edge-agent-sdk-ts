@@ -1,0 +1,68 @@
+{
+  "version": "9",
+  "items": {
+    "e8ad01430833279511f92a6b24949221": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.21/cb02257de8e13e8498f8e2f69f742f2d438e794d/kotlin-stdlib-common-1.7.21.jar"
+    },
+    "7b6747173c47765102529ad5fe463183": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-js/1.7.21/e4176fa95e1661a5225db3d4d55c11cf040d869b/kotlin-stdlib-js-1.7.21.jar",
+      "target": "kotlin/1.7.21"
+    },
+    "895195c673d7ea83de5af201c50e8279": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-js-runner/1.7.21/c776694bcd8ec38ab942d5ca1d896ca805c9541f/kotlin-test-js-runner-1.7.21.jar",
+      "target": "kotlin-test-js-runner/1.7.21"
+    },
+    "628e48a3cef2e3dd43f35908bef853c7": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/com.ionspin.kotlin/bignum-js/0.3.7/608d37f468a7ac775681d3fe3c2ea6baba3cf5cf/bignum-jsir-0.3.7.klib"
+    },
+    "e0bb237ddc9acaf1e85f1c550bde6b05": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-js/1.7.22/347b4084a10d4b5ec89f62f7c2401e455e01cfb9/kotlin-stdlib-js-1.7.22.jar",
+      "target": "kotlin/1.7.22"
+    },
+    "e7eddb87fe5a2b52b27b5a1bc2a5050e": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.22/5dd2c9dcf64c94b46cf4bdb6fa4035b9bb726e2e/kotlin-stdlib-common-1.7.22.jar"
+    },
+    "6a496fc5ca771b6f7ee9127497e47cb2": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin-wrappers/kotlin-web/1.0.0-pre.461/f46800f5dfbe0eda840379e483151989e563f640/kotlin-web-1.0.0-pre.461.klib"
+    },
+    "ca88847b91716bc7bd1d76368318d3e2": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin-wrappers/kotlin-js/1.0.0-pre.461/bf5e8050bf1badcd66695ab892ffebc9320d1b43/kotlin-js-1.0.0-pre.461.klib"
+    },
+    "87b37b026e9680692b36e7c4c08334c2": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-js/1.6.4/791d62c16e6fad7cc9b1e6fafe88a3d454744d99/kotlinx-coroutines-core-jsir-1.6.4.klib"
+    },
+    "489089308e6bacd4b18fc93c501bb01c": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/atomicfu-js/0.17.3/5fd992f78532945e29a1c54279eafffe2a0c95fe/atomicfu-jsir-0.17.3.klib"
+    },
+    "68b4fc3260b20bef86b65f0a39fae75a": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/atomicfu/1.6.21/f486917a9c89e5c7d5d08009d58ad810a57a7011/atomicfu-1.6.21.jar"
+    },
+    "9b6b65fb46ce5b8f339ac698cf892acf": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin-wrappers/kotlin-node/18.11.13-pre.461/efaa54f3c0d1ede69b7c84d13a992ed3d889d544/kotlin-node-18.11.13-pre.461.klib",
+      "target": "kotlin-wrappers-kotlin-node-js-ir/18.11.13-pre.461"
+    },
+    "5702b4e10f6b1ff007497763ec0755f7": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-js/1.7.21/bf1ce1885b3b8556744a12da87bc55a2da776950/kotlin-test-js-1.7.21.jar",
+      "target": "kotlin-test/1.7.21"
+    },
+    "d085c78b8c9669f64073df2b64187d47": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-test-js/1.6.4/fb67a9257d9f18db0c9c668229357faa15a2fc5a/kotlinx-coroutines-test-jsir-1.6.4.klib"
+    },
+    "e6f8215fb23aaaf229550cd496a7bede": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-json-js/1.4.1/c917f54185a5e5d0fa89fe4306459f02f43995e5/kotlinx-serialization-json-jsir-1.4.1.klib"
+    },
+    "f87e1091f3042c2a72bd4350c41785fa": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-core-js/1.4.1/f6e619b57ae5a92c2247f92e8e6712cedc0b81c2/kotlinx-serialization-core-jsir-1.4.1.klib"
+    },
+    "c757ea0193ef52274111b7dfcef33aa3": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-datetime-js/0.4.0/254f7fbd94ca83b23368b6abdd89d9ad72e0a832/kotlinx-datetime-jsir-0.4.0.klib",
+      "target": "Kotlin-DateTime-library-kotlinx-datetime-js-ir/0.4.0"
+    },
+    "6d211043ee87110688e39f1d87b88fb6": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-core-js/1.3.2/d5141c34ed69cb7b122a0ffbbc7692aefe3eefd4/kotlinx-serialization-core-jsir-1.3.2.klib"
+    },
+    "ee43f6a6ced8da47fcfa9f33c31e8474": {
+      "src": "/Users/ribo/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio-js/3.2.0/f38125aaf2ff6107cc53f45d83a4652b8422acce/okio-jsir-3.2.0.klib"
+    }
+  }
+}

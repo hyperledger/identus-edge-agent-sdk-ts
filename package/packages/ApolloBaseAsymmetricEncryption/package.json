@@ -1,0 +1,20 @@
+{
+  "name": "ApolloBaseAsymmetricEncryption",
+  "version": "1.6.0-alpha",
+  "main": "kotlin/ApolloBaseAsymmetricEncryption.js",
+  "devDependencies": {
+    "source-map-support": "0.5.21",
+    "dukat": "0.5.8-rc.4"
+  },
+  "dependencies": {
+    "elliptic": "6.5.4",
+    "@types/elliptic": "6.4.14",
+    "bip32": "2.0.6",
+    "bip39": "3.0.4",
+    "stream-browserify": "3.0.0",
+    "buffer": "6.0.3"
+  },
+  "peerDependencies": {},
+  "optionalDependencies": {},
+  "bundledDependencies": []
+}

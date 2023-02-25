@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+
+
+  "typescript.tsdk": "./node_modules/typescript/lib",
+
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true
+  },
+
+  "eslint.validate": ["typescript"]
+}
