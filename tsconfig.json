@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "outDir": "build",
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "declarationDir": "build",
+    "declaration": true,
+    "esModuleInterop": false,
+    "inlineSourceMap": false,
+    "lib": ["esnext"],
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "pretty": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "strict": true,
+    "traceResolution": false,
+    "types": ["node", "mocha"],
+    "typeRoots": ["./"],
+    "paths": {
+      "stream": ["./node_modules/readable-stream"],
+      "@input-output-hk/atala-prism-sdk": [
+        "./node_modules/@input-output-hk/atala-prism-sdk"
+      ]
+    }
+  },
+  "compileOnSave": false,
+  "exclude": ["node_modules", "build"],
+  "include": ["."]
+}
