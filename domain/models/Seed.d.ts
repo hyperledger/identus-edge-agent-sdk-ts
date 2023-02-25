@@ -1,3 +1,3 @@
 export interface Seed {
-    value: Int8Array;
+  value: Uint8Array;
 }
