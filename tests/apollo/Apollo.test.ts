@@ -9,11 +9,6 @@ let apollo: Apollo;
 let keyPair: KeyPair;
 
 describe("Apollo Tests", () => {
-  const testData = new Uint8Array([
-    -107, 101, 68, 118, 27, 74, 29, 50, -32, 72, 47, -127, -49, 3, -8, -55, -63,
-    -66, 46, 125,
-  ]);
-
   beforeEach(() => {
     apollo = new Apollo();
   });
