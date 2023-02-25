@@ -1,4 +1,5 @@
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
+import * as bip39 from "bip39";
 import * as elliptic from "elliptic";
 import {
   Seed,
@@ -52,13 +53,24 @@ export default class Apollo implements ApolloInterface {
     }
   }
   createRandomMnemonics(): MnemonicWordList {
-    throw new Error("Method not implemented.");
+    return bip39.generateMnemonic(256).split(" ") as MnemonicWordList;
   }
-  createSeed(mnemonics: MnemonicWordList, passphrase: string): Seed {
-    throw new Error("Method not implemented.");
+  createSeed(mnemonics: MnemonicWordList, passphrase?: string): Seed {
+    const mnemonicString = mnemonics.join(" ");
+    bip39.validateMnemonic(mnemonicString);
+    const seed = bip39.mnemonicToSeedSync(mnemonicString, passphrase);
+    return {
+      value: seed,
+    };
   }
-  createRandomSeed(passphrase?: string | undefined): SeedWords {
-    throw new Error("Method not implemented.");
+  createRandomSeed(passphrase?: string): SeedWords {
+    const mnemonics = this.createRandomMnemonics();
+    const seed = this.createSeed(mnemonics, passphrase);
+
+    return {
+      seed: seed,
+      mnemonics: mnemonics,
+    };
   }
   createKeyPairFromKeyCurve(seed: Seed, curve: KeyCurve): KeyPair {
     return this.getKeyPairForCurve(seed, curve);
