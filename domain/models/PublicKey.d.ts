@@ -1,9 +1,9 @@
-import { KeyCurve } from './KeyCurve';
+import { KeyCurve } from "./KeyCurve";
 export interface PublicKey {
-    curve: KeyCurve;
-    value: Uint8Array;
+    keyCurve: KeyCurve;
+    value: string;
 }
 export interface CompressedPublicKey {
     uncompressed: PublicKey;
-    value: Uint8Array;
+    value: string;
 }

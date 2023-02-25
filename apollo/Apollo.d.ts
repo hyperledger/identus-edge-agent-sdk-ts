@@ -1,7 +1,8 @@
-import { default as ApolloInterface } from '../domain/buildingBlocks/Apollo';
-import { Seed, SeedWords, KeyCurve, KeyPair, PrivateKey, PublicKey, CompressedPublicKey, Signature } from '../domain/models';
-import { MnemonicWordList } from '../domain/models/WordList';
+import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
+import { Seed, SeedWords, KeyCurve, KeyPair, PrivateKey, PublicKey, CompressedPublicKey, Signature } from "../domain/models";
+import { MnemonicWordList } from "../domain/models/WordList";
 export default class Apollo implements ApolloInterface {
+    private getKeyPairForCurve;
     createRandomMnemonics(): MnemonicWordList;
     createSeed(mnemonics: MnemonicWordList, passphrase: string): Seed;
     createRandomSeed(passphrase?: string | undefined): SeedWords;
