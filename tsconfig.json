@@ -20,7 +20,7 @@
     "noEmitOnError": true,
     "strict": true,
     "traceResolution": false,
-    "types": ["node"],
+    "types": ["node", "mocha"],
     "typeRoots": ["./"],
     "paths": {
       "stream": ["./node_modules/readable-stream"],
