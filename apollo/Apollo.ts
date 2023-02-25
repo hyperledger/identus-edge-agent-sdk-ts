@@ -13,6 +13,10 @@ import {
   Curve,
 } from "../domain/models";
 import { MnemonicWordList } from "../domain/models/WordList";
+import {
+  MnemonicLengthException,
+  MnemonicWordException,
+} from "../domain/models/errors/Mnemonic";
 
 const EC = elliptic.ec;
 const EDDSA = elliptic.eddsa;
@@ -23,7 +27,7 @@ const eddsa = new EDDSA("ed25519");
 export default class Apollo implements ApolloInterface {
   private getKeyPairForCurve(seed: Seed, curve: KeyCurve): KeyPair {
     if (curve.curve == Curve.SECP256K1 || curve.curve == Curve.X25519) {
-      const keyPair = ec.genKeyPair({ entropy: seed.value });
+      const keyPair = ec.genKeyPair({ entropy: Buffer.from(seed.value) });
       return {
         keyCurve: curve,
         privateKey: {
@@ -32,7 +36,7 @@ export default class Apollo implements ApolloInterface {
         },
         publicKey: {
           keyCurve: curve,
-          value: keyPair.getPublic().encode("hex", true),
+          value: keyPair.getPublic().encode("hex", false),
         },
       };
     } else if (curve.curve == Curve.ED25519) {
@@ -57,7 +61,17 @@ export default class Apollo implements ApolloInterface {
   }
   createSeed(mnemonics: MnemonicWordList, passphrase?: string): Seed {
     const mnemonicString = mnemonics.join(" ");
-    bip39.validateMnemonic(mnemonicString);
+
+    if (mnemonics.length % 3 != 0) {
+      throw new MnemonicLengthException(
+        "Word list size must be multiple of three words"
+      );
+    } else if (mnemonics.length <= 0) {
+      throw new MnemonicLengthException("Word list is empty");
+    }
+    if (!bip39.validateMnemonic(mnemonicString, bip39.wordlists.english)) {
+      throw new MnemonicWordException(`Invalid mnemonic word/s`);
+    }
     const seed = bip39.mnemonicToSeedSync(mnemonicString, passphrase);
     return {
       value: seed,
@@ -66,7 +80,6 @@ export default class Apollo implements ApolloInterface {
   createRandomSeed(passphrase?: string): SeedWords {
     const mnemonics = this.createRandomMnemonics();
     const seed = this.createSeed(mnemonics, passphrase);
-
     return {
       seed: seed,
       mnemonics: mnemonics,
@@ -82,7 +95,9 @@ export default class Apollo implements ApolloInterface {
     const keyPair = ec.keyFromPublic(publicKey.value);
     return {
       uncompressed: {
-        keyCurve: publicKey.keyCurve,
+        keyCurve: {
+          curve: Curve.SECP256K1,
+        },
         value: keyPair.getPublic().encode("hex", true),
       },
       value: keyPair.getPublic().encode("hex", true),
@@ -91,7 +106,17 @@ export default class Apollo implements ApolloInterface {
   compressedPublicKeyFromCompresedData(
     compressedData: Uint8Array
   ): CompressedPublicKey {
-    throw new Error("Method not implemented.");
+    const point = ec.curve.base.decodePoint(compressedData).encode("hex");
+    const keyPair = ec.keyFromPublic(Buffer.from(point, "hex"));
+    return {
+      uncompressed: {
+        keyCurve: {
+          curve: Curve.SECP256K1,
+        },
+        value: keyPair.getPublic().encode("hex", true),
+      },
+      value: keyPair.getPublic().encode("hex", true),
+    };
   }
   publicKeyFromPoints(
     curve: KeyCurve,
@@ -108,7 +133,11 @@ export default class Apollo implements ApolloInterface {
     };
   }
   publicKeyFromPoint(curve: KeyCurve, x: Uint8Array): PublicKey {
-    throw new Error("Method not implemented.");
+    const publicKey = ec.keyFromPublic(Buffer.from(x));
+    return {
+      keyCurve: curve,
+      value: publicKey.getPublic().encode("hex", true),
+    };
   }
   signByteArrayMessage(privateKey: PrivateKey, message: Uint8Array): Signature {
     const messageBuffer = Buffer.from(message);
