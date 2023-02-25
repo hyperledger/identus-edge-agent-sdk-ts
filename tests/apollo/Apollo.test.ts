@@ -1,10 +1,9 @@
 import { expect, assert } from "chai";
-import Apollo from "../apollo/Apollo";
-import { ECConfig } from "../config/ECConfig";
-import { Curve, KeyPair, KeyCurve } from "../domain/models";
-import { MnemonicChecksumException } from "../domain/models/errors/Mnemonic";
-import { MnemonicWordList } from "../domain/models/WordList";
-import { bip39Vectors } from "./apollo/derivation/BipVectors";
+import Apollo from "../../apollo/Apollo";
+import { ECConfig } from "../../config/ECConfig";
+import { Curve, KeyPair } from "../../domain/models";
+import { MnemonicWordList } from "../../domain/models/WordList";
+import { bip39Vectors } from "./derivation/BipVectors";
 
 let apollo: Apollo;
 let keyPair: KeyPair;
@@ -36,6 +35,7 @@ describe("Apollo Tests", () => {
     }
     // with great probability we'll see at least 75% of words after 3600 draws from 2048 possible
     expect(2048 - seenWords.length).to.be.lessThan(512);
+<<<<<<< HEAD
   });
 
   it("Should compute the right binary seed", () => {
@@ -126,5 +126,7 @@ describe("Apollo Tests", () => {
         ).to.equal(true);
       });
     });
+=======
+>>>>>>> master
   });
 });
