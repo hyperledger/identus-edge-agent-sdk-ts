@@ -27,7 +27,8 @@
     "build:node-esm": "rm -rf build/node/es && npx rollup -c rollup/node/rollup.es.js",
     "build:browser": "rm -rf build/browser/cjs && npx rollup -c rollup/browser/rollup.cjs.js",
     "build:browser-esm": "rm -rf build/browser/es && npx rollup -c rollup/browser/rollup.es.js",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
+    "generate-parser": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -48,6 +49,7 @@
     "@types/mocha": "^10.0.1",
     "@types/sinon": "^10.0.13",
     "@types/uuid": "^9.0.1",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
     "arraybuffer-loader": "^1.0.8",
     "babel-loader": "^8.2.2",
     "babel-plugin-add-module-exports": "^1.0.4",
@@ -90,6 +92,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4",
     "bip39": "^3.1.0",
     "elliptic": "^6.5.4",
     "uuid": "^9.0.0"
