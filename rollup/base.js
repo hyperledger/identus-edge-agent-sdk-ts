@@ -29,6 +29,7 @@ export default (mode, type) => {
         jsnext: true,
         main: true,
         browser: true,
+        preferBuiltins: true,
       }),
       cleanup(),
     ],
@@ -56,6 +57,7 @@ export default (mode, type) => {
       "@scure/bip39/wordlists/english",
       "google-protobuf/google/protobuf/timestamp_pb",
       "@stablelib/sha256",
+      "Buffer",
     ],
   };
 };

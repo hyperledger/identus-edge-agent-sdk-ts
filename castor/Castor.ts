@@ -7,6 +7,7 @@ import {
   KeyPair,
   DIDDocument,
   PrismDIDMethodId,
+  Curve,
 } from "../domain/models";
 import {
   getUsageId,
@@ -20,9 +21,17 @@ import {
   Service as ProtoService,
 } from "./protos/protos";
 
+import * as PeerDID from "@aviarytech/did-peer";
+import { IDIDDocumentServiceDescriptor } from "@aviarytech/did-peer/interfaces";
 import { loadSync } from "protobufjs";
 import { SHA256 } from "@stablelib/sha256";
-
+import {
+  PeerDIDKeys,
+  VerificationMethodTypeAgreement,
+  VerificationMethodTypeAuthentication,
+} from "./types/PeerDIDKeys";
+import { CastorError } from "domain/models/Errors";
+import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
 
@@ -33,10 +42,10 @@ export default class Castor implements CastorInterface {
   parseDID(did: string): DID {
     return DIDParser.parse(did);
   }
-  createPrismDID(
+  async createPrismDID(
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
-  ): DID {
+  ): Promise<DID> {
     const operation = new AtalaOperation();
 
     const id = getUsageId(Usage.MASTER_KEY);
@@ -80,12 +89,67 @@ export default class Castor implements CastorInterface {
 
     return new DID("did", "prism", methodSpecificId.toString());
   }
-  createPeerDID(keyPairs: KeyPair[], services: Service[]): DID {
+
+  private extractPeerDIDKeysFromKeyPairs(keyPairs: KeyPair[]): PeerDIDKeys {
+    return keyPairs.reduce(
+      ({ encryptionKeys, signingKeys }, currentKeyPair) => {
+        if (currentKeyPair.keyCurve.curve == Curve.ED25519) {
+          signingKeys.push({
+            id: "",
+            type: VerificationMethodTypeAuthentication.ED25519_VERIFICATION_KEY_2020,
+            controller: "",
+          });
+          return { encryptionKeys, signingKeys };
+        } else if (currentKeyPair.keyCurve.curve == Curve.X25519) {
+          encryptionKeys.push({
+            id: "",
+            type: VerificationMethodTypeAgreement.X25519_KEY_AGREEMENT_KEY_2020,
+            controller: "",
+          });
+          return { encryptionKeys, signingKeys };
+        } else {
+          throw new CastorError.InvalidKeyError();
+        }
+      },
+      {
+        encryptionKeys: [],
+        signingKeys: [],
+      } as PeerDIDKeys
+    );
+  }
+
+  async createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
+    const service: IDIDDocumentServiceDescriptor[] = services.map(
+      ({ id, type, serviceEndpoint: { uri, accept } }) => ({
+        id: id,
+        type: type[0]!,
+        serviceEndpoint: uri,
+        routingKeys: [],
+        accepts: accept,
+      })
+    );
+
+    const didPeerKeys = this.extractPeerDIDKeysFromKeyPairs(keyPairs);
+    const peerDID = await PeerDID.create(
+      2,
+      didPeerKeys.signingKeys,
+      didPeerKeys.encryptionKeys,
+      service[0]
+    );
+
+    return DID.fromString(peerDID);
+  }
+
+  async resolveDID(did: string): Promise<DIDDocument> {
+    const method = DID.fromString(did).method;
+
+    if (method === PeerDIDResolver.method) {
+      return PeerDIDResolver.resolve(did);
+    }
+
     throw new Error("Method not implemented.");
   }
-  resolveDID(did: string): Promise<DIDDocument> {
-    throw new Error("Method not implemented.");
-  }
+
   verifySignature(
     did: DID,
     challenge: Uint8Array,

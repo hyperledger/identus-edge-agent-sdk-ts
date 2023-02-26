@@ -9,4 +9,5 @@ export * from "./DID";
 export * from "./DIDDocument";
 export * from "./DIDUrl";
 export * from "./PrismDIDMethodId";
+export * from "./DIDResolver";
 export type JsonString = string;

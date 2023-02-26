@@ -13,8 +13,8 @@ export class ServiceEndpoint {
 
 export class VerificationMethod {
   constructor(
-    public id: DIDUrl,
-    public controller: DID,
+    public id: string,
+    public controller: string,
     public type: string,
     public publicKeyJwk?: Map<string, string>,
     public publicKeyMultibase?: string

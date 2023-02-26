@@ -43,9 +43,9 @@
     "build:browser-esm": "rm -rf build/browser/es && npx rollup -c rollup/browser/rollup.es.js",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
-    "protos": "rm -rf castor/protos/generated && mkdir -p castor/protos/generated && yarn protos:node && yarn protos:common",
-    "protos:node": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/generated\"  node_modules/@input-output-hk/atala-prism-protos/node_models.proto",
-    "protos:common": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/generated\"  node_modules/@input-output-hk/atala-prism-protos/common_models.proto"
+    "protos": "rm -rf castor/protos/_generated && mkdir -p castor/protos/_generated && yarn protos:node && yarn protos:common",
+    "protos:node": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/_generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/_generated\"  node_modules/@input-output-hk/atala-prism-protos/node_models.proto",
+    "protos:common": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/_generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/_generated\"  node_modules/@input-output-hk/atala-prism-protos/common_models.proto"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
@@ -63,11 +63,7 @@
     "@types/sinon": "^10.0.13",
     "@types/uuid": "^9.0.1",
     "antlr4ts-cli": "^0.5.0-alpha.4",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-add-module-exports": "^1.0.4",
-    "babel-plugin-nameof-js": "^0.0.2",
     "chai": "^4.3.7",
-    "clean-webpack-plugin": "^4.0.0",
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "rollup": "^2.68.0",
@@ -86,15 +82,17 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "@aviarytech/did-peer": "^0.0.19",
     "@input-output-hk/atala-prism-protos": "1.4.1",
     "@input-output-hk/atala-prism-sdk": "1.4.1",
     "@scure/bip39": "^1.1.1",
+    "@sicpa_open_source/peer-did-ts": "^0.2.0",
     "@stablelib/sha256": "^1.0.1",
     "antlr4ts": "^0.5.0-alpha.4",
+    "bn.js": "^5.2.1",
     "elliptic": "^6.5.4",
     "google-protobuf": "^3.21.2",
     "proto3-json-serializer": "^1.1.0",
-    "uuid": "^9.0.0",
-    "bn.js": "^5.2.1"
+    "uuid": "^9.0.0"
   }
 }
