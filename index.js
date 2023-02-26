@@ -1,3 +1,4 @@
-const hola = require("./build/node/cjs");
+const { Apollo } = require("./build/node/cjs");
 
-console.log(hola);
+const apollo = new Apollo();
+console.log(apollo.test());

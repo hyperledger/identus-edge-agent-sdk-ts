@@ -21,7 +21,7 @@ import {
 } from "./protos/protos";
 
 import { loadSync } from "protobufjs";
-import * as crypto from "crypto";
+import { SHA256 } from "@stablelib/sha256";
 
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
@@ -69,11 +69,10 @@ export default class Castor implements CastorInterface {
     const encodedState = Buffer.from(
       encodableOperation.encode(operation.toObject()).finish()
     );
-    const stateHash = crypto
-      .createHash("sha256")
-      .update(encodedState.toString("hex"))
-      .digest()
-      .toString("hex");
+    const sha256 = new SHA256();
+    const stateHash = Buffer.from(
+      sha256.update(encodedState).digest()
+    ).toString("hex");
 
     const base64State = encodedState.toString("base64");
 

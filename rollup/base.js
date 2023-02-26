@@ -55,6 +55,7 @@ export default (mode, type) => {
       "elliptic",
       "@scure/bip39/wordlists/english",
       "google-protobuf/google/protobuf/timestamp_pb",
+      "@stablelib/sha256",
     ],
   };
 };
