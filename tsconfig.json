@@ -20,7 +20,7 @@
     "noEmitOnError": false,
     "strict": true,
     "traceResolution": false,
-    "types": ["node", "mocha"],
+    "types": ["mocha"],
     "typeRoots": ["./types"],
     "paths": {
       "protos": ["castor/protos/generated"],
