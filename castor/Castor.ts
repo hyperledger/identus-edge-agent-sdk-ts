@@ -19,7 +19,8 @@ import {
   CreateDIDOperation,
   Service as ProtoService,
 } from "./protos/protos";
-import * as protobuf from "protobufjs";
+
+import { loadSync } from "protobufjs";
 import * as crypto from "crypto";
 
 export default class Castor implements CastorInterface {
@@ -61,9 +62,9 @@ export default class Castor implements CastorInterface {
 
     operation.setCreateDid(didOperation);
 
-    const encodableOperation = protobuf
-      .loadSync("./protos/node_models.proto")
-      .lookupType("AtalaOperation");
+    const encodableOperation = loadSync(
+      "./protos/node_models.proto"
+    ).lookupType("AtalaOperation");
 
     const encodedState = Buffer.from(
       encodableOperation.encode(operation.toObject()).finish()

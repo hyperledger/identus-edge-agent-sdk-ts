@@ -1,5 +1,7 @@
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
-import * as bip39 from "bip39";
+import * as bip39 from "@scure/bip39";
+import { wordlist } from "@scure/bip39/wordlists/english";
+
 import * as elliptic from "elliptic";
 import {
   Seed,
@@ -57,7 +59,7 @@ export default class Apollo implements ApolloInterface {
     }
   }
   createRandomMnemonics(): MnemonicWordList {
-    return bip39.generateMnemonic(256).split(" ") as MnemonicWordList;
+    return bip39.generateMnemonic(wordlist, 256).split(" ") as MnemonicWordList;
   }
   createSeed(mnemonics: MnemonicWordList, passphrase?: string): Seed {
     const mnemonicString = mnemonics.join(" ");
@@ -69,7 +71,7 @@ export default class Apollo implements ApolloInterface {
     } else if (mnemonics.length <= 0) {
       throw new MnemonicLengthException("Word list is empty");
     }
-    if (!bip39.validateMnemonic(mnemonicString, bip39.wordlists.english)) {
+    if (!bip39.validateMnemonic(mnemonicString, wordlist)) {
       throw new MnemonicWordException(`Invalid mnemonic word/s`);
     }
     const seed = bip39.mnemonicToSeedSync(mnemonicString, passphrase);

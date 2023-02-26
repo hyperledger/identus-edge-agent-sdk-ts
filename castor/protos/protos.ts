@@ -28,7 +28,7 @@ var global = function () {
   return Function("return this")();
 }.call(null);
 
-import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb.js";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 goog.object.extend(proto, google_protobuf_timestamp_pb);
 goog.exportSymbol("proto.atala.prism.AddKeyAction", null, global);

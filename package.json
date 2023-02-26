@@ -35,9 +35,9 @@
     "build:browser-esm": "rm -rf build/browser/es && npx rollup -c rollup/browser/rollup.es.js",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
-    "protos": "rm -rf protos/generated && mkdir -p protos/generated && yarn protos:node && yarn protos:common",
-    "protos:node": "protoc -Iprotos --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./protos/generated\" --js_out=\"import_style=commonjs,binary:./protos/generated\"  protos/node_models.proto",
-    "protos:common": "protoc -Iprotos --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./protos/generated\" --js_out=\"import_style=commonjs,binary:./protos/generated\"  protos/common_models.proto"
+    "protos": "rm -rf castor/protos/generated && mkdir -p castor/protos/generated && yarn protos:node && yarn protos:common",
+    "protos:node": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/generated\"  node_modules/@input-output-hk/atala-prism-protos/node_models.proto",
+    "protos:common": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/generated\"  node_modules/@input-output-hk/atala-prism-protos/common_models.proto"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -51,6 +51,7 @@
     "@input-output-hk/atala-prism-protos": "1.4.1",
     "@input-output-hk/atala-prism-sdk": "1.4.1",
     "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^3.0.0",
     "@rollup/plugin-terser": "^0.4.0",
@@ -101,9 +102,10 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@scure/bip39": "^1.1.1",
     "antlr4ts": "^0.5.0-alpha.4",
-    "bip39": "^3.1.0",
     "elliptic": "^6.5.4",
+    "google-protobuf": "^3.21.2",
     "proto3-json-serializer": "^1.1.0",
     "uuid": "^9.0.0"
   }

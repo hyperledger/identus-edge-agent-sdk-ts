@@ -3,6 +3,7 @@ import terser from "@rollup/plugin-terser";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
+import json from "@rollup/plugin-json";
 
 export default (mode, type) => {
   return {
@@ -14,6 +15,7 @@ export default (mode, type) => {
     },
     plugins: [
       ignore(["@input-output-hk/atala-prism-sdk"]),
+      json(),
       typescript({
         compilerOptions: {
           declaration: true,
@@ -32,8 +34,6 @@ export default (mode, type) => {
     ],
     external: [
       "@input-output-hk/atala-prism-sdk",
-      "elliptic",
-      "bn.js",
       "antlr4ts",
       "antlr4ts/Lexer",
       "antlr4ts/VocabularyImpl",
@@ -47,11 +47,14 @@ export default (mode, type) => {
       "antlr4ts/ParserRuleContext",
       "antlr4ts/DefaultErrorStrategy",
       "antlr4ts/tree/ParseTreeWalker",
-      "AtalaOperation",
-      "KeyUsage",
-      "PublicKey",
-      "protobufjs",
       "antlr4ts/misc/Utils",
+      "loadSync",
+      "google-protobuf",
+      "protobufjs",
+      "@scure/bip39",
+      "elliptic",
+      "@scure/bip39/wordlists/english",
+      "google-protobuf/google/protobuf/timestamp_pb",
     ],
   };
 };
