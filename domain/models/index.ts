@@ -8,5 +8,5 @@ export * from "./Signature";
 export * from "./DID";
 export * from "./DIDDocument";
 export * from "./DIDUrl";
-
+export * from "./PrismDIDMethodId";
 export type JsonString = string;

@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "module": "esnext",
     "target": "esnext",
-    "outDir": "build",
-    "allowJs": false,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "declarationDir": "build",
-    "declaration": true,
-    "esModuleInterop": false,
+
+    "esModuleInterop": true,
     "inlineSourceMap": false,
     "lib": ["esnext"],
     "listEmittedFiles": false,
@@ -15,21 +14,24 @@
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "pretty": true,
+    "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "noEmitOnError": true,
+    "noEmitOnError": false,
     "strict": true,
     "traceResolution": false,
     "types": ["node", "mocha"],
-    "typeRoots": ["./"],
+    "typeRoots": ["./types"],
     "paths": {
-      "stream": ["./node_modules/readable-stream"],
-      "@input-output-hk/atala-prism-sdk": [
-        "./node_modules/@input-output-hk/atala-prism-sdk"
-      ]
+      "protos": ["castor/protos/generated"],
+      "stream": ["./node_modules/readable-stream"]
     }
   },
   "compileOnSave": false,
-  "exclude": ["node_modules", "build"],
-  "include": ["."]
+  "exclude": ["node_modules", "build", "rollup"],
+  "include": [".", "protos.ts"],
+  "typeAcquisition": {
+    "enable": true,
+    "include": ["node"]
+  }
 }
