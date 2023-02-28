@@ -94,7 +94,7 @@ export default class Apollo implements ApolloInterface {
     return this.getKeyPairForCurve(seed, privateKey.keyCurve);
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
-    const keyPair = ec.keyFromPublic(publicKey.value);
+    const keyPair = ec.keyFromPublic(Buffer.from(publicKey.value, "hex"));
     return {
       uncompressed: {
         keyCurve: {
@@ -108,7 +108,7 @@ export default class Apollo implements ApolloInterface {
   compressedPublicKeyFromCompresedData(
     compressedData: Uint8Array | string
   ): CompressedPublicKey {
-    const point = ec.curve.base.decodePoint(compressedData).encode("hex");
+    const point = ec.curve.decodePoint(compressedData).encode("hex");
     const keyPair = ec.keyFromPublic(Buffer.from(point, "hex"));
     return {
       uncompressed: {

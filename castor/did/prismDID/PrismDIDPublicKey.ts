@@ -137,7 +137,7 @@ export class PrismDIDPublicKey {
         data: Buffer.from(
           this.apollo.compressedPublicKeyFromCompresedData(
             Buffer.from(this.keyData.value, "hex")
-          ).value
+          ).uncompressed.value
         ),
       });
 

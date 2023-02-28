@@ -1,3 +1,4 @@
+import path from "path";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
@@ -72,19 +73,13 @@ export default class Castor implements CastorInterface {
       create_did: didOperation,
     });
 
-    const encodableOperation = loadSync(
-      "./protos/node_models.proto"
-    ).lookupType("AtalaOperation");
-
-    const encodedState = Buffer.from(
-      encodableOperation.encode(operation.toObject()).finish()
-    );
+    const encodedState = Buffer.from(operation.serializeBinary());
     const sha256 = new SHA256();
     const stateHash = Buffer.from(
       sha256.update(encodedState).digest()
     ).toString("hex");
 
-    const base64State = encodedState.toString("base64");
+    const base64State = encodedState.toString("base64url");
 
     const methodSpecificId = new PrismDIDMethodId([stateHash, base64State]);
 

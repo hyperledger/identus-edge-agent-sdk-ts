@@ -11,10 +11,21 @@ import {
   VerificationMethods as DIDDocumentVerificationMethods,
   Service as DIDDocumentService,
   Services as DIDDocumentServices,
+  ServiceEndpoint as DIDDocumentServiceEndpoint,
+  Authentication as DIDDocumentAuthentication,
   DID,
+  Curve,
+  DIDUrl,
+  DIDDocumentCoreProperty,
 } from "../../domain/models";
 
 import * as DIDParser from "../parser/DIDParser";
+import * as Protos from "../../castor/protos/node_models";
+import {
+  getUsage,
+  getUsageId,
+  PrismDIDPublicKey,
+} from "../../castor/did/prismDID/PrismDIDPublicKey";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method: string = "prism";
@@ -30,10 +41,22 @@ export class LongFormPrismDIDResolver implements DIDResolver {
       prismDID.stateHash,
       Buffer.from(prismDID.encodedState, "base64url")
     );
-
     const servicesProperty = new DIDDocumentServices(services);
-    //const verificationMethodsProperty = new DIDDocumentVerificationMethods();
-    throw new Error();
+    const verificationMethodsProperty = new DIDDocumentVerificationMethods([
+      ...verificationMethods.values(),
+    ]);
+    const coreProperties: DIDDocumentCoreProperty[] = [];
+    const authenticate: DIDDocumentAuthentication[] = [];
+
+    for (const [key, value] of verificationMethods) {
+      authenticate.push(new DIDDocumentAuthentication([key], [value]));
+    }
+
+    coreProperties.push(...authenticate);
+    coreProperties.push(servicesProperty);
+    coreProperties.push(verificationMethodsProperty);
+
+    return new DIDDocument(did, coreProperties);
   }
 
   private decodeState(
@@ -43,54 +66,66 @@ export class LongFormPrismDIDResolver implements DIDResolver {
   ): [Map<string, DIDDocumentVerificationMethod>, DIDDocumentService[]] {
     try {
       const verifyEncodedState = new SHA256().update(encodedData).digest();
-      const verifyEncodedStateHex = verifyEncodedState.toString();
+      const verifyEncodedStateHex = verifyEncodedState;
 
-      if (stateHash !== verifyEncodedStateHex) {
+      if (
+        Buffer.from(verifyEncodedState).toString("hex") !==
+        Buffer.from(verifyEncodedStateHex).toString("hex")
+      ) {
         throw new CastorError.InitialStateOfDIDChanged();
       }
 
       const encodableOperation = loadSync(
-        "./protos/node_models.proto"
+        "castor/protos/node_models.proto"
       ).lookupType("AtalaOperation");
 
-      const operation = encodableOperation.decode(encodedData);
+      const operation = encodableOperation.decode(encodedData) as any;
 
-      // const publicKeys =
-      //   operation.createDid?.didData?.publicKeys?.map((key) => {
-      //     try {
-      //       return new PrismDIDPublicKey(apollo, key);
-      //     } catch (e) {
-      //       throw e;
-      //     }
-      //   }) || [];
+      const publicKeys: PrismDIDPublicKey[] =
+        operation.createDid?.didData?.publicKeys?.map(
+          (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
+            return new PrismDIDPublicKey(
+              this.apollo,
+              getUsageId(getUsage(key.usage)),
+              getUsage(key.usage),
+              {
+                keyCurve: {
+                  curve: Curve.SECP256K1,
+                },
+                value: key.key_data,
+              }
+            );
+          }
+        ) || [];
 
-      // const services =
-      //   operation.createDid?.didData?.services?.map((service) => {
-      //     return new DIDDocument.Service(
-      //       service.id,
-      //       [service.type],
-      //       new DIDDocument.ServiceEndpoint(service.serviceEndpoint[0])
-      //     );
-      //   }) || [];
+      const services =
+        operation.createDid?.didData?.services?.map(
+          (service: Protos.io.iohk.atala.prism.protos.Service) => {
+            return new DIDDocumentService(
+              service.id,
+              [service.type],
+              new DIDDocumentServiceEndpoint(service.service_endpoint[0])
+            );
+          }
+        ) || [];
 
-      // const verificationMethods = publicKeys.reduce(
-      //   (partialResult, publicKey) => {
-      //     const didUrl = new DIDUrl(did, publicKey.id);
-      //     const method = new DIDDocument.VerificationMethod(
-      //       didUrl,
-      //       did,
-      //       publicKey.keyData.curve.curve.value,
-      //       publicKey.keyData.value.base64Encoded
-      //     );
-      //     return {
-      //       ...partialResult,
-      //       [didUrl.string()]: method,
-      //     };
-      //   },
-      //   {}
-      // );
-      throw new Error();
-      //return [verificationMethods, services];
+      const verificationMethods = publicKeys.reduce(
+        (partialResult, publicKey) => {
+          const didUrl = new DIDUrl(did, [], new Map(), publicKey.id);
+          const method = new DIDDocumentVerificationMethod(
+            didUrl.string(),
+            did.toString(),
+            publicKey.keyData.keyCurve.curve,
+            undefined,
+            publicKey.keyData.value
+          );
+          partialResult.set(didUrl.string(), method);
+          return partialResult;
+        },
+        new Map<string, DIDDocumentVerificationMethod>()
+      );
+
+      return [verificationMethods, services];
     } catch (err) {
       throw new CastorError.InitialStateOfDIDChanged();
     }
