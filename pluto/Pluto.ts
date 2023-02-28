@@ -7,8 +7,13 @@ import { Message } from '../domain/models/Message';
 import { PeerDID } from '../domain/models/PeerDID';
 import { PrismDIDInfo } from '../domain/models/PrismDIDInfo';
 import { VerifiableCredential } from '../domain/models/VerifiableCredential';
+import {io} from '@input-output-hk/atala-prism-sdk-internals';
+import Connection = io.iohk.atala.prism.protos.Connection;
 
 export default class Pluto implements PlutoInterface {
+  constructor(connection: Connection) {
+
+  }
   start(): Promise<any> {
     throw new Error('Method not implemented.');
   }
