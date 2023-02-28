@@ -58,6 +58,7 @@ export default (mode, type) => {
       "google-protobuf/google/protobuf/timestamp_pb",
       "@stablelib/sha256",
       "Buffer",
+      "castor/protos/_generated/node_models_pb.js",
     ],
   };
 };

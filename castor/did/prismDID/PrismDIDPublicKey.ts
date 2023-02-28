@@ -2,8 +2,7 @@ import Apollo from "../../../domain/buildingBlocks/Apollo";
 import { Curve, PublicKey } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 
-import * as protos from "../../protos/protos";
-
+import * as Protos from "../../protos/node_models";
 export enum Usage {
   MASTER_KEY = "masterKey",
   ISSUING_KEY = "issuingKey",
@@ -15,13 +14,88 @@ export enum Usage {
   UNKNOWN_KEY = "unknownKey",
 }
 
-export function findKeyById<T>(data: T, keyNumber: number | string): keyof T {
-  const keys = Object.keys(protos.KeyUsage) as (keyof T)[];
-  return keys.find((key) => (data[key] as T) === keyNumber)!;
+export function getProtosUsage(
+  usage: Usage
+): Protos.io.iohk.atala.prism.protos.KeyUsage {
+  switch (usage) {
+    case Usage.UNKNOWN_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
+    case Usage.MASTER_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
+    case Usage.ISSUING_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
+    case Usage.KEY_AGREEMENT_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.KEY_AGREEMENT_KEY;
+    case Usage.AUTHENTICATION_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
+    case Usage.REVOCATION_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.REVOCATION_KEY;
+    case Usage.CAPABILITY_INVOCATION_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage
+        .CAPABILITY_INVOCATION_KEY;
+    case Usage.CAPABILITY_DELEGATION_KEY:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage
+        .CAPABILITY_DELEGATION_KEY;
+    default:
+      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
+  }
 }
 
-export function getUsageId(usage: Usage, num: Number = 0) {
-  return `${usage.replace("key", "")}${num}`;
+export function getUsageId(index: Usage): string {
+  switch (index) {
+    case Usage.MASTER_KEY:
+      return "master(index)";
+    case Usage.ISSUING_KEY:
+      return "issuing(index)";
+    case Usage.KEY_AGREEMENT_KEY:
+      return "agreement(index)";
+    case Usage.AUTHENTICATION_KEY:
+      return "authentication(index)";
+    case Usage.REVOCATION_KEY:
+      return "revocation(index)";
+    case Usage.CAPABILITY_DELEGATION_KEY:
+      return "delegation(index)";
+    case Usage.CAPABILITY_DELEGATION_KEY:
+      return "invocation(index)";
+    default:
+      return "unknown(index)";
+  }
+}
+
+export function getUsage(
+  protosUsage: Protos.io.iohk.atala.prism.protos.KeyUsage
+): Usage {
+  let usage: Usage;
+  switch (protosUsage) {
+    case 0:
+      usage = Usage.UNKNOWN_KEY;
+      break;
+    case 1:
+      usage = Usage.MASTER_KEY;
+      break;
+    case 2:
+      usage = Usage.ISSUING_KEY;
+      break;
+    case 3:
+      usage = Usage.KEY_AGREEMENT_KEY;
+      break;
+    case 4:
+      usage = Usage.AUTHENTICATION_KEY;
+      break;
+    case 5:
+      usage = Usage.REVOCATION_KEY;
+      break;
+    case 6:
+      usage = Usage.CAPABILITY_INVOCATION_KEY;
+      break;
+    case 7:
+      usage = Usage.CAPABILITY_DELEGATION_KEY;
+      break;
+    default:
+      usage = Usage.UNKNOWN_KEY;
+      break;
+  }
+  return usage;
 }
 
 export class PrismDIDPublicKey {
@@ -38,41 +112,41 @@ export class PrismDIDPublicKey {
     this.keyData = keyData;
   }
 
-  static fromProto(apollo: Apollo, proto: typeof protos.PublicKey) {
-    const id = proto.getId();
-    const keyUsageId = proto.getUsage();
-    const usage = findKeyById<typeof protos.KeyUsage>(
-      protos.KeyUsage,
-      keyUsageId
-    );
-    if (!proto.hasCompressedEcKeyData()) {
+  static fromProto(
+    apollo: Apollo,
+    proto: Protos.io.iohk.atala.prism.protos.PublicKey
+  ) {
+    const id = proto.id;
+    const usage = proto.usage;
+    if (!proto.has_compressed_ec_key_data) {
       throw new CastorError.InvalidPublicKeyEncoding();
     }
     const publicKey: PublicKey = {
       keyCurve: {
         curve: Curve.SECP256K1,
       },
-      value: Buffer.from(
-        proto.getCompressedEcKeyData()!.getData_asU8()
-      ).toString("hex"),
+      value: Buffer.from(proto.compressed_ec_key_data.data).toString("hex"),
     };
-    return new PrismDIDPublicKey(apollo, id, usage as Usage, publicKey);
+    return new PrismDIDPublicKey(apollo, id, getUsage(usage), publicKey);
   }
 
-  toProto(): typeof protos.PublicKey {
-    const publicKey = new protos.PublicKey();
-    const compressed = new protos.CompressedECKeyData();
-    compressed.setCurve(Curve.SECP256K1);
-    compressed.setData(
-      this.apollo.compressedPublicKeyFromCompresedData(
-        Buffer.from(this.keyData.value, "hex")
-      ).value
-    );
-    const usage = findKeyById<typeof Usage>(Usage, this.usage);
-    publicKey.setId(this.id);
-    publicKey.setUsage(protos.KeyUsage[usage]);
-    publicKey.setCompressedEcKeyData(compressed);
+  toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
+    const compressed =
+      new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
+        curve: Curve.SECP256K1,
+        data: Buffer.from(
+          this.apollo.compressedPublicKeyFromCompresedData(
+            Buffer.from(this.keyData.value, "hex")
+          ).value
+        ),
+      });
 
+    const usage = getProtosUsage(this.usage);
+    const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({
+      id: this.id,
+      usage: usage,
+      compressed_ec_key_data: compressed,
+    });
     return publicKey;
   }
 }

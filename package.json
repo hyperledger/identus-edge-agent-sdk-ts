@@ -44,9 +44,9 @@
     "build:browser-esm": "rm -rf build/browser/es && npx rollup -c rollup/browser/rollup.es.js",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' npx mocha -r ts-node/register 'tests/**/*.ts'",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
-    "protos": "rm -rf castor/protos/_generated && mkdir -p castor/protos/_generated && yarn protos:node && yarn protos:common",
-    "protos:node": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/_generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/_generated\"  node_modules/@input-output-hk/atala-prism-protos/node_models.proto",
-    "protos:common": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/_generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/_generated\"  node_modules/@input-output-hk/atala-prism-protos/common_models.proto"
+    "protos": "yarn protos:node && yarn protos:common",
+    "protos:node": "protoc -Iprotos --proto_path=castor/protos --ts_out=castor/protos  castor/protos/node_models.proto",
+    "protos:common": "protoc -Iprotos --proto_path=castor/protos --ts_out=castor/protos  castor/protos/common_models.proto"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",

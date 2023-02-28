@@ -28,7 +28,7 @@ import {
 import { JWKHelper } from "../../peer-did/helpers/JWKHelper";
 
 export class PeerDIDResolver implements DIDResolver {
-  static method: String = "peer";
+  method: string = "peer";
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DID.fromString(didString);
