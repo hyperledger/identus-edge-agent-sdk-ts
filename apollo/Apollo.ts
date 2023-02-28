@@ -1,5 +1,7 @@
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
-import * as bip39 from "bip39";
+import * as bip39 from "@scure/bip39";
+import { wordlist } from "@scure/bip39/wordlists/english";
+
 import * as elliptic from "elliptic";
 import {
   Seed,
@@ -57,7 +59,7 @@ export default class Apollo implements ApolloInterface {
     }
   }
   createRandomMnemonics(): MnemonicWordList {
-    return bip39.generateMnemonic(256).split(" ") as MnemonicWordList;
+    return bip39.generateMnemonic(wordlist, 256).split(" ") as MnemonicWordList;
   }
   createSeed(mnemonics: MnemonicWordList, passphrase?: string): Seed {
     const mnemonicString = mnemonics.join(" ");
@@ -69,7 +71,7 @@ export default class Apollo implements ApolloInterface {
     } else if (mnemonics.length <= 0) {
       throw new MnemonicLengthException("Word list is empty");
     }
-    if (!bip39.validateMnemonic(mnemonicString, bip39.wordlists.english)) {
+    if (!bip39.validateMnemonic(mnemonicString, wordlist)) {
       throw new MnemonicWordException(`Invalid mnemonic word/s`);
     }
     const seed = bip39.mnemonicToSeedSync(mnemonicString, passphrase);
@@ -92,7 +94,7 @@ export default class Apollo implements ApolloInterface {
     return this.getKeyPairForCurve(seed, privateKey.keyCurve);
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
-    const keyPair = ec.keyFromPublic(publicKey.value);
+    const keyPair = ec.keyFromPublic(Buffer.from(publicKey.value, "hex"));
     return {
       uncompressed: {
         keyCurve: {
@@ -104,9 +106,9 @@ export default class Apollo implements ApolloInterface {
     };
   }
   compressedPublicKeyFromCompresedData(
-    compressedData: Uint8Array
+    compressedData: Uint8Array | string
   ): CompressedPublicKey {
-    const point = ec.curve.base.decodePoint(compressedData).encode("hex");
+    const point = ec.curve.decodePoint(compressedData).encode("hex");
     const keyPair = ec.keyFromPublic(Buffer.from(point, "hex"));
     return {
       uncompressed: {
