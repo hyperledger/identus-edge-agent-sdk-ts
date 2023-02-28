@@ -21,10 +21,7 @@
     "traceResolution": false,
     "types": ["mocha"],
     "typeRoots": ["./types"],
-    "paths": {
-      "protos": ["castor/protos/generated"],
-      "stream": ["./node_modules/readable-stream"]
-    }
+    "paths": {}
   },
   "compileOnSave": false,
   "exclude": ["node_modules", "build", "rollup"],

@@ -25,7 +25,8 @@
     "mercury",
     "pluto",
     "pollux",
-    "prism-agent"
+    "prism-agent",
+    "peerdid"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/input-output-hk"
@@ -41,7 +42,7 @@
     "build:node-esm": "rm -rf build/node/es && npx rollup -c rollup/node/rollup.es.js",
     "build:browser": "rm -rf build/browser/cjs && npx rollup -c rollup/browser/rollup.cjs.js",
     "build:browser-esm": "rm -rf build/browser/es && npx rollup -c rollup/browser/rollup.es.js",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' npx mocha -r ts-node/register 'tests/**/*.ts'",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
     "protos": "rm -rf castor/protos/_generated && mkdir -p castor/protos/_generated && yarn protos:node && yarn protos:common",
     "protos:node": "protoc -Iprotos --proto_path=. --plugin=\"protoc-gen-ts=./node_modules/.bin/protoc-gen-ts\" --ts_out=\"./castor/protos/_generated\" --js_out=\"import_style=commonjs,binary:./castor/protos/_generated\"  node_modules/@input-output-hk/atala-prism-protos/node_models.proto",
@@ -59,7 +60,7 @@
     "@types/elliptic": "^6.4.14",
     "@types/google-protobuf": "^3.15.6",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.14.2",
     "@types/sinon": "^10.0.13",
     "@types/uuid": "^9.0.1",
     "antlr4ts-cli": "^0.5.0-alpha.4",
@@ -82,7 +83,6 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@aviarytech/did-peer": "^0.0.19",
     "@input-output-hk/atala-prism-protos": "1.4.1",
     "@input-output-hk/atala-prism-sdk": "1.4.1",
     "@scure/bip39": "^1.1.1",
@@ -92,6 +92,8 @@
     "bn.js": "^5.2.1",
     "elliptic": "^6.5.4",
     "google-protobuf": "^3.21.2",
+    "jose": "^4.12.2",
+    "multiformats": "^9.9.0",
     "proto3-json-serializer": "^1.1.0",
     "uuid": "^9.0.0"
   }
