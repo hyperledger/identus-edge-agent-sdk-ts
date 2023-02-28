@@ -8,6 +8,9 @@ import {
   DIDDocument,
   PrismDIDMethodId,
   Curve,
+  DIDDocumentCoreProperty,
+  Authentication as DIDDocumentAuthentication,
+  VerificationMethod as DIDDocumentVerificationMethod,
 } from "../domain/models";
 import {
   getUsageId,
@@ -25,6 +28,7 @@ import { SHA256 } from "@stablelib/sha256";
 
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
+import { JWKHelper } from "peer-did/helpers/JWKHelper";
 
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
@@ -99,11 +103,11 @@ export default class Castor implements CastorInterface {
     throw new Error("Method not implemented.");
   }
 
-  verifySignature(
+  async verifySignature(
     did: DID,
     challenge: Uint8Array,
     signature: Uint8Array
   ): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    throw new Error("Not implemented");
   }
 }

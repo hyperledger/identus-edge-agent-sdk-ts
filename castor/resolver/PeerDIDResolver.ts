@@ -1,13 +1,11 @@
 import { CastorError } from "../../domain/models/Errors";
-import { MultiCodec, Codec, KeyType } from "../../peer-did/helpers/Multicodec";
-import { PeerDIDEncoded, PeerDIDService } from "../../peer-did/PeerDID";
+import { MultiCodec, Codec } from "../../peer-did/helpers/Multicodec";
+import { PeerDIDService } from "../../peer-did/PeerDID";
 import {
   VerificationMaterialFormatPeerDID,
   VerificationMaterialAuthentication,
   VerificationMaterialAgreement,
   VerificationMaterialPeerDID,
-  VerificationMaterialPeerDIDWithAuthentication,
-  VerificationMaterialPeerDIDWithAgreement,
   VerificationMethodTypeAgreement,
   VerificationMethodTypeAuthentication,
   Numalgo2Prefix,

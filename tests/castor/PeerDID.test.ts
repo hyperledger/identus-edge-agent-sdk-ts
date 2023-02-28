@@ -109,24 +109,11 @@ describe("DIDCreateTest", () => {
     expect(did.toString()).to.equal(validPeerDID);
   });
   it("Should resolver peerdid correctly", async () => {
-    let peerDIDString =
-      "did:peer:2.Ez6LSci5EK4Ezue5QA72ZX71QUbXY2xr5ygRw7wM1WJigTNnd.Vz6MkqgCXHEGr2wJZANPZGC8WFmeVuS3abAD9uvh7mTXygCFv.SeyJ0IjoiZG0iLCJzIjoibG9jYWxob3N0OjgwODIiLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19";
-
-    let peerDID = new DID(
-      "did",
-      "peer",
-      "2.Ez6LSci5EK4Ezue5QA72ZX71QUbXY2xr5ygRw7wM1WJigTNnd.Vz6MkqgCXHEGr2wJZANPZGC8WFmeVuS3abAD9uvh7mTXygCFv.SeyJ0IjoiZG0iLCJzIjoibG9jYWxob3N0OjgwODIiLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19"
-    );
-
-    let mypeerDIDString =
-      "did:peer:2.Ez6LSmx3k5X9xMos7VXdMDJx1CGNTd2tWfLTVyMtu3toJWqPo.Vz6Mkvcu3GqbvM3vr5W1sDVe41wmLeUL6a7b4wEcrGw6ULATR.SeyJ0IjoiZG0iLCJzIjoiazhzLWRldi5hdGFsYXByaXNtLmlvL3ByaXNtLWFnZW50L2RpZGNvbW0iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19";
-
     let mypeerDID = new DID(
       "did",
       "peer",
       "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
     );
-
     const apollo = new Apollo();
     const castor = new Castor(apollo);
     let document = await castor.resolveDID(mypeerDID.toString());
