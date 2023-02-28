@@ -1,5 +1,5 @@
 {
-  "name": "@input-output-hk/atala-prism-walletsdk",
+  "name": "@input-output-hk/atala-prism-wallet-sdk",
   "version": "0.0.1",
   "description": "PRISM typescript SDK",
   "main": "src/index.ts",
