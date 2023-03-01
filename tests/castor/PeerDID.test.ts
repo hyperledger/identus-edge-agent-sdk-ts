@@ -1,27 +1,15 @@
 import { expect } from "chai";
 
-import {
-  PrivateKey,
-  Curve,
-  PublicKey,
-  KeyPair,
-  Service,
-  DID,
-} from "../../domain";
+import { Curve, KeyPair, Service, DID } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 
 import Castor from "../../castor/Castor";
 import {
   VerificationMaterialAuthentication,
   VerificationMaterialFormatPeerDID,
-  VerificationMethodTypeAgreement,
   VerificationMethodTypeAuthentication,
 } from "../../peer-did/types";
-import {
-  MultiCodec,
-  KeyType as PeerDIDKeyType,
-  Codec,
-} from "../../peer-did/helpers/Multicodec";
+import { MultiCodec } from "../../peer-did/helpers/Multicodec";
 import { PeerDIDResolver } from "../../castor/resolver/PeerDIDResolver";
 
 describe("DIDCreateTest", () => {

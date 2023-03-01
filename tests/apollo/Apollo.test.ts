@@ -37,7 +37,7 @@ describe("Apollo Tests", () => {
     const vectors = JSON.parse(bip39Vectors) as string[][];
 
     for (const v of vectors) {
-      const [_, mnemonicPhrase, binarySeedHex, __] = v;
+      const [, mnemonicPhrase, binarySeedHex] = v;
       const mnemonicCode = mnemonicPhrase.split(" ") as MnemonicWordList;
       const binarySeed = apollo.createSeed(mnemonicCode, password);
       expect(binarySeedHex).to.equal(
@@ -75,7 +75,7 @@ describe("Apollo Tests", () => {
   });
 
   it("Should test failure when wrong mnemonic length is used", () => {
-    const mnemonicCode = [] as MnemonicWordList;
+    const mnemonicCode = [] as unknown as MnemonicWordList;
     mnemonicCode.push("abandon");
 
     assert.throws(

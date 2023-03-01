@@ -1,6 +1,4 @@
 import { SHA256 } from "@stablelib/sha256";
-import { loadSync } from "protobufjs";
-
 import { CastorError } from "../../domain/models/Errors";
 import Apollo from "../../domain/buildingBlocks/Apollo";
 import { LongFormPrismDID } from "../../castor/did/prismDID/LongFormPrismDID";
@@ -74,15 +72,13 @@ export class LongFormPrismDIDResolver implements DIDResolver {
       ) {
         throw new CastorError.InitialStateOfDIDChanged();
       }
-
-      const encodableOperation = loadSync(
-        "castor/protos/node_models.proto"
-      ).lookupType("AtalaOperation");
-
-      const operation = encodableOperation.decode(encodedData) as any;
+      const operation =
+        Protos.io.iohk.atala.prism.protos.AtalaOperation.deserializeBinary(
+          encodedData
+        );
 
       const publicKeys: PrismDIDPublicKey[] =
-        operation.createDid?.didData?.publicKeys?.map(
+        operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
             return new PrismDIDPublicKey(
               this.apollo,
@@ -99,7 +95,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
         ) || [];
 
       const services =
-        operation.createDid?.didData?.services?.map(
+        operation.create_did?.did_data?.services?.map(
           (service: Protos.io.iohk.atala.prism.protos.Service) => {
             return new DIDDocumentService(
               service.id,

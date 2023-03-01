@@ -1,15 +1,16 @@
-import Castor from '../domain/buildingBlocks/Castor'
-import { default as PolluxInterface } from '../domain/buildingBlocks/Pollux'
-import { VerifiableCredential } from '../domain/models/VerifiableCredential'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import Castor from "../domain/buildingBlocks/Castor";
+import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
+import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 
 export default class Pollux implements PolluxInterface {
-  private castor: Castor
+  private castor: Castor;
 
   constructor(castor: Castor) {
-    this.castor = castor
+    this.castor = castor;
   }
 
   parseVerifiableCredential(jwtString: string): VerifiableCredential {
-    throw new Error('Not implemented')
+    throw new Error("Not implemented");
   }
 }
