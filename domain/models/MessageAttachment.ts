@@ -36,9 +36,9 @@ export class AttachmentDescriptor {
     public readonly mediaType: string | null = null,
     public readonly data: AttachmentData,
     public readonly filename: Array<string> | null,
-    public readonly format: String | null = null,
+    public readonly format: string | null = null,
     public readonly lastModTime: string | null = null,
-    public readonly byteCount: Number | null = null,
+    public readonly byteCount: number | null = null,
     public readonly deascription: string | null = null
   ) {}
 }

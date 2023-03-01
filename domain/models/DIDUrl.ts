@@ -10,7 +10,7 @@ export class DIDUrl {
     did: DID,
     path: string[] = [],
     parameters: Map<string, string> = new Map(),
-    fragment: string = '',
+    fragment = ""
   ) {
     this.did = did;
     this.path = path;
@@ -27,7 +27,9 @@ export class DIDUrl {
   }
 
   queryString(): string {
-    return `?${Array.from(this.parameters.entries()).map(([key, value]) => `${key}=${value}`).join("&")}`;
+    return `?${Array.from(this.parameters.entries())
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&")}`;
   }
 
   fragmentString(): string {

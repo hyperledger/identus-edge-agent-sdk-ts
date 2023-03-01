@@ -75,7 +75,7 @@ describe("Apollo Tests", () => {
   });
 
   it("Should test failure when wrong mnemonic length is used", () => {
-    const mnemonicCode = new Array() as MnemonicWordList;
+    const mnemonicCode = [] as MnemonicWordList;
     mnemonicCode.push("abandon");
 
     assert.throws(

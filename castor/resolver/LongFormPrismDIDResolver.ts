@@ -28,7 +28,7 @@ import {
 } from "../../castor/did/prismDID/PrismDIDPublicKey";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
-  method: string = "prism";
+  method = "prism";
 
   constructor(private apollo: Apollo) {}
 
@@ -36,7 +36,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
     const did = DIDParser.parse(didString);
     const prismDID = new LongFormPrismDID(did);
 
-    let [verificationMethods, services] = this.decodeState(
+    const [verificationMethods, services] = this.decodeState(
       did,
       prismDID.stateHash,
       Buffer.from(prismDID.encodedState, "base64url")

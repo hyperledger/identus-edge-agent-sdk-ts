@@ -14,7 +14,7 @@ export default interface Pluto {
 
     storePrismDID(
     did: DID,
-    keyPathIndex: Number,
+    keyPathIndex: number,
     alias?: string,
     ): any
 
@@ -27,7 +27,7 @@ export default interface Pluto {
 
     storeMessages(messages: Array<Message>): any
 
-    storePrivateKeys(privateKey: PrivateKey, did: DID, keyPathIndex: Number, metaId: string | null): any
+    storePrivateKeys(privateKey: PrivateKey, did: DID, keyPathIndex: number, metaId: string | null): any
 
     storeMediator(mediator: DID, host: DID, routing: DID): any
 
@@ -39,9 +39,9 @@ export default interface Pluto {
 
     getDIDInfoByAlias(alias: string): Array<PrismDIDInfo>
 
-    getPrismDIDKeyPathIndex(did: DID): Number | null
+    getPrismDIDKeyPathIndex(did: DID): number | null
 
-    getPrismLastKeyPathIndex(): Number
+    getPrismLastKeyPathIndex(): number
 
     getAllPeerDIDs(): Array<PeerDID>
 

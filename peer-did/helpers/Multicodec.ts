@@ -50,7 +50,7 @@ export class MultiCodec {
   }
 
   decode(defaultCodec?: Codec): [Codec, Uint8Array] {
-    let [code, bytes] = uVarInt(Array.from(this.value));
+    const [code, bytes] = uVarInt(Array.from(this.value));
     const bufferWithoutBytes = !defaultCodec
       ? this.value
       : this.value.slice(bytes);

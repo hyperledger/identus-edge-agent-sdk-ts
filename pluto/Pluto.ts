@@ -12,7 +12,7 @@ export default class Pluto implements PlutoInterface {
   start(): Promise<any> {
     throw new Error('Method not implemented.');
   }
-  storePrismDID(did: DID, keyPathIndex: Number, alias?: string | undefined) {
+  storePrismDID(did: DID, keyPathIndex: number, alias?: string | undefined) {
     throw new Error('Method not implemented.');
   }
   storePeerDID(did: DID, privateKeys: PrivateKey[]) {
@@ -27,7 +27,7 @@ export default class Pluto implements PlutoInterface {
   storeMessages(messages: Message[]) {
     throw new Error('Method not implemented.');
   }
-  storePrivateKeys(privateKey: PrivateKey, did: DID, keyPathIndex: Number, metaId: string | null) {
+  storePrivateKeys(privateKey: PrivateKey, did: DID, keyPathIndex: number, metaId: string | null) {
     throw new Error('Method not implemented.');
   }
   storeMediator(mediator: DID, host: DID, routing: DID) {
@@ -45,10 +45,10 @@ export default class Pluto implements PlutoInterface {
   getDIDInfoByAlias(alias: string): PrismDIDInfo[] {
     throw new Error('Method not implemented.');
   }
-  getPrismDIDKeyPathIndex(did: DID): Number | null {
+  getPrismDIDKeyPathIndex(did: DID): number | null {
     throw new Error('Method not implemented.');
   }
-  getPrismLastKeyPathIndex(): Number {
+  getPrismLastKeyPathIndex(): number {
     throw new Error('Method not implemented.');
   }
   getAllPeerDIDs(): PeerDID[] {
