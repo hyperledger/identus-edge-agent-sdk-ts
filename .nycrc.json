@@ -1,0 +1,10 @@
+{
+    "reporter": ["lcov", "text"],
+    "sourceMap": true,
+    "instrument": true,
+    "temp-dir": ".nyc_output",
+    "report-dir": "coverage",
+    "all": true,
+    "exclude": [".*","castor/protos", "castor/parser", "tests"],
+    "check-coverage": true
+}
