@@ -28,6 +28,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+          scope: "@input-output-hk"
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Install
         run: yarn install
