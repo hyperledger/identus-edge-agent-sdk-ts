@@ -43,8 +43,5 @@ jobs:
       - name: Test
         run: yarn test
 
-      - name: Coverage
-        run: yarn coverage:check
-
       - name: Check coverage
         run: yarn coverage:check
