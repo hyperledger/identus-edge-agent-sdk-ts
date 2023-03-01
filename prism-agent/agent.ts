@@ -1,5 +1,12 @@
 import Apollo from "../domain/buildingBlocks/Apollo";
-import { Service as DIDDocumentService, Seed, Signature, DID } from "../domain";
+import {
+  Service as DIDDocumentService,
+  ServiceEndpoint as DIDDocumentServiceEndpoint,
+  Seed,
+  Signature,
+  DID,
+  Curve,
+} from "../domain";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import Mercury from "../domain/buildingBlocks/Mercury";
@@ -13,6 +20,8 @@ import {
   OutOfBandInvitation,
   PrismOnboardingInvitation,
 } from "./types";
+import { AgentError } from "../domain/models/Errors";
+import { connect } from "http2";
 
 enum AgentState {
   STOPPED,
@@ -24,41 +33,23 @@ enum AgentState {
 export default class Agent {
   private state: AgentState = AgentState.STOPPED;
 
-  private seed: Seed;
-  private apollo: Apollo;
-  private castor: Castor;
-  private pluto: Pluto;
-  private mercury: Mercury;
-  private api: Api;
-  private connectionsManager: ConnectionManager;
-
-  static instanceFromMediationHandler(
-    apollo: Apollo,
-    castor: Castor,
-    pluto: Pluto,
-    mercury: Mercury,
-    mediationHandler: MediationHandler,
-    seed?: Seed,
-    api?: Api
-  ): Agent {
-    const connectionManager = new ConnectionManager(
+  constructor(
+    private apollo: Apollo,
+    private castor: Castor,
+    private pluto: Pluto,
+    private mercury: Mercury,
+    private mediationHandler: MediationHandler,
+    private connectionManager: ConnectionManager = new ConnectionManager(
       mercury,
       castor,
       pluto,
       mediationHandler
-    );
-    return new Agent(
-      apollo,
-      castor,
-      pluto,
-      mercury,
-      connectionManager,
-      seed,
-      api
-    );
-  }
+    ),
+    private seed: Seed = apollo.createRandomSeed().seed,
+    private api: Api = new ApiImpl()
+  ) {}
 
-  constructor(
+  static instanceFromConnectionManager(
     apollo: Apollo,
     castor: Castor,
     pluto: Pluto,
@@ -67,31 +58,73 @@ export default class Agent {
     seed?: Seed,
     api?: Api
   ) {
-    this.apollo = apollo;
-    this.castor = castor;
-    this.pluto = pluto;
-    this.mercury = mercury;
-    this.seed = seed ? seed : apollo.createRandomSeed().seed;
-    this.api = api ? api : new ApiImpl();
-    this.connectionsManager = connectionManager;
+    return new Agent(
+      apollo,
+      castor,
+      pluto,
+      mercury,
+      connectionManager.mediationHandler,
+      connectionManager,
+      seed ? seed : apollo.createRandomSeed().seed,
+      api ? api : new ApiImpl()
+    );
   }
 
   async start(): Promise<AgentState> {
-    throw new Error("Not implemented");
+    if (this.state !== AgentState.STOPPED) {
+      return this.state;
+    }
+    this.state = AgentState.STARTING;
+    try {
+      await this.pluto.start();
+      await this.connectionManager.startMediator();
+    } catch (e) {
+      if (e instanceof AgentError.NoMediatorAvailableError) {
+        const hostDID = await this.createNewPeerDID(
+          [
+            new DIDDocumentService(
+              "#didcomm-1",
+              ["DIDCommMessaging"],
+              new DIDDocumentServiceEndpoint(
+                this.connectionManager.mediationHandler.mediatorDID.toString()
+              )
+            ),
+          ],
+          false
+        );
+        await this.connectionManager.registerMediator(hostDID);
+      } else throw e;
+    }
+    if (this.connectionManager.mediationHandler.mediator !== undefined) {
+      this.state = AgentState.RUNNING;
+    } else {
+      throw new AgentError.MediationRequestFailedError();
+    }
+    return this.state;
   }
 
   async createNewPrismDID(
     keyPathIndex: NullableType<number>,
     alias: NullableType<string>,
     services: DIDDocumentService[] = []
-  ) {
-    throw new Error("Not implemented");
+  ): Promise<DID> {
+    const index = keyPathIndex
+      ? keyPathIndex
+      : this.pluto.getPrismLastKeyPathIndex();
+    const keyPair = this.apollo.createKeyPairFromKeyCurve(this.seed, {
+      curve: Curve.SECP256K1,
+      index: index,
+    });
+    const did = await this.castor.createPrismDID(keyPair.publicKey, services);
+    this.pluto.storePrivateKeys(keyPair.privateKey, did, index, null);
+    this.pluto.storePrismDID(did, index, alias);
+    return did;
   }
 
   async createNewPeerDID(
     services: DIDDocumentService[] = [],
     updateMediator: boolean = true
-  ) {
+  ): Promise<DID> {
     throw new Error("Not implemented");
   }
 

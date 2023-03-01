@@ -1,79 +1,80 @@
-
-import { DID, PrivateKey } from "../models"
-import { DIDPair } from "../models/DIDPair"
-import { Mediator } from "../models/Mediator"
-import { Message } from "../models/Message"
-import { PeerDID } from "../models/PeerDID"
-import { PrismDIDInfo } from "../models/PrismDIDInfo"
-import { VerifiableCredential } from "../models/VerifiableCredential"
-
+import { DID, NullableType, PrivateKey } from "../models";
+import { DIDPair } from "../models/DIDPair";
+import { Mediator } from "../models/Mediator";
+import { Message } from "../models/Message";
+import { PeerDID } from "../models/PeerDID";
+import { PrismDIDInfo } from "../models/PrismDIDInfo";
+import { VerifiableCredential } from "../models/VerifiableCredential";
 
 export default interface Pluto {
+  start(): Promise<any>;
 
-    start(): Promise<any>
-
-    storePrismDID(
+  storePrismDID(
     did: DID,
-    keyPathIndex: Number,
-    alias?: string,
-    ): any
+    keyPathIndex: number,
+    alias?: NullableType<string>
+  ): any;
 
+  storePeerDID(did: DID, privateKeys: Array<PrivateKey>): any;
 
-    storePeerDID(did: DID, privateKeys: Array<PrivateKey>): any
+  storeDIDPair(host: DID, receiver: DID, name: string): any;
 
-    storeDIDPair(host: DID, receiver: DID, name: string): any
+  storeMessage(message: Message): any;
 
-    storeMessage(message: Message): any
+  storeMessages(messages: Array<Message>): any;
 
-    storeMessages(messages: Array<Message>): any
+  storePrivateKeys(
+    privateKey: PrivateKey,
+    did: DID,
+    keyPathIndex: number,
+    metaId: string | null
+  ): any;
 
-    storePrivateKeys(privateKey: PrivateKey, did: DID, keyPathIndex: Number, metaId: string | null): any
+  storeMediator(mediator: DID, host: DID, routing: DID): any;
 
-    storeMediator(mediator: DID, host: DID, routing: DID): any
+  storeCredential(credential: VerifiableCredential): any;
 
-    storeCredential(credential: VerifiableCredential): any
+  getAllPrismDIDs(): Array<PrismDIDInfo>;
 
-    getAllPrismDIDs(): Array<PrismDIDInfo>
+  getDIDInfoByDID(did: DID): PrismDIDInfo | null;
 
-    getDIDInfoByDID(did: DID): PrismDIDInfo | null
+  getDIDInfoByAlias(alias: string): Array<PrismDIDInfo>;
 
-    getDIDInfoByAlias(alias: string): Array<PrismDIDInfo>
+  getPrismDIDKeyPathIndex(did: DID): number | null;
 
-    getPrismDIDKeyPathIndex(did: DID): Number | null
+  getPrismLastKeyPathIndex(): number;
 
-    getPrismLastKeyPathIndex(): Number
+  getAllPeerDIDs(): Array<PeerDID>;
 
-    getAllPeerDIDs(): Array<PeerDID>
+  getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> | null;
 
-    getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> | null
+  getDIDPrivateKeyByID(id: string): PrivateKey | null;
 
-    getDIDPrivateKeyByID(id: string): PrivateKey | null
+  getAllDidPairs(): Array<DIDPair>;
 
-    getAllDidPairs(): Array<DIDPair>
+  getPairByDID(did: DID): DIDPair | null;
 
-    getPairByDID(did: DID): DIDPair| null
+  getPairByName(name: string): DIDPair | null;
 
-    getPairByName(name: string): DIDPair | null
+  getAllMessages(): Array<Message>;
 
-    getAllMessages(): Array<Message>
+  getAllMessagesByDID(did: DID): Array<Message>;
 
-    getAllMessagesByDID(did: DID): Array<Message>
+  getAllMessagesSent(): Array<Message>;
 
-    getAllMessagesSent(): Array<Message>
+  getAllMessagesReceived(): Array<Message>;
 
-    getAllMessagesReceived(): Array<Message>
+  getAllMessagesSentTo(did: DID): Array<Message>;
 
-    getAllMessagesSentTo(did: DID): Array<Message>
+  getAllMessagesReceivedFrom(did: DID): Array<Message>;
 
-    getAllMessagesReceivedFrom(did: DID): Array<Message>
+  getAllMessagesOfType(type: string, relatedWithDID?: DID): Array<Message>;
 
-    getAllMessagesOfType(type: string, relatedWithDID?: DID): Array<Message>
+  getAllMessagesByFromToDID(from: DID, to: DID): Array<Message>;
 
-    getAllMessagesByFromToDID(from: DID, to: DID): Array<Message>
+  getMessage(id: string): Message | null;
 
-    getMessage(id: string): Message | null
+  getAllMediators(): Array<Mediator>;
 
-    getAllMediators(): Array<Mediator>
-
-    getAllCredentials(): Array<VerifiableCredential>
+  getAllCredentials(): Array<VerifiableCredential>;
 }

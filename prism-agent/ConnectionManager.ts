@@ -2,23 +2,23 @@ import Mercury from "../domain/buildingBlocks/Mercury";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import { MediationHandler } from "./mediation/types/MediationHandler";
-import { Mediator, Message } from "../domain";
+import { Mediator, Message, DID } from "../domain";
 
 export class ConnectionManager implements ConnectionManager {
   static NUMBER_OF_MESSAGES = 10;
 
   constructor(
-    mercury: Mercury,
-    castor: Castor,
-    pluto: Pluto,
-    mediationHandler: MediationHandler
+    protected mercury: Mercury,
+    protected castor: Castor,
+    protected pluto: Pluto,
+    public mediationHandler: MediationHandler
   ) {}
 
   async startMediator(): Promise<void> {
     throw new Error("Not implemented");
   }
 
-  async registerMediator(): Promise<Mediator | undefined> {
+  async registerMediator(hostDID: DID): Promise<Mediator | undefined> {
     throw new Error("Not implemented");
   }
 
