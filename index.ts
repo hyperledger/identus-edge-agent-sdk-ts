@@ -4,4 +4,4 @@ export * as Domain from "./domain";
 export * from "./mercury/Mercury";
 export * from "./pluto/Pluto";
 export * from "./pollux/Pollux";
-export * from "./prism-agent/agent";
+export * from "./prism-agent/Agent";

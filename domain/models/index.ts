@@ -11,4 +11,8 @@ export * from "./DIDUrl";
 export * from "./PrismDIDMethodId";
 export * from "./DIDResolver";
 export * from "./PeerDID";
+export * from "./Message";
+export * from "./MessageAttachment";
+export * from "./Mediator";
+export * from "./NullableType";
 export type JsonString = string;
