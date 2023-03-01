@@ -55,7 +55,7 @@ export function getUsageId(index: Usage): string {
       return "revocation(index)";
     case Usage.CAPABILITY_DELEGATION_KEY:
       return "delegation(index)";
-    case Usage.CAPABILITY_DELEGATION_KEY:
+    case Usage.CAPABILITY_INVOCATION_KEY:
       return "invocation(index)";
     default:
       return "unknown(index)";

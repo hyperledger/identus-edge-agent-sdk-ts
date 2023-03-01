@@ -1,4 +1,4 @@
-import { expect, assert } from "chai";
+import { expect } from "chai";
 
 import * as DIDUrlParser from "../../castor/parser/DIDUrlParser";
 
