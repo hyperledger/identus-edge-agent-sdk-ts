@@ -90,8 +90,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@types/sql.js": "^1.4.4",
     "bip39": "^3.1.0",
     "elliptic": "^6.5.4",
     "uuid": "^9.0.0"
+  },
+  "peerDependencies": {
+    "sql.js": "^1.8.0"
   }
 }
