@@ -28,7 +28,7 @@ import {
 import { JWKHelper } from "../../peer-did/helpers/JWKHelper";
 
 export class PeerDIDResolver implements DIDResolver {
-  method: string = "peer";
+  method = "peer";
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DID.fromString(didString);
@@ -147,7 +147,7 @@ export class PeerDIDResolver implements DIDResolver {
     }
     if (codec === Codec.x25519) {
       try {
-        let jwkJsonString = JWKHelper.toJWK(
+        const jwkJsonString = JWKHelper.toJWK(
           decodedEncnum,
           VerificationMethodTypeAgreement.JSON_WEB_KEY_2020
         );
@@ -165,7 +165,7 @@ export class PeerDIDResolver implements DIDResolver {
       }
     } else if (codec === Codec.ed25519) {
       try {
-        let jwkJsonString = JWKHelper.toJWK(
+        const jwkJsonString = JWKHelper.toJWK(
           decodedEncnum,
           VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020
         );
@@ -187,7 +187,7 @@ export class PeerDIDResolver implements DIDResolver {
   }
 
   public fromBase58Multibase(multibase: string): [string, Uint8Array] {
-    let multibaseDecoded = base58btc.decode(multibase);
+    const multibaseDecoded = base58btc.decode(multibase);
     return [multibase.slice(1), multibaseDecoded];
   }
 

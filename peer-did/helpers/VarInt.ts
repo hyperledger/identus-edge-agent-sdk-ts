@@ -2,7 +2,7 @@
  */
 export function putUVarInt(value: number, buffer: number[]): number[] {
   let val: number = value;
-  let tmpBuffer: number[] = [];
+  const tmpBuffer: number[] = [];
 
   do {
     let b = val & 0x7f;
@@ -29,9 +29,9 @@ export function putUVarInt(value: number, buffer: number[]): number[] {
         and -n is the number of bytes read
 */
 export function uVarInt(buffer: number[]): [number, number] {
-  let output: number = 0;
-  let counter: number = 0;
-  let shifter: number = 0;
+  let output = 0;
+  let counter = 0;
+  let shifter = 0;
 
   for (const byte of buffer) {
     if (byte < 0x80) {

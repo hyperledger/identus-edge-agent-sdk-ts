@@ -5,7 +5,7 @@ import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 
 describe("DIDCreateTest", () => {
-  it("Should test milticodec coding", async () => {
+  it("Should correctly create a prismDID from an existing HexKey", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
 

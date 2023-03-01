@@ -1,4 +1,4 @@
-import path from "path";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
@@ -17,7 +17,6 @@ import {
 } from "./did/prismDID/PrismDIDPublicKey";
 import * as DIDParser from "./parser/DIDParser";
 import * as Protos from "./protos/node_models";
-import { loadSync } from "protobufjs";
 import { SHA256 } from "@stablelib/sha256";
 
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";

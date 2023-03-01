@@ -1,5 +1,4 @@
 import { DID } from "./DID";
-import { DIDUrl } from "./DIDUrl";
 import { CastorError } from "./Errors";
 import { Curve } from "./KeyCurve";
 
