@@ -93,8 +93,6 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@input-output-hk/atala-prism-protos": "1.4.1",
-    "@input-output-hk/atala-prism-sdk": "1.4.1",
     "@scure/bip39": "^1.1.1",
     "@sicpa_open_source/peer-did-ts": "^0.2.0",
     "@stablelib/sha256": "^1.0.1",
