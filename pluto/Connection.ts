@@ -6,7 +6,6 @@ import ConnectionModel, {
 import ConnectionError from '../domain/models/errors/Connection';
 import {InitSqlJsStatic} from 'sql.js';
 import sqljs from 'sql.js';
-console.log(sqljs)
 
 export default class Connection implements ConnectionModel {
   private databaseURL?: string;
