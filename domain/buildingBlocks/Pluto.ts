@@ -9,7 +9,11 @@ import { VerifiableCredential } from "../models/VerifiableCredential";
 export default interface Pluto {
   start(): Promise<void>;
 
-  storePrismDID(did: DID, keyPathIndex: number, alias?: string): void;
+  storePrismDID(
+    did: DID,
+    keyPathIndex: number,
+    alias?: NullableType<string>
+  ): void;
 
   storePeerDID(did: DID, privateKeys: Array<PrivateKey>): void;
 

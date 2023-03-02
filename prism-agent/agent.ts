@@ -5,7 +5,6 @@ import {
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
   Seed,
-  DIDDocumentCoreProperty,
   Signature,
   DID,
   Curve,
@@ -125,7 +124,7 @@ export default class Agent {
 
   async createNewPeerDID(
     services: DIDDocumentService[] = [],
-    updateMediator: boolean = true
+    updateMediator = true
   ): Promise<DID> {
     const index = this.pluto.getPrismLastKeyPathIndex();
     const keyAgreementKeyPair = this.apollo.createKeyPairFromKeyCurve(
