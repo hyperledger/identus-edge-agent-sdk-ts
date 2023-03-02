@@ -1,3 +1,4 @@
+import { uuid } from "@stablelib/uuid";
 
 export interface AttachmentHeader {
   readonly children: string;
@@ -27,8 +28,13 @@ export interface AttachmentJsonData {
   readonly data: string;
 }
 
-
-type AttachmentData = AttachmentJsonData | AttachmentLinkData | AttachmentBase64 | AttachmentJwsData | AttachmentJws | AttachmentHeader
+type AttachmentData =
+  | AttachmentJsonData
+  | AttachmentLinkData
+  | AttachmentBase64
+  | AttachmentJwsData
+  | AttachmentJws
+  | AttachmentHeader;
 
 export class AttachmentDescriptor {
   constructor(
@@ -41,4 +47,16 @@ export class AttachmentDescriptor {
     public readonly byteCount: number | null = null,
     public readonly deascription: string | null = null
   ) {}
+
+  static build<T>(
+    payload: T,
+    id: string = uuid(),
+    mediaType = "application/json"
+  ): AttachmentDescriptor {
+    const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
+    const attachment: AttachmentBase64 = {
+      base64: encoded,
+    };
+    return new AttachmentDescriptor(id, mediaType, attachment);
+  }
 }

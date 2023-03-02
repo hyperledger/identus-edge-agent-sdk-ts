@@ -11,6 +11,7 @@ export class UnknownPrismOnboardingTypeError extends Error {}
 export class FailedToOnboardError extends Error {}
 export class InvalidPickupDeliveryMessageError extends Error {}
 export class InvalidOfferCredentialMessageError extends Error {}
+export class InvalidOfferCredentialBodyError extends Error {}
 export class InvalidProposedCredentialMessageError extends Error {}
 export class InvalidIssueCredentialMessageError extends Error {}
 export class InvalidRequestCredentialMessageError extends Error {}
