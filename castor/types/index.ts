@@ -3,8 +3,6 @@ import {
   VerificationMaterialAuthentication,
 } from "peer-did/types";
 
-type PeerDIDKeyType = "encryptionKeys" | "signingKeys";
-
 export type PeerDIDKeys = {
   signingKeys: VerificationMaterialAuthentication[];
   encryptionKeys: VerificationMaterialAgreement[];

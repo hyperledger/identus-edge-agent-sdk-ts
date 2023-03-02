@@ -1,7 +1,6 @@
 import {
   DID,
   DIDDocument,
-  DIDResolver,
   KeyPair,
   PublicKey,
   Service as DIDDocumentService,

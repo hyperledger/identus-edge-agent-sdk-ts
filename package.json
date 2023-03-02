@@ -1,5 +1,5 @@
 {
-  "name": "@input-output-hk/atala-prism-walletsdk",
+  "name": "@input-output-hk/atala-prism-wallet-sdk",
   "version": "0.0.1",
   "description": "PRISM typescript SDK",
   "main": "src/index.ts",
@@ -29,12 +29,12 @@
     "peerdid"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/input-output-hk"
+    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/input-output-hk/atala-prism-walletsdk-ts.git",
-    "directory": "@input-output-hk/atala-prism-walletsdk"
+    "url": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts.git",
+    "directory": "@input-output-hk/atala-prism-wallet-sdk"
   },
   "scripts": {
     "build": "rm -rf build && npm run build:node && npm run build:node-esm && npm run build:browser && npm run build:browser-esm",
@@ -42,11 +42,12 @@
     "build:node-esm": "rm -rf build/node/es && npx rollup -c rollup/node/rollup.es.js",
     "build:browser": "rm -rf build/browser/cjs && npx rollup -c rollup/browser/rollup.cjs.js",
     "build:browser-esm": "rm -rf build/browser/es && npx rollup -c rollup/browser/rollup.es.js",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' npx mocha -r ts-node/register 'tests/**/*.ts'",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' npx nyc mocha -r ts-node/register 'tests/**/*.ts'",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
     "protos": "yarn protos:node && yarn protos:common",
     "protos:node": "protoc -Iprotos --proto_path=castor/protos --ts_out=castor/protos  castor/protos/node_models.proto",
-    "protos:common": "protoc -Iprotos --proto_path=castor/protos --ts_out=castor/protos  castor/protos/common_models.proto"
+    "protos:common": "protoc -Iprotos --proto_path=castor/protos --ts_out=castor/protos  castor/protos/common_models.proto",
+    "coverage:check": "npx nyc check-coverage --lines 70 --branches 45 --functions 60 --statements 70"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
@@ -56,6 +57,9 @@
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@rollup/plugin-wasm": "^5.1.2",
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/chai": "^4.3.4",
     "@types/elliptic": "^6.4.14",
     "@types/google-protobuf": "^3.15.6",
@@ -63,10 +67,14 @@
     "@types/node": "^18.14.2",
     "@types/sinon": "^10.0.13",
     "@types/uuid": "^9.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
     "antlr4ts-cli": "^0.5.0-alpha.4",
     "chai": "^4.3.7",
+    "eslint": "^8.35.0",
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
+    "nyc": "^15.1.0",
     "rollup": "^2.68.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-copy": "^3.4.0",
@@ -74,17 +82,17 @@
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.34.1",
     "run-all": "^1.0.1",
+    "semantic-release": "19.0.5",
+    "semantic-release-slack-bot": "^3.5.3",
     "sinon": "^15.0.1",
     "ts-node": "^10.8.1",
     "ts-protoc-gen": "^0.15.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.9.5"
   },
   "keywords": [],
   "author": "",
   "license": "",
   "dependencies": {
-    "@input-output-hk/atala-prism-protos": "1.4.1",
-    "@input-output-hk/atala-prism-sdk": "1.4.1",
     "@scure/bip39": "^1.1.1",
     "@sicpa_open_source/peer-did-ts": "^0.2.0",
     "@stablelib/sha256": "^1.0.1",
@@ -95,7 +103,6 @@
     "google-protobuf": "^3.21.2",
     "jose": "^4.12.2",
     "multiformats": "^9.9.0",
-    "proto3-json-serializer": "^1.1.0",
     "uuid": "^9.0.0"
   }
 }

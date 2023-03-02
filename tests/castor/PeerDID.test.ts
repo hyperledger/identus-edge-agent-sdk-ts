@@ -1,27 +1,15 @@
 import { expect } from "chai";
 
-import {
-  PrivateKey,
-  Curve,
-  PublicKey,
-  KeyPair,
-  Service,
-  DID,
-} from "../../domain";
+import { Curve, KeyPair, Service, DID } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 
 import Castor from "../../castor/Castor";
 import {
   VerificationMaterialAuthentication,
   VerificationMaterialFormatPeerDID,
-  VerificationMethodTypeAgreement,
   VerificationMethodTypeAuthentication,
 } from "../../peer-did/types";
-import {
-  MultiCodec,
-  KeyType as PeerDIDKeyType,
-  Codec,
-} from "../../peer-did/helpers/Multicodec";
+import { MultiCodec } from "../../peer-did/helpers/Multicodec";
 import { PeerDIDResolver } from "../../castor/resolver/PeerDIDResolver";
 
 describe("DIDCreateTest", () => {
@@ -69,7 +57,7 @@ describe("DIDCreateTest", () => {
         curve: Curve.ED25519,
       },
     };
-    let KeyAgreementKeyPair: KeyPair = {
+    const KeyAgreementKeyPair: KeyPair = {
       ...agreementKeyCurve,
       privateKey: {
         ...agreementKeyCurve,
@@ -81,7 +69,7 @@ describe("DIDCreateTest", () => {
       },
     };
 
-    let authenticationKeyPair: KeyPair = {
+    const authenticationKeyPair: KeyPair = {
       ...authenticationKeyCurve,
       privateKey: {
         ...authenticationKeyCurve,
@@ -109,14 +97,14 @@ describe("DIDCreateTest", () => {
     expect(did.toString()).to.equal(validPeerDID);
   });
   it("Should resolver peerdid correctly", async () => {
-    let mypeerDID = new DID(
+    const mypeerDID = new DID(
       "did",
       "peer",
       "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
     );
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-    let document = await castor.resolveDID(mypeerDID.toString());
+    const document = await castor.resolveDID(mypeerDID.toString());
     expect(document.id.toString()).to.equal(mypeerDID.toString());
   });
 });

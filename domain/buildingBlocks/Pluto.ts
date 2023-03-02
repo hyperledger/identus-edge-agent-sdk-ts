@@ -7,32 +7,28 @@ import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { VerifiableCredential } from "../models/VerifiableCredential";
 
 export default interface Pluto {
-  start(): Promise<any>;
+  start(): Promise<void>;
 
-  storePrismDID(
-    did: DID,
-    keyPathIndex: number,
-    alias?: NullableType<string>
-  ): any;
+  storePrismDID(did: DID, keyPathIndex: number, alias?: string): void;
 
-  storePeerDID(did: DID, privateKeys: Array<PrivateKey>): any;
+  storePeerDID(did: DID, privateKeys: Array<PrivateKey>): void;
 
-  storeDIDPair(host: DID, receiver: DID, name: string): any;
+  storeDIDPair(host: DID, receiver: DID, name: string): void;
 
-  storeMessage(message: Message): any;
+  storeMessage(message: Message): void;
 
-  storeMessages(messages: Array<Message>): any;
+  storeMessages(messages: Array<Message>): void;
 
   storePrivateKeys(
     privateKey: PrivateKey,
     did: DID,
     keyPathIndex: number,
     metaId: string | null
-  ): any;
+  ): void;
 
-  storeMediator(mediator: DID, host: DID, routing: DID): any;
+  storeMediator(mediator: DID, host: DID, routing: DID): void;
 
-  storeCredential(credential: VerifiableCredential): any;
+  storeCredential(credential: VerifiableCredential): void;
 
   getAllPrismDIDs(): Array<PrismDIDInfo>;
 

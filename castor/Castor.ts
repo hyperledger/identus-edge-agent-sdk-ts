@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
