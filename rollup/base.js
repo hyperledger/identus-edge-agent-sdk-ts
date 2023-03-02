@@ -1,5 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
@@ -14,6 +15,9 @@ export default (mode, type) => {
       format: `${type}`,
     },
     plugins: [
+      peerDepsExternal({
+        packageJsonPath: '../package.json'
+      }),
       ignore(["@input-output-hk/atala-prism-sdk"]),
       json(),
       typescript({
@@ -34,6 +38,8 @@ export default (mode, type) => {
       cleanup(),
     ],
     external: [
+      "sql.js",
+      "sqlite3",
       "@input-output-hk/atala-prism-sdk",
       "antlr4ts",
       "antlr4ts/Lexer",
