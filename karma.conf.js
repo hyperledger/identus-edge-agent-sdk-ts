@@ -11,13 +11,32 @@ module.exports = function (config) {
     // List of files / patterns to load in the browser
     files: [
       // Your test files go here
+      "apollo/**/*.ts",
+      "castor/**/*.ts",
+      "config/**/*.ts",
+      "domain/**/*.ts",
+      "mercury/**/*.ts",
+      "peer-did/**/*.ts",
+      "pluto/**/*.ts",
+      "pollux/**/*.ts",
+      "prism-agent/**/*.ts",
       "tests/**/*.ts",
+      "tests/**/*.test.ts",
     ],
 
     // Preprocess matching files before serving them to the browser
     preprocessors: {
-      // Your test files will be processed with these loaders
+      "apollo/**/*.ts": ["karma-typescript", "sourcemap"],
+      "castor/**/*.ts": ["karma-typescript", "sourcemap"],
+      "config/**/*.ts": ["karma-typescript", "sourcemap"],
+      "domain/**/*.ts": ["karma-typescript", "sourcemap"],
+      "mercury/**/*.ts": ["karma-typescript", "sourcemap"],
+      "peer-did/**/*.ts": ["karma-typescript", "sourcemap"],
+      "pluto/**/*.ts": ["karma-typescript", "sourcemap"],
+      "pollux/**/*.ts": ["karma-typescript", "sourcemap"],
+      "prism-agent/**/*.ts": ["karma-typescript", "sourcemap"],
       "tests/**/*.ts": ["karma-typescript", "sourcemap"],
+      "tests/**/*.test.ts": ["karma-typescript", "sourcemap"],
     },
 
     // Test results reporter to use
@@ -25,7 +44,16 @@ module.exports = function (config) {
     reporters: ["mocha"],
 
     // TypeScript configuration
-    karmaTypescriptConfig: typescriptConfig,
+    karmaTypescriptConfig: {
+      coverageOptions: {
+        instrumentation: false,
+      },
+
+      compilerOptions: {
+        module: "commonjs",
+        target: "ES2020",
+      },
+    },
 
     // Plugins to use
     plugins: [
