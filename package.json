@@ -90,12 +90,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@types/mysql": "^2.15.21",
     "@types/sql.js": "^1.4.4",
     "bip39": "^3.1.0",
     "elliptic": "^6.5.4",
+    "require-esm-in-cjs": "^0.1.0",
     "uuid": "^9.0.0"
   },
   "peerDependencies": {
-    "sql.js": "^1.8.0"
+    "sql.js": "^1.8.0",
+    "sqlite3": "^5.1.4"
   }
 }

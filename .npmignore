@@ -5,3 +5,7 @@ cdn
 src
 config
 test.ts
+build/browser/cjs/tests
+build/browser/es/tests
+build/node/cjs/tests
+build/node/es/tests

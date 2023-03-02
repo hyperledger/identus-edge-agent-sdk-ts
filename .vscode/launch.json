@@ -4,22 +4,19 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Test Cardano",
-      "program": "${workspaceFolder}/test.js",
-      "args":[
-      
-      ]
-    },
-    {
-      "name": "Launch TypeScript",
-      "type": "node",
-      "request": "launch",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-      "args": ["./test.ts", "--transpile-only"],
-      "cwd": "${workspaceFolder}",
-      "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": ["<node_internals>/**", "node_modules/**"],
-      
+      "name": "Mocha All",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-r",
+        "ts-node/register",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/tests/**/*.ts"
+      ],
+      "env": {
+        "TS_NODE_COMPILER_OPTIONS": "{\"module\": \"commonjs\" }"
+      }
     }
   ]
 }

@@ -1,22 +1,19 @@
-import { DID } from './DID'
-import { DIDUrl } from './DIDUrl'
-import { CastorError } from './Errors';
-import { Curve } from './KeyCurve';
+import { DID } from "./DID";
+import { CastorError } from "./Errors";
+import { Curve } from "./KeyCurve";
 
-
-export class ServiceEndpoint{
+export class ServiceEndpoint {
   constructor(
-    public uri: String,
+    public uri: string,
     public accept: Array<string> = [],
-    public routingKeys: Array<string> = [],
+    public routingKeys: Array<string> = []
   ) {}
 }
 
 export class VerificationMethod {
-
   constructor(
-    public id: DIDUrl,
-    public controller: DID,
+    public id: string,
+    public controller: string,
     public type: string,
     public publicKeyJwk?: Map<string, string>,
     public publicKeyMultibase?: string
@@ -40,7 +37,8 @@ export class Service {
   constructor(
     public id: string,
     public type: Array<string>,
-    public serviceEndpoint: ServiceEndpoint) {}
+    public serviceEndpoint: ServiceEndpoint
+  ) {}
 }
 
 export class AlsoKnownAs {
@@ -60,29 +58,55 @@ export class Services {
 }
 
 export class Authentication {
-  constructor(public urls: Array<string>,public verificationMethods: Array<VerificationMethod>) {}
+  constructor(
+    public urls: Array<string>,
+    public verificationMethods: Array<VerificationMethod>
+  ) {}
 }
 
 export class AssertionMethod {
-  constructor(public urls: Array<string>,public verificationMethods: Array<VerificationMethod>) {}
+  constructor(
+    public urls: Array<string>,
+    public verificationMethods: Array<VerificationMethod>
+  ) {}
 }
 
 export class KeyAgreement {
-  constructor(public urls: Array<string>,public verificationMethods: Array<VerificationMethod>) {}
+  constructor(
+    public urls: Array<string>,
+    public verificationMethods: Array<VerificationMethod>
+  ) {}
 }
 
 export class CapabilityInvocation {
-  constructor(public urls: Array<string>,public verificationMethods: Array<VerificationMethod>) {}
+  constructor(
+    public urls: Array<string>,
+    public verificationMethods: Array<VerificationMethod>
+  ) {}
 }
 
 export class CapabilityDelegation {
-  constructor(public urls: Array<string>,public verificationMethods: Array<VerificationMethod>) {}
+  constructor(
+    public urls: Array<string>,
+    public verificationMethods: Array<VerificationMethod>
+  ) {}
 }
 
-export type DIDDocumentCoreProperty = Service | AlsoKnownAs | Controller | VerificationMethods | Services |
-   Authentication | AssertionMethod | KeyAgreement | CapabilityInvocation | CapabilityDelegation
+export type DIDDocumentCoreProperty =
+  | Service
+  | AlsoKnownAs
+  | Controller
+  | VerificationMethods
+  | Services
+  | Authentication
+  | AssertionMethod
+  | KeyAgreement
+  | CapabilityInvocation
+  | CapabilityDelegation;
 
 export class DIDDocument {
-  constructor(public id: DID, public coreProperties: Array<DIDDocumentCoreProperty>) {}
+  constructor(
+    public id: DID,
+    public coreProperties: Array<DIDDocumentCoreProperty>
+  ) {}
 }
-

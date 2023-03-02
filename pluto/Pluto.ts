@@ -50,10 +50,10 @@ export default class Pluto implements PlutoInterface {
   getDIDInfoByAlias(alias: string): PrismDIDInfo[] {
     throw new Error('Method not implemented.');
   }
-  getPrismDIDKeyPathIndex(did: DID): Number | null {
+  getPrismDIDKeyPathIndex(did: DID): number | null {
     throw new Error('Method not implemented.');
   }
-  getPrismLastKeyPathIndex(): Number {
+  getPrismLastKeyPathIndex(): number {
     throw new Error('Method not implemented.');
   }
   getAllPeerDIDs(): PeerDID[] {

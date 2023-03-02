@@ -1,4 +1,4 @@
-
+require('require-esm-in-cjs')
 const webpack = require('webpack');
 const path = require("path");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
@@ -7,7 +7,10 @@ const prod_Path = 'cdn';
 const src_Path = 'src';
 
 module.exports = (env) => ({
-  mode: 'production',
+  mode: 'development',
+  externals: {
+    sql: 'sql.js'
+  },
   performance: {
     hints: false
   },
@@ -39,9 +42,9 @@ module.exports = (env) => ({
     topLevelAwait: true,
     asyncWebAssembly: true
   },
-  resolve:{ 
+  resolve:{
     extensions: ['.ts', '.js','.wasm'],
-    fallback: { 
+    fallback: {
       "util": require.resolve('util/'),
       "crypto": require.resolve("crypto-browserify"),
       "stream": require.resolve("stream-browserify"),

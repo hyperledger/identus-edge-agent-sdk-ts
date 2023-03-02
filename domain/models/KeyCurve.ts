@@ -1,16 +1,18 @@
-
 export interface KeyCurve {
   curve: Curve;
   index?: number;
 }
 
 export enum Curve {
-  X25519 = 'X25519',
-  ED25519 = 'Ed25519',
-  SECP256K1 = 'secp256k1',
+  X25519 = "X25519",
+  ED25519 = "Ed25519",
+  SECP256K1 = "Secp256k1",
 }
 
-export function getKeyCurveByNameAndIndex(name: string, index?: number): KeyCurve {
+export function getKeyCurveByNameAndIndex(
+  name: string,
+  index?: number
+): KeyCurve {
   switch (name) {
     case Curve.X25519:
       return { curve: Curve.X25519 };
