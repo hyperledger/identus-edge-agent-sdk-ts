@@ -1,9 +1,9 @@
-import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
 import json from "@rollup/plugin-json";
+import esbuild from "rollup-plugin-esbuild";
 
 export default (mode, type) => {
   return {
@@ -16,13 +16,7 @@ export default (mode, type) => {
     plugins: [
       ignore(["@input-output-hk/atala-prism-sdk"]),
       json(),
-      typescript({
-        compilerOptions: {
-          declaration: true,
-          declarationMap: true,
-          outDir: `build/${mode}/${type}`,
-        },
-      }),
+      esbuild(),
       terser(),
       nodeResolve({
         //used to resolve NPM module reading from packages.json those entrypoint (ES6 - Main or Browser specific)
@@ -34,7 +28,6 @@ export default (mode, type) => {
       cleanup(),
     ],
     external: [
-      "@input-output-hk/atala-prism-sdk",
       "antlr4ts",
       "antlr4ts/Lexer",
       "antlr4ts/VocabularyImpl",
@@ -49,7 +42,7 @@ export default (mode, type) => {
       "antlr4ts/DefaultErrorStrategy",
       "antlr4ts/tree/ParseTreeWalker",
       "antlr4ts/misc/Utils",
-      "loadSync",
+      "axios",
       "google-protobuf",
       "protobufjs",
       "@scure/bip39",
@@ -58,7 +51,6 @@ export default (mode, type) => {
       "google-protobuf/google/protobuf/timestamp_pb",
       "@stablelib/sha256",
       "Buffer",
-      "castor/protos/_generated/node_models_pb.js",
     ],
   };
 };

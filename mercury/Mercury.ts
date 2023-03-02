@@ -12,7 +12,7 @@ export default class Mercury implements MercuryInterface {
   sendMessage(message: Message): Promise<Uint8Array> {
     throw new Error("Method not implemented.");
   }
-  sendMessageParseMessage(message: Message): Promise<Message | null> {
+  sendMessageParseMessage(message: Message): Promise<Message | undefined> {
     throw new Error("Method not implemented.");
   }
 }

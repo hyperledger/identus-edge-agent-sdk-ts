@@ -1,4 +1,4 @@
-import { AxiosStatic, AxiosResponse } from "axios";
+import { AxiosStatic } from "axios";
 
 export class HttpResponse<T> {
   constructor(public body: T, public httpStatus: number) {}
