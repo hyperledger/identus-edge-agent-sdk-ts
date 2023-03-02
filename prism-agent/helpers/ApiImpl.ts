@@ -4,9 +4,10 @@ import axios, {
   RawAxiosRequestHeaders,
 } from "axios";
 import { ApiError } from "../../domain/models/Errors";
-import { Api } from "./api";
+import { Api, HttpResponse } from "./api";
 import { HttpError } from "./HttpError";
 import { URL } from "url";
+
 export class ApiImpl implements Api {
   client: AxiosStatic = axios;
   async request<T>(
@@ -15,18 +16,18 @@ export class ApiImpl implements Api {
     urlParameters: Map<string, string>,
     httpHeaders: Map<string, string>,
     body?: any
-  ): Promise<T> {
+  ): Promise<HttpResponse<T>> {
     if (url.slice(0, 1) !== "/") {
       throw new ApiError.InvalidRequestPath(url);
     }
     const rawUrl = new URL(`${url}`);
     const rawHeaders: RawAxiosRequestHeaders = {};
 
-    for (let [name, value] of urlParameters) {
+    for (const [name, value] of urlParameters) {
       rawUrl.searchParams.append(name, value);
     }
 
-    for (let [name, value] of httpHeaders) {
+    for (const [name, value] of httpHeaders) {
       rawHeaders[name] = value;
     }
 
@@ -46,6 +47,6 @@ export class ApiImpl implements Api {
       throw new HttpError<T>(response);
     }
 
-    return response.data;
+    return new HttpResponse<T>(response.data, response.status);
   }
 }

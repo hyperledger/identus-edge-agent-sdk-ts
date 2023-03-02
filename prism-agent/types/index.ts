@@ -1,4 +1,5 @@
 import { DID, JsonString } from "domain/models";
+import { AgentError } from "domain/models/Errors";
 import { NullableType } from "domain/models/NullableType";
 
 interface InvitationInterface {
@@ -30,7 +31,22 @@ export class PrismOnboardingInvitation implements InvitationInterface {
   static parsePrismOnboardingInvitationFromJson(
     json: JsonString
   ): PrismOnboardingInvitation {
-    throw new Error("Not implemented");
+    const jsonObject = JSON.parse(json);
+    if (!jsonObject.onboardEndpoint) {
+      throw new AgentError.InvitationIsInvalidError(
+        "Undefined PrismOnboardingInvitation onboardEndpoint"
+      );
+    }
+    if (!jsonObject.type) {
+      throw new AgentError.InvitationIsInvalidError(
+        "Undefined PrismOnboardingInvitation type"
+      );
+    }
+    const onboardingEndpoint = jsonObject.onboardEndpoint;
+    const type = jsonObject.type;
+    const from = jsonObject.from;
+
+    return new PrismOnboardingInvitation(onboardingEndpoint, type, from);
   }
 }
 
@@ -41,4 +57,36 @@ export class OutOfBandInvitation implements InvitationInterface {
     public type: InvitationTypes,
     public from: NullableType<DID>
   ) {}
+
+  static parseOutOfBandInvitationFromJson(
+    json: JsonString
+  ): OutOfBandInvitation {
+    const jsonObject = JSON.parse(json);
+    if (!jsonObject.id) {
+      throw new AgentError.InvitationIsInvalidError(
+        "Undefined OutOfBandInvitation id"
+      );
+    }
+    if (!jsonObject.body) {
+      throw new AgentError.InvitationIsInvalidError(
+        "Undefined OutOfBandInvitation body"
+      );
+    }
+    if (!jsonObject.type) {
+      throw new AgentError.InvitationIsInvalidError(
+        "Undefined OutOfBandInvitation type"
+      );
+    }
+    if (!jsonObject.from) {
+      throw new AgentError.InvitationIsInvalidError(
+        "Undefined OutOfBandInvitation from"
+      );
+    }
+
+    const id = jsonObject.id;
+    const body = jsonObject.body;
+    const type = jsonObject.type;
+    const from = DID.fromString(jsonObject.from);
+    return new OutOfBandInvitation(id, body, type, from);
+  }
 }

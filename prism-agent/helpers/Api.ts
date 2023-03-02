@@ -1,5 +1,9 @@
 import { AxiosStatic, AxiosResponse } from "axios";
 
+export class HttpResponse<T> {
+  constructor(public body: T, public httpStatus: number) {}
+}
+
 export interface Api {
   client: AxiosStatic;
 
@@ -9,5 +13,5 @@ export interface Api {
     urlParameters: Map<string, string>,
     httpHeaders: Map<string, string>,
     body: any
-  ): Promise<T>;
+  ): Promise<HttpResponse<T>>;
 }

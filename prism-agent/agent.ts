@@ -23,6 +23,10 @@ import {
   PrismOnboardingInvitation,
 } from "./types";
 import { AgentError } from "../domain/models/Errors";
+import {
+  findProtocolTypeByValue,
+  ProtocolType,
+} from "./protocols/ProtocolTypes";
 
 enum AgentState {
   STOPPED,
@@ -185,20 +189,73 @@ export default class Agent {
 
     return did;
   }
-
   async parseInvitation(str: string): Promise<InvitationType> {
-    throw new Error("Not implemented");
+    const json = JSON.parse(str);
+    const typeString = findProtocolTypeByValue(json.type);
+
+    switch (typeString) {
+      case ProtocolType.PrismOnboarding:
+        return this.parsePrismInvitation(str);
+      case ProtocolType.Didcomminvitation:
+        return this.parseOOBInvitation(str);
+    }
+
+    throw new AgentError.UnknownInvitationTypeError();
   }
   async acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void> {
-    throw new Error("Not implemented");
+    if (!invitation.from) {
+      throw new AgentError.UnknownInvitationTypeError();
+    }
+    interface SendDID {
+      did: string;
+    }
+    const body: SendDID = {
+      did: invitation.from.toString(),
+    };
+    const response = await this.api.request(
+      "POST",
+      invitation.onboardEndpoint,
+      new Map(),
+      new Map(),
+      body
+    );
+    if (response.httpStatus != 200) {
+      throw new AgentError.FailedToOnboardError();
+    }
   }
   async signWith(did: DID, message: Uint8Array): Promise<Signature> {
-    throw new Error("Not implemented");
+    const privateKeys = this.pluto.getDIDPrivateKeysByDID(did);
+    if (!privateKeys || privateKeys.length <= 0) {
+      throw new AgentError.CannotFindDIDPrivateKey();
+    }
+    const [privateKey] = privateKeys;
+    return this.apollo.signByteArrayMessage(privateKey, message);
   }
   async parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation> {
-    throw new Error("Not implemented");
+    try {
+      const prismOnboarding =
+        PrismOnboardingInvitation.parsePrismOnboardingInvitationFromJson(str);
+      const url = prismOnboarding.onboardEndpoint;
+      const services: DIDDocumentService[] = [
+        new DIDDocumentService(
+          "#didcomm-1",
+          ["DIDCommMessaging"],
+          new DIDDocumentServiceEndpoint(url, ["DIDCommMessaging"])
+        ),
+      ];
+      const updateMediator = true;
+      const did = await this.createNewPeerDID(services, updateMediator);
+      prismOnboarding.from = did;
+      return prismOnboarding;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new AgentError.UnknownInvitationTypeError(e.message);
+      } else {
+        throw e;
+      }
+    }
   }
   async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
-    throw new Error("Not implemented");
+    return OutOfBandInvitation.parseOutOfBandInvitationFromJson(str);
   }
 }
