@@ -4,7 +4,6 @@ import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { InvalidDIDString } from "../../domain/models/errors/Castor";
 import { DIDUrlAbnfListener } from "./DIDUrlAbnfListener";
-import { URLSearchParams } from "url";
 
 import {
   FragContext,

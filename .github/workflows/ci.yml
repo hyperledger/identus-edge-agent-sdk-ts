@@ -7,7 +7,7 @@ on:
   pull_request:
   push:
     branches:
-      - "main"
+      - "master"
 
 defaults:
   run:
@@ -15,7 +15,7 @@ defaults:
 
 jobs:
   build-and-test:
-    name: "Build and test"
+    name: Build and test
     runs-on: ubuntu-latest
     env:
       NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
@@ -29,19 +29,25 @@ jobs:
         with:
           node-version: "lts/*"
           scope: "@input-output-hk"
-          registry-url: 'https://npm.pkg.github.com'
+          registry-url: "https://npm.pkg.github.com"
 
       - name: Install
-        run: yarn install
+        run: npm install
 
       - name: Eslint
-        run: yarn eslint .
+        run: npx eslint .
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
-      - name: Test
-        run: yarn test
+      - name: Build tests
+        run: npm run build:test
+
+      - name: Test node
+        run: npm run test:node
+
+      - name: Test browser
+        run: npm run test:browser
 
       - name: Check coverage
         run: yarn coverage:check

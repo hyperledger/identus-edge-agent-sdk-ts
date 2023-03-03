@@ -4,20 +4,7 @@ import { Curve, DID, KeyPair } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 
-let apollo: Apollo;
-let keyPair: KeyPair;
-
-describe("DIDCreateTest", () => {
-  beforeEach(() => {
-    apollo = new Apollo();
-    keyPair = apollo.createKeyPairFromKeyCurve(
-      apollo.createRandomSeed().seed,
-      {
-        curve: Curve.SECP256K1,
-      }
-    );
-  });
-
+describe("PRISMDID CreateTest", () => {
   it("Should correctly create a prismDID from an existing HexKey", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
