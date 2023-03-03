@@ -1,13 +1,15 @@
 import {Database as SQLDatabase} from 'sql.js';
 import {Database as SQLiteDabase} from 'sqlite3';
+import {Buffer} from 'buffer';
 
 export type ConnectionDatabaseType = SQLDatabase | SQLiteDabase | null;
+export type SqliteDatabaseType = ArrayLike<number> | Buffer | null;
 
 export type ConnectionSQL = 'sql';
 export type ConnectionSQLite = 'sqlite';
 type ConfigSQL = {
   type: ConnectionSQL;
-  databaseURL?: string;
+  sqliteDatabase?: SqliteDatabaseType;
   wasmBinaryURL?: string;
 }
 
@@ -25,5 +27,6 @@ export default interface ConnectionModel extends Pick<ConnectionParams, "type"> 
   connected: boolean;
   initialized: boolean;
   wasmBinaryURL?: string;
-  sqliteDatabaseURL?: string;
+  readonly filename?: string;
+  readonly sqliteDatabase?: SqliteDatabaseType;
 }

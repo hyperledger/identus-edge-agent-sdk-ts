@@ -7,8 +7,8 @@ import {Database as SQLDatabaseType, InitSqlJsStatic} from 'sql.js';
 import {sqlite3, Database as SQLiteDatabaseType} from 'sqlite3';
 
 export default class Connection implements ConnectionModel {
-  private databaseURL?: string;
-  private filename?: string;
+  readonly filename;
+  readonly sqliteDatabase;
   wasmBinaryURL?: string;
   initialized = false;
   connected = false;
@@ -19,8 +19,9 @@ export default class Connection implements ConnectionModel {
     this.type = params.type;
     if (params.type === 'sql') {
       this.wasmBinaryURL = params.wasmBinaryURL;
-      this.databaseURL = params.databaseURL;
+      this.sqliteDatabase = params.sqliteDatabase??null;
     }
+
     if (params.type === 'sqlite') {
       this.filename = params.filename;
     }
@@ -86,6 +87,7 @@ export default class Connection implements ConnectionModel {
 
 
   private get SQLDatabase(): Promise<SQLDatabaseType> {
+
     return new Promise(async (resolve, reject) => {
       /*
       * @todo:
@@ -99,7 +101,7 @@ export default class Connection implements ConnectionModel {
           locateFile: file => that.wasmBinaryURL ?? `https://sql.js.org/dist/${file}`
         });
 
-        resolve(new SQL.Database())
+        resolve(new SQL.Database(this.sqliteDatabase))
 
       } catch (error) {
         reject(error)
