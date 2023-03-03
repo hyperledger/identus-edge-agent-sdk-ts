@@ -6,6 +6,18 @@ export class InvalidURLError extends Error {
   }
 }
 
+export class NoSenderDIDSetError extends Error {
+  constructor(message?: string) {
+    super(message);
+  }
+}
+
+export class NoRecipientDIDSetError extends Error {
+  constructor(message?: string) {
+    super(message);
+  }
+}
+
 export class NoDIDReceiverSetError extends Error {
   constructor(message?: string) {
     super(message);
