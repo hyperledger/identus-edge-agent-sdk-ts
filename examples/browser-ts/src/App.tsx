@@ -1,28 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import * as sdk from "@input-output-hk/atala-prism-wallet-sdk/browser";
+import React from "react";
+import "./App.css";
+import {
+  Apollo,
+  Castor,
+  Domain,
+} from "@input-output-hk/atala-prism-wallet-sdk/browser";
 
-const apollo = new sdk.Apollo();
-console.log('Apollo test:', apollo.createRandomSeed());
+const apollo = new Apollo();
+const castor = new Castor(apollo);
+let mnemonics = apollo.createRandomMnemonics();
+let seedWords = apollo.createRandomSeed();
+let keys = apollo.createKeyPairFromKeyCurve(seedWords.seed, {
+  curve: Domain.Curve.SECP256K1,
+});
+console.log("mnemonics", mnemonics);
+console.log("seed words", seedWords);
+console.log("Keys", keys);
+
+function MnemonicsAndKeys() {
+  let [mnemonics, setMnemonics] = React.useState<string[]>([]);
+
+  function createMnemonics() {
+    setMnemonics(apollo.createRandomMnemonics());
+  }
+
+  return (
+    <>
+      <button onClick={createMnemonics}>Generate random mnemonics</button>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+        }}
+      >
+        {mnemonics.map((word, i) => (
+          <span
+            style={{
+              margin: 7,
+              padding: "4px 10px",
+              background: "lightgray",
+              borderRadius: 6,
+            }}
+          >
+            {i + 1}. {word}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Atala PRISM Wallet SDK Usage Examples</h1>
+      <h2>Mnemonics and keys</h2>
+      <MnemonicsAndKeys />
+      <code>const a = 2 + 2;</code>
     </div>
   );
 }
