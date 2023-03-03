@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { Buffer } from "buffer";
 
 import { Curve, KeyPair, Service, DID } from "../../domain";
 import Apollo from "../../apollo/Apollo";
@@ -12,7 +13,7 @@ import {
 import { MultiCodec } from "../../peer-did/helpers/Multicodec";
 import { PeerDIDResolver } from "../../castor/resolver/PeerDIDResolver";
 
-describe("DIDCreateTest", () => {
+describe("PEERDID CreateTest", () => {
   it("Should test milticodec coding", () => {
     const testData = Uint8Array.from(Buffer.from("test1"));
 

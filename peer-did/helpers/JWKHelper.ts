@@ -1,3 +1,5 @@
+import { base64url } from "multiformats/bases/base64";
+
 import { CastorError } from "../../domain/models/Errors";
 import {
   VerificationMaterialAgreement,
@@ -6,7 +8,6 @@ import {
   VerificationMethodTypeAuthentication,
   VerificationMethodTypePeerDID,
 } from "../types";
-import { base64url } from "multiformats/bases/base64";
 
 export type VerificationMaterial =
   | VerificationMaterialAgreement
@@ -20,7 +21,8 @@ export class JWKHelper {
     if (crv !== "X25519") {
       throw new CastorError.InvalidJWKKeysError();
     }
-    return Buffer.from(xKey, "base64url");
+
+    return Buffer.from(base64url.decode(`u${xKey}`));
   }
 
   static fromJWKAuthentication(
@@ -32,7 +34,7 @@ export class JWKHelper {
     if (crv !== "Ed25519") {
       throw new CastorError.InvalidJWKKeysError();
     }
-    return Buffer.from(xKey, "base64url");
+    return Buffer.from(base64url.decode(`u${xKey}`));
   }
 
   static toJWK(publicKey: Uint8Array, material: VerificationMethodTypePeerDID) {
