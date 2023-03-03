@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig-alt.json",
+  "compilerOptions": {
+    "outDir": "./build/tests",
+    "module": "commonjs"
+  },
+  "include": ["tests"]
+}
