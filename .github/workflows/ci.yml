@@ -29,19 +29,22 @@ jobs:
         with:
           node-version: "lts/*"
           scope: "@input-output-hk"
-          registry-url: 'https://npm.pkg.github.com'
+          registry-url: "https://npm.pkg.github.com"
 
       - name: Install
-        run: yarn install
+        run: npm install
 
       - name: Eslint
-        run: yarn eslint .
+        run: npx eslint .
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
-      - name: Test
-        run: yarn test
+      - name: Test node
+        run: npm run test:node
+
+      - name: Test browser
+        run: npm run test:browser
 
       - name: Check coverage
         run: yarn coverage:check
