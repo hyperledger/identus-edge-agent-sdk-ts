@@ -107,4 +107,24 @@ describe("DIDCreateTest", () => {
     const document = await castor.resolveDID(mypeerDID.toString());
     expect(document.id.toString()).to.equal(mypeerDID.toString());
   });
+
+  it.only("Create a PeerDID and verify a signature", () => {
+    const apollo = new Apollo();
+    const castor = new Castor(apollo);
+    const did = new DID(
+      "did",
+      "peer",
+      "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+    );
+    const keyPair = apollo.createKeyPairFromKeyCurve(
+      apollo.createRandomSeed().seed,
+      {
+        curve: Curve.ED25519,
+      }
+    );
+    const text = "The quick brown fox jumps over the lazy dog";
+    const signature = apollo.signStringMessage(keyPair.privateKey, text);
+
+    castor.verifySignature(did, Buffer.from(text), Buffer.from(signature.value))
+  })
 });

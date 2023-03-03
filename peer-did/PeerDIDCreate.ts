@@ -3,6 +3,7 @@ import {
   DID,
   KeyPair,
   Service as DIDDocumentService,
+  PublicKey,
 } from "../domain/models";
 import { CastorError } from "../domain/models/Errors";
 import { JWKHelper, VerificationMaterial } from "./helpers/JWKHelper";

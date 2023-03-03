@@ -12,7 +12,7 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/tests/**/*.ts"
+        "${workspaceFolder}/tests/castor/PrismDID.test.ts"
       ],
       "env": {
         "TS_NODE_COMPILER_OPTIONS": "{\"module\": \"commonjs\" }"

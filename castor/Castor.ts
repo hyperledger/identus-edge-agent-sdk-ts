@@ -9,6 +9,7 @@ import {
   DIDDocument,
   PrismDIDMethodId,
   DIDResolver,
+  Curve
 } from "../domain/models";
 import {
   getUsageId,
@@ -23,6 +24,10 @@ import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
 import { CastorError } from "../domain/models/Errors";
+import {
+  VerificationMethod as DIDDocumentVerificationMethod,
+    VerificationMethods as DIDDocumentVerificationMethods,
+  } from "../domain";
 
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
@@ -107,6 +112,50 @@ export default class Castor implements CastorInterface {
     challenge: Uint8Array,
     signature: Uint8Array
   ): Promise<boolean> {
-    throw new Error("Not implemented");
+    const didDocument = await this.resolveDID(did.toString())
+    didDocument
+    const verificationMethods = didDocument.coreProperties.reduce<DIDDocumentVerificationMethod[]>((result, property) => {
+      if (property instanceof DIDDocumentVerificationMethods) {
+       result.push(...property.values);
+      }
+      return result;
+    }, []);
+    var publicKey = null;
+    if (did.method == 'prism') {
+      const method = verificationMethods.find(method => method.type == Curve.SECP256K1);
+      if (method == null) {
+        throw new Error("Not verification method for Prism DID")
+      }
+      if (method.publicKeyMultibase == null) {
+        throw new Error("No public key multibase available for Prism DID")
+      }
+      try {
+        publicKey = this.apollo.compressedPublicKeyFromCompresedData(Buffer.from(method.publicKeyMultibase)).uncompressed;
+      } catch(e) {
+        throw new Error()
+      }
+      
+    } else if(did.method == 'peer') {
+      const method = verificationMethods.find(method => method.type == Curve.ED25519);
+      if (method == null) {
+        throw new Error("Not verification method for DID peer")
+      }
+      if (method.publicKeyJwk == null) {
+        throw new Error("No public key JWK available for DID peer")
+      }
+      publicKey = this.apollo.compressedPublicKeyFromPublicKey({
+        keyCurve: {
+          curve: Curve.ED25519
+        }, 
+        value: method.publicKeyJwk.x
+      }).uncompressed
+      
+    } else {
+      throw new Error("Did not supported")
+    }
+    if (publicKey != null) {
+      return this.apollo.verifySignature(publicKey, challenge, {value: signature})
+    }
+    throw new Error("Wrong method");
   }
 }
