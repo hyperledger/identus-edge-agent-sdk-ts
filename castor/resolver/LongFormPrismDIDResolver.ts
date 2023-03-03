@@ -24,6 +24,7 @@ import {
   getUsageId,
   PrismDIDPublicKey,
 } from "../../castor/did/prismDID/PrismDIDPublicKey";
+import * as base64 from "multiformats/bases/base64";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
@@ -33,11 +34,12 @@ export class LongFormPrismDIDResolver implements DIDResolver {
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DIDParser.parse(didString);
     const prismDID = new LongFormPrismDID(did);
-
+    const state = prismDID.encodedState;
+    const base64State = base64.base64url.decode(`u${state}`);
     const [verificationMethods, services] = this.decodeState(
       did,
       prismDID.stateHash,
-      Buffer.from(prismDID.encodedState, "base64url")
+      base64State
     );
     const servicesProperty = new DIDDocumentServices(services);
     const verificationMethodsProperty = new DIDDocumentVerificationMethods([

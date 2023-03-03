@@ -1,9 +1,12 @@
+import * as base64 from "multiformats/bases/base64";
+
 import {
   Curve,
   DID,
   KeyPair,
   Service as DIDDocumentService,
 } from "../domain/models";
+
 import { CastorError } from "../domain/models/Errors";
 import { JWKHelper, VerificationMaterial } from "./helpers/JWKHelper";
 import { MultiCodec } from "./helpers/Multicodec";
@@ -80,9 +83,13 @@ export class PeerDIDCreate {
     );
     if (peerDIDServices.length === 1) {
       const peerDIDService = peerDIDServices[0];
-      return Buffer.from(JSON.stringify(peerDIDService)).toString("base64url");
+      return base64.base64url.baseEncode(
+        Buffer.from(JSON.stringify(peerDIDService))
+      );
     }
-    return Buffer.from(JSON.stringify(peerDIDServices)).toString("base64url");
+    return base64.base64url.baseEncode(
+      Buffer.from(JSON.stringify(peerDIDServices))
+    );
   }
 
   private validateRawKeyLength(key: Uint8Array) {
