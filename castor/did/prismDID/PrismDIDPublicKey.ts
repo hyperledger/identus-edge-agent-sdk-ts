@@ -121,31 +121,33 @@ export class PrismDIDPublicKey {
     if (!proto.has_compressed_ec_key_data) {
       throw new CastorError.InvalidPublicKeyEncoding();
     }
-    const publicKey: PublicKey = {
+    if (proto.key_data !== "compressed_ec_key_data") {
+      throw new CastorError.ExpectedCompressedKey();
+    }
+
+    const publicKey: PublicKey = apollo.compressedPublicKeyFromPublicKey({
       keyCurve: {
         curve: Curve.SECP256K1,
       },
-      value: Buffer.from(proto.compressed_ec_key_data.data).toString("hex"),
-    };
+      value: proto.compressed_ec_key_data.data,
+    }).uncompressed;
+
     return new PrismDIDPublicKey(apollo, id, getUsage(usage), publicKey);
   }
 
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
-    const compressed =
-      new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
-        curve: Curve.SECP256K1,
-        data: Buffer.from(
-          this.apollo.compressedPublicKeyFromCompresedData(
-            Buffer.from(this.keyData.value, "hex")
-          ).uncompressed.value
-        ),
-      });
-
+    const compressed = this.apollo.compressedPublicKeyFromCompresedData(
+      this.keyData.value
+    );
     const usage = getProtosUsage(this.usage);
     const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({
       id: this.id,
       usage: usage,
-      compressed_ec_key_data: compressed,
+      compressed_ec_key_data:
+        new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
+          curve: Curve.SECP256K1,
+          data: compressed.value,
+        }),
     });
     return publicKey;
   }

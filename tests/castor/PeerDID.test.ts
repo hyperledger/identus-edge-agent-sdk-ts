@@ -61,11 +61,11 @@ describe("PEERDID CreateTest", () => {
       ...agreementKeyCurve,
       privateKey: {
         ...agreementKeyCurve,
-        value: "COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE",
+        value: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
       },
       publicKey: {
         ...agreementKeyCurve,
-        value: "rI3CjEk-yaFi5bQTavOmV25EJHQnDQJeIi4OV6p_f2U",
+        value: Buffer.from("rI3CjEk-yaFi5bQTavOmV25EJHQnDQJeIi4OV6p_f2U"),
       },
     };
 
@@ -73,11 +73,11 @@ describe("PEERDID CreateTest", () => {
       ...authenticationKeyCurve,
       privateKey: {
         ...authenticationKeyCurve,
-        value: "JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs",
+        value: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
       },
       publicKey: {
         ...authenticationKeyCurve,
-        value: "dm5f2GdR5BaHpRxB8bTElvE_0gIC2p404Msx9swJ914",
+        value: Buffer.from("dm5f2GdR5BaHpRxB8bTElvE_0gIC2p404Msx9swJ914"),
       },
     };
 
@@ -125,6 +125,10 @@ describe("PEERDID CreateTest", () => {
     const text = "The quick brown fox jumps over the lazy dog";
     const signature = apollo.signStringMessage(keyPair.privateKey, text);
 
-    castor.verifySignature(did, Buffer.from(text), Buffer.from(signature.value))
-  })
+    castor.verifySignature(
+      did,
+      Buffer.from(text),
+      Buffer.from(signature.value)
+    );
+  });
 });

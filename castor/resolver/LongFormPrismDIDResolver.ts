@@ -90,7 +90,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
                 keyCurve: {
                   curve: Curve.SECP256K1,
                 },
-                value: key.key_data,
+                value: key.compressed_ec_key_data.data,
               }
             );
           }
@@ -115,7 +115,8 @@ export class LongFormPrismDIDResolver implements DIDResolver {
             did.toString(),
             publicKey.keyData.keyCurve.curve,
             undefined,
-            publicKey.keyData.value
+            //Removing the base64 encoding, the m
+            base64.base64.encode(publicKey.keyData.value).slice(1)
           );
           partialResult.set(didUrl.string(), method);
           return partialResult;

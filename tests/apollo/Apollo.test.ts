@@ -97,10 +97,10 @@ describe("Apollo Tests", () => {
       });
 
       it("Should test secp256k1 keypair generation", () => {
-        expect(Buffer.from(keyPair.publicKey.value, "hex").length).to.equal(
+        expect(keyPair.publicKey.value.length).to.equal(
           ECConfig.PUBLIC_KEY_BYTE_SIZE
         );
-        expect(Buffer.from(keyPair.privateKey.value, "hex").length).to.equal(
+        expect(keyPair.privateKey.value.length).to.equal(
           ECConfig.PRIVATE_KEY_BYTE_SIZE
         );
       });

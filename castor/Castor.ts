@@ -9,7 +9,7 @@ import {
   DIDDocument,
   PrismDIDMethodId,
   DIDResolver,
-  Curve
+  Curve,
 } from "../domain/models";
 import {
   getUsageId,
@@ -26,8 +26,8 @@ import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
 import { CastorError } from "../domain/models/Errors";
 import {
   VerificationMethod as DIDDocumentVerificationMethod,
-    VerificationMethods as DIDDocumentVerificationMethods,
-  } from "../domain";
+  VerificationMethods as DIDDocumentVerificationMethods,
+} from "../domain";
 import * as base64 from "multiformats/bases/base64";
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
@@ -112,30 +112,34 @@ export default class Castor implements CastorInterface {
     challenge: Uint8Array,
     signature: Uint8Array
   ): Promise<boolean> {
-    const didDocument = await this.resolveDID(did.toString())
-    didDocument
-    const verificationMethods = didDocument.coreProperties.reduce<DIDDocumentVerificationMethod[]>((result, property) => {
+    const didDocument = await this.resolveDID(did.toString());
+    didDocument;
+    const verificationMethods = didDocument.coreProperties.reduce<
+      DIDDocumentVerificationMethod[]
+    >((result, property) => {
       if (property instanceof DIDDocumentVerificationMethods) {
-       result.push(...property.values);
+        result.push(...property.values);
       }
       return result;
     }, []);
-    let publicKey = null;
-    if (did.method == 'prism') {
-      const method = verificationMethods.find(method => method.type == Curve.SECP256K1);
-      if (method == null) {
-        throw new Error("Not verification method for Prism DID")
+    let publicKey: PublicKey;
+    if (did.method == "prism") {
+      const method = verificationMethods.find(
+        (method) => method.type == Curve.SECP256K1
+      );
+      if (!method) {
+        throw new Error("Not verification method for Prism DID");
       }
-      if (method.publicKeyMultibase == null) {
-        throw new Error("No public key multibase available for Prism DID")
+      if (!method.publicKeyMultibase) {
+        throw new Error("No public key multibase available for Prism DID");
       }
-      try {
-        publicKey = this.apollo.compressedPublicKeyFromCompresedData(Buffer.from(method.publicKeyMultibase)).uncompressed;
-      } catch(e) {
-        throw new Error()
-      }
-      
-    } else if(did.method == 'peer') {
+      publicKey = {
+        keyCurve: {
+          curve: Curve.SECP256K1,
+        },
+        value: Buffer.from(method.publicKeyMultibase),
+      };
+    } else if (did.method == "peer") {
       throw new Error("Peer DID not implemented");
       // const method = verificationMethods.find(method => method.type == Curve.ED25519);
       // if (method == null) {
@@ -147,15 +151,16 @@ export default class Castor implements CastorInterface {
       // publicKey = this.apollo.compressedPublicKeyFromPublicKey({
       //   keyCurve: {
       //     curve: Curve.ED25519
-      //   }, 
+      //   },
       //   value: method.publicKeyJwk.x
       // }).uncompressed
-      
     } else {
-      throw new Error("Did not supported")
+      throw new Error("Did not supported");
     }
     if (publicKey != null) {
-      return this.apollo.verifySignature(publicKey, challenge, {value: signature})
+      return this.apollo.verifySignature(publicKey, challenge, {
+        value: signature,
+      });
     }
     throw new Error("Wrong method");
   }

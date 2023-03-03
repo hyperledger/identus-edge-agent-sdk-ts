@@ -20,9 +20,8 @@ describe("PRISMDID CreateTest", () => {
       keyCurve: {
         curve: Curve.SECP256K1,
       },
-      value: pubHex,
+      value: Buffer.from(pubHex, "hex"),
     }).uncompressed;
-
     const createdDID = await castor.createPrismDID(masterPublicKey, []);
     const resolveCreated = await castor.resolveDID(createdDID.toString());
 
@@ -32,18 +31,23 @@ describe("PRISMDID CreateTest", () => {
   it.only("Create a PrismDID and verify a signature", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-
     const keyPair = apollo.createKeyPairFromKeyCurve(
       apollo.createRandomSeed().seed,
       {
         curve: Curve.SECP256K1,
       }
     );
-    const did = await castor.createPrismDID(keyPair.publicKey, []);
+    const masterPublicKey = apollo.compressedPublicKeyFromPublicKey(
+      keyPair.publicKey
+    ).uncompressed;
+    const did = await castor.createPrismDID(masterPublicKey, []);
     const text = "The quick brown fox jumps over the lazy dog";
     const signature = apollo.signStringMessage(keyPair.privateKey, text);
-
-    castor.verifySignature(did, Buffer.from(text), Buffer.from(signature.value))
-
-  })
+    const result = await castor.verifySignature(
+      did,
+      Buffer.from(text),
+      Buffer.from(signature.value)
+    );
+    expect(result).to.be.equal(true);
+  });
 });

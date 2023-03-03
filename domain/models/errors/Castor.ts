@@ -1,5 +1,3 @@
-
-
 export class InvalidLongFormDID extends Error {
   constructor(message?: string) {
     super(message);
@@ -13,6 +11,12 @@ export class MethodIdIsDoesNotSatisfyRegex extends Error {
 }
 
 export class InvalidPublicKeyEncoding extends Error {
+  constructor(message?: string) {
+    super(message);
+  }
+}
+
+export class ExpectedCompressedKey extends Error {
   constructor(message?: string) {
     super(message);
   }
