@@ -1,15 +1,29 @@
-import {Database as SQLDatabase, InitSqlJsStatic} from 'sql.js';
-import {Database as SQLiteDatabase} from 'sqlite3';
-export type ConnectionType = 'sql' | 'sqlite';
-export type ConnectionDatabaseType = SQLDatabase | SQLiteDatabase | null;
-export type ConnectionDriverType = InitSqlJsStatic;
-export type ConnectionParams = {
+import {Database as SQLDatabase} from 'sql.js';
+import {Database as SQLiteDabase} from 'sqlite3';
+
+export type ConnectionDatabaseType = SQLDatabase | SQLiteDabase | null;
+
+export type ConnectionSQL = 'sql';
+export type ConnectionSQLite = 'sqlite';
+type ConfigSQL = {
+  type: ConnectionSQL;
   databaseURL?: string;
-  type: ConnectionType;
+  wasmBinaryURL?: string;
 }
-export default interface ConnectionModel extends Pick<ConnectionParams, 'type'> {
-  connect(driver: ConnectionDriverType): Promise<any>;
+
+type ConfigSQLite = {
+  type: ConnectionSQLite;
+  filename: string;
+
+}
+
+export type ConnectionParams = ConfigSQL | ConfigSQLite
+
+export default interface ConnectionModel extends Pick<ConnectionParams, "type"> {
+  connect(driver: ConnectionDatabaseType): Promise<any>;
   disconnect(): Promise<any>;
   connected: boolean;
   initialized: boolean;
+  wasmBinaryURL?: string;
+  sqliteDatabaseURL?: string;
 }

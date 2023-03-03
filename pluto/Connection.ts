@@ -1,14 +1,15 @@
 import ConnectionModel, {
   ConnectionDatabaseType,
-  ConnectionDriverType,
-  ConnectionParams
+  ConnectionParams,
 } from '../domain/models/Connection';
 import ConnectionError from '../domain/models/errors/Connection';
-import {InitSqlJsStatic} from 'sql.js';
-import sqljs from 'sql.js';
+import {Database as SQLDatabaseType, InitSqlJsStatic} from 'sql.js';
+import {sqlite3, Database as SQLiteDatabaseType} from 'sqlite3';
 
 export default class Connection implements ConnectionModel {
   private databaseURL?: string;
+  private filename?: string;
+  wasmBinaryURL?: string;
   initialized = false;
   connected = false;
   type;
@@ -16,89 +17,115 @@ export default class Connection implements ConnectionModel {
 
   constructor(params: ConnectionParams) {
     this.type = params.type;
-    this.databaseURL = params.databaseURL;
-    // this.init();
+    if (params.type === 'sql') {
+      this.wasmBinaryURL = params.wasmBinaryURL;
+      this.databaseURL = params.databaseURL;
+    }
+    if (params.type === 'sqlite') {
+      this.filename = params.filename;
+    }
   }
 
-  async init() {
-    let driver:ConnectionDriverType;
-    let database: ConnectionDatabaseType;
-    try {
-      driver =  await this.getDriver();
-
-    } catch (error) {
-        throw new ConnectionError((error as ConnectionError).message)
-    }
-
-    try {
-      database = await this.connect(driver);
-    } catch (error) {
-      throw error;
-    }
-    this.initialized = true;
-    this.database = database;
-  }
-
-  async connect(driver:ConnectionDriverType): Promise<any> {
-    const that = this;
-    let database:ConnectionDatabaseType;
-
-    switch (driver.name) {
-      case 'initSqlJs':
+  async connect(): Promise<any> {
+    switch (this.type) {
+      case 'sql':
         try {
-          const SQL = await driver(this.databaseURL !== undefined ? {
-
-            locateFile(url: string, scriptDirectory: string): string {
-              return that.databaseURL as unknown as string;
-            }
-          } : {})
-          that.connected = true;
-          database = new SQL.Database();
-
+          this.database = await this.SQLDatabase;
+          this.connected = true;
         } catch (error) {
-          // Unable to connect to database
-          throw new ConnectionError((error as Error).message);
+          throw error
         }
         break;
-
-      default:
-        throw new ConnectionError(`Internal error: unable to handle the case of function ${driver.name}`);
+      case 'sqlite':
+        try {
+          const db = await this.SqliteDatabase;
+          this.database = db;
+          this.connected = await new Promise<boolean>((resolve, reject) => {
+            const openHandler = () => {
+              resolve(true);
+            }
+            const errorHandler = () => {
+              reject(false);
+            }
+            db.on("open", openHandler)
+            db.on('error', errorHandler);
+          })
+        } catch (error) {
+          throw error
+        }
+        break;
     }
-    return database;
   }
 
-  async disconnect(): Promise<void> {
+  async disconnect() {
     if(this.database) {
       switch (this.type) {
         case 'sql':
           this.database.close();
           this.connected = false;
           break;
+        case 'sqlite':
+          this.connected = await new Promise<boolean>((resolve) => {
+            this.database?.close(() => {
+              resolve(false);
+            });
+          })
       }
     }
   }
 
-  private async getDriver(): Promise<ConnectionDriverType> {
-    let database:ConnectionDriverType;
-    /*
 
-    * Here you can add driver support.
-    * Make sure you've defined a type for the given driver, then handle it in the switch cases
-    *
-    * */
-    switch (this.type) {
-      case 'sql':
-        try {
-          database = require('sql.js') as InitSqlJsStatic;
-        } catch (error) {
-          console.log(error)
-          throw new ConnectionError(`Unable to import sql driver, please install sql.js and try again.`);
-        }
-        break;
-      default:
-        throw new ConnectionError(`The driver ${this.type} is not supported, please contact support.`);
+
+  private async getSQLPackage() {
+    try {
+      return (await import('sql.js') as {default: InitSqlJsStatic}).default;
+    } catch (error) {
+      throw new ConnectionError(`Unable to import sql driver, please install sql.js and try again.`);
     }
-    return database;
   }
 
+
+  private get SQLDatabase(): Promise<SQLDatabaseType> {
+    return new Promise(async (resolve, reject) => {
+      /*
+      * @todo:
+      *   - Load databases depending on the TARGET = node | browser
+      * */
+      try {
+        const sqlInit:InitSqlJsStatic = await this.getSQLPackage();
+        const that = this;
+        const SQL = await sqlInit({
+          // In browser should load async from URL
+          locateFile: file => that.wasmBinaryURL ?? `https://sql.js.org/dist/${file}`
+        });
+
+        resolve(new SQL.Database())
+
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  private get SqliteDatabase(): Promise<SQLiteDatabaseType> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const sqlitePackage = await this.getSqlitePackage();
+        const sqlite3 = sqlitePackage.verbose();
+        resolve(new sqlite3.Database(this.filename ?? ":memory")); // default to memory
+      } catch (error) {
+        reject(error)
+      }
+      })
+  }
+
+
+  private async getSqlitePackage() {
+
+    try {
+      return (await import('sqlite3') as unknown as  ({default: sqlite3})).default;
+    } catch (error) {
+      throw new ConnectionError("Unable to sqlite driver, please install sqlite3");
+    }
+  }
 }

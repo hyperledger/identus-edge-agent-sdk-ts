@@ -1,4 +1,3 @@
-
 import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto'
 import { DID, PrivateKey } from '../domain/models';
 import { DIDPair } from '../domain/models/DIDPair';
@@ -7,8 +6,7 @@ import { Message } from '../domain/models/Message';
 import { PeerDID } from '../domain/models/PeerDID';
 import { PrismDIDInfo } from '../domain/models/PrismDIDInfo';
 import { VerifiableCredential } from '../domain/models/VerifiableCredential';
-import {io} from '@input-output-hk/atala-prism-sdk-internals';
-import Connection = io.iohk.atala.prism.protos.Connection;
+import Connection from './Connection';
 
 export default class Pluto implements PlutoInterface {
   constructor(connection: Connection) {
