@@ -20,7 +20,6 @@ describe('BROWSER - Connection tests', () => {
     })
 
     await connection.connect();
-
     expect(connection.connected).true;
 
     await connection.disconnect();

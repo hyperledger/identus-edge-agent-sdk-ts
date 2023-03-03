@@ -4,7 +4,7 @@ import { Curve } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 
-describe("DIDCreateTest", () => {
+describe("PRISMDID CreateTest", () => {
   it("Should correctly create a prismDID from an existing HexKey", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
