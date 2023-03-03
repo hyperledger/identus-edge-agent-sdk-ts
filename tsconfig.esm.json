@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig-alt.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./build/esm",
     "module": "esnext"
