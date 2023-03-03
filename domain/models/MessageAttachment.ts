@@ -39,13 +39,13 @@ type AttachmentData =
 export class AttachmentDescriptor {
   constructor(
     public readonly id: string,
-    public readonly mediaType: string | null = null,
     public readonly data: AttachmentData,
-    public readonly filename: Array<string> | null,
-    public readonly format: string | null = null,
-    public readonly lastModTime: string | null = null,
-    public readonly byteCount: number | null = null,
-    public readonly deascription: string | null = null
+    public readonly mediaType?: string,
+    public readonly filename?: Array<string>,
+    public readonly format?: string,
+    public readonly lastModTime?: string,
+    public readonly byteCount?: number,
+    public readonly deascription?: string
   ) {}
 
   static build<T>(
@@ -57,6 +57,6 @@ export class AttachmentDescriptor {
     const attachment: AttachmentBase64 = {
       base64: encoded,
     };
-    return new AttachmentDescriptor(id, mediaType, attachment);
+    return new AttachmentDescriptor(id, attachment, mediaType);
   }
 }

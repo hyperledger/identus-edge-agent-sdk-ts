@@ -1,4 +1,4 @@
-import { DIDPair } from "domain/models/DIDPair";
+import { DIDPair } from "../../domain/models/DIDPair";
 
 export interface ConnectionsManager {
   addConnection(paired: DIDPair): Promise<void>;

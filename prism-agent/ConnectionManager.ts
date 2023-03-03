@@ -3,7 +3,7 @@ import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import { MediationHandler } from "./mediation/types/MediationHandler";
 import { Mediator, Message, DID } from "../domain";
-import { AgentError } from "domain/models/Errors";
+import { AgentError } from "../domain/models/Errors";
 
 export class ConnectionManager {
   static NUMBER_OF_MESSAGES = 10;

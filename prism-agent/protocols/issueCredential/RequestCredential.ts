@@ -1,6 +1,6 @@
 import { uuid } from "@stablelib/uuid";
 
-import { AttachmentDescriptor, DID } from "../../../domain";
+import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { CredentialFormat } from "./CredentialFormat";
 import { CredentialHelpers } from "./CredentialHelpers";
 
@@ -23,11 +23,10 @@ export class RequestCredential {
   ) {}
 
   static fromMessage(fromMessage: Message): RequestCredential {
-    throw new Error("Not implemented")
+    throw new Error("Not implemented");
   }
 
-  static makeRequestFromOfferCredential(offer: )
-
+  //static makeRequestFromOfferCredential(offer: )
 
   static build<T>(
     fromDID: DID,

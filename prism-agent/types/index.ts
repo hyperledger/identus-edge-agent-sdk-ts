@@ -1,6 +1,6 @@
-import { DID, JsonString } from "domain/models";
-import { AgentError } from "domain/models/Errors";
-import { NullableType } from "domain/models/NullableType";
+import { DID, JsonString } from "../../domain/models";
+import { AgentError } from "../../domain/models/Errors";
+import { NullableType } from "../../domain/models/NullableType";
 
 interface InvitationInterface {
   type: InvitationTypes;

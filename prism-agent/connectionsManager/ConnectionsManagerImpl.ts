@@ -1,4 +1,4 @@
-import { DIDPair } from "domain/models/DIDPair";
+import { DIDPair } from "../../domain/models/DIDPair";
 import { ConnectionsManager } from "./ConnectionsManager";
 
 export class ConnectionsManagerImpl implements ConnectionsManager {
