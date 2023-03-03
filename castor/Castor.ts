@@ -120,7 +120,7 @@ export default class Castor implements CastorInterface {
       }
       return result;
     }, []);
-    var publicKey = null;
+    let publicKey = null;
     if (did.method == 'prism') {
       const method = verificationMethods.find(method => method.type == Curve.SECP256K1);
       if (method == null) {
@@ -136,19 +136,20 @@ export default class Castor implements CastorInterface {
       }
       
     } else if(did.method == 'peer') {
-      const method = verificationMethods.find(method => method.type == Curve.ED25519);
-      if (method == null) {
-        throw new Error("Not verification method for DID peer")
-      }
-      if (method.publicKeyJwk == null) {
-        throw new Error("No public key JWK available for DID peer")
-      }
-      publicKey = this.apollo.compressedPublicKeyFromPublicKey({
-        keyCurve: {
-          curve: Curve.ED25519
-        }, 
-        value: method.publicKeyJwk.x
-      }).uncompressed
+      throw new Error("Peer DID not implemented");
+      // const method = verificationMethods.find(method => method.type == Curve.ED25519);
+      // if (method == null) {
+      //   throw new Error("Not verification method for DID peer")
+      // }
+      // if (method.publicKeyJwk == null) {
+      //   throw new Error("No public key JWK available for DID peer")
+      // }
+      // publicKey = this.apollo.compressedPublicKeyFromPublicKey({
+      //   keyCurve: {
+      //     curve: Curve.ED25519
+      //   }, 
+      //   value: method.publicKeyJwk.x
+      // }).uncompressed
       
     } else {
       throw new Error("Did not supported")

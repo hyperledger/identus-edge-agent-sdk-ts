@@ -29,24 +29,21 @@ describe("PRISMDID CreateTest", () => {
     expect(resolveCreated.id.toString()).to.be.equal(resolvedDID.id.toString());
   });
 
-  it("Create a PrismDID and verify a signature", async () => {
+  it.only("Create a PrismDID and verify a signature", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-    const pubHex =
-    "0434b9cde61490b0920092c8e9a2d74533d1c6cb422cf50423a4e006b015087930e4f9f7e496b1c8156ee92a44fc8be624b178be5d78b9877d5ccd431a54295ca7";
 
-    const masterPublicKey = apollo.compressedPublicKeyFromPublicKey({
-      keyCurve: {
+    const keyPair = apollo.createKeyPairFromKeyCurve(
+      apollo.createRandomSeed().seed,
+      {
         curve: Curve.SECP256K1,
-      },
-      value: pubHex,
-    }).uncompressed;
-
-    const did = await castor.createPrismDID(masterPublicKey, []);
+      }
+    );
+    const did = await castor.createPrismDID(keyPair.publicKey, []);
     const text = "The quick brown fox jumps over the lazy dog";
-    // const signature = apollo.signStringMessage(keyPair.privateKey, text);
+    const signature = apollo.signStringMessage(keyPair.privateKey, text);
 
-    // castor.verifySignature(did, Buffer.from(text), Buffer.from(signature.value))
+    castor.verifySignature(did, Buffer.from(text), Buffer.from(signature.value))
 
   })
 });
