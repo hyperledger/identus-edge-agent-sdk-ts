@@ -108,7 +108,7 @@ describe("PEERDID CreateTest", () => {
     expect(document.id.toString()).to.equal(mypeerDID.toString());
   });
 
-  it.only("Create a PeerDID and verify a signature", () => {
+  it("Create a PeerDID and verify a signature", () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
     const did = new DID(
