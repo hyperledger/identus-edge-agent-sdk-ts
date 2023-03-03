@@ -15,7 +15,7 @@ module.exports = function (config) {
       },
     ],
     preprocessors: {
-      "build/tests/**/*.js": ["browserify", "sourcemap"],
+      "build/tests/**/**/*.js": ["browserify", "sourcemap"],
     },
     browserify: {
       debug: true,
