@@ -11,5 +11,6 @@ module.exports = {
     "index.js",
     "castor/parser",
     "build",
+    "examples",
   ],
 };
