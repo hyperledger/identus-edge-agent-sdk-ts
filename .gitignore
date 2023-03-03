@@ -1,7 +1,8 @@
 
 # Created by https://www.gitignore.io/api/node
 # Edit at https://www.gitignore.io/?templates=node
-*[.db | .sqlite]
+*.db
+*.sqlite
 ### Custom
 .rpt2_cache/
 *.idea/

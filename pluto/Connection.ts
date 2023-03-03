@@ -76,7 +76,6 @@ export default class Connection implements ConnectionModel {
   }
 
 
-
   private async getSQLPackage() {
     try {
       return (await import('sql.js') as {default: InitSqlJsStatic}).default;
