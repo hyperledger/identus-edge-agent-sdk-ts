@@ -9,7 +9,7 @@ module.exports = function (config) {
     // List of files / patterns to load in the browser
     files: [
       {
-        pattern: "build/tests/**/*.js",
+        pattern: "build/tests/**/**/*.js",
         watched: true,
         type: "js",
       },
