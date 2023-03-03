@@ -1,7 +1,7 @@
 export { default as Apollo } from "./apollo/Apollo";
-export * from "./castor/Castor";
+export { default as Castor } from "./castor/Castor";
 export * as Domain from "./domain";
-export * from "./mercury/Mercury";
-export * from "./pluto/Pluto";
-export * from "./pollux/Pollux";
-export * from "./prism-agent/agent";
+export { default as Mercury } from "./mercury/Mercury";
+export { default as Pluto } from "./pluto/Pluto";
+export { default as Pollux } from "./pollux/Pollux";
+export { default as Agent } from "./prism-agent/agent";

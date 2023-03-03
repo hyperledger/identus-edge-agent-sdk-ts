@@ -23,7 +23,7 @@ import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
 import { CastorError } from "../domain/models/Errors";
-
+import * as base64 from "multiformats/bases/base64";
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
   private resolvers: DIDResolver[];
@@ -72,13 +72,13 @@ export default class Castor implements CastorInterface {
       create_did: didOperation,
     });
 
-    const encodedState = Buffer.from(operation.serializeBinary());
+    const encodedState = operation.serializeBinary();
     const sha256 = new SHA256();
     const stateHash = Buffer.from(
       sha256.update(encodedState).digest()
     ).toString("hex");
 
-    const base64State = encodedState.toString("base64url");
+    const base64State = base64.base64url.baseEncode(encodedState);
 
     const methodSpecificId = new PrismDIDMethodId([stateHash, base64State]);
 
