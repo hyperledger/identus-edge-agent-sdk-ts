@@ -26,6 +26,7 @@ import {
   Services as DIDDocumentServices,
 } from "../../domain/models";
 import { JWKHelper } from "../../peer-did/helpers/JWKHelper";
+import * as base64 from "multiformats/bases/base64";
 
 export class PeerDIDResolver implements DIDResolver {
   method = "peer";
@@ -210,7 +211,9 @@ export class PeerDIDResolver implements DIDResolver {
   public decodeService(did: DID, encodedString: string): DIDDocumentService[] {
     let jsonData: Buffer;
     try {
-      jsonData = Buffer.from(encodedString, "base64url");
+      const base64State = base64.base64url.decode(`u${encodedString}`);
+
+      jsonData = Buffer.from(base64State);
 
       const serviceList = JSON.parse(jsonData.toString());
       const services = (

@@ -4,7 +4,7 @@ import {
   Apollo,
   Castor,
   Domain,
-} from "@input-output-hk/atala-prism-wallet-sdk/browser";
+} from "@input-output-hk/atala-prism-wallet-sdk";
 
 const apollo = new Apollo();
 const castor = new Castor(apollo);
