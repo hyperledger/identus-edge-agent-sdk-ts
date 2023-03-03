@@ -1,4 +1,3 @@
-import { Buffer } from "buffer";
 import { SHA256 } from "@stablelib/sha256";
 import { CastorError } from "../../domain/models/Errors";
 import Apollo from "../../domain/buildingBlocks/Apollo";

@@ -93,7 +93,6 @@
     "@scure/bip39": "^1.1.1",
     "@stablelib/base64": "^1.0.1",
     "@stablelib/sha256": "^1.0.1",
-    "Buffer": "^0.0.0",
     "antlr4ts": "^0.5.0-alpha.4",
     "bn.js": "^5.2.1",
     "elliptic": "^6.5.4",

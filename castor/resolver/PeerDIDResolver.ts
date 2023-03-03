@@ -1,4 +1,3 @@
-import { Buffer } from "buffer";
 import { CastorError } from "../../domain/models/Errors";
 import { MultiCodec, Codec } from "../../peer-did/helpers/Multicodec";
 import { PeerDIDService } from "../../peer-did/PeerDID";

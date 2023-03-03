@@ -1,4 +1,3 @@
-import { Buffer } from "buffer";
 import Apollo from "../../../domain/buildingBlocks/Apollo";
 import { Curve, PublicKey } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";

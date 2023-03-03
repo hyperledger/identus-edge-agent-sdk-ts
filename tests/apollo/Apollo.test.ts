@@ -1,4 +1,3 @@
-import { Buffer } from "buffer";
 import { expect, assert } from "chai";
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";

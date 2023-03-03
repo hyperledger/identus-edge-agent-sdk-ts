@@ -1,4 +1,3 @@
-import { Buffer } from "buffer";
 import * as base64 from "multiformats/bases/base64";
 
 import {

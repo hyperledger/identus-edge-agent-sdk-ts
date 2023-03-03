@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { Buffer } from "buffer";
 
 import { Curve, KeyPair, Service, DID } from "../../domain";
 import Apollo from "../../apollo/Apollo";
