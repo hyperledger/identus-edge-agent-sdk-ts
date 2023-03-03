@@ -24,7 +24,7 @@
     "paths": {}
   },
   "compileOnSave": false,
-  "exclude": ["node_modules", "build", "rollup"],
+  "exclude": ["node_modules", "build", "rollup", "examples"],
   "include": ["."],
   "typeAcquisition": {
     "enable": true,

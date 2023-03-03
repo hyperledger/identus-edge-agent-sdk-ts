@@ -2,8 +2,15 @@
   "name": "@input-output-hk/atala-prism-wallet-sdk",
   "version": "0.0.1",
   "description": "PRISM typescript SDK",
-  "main": "src/index.ts",
+  "main": "build/browser/cjs/index.js",
+  "types": "build/browser/cjs/index.d.ts",
+  "browser": "build/browser/cjs/index.js",
+  "module": "build/browser/es/index.js",
   "exports": {
+    ".": {
+      "require": "./build/browser/cjs/index.js",
+      "import": "./build/browser/es/index.js"
+    },
     "./node": {
       "require": "./build/node/cjs/index.js",
       "import": "./build/node/es/index.js"
