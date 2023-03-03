@@ -37,7 +37,6 @@ const plugins = [
     browser: true,
     preferBuiltins: true,
   }),
-  typescript({ tsconfig: "tsconfig.json" }),
   cleanup(),
   terser(),
 ];
@@ -46,7 +45,7 @@ export default [
   {
     input: "index.ts",
     output: [{ file: "build/index.d.ts", format: "cjs" }],
-    plugins: [dts()],
+    plugins: [typescript({ emitDeclarationOnly: true })],
   },
   {
     input: ["index.ts"],
@@ -62,7 +61,7 @@ export default [
         format: `cjs`,
       },
     ],
-    plugins: [...plugins],
+    plugins: [...plugins, typescript({ tsconfig: "tsconfig.json" })],
     external: externals,
   },
   {
@@ -74,7 +73,7 @@ export default [
         format: `cjs`,
       },
     ],
-    plugins: [...plugins],
+    plugins: [...plugins, typescript({ tsconfig: "tsconfig.json" })],
     external: externals,
   },
 ];
