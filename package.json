@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "PRISM typescript SDK",
   "main": "build/cjs/index.js",
-  "browser": "build/umd/index.js",
+  "browser": "build/cjs/index.js",
   "module": "build/es/index.js",
-  "types": "build/index.d.ts",
+  "types": "build/types/index.d.ts",
   "files": [
     "build"
   ],
