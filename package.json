@@ -18,6 +18,7 @@
     "directory": "@input-output-hk/atala-prism-wallet-sdk"
   },
   "scripts": {
+    "build:tsc": "tsc -b ./tsconfig-alt.cjs.json ./tsconfig-alt.esm.json ./tsconfig-alt.types.json",
     "build": "rm -rf build && npx rollup -c rollup/base.js",
     "test": "npm run test:node && npm run test:browser",
     "test:node": "npx nyc node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/**/*.ts",
