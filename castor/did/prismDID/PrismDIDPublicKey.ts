@@ -1,5 +1,5 @@
 import Apollo from "../../../domain/buildingBlocks/Apollo";
-import { Curve, PublicKey } from "../../../domain/models";
+import { CompressedPublicKey, Curve, PublicKey } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 
 import * as Protos from "../../protos/node_models";
@@ -115,39 +115,45 @@ export class PrismDIDPublicKey {
   static fromProto(
     apollo: Apollo,
     proto: Protos.io.iohk.atala.prism.protos.PublicKey
-  ) {
+  ): PrismDIDPublicKey {
     const id = proto.id;
     const usage = proto.usage;
-    if (!proto.has_compressed_ec_key_data) {
-      throw new CastorError.InvalidPublicKeyEncoding();
-    }
-    if (proto.key_data !== "compressed_ec_key_data") {
-      throw new CastorError.ExpectedCompressedKey();
+    let keyData: PublicKey;
+
+    switch (proto.key_data) {
+      case "compressed_ec_key_data":
+        keyData = apollo.compressedPublicKeyFromCompresedData(
+          proto.compressed_ec_key_data.data
+        ).uncompressed;
+        break;
+      default:
+        throw new CastorError.InvalidPublicKeyEncoding();
     }
 
-    const publicKey: PublicKey = apollo.compressedPublicKeyFromPublicKey({
-      keyCurve: {
-        curve: Curve.SECP256K1,
-      },
-      value: proto.compressed_ec_key_data.data,
-    }).uncompressed;
+    return new PrismDIDPublicKey(apollo, id, getUsage(usage), keyData);
+  }
 
-    return new PrismDIDPublicKey(apollo, id, getUsage(usage), publicKey);
+  private compressedToProto(
+    compressed: CompressedPublicKey
+  ): Protos.io.iohk.atala.prism.protos.CompressedECKeyData {
+    return new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
+      curve: compressed.uncompressed.keyCurve.curve,
+      data: compressed.value,
+    });
   }
 
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
-    const compressed = this.apollo.compressedPublicKeyFromCompresedData(
-      this.keyData.value
-    );
+    const compressed = this.apollo.compressedPublicKeyFromPublicKey({
+      keyCurve: {
+        curve: Curve.SECP256K1,
+      },
+      value: this.keyData.value,
+    });
     const usage = getProtosUsage(this.usage);
     const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({
       id: this.id,
       usage: usage,
-      compressed_ec_key_data:
-        new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
-          curve: Curve.SECP256K1,
-          data: compressed.value,
-        }),
+      compressed_ec_key_data: this.compressedToProto(compressed),
     });
     return publicKey;
   }

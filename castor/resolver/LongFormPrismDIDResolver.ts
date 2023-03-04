@@ -115,8 +115,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
             did.toString(),
             publicKey.keyData.keyCurve.curve,
             undefined,
-            //Removing the base64 encoding, the m
-            base64.base64.encode(publicKey.keyData.value).slice(1)
+            base64.base64.encode(publicKey.keyData.value)
           );
           partialResult.set(didUrl.string(), method);
           return partialResult;

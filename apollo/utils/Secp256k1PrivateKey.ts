@@ -4,11 +4,8 @@ import { ECConfig } from "../../config/ECConfig";
 import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { ApolloError } from "../../domain/models/Errors";
-import { BNHelper } from "./bn/BNHelper";
 
 abstract class Secp256k1PrivateKeyCommon {
-  public abstract d: bigint;
-
   public abstract getPublicKey(): Secp256k1PublicKey;
 }
 
@@ -16,11 +13,8 @@ export class Secp256k1PrivateKey
   extends Secp256k1KeyCommon
   implements Secp256k1PrivateKeyCommon
 {
-  constructor(
-    private nativeValue: BN,
-    public d: bigint = Secp256k1PrivateKey.privateKeyD(nativeValue)
-  ) {
-    if (d < BigInt(2) || BNHelper.getBN(d) >= ECConfig.n) {
+  constructor(public nativeValue: BN) {
+    if (nativeValue.cmp(ECConfig.n) >= 0) {
       throw new ApolloError.ECPublicKeyInitialization();
     }
     super();
@@ -35,12 +29,15 @@ export class Secp256k1PrivateKey
   }
 
   public getPublicKey(): Secp256k1PublicKey {
-    const keyPair = this.ec.keyFromPrivate(this.nativeValue.toString("hex"));
+    const keyPair = this.ec.keyFromPrivate(
+      this.nativeValue.toString("hex"),
+      "hex"
+    );
     return new Secp256k1PublicKey(keyPair.getPublic());
   }
 
-  static secp256k1FromBigInteger(d: bigint): Secp256k1PrivateKey {
-    return new Secp256k1PrivateKey(new BN(d.toString()));
+  static secp256k1FromBigInteger(bigInteger: BN): Secp256k1PrivateKey {
+    return new Secp256k1PrivateKey(bigInteger);
   }
 
   static secp256k1FromBytes(encoded: Uint8Array): Secp256k1PrivateKey {
@@ -48,9 +45,5 @@ export class Secp256k1PrivateKey
       throw new ApolloError.ECPublicKeyInitialization();
     }
     return new Secp256k1PrivateKey(new BN(encoded));
-  }
-
-  private static privateKeyD(privateKey: BN): bigint {
-    return BigInt(privateKey.toString());
   }
 }

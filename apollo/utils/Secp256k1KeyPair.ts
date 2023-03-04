@@ -5,14 +5,7 @@ import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 import { Secp256k1PrivateKey } from "./Secp256k1PrivateKey";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 
-interface Secp256k1KeyPairGeneration {
-  generateSecp256k1KeyPair(): Secp256k1KeyPair;
-}
-
-export class Secp256k1KeyPair
-  extends Secp256k1KeyCommon
-  implements Secp256k1KeyPairGeneration
-{
+export class Secp256k1KeyPair extends Secp256k1KeyCommon {
   constructor(
     public privateKey: Secp256k1PrivateKey,
     public publicKey: Secp256k1PublicKey
@@ -20,7 +13,7 @@ export class Secp256k1KeyPair
     super();
   }
 
-  generateSecp256k1KeyPair(): Secp256k1KeyPair {
+  static generateSecp256k1KeyPair(): Secp256k1KeyPair {
     const keyPair = this.ec.genKeyPair();
     const bigNumber = keyPair.getPrivate();
     const basePoint = keyPair.getPublic();

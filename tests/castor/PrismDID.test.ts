@@ -10,7 +10,7 @@ describe("PRISMDID CreateTest", () => {
     const castor = new Castor(apollo);
 
     const didExample =
-      "did:prism:82ef2865dc98665aac07f099a8d07d715923d7ac4c2a697c0297b13089efd1f2:CmYKZBJiCg1tYXN0ZXIoaW5kZXgpEAFKTwoJU2VjcDI1NmsxEkIwMzM0YjljZGU2MTQ5MGIwOTIwMDkyYzhlOWEyZDc0NTMzZDFjNmNiNDIyY2Y1MDQyM2E0ZTAwNmIwMTUwODc5MzA";
+      "did:prism:f87379b319e20d14135c8a25c9ada6a0cd01e93469107135c4958d0725559e13:CkUKQxJBCg1tYXN0ZXIoaW5kZXgpEAFKLgoJU2VjcDI1NmsxEiEDNLnN5hSQsJIAksjpotdFM9HGy0Is9QQjpOAGsBUIeTA";
     const resolvedDID = await castor.resolveDID(didExample);
 
     const pubHex =
@@ -28,7 +28,7 @@ describe("PRISMDID CreateTest", () => {
     expect(resolveCreated.id.toString()).to.be.equal(resolvedDID.id.toString());
   });
 
-  it.only("Create a PrismDID and verify a signature", async () => {
+  it("Create a PrismDID and verify a signature", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
     const keyPair = apollo.createKeyPairFromKeyCurve(

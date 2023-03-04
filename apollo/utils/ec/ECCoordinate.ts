@@ -6,10 +6,9 @@ export class ECCoordinate {
   constructor(public coordinate: BN) {}
 
   bytes(): Uint8Array {
-    return Buffer.from(
-      new Array(ECCoordinate.PRIVATE_KEY_BYTE_SIZE)
-        .fill(0)
-        .concat(this.coordinate)
-    );
+    const size = ECCoordinate.PRIVATE_KEY_BYTE_SIZE;
+    const bytes = this.coordinate.toArrayLike(Buffer, "be", size);
+    const padding = new Uint8Array(size - bytes.length);
+    return new Uint8Array([...padding, ...bytes]);
   }
 }

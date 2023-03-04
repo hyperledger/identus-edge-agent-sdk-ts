@@ -2,7 +2,6 @@ import * as ecc from "tiny-secp256k1";
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
-import bip32 from "bip32";
 
 import * as elliptic from "elliptic";
 import {
@@ -21,7 +20,11 @@ import {
   MnemonicLengthException,
   MnemonicWordException,
 } from "../domain/models/errors/Mnemonic";
-import { ApolloError } from "../domain/models/Errors";
+import { DerivationPath } from "./utils/derivation/DerivationPath";
+import { KeyDerivation } from "./utils/derivation/KeyDerivation";
+import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
+import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
+import * as base64 from "multiformats/bases/base64";
 
 const EC = elliptic.ec;
 const EDDSA = elliptic.eddsa;
@@ -32,24 +35,20 @@ const eddsa = new EDDSA("ed25519");
 export default class Apollo implements ApolloInterface {
   private getKeyPairForCurve(seed: Seed, curve: KeyCurve): KeyPair {
     if (curve.curve == Curve.SECP256K1 || curve.curve == Curve.X25519) {
-      const root = bip32(ecc).fromSeed(Buffer.from(seed.value));
-      const child = root.derivePath(`m/${curve.index || 0}'/0'/0'`);
-      if (!child.privateKey) {
-        throw new ApolloError.InvalidDerivationPath();
-      }
-      const privateKey = child.privateKey;
-      const keyPair = ec.keyFromPrivate(privateKey.toString("hex"));
-      const publicKey = Buffer.from(keyPair.getPublic().encode("array", true));
-
+      const derivationPath = DerivationPath.fromPath(
+        `m/${curve.index || 0}'/0'/0'`
+      );
+      const extendedKey = KeyDerivation.deriveKey(seed.value, derivationPath);
+      const keyPair = extendedKey.keyPair();
       return {
         keyCurve: curve,
         privateKey: {
           keyCurve: curve,
-          value: publicKey,
+          value: keyPair.privateKey.getEncoded(),
         },
         publicKey: {
           keyCurve: curve,
-          value: publicKey,
+          value: keyPair.publicKey.getEncoded(),
         },
       };
     } else if (curve.curve == Curve.ED25519) {
@@ -105,30 +104,32 @@ export default class Apollo implements ApolloInterface {
     return this.getKeyPairForCurve(seed, privateKey.keyCurve);
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
-    const keyPair = ec.keyFromPublic(publicKey.value, "hex");
+    const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromBytes(
+      publicKey.value
+    );
     return {
       uncompressed: {
         keyCurve: {
           curve: Curve.SECP256K1,
         },
-        value: Buffer.from(keyPair.getPublic().encode("array", false)),
+        value: secp256k1PublicKey.getEncoded(),
       },
-      value: Buffer.from(keyPair.getPublic().encode("array", false)),
+      value: secp256k1PublicKey.getEncodedCompressed(),
     };
   }
   compressedPublicKeyFromCompresedData(
-    compressedData: Uint8Array | string
+    compressedData: Uint8Array
   ): CompressedPublicKey {
-    const point = ec.curve.decodePoint(compressedData).encode("hex");
-    const keyPair = ec.keyFromPublic(Buffer.from(point, "hex"));
+    const secp256k1PublicKey =
+      Secp256k1PublicKey.secp256k1FromCompressed(compressedData);
     return {
       uncompressed: {
         keyCurve: {
           curve: Curve.SECP256K1,
         },
-        value: Buffer.from(keyPair.getPublic().encode("hex", true), "hex"),
+        value: secp256k1PublicKey.getEncoded(),
       },
-      value: Buffer.from(keyPair.getPublic().encode("hex", true), "hex"),
+      value: secp256k1PublicKey.getEncodedCompressed(),
     };
   }
   publicKeyFromPoints(
@@ -136,20 +137,17 @@ export default class Apollo implements ApolloInterface {
     x: Uint8Array,
     y: Uint8Array
   ): PublicKey {
-    const publicKey = ec.keyFromPublic({
-      x: Buffer.from(x).toString("hex"),
-      y: Buffer.from(y).toString("hex"),
-    });
+    const publicKey = Secp256k1PublicKey.secp256k1FromByteCoordinates(x, y);
     return {
       keyCurve: curve,
-      value: Buffer.from(publicKey.getPublic().encode("hex", true), "hex"),
+      value: publicKey.getEncoded(),
     };
   }
   publicKeyFromPoint(curve: KeyCurve, x: Uint8Array): PublicKey {
-    const publicKey = ec.keyFromPublic(Buffer.from(x));
+    const publicKey = Secp256k1PublicKey.secp256k1FromBytes(x);
     return {
       keyCurve: curve,
-      value: Buffer.from(publicKey.getPublic().encode("hex", true), "hex"),
+      value: publicKey.getEncoded(),
     };
   }
   signByteArrayMessage(privateKey: PrivateKey, message: Uint8Array): Signature {
@@ -163,10 +161,10 @@ export default class Apollo implements ApolloInterface {
       privateKey.keyCurve.curve == Curve.SECP256K1 ||
       privateKey.keyCurve.curve == Curve.X25519
     ) {
-      const keyPair = ec.keyFromPrivate(privateKey.value);
-      if (!keyPair.validate().result) {
-        throw new ApolloError.InvalidPrivateKey();
-      }
+      const secp256k1PrivateKey = Secp256k1PrivateKey.secp256k1FromBytes(
+        privateKey.value
+      );
+      const keyPair = ec.keyFromPrivate(secp256k1PrivateKey.getEncoded());
       return {
         value: Buffer.from(keyPair.sign(messageBuffer).toDER()),
       };
@@ -194,10 +192,12 @@ export default class Apollo implements ApolloInterface {
       publicKey.keyCurve.curve == Curve.SECP256K1 ||
       publicKey.keyCurve.curve == Curve.X25519
     ) {
+      const publicKeyBuffer = Buffer.from(publicKey.value);
+      const decodedPubKey = base64.base64.decode(publicKeyBuffer.toString());
       return ec.verify(
         challengeBuffer,
         signatureBuffer,
-        Buffer.from(publicKey.value)
+        Buffer.from(decodedPubKey)
       );
     }
     throw new Error("Method not implemented.");

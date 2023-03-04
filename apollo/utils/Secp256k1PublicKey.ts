@@ -1,9 +1,8 @@
-import { BN } from "bn.js";
+import BN from "bn.js";
 import * as elliptic from "elliptic";
 import BigInteger from "bn.js";
 
 import { ECConfig } from "../../config/ECConfig";
-import { BNHelper } from "./bn/BNHelper";
 import { ECCoordinate } from "./ec/ECCoordinate";
 import { ECPoint } from "./ec/ECPoint";
 import { ApolloError } from "../../domain/models/Errors";
@@ -22,7 +21,7 @@ export class Secp256k1PublicKey
     private nativeValue: elliptic.curve.base.BasePoint,
     private ecPoint: ECPoint = Secp256k1PublicKey.computeCurvePoint(nativeValue)
   ) {
-    if (Secp256k1PublicKey.isPointOnSecp256k1Curve(ecPoint)) {
+    if (!Secp256k1PublicKey.isPointOnSecp256k1Curve(ecPoint)) {
       throw new ApolloError.ECPublicKeyInitialization();
     }
 
@@ -41,6 +40,11 @@ export class Secp256k1PublicKey
     return arr;
   }
 
+  getEncoded(): Uint8Array {
+    //TODO: Fix here also,why each time we encode using that library its adding encoding
+    return Uint8Array.from(this.nativeValue.encode("array", false));
+  }
+
   getCurvePoint(): ECPoint {
     return this.ecPoint;
   }
@@ -57,8 +61,8 @@ export class Secp256k1PublicKey
     // Elliptic curve equation for Secp256k1
     return y
       .sqr()
-      .isub(x.pow(new BN(3)).iadd(new BN(ECConfig.b)))
-      .mod(new BN(ECConfig.p))
+      .isub(x.pow(new BN(3)).iadd(ECConfig.b))
+      .mod(ECConfig.p)
       .eq(new BN(0));
   }
 
@@ -121,7 +125,7 @@ export class Secp256k1PublicKey
       );
     }
     const point = this.ec.curve.decodePoint(compressed);
-    const uncompressedEncoding = point.encode("hex").decodeHex();
+    const uncompressedEncoding = point.encode();
     return Secp256k1PublicKey.secp256k1FromBytes(uncompressedEncoding);
   }
 }

@@ -8,6 +8,7 @@ import {
   KeyPair,
   DIDDocument,
   PrismDIDMethodId,
+  DIDDocumentCoreProperty,
   DIDResolver,
   Curve,
 } from "../domain/models";
@@ -107,21 +108,29 @@ export default class Castor implements CastorInterface {
     return resolver.resolve(did);
   }
 
+  private extractVerificationMethods(
+    coreProperties: DIDDocumentCoreProperty[]
+  ): DIDDocumentVerificationMethod[] {
+    return coreProperties.reduce<DIDDocumentVerificationMethod[]>(
+      (result, property) => {
+        if (property instanceof DIDDocumentVerificationMethods) {
+          result.push(...property.values);
+        }
+        return result;
+      },
+      []
+    );
+  }
+
   async verifySignature(
     did: DID,
     challenge: Uint8Array,
     signature: Uint8Array
   ): Promise<boolean> {
     const didDocument = await this.resolveDID(did.toString());
-    didDocument;
-    const verificationMethods = didDocument.coreProperties.reduce<
-      DIDDocumentVerificationMethod[]
-    >((result, property) => {
-      if (property instanceof DIDDocumentVerificationMethods) {
-        result.push(...property.values);
-      }
-      return result;
-    }, []);
+    const verificationMethods = this.extractVerificationMethods(
+      didDocument.coreProperties
+    );
     let publicKey: PublicKey;
     if (did.method == "prism") {
       const method = verificationMethods.find(
