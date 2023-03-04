@@ -55,7 +55,9 @@ export class JWKHelper {
     return JSON.stringify({
       crv: crv,
       kty: "OKP",
-      x: xKeyString.slice(1),
+      x: {
+        data: xKeyString.slice(1),
+      },
     });
   }
 }

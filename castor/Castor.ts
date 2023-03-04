@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { SHA256 } from "@stablelib/sha256";
+
 import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
@@ -19,7 +21,6 @@ import {
 } from "./did/prismDID/PrismDIDPublicKey";
 import * as DIDParser from "./parser/DIDParser";
 import * as Protos from "./protos/node_models";
-import { SHA256 } from "@stablelib/sha256";
 
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
@@ -30,6 +31,14 @@ import {
   VerificationMethods as DIDDocumentVerificationMethods,
 } from "../domain";
 import * as base64 from "multiformats/bases/base64";
+import { JWKHelper } from "../peer-did/helpers/JWKHelper";
+import {
+  VerificationMaterialAgreement,
+  VerificationMaterialAuthentication,
+  VerificationMaterialFormatPeerDID,
+  VerificationMethodTypeAgreement,
+  VerificationMethodTypeAuthentication,
+} from "../peer-did/types";
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
   private resolvers: DIDResolver[];
@@ -132,45 +141,90 @@ export default class Castor implements CastorInterface {
       didDocument.coreProperties
     );
     let publicKey: PublicKey;
+
     if (did.method == "prism") {
-      const method = verificationMethods.find(
+      const methods = verificationMethods.filter(
         (method) => method.type == Curve.SECP256K1
       );
-      if (!method) {
-        throw new Error("Not verification method for Prism DID");
+      if (methods.length <= 0) {
+        throw new Error("Not verification methods for Prism DID");
       }
-      if (!method.publicKeyMultibase) {
-        throw new Error("No public key multibase available for Prism DID");
+      for (const method of methods) {
+        if (!method.publicKeyMultibase) {
+          throw new Error(
+            "PrismDID VerificationMethod does not have multibase Key in it"
+          );
+        }
+        publicKey = {
+          keyCurve: {
+            curve: Curve.SECP256K1,
+          },
+          value: Buffer.from(method.publicKeyMultibase),
+        };
+        if (
+          this.apollo.verifySignature(publicKey, challenge, {
+            value: signature,
+          })
+        ) {
+          return true;
+        }
       }
-      publicKey = {
-        keyCurve: {
-          curve: Curve.SECP256K1,
-        },
-        value: Buffer.from(method.publicKeyMultibase),
-      };
     } else if (did.method == "peer") {
-      throw new Error("Peer DID not implemented");
-      // const method = verificationMethods.find(method => method.type == Curve.ED25519);
-      // if (method == null) {
-      //   throw new Error("Not verification method for DID peer")
-      // }
-      // if (method.publicKeyJwk == null) {
-      //   throw new Error("No public key JWK available for DID peer")
-      // }
-      // publicKey = this.apollo.compressedPublicKeyFromPublicKey({
-      //   keyCurve: {
-      //     curve: Curve.ED25519
-      //   },
-      //   value: method.publicKeyJwk.x
-      // }).uncompressed
+      const methods = verificationMethods.filter(({ publicKeyJwk }) => {
+        if (!publicKeyJwk) return false;
+        return (
+          publicKeyJwk.crv === Curve.X25519 ||
+          publicKeyJwk.crv === Curve.ED25519
+        );
+      });
+      if (methods.length <= 0) {
+        throw new Error("Not verification methods for Peer DID");
+      }
+      for (const method of methods) {
+        if (!method.publicKeyJwk) {
+          throw new Error(
+            "PeerDID VerificationMethod does not have jwk Key in it"
+          );
+        }
+        const material =
+          method.publicKeyJwk.crv === Curve.X25519
+            ? new VerificationMaterialAgreement(
+                JSON.stringify(method.publicKeyJwk),
+                VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
+                VerificationMaterialFormatPeerDID.JWK
+              )
+            : new VerificationMaterialAuthentication(
+                JSON.stringify(method.publicKeyJwk),
+                VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
+                VerificationMaterialFormatPeerDID.JWK
+              );
+
+        const decodedKey =
+          method.publicKeyJwk.crv === Curve.X25519
+            ? JWKHelper.fromJWKAgreement(
+                material as VerificationMaterialAgreement
+              )
+            : JWKHelper.fromJWKAuthentication(
+                material as VerificationMaterialAuthentication
+              );
+        publicKey = {
+          keyCurve: {
+            curve: method.publicKeyJwk.crv as Curve,
+          },
+          value: Buffer.from(decodedKey),
+        };
+        if (
+          this.apollo.verifySignature(publicKey, challenge, {
+            value: signature,
+          })
+        ) {
+          return true;
+        }
+      }
     } else {
       throw new Error("Did not supported");
     }
-    if (publicKey != null) {
-      return this.apollo.verifySignature(publicKey, challenge, {
-        value: signature,
-      });
-    }
-    throw new Error("Wrong method");
+
+    return false;
   }
 }
