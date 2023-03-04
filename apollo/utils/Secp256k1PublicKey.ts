@@ -110,8 +110,9 @@ export class Secp256k1PublicKey
     x: BigInteger,
     y: BigInteger
   ): Secp256k1PublicKey {
-    const xCoord = x.toBuffer();
-    const yCoord = y.toBuffer();
+    console.log(x);
+    const xCoord = Buffer.from(x.toArray());
+    const yCoord = Buffer.from(y.toArray());
     const keyPair = this.ec.keyFromPublic({
       x: xCoord.toString("hex"),
       y: yCoord.toString("hex"),

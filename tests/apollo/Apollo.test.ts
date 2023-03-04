@@ -4,7 +4,7 @@ import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";
-import { Curve, KeyPair } from "../../domain/models";
+import { KeyPair } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
@@ -120,11 +120,11 @@ describe("Apollo Tests", () => {
       Secp256k1PrivateKey.secp256k1FromBytes(encodedPrivateKey);
     const newFromBigInteger = Secp256k1PrivateKey.secp256k1FromBigInteger(d);
 
-    expect(keyPair.privateKey.nativeValue.toBuffer()).to.deep.equal(
-      newFromBytes.nativeValue.toBuffer()
+    expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
+      newFromBytes.nativeValue.toArray()
     );
-    expect(keyPair.privateKey.nativeValue.toBuffer()).to.deep.equal(
-      newFromBigInteger.nativeValue.toBuffer()
+    expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
+      newFromBigInteger.nativeValue.toArray()
     );
   });
 });

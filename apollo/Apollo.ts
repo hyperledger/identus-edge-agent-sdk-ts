@@ -1,4 +1,3 @@
-import * as ecc from "tiny-secp256k1";
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
