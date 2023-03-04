@@ -1,8 +1,6 @@
-import * as ecc from "tiny-secp256k1";
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
-import bip32 from "bip32";
 
 import * as elliptic from "elliptic";
 import {
@@ -21,7 +19,6 @@ import {
   MnemonicLengthException,
   MnemonicWordException,
 } from "../domain/models/errors/Mnemonic";
-import { ApolloError } from "../domain/models/Errors";
 import { DerivationPath } from "./utils/derivation/DerivationPath";
 import { KeyDerivation } from "./utils/derivation/KeyDerivation";
 import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
