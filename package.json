@@ -20,7 +20,7 @@
   "scripts": {
     "build": "rm -rf build && npx rollup -c rollup/base.js",
     "test": "npm run test:node && npm run test:browser",
-    "test:node": "npx nyc node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/**/*.ts",
+    "test:node": "npx nyc node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/**/**/*.ts",
     "test:browser": "npx karma start karma.conf.js",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
     "protos": "yarn protos:node && yarn protos:common",

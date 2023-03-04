@@ -1,8 +1,14 @@
 import Pluto from '../../pluto/Pluto';
 import {expect} from 'chai';
+import Connection from '../../pluto/Connection';
 
 describe('Pluto tests', () => {
   it('should start successfully', function () {
+    const connection = new Connection({
+      type: "sql"
+    })
+    new Pluto(connection);
+
   });
 
   it('should store prism DID', function () {

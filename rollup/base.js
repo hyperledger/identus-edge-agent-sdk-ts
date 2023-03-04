@@ -9,6 +9,8 @@ import nodePolyfills from "rollup-plugin-polyfill-node";
 import multiInput from "rollup-plugin-multi-input";
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 const externals = [
+  "sqlite3",
+  "sql.js",
   "antlr4ts",
   "antlr4ts/Lexer",
   "antlr4ts/VocabularyImpl",
@@ -31,7 +33,9 @@ const plugins = [
   multiInput(),
   commonjs(),
   ignore(externals),
-  nodePolyfills(),
+  // nodePolyfills({
+  //   include: ["fs"]
+  // }),
   json(),
   nodeResolve({
     //used to resolve NPM module reading from packages.json those entrypoint (ES6 - Main or Browser specific)

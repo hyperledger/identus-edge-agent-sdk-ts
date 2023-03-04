@@ -9,8 +9,11 @@ import { VerifiableCredential } from '../domain/models/VerifiableCredential';
 import Connection from './Connection';
 
 export default class Pluto implements PlutoInterface {
+  readonly database
   constructor(connection: Connection) {
-
+    this.database = connection;
+    this.database.connect();
+    // this.database?.database?.run()
   }
   start(): Promise<any> {
     throw new Error('Method not implemented.');

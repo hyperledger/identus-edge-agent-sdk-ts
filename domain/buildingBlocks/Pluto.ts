@@ -5,8 +5,10 @@ import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { VerifiableCredential } from "../models/VerifiableCredential";
+import Connection from '../../pluto/Connection';
 
 export default interface Pluto {
+  readonly database: Connection
   start(): Promise<void>;
 
   storePrismDID(did: DID, keyPathIndex: number, alias?: string): void;

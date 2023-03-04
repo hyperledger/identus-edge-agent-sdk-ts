@@ -9,13 +9,14 @@ module.exports = function (config) {
     // List of files / patterns to load in the browser
     files: [
       {
-        pattern: "build/tests/**/**/*.js",
+        pattern: "build/tests/**/*.js",
         watched: true,
         type: "js",
       },
     ],
+    exclude: ['/tests/**/node/*.ts'],
     preprocessors: {
-      "build/tests/**/**/*.js": ["browserify", "sourcemap"],
+      "build/tests/**/*.js": ["browserify", "sourcemap"],
     },
     browserify: {
       debug: true,
