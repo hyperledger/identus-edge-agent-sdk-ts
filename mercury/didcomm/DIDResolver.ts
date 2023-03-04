@@ -10,9 +10,9 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
     const doc = await this.castor.resolveDID(did);
 
     const authentications: string[] = [];
-    const key_agreements: string[] = [];
+    const keyAgreements: string[] = [];
     const services: DIDComm.Service[] = [];
-    const verification_methods: DIDComm.VerificationMethod[] = [];
+    const verificationMethods: DIDComm.VerificationMethod[] = [];
 
     doc.coreProperties.forEach((coreProperty) => {
       if ("verificationMethods" in coreProperty) {
@@ -25,11 +25,11 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
               break;
 
             case Domain.Curve.X25519:
-              key_agreements.push(method.id);
+              keyAgreements.push(method.id);
               break;
 
             default:
-              verification_methods.push({
+              verificationMethods.push({
                 controller: method.controller,
                 id: method.id,
                 type: "JsonWebKey2020",
@@ -59,13 +59,12 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
       }
     });
 
-    const didString = doc.id.toString();
     const dcdoc: DIDComm.DIDDoc = {
-      did: didString,
-      authentications,
-      key_agreements,
-      services,
-      verification_methods,
+      id: doc.id.toString(),
+      authentication: authentications,
+      keyAgreement: keyAgreements,
+      service: services,
+      verificationMethod: verificationMethods,
     };
 
     return dcdoc;
