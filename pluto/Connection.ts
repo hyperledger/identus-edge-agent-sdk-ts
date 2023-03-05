@@ -88,10 +88,6 @@ export default class Connection implements ConnectionModel {
   private get SQLDatabase(): Promise<SQLDatabaseType> {
 
     return new Promise(async (resolve, reject) => {
-      /*
-      * @todo:
-      *   - Load databases depending on the TARGET = node | browser
-      * */
       try {
         const sqlInit:InitSqlJsStatic = await this.getSQLPackage();
         const that = this;
@@ -119,7 +115,6 @@ export default class Connection implements ConnectionModel {
       }
       })
   }
-
 
   private async getSqlitePackage() {
 
