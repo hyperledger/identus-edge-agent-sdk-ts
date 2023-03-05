@@ -4,7 +4,7 @@ import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";
-import { KeyPair } from "../../domain/models";
+import { Curve, KeyPair } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
@@ -39,7 +39,6 @@ describe("Apollo Tests", () => {
   it("Should compute the right binary seed", () => {
     const password = "TREZOR";
     const vectors = JSON.parse(bip39Vectors) as string[][];
-
     for (const v of vectors) {
       const [, mnemonicPhrase, binarySeedHex] = v;
       const mnemonicCode = mnemonicPhrase.split(" ") as MnemonicWordList;
@@ -126,5 +125,73 @@ describe("Apollo Tests", () => {
     expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
       newFromBigInteger.nativeValue.toArray()
     );
+  });
+
+  it("Should create and Sign and verify a message using ED25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.ED25519,
+    });
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(keyPair.publicKey, text, signature);
+    expect(verified).to.be.equal(true);
+  });
+
+  it("Should only verify signed message using the correct ED25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.ED25519,
+    });
+    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
+      apollo.createRandomSeed().seed,
+      {
+        curve: Curve.ED25519,
+      }
+    );
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(
+      wrongKeyPair.publicKey,
+      text,
+      signature
+    );
+    expect(verified).to.be.equal(false);
+  });
+
+  it("Should create and Sign and verify a message using X25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.X25519,
+    });
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(keyPair.publicKey, text, signature);
+    expect(verified).to.be.equal(true);
+  });
+
+  it("Should only verify signed message using the correct X25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.X25519,
+    });
+    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
+      apollo.createRandomSeed().seed,
+      {
+        curve: Curve.X25519,
+      }
+    );
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(
+      wrongKeyPair.publicKey,
+      text,
+      signature
+    );
+    expect(verified).to.be.equal(false);
   });
 });

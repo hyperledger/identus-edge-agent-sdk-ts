@@ -6,13 +6,7 @@ import { DerivationAxis } from "./DerivationAxis";
 import { DerivationPath } from "./DerivationPath";
 
 export class ExtendedKey {
-  private bip32: BIP32Interface;
-  private path: DerivationPath;
-
-  constructor(bip32: BIP32Interface, path: DerivationPath) {
-    this.bip32 = bip32;
-    this.path = path;
-  }
+  constructor(private bip32: BIP32Interface, private path: DerivationPath) {}
 
   /**
    * Public key for this extended key

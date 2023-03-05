@@ -76,19 +76,22 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@bitcoinerlab/secp256k1": "^1.0.2",
     "@scure/bip39": "^1.1.1",
     "@stablelib/base64": "^1.0.1",
+    "@stablelib/ed25519": "^1.0.3",
     "@stablelib/sha256": "^1.0.1",
+    "@stablelib/wipe": "^1.0.1",
+    "@stablelib/x25519": "^1.0.3",
     "antlr4ts": "^0.5.0-alpha.4",
-    "bip32": "^4.0.0",
+    "bip32": "^2.0.6",
     "bn.js": "^5.2.1",
+    "crypto": "^1.0.1",
+    "ed25519-keygen": "^0.3.0",
     "elliptic": "^6.5.4",
     "google-protobuf": "^3.21.2",
+    "hash.js": "1.1.7",
     "jose": "^4.12.2",
     "multiformats": "^9.9.0",
-    "noble-secp256k1": "^1.2.14",
-    "tiny-secp256k1": "^2.2.1",
     "uuid": "^9.0.0"
   }
 }
