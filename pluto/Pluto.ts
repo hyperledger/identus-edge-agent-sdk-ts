@@ -183,7 +183,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getDIDInfoByDID(did: DID): PrismDIDInfo | null {
     const fetch = this.getMethod('DID', 'fetchDIDInfoByDID');
     try {
-      return this.database?.exec(fetch) as unknown as PrismDIDInfo || null;
+      return this.execAsOne<PrismDIDInfo>(fetch, [did.toString()]);
     } catch (error) {
       throw error;
     }

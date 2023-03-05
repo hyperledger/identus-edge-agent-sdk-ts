@@ -17,9 +17,6 @@ describe('Pluto tests', () => {
     await instance.start();
     const value = instance.storePrismDID(DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"), 0, "Did test");
     const values = instance.getAllPrismDIDs()
-    // console.log(instance.storeDIDPair());
-    // console.log(UUID.fromString("some data"));
-    // console.log({values});
     const byAlias = instance.getDIDInfoByAlias('Did test');
   })
   //
