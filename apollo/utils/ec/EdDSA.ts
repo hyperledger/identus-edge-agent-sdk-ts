@@ -7,7 +7,7 @@ import { DerivationAxis } from "../derivation/DerivationAxis";
 import { DerivationPath } from "../derivation/DerivationPath";
 import { Ed25519PublicKey } from "../Ed25519PublicKey";
 import { Ed25519PrivateKey } from "../Ed25519PrivateKey";
-import { Ed25519KeyPair } from "../ED25519KeyPair";
+import { Ed25519KeyPair } from "../Ed25519KeyPair";
 import { X25519KeyPair } from "../X25519KeyPair";
 import { X25519PrivateKey } from "../X25519PrivateKey";
 import { X25519PublicKey } from "../X25519PublicKey";

@@ -4,18 +4,12 @@ import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";
-import { Curve, KeyPair } from "../../domain/models";
+import { Curve } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
-import {
-  getUsageId,
-  PrismDIDPublicKey,
-  Usage,
-} from "../../castor/did/prismDID/PrismDIDPublicKey";
 
 let apollo: Apollo;
-let keyPair: KeyPair;
 
 describe("Apollo Tests", () => {
   beforeEach(() => {
