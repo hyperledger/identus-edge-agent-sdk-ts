@@ -1,6 +1,7 @@
 import BN from "bn.js";
 import * as elliptic from "elliptic";
 import BigInteger from "bn.js";
+import * as base64 from "multiformats/bases/base64";
 
 import { ECConfig } from "../../config/ECConfig";
 import { ECCoordinate } from "./ec/ECCoordinate";
@@ -41,7 +42,6 @@ export class Secp256k1PublicKey
   }
 
   getEncoded(): Uint8Array {
-    //TODO: Fix here also,why each time we encode using that library its adding encoding
     return Uint8Array.from(this.nativeValue.encode("array", false));
   }
 
@@ -127,5 +127,10 @@ export class Secp256k1PublicKey
     const point = this.ec.curve.decodePoint(compressed);
     const uncompressedEncoding = point.encode();
     return Secp256k1PublicKey.secp256k1FromBytes(uncompressedEncoding);
+  }
+
+  verify(message: Buffer, sig: Buffer) {
+    const publicKeyBuffer = Buffer.from(this.getEncodedCompressed());
+    return this.ec.verify(message, sig, Buffer.from(publicKeyBuffer));
   }
 }

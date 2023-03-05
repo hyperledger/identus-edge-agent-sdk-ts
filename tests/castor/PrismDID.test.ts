@@ -37,10 +37,7 @@ describe("PRISMDID CreateTest", () => {
         curve: Curve.SECP256K1,
       }
     );
-    const masterPublicKey = apollo.compressedPublicKeyFromPublicKey(
-      keyPair.publicKey
-    ).uncompressed;
-    const did = await castor.createPrismDID(masterPublicKey, []);
+    const did = await castor.createPrismDID(keyPair.publicKey, []);
     const text = "The quick brown fox jumps over the lazy dog";
     const signature = apollo.signStringMessage(keyPair.privateKey, text);
     const result = await castor.verifySignature(

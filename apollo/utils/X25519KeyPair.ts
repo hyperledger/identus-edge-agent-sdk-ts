@@ -7,11 +7,19 @@ export class X25519KeyPair {
     private publicKey: X25519PublicKey
   ) {}
 
-  public getPrivate(): Buffer {
+  public getPrivate(): X25519PrivateKey {
+    return this.privateKey;
+  }
+
+  public getPublic(): X25519PublicKey {
+    return this.publicKey;
+  }
+
+  public getPrivateBytes(): Buffer {
     return this.privateKey.toBytes();
   }
 
-  public getPublic(): Buffer {
+  public getPublicBytes(): Buffer {
     return this.publicKey.toBytes();
   }
 }

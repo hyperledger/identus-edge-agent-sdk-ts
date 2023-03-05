@@ -46,4 +46,10 @@ export class Secp256k1PrivateKey
     }
     return new Secp256k1PrivateKey(new BN(encoded));
   }
+
+  sign(message: Buffer) {
+    const keyPair = Secp256k1PrivateKey.ec.keyFromPrivate(this.getEncoded());
+    const sig = keyPair.sign(message);
+    return Buffer.from(sig.toDER());
+  }
 }

@@ -39,6 +39,7 @@ import {
   VerificationMethodTypeAgreement,
   VerificationMethodTypeAuthentication,
 } from "../peer-did/types";
+import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
   private resolvers: DIDResolver[];
@@ -155,11 +156,16 @@ export default class Castor implements CastorInterface {
             "PrismDID VerificationMethod does not have multibase Key in it"
           );
         }
+
+        const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromCompressed(
+          Buffer.from(base64.base64.decode(method.publicKeyMultibase))
+        ).getEncoded();
+
         publicKey = {
           keyCurve: {
             curve: Curve.SECP256K1,
           },
-          value: Buffer.from(method.publicKeyMultibase),
+          value: publicKeyEncoded,
         };
         if (
           this.apollo.verifySignature(publicKey, challenge, {

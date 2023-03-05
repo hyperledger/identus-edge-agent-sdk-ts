@@ -109,6 +109,9 @@ export class LongFormPrismDIDResolver implements DIDResolver {
 
       const verificationMethods = publicKeys.reduce(
         (partialResult, publicKey) => {
+          /**
+           * TODO: Support keys in multiple formats, right now its multibase
+           */
           const didUrl = new DIDUrl(did, [], new Map(), publicKey.id);
           const method = new DIDDocumentVerificationMethod(
             didUrl.string(),
