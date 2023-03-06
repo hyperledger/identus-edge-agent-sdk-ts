@@ -39,10 +39,9 @@ export class DIDCommSecretsResolver implements DIDComm.SecretsResolver {
       const secret: DIDComm.Secret = {
         id,
         type: "JsonWebKey2020",
-        secret_material: {
+        privateKeyJwk: {
           format: "JWK",
-          value: "",
-          // value: this.apollo.getPrivateJWKJson(id, keyPair)
+          value: this.apollo.getPrivateJWKJson(id, keyPair),
         },
       };
 

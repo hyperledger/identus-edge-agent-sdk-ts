@@ -26,26 +26,23 @@ export class OctetKeyPair {
   constructor(id: string, from: KeyPair) {
     this.kid = id;
     this.crv = from.keyCurve.curve;
-    this.privateKey = from.privateKey.value.toString("hex");
-    this.publicKey = from.publicKey.toString("base64url");
+    this.privateKey = Buffer.from(from.privateKey.value).toString();
+    this.publicKey = Buffer.from(from.publicKey.value).toString();
   }
 
-  public get publicJson(): string | null {
+  public get publicJson(): string {
     const publicJson: PublicJson = {
       kty: this.kty,
       kid: this.kid,
       crv: this.crv,
       publicKey: this.publicKey,
     };
-    try {
-      const dataJson = JSON.stringify(publicJson);
-      return dataJson;
-    } catch {
-      return null;
-    }
+
+    const dataJson = JSON.stringify(publicJson);
+    return dataJson;
   }
 
-  public get privateJson(): string | null {
+  public get privateJson(): string {
     const privateJson: PrivateJson = {
       kty: this.kty,
       kid: this.kid,
@@ -53,11 +50,8 @@ export class OctetKeyPair {
       privateKey: this.privateKey,
       publicKey: this.publicKey,
     };
-    try {
-      const dataJson = JSON.stringify(privateJson);
-      return dataJson;
-    } catch {
-      return null;
-    }
+
+    const dataJson = JSON.stringify(privateJson);
+    return dataJson;
   }
 }

@@ -29,7 +29,6 @@ export default interface Apollo {
     challenge: Uint8Array,
     signature: Uint8Array
   ): boolean;
-
   getPrivateJWKJson(id: string, keyPair: KeyPair): string;
   getPublicJWKJson(id: string, keyPair: KeyPair): string;
 }
