@@ -1,5 +1,4 @@
 import Pluto from '../../../pluto/Pluto';
-import Apollo from '../../../apollo/Apollo';
 import {DID} from '../../../domain';
 import {Message, MessageDirection} from '../../../domain/models/Message';
 import {v4 as uuidv4} from 'uuid';
@@ -15,25 +14,14 @@ describe('Pluto tests', () => {
       type: 'sql',
     });
     await instance.start();
-    const value = instance.storePrismDID(DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"), 0, "Did test");
-    const values = instance.getAllPrismDIDs()
-    const byAlias = instance.getDIDInfoByAlias('Did test');
-  })
-  //
-  // it('should store peer DID', function () {
-  //
-  // });
-  //
-  // it('should store DID Pair', function () {
-  //
-  // })
-  //
+    instance.storePrismDID(DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"), 0, "Did test");
+  });
   it('should store message', async function () {
 
     const instance = new Pluto({
       type: 'sql',
     });
-    await instance.start()
+    await instance.start();
     const messageId = uuidv4();
     const message_a = {
       piuri: "test a",
@@ -49,18 +37,19 @@ describe('Pluto tests', () => {
       direction: MessageDirection.RECEIVED,
       fromPrior: "sdomasd",
       extraHeaders: ['askdpaks']
-    }
+    };
 
     instance.storeMessage(message_a);
     const values = instance.getAllMessages();
-    expect(values).not.empty
-  })
+    const value = instance.getMessage(values[0].id);
+    expect(values).not.empty;
+  });
 
   it('should store messages', async function () {
     const instance = new Pluto({
       type: 'sql',
     });
-    await instance.start()
+    await instance.start();
     const messageId = uuidv4();
 
     const message = {
@@ -77,12 +66,11 @@ describe('Pluto tests', () => {
       direction: MessageDirection.RECEIVED,
       fromPrior: "sdomasd",
       extraHeaders: ['askdpaks']
-    }
-
+    };
     instance.storeMessages(Array(10).fill("_").map(() => message));
     const values = instance.getAllMessages();
     expect(values.length).equals(10);
-  })
+  });
   //
   // it('should store private keys', function () {
   //
@@ -183,4 +171,4 @@ describe('Pluto tests', () => {
   // it('should get all credentials', function () {
   //
   // });
-})
+});

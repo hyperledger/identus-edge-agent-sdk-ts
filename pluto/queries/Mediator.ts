@@ -1,4 +1,5 @@
-CREATE TABLE Mediator (
+const Mediator = {
+  createTable: `CREATE TABLE Mediator (
     id TEXT NOT NULL UNIQUE, -- VARCHAR(36)
     mediatorDIDId TEXT NOT NULL,
     hostDIDId TEXT,
@@ -9,12 +10,15 @@ CREATE TABLE Mediator (
     FOREIGN KEY (routingDIDId) REFERENCES DID(did)
 );
 
-insert:
-INSERT INTO Mediator(id, mediatorDIDId, hostDIDId, routingDIDId)
-VALUES ?;
+`,
 
-fetchAllMediators:
-SELECT Mediator.id, mediatorDID.did AS MediatorDID, hostDID.did AS HostDID, routingDID.did AS RoutingDID
+  insert: `
+    INSERT INTO Mediator(id, mediatorDIDId, hostDIDId, routingDIDId)
+VALUES (?, ?, ?, ?);
+    `,
+
+  fetchAllMediators: `
+    SELECT Mediator.id, mediatorDID.did AS MediatorDID, hostDID.did AS HostDID, routingDID.did AS RoutingDID
 FROM Mediator
 JOIN DID AS mediatorDID
 ON Mediator.mediatorDIDId = mediatorDID.methodId
@@ -22,3 +26,9 @@ JOIN DID AS hostDID
 ON Mediator.hostDIDId = hostDID.methodId
 JOIN DID AS routingDID
 ON Mediator.routingDIDId = routingDID.methodId;
+    `,
+
+};
+
+export type MediatorQueriesTypes = "createTable" | "insert" | "fetchAllMediators"
+export default Mediator;
