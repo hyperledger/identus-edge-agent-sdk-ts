@@ -33,10 +33,7 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
                 controller: method.controller,
                 id: method.id,
                 type: "JsonWebKey2020",
-                verification_material: {
-                  format: "JWK",
-                  value: method.publicKeyJwk,
-                },
+                publicKeyJwk: method.publicKeyJwk,
               });
           }
         });
@@ -48,12 +45,11 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
       ) {
         services.push({
           id: coreProperty.id,
-          kind: {
-            DIDCommMessaging: {
-              service_endpoint: coreProperty.serviceEndpoint.uri,
-              accept: coreProperty.serviceEndpoint.accept,
-              routing_keys: coreProperty.serviceEndpoint.routingKeys,
-            },
+          type: "DIDCommMessaging",
+          serviceEndpoint: {
+            uri: coreProperty.serviceEndpoint.uri,
+            accept: coreProperty.serviceEndpoint.accept,
+            routing_keys: coreProperty.serviceEndpoint.routingKeys,
           },
         });
       }
