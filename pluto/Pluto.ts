@@ -242,7 +242,20 @@ export default class Pluto extends Connection implements PlutoInterface {
   getPairByDID(did: DID): DIDPair | null {
     const fetch = this.getMethod<"DIDPair">('DIDPair', 'fetchDIDPairByDID');
     try {
-      return this.execAsOne<DIDPair>(fetch, [did.toString()]);
+      const result = this.execAsOne<{
+        id: string;
+        name: string;
+        hostDID: string;
+        receiverDID: string;
+      }>(fetch, [did.toString()]);
+      if (!result) {
+        return null;
+      }
+      return {
+        host: DID.fromString(result.hostDID),
+        receiver: DID.fromString(result.receiverDID),
+        name: result.name
+      };
     } catch (error) {
       throw error;
     }
