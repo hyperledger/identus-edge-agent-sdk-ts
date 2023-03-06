@@ -1,24 +1,29 @@
-import elliptic from "elliptic";
+import * as elliptic from "elliptic";
+import { base64url } from "multiformats/bases/base64";
 
-const utils = elliptic.utils;
+import { Ed25519KeyCommon } from "./Ed25519KeyCommon";
 
-export class Ed25519PublicKey {
-  protected bytes: Buffer;
+export class Ed25519PublicKey extends Ed25519KeyCommon {
+  private keyPair: elliptic.eddsa.KeyPair;
 
-  private eddsa = new elliptic.eddsa("ed25519");
+  constructor(nativeValue: Uint8Array) {
+    super();
 
-  constructor(bytes: Uint8Array) {
-    this.bytes = Buffer.from(bytes);
+    this.keyPair = this.eddsa.keyFromPublic(
+      Array.from(
+        base64url.baseDecode(nativeValue.toString())
+      ) as unknown as Buffer
+    );
   }
-  toBytes(): Buffer {
-    return this.bytes;
+
+  getEncoded(): Buffer {
+    return Buffer.from(base64url.baseEncode(this.keyPair.getPublic()));
   }
 
   verify(message: Buffer, sig: Buffer) {
-    return this.eddsa.verify(
-      message,
-      sig.toString("hex"),
-      utils.parseBytes(this.bytes.toString("hex")).slice(0, 32)
-    );
+    //TODO: Report a bug in elliptic, this method is not expecting a Buffer (bytes)
+    //Internally it expects to find an array, if not Buffer.slice.concat fails when Array.slice.concat doesn't
+    //Must keep this...
+    return this.keyPair.verify(message, Array.from(sig) as unknown as Buffer);
   }
 }

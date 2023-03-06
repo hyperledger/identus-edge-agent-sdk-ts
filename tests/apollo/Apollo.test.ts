@@ -1,13 +1,18 @@
 import BN from "bn.js";
 import { expect, assert } from "chai";
+import { base64url } from "multiformats/bases/base64";
+
 import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";
-import { Curve } from "../../domain/models";
+import { Curve, PrivateKey } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
+
+import { Ed25519KeyPair } from "../../apollo/utils/Ed25519KeyPair";
+import { X25519KeyPair } from "../../apollo/utils/X25519KeyPair";
 
 let apollo: Apollo;
 
@@ -134,7 +139,11 @@ describe("Apollo Tests", () => {
       curve: Curve.SECP256K1,
     });
     const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(keyPair.publicKey, text, signature);
+    const verified = apollo.verifySignature(
+      keyPair.publicKey,
+      text,
+      signature.value
+    );
     expect(verified).to.be.equal(true);
   });
 
@@ -155,7 +164,7 @@ describe("Apollo Tests", () => {
     const verified = apollo.verifySignature(
       wrongKeyPair.publicKey,
       text,
-      signature
+      signature.value
     );
     expect(verified).to.be.equal(false);
   });
@@ -168,7 +177,11 @@ describe("Apollo Tests", () => {
       curve: Curve.ED25519,
     });
     const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(keyPair.publicKey, text, signature);
+    const verified = apollo.verifySignature(
+      keyPair.publicKey,
+      text,
+      signature.value
+    );
     expect(verified).to.be.equal(true);
   });
 
@@ -189,41 +202,7 @@ describe("Apollo Tests", () => {
     const verified = apollo.verifySignature(
       wrongKeyPair.publicKey,
       text,
-      signature
-    );
-    expect(verified).to.be.equal(false);
-  });
-
-  it("Should create and Sign and verify a message using X25519 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
-    const apollo = new Apollo();
-    const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.X25519,
-    });
-    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(keyPair.publicKey, text, signature);
-    expect(verified).to.be.equal(true);
-  });
-
-  it("Should only verify signed message using the correct X25519 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
-    const apollo = new Apollo();
-    const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.X25519,
-    });
-    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
-      apollo.createRandomSeed().seed,
-      {
-        curve: Curve.X25519,
-      }
-    );
-    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(
-      wrongKeyPair.publicKey,
-      text,
-      signature
+      signature.value
     );
     expect(verified).to.be.equal(false);
   });

@@ -23,12 +23,12 @@ import { DerivationPath } from "./utils/derivation/DerivationPath";
 import { KeyDerivation } from "./utils/derivation/KeyDerivation";
 import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
-import * as base64 from "multiformats/bases/base64";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
-import { X25519PublicKey } from "./utils/X25519PublicKey";
-
+import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
+import { X25519KeyPair } from "./utils/X25519KeyPair";
+import { base64url } from "multiformats/bases/base64";
 const EC = elliptic.ec;
 
 export default class Apollo implements ApolloInterface {
@@ -57,37 +57,29 @@ export default class Apollo implements ApolloInterface {
         },
       };
     } else if (curve.curve == Curve.ED25519) {
-      const ed25519Key = KeyDerivation.deriveEd25519Key(
-        seed.value,
-        derivationPath
-      );
-      const keyPair = ed25519Key.keyPair();
+      const keyPair = new Ed25519KeyPair();
       return {
         keyCurve: curve,
         privateKey: {
           keyCurve: curve,
-          value: keyPair.getPrivateBytes(),
+          value: keyPair.getPrivate(),
         },
         publicKey: {
           keyCurve: curve,
-          value: keyPair.getPublicBytes(),
+          value: keyPair.getPublic(),
         },
       };
     } else if (curve.curve == Curve.X25519) {
-      const ed25519Key = KeyDerivation.deriveX25519Key(
-        seed.value,
-        derivationPath
-      );
-      const keyPair = ed25519Key.x25519KeyPair();
+      const keyPair = new X25519KeyPair();
       return {
         keyCurve: curve,
         privateKey: {
           keyCurve: curve,
-          value: keyPair.getPrivateBytes(),
+          value: keyPair.getPrivate(),
         },
         publicKey: {
           keyCurve: curve,
-          value: keyPair.getPublicBytes(),
+          value: keyPair.getPublic(),
         },
       };
     } else {
@@ -179,21 +171,25 @@ export default class Apollo implements ApolloInterface {
   signByteArrayMessage(privateKey: PrivateKey, message: Uint8Array): Signature {
     const messageBuffer = Buffer.from(message);
     if (privateKey.keyCurve.curve == Curve.ED25519) {
-      const ed25519PrivateKey = new Ed25519PrivateKey(privateKey.value);
+      const ed25519PrivateKey = new Ed25519PrivateKey(
+        Buffer.from(privateKey.value)
+      );
       return {
-        value: ed25519PrivateKey.sign(messageBuffer),
+        value: Buffer.from(ed25519PrivateKey.sign(messageBuffer)),
       };
     } else if (privateKey.keyCurve.curve == Curve.X25519) {
-      const x25519PrivateKey = new X25519PrivateKey(privateKey.value);
+      const x25519PrivateKeyPair = new X25519PrivateKey(
+        Buffer.from(privateKey.value)
+      );
       return {
-        value: x25519PrivateKey.sign(messageBuffer),
+        value: Buffer.from(x25519PrivateKeyPair.sign(messageBuffer)),
       };
     } else if (privateKey.keyCurve.curve == Curve.SECP256K1) {
       const secp256k1PrivateKey = Secp256k1PrivateKey.secp256k1FromBytes(
         privateKey.value
       );
       return {
-        value: secp256k1PrivateKey.sign(messageBuffer),
+        value: Buffer.from(secp256k1PrivateKey.sign(messageBuffer)),
       };
     }
     throw new Error("Method not implemented.");
@@ -207,16 +203,15 @@ export default class Apollo implements ApolloInterface {
   verifySignature(
     publicKey: PublicKey,
     challenge: Uint8Array,
-    signature: Signature
+    signature: Uint8Array
   ): boolean {
     const challengeBuffer = Buffer.from(challenge);
-    const signatureBuffer = Buffer.from(signature.value);
+    const signatureBuffer = Buffer.from(signature);
     if (publicKey.keyCurve.curve == Curve.ED25519) {
       const ed25519PublicKey = new Ed25519PublicKey(publicKey.value);
       return ed25519PublicKey.verify(challengeBuffer, signatureBuffer);
     } else if (publicKey.keyCurve.curve == Curve.X25519) {
-      const x25519PublicKey = new X25519PublicKey(publicKey.value);
-      return x25519PublicKey.verify(challengeBuffer, signatureBuffer);
+      throw new Error("Method not implemented.");
     } else if (publicKey.keyCurve.curve == Curve.SECP256K1) {
       const compressed = this.compressedPublicKeyFromPublicKey(publicKey);
       const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromCompressed(

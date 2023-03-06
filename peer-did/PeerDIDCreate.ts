@@ -22,6 +22,7 @@ import {
   VerificationMethodTypeAuthentication,
 } from "./types";
 
+import { base64url } from "multiformats/bases/base64";
 import { base58btc } from "multiformats/bases/base58";
 
 export class PeerDIDCreate {

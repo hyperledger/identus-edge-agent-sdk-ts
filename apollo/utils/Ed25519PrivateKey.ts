@@ -1,22 +1,24 @@
-import elliptic from "elliptic";
+import * as elliptic from "elliptic";
+import { base64url } from "multiformats/bases/base64";
 
-const utils = elliptic.utils;
+import { Ed25519KeyCommon } from "./Ed25519KeyCommon";
 
-export class Ed25519PrivateKey {
-  protected bytes: Buffer;
-  private eddsa = new elliptic.eddsa("ed25519");
-  constructor(bytes: Uint8Array) {
-    this.bytes = Buffer.from(bytes);
+export class Ed25519PrivateKey extends Ed25519KeyCommon {
+  private keyPair: elliptic.eddsa.KeyPair;
+
+  constructor(nativeValue: Buffer) {
+    super();
+    this.keyPair = this.eddsa.keyFromSecret(
+      Buffer.from(base64url.baseDecode(nativeValue.toString()))
+    );
   }
-  toBytes(): Buffer {
-    return this.bytes;
+
+  getEncoded(): Buffer {
+    return Buffer.from(base64url.baseEncode(this.keyPair.getSecret()));
   }
 
   sign(message: Buffer) {
-    const keyPair = this.eddsa.keyFromSecret(
-      utils.parseBytes(this.bytes).slice(0, 32)
-    );
-    const sig = keyPair.sign(message);
-    return Buffer.from(sig.toBytes());
+    const sig = this.keyPair.sign(message);
+    return sig.toBytes();
   }
 }

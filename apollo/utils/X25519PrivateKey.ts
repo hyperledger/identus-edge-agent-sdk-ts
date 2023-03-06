@@ -1,23 +1,28 @@
-import elliptic from "elliptic";
-import { X25519PublicKey } from "./X25519PublicKey";
+import * as elliptic from "elliptic";
+import { base64url } from "multiformats/bases/base64";
 
-export class X25519PrivateKey {
-  protected bytes: Buffer;
-  private static ec = new elliptic.ec("curve25519");
-  constructor(bytes: Uint8Array) {
-    this.bytes = Buffer.from(bytes);
+import { X25519KeyCommon } from "./X25519KeyCommon";
+
+export class X25519PrivateKey extends X25519KeyCommon {
+  private keyPair: elliptic.ec.KeyPair;
+
+  constructor(nativeValue: Buffer) {
+    super();
+
+    this.keyPair = this.ec.keyFromPrivate(
+      Array.from(
+        base64url.baseDecode(nativeValue.toString())
+      ) as unknown as Buffer
+    );
   }
-  toBytes(): Buffer {
-    return this.bytes;
+
+  getEncoded(): Buffer {
+    return Buffer.from(
+      base64url.baseEncode(Buffer.from(this.keyPair.getPrivate().toArray()))
+    );
   }
 
   sign(message: Buffer) {
-    const keyPair = X25519PrivateKey.ec.keyFromPrivate(this.bytes);
-    const sig = keyPair.sign(message);
-    return Buffer.from(sig.toDER());
-  }
-
-  static fromEd25519Private(xPrv: Buffer): X25519PublicKey {
-    throw new Error();
+    return Buffer.from(this.keyPair.sign(message).toDER());
   }
 }

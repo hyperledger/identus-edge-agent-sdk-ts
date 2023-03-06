@@ -98,6 +98,7 @@ describe("PEERDID CreateTest", () => {
     const did = await castor.createPeerDID(keyPairs, services);
     expect(did.toString()).to.equal(validPeerDID);
   });
+
   it("Should resolver peerdid correctly", async () => {
     const mypeerDID = new DID(
       "did",
@@ -163,6 +164,53 @@ describe("PEERDID CreateTest", () => {
     const keyPair = authenticationKeyPair;
     const text = "The quick brown fox jumps over the lazy dog";
     const signature = apollo.signStringMessage(keyPair.privateKey, text);
+    const result = await castor.verifySignature(
+      did,
+      Buffer.from(text),
+      signature.value
+    );
+
+    expect(result).to.be.equal(true);
+  });
+
+  it("Create a PeerDID and verify a signature from new keys", async () => {
+    const apollo = new Apollo();
+    const castor = new Castor(apollo);
+    const seed = apollo.createRandomSeed().seed;
+
+    const authenticationKeyPair: KeyPair = apollo.createKeyPairFromKeyCurve(
+      seed,
+      {
+        curve: Curve.ED25519,
+      }
+    );
+
+    const KeyAgreementKeyPair: KeyPair = apollo.createKeyPairFromKeyCurve(
+      seed,
+      {
+        curve: Curve.X25519,
+      }
+    );
+
+    const keyPairs = [KeyAgreementKeyPair, authenticationKeyPair];
+    const services: Service[] = [
+      {
+        id: "didcomm",
+        type: ["DIDCommMessaging"],
+        serviceEndpoint: {
+          uri: "https://example.com/endpoint",
+          accept: [],
+          routingKeys: ["did:example:somemediator#somekey"],
+        },
+      },
+    ];
+    const did = await castor.createPeerDID(keyPairs, services);
+    const text = "The quick brown fox jumps over the lazy dog";
+
+    const signature = apollo.signStringMessage(
+      authenticationKeyPair.privateKey,
+      text
+    );
     const result = await castor.verifySignature(
       did,
       Buffer.from(text),

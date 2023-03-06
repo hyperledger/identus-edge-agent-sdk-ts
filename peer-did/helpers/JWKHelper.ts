@@ -22,8 +22,8 @@ export class JWKHelper {
       throw new CastorError.InvalidJWKKeysError();
     }
     //Assume we get base64 encoded strings, we add the u for base64url encoding
-    return Buffer.from(
-      base64url.decode(`u${Buffer.from(xKey.data).toString()}`)
+    return Uint8Array.from(
+      base64url.baseDecode(Buffer.from(xKey.data).toString())
     );
   }
 
@@ -36,8 +36,8 @@ export class JWKHelper {
     if (crv !== "Ed25519") {
       throw new CastorError.InvalidJWKKeysError();
     }
-    return Buffer.from(
-      base64url.decode(`u${Buffer.from(xKey.data).toString()}`)
+    return Uint8Array.from(
+      base64url.baseDecode(Buffer.from(xKey.data).toString())
     );
   }
 

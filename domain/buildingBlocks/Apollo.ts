@@ -27,7 +27,7 @@ export default interface Apollo {
   verifySignature(
     publicKey: PublicKey,
     challenge: Uint8Array,
-    signature: Signature
+    signature: Uint8Array
   ): boolean;
 
   getPrivateJWKJson(id: string, keyPair: KeyPair): string;

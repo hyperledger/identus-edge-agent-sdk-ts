@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SHA256 } from "@stablelib/sha256";
+import { base64url } from "multiformats/bases/base64";
 
 import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
@@ -167,11 +168,7 @@ export default class Castor implements CastorInterface {
           },
           value: publicKeyEncoded,
         };
-        if (
-          this.apollo.verifySignature(publicKey, challenge, {
-            value: signature,
-          })
-        ) {
+        if (this.apollo.verifySignature(publicKey, challenge, signature)) {
           return true;
         }
       }
@@ -210,17 +207,14 @@ export default class Castor implements CastorInterface {
             : JWKHelper.fromJWKAuthentication(
                 material as VerificationMaterialAuthentication
               );
+
         publicKey = {
           keyCurve: {
             curve: method.publicKeyJwk.crv as Curve,
           },
-          value: Buffer.from(decodedKey),
+          value: Buffer.from(base64url.baseEncode(decodedKey)),
         };
-        if (
-          this.apollo.verifySignature(publicKey, challenge, {
-            value: signature,
-          })
-        ) {
+        if (this.apollo.verifySignature(publicKey, challenge, signature)) {
           return true;
         }
       }
