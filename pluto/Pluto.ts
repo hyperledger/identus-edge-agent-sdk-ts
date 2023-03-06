@@ -310,9 +310,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesSentTo(did: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesSentTo');
     try {
-      return this.execAsMany<Message>(fetch, {
-        ":to": did.toString(),
-      });
+      return this.execAsMany<Message>(fetch, [did.toString()]);
     } catch (error) {
       throw error;
     }
