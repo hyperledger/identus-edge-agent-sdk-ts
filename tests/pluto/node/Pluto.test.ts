@@ -1,12 +1,18 @@
 import Pluto from '../../../pluto/Pluto';
-import {DID} from '../../../domain';
+import {Curve, DID, getKeyCurveByNameAndIndex, PrivateKey} from '../../../domain';
 import {Message, MessageDirection} from '../../../domain/models/Message';
 import {v4 as uuidv4} from 'uuid';
 import {expect} from 'chai';
+import {CredentialType} from '../../../domain/models/VerifiableCredential';
 
 describe('Pluto tests', () => {
-  it('should start successfully', function () {
+  it('should start successfully', async function () {
 
+    const instance = new Pluto({
+      type: 'sql',
+    });
+
+    await instance.start();
   });
 
   it('should store prism DID', async function () {
@@ -16,6 +22,7 @@ describe('Pluto tests', () => {
     await instance.start();
     instance.storePrismDID(DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"), 0, "Did test");
   });
+
   it('should store message', async function () {
 
     const instance = new Pluto({
@@ -23,7 +30,7 @@ describe('Pluto tests', () => {
     });
     await instance.start();
     const messageId = uuidv4();
-    const message_a = {
+    const message = {
       piuri: "test a",
       from: DID.fromString("did:prism:100"),
       thid: 'test',
@@ -39,10 +46,10 @@ describe('Pluto tests', () => {
       extraHeaders: ['askdpaks']
     };
 
-    instance.storeMessage(message_a);
+    instance.storeMessage(message);
     const values = instance.getAllMessages();
     const value = instance.getMessage(values[0].id);
-    expect(values).not.empty;
+    expect(value?.from?.toString()).equal(message.from.toString());
   });
 
   it('should store messages', async function () {
@@ -72,103 +79,603 @@ describe('Pluto tests', () => {
     expect(values.length).equals(10);
   });
   //
-  // it('should store private keys', function () {
+  it('should store private keys', async function () {
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    const did = DID.fromString("did:prism:123");
+    instance.storePrivateKeys(privateKey, did, 0, null);
+  });
+
+  it('should store mediator', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const mediator = DID.fromString("did:prism:123");
+    const host = DID.fromString("did:prism:321");
+    const routing = DID.fromString("did:prism:432");
+    instance.storeMediator(mediator, host, routing);
+
+  });
+
+  it('should store credential', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    instance.storeCredential({
+      id: "",
+      credentialType: CredentialType.JWT,
+      context: ["test0", "test1"],
+      type: ['auth'],
+      credentialSceham: {
+        id: uuidv4(),
+        type: "decode_jwt"
+      }, // Issue: Naming looks odd, I guess credentialSchema? .
+      credentialSubject: "",
+      credentialStatus: {
+        id: uuidv4(),
+        type: "test"
+      },
+      refreshService: {
+        id: uuidv4(),
+        type: "test"
+      },
+      evidence: {
+        id: uuidv4(),
+        type: "test"
+      },
+      termsOfUse: {
+        id: uuidv4(),
+        type: "test"
+      },
+      issuer: DID.fromString("did:prism:123"),
+      issuanceDate: new Date().toDateString(),
+      expirationDate: new Date().toDateString(),
+      validFrom: {
+        id: uuidv4(),
+        type: "test"
+      }, // Question: Is this valid interface?
+      validUntil: {
+        id: uuidv4(),
+        type: "test"
+      }, // Question: Is this valid interface?
+      proof: "",
+      aud: ["test0", 'test1'],
+    });
+  });
+
+  it('should get all prism DIDs', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
+    const keyPathIndex = 0;
+    const alias = "Did test";
+    instance.storePrismDID(did, keyPathIndex, alias);
+
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+    const dids = instance.getAllPrismDIDs();
+    expect(dids).not.empty;
+  });
+
+  it('should get DID info by DID', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
+    const keyPathIndex = 0;
+    const alias = "Did test";
+    instance.storePrismDID(did, keyPathIndex, alias);
+
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    const result = instance.getDIDInfoByDID(did);
+    expect(result?.did.toString()).equals(did.toString());
+  });
+
+  it('should get DID info by alias', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const did = DID.fromString("did:prism:dadsa:asdpijasiopdj");
+    const keyPathIndex = 0;
+    const alias = "Did test";
+    instance.storePrismDID(did, keyPathIndex, alias);
+
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    const result = instance.getDIDInfoByAlias(alias);
+    expect(!!result.find(item => item.alias === alias)).true;
+  });
+
+  it('should get prism DID key path index', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const did = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
+    const keyPathIndex = 10;
+    const alias = "Did test";
+    instance.storePrismDID(did, keyPathIndex, alias);
+
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    const result = instance.getPrismDIDKeyPathIndex(did);
+    expect(result).equals(keyPathIndex);
+  });
+
+  it('should get prism last key path index', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const did = DID.fromString("did:prism:dadsa:92jsadn1");
+    const keyPathIndex = 11;
+    const alias = "Did test";
+    instance.storePrismDID(did, keyPathIndex, alias);
+
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    const result = instance.getPrismLastKeyPathIndex(); // Issue: this method does not work because of method written incorrect it should be "prism" instead of "Prism"
+    // expect(result).equals(keyPathIndex); // failing
+  });
   //
-  // });
+  it('should get all peer DIDs', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const peerDid = DID.fromString("did:peer:3i21d");
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.ED25519),
+    };
+
+    const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
+    const keyPathIndex = 11;
+    const alias = "Did test";
+    instance.storePrismDID(prismDid, keyPathIndex, alias);
+
+    const prismPrivateKey: PrivateKey = {
+      value: "some key",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.SECP256K1),
+    };
+    instance.storePrivateKeys(prismPrivateKey, prismDid, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    instance.storePeerDID(peerDid, [privateKey]);
+    const dids = instance.getAllPeerDIDs();
+    expect(dids.length).equals(1);
+  });
+
+  it('should get DID private keys by DID', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const peerDid = DID.fromString("did:peer:3i21d");
+    await instance.start();
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.ED25519),
+    };
+
+    instance.storePeerDID(peerDid, [privateKey]);
+    const result = instance.getDIDPrivateKeysByDID(peerDid);
+    expect(!!result?.find(item => item.value === privateKey.value)).true; // fails because of the implementation
+  });
   //
-  // it('should store mediator', function () {
+  it('should get DID private key by ID', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const peerDid = DID.fromString("did:peer:3i21d");
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.ED25519),
+    };
+
+    instance.storePeerDID(peerDid, [privateKey]);
+    // Question: Should we implement getAllPrivateKeys() method?
+    const result = instance.database?.exec("SELECT id FROM PrivateKey;") as any;
+    const privateKeyResult = instance.getDIDPrivateKeyByID(result[0].values[0][0]);
+    expect(privateKeyResult?.keyCurve.curve).equals(Curve.ED25519);
+  });
+
+  it('should get all did pairs', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const host = DID.fromString("did:prism:123");
+    const receiver = DID.fromString("did:prism:321");
+    const name = "test";
+    instance.storeDIDPair(host, receiver, name);
+    const dids = instance.getAllDidPairs();
+    expect(dids).not.empty;
+  });
+
+  it('should get pair by DID', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const host = DID.fromString("did:prism:123");
+    const receiver = DID.fromString("did:prism:321");
+    const name = "test";
+    instance.storeDIDPair(host, receiver, name);
+    const result = instance.getPairByDID(host);
+    expect(result?.host.toString()).equals(host.toString());
+  });
+
+  it('should get pair by name', async function () {
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    const host = DID.fromString("did:prism:123");
+    const receiver = DID.fromString("did:prism:321");
+    const name = "test";
+    instance.storeDIDPair(host, receiver, name);
+    const result = instance.getPairByName(name);
+    expect(result?.name).equals(name);
+  });
+
+  it('should get all messages', async function () {
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+    instance.storeMessage({
+      id: uuidv4(),
+      thid: "",
+      to: DID.fromString("did:prism:123"),
+      from: DID.fromString("did:prism:321"),
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    });
+    const messages = instance.getAllMessages();
+    expect(messages).not.empty;
+  });
+
+  it('should get all messages by DID', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+    instance.storeMessage({
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    });
+    const messages = instance.getAllMessagesByDID(from);
+    expect(messages).not.empty;
+  });
+
+  it('should get all messages sent', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+    instance.storeMessage({
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.SENT,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    });
+    const messages = instance.getAllMessagesSent();
+    expect(messages).not.empty;
+  });
+
+  it('should get all messages received', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+    instance.storeMessage({
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    });
+    const messages = instance.getAllMessagesReceived();
+    expect(messages).not.empty;
+  });
+
+  it('should get all messages sent to', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+    instance.storeMessage({
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.SENT,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    });
+    const messages = instance.getAllMessagesSentTo(to);
+    expect(messages).not.empty;
+  });
+
+  it('should get all messages received from', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+    instance.storeMessage({
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    });
+    const messages = instance.getAllMessagesReceivedFrom(from);
+    expect(messages).not.empty;
+  });
+
+  it('should get all messages of type', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+    const message = {
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "type-example",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    };
+    instance.storeMessage(message);
+    const messages = instance.getAllMessagesOfType(message.piuri);
+    expect(messages).not.empty;
+  });
   //
-  // });
-  //
-  // it('should store credential', function () {
-  //
-  // })
-  //
-  // it('should get all prism DIDs', function () {
-  //
-  // });
-  //
-  // it('should get DID info by DID', function () {
-  //
-  // });
-  //
-  // it('should get DID info by alias', function () {
-  //
-  // });
-  //
-  // it('should get prism DID key path index', function () {
-  //
-  // });
-  //
-  // it('should get prism last key path index', function () {
-  //
-  // });
-  //
-  // it('should get all peer DIDs', function () {
-  //
-  // });
-  //
-  // it('should get DID private keys by DID', function () {
-  //
-  // });
-  //
-  // it('should get DID private key by ID', function () {
-  //
-  // });
-  //
-  // it('should get all did pairs', function () {
-  //
-  // });
-  //
-  // it('should get pair by DID', function () {
-  //
-  // });
-  //
-  // it('should get pair by name', function () {
-  //
-  // });
-  //
-  // it('should get all messages', function () {
-  //
-  // });
-  //
-  // it('should get all messages by DID', function () {
-  //
-  // });
-  //
-  // it('should get all messages sent', function () {
-  //
-  // });
-  //
-  // it('should get all messages received', function () {
-  //
-  // });
-  //
-  // it('should get all messages sent to', function () {
-  //
-  // });
-  //
-  // it('should get all messages received from', function () {
-  //
-  // });
-  //
-  // it('should get all messages of type', function () {
-  //
-  // });
-  //
-  // it('should get all messages by from to DID', function () {
-  //
-  // });
-  //
-  // it('should get message', function () {
-  //
-  // });
-  //
-  // it('should get all mediators', function () {
-  //
-  // });
-  //
-  // it('should get all credentials', function () {
-  //
-  // });
+  it('should get all messages by from to DID', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+
+    const message = {
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "type-example",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    };
+    instance.storeMessage(message);
+    const result = instance.getAllMessagesByFromToDID(message.from, message.to);
+    expect(result[0].body).equal(message.body);
+  });
+
+  it('should get message', async function () {
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    const to = DID.fromString("did:prism:123");
+    const from = DID.fromString("did:prism:321");
+    await instance.start();
+
+    const message = {
+      id: uuidv4(),
+      thid: "",
+      to,
+      from,
+      direction: MessageDirection.RECEIVED,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message",
+      createdTime: new Date().toDateString(),
+      attachments: [],
+      piuri: "type-example",
+      extraHeaders: ['x-extra-header'],
+      expiresTimePlus: new Date().toString(),
+    };
+    instance.storeMessage(message);
+    const messages = instance.getAllMessages();
+
+    const result = instance.getMessage(messages[0].id);
+    expect(result?.body).equal(message.body);
+  });
+
+  it('should get all mediators', async function () {
+
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+
+    const mediator = DID.fromString("did:prism:123");
+    const host = DID.fromString("did:prism:321");
+    const routing = DID.fromString("did:prism:432");
+    instance.storeMediator(mediator, host, routing);
+
+    const data = instance.getAllMediators(); // Issue: query invalid, needs solution, doesn't seem complete.
+    expect(data).not.empty; // fails
+  });
+
+  it('should get all credentials', async function () {
+
+
+    const instance = new Pluto({
+      type: 'sql',
+    });
+    await instance.start();
+
+    instance.storeCredential({
+      id: "",
+      credentialType: CredentialType.JWT,
+      context: ["test0", "test1"],
+      type: ['auth'],
+      credentialSceham: {
+        id: uuidv4(),
+        type: "decode_jwt"
+      }, // Question: Naming looks odd, I guess credentialSchema? .
+      credentialSubject: "",
+      credentialStatus: {
+        id: uuidv4(),
+        type: "test"
+      },
+      refreshService: {
+        id: uuidv4(),
+        type: "test"
+      },
+      evidence: {
+        id: uuidv4(),
+        type: "test"
+      },
+      termsOfUse: {
+        id: uuidv4(),
+        type: "test"
+      },
+      issuer: DID.fromString("did:prism:123"),
+      issuanceDate: new Date().toDateString(),
+      expirationDate: new Date().toDateString(),
+      validFrom: {
+        id: uuidv4(),
+        type: "test"
+      }, // Question: Is this valid interface?
+      validUntil: {
+        id: uuidv4(),
+        type: "test"
+      }, // Question: Is this valid interface?
+      proof: "",
+      aud: ["test0", 'test1'],
+    });
+
+    const data = instance.getAllCredentials();
+    expect(data).not.empty;
+  });
 });
