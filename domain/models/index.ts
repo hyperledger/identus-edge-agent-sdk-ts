@@ -11,4 +11,5 @@ export * from "./DIDUrl";
 export * from "./PrismDIDMethodId";
 export * from "./DIDResolver";
 export * from "./PeerDID";
+export * from "./WordList";
 export type JsonString = string;
