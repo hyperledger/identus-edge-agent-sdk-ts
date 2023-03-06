@@ -280,12 +280,10 @@ export default class Pluto extends Connection implements PlutoInterface {
   }
 
   getAllMessagesByDID(did: DID): Message[] {
-    const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesFromTo');
+    // Question: This method is not implemented in Kotlin, is it missing or just not wanted anymore?
+    const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesReceivedFrom');
     try {
-      return this.execAsMany<Message>(fetch, {
-        ":from": did.toString(),
-        ":to": did.toString(),
-      });
+      return this.execAsMany<Message>(fetch, [did.toString()]);
     } catch (error) {
       throw error;
     }
