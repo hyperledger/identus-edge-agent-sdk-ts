@@ -2,7 +2,7 @@ import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto';
 import {Curve, DID, PrivateKey} from '../domain/models';
 import {DIDPair} from '../domain/models/DIDPair';
 import {Mediator} from '../domain/models/Mediator';
-import {Message} from '../domain/models/Message';
+import {Message, MessageDirection} from '../domain/models/Message';
 import {PeerDID} from '../domain/models/PeerDID';
 import {PrismDIDInfo} from '../domain/models/PrismDIDInfo';
 import {VerifiableCredential} from '../domain/models/VerifiableCredential';
@@ -15,6 +15,7 @@ import MediatorQueries, {MediatorQueriesTypes} from './queries/Mediator';
 import MessageQueries, {MessageQueriesTypes} from './queries/Message';
 import PrivateKeyQueries, {PrivateKeyQueriesTypes} from './queries/PrivateKey';
 import VerifiableCredentialQueries, {VerifiableCredentialQueriesTypes} from './queries/VerifiableCredential';
+import {AttachmentDescriptor} from '../domain/models/MessageAttachment';
 
 type TableName = "DID" | "DIDPair" | "Mediator" | "Message" | "PrivateKey" | "VerifiableCredential";
 type MethodType<tablename> =
@@ -24,7 +25,7 @@ type MethodType<tablename> =
                 tablename extends "Message" ? MessageQueriesTypes :
                     tablename extends "PrivateKey" ? PrivateKeyQueriesTypes :
                         tablename extends "VerifiableCredential" ? VerifiableCredentialQueriesTypes : null;
-
+type MessageDBResult = { id: string, createdTime: string, dataJson: string, from: string, thid: string, to: string, type: string, isReceived: string };
 export default class Pluto extends Connection implements PlutoInterface {
   constructor(connection: ConnectionParams) {
     super(connection);
@@ -273,7 +274,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessages(): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessages');
     try {
-      return this.execAsMany(fetch) as Message[];
+      return this.execAsMany<MessageDBResult>(fetch).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -283,7 +284,7 @@ export default class Pluto extends Connection implements PlutoInterface {
     // Question: This method is not implemented in Kotlin, is it missing or just not wanted anymore?
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesReceivedFrom');
     try {
-      return this.execAsMany<Message>(fetch, [did.toString()]);
+      return this.execAsMany<MessageDBResult>(fetch, [did.toString()]).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -292,7 +293,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesSent(): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllSentMessages');
     try {
-      return this.execAsMany<Message>(fetch);
+      return this.execAsMany<MessageDBResult>(fetch).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -301,7 +302,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesReceived(): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllReceivedMessages');
     try {
-      return this.execAsMany<Message>(fetch);
+      return this.execAsMany<MessageDBResult>(fetch).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -310,7 +311,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesSentTo(did: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesSentTo');
     try {
-      return this.execAsMany<Message>(fetch, [did.toString()]);
+      return this.execAsMany<MessageDBResult>(fetch, [did.toString()]).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -319,7 +320,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesReceivedFrom(did: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesReceivedFrom');
     try {
-      return this.execAsMany<Message>(fetch, [did.toString()]);
+      return this.execAsMany<MessageDBResult>(fetch, [did.toString()]).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -331,11 +332,11 @@ export default class Pluto extends Connection implements PlutoInterface {
     //        Unable to write a test scenario for this usecase, where :from and :to is the same DID.
     const method = relatedWithDID ? fetch : fetch.replace("AND \`from\` = :from", "").replace("AND \`to\` = :to;", "");
     try {
-      return this.execAsMany<Message>(method, {
+      return this.execAsMany<MessageDBResult>(method, {
         ":type": type,
         ':from': relatedWithDID?.toString() ?? null, // required in query
         ':to': relatedWithDID?.toString() ?? null, // required in query
-      });
+      }).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -344,10 +345,10 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesByFromToDID(from: DID, to: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesFromTo');
     try {
-      return this.execAsMany<Message>(fetch, {
+      return this.execAsMany<MessageDBResult>(fetch, {
         ":from": from.toString(),
         ":to": to.toString(),
-      });
+      }).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;
     }
@@ -356,7 +357,11 @@ export default class Pluto extends Connection implements PlutoInterface {
   getMessage(id: string): Message | null {
     const fetch = this.getMethod<"Message">('Message', 'fetchMessageById');
     try {
-      return this.execAsOne<Message>(fetch, [id]);
+      const result = this.execAsOne<MessageDBResult>(fetch, [id]);
+      if (!result) {
+        return null;
+      }
+      return this.transformToMessageInterface(result);
     } catch (error) {
       throw error;
     }
@@ -379,6 +384,26 @@ export default class Pluto extends Connection implements PlutoInterface {
     } catch (error) {
       throw error;
     }
+  }
+
+  private transformToMessageInterface(result: { id: string, createdTime: string, dataJson: string, from: string, thid: string, to: string, type: string, isReceived: string }) {
+    const data = JSON.parse(result.dataJson);
+    return {
+      piuri: result.type,
+      id: result.id,
+      direction: result.isReceived ? MessageDirection.RECEIVED : MessageDirection.SENT,
+      ack: data.ack,
+      body: data.body,
+      extraHeaders: data.extraHeaders as unknown as string[],
+      createdTime: result.createdTime,
+      expiresTimePlus: data.expiresTimePlus,
+      attachments: data.attachments as unknown as AttachmentDescriptor[],
+      from: DID.fromString(result.from),
+      to: DID.fromString(result.to),
+      fromPrior: data.fromPrior,
+      thid: result.thid,
+      pthid: data.pthid,
+    } as Message;
   }
 
   private transformResponseToObject(values: any, columns: any) {
