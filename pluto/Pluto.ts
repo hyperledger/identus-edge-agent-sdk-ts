@@ -1,5 +1,5 @@
 import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto';
-import {DID, PrivateKey} from '../domain/models';
+import {Curve, DID, PrivateKey} from '../domain/models';
 import {DIDPair} from '../domain/models/DIDPair';
 import {Mediator} from '../domain/models/Mediator';
 import {Message} from '../domain/models/Message';
@@ -185,7 +185,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   }
 
   getAllPeerDIDs(): PeerDID[] {
-    const fetch = this.getMethod<"DIDPair">('DIDPair', 'fetchAllDIDPairs');
+    const fetch = this.getMethod<"DID">('DID', 'fetchAllPeerDID');
     try {
       return this.execAsMany<PeerDID>(fetch);
     } catch (error) {
@@ -209,7 +209,22 @@ export default class Pluto extends Connection implements PlutoInterface {
   getDIDPrivateKeyByID(id: string): PrivateKey | null {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchPrivateKeyByID');
     try {
-      return this.execAsOne<PrivateKey>(fetch, [id]);
+      const result = this.execAsOne<{
+        id: string,
+        curve: Curve,
+        privateKey: string,
+        keyPathIndex: number,
+        didId: string
+      }>(fetch, [id]);
+      if (!result) {
+        return result;
+      }
+      return {
+        keyCurve: {
+          curve: result.curve,
+        },
+        value: result.privateKey,
+      };
     } catch (error) {
       throw error;
     }
