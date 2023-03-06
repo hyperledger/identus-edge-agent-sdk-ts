@@ -149,7 +149,7 @@ export default class Castor implements CastorInterface {
         (method) => method.type == Curve.SECP256K1
       );
       if (methods.length <= 0) {
-        throw new Error("Not verification methods for Prism DID");
+        throw new Error("No verification methods for Prism DID");
       }
       for (const method of methods) {
         if (!method.publicKeyMultibase) {
