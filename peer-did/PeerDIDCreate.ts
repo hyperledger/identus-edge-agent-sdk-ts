@@ -5,6 +5,7 @@ import {
   DID,
   KeyPair,
   Service as DIDDocumentService,
+  PublicKey,
 } from "../domain/models";
 
 import { CastorError } from "../domain/models/Errors";
@@ -21,6 +22,7 @@ import {
   VerificationMethodTypeAuthentication,
 } from "./types";
 
+import { base64url } from "multiformats/bases/base64";
 import { base58btc } from "multiformats/bases/base58";
 
 export class PeerDIDCreate {
