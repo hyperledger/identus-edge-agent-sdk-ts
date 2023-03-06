@@ -196,7 +196,10 @@ export default class Pluto extends Connection implements PlutoInterface {
   getDIDPrivateKeysByDID(did: DID): PrivateKey[] | null {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchPrivateKeyByDID');
     try {
-      // Not sure if is implemented correctly.
+      /*
+      * Issue:
+      *  The query expects didId as the parameter, which should be DID.methodId instead of did.toString()
+      * */
       return this.execAsMany<PrivateKey>(fetch, [did.toString()]);
     } catch (error) {
       throw error;
@@ -362,7 +365,9 @@ export default class Pluto extends Connection implements PlutoInterface {
   private execAsOne<param>(query: string, params?: (string | number | null)[] | { [key: string]: string }): param | null {
     // @ts-ignore
     let result = this.database?.exec(query, params) as any;
-
+    if (!result.length) {
+      return null;
+    }
     return this.transformResponseToObject(result[0].values[0], result[0].columns) as unknown as param;
   }
 
