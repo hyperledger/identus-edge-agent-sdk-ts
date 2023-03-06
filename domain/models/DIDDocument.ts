@@ -15,7 +15,7 @@ export class VerificationMethod {
     public id: string,
     public controller: string,
     public type: string,
-    public publicKeyJwk?: Map<string, string>,
+    public publicKeyJwk?: PublicKeyJWK,
     public publicKeyMultibase?: string
   ) {}
 
@@ -109,4 +109,9 @@ export class DIDDocument {
     public id: DID,
     public coreProperties: Array<DIDDocumentCoreProperty>
   ) {}
+}
+
+export interface PublicKeyJWK {
+  crv: string;
+  x: string;
 }
