@@ -1,12 +1,20 @@
+import BN from "bn.js";
 import { expect, assert } from "chai";
+import { base64url } from "multiformats/bases/base64";
+
+import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
+
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";
-import { Curve, KeyPair } from "../../domain/models";
+import { Curve, PrivateKey } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
+import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
+
+import { Ed25519KeyPair } from "../../apollo/utils/Ed25519KeyPair";
+import { X25519KeyPair } from "../../apollo/utils/X25519KeyPair";
 
 let apollo: Apollo;
-let keyPair: KeyPair;
 
 describe("Apollo Tests", () => {
   beforeEach(() => {
@@ -35,7 +43,6 @@ describe("Apollo Tests", () => {
   it("Should compute the right binary seed", () => {
     const password = "TREZOR";
     const vectors = JSON.parse(bip39Vectors) as string[][];
-
     for (const v of vectors) {
       const [, mnemonicPhrase, binarySeedHex] = v;
       const mnemonicCode = mnemonicPhrase.split(" ") as MnemonicWordList;
@@ -85,40 +92,118 @@ describe("Apollo Tests", () => {
       Error,
       "Word list size must be multiple of three words"
     );
+  });
 
-    describe("Tests with keyPair", () => {
-      beforeEach(() => {
-        keyPair = apollo.createKeyPairFromKeyCurve(
-          apollo.createRandomSeed().seed,
-          {
-            curve: Curve.SECP256K1,
-          }
-        );
-      });
+  it("Should test secp256k1KeyPair generation", () => {
+    const keyPair = Secp256k1KeyPair.generateSecp256k1KeyPair();
+    expect(keyPair.privateKey.getEncoded().length).to.equal(
+      ECConfig.PRIVATE_KEY_BYTE_SIZE
+    );
+    expect(
+      Buffer.from(keyPair.privateKey.getEncoded()).toString("hex").length
+    ).to.equal(ECConfig.PRIVATE_KEY_BYTE_SIZE * 2);
+    console.log(
+      keyPair.publicKey.getEncoded().length,
+      ECConfig.PUBLIC_KEY_BYTE_SIZE
+    );
+    expect(keyPair.publicKey.getEncoded().length).to.equal(
+      ECConfig.PUBLIC_KEY_BYTE_SIZE
+    );
+    expect(
+      Buffer.from(keyPair.publicKey.getEncoded()).toString("hex").length
+    ).to.equal(ECConfig.PUBLIC_KEY_BYTE_SIZE * 2);
+  });
 
-      it("Should test secp256k1 keypair generation", () => {
-        expect(Buffer.from(keyPair.publicKey.value, "hex").length).to.equal(
-          ECConfig.PUBLIC_KEY_BYTE_SIZE
-        );
-        expect(Buffer.from(keyPair.privateKey.value, "hex").length).to.equal(
-          ECConfig.PRIVATE_KEY_BYTE_SIZE
-        );
-      });
+  it("Should create a private key from encoded", () => {
+    const keyPair = Secp256k1KeyPair.generateSecp256k1KeyPair();
+    const encodedPrivateKey = keyPair.privateKey.getEncoded();
+    const d = new BN(encodedPrivateKey);
 
-      it("Should sign and verify a message", () => {
-        const text = "The quick brown fox jumps over the lazy dog";
-        const signature = apollo.signStringMessage(keyPair.privateKey, text);
-        expect(
-          signature.value.length <= ECConfig.SIGNATURE_MAX_BYTE_SIZE
-        ).to.equal(true);
-        expect(
-          apollo.verifySignature(
-            keyPair.publicKey,
-            Buffer.from(text),
-            signature
-          )
-        ).to.equal(true);
-      });
+    const newFromBytes =
+      Secp256k1PrivateKey.secp256k1FromBytes(encodedPrivateKey);
+    const newFromBigInteger = Secp256k1PrivateKey.secp256k1FromBigInteger(d);
+
+    expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
+      newFromBytes.nativeValue.toArray()
+    );
+    expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
+      newFromBigInteger.nativeValue.toArray()
+    );
+  });
+
+  it("Should create and Sign and verify a message using Secp256k1 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.SECP256K1,
     });
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(
+      keyPair.publicKey,
+      text,
+      signature.value
+    );
+    expect(verified).to.be.equal(true);
+  });
+
+  it("Should only verify signed message using the correct SECP256K1 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.SECP256K1,
+    });
+    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
+      apollo.createRandomSeed().seed,
+      {
+        curve: Curve.SECP256K1,
+      }
+    );
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(
+      wrongKeyPair.publicKey,
+      text,
+      signature.value
+    );
+    expect(verified).to.be.equal(false);
+  });
+
+  it("Should create and Sign and verify a message using ED25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.ED25519,
+    });
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(
+      keyPair.publicKey,
+      text,
+      signature.value
+    );
+    expect(verified).to.be.equal(true);
+  });
+
+  it("Should only verify signed message using the correct ED25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.ED25519,
+    });
+    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
+      apollo.createRandomSeed().seed,
+      {
+        curve: Curve.ED25519,
+      }
+    );
+    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
+    const verified = apollo.verifySignature(
+      wrongKeyPair.publicKey,
+      text,
+      signature.value
+    );
+    expect(verified).to.be.equal(false);
   });
 });
