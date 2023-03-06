@@ -93,7 +93,7 @@ export default class Pluto extends Connection implements PlutoInterface {
       message.from?.toString() ?? null,
       message?.thid ?? null,
       message.to?.toString() ?? null,
-      message.piuri,
+      message.piuri ?? null, // Question: What does piuri mean? Isn't supposed to be called "type" instead?
       message.direction
     ]);
   }
@@ -327,11 +327,14 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesOfType(type: string, relatedWithDID?: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesOfType');
+    // Issue: This method, implements a useless case relatedWithDID parameter, which is expected to be both, the ":from" and ":to" fields.
+    //        Unable to write a test scenario for this usecase, where :from and :to is the same DID.
+    const method = relatedWithDID ? fetch : fetch.replace("AND \`from\` = :from", "").replace("AND \`to\` = :to;", "");
     try {
-      return this.execAsMany<Message>(fetch, {
+      return this.execAsMany<Message>(method, {
         ":type": type,
-        ':from': relatedWithDID?.toString() ?? "", // required in query
-        ':to': relatedWithDID?.toString() ?? "", // required in query
+        ':from': relatedWithDID?.toString() ?? null, // required in query
+        ':to': relatedWithDID?.toString() ?? null, // required in query
       });
     } catch (error) {
       throw error;
@@ -386,7 +389,7 @@ export default class Pluto extends Connection implements PlutoInterface {
     return object;
   }
 
-  private execAsOne<param>(query: string, params?: (string | number | null)[] | { [key: string]: string }): param | null {
+  private execAsOne<param>(query: string, params?: (string | number | null)[] | { [key: string]: (string | null | number) }): param | null {
     // @ts-ignore
     let result = this.database?.exec(query, params) as any;
     if (!result.length) {
@@ -395,7 +398,7 @@ export default class Pluto extends Connection implements PlutoInterface {
     return this.transformResponseToObject(result[0].values[0], result[0].columns) as unknown as param;
   }
 
-  private execAsMany<param>(query: string, params?: (string | number | null)[] | { [key: string]: string }): param[] {
+  private execAsMany<param>(query: string, params?: (string | number | null)[] | { [key: string]: (string | null | number) }): param[] {
     // @ts-ignore
     let result = this.database?.exec(query, params) as any;
     if (!result.length) {
