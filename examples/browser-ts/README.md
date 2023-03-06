@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Polyfills
+Using SDK in browser requires polyfills for `assert` and `util` Node.js modules.
+Also `Buffer` polyfill is required.
+- `npm install assert util buffer`
+- import `polyfills.ts` in `src/index.tsx`
 ## Available Scripts
 
 In the project directory, you can run:
