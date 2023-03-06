@@ -1,31 +1,31 @@
 import { uuid } from "@stablelib/uuid";
 
-export interface AttachmentHeader {
-  readonly children: string;
+export class AttachmentHeader {
+  constructor(readonly children: string) {}
 }
 
-export interface AttachmentJws {
-  readonly header: AttachmentHeader;
-  readonly protectedStr: string;
-  readonly signature: string;
+export class AttachmentJws {
+  constructor(
+    readonly header: AttachmentHeader,
+    readonly protectedStr: string,
+    readonly signature: string
+  ) {}
 }
 
-export interface AttachmentJwsData {
-  readonly base64: string;
-  readonly jws: AttachmentJws;
+export class AttachmentJwsData {
+  constructor(readonly base64: string, readonly jws: AttachmentJws) {}
 }
 
-export interface AttachmentBase64 {
-  readonly base64: string;
+export class AttachmentBase64 {
+  constructor(readonly base64: string) {}
 }
 
-export interface AttachmentLinkData {
-  readonly links: string[];
-  readonly hash: string;
+export class AttachmentLinkData {
+  constructor(readonly links: string[], readonly hash: string) {}
 }
 
-export interface AttachmentJsonData {
-  readonly data: string;
+export class AttachmentJsonData {
+  constructor(readonly data: string) {}
 }
 
 type AttachmentData =
@@ -38,9 +38,9 @@ type AttachmentData =
 
 export class AttachmentDescriptor {
   constructor(
-    public readonly id: string,
     public readonly data: AttachmentData,
     public readonly mediaType?: string,
+    public readonly id: string = uuid(),
     public readonly filename?: Array<string>,
     public readonly format?: string,
     public readonly lastModTime?: string,
@@ -57,6 +57,6 @@ export class AttachmentDescriptor {
     const attachment: AttachmentBase64 = {
       base64: encoded,
     };
-    return new AttachmentDescriptor(id, attachment, mediaType);
+    return new AttachmentDescriptor(attachment, mediaType, id);
   }
 }

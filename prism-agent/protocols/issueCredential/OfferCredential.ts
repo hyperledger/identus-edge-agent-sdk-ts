@@ -5,12 +5,14 @@ import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
 import { CredentialHelpers } from "./CredentialHelpers";
 import { CredentialPreview } from "./CredentialPreview";
+import { ProposeCredential } from "./ProposeCredential";
 
 class OfferCredentialBody {
   constructor(
     public credentialPreview: CredentialPreview,
     public formats: CredentialFormat[],
     public goalCode?: string,
+    public comment?: string,
     public replacementId?: string,
     public multipleAvailable?: string
   ) {}
@@ -47,6 +49,23 @@ export class OfferCredential {
     );
   }
 
+  static makeOfferFromProposedCredential(
+    proposed: ProposeCredential
+  ): OfferCredential {
+    return new OfferCredential(
+      createOfferCredentialBody(
+        proposed.body.credentialPreview,
+        proposed.body.formats,
+        proposed.body.goalCode,
+        proposed.body.comment
+      ),
+      proposed.attachments,
+      proposed.to,
+      proposed.from,
+      proposed.id
+    );
+  }
+
   static fromMessage(fromMessage: Message): OfferCredential {
     if (
       fromMessage.piuri !== ProtocolType.DidcommOfferCredential ||
@@ -77,6 +96,7 @@ export class OfferCredential {
       fromMessage.id
     );
   }
+
   static build<T>(
     credentialPreview: CredentialPreview,
     fromDID: DID,
@@ -106,6 +126,7 @@ export function createOfferCredentialBody(
   credentialPreview: CredentialPreview,
   formats: CredentialFormat[],
   goalCode?: string,
+  comment?: string,
   replacementId?: string,
   multipleAvailable?: string
 ): OfferCredentialBody {
@@ -121,6 +142,7 @@ export function createOfferCredentialBody(
     credentialPreview,
     formats,
     goalCode,
+    comment,
     replacementId,
     multipleAvailable
   );
