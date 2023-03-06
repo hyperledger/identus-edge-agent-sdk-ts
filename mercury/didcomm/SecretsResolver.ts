@@ -32,8 +32,7 @@ export class DIDCommSecretsResolver implements DIDComm.SecretsResolver {
     return peerDid.privateKeys.map((privateKey) => {
       const seed: Domain.Seed = { value: new Uint8Array() };
       const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
-      const ecnumbasis = "";
-      // const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
+      const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
       const id = `${peerDid.did.toString()}#${ecnumbasis}`;
 
       const secret: DIDComm.Secret = {
