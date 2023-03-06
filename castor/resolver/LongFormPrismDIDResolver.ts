@@ -90,7 +90,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
                 keyCurve: {
                   curve: Curve.SECP256K1,
                 },
-                value: key.key_data,
+                value: key.compressed_ec_key_data.data,
               }
             );
           }
@@ -109,13 +109,16 @@ export class LongFormPrismDIDResolver implements DIDResolver {
 
       const verificationMethods = publicKeys.reduce(
         (partialResult, publicKey) => {
+          /**
+           * TODO: Support keys in multiple formats, right now its multibase
+           */
           const didUrl = new DIDUrl(did, [], new Map(), publicKey.id);
           const method = new DIDDocumentVerificationMethod(
             didUrl.string(),
             did.toString(),
             publicKey.keyData.keyCurve.curve,
             undefined,
-            publicKey.keyData.value
+            base64.base64.encode(publicKey.keyData.value)
           );
           partialResult.set(didUrl.string(), method);
           return partialResult;

@@ -19,7 +19,7 @@ export enum Numalgo2Prefix {
 export type OctetPublicKey = {
   kty: "OKP";
   crv: string;
-  x: string;
+  x: Uint8Array;
 };
 
 export class VerificationMethodTypeAgreement extends VerificationMethodType {
