@@ -178,7 +178,7 @@ export default class Castor implements CastorInterface {
         return publicKeyJwk.crv === Curve.ED25519;
       });
       if (methods.length <= 0) {
-        throw new Error("Not verification methods for Peer DID");
+        throw new Error("No verification methods for Peer DID");
       }
       for (const method of methods) {
         if (!method.publicKeyJwk) {
