@@ -19,7 +19,7 @@ class OfferCredentialBody {
 }
 
 export class OfferCredential {
-  public type = ProtocolType.DidcommOfferCredential;
+  public static type = ProtocolType.DidcommOfferCredential;
 
   constructor(
     public body: OfferCredentialBody,
@@ -41,7 +41,7 @@ export class OfferCredential {
     return new Message(
       body,
       this.id,
-      this.type,
+      OfferCredential.type,
       this.from,
       this.to,
       this.attachments,

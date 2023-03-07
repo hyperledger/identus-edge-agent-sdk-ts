@@ -22,7 +22,7 @@ class IssueCredentialBody {
 }
 
 export class IssueCredential {
-  public type = ProtocolType.DidcommIssueCredential;
+  public static type = ProtocolType.DidcommIssueCredential;
 
   constructor(
     public body: IssueCredentialBody,
@@ -38,7 +38,7 @@ export class IssueCredential {
     return new Message(
       body,
       this.id,
-      this.type,
+      IssueCredential.type,
       this.from,
       this.to,
       this.attachments,
@@ -61,12 +61,12 @@ export class IssueCredential {
 
   static fromMessage(fromMessage: Message): IssueCredential {
     if (
-      fromMessage.piuri !== ProtocolType.DidcommOfferCredential ||
+      fromMessage.piuri !== ProtocolType.DidcommIssueCredential ||
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      new AgentError.InvalidOfferCredentialMessageError(
-        "Invalid offer credential message error."
+      new AgentError.InvalidIssueCredentialMessageError(
+        "Invalid issue credential message error."
       );
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

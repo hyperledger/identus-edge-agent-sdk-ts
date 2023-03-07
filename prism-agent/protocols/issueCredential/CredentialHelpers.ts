@@ -1,4 +1,4 @@
-import { AttachmentDescriptor, DID, Message } from "../../../domain";
+import { AttachmentDescriptor } from "../../../domain";
 import { CredentialFormat } from "./CredentialFormat";
 
 interface ParsedCredentialType {

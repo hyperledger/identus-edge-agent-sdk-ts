@@ -1,8 +1,11 @@
 import { uuid } from "@stablelib/uuid";
 
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
+import { AgentError } from "../../../domain/models/Errors";
+import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
 import { CredentialHelpers } from "./CredentialHelpers";
+import { OfferCredential } from "./OfferCredential";
 
 class RequestCredentialBody {
   constructor(
@@ -13,6 +16,8 @@ class RequestCredentialBody {
 }
 
 export class RequestCredential {
+  public static type = ProtocolType.DidcommRequestCredential;
+
   constructor(
     public body: RequestCredentialBody,
     public attachments: AttachmentDescriptor[],
@@ -22,11 +27,74 @@ export class RequestCredential {
     public id: string = uuid()
   ) {}
 
-  static fromMessage(fromMessage: Message): RequestCredential {
-    throw new Error("Not implemented");
+  makeMessage(): Message {
+    const body = JSON.stringify(this);
+    return new Message(
+      body,
+      this.id,
+      RequestCredential.type,
+      this.from,
+      this.to,
+      this.attachments,
+      this.thid
+    );
   }
 
-  //static makeRequestFromOfferCredential(offer: )
+  static fromMessage(fromMessage: Message): RequestCredential {
+    if (
+      fromMessage.piuri !== ProtocolType.DidcommRequestCredential ||
+      !fromMessage.from ||
+      !fromMessage.to
+    ) {
+      new AgentError.InvalidRequestCredentialMessageError(
+        "Invalid request credential message error."
+      );
+    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const fromDID = fromMessage.from!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const toDID = fromMessage.to!;
+    const body = JSON.parse(fromMessage.body);
+    const reqiestCredentialBody = createRequestCredentialBody(
+      body.formats,
+      body.goalCode,
+      body.comment
+    );
+    return new RequestCredential(
+      reqiestCredentialBody,
+      fromMessage.attachments,
+      fromDID,
+      toDID,
+      fromMessage.thid,
+      fromMessage.id
+    );
+  }
+
+  static makeRequestFromOfferCredential(
+    offer: OfferCredential
+  ): RequestCredential {
+    if (!offer.to || !offer.from) {
+      new AgentError.InvalidOfferCredentialMessageError(
+        "Invalid offer credential message error."
+      );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const to = offer.to!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const from = offer.from!;
+    return new RequestCredential(
+      createRequestCredentialBody(
+        offer.body.formats,
+        offer.body.goalCode,
+        offer.body.comment
+      ),
+      offer.attachments,
+      to,
+      from,
+      offer.thid
+    );
+  }
 
   static build<T>(
     fromDID: DID,
@@ -52,5 +120,12 @@ export function createRequestCredentialBody(
   goalCode?: string,
   comment?: string
 ): RequestCredentialBody {
+  if (
+    !formats ||
+    !Array.isArray(formats) ||
+    formats.find((format) => !(format instanceof CredentialFormat))
+  ) {
+    throw new AgentError.InvalidRequestCredentialMessageError();
+  }
   return new RequestCredentialBody(formats, goalCode, comment);
 }

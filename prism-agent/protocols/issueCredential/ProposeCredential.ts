@@ -16,7 +16,7 @@ class ProposeCredentialBody {
 }
 
 export class ProposeCredential {
-  public type = ProtocolType.DidcommProposeCredential;
+  public static type = ProtocolType.DidcommProposeCredential;
 
   constructor(
     public body: ProposeCredentialBody,
@@ -32,7 +32,7 @@ export class ProposeCredential {
     return new Message(
       body,
       this.id,
-      this.type,
+      ProposeCredential.type,
       this.from,
       this.to,
       this.attachments,
@@ -42,12 +42,12 @@ export class ProposeCredential {
 
   static fromMessage(fromMessage: Message): ProposeCredential {
     if (
-      fromMessage.piuri !== ProtocolType.DidcommOfferCredential ||
+      fromMessage.piuri !== ProtocolType.DidcommProposeCredential ||
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      new AgentError.InvalidOfferCredentialMessageError(
-        "Invalid offer credential message error."
+      new AgentError.InvalidProposedCredentialMessageError(
+        "Invalid proposed credential message error."
       );
     }
     const fromDID = fromMessage.from;
