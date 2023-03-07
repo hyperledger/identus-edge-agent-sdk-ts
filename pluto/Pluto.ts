@@ -1,5 +1,5 @@
 import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto';
-import {Curve, DID, PrivateKey} from '../domain/models';
+import {Curve, DID, getKeyCurveByNameAndIndex, PrivateKey} from '../domain/models';
 import {DIDPair} from '../domain/models/DIDPair';
 import {Mediator} from '../domain/models/Mediator';
 import {Message, MessageDirection} from '../domain/models/Message';
@@ -35,6 +35,14 @@ type CredentialDBResult = {
   verifiableCredentialJson: string;
   issuerDIDId: string;
 }
+type PrivateKeyDBResult = {
+  id: string;
+  curve: string;
+  privateKey: string;
+  keyPathIndex: number;
+  didId: string;
+}
+
 export default class Pluto extends Connection implements PlutoInterface {
   constructor(connection: ConnectionParams) {
     super(connection);
@@ -87,7 +95,7 @@ export default class Pluto extends Connection implements PlutoInterface {
     const insertPeerDid = this.getMethod<"DID">('DID', 'insert');
     const insertPrivateKeys = this.getMethod<"PrivateKey">('PrivateKey', 'insert');
     this.database?.run(insertPeerDid, [did.toString(), did.method, did.methodId, did.schema, null]);
-    privateKeys.forEach((privateKey) => this.database?.run(insertPrivateKeys, [uuidv4(), privateKey.keyCurve.curve, privateKey.value.toString(), privateKey.keyCurve?.index ?? 0, did.methodId]));
+    privateKeys.forEach((privateKey) => this.database?.run(insertPrivateKeys, [uuidv4(), privateKey.keyCurve.curve, privateKey.value.toString(), privateKey.keyCurve?.index ?? 0, did.toString()]));
   }
 
   storeDIDPair(host: DID, receiver: DID, name: string) {
@@ -121,7 +129,7 @@ export default class Pluto extends Connection implements PlutoInterface {
       privateKey.keyCurve.curve.toString(),
       privateKey.value.toString(),
       keyPathIndex ?? 0,
-      did.methodId
+      did.toString()
     ]);
   }
 
@@ -166,7 +174,7 @@ export default class Pluto extends Connection implements PlutoInterface {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchKeyPathIndexByDID');
     try {
       const result = this.execAsOne<{ keyPathIndex: number }>(fetch, [
-        did.methodId
+        did.toString()
       ]);
       return result?.keyPathIndex ?? null;
     } catch (error) {
@@ -196,11 +204,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   getDIDPrivateKeysByDID(did: DID): PrivateKey[] | null {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchPrivateKeyByDID');
     try {
-      /*
-      * Issue:
-      *  The query expects didId as the parameter, which should be DID.methodId instead of did.toString()
-      * */
-      return this.execAsMany<PrivateKey>(fetch, [did.toString()]);
+      return this.execAsMany<PrivateKeyDBResult>(fetch, [did.toString()]).map(this.transformPrivateKeyToPrivateKeyInterface);
     } catch (error) {
       throw error;
     }
@@ -404,6 +408,13 @@ export default class Pluto extends Connection implements PlutoInterface {
       // override
       id: result.id,
       issuer: DID.fromString(result.issuerDIDId),
+    };
+  }
+
+  private transformPrivateKeyToPrivateKeyInterface(result: PrivateKeyDBResult): PrivateKey {
+    return {
+      value: result.privateKey,
+      keyCurve: getKeyCurveByNameAndIndex(result.curve)
     };
   }
 

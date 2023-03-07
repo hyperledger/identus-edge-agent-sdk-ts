@@ -18,28 +18,28 @@ VALUES (?, ?, ?, ?, ?);
   fetchAllPrismDID: `
     SELECT DID.*, PrivateKey.keyPathIndex
 FROM DID
-JOIN PrivateKey ON DID.methodId = PrivateKey.didId
+JOIN PrivateKey ON DID.did = PrivateKey.didId
 WHERE method = 'prism';
     `,
 
   fetchDIDInfoByDID: `
     SELECT DID.*, PrivateKey.keyPathIndex
 FROM DID
-JOIN PrivateKey ON DID.methodId = PrivateKey.didId
+JOIN PrivateKey ON DID.did = PrivateKey.didId
 WHERE did = ?;
     `,
 
   fetchDIDInfoByAlias: `
     SELECT DID.*, PrivateKey.keyPathIndex
 FROM DID
-JOIN PrivateKey ON DID.methodId = PrivateKey.didId
+JOIN PrivateKey ON DID.did = PrivateKey.didId
 WHERE alias = ?;
     `,
 
   fetchAllPeerDID: `
     SELECT DID.did, DID.alias, PrivateKey.*
 FROM DID
-JOIN PrivateKey ON DID.methodId = PrivateKey.didId
+JOIN PrivateKey ON DID.did = PrivateKey.didId
 WHERE DID.method = 'peer';
     `,
 

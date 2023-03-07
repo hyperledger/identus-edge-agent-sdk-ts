@@ -306,7 +306,7 @@ describe('Pluto tests', () => {
 
     instance.storePeerDID(peerDid, [privateKey]);
     const result = instance.getDIDPrivateKeysByDID(peerDid);
-    expect(!!result?.find(item => item.value === privateKey.value)).true; // fails because of the implementation
+    expect(!!result?.find(item => item.value === privateKey.value)).true;
   });
   //
   it('should get DID private key by ID', async function () {
