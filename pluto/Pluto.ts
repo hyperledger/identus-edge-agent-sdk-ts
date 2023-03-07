@@ -331,14 +331,10 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesOfType(type: string, relatedWithDID?: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesOfType');
-    // Issue: This method, implements a useless case relatedWithDID parameter, which is expected to be both, the ":from" and ":to" fields.
-    //        Unable to write a test scenario for this usecase, where :from and :to is the same DID.
-    const method = relatedWithDID ? fetch : fetch.replace("AND \`from\` = :from", "").replace("AND \`to\` = :to;", "");
     try {
-      return this.execAsMany<MessageDBResult>(method, {
+      return this.execAsMany<MessageDBResult>(fetch, {
         ":type": type,
-        ':from': relatedWithDID?.toString() ?? null, // required in query
-        ':to': relatedWithDID?.toString() ?? null, // required in query
+        ':relatedWithDID': relatedWithDID?.toString() ?? null,
       }).map(this.transformToMessageInterface);
     } catch (error) {
       throw error;

@@ -552,7 +552,7 @@ describe('Pluto tests', () => {
       expiresTimePlus: new Date().toString(),
     };
     instance.storeMessage(message);
-    const messages = instance.getAllMessagesOfType(message.piuri);
+    const messages = instance.getAllMessagesOfType(message.piuri, to);
     expect(messages).not.empty;
   });
   //

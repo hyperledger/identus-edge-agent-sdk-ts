@@ -58,8 +58,7 @@ WHERE \`from\` = ?;
     SELECT *
 FROM Message
 WHERE type = :type
-AND \`from\` = :from
-AND \`to\` = :to;
+AND (:relatedWithDID IS NULL OR :relatedWithDID IN (\`from\`, \`to\`));
     `,
 
   fetchMessageById: `
