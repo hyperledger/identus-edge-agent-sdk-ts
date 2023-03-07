@@ -20,7 +20,15 @@ describe('Pluto tests', () => {
       type: 'sql',
     });
     await instance.start();
-    instance.storePrismDID(DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"), 0, "Did test");
+    const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
+    const keyPathIndex = 0;
+    const alias = "Did test";
+    const privateKey: PrivateKey = {
+      value: "some value",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+
+    instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
   });
 
   it('should store message', async function () {
@@ -162,13 +170,14 @@ describe('Pluto tests', () => {
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
     const keyPathIndex = 0;
     const alias = "Did test";
-    instance.storePrismDID(did, keyPathIndex, alias);
 
     const privateKey: PrivateKey = {
       value: "some value",
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
-    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
+
     const dids = instance.getAllPrismDIDs();
     expect(dids).not.empty;
   });
@@ -182,13 +191,13 @@ describe('Pluto tests', () => {
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
     const keyPathIndex = 0;
     const alias = "Did test";
-    instance.storePrismDID(did, keyPathIndex, alias);
 
     const privateKey: PrivateKey = {
       value: "some value",
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
-    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
     const result = instance.getDIDInfoByDID(did);
     expect(result?.did.toString()).equals(did.toString());
@@ -203,13 +212,12 @@ describe('Pluto tests', () => {
     const did = DID.fromString("did:prism:dadsa:asdpijasiopdj");
     const keyPathIndex = 0;
     const alias = "Did test";
-    instance.storePrismDID(did, keyPathIndex, alias);
-
     const privateKey: PrivateKey = {
       value: "some value",
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
-    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
     const result = instance.getDIDInfoByAlias(alias);
     expect(!!result.find(item => item.alias === alias)).true;
@@ -224,13 +232,13 @@ describe('Pluto tests', () => {
     const did = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
     const keyPathIndex = 10;
     const alias = "Did test";
-    instance.storePrismDID(did, keyPathIndex, alias);
 
     const privateKey: PrivateKey = {
       value: "some value",
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
-    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
     const result = instance.getPrismDIDKeyPathIndex(did);
     expect(result).equals(keyPathIndex);
@@ -245,16 +253,15 @@ describe('Pluto tests', () => {
     const did = DID.fromString("did:prism:dadsa:92jsadn1");
     const keyPathIndex = 11;
     const alias = "Did test";
-    instance.storePrismDID(did, keyPathIndex, alias);
 
     const privateKey: PrivateKey = {
       value: "some value",
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
-    instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+    instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const result = instance.getPrismLastKeyPathIndex(); // Issue: this method does not work because of method written incorrect it should be "prism" instead of "Prism"
-    expect(result).equals(keyPathIndex); // failing
+    const result = instance.getPrismLastKeyPathIndex();
+    expect(result).equals(keyPathIndex);
   });
   //
   it('should get all peer DIDs', async function () {
@@ -272,13 +279,13 @@ describe('Pluto tests', () => {
     const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
     const keyPathIndex = 11;
     const alias = "Did test";
-    instance.storePrismDID(prismDid, keyPathIndex, alias);
 
     const prismPrivateKey: PrivateKey = {
       value: "some key",
       keyCurve: getKeyCurveByNameAndIndex(Curve.SECP256K1),
     };
-    instance.storePrivateKeys(prismPrivateKey, prismDid, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
+
+    instance.storePrismDID(prismDid, keyPathIndex, prismPrivateKey, null, alias);
 
     instance.storePeerDID(peerDid, [privateKey]);
     const dids = instance.getAllPeerDIDs();

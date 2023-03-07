@@ -67,9 +67,11 @@ export default class Pluto extends Connection implements PlutoInterface {
     });
   }
 
-  storePrismDID(did: DID, keyPathIndex: number, alias?: string | undefined) {
+  storePrismDID(did: DID, keyPathIndex: number, privateKey: PrivateKey, privateKeyMetaId: string | null, alias?: string) {
     const insert = this.getMethod<"DID">('DID', 'insert');
-    return this.database?.run(insert, [did.toString(), did.method, did.methodId, did.schema, alias ?? ""]);
+    const result = this.database?.run(insert, [did.toString(), did.method, did.methodId, did.schema, alias ?? ""]);
+    this.storePrivateKeys(privateKey, did, keyPathIndex, privateKeyMetaId);
+    return result;
   }
 
   storePeerDID(did: DID, privateKeys: PrivateKey[]) {
