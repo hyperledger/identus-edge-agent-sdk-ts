@@ -28,7 +28,7 @@ export interface AttachmentJsonData {
 }
 
 
-type AttachmentData = AttachmentJsonData | AttachmentLinkData | AttachmentBase64 | AttachmentJwsData | AttachmentJws | AttachmentHeader
+export type AttachmentData = AttachmentJsonData | AttachmentLinkData | AttachmentBase64 | AttachmentJwsData | AttachmentJws | AttachmentHeader
 
 export class AttachmentDescriptor {
   constructor(
@@ -39,6 +39,6 @@ export class AttachmentDescriptor {
     public readonly format: string | null = null,
     public readonly lastModTime: string | null = null,
     public readonly byteCount: number | null = null,
-    public readonly deascription: string | null = null
-  ) {}
+    public readonly description: string | null = null
+  ) { }
 }

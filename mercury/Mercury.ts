@@ -5,7 +5,7 @@ import { default as MercuryInterface } from '../domain/buildingBlocks/Mercury'
 import { DIDCommProtocol } from './DIDCommProtocol';
 
 interface HttpManager {
-  postEncrypted: (url: string, body: string) => Promise<any>;
+  postEncrypted: (url: string, body: string) => Promise<Uint8Array>;
 }
 
 export default class Mercury implements MercuryInterface {
@@ -26,21 +26,19 @@ export default class Mercury implements MercuryInterface {
       throw new MercuryError.NoSenderDIDSetError();
 
     return this.protocol.packEncrypted(message, toDid, fromDid);
-    // return this.Context.Run(new PackEncryptedOperation(message));
   }
 
   unpackMessage(message: string): Promise<Domain.Message> {
     return this.protocol.unpack(message);
-    // return this.Context.Run(new UnpackOperation(message));
   }
 
   async sendMessage(message: Domain.Message): Promise<Uint8Array> {
-    const did = message.to;
+    const toDid = message.to;
 
-    if (this.notDid(did))
+    if (this.notDid(toDid))
       throw new MercuryError.NoRecipientDIDSetError();
 
-    const document = await this.castor.resolveDID(did.toString());
+    const document = await this.castor.resolveDID(toDid.toString());
     const service = document.coreProperties.find((x): x is Domain.Service => x instanceof Domain.Service);
 
     if (service == undefined)
