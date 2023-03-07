@@ -1,3 +1,4 @@
-export class CredentialFormat {
-  constructor(public attachId: string, public format: string) {}
+export interface CredentialFormat {
+  attachId: string;
+  format: string;
 }

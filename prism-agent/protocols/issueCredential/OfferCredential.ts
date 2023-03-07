@@ -3,20 +3,9 @@ import { AgentError } from "../../../domain/models/Errors";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers } from "./CredentialHelpers";
+import { CredentialHelpers, OfferCredentialBody } from "./CredentialHelpers";
 import { CredentialPreview } from "./CredentialPreview";
 import { ProposeCredential } from "./ProposeCredential";
-
-class OfferCredentialBody {
-  constructor(
-    public credentialPreview: CredentialPreview,
-    public formats: CredentialFormat[],
-    public goalCode?: string,
-    public comment?: string,
-    public replacementId?: string,
-    public multipleAvailable?: string
-  ) {}
-}
 
 export class OfferCredential {
   public static type = ProtocolType.DidcommOfferCredential;
@@ -76,10 +65,12 @@ export class OfferCredential {
         "Invalid offer credential message error."
       );
     }
-
+    const body = CredentialHelpers.safeParseBody<OfferCredentialBody>(
+      fromMessage.body
+    );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;
-    const body = JSON.parse(fromMessage.body);
+
     const offerCredentialBody = createOfferCredentialBody(
       body.credentialPreview,
       body.formats,
@@ -130,20 +121,12 @@ export function createOfferCredentialBody(
   replacementId?: string,
   multipleAvailable?: string
 ): OfferCredentialBody {
-  if (
-    !credentialPreview ||
-    !formats ||
-    !Array.isArray(formats) ||
-    formats.find((format) => !(format instanceof CredentialFormat))
-  ) {
-    throw new AgentError.InvalidOfferCredentialBodyError();
-  }
-  return new OfferCredentialBody(
-    credentialPreview,
+  return {
     formats,
+    credentialPreview,
     goalCode,
     comment,
     replacementId,
-    multipleAvailable
-  );
+    multipleAvailable,
+  };
 }

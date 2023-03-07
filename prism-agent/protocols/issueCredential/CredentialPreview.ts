@@ -1,17 +1,14 @@
 import { ProtocolType } from "../ProtocolTypes";
 
-class Attribute {
-  constructor(
-    public name: string,
-    public value: string,
-    public mimeType?: string
-  ) {}
+export interface Attribute {
+  name: string;
+  value: string;
+  mimeType?: string;
 }
 
-export class CredentialPreview {
-  public type = ProtocolType.DidcommCredentialPreview;
-
-  constructor(public attributes: Attribute[]) {}
+export interface CredentialPreview {
+  type: ProtocolType.DidcommCredentialPreview;
+  attributes: Attribute[];
 }
 
 export function createCredentialPreviewAttribute(
@@ -19,5 +16,9 @@ export function createCredentialPreviewAttribute(
   value: string,
   mimeType?: string
 ): Attribute {
-  return new Attribute(name, value, mimeType);
+  return {
+    name,
+    value,
+    mimeType,
+  };
 }

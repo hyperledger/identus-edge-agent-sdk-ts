@@ -8,18 +8,9 @@ import {
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers } from "./CredentialHelpers";
+import { CredentialHelpers, IssueCredentialBody } from "./CredentialHelpers";
 import { RequestCredential } from "./RequestCredential";
 import { base64url } from "multiformats/bases/base64";
-class IssueCredentialBody {
-  constructor(
-    public goalCode?: string,
-    public comment?: string,
-    public replacementId?: string,
-    public moreAvailable?: string,
-    public formats: CredentialFormat[] = []
-  ) {}
-}
 
 export class IssueCredential {
   public static type = ProtocolType.DidcommIssueCredential;
@@ -73,13 +64,15 @@ export class IssueCredential {
     const fromDID = fromMessage.from!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toDID = fromMessage.to!;
-    const body = JSON.parse(fromMessage.body);
+    const body = CredentialHelpers.safeParseBody<IssueCredentialBody>(
+      fromMessage.body
+    );
     const issueCredentialBody = createIssueCredentialBody(
-      body.credentialPreview,
       body.formats,
       body.goalCode,
+      body.comment,
       body.replacementId,
-      body.multipleAvailable
+      body.moreAvailable
     );
     return new IssueCredential(
       issueCredentialBody,
@@ -127,17 +120,17 @@ export class IssueCredential {
 }
 
 export function createIssueCredentialBody(
-  formats: CredentialFormat[] = [],
+  formats: CredentialFormat[],
   goalCode?: string,
   comment?: string,
   replacementId?: string,
   moreAvailable?: string
 ) {
-  return new IssueCredentialBody(
+  return {
+    formats,
     goalCode,
     comment,
     replacementId,
     moreAvailable,
-    formats
-  );
+  };
 }

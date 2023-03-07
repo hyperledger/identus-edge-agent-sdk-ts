@@ -3,17 +3,8 @@ import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers } from "./CredentialHelpers";
+import { CredentialHelpers, ProposeCredentialBody } from "./CredentialHelpers";
 import { CredentialPreview } from "./CredentialPreview";
-
-class ProposeCredentialBody {
-  constructor(
-    public credentialPreview: CredentialPreview,
-    public formats: CredentialFormat[],
-    public goalCode?: string,
-    public comment?: string
-  ) {}
-}
 
 export class ProposeCredential {
   public static type = ProtocolType.DidcommProposeCredential;
@@ -50,9 +41,12 @@ export class ProposeCredential {
         "Invalid proposed credential message error."
       );
     }
+    const body = CredentialHelpers.safeParseBody<ProposeCredentialBody>(
+      fromMessage.body
+    );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;
-    const body = JSON.parse(fromMessage.body);
+
     const proposeCredentialBody = createProposeCredentialBody(
       body.credentialPreview,
       body.formats,
@@ -100,19 +94,10 @@ export function createProposeCredentialBody(
   goalCode?: string,
   comment?: string
 ): ProposeCredentialBody {
-  if (
-    !credentialPreview ||
-    !formats ||
-    !Array.isArray(formats) ||
-    formats.find((format) => !(format instanceof CredentialFormat))
-  ) {
-    throw new AgentError.InvalidOfferCredentialBodyError();
-  }
-
-  return new ProposeCredentialBody(
-    credentialPreview,
+  return {
     formats,
+    credentialPreview,
     goalCode,
-    comment
-  );
+    comment,
+  };
 }

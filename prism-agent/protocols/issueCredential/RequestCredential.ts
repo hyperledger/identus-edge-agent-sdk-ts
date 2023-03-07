@@ -4,22 +4,14 @@ import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers } from "./CredentialHelpers";
+import { CredentialBody, CredentialHelpers } from "./CredentialHelpers";
 import { OfferCredential } from "./OfferCredential";
-
-class RequestCredentialBody {
-  constructor(
-    public formats: CredentialFormat[],
-    public goalCode?: string,
-    public comment?: string
-  ) {}
-}
 
 export class RequestCredential {
   public static type = ProtocolType.DidcommRequestCredential;
 
   constructor(
-    public body: RequestCredentialBody,
+    public body: CredentialBody,
     public attachments: AttachmentDescriptor[],
     public from: DID,
     public to: DID,
@@ -50,11 +42,12 @@ export class RequestCredential {
         "Invalid request credential message error."
       );
     }
+    const body = CredentialHelpers.safeParseBody(fromMessage.body);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fromDID = fromMessage.from!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toDID = fromMessage.to!;
-    const body = JSON.parse(fromMessage.body);
+
     const reqiestCredentialBody = createRequestCredentialBody(
       body.formats,
       body.goalCode,
@@ -119,13 +112,10 @@ export function createRequestCredentialBody(
   formats: CredentialFormat[],
   goalCode?: string,
   comment?: string
-): RequestCredentialBody {
-  if (
-    !formats ||
-    !Array.isArray(formats) ||
-    formats.find((format) => !(format instanceof CredentialFormat))
-  ) {
-    throw new AgentError.InvalidRequestCredentialMessageError();
-  }
-  return new RequestCredentialBody(formats, goalCode, comment);
+): CredentialBody {
+  return {
+    formats,
+    goalCode,
+    comment,
+  };
 }
