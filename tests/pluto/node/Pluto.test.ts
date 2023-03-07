@@ -640,8 +640,8 @@ describe('Pluto tests', () => {
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
     instance.storePrismDID(mediator, 10, mediatorPrivateKey, null, "Mediator");
-    instance.storePrismDID(host, 11, mediatorPrivateKey, null, "Host");
-    instance.storePrismDID(routing, 12, mediatorPrivateKey, null, "Routing");
+    instance.storePrismDID(host, 11, hostPrivateKey, null, "Host");
+    instance.storePrismDID(routing, 12, routingPrivateKey, null, "Routing");
 
     instance.storeMediator(mediator, host, routing);
 
