@@ -25,7 +25,16 @@ type MethodType<tablename> =
                 tablename extends "Message" ? MessageQueriesTypes :
                     tablename extends "PrivateKey" ? PrivateKeyQueriesTypes :
                         tablename extends "VerifiableCredential" ? VerifiableCredentialQueriesTypes : null;
+
 type MessageDBResult = { id: string, createdTime: string, dataJson: string, from: string, thid: string, to: string, type: string, isReceived: string };
+type CredentialDBResult = {
+  id: string;
+  credentialType: string;
+  expirationDate: string;
+  issuanceDate: string;
+  verifiableCredentialJson: string;
+  issuerDIDId: string;
+}
 export default class Pluto extends Connection implements PlutoInterface {
   constructor(connection: ConnectionParams) {
     super(connection);
@@ -123,18 +132,6 @@ export default class Pluto extends Connection implements PlutoInterface {
       mediator.methodId,
       host.methodId,
       routing.methodId,
-    ]);
-  }
-
-  storeCredential(credential: VerifiableCredential) {
-    const insert = this.getMethod<"VerifiableCredential">('VerifiableCredential', 'insert');
-    this.database?.run(insert, [
-      uuidv4(),
-      credential.credentialType,
-      credential.expirationDate,
-      credential.issuanceDate,
-      JSON.stringify(credential),
-      credential.issuer.toString(),
     ]);
   }
 
@@ -381,11 +378,33 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllCredentials(): VerifiableCredential[] {
     const fetch = this.getMethod<"VerifiableCredential">('VerifiableCredential', 'fetchAllCredentials');
     try {
-      // not sure if the implementation is correct
-      return this.execAsMany<VerifiableCredential>(fetch);
+      return this.execAsMany<CredentialDBResult>(fetch).map(this.transformCredentialToVerifiableCredentialInterface);
     } catch (error) {
       throw error;
     }
+  }
+
+  storeCredential(credential: VerifiableCredential) {
+    const insert = this.getMethod<"VerifiableCredential">('VerifiableCredential', 'insert');
+
+    this.database?.run(insert, [
+      uuidv4(),
+      credential.credentialType,
+      credential.expirationDate,
+      credential.issuanceDate,
+      JSON.stringify(credential),
+      credential.issuer.toString(),
+    ]);
+  }
+
+  private transformCredentialToVerifiableCredentialInterface(result: CredentialDBResult): VerifiableCredential {
+    const json = JSON.parse(result.verifiableCredentialJson) as VerifiableCredential;
+    return {
+      ...json,
+      // override
+      id: result.id,
+      issuer: DID.fromString(result.issuerDIDId),
+    };
   }
 
   private transformToMessageInterface(result: { id: string, createdTime: string, dataJson: string, from: string, thid: string, to: string, type: string, isReceived: string }) {
