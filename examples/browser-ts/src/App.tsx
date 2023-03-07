@@ -98,10 +98,12 @@ function KeyPair({ curve = Domain.Curve.SECP256K1 }: { curve?: Domain.Curve }) {
               <b>Curve:</b> {keyPair.keyCurve.curve}
             </p>
             <p>
-              <b>Public key:</b> {trimString(keyPair.publicKey.value, 50)}
+              <b>Public key:</b>{" "}
+              {trimString(jose.base64url.encode(keyPair.publicKey.value), 50)}
             </p>
             <p>
-              <b>Private key:</b> {trimString(keyPair.privateKey.value, 50)}
+              <b>Private key:</b>{" "}
+              {trimString(jose.base64url.encode(keyPair.privateKey.value), 50)}
             </p>
 
             <hr />
@@ -129,6 +131,7 @@ function Signatures({ keyPair }: { keyPair: Domain.KeyPair }) {
       keyPair.privateKey,
       "hello world"
     );
+
     setSignatureEncoded(jose.base64url.encode(helloWorldSig.value));
   }
 
@@ -141,7 +144,7 @@ function Signatures({ keyPair }: { keyPair: Domain.KeyPair }) {
       isValid = apollo.verifySignature(
         keyPair.publicKey,
         new TextEncoder().encode("hello world"),
-        { value: jose.base64url.decode(signatureEncoded) }
+        jose.base64url.decode(signatureEncoded)
       );
     } catch (e) {
       console.warn("Failed to validate signature", e);
