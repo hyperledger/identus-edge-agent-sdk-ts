@@ -10,17 +10,10 @@ import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import * as jose from "jose";
+import Box from "./Box";
 
 const apollo = new Apollo();
 const castor = new Castor(apollo);
-// let mnemonics = apollo.createRandomMnemonics();
-// let seed = apollo.createSeed(mnemonics, "my-secret");
-// let keys = apollo.createKeyPairFromKeyCurve(seed, {
-//   curve: Domain.Curve.SECP256K1,
-// });
-// console.log("mnemonics", mnemonics);
-// console.log("seed words", seed);
-// console.log("Keys", keys);
 
 function Mnemonics() {
   let [mnemonics, setMnemonics] = useAtom(mnemonicsAtom);
@@ -154,6 +147,10 @@ function Signatures({ keyPair }: { keyPair: Domain.KeyPair }) {
     setIsSignatureValid(isValid);
   }
 
+  if (keyPair.keyCurve.curve === Domain.Curve.X25519) {
+    return <b>Signatures not supported for X25519 keys!</b>;
+  }
+
   return (
     <div>
       <button onClick={signData}>Sign</button>
@@ -173,6 +170,125 @@ function Signatures({ keyPair }: { keyPair: Domain.KeyPair }) {
   );
 }
 
+function Dids() {
+  const [mnemonics] = useAtom(mnemonicsAtom);
+  const [prismDid, setPrismDid] = React.useState<Domain.DID | null>(null);
+  const [peerDid, setPeerDid] = React.useState<Domain.DID | null>(null);
+
+  const exampleService = new Domain.Service("didcomm", ["DIDCommMessaging"], {
+    uri: "https://example.com/endpoint",
+    accept: ["didcomm/v2"],
+    routingKeys: ["did:example:somemediator#somekey"],
+  });
+
+  async function createPrismDid() {
+    if (!mnemonics) return;
+
+    const seed = apollo.createSeed(mnemonics, "my-secret");
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Domain.Curve.SECP256K1,
+    });
+    const prismDID = await castor.createPrismDID(keyPair.publicKey, [
+      exampleService,
+    ]);
+
+    setPrismDid(prismDID);
+  }
+
+  async function resolvePrismDid() {
+    if (!prismDid) return;
+    const didStr = prismDid.toString();
+    const didDoc = await castor.resolveDID(didStr);
+
+    console.log("DID DOC", didDoc);
+  }
+
+  async function createPeerDid() {
+    if (!mnemonics) return;
+
+    const seed = apollo.createSeed(mnemonics, "my-secret");
+    const authKeyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Domain.Curve.ED25519,
+    });
+    const keyAgreementKeyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Domain.Curve.X25519,
+    });
+    const peerDID = await castor.createPeerDID(
+      [authKeyPair, keyAgreementKeyPair],
+      [exampleService]
+    );
+
+    setPeerDid(peerDID);
+  }
+
+  async function resolvePeerDid() {
+    if (!peerDid) return;
+    const didStr = peerDid.toString();
+    const didDoc = await castor.resolveDID(didStr);
+
+    console.log("DID DOC", didDoc);
+  }
+
+  return (
+    <Box>
+      <h3>DIDs</h3>
+      <button onClick={createPrismDid}>Create PRISM DID</button>
+      {prismDid ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            height: 100,
+          }}
+        >
+          <b>PRISM DID: </b>
+          <div
+            style={{
+              overflow: "auto",
+              width: "100%",
+            }}
+          >
+            {prismDid.toString()}
+          </div>
+          <button style={{ width: 120 }} onClick={resolvePrismDid}>
+            Resolve
+          </button>
+        </div>
+      ) : null}
+
+      <Spacer />
+
+      <button onClick={createPeerDid}>Create Peer DID</button>
+      {peerDid ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            height: 100,
+          }}
+        >
+          <b>Peer DID: </b>
+          <div
+            style={{
+              overflow: "auto",
+              width: "100%",
+            }}
+          >
+            {peerDid.toString()}
+          </div>
+          <button style={{ width: 120 }} onClick={resolvePeerDid}>
+            Resolve
+          </button>
+        </div>
+      ) : null}
+    </Box>
+  );
+}
+
 function App() {
   return (
     <div className="App">
@@ -185,6 +301,10 @@ function App() {
       <KeyPair curve={Domain.Curve.SECP256K1} />
       <KeyPair curve={Domain.Curve.ED25519} />
       <KeyPair curve={Domain.Curve.X25519} />
+
+      <Dids />
+
+      <Spacer />
     </div>
   );
 }
