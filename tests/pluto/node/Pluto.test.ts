@@ -151,11 +151,11 @@ describe('Pluto tests', () => {
       validFrom: {
         id: uuidv4(),
         type: "test"
-      }, // Question: Is this valid interface?
+      },
       validUntil: {
         id: uuidv4(),
         type: "test"
-      }, // Question: Is this valid interface?
+      },
       proof: "",
       aud: ["test0", 'test1'],
     });
@@ -689,11 +689,11 @@ describe('Pluto tests', () => {
       validFrom: {
         id: uuidv4(),
         type: "test"
-      }, // Question: Is this valid interface?
+      },
       validUntil: {
         id: uuidv4(),
         type: "test"
-      }, // Question: Is this valid interface?
+      },
       proof: "",
       aud: ["test0", 'test1'],
     });
