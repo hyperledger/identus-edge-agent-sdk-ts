@@ -65,15 +65,11 @@ export class OfferCredential {
         "Invalid offer credential message error."
       );
     }
-    const offerCredentialBody = CredentialHelpers.safeParseBody<
-      OfferCredentialBody,
-      typeof AgentError.InvalidOfferCredentialBodyError,
-      typeof AgentError.InvalidCredentialFormats
-    >(
-      fromMessage.body,
-      AgentError.InvalidOfferCredentialBodyError,
-      AgentError.InvalidCredentialFormats
-    );
+    const offerCredentialBody =
+      CredentialHelpers.safeParseBody<OfferCredentialBody>(
+        fromMessage.body,
+        this.type
+      );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;
 

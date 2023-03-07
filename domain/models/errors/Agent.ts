@@ -46,6 +46,12 @@ export class InvalidOfferCredentialBodyError extends Error {
   }
 }
 
+export class UnknownCredentialBodyError extends Error {
+  constructor() {
+    super("Error: parsed unknown Credential Body");
+  }
+}
+
 export class InvalidCredentialFormats extends Error {
   constructor() {
     super("Invalid credential formats");

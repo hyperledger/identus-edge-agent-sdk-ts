@@ -7,6 +7,7 @@ import {
   InvalidProposeCredentialBodyError,
   InvalidRequestCredentialBodyError,
 } from "../../../domain/models/errors/Agent";
+import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
 import { CredentialPreview } from "./CredentialPreview";
 export interface CredentialBody {
@@ -42,59 +43,36 @@ type CredentialBodyErrors =
   | InvalidProposeCredentialBodyError
   | InvalidOfferCredentialBodyError;
 
-export interface ParsedCredentialFormat {
-  body: CredentialBodyTypes;
+export interface ParsedCredentialFormat<T> {
+  body: T;
 }
 
 export function isProposeCredentialBody(
+  type: ProtocolType,
   body: any
 ): body is ProposeCredentialBody {
-  return (
-    typeof body === "object" &&
-    "formats" in body &&
-    Array.isArray(body.formats) &&
-    (body.goalCode === undefined || typeof body.goalCode === "string") &&
-    (body.comment === undefined || typeof body.comment === "string") &&
-    typeof body.credentialPreview === "object"
-  );
+  return type === ProtocolType.DidcommProposeCredential;
 }
 
-export function isOfferCredentialBody(body: any): body is OfferCredentialBody {
-  return (
-    typeof body === "object" &&
-    "formats" in body &&
-    Array.isArray(body.formats) &&
-    (body.goalCode === undefined || typeof body.goalCode === "string") &&
-    (body.comment === undefined || typeof body.comment === "string") &&
-    typeof body.credentialPreview === "object" &&
-    (body.replacementId === undefined ||
-      typeof body.replacementId === "string") &&
-    (body.multipleAvailable === undefined ||
-      typeof body.multipleAvailable === "string")
-  );
+export function isOfferCredentialBody(
+  type: ProtocolType,
+  body: any
+): body is OfferCredentialBody {
+  return type === ProtocolType.DidcommOfferCredential;
 }
 
-export function isIssueCredentialBody(body: any): body is IssueCredentialBody {
-  return (
-    typeof body === "object" &&
-    "formats" in body &&
-    Array.isArray(body.formats) &&
-    (body.goalCode === undefined || typeof body.goalCode === "string") &&
-    (body.comment === undefined || typeof body.comment === "string") &&
-    (body.moreAvailable === undefined ||
-      typeof body.moreAvailable === "string") &&
-    (body.replacementId === undefined || typeof body.replacementId === "string")
-  );
+export function isIssueCredentialBody(
+  type: ProtocolType,
+  body: any
+): body is IssueCredentialBody {
+  return type === ProtocolType.DidcommIssueCredential;
 }
 
-export function isCredentialBody(body: any): body is CredentialBody {
-  return (
-    typeof body === "object" &&
-    "formats" in body &&
-    Array.isArray(body.formats) &&
-    (body.goalCode === undefined || typeof body.goalCode === "string") &&
-    (body.comment === undefined || typeof body.comment === "string")
-  );
+export function isCredentialBody(
+  type: ProtocolType,
+  body: any
+): body is CredentialBody {
+  return type === ProtocolType.DidcommRequestCredential;
 }
 
 export class CredentialHelpers {
@@ -130,76 +108,98 @@ export class CredentialHelpers {
     };
   }
 
-  static safeParseBody<
-    T extends CredentialBodyTypes,
-    Y extends new (message?: string) => CredentialBodyErrors,
-    Z extends new () => AgentError.InvalidCredentialFormats
-  >(body: string, CredentialTypeError: Y, CredentialFormatError: Z): T {
+  static safeParseBody<T extends CredentialBodyTypes>(
+    body: string,
+    type: ProtocolType
+  ): T {
+    let parsed: ParsedCredentialFormat<T>;
     try {
-      const parsed: ParsedCredentialFormat = JSON.parse(body);
-      if (!parsed.body) {
-        throw new CredentialTypeError("Undefined Body");
-      }
-
-      const { formats = [], goalCode, comment } = parsed.body;
-      if (!formats || !Array.isArray(formats)) {
-        throw new CredentialFormatError();
-      }
-
-      const credentialFormats = formats.map((format) =>
-        this.getFormatFromJsonObject(format)
-      );
-
-      if (isOfferCredentialBody(parsed.body)) {
-        if (!parsed.body.credentialPreview) {
-          throw new CredentialTypeError("Undefined credentialPreview");
-        }
-        return {
-          formats: credentialFormats,
-          credentialPreview: parsed.body.credentialPreview,
-          replacementId: parsed.body.replacementId,
-          multipleAvailable: parsed.body.multipleAvailable,
-          goalCode,
-          comment,
-        } as T;
-      } else if (isIssueCredentialBody(parsed.body)) {
-        if (parsed.body.replacementId && typeof parsed.body !== "string") {
-          throw new CredentialTypeError(
-            "Invalid replacementId, should be a string"
-          );
-        }
-        return {
-          formats: credentialFormats,
-          replacementId: parsed.body.replacementId,
-          moreAvailable: parsed.body.moreAvailable,
-          goalCode,
-          comment,
-        } as T;
-      } else if (isProposeCredentialBody(parsed.body)) {
-        if (!parsed.body.credentialPreview) {
-          throw new CredentialTypeError("Undefined credentialPreview");
-        }
-        return {
-          formats: credentialFormats,
-          credentialPreview: parsed.body.credentialPreview,
-          goalCode,
-          comment,
-        } as T;
-      } else if (isCredentialBody(parsed.body)) {
-        return {
-          formats: credentialFormats,
-          goalCode,
-          comment,
-        } as T;
-      }
-
-      throw new CredentialTypeError();
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new CredentialTypeError(e.message);
-      } else {
-        throw e;
-      }
+      parsed = JSON.parse(body);
+    } catch (err) {
+      throw new AgentError.UnknownCredentialBodyError();
     }
+
+    const { formats = [], goalCode, comment } = parsed.body || {};
+
+    if (isOfferCredentialBody(type, parsed.body)) {
+      if (!Object.keys(parsed.body).length) {
+        throw new AgentError.InvalidOfferCredentialBodyError(
+          "Invalid Offer CredentialBody Error"
+        );
+      }
+      if (!formats || !Array.isArray(formats)) {
+        throw new AgentError.InvalidCredentialFormats();
+      }
+      if (!parsed.body.credentialPreview) {
+        throw new AgentError.InvalidOfferCredentialBodyError(
+          "Undefined credentialPreview"
+        );
+      }
+      return {
+        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
+        credentialPreview: parsed.body.credentialPreview,
+        replacementId: parsed.body.replacementId,
+        multipleAvailable: parsed.body.multipleAvailable,
+        goalCode,
+        comment,
+      } as T;
+    } else if (isIssueCredentialBody(type, parsed.body)) {
+      if (!Object.keys(parsed.body).length) {
+        throw new AgentError.InvalidIssueCredentialBodyError(
+          "Invalid Issue CredentialBody Error"
+        );
+      }
+      if (!formats || !Array.isArray(formats)) {
+        throw new AgentError.InvalidCredentialFormats();
+      }
+      if (parsed.body.replacementId && typeof parsed.body !== "string") {
+        throw new AgentError.InvalidIssueCredentialBodyError(
+          "Invalid replacementId, should be a string"
+        );
+      }
+      return {
+        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
+        replacementId: parsed.body.replacementId,
+        moreAvailable: parsed.body.moreAvailable,
+        goalCode,
+        comment,
+      } as T;
+    } else if (isProposeCredentialBody(type, parsed.body)) {
+      if (!Object.keys(parsed.body).length) {
+        throw new AgentError.InvalidProposeCredentialBodyError(
+          "Invalid Propose CredentialBody Error"
+        );
+      }
+      if (!formats || !Array.isArray(formats)) {
+        throw new AgentError.InvalidCredentialFormats();
+      }
+      if (!parsed.body.credentialPreview) {
+        throw new AgentError.InvalidProposeCredentialBodyError(
+          "Undefined credentialPreview"
+        );
+      }
+      return {
+        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
+        credentialPreview: parsed.body.credentialPreview,
+        goalCode,
+        comment,
+      } as T;
+    } else if (isCredentialBody(type, parsed.body)) {
+      if (!Object.keys(parsed.body).length) {
+        throw new AgentError.InvalidCredentialBodyError(
+          "Invalid CredentialBody Error"
+        );
+      }
+      if (!formats || !Array.isArray(formats)) {
+        throw new AgentError.InvalidCredentialFormats();
+      }
+      return {
+        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
+        goalCode,
+        comment,
+      } as T;
+    }
+
+    throw new AgentError.UnknownCredentialBodyError();
   }
 }

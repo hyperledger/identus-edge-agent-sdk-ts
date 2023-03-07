@@ -1,10 +1,6 @@
 import { expect, assert } from "chai";
 import { Message } from "../../../../domain";
 import {
-  createIssueCredentialBody,
-  IssueCredential,
-} from "../../../../prism-agent/protocols/issueCredential/IssueCredential";
-import {
   createOfferCredentialBody,
   OfferCredential,
 } from "../../../../prism-agent/protocols/issueCredential/OfferCredential";
