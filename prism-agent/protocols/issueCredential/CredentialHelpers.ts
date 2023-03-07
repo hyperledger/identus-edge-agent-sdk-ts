@@ -7,7 +7,6 @@ import {
   InvalidProposeCredentialBodyError,
   InvalidRequestCredentialBodyError,
 } from "../../../domain/models/errors/Agent";
-import Agent from "../../agent";
 import { CredentialFormat } from "./CredentialFormat";
 import { CredentialPreview } from "./CredentialPreview";
 export interface CredentialBody {
@@ -151,17 +150,7 @@ export class CredentialHelpers {
         this.getFormatFromJsonObject(format)
       );
 
-      if (isProposeCredentialBody(parsed.body)) {
-        if (!parsed.body.credentialPreview) {
-          throw new CredentialTypeError("Undefined credentialPreview");
-        }
-        return {
-          formats: credentialFormats,
-          credentialPreview: parsed.body.credentialPreview,
-          goalCode,
-          comment,
-        } as T;
-      } else if (isOfferCredentialBody(parsed.body)) {
+      if (isOfferCredentialBody(parsed.body)) {
         if (!parsed.body.credentialPreview) {
           throw new CredentialTypeError("Undefined credentialPreview");
         }
@@ -183,6 +172,16 @@ export class CredentialHelpers {
           formats: credentialFormats,
           replacementId: parsed.body.replacementId,
           moreAvailable: parsed.body.moreAvailable,
+          goalCode,
+          comment,
+        } as T;
+      } else if (isProposeCredentialBody(parsed.body)) {
+        if (!parsed.body.credentialPreview) {
+          throw new CredentialTypeError("Undefined credentialPreview");
+        }
+        return {
+          formats: credentialFormats,
+          credentialPreview: parsed.body.credentialPreview,
           goalCode,
           comment,
         } as T;
