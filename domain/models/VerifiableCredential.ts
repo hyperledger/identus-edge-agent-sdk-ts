@@ -13,7 +13,7 @@ export class VerifiableCredentialTypeContainer {
   constructor(
     public readonly id: string,
     public readonly type: string
-  ) {}
+  ) { }
 }
 
 export interface VerifiableCredential {
@@ -21,7 +21,7 @@ export interface VerifiableCredential {
   readonly credentialType: CredentialType
   readonly context: Array<string>
   readonly type: Array<string>
-  readonly credentialSceham?: VerifiableCredentialTypeContainer
+  readonly credentialSchema?: VerifiableCredentialTypeContainer
   readonly credentialSubject: string
   readonly credentialStatus?: VerifiableCredentialTypeContainer
   readonly refreshService: VerifiableCredentialTypeContainer
