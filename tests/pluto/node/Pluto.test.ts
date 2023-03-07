@@ -645,8 +645,8 @@ describe('Pluto tests', () => {
 
     instance.storeMediator(mediator, host, routing);
 
-    const data = instance.getAllMediators(); // Issue: query invalid, needs solution, doesn't seem complete.
-    expect(data).not.empty; // fails
+    const data = instance.getAllMediators();
+    expect(data).not.empty;
   });
 
   it('should get all credentials', async function () {
