@@ -46,6 +46,12 @@ export class InvalidOfferCredentialBodyError extends Error {
   }
 }
 
+export class InvalidMediationGrantBodyError extends Error {
+  constructor(message?: string) {
+    super(message || "Invalid Offer CredentialBody Error");
+  }
+}
+
 export class UnknownCredentialBodyError extends Error {
   constructor() {
     super("Error: parsed unknown Credential Body");

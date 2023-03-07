@@ -3,8 +3,9 @@ import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers, ProposeCredentialBody } from "./CredentialHelpers";
+import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { CredentialPreview } from "./CredentialPreview";
+import { ProposeCredentialBody } from "../types";
 
 export class ProposeCredential {
   public static type = ProtocolType.DidcommProposeCredential;
@@ -42,7 +43,7 @@ export class ProposeCredential {
       );
     }
     const proposeCredentialBody =
-      CredentialHelpers.safeParseBody<ProposeCredentialBody>(
+      ProtocolHelpers.safeParseBody<ProposeCredentialBody>(
         fromMessage.body,
         this.type
       );
@@ -66,7 +67,7 @@ export class ProposeCredential {
     credentials: Map<string, T> = new Map()
   ) {
     const { formats, attachments } =
-      CredentialHelpers.parseCredentials(credentials);
+      ProtocolHelpers.parseCredentials(credentials);
 
     const proposeCredentialBody = createProposeCredentialBody(
       credentialPreview,

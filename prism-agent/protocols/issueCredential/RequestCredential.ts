@@ -4,8 +4,9 @@ import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialBody, CredentialHelpers } from "./CredentialHelpers";
+import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { OfferCredential } from "./OfferCredential";
+import { CredentialBody } from "../types";
 
 export class RequestCredential {
   public static type = ProtocolType.DidcommRequestCredential;
@@ -42,11 +43,10 @@ export class RequestCredential {
         "Invalid request credential message error."
       );
     }
-    const reqiestCredentialBody =
-      CredentialHelpers.safeParseBody<CredentialBody>(
-        fromMessage.body,
-        this.type
-      );
+    const reqiestCredentialBody = ProtocolHelpers.safeParseBody<CredentialBody>(
+      fromMessage.body,
+      this.type
+    );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fromDID = fromMessage.from!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -95,7 +95,7 @@ export class RequestCredential {
     credentials: Map<string, T> = new Map()
   ): RequestCredential {
     const { formats, attachments } =
-      CredentialHelpers.parseCredentials(credentials);
+      ProtocolHelpers.parseCredentials(credentials);
     const requestCredentialBody = createRequestCredentialBody(formats);
     return new RequestCredential(
       requestCredentialBody,

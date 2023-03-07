@@ -1,81 +1,51 @@
-import { AttachmentDescriptor } from "../../../domain";
-import { AgentError } from "../../../domain/models/Errors";
+import { AttachmentDescriptor } from "../../domain";
+import { AgentError } from "../../domain/models/Errors";
+import { ProtocolType } from "../protocols/ProtocolTypes";
+import { CredentialFormat } from "../protocols/issueCredential/CredentialFormat";
 import {
-  InvalidCredentialBodyError,
-  InvalidIssueCredentialBodyError,
-  InvalidOfferCredentialBodyError,
-  InvalidProposeCredentialBodyError,
-  InvalidRequestCredentialBodyError,
-} from "../../../domain/models/errors/Agent";
-import { ProtocolType } from "../ProtocolTypes";
-import { CredentialFormat } from "./CredentialFormat";
-import { CredentialPreview } from "./CredentialPreview";
-export interface CredentialBody {
-  formats: CredentialFormat[];
-  goalCode?: string;
-  comment?: string;
-}
+  ProposeCredentialBody,
+  OfferCredentialBody,
+  IssueCredentialBody,
+  CredentialBody,
+  MediationGrantBody,
+  ParsedCredentialFormat,
+} from "../protocols/types";
 
-export interface IssueCredentialBody extends CredentialBody {
-  moreAvailable?: string;
-  replacementId?: string;
-}
+export class ProtocolHelpers {
+  private static isProposeCredentialBody(
+    type: ProtocolType,
+    body: any
+  ): body is ProposeCredentialBody {
+    return type === ProtocolType.DidcommProposeCredential;
+  }
 
-export interface OfferCredentialBody extends CredentialBody {
-  credentialPreview: CredentialPreview;
-  replacementId?: string;
-  multipleAvailable?: string;
-}
-export interface ProposeCredentialBody extends CredentialBody {
-  credentialPreview: CredentialPreview;
-}
+  private static isOfferCredentialBody(
+    type: ProtocolType,
+    body: any
+  ): body is OfferCredentialBody {
+    return type === ProtocolType.DidcommOfferCredential;
+  }
 
-export type CredentialBodyTypes =
-  | IssueCredentialBody
-  | OfferCredentialBody
-  | ProposeCredentialBody
-  | CredentialBody;
+  private static isIssueCredentialBody(
+    type: ProtocolType,
+    body: any
+  ): body is IssueCredentialBody {
+    return type === ProtocolType.DidcommIssueCredential;
+  }
 
-type CredentialBodyErrors =
-  | InvalidCredentialBodyError
-  | InvalidIssueCredentialBodyError
-  | InvalidRequestCredentialBodyError
-  | InvalidProposeCredentialBodyError
-  | InvalidOfferCredentialBodyError;
+  private static isCredentialBody(
+    type: ProtocolType,
+    body: any
+  ): body is CredentialBody {
+    return type === ProtocolType.DidcommRequestCredential;
+  }
 
-export interface ParsedCredentialFormat<T> {
-  body: T;
-}
-
-export function isProposeCredentialBody(
-  type: ProtocolType,
-  body: any
-): body is ProposeCredentialBody {
-  return type === ProtocolType.DidcommProposeCredential;
-}
-
-export function isOfferCredentialBody(
-  type: ProtocolType,
-  body: any
-): body is OfferCredentialBody {
-  return type === ProtocolType.DidcommOfferCredential;
-}
-
-export function isIssueCredentialBody(
-  type: ProtocolType,
-  body: any
-): body is IssueCredentialBody {
-  return type === ProtocolType.DidcommIssueCredential;
-}
-
-export function isCredentialBody(
-  type: ProtocolType,
-  body: any
-): body is CredentialBody {
-  return type === ProtocolType.DidcommRequestCredential;
-}
-
-export class CredentialHelpers {
+  private static isMediationGrantBody(
+    type: ProtocolType,
+    body: any
+  ): body is MediationGrantBody {
+    return type === ProtocolType.DidcommMediationGrant;
+  }
   static parseCredentials<T>(credentials: Map<string, T>) {
     const initialValue = {
       formats: [] as CredentialFormat[],
@@ -108,10 +78,7 @@ export class CredentialHelpers {
     };
   }
 
-  static safeParseBody<T extends CredentialBodyTypes>(
-    body: string,
-    type: ProtocolType
-  ): T {
+  static safeParseBody<T>(body: string, type: ProtocolType): T {
     let parsed: ParsedCredentialFormat<T>;
     try {
       parsed = JSON.parse(body);
@@ -119,9 +86,17 @@ export class CredentialHelpers {
       throw new AgentError.UnknownCredentialBodyError();
     }
 
-    const { formats = [], goalCode, comment } = parsed.body || {};
+    if (this.isMediationGrantBody(type, parsed.body)) {
+      const { routingDid } = parsed.body;
+      if (!routingDid) {
+        throw new AgentError.InvalidMediationGrantBodyError(
+          "Undefined routingDid"
+        );
+      }
+    }
 
-    if (isOfferCredentialBody(type, parsed.body)) {
+    if (this.isOfferCredentialBody(type, parsed.body)) {
+      const { formats = [], goalCode, comment } = parsed.body || {};
       if (!Object.keys(parsed.body).length) {
         throw new AgentError.InvalidOfferCredentialBodyError(
           "Invalid Offer CredentialBody Error"
@@ -143,7 +118,10 @@ export class CredentialHelpers {
         goalCode,
         comment,
       } as T;
-    } else if (isIssueCredentialBody(type, parsed.body)) {
+    }
+
+    if (this.isIssueCredentialBody(type, parsed.body)) {
+      const { formats = [], goalCode, comment } = parsed.body || {};
       if (!Object.keys(parsed.body).length) {
         throw new AgentError.InvalidIssueCredentialBodyError(
           "Invalid Issue CredentialBody Error"
@@ -164,7 +142,10 @@ export class CredentialHelpers {
         goalCode,
         comment,
       } as T;
-    } else if (isProposeCredentialBody(type, parsed.body)) {
+    }
+
+    if (this.isProposeCredentialBody(type, parsed.body)) {
+      const { formats = [], goalCode, comment } = parsed.body || {};
       if (!Object.keys(parsed.body).length) {
         throw new AgentError.InvalidProposeCredentialBodyError(
           "Invalid Propose CredentialBody Error"
@@ -184,7 +165,10 @@ export class CredentialHelpers {
         goalCode,
         comment,
       } as T;
-    } else if (isCredentialBody(type, parsed.body)) {
+    }
+
+    if (this.isCredentialBody(type, parsed.body)) {
+      const { formats = [], goalCode, comment } = parsed.body || {};
       if (!Object.keys(parsed.body).length) {
         throw new AgentError.InvalidCredentialBodyError(
           "Invalid CredentialBody Error"

@@ -3,9 +3,10 @@ import { AgentError } from "../../../domain/models/Errors";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers, OfferCredentialBody } from "./CredentialHelpers";
+import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { CredentialPreview } from "./CredentialPreview";
 import { ProposeCredential } from "./ProposeCredential";
+import { OfferCredentialBody } from "../types";
 
 export class OfferCredential {
   public static type = ProtocolType.DidcommOfferCredential;
@@ -66,7 +67,7 @@ export class OfferCredential {
       );
     }
     const offerCredentialBody =
-      CredentialHelpers.safeParseBody<OfferCredentialBody>(
+      ProtocolHelpers.safeParseBody<OfferCredentialBody>(
         fromMessage.body,
         this.type
       );
@@ -91,7 +92,7 @@ export class OfferCredential {
     credentials: Map<string, T> = new Map()
   ) {
     const { formats, attachments } =
-      CredentialHelpers.parseCredentials(credentials);
+      ProtocolHelpers.parseCredentials(credentials);
 
     const offerCredentialBody = createOfferCredentialBody(
       credentialPreview,

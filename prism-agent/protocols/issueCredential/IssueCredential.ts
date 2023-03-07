@@ -8,9 +8,10 @@ import {
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { CredentialHelpers, IssueCredentialBody } from "./CredentialHelpers";
+import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { RequestCredential } from "./RequestCredential";
 import { base64url } from "multiformats/bases/base64";
+import { IssueCredentialBody } from "../types";
 
 export class IssueCredential {
   public static type = ProtocolType.DidcommIssueCredential;
@@ -61,7 +62,7 @@ export class IssueCredential {
       );
     }
     const issueCredentialBody =
-      CredentialHelpers.safeParseBody<IssueCredentialBody>(
+      ProtocolHelpers.safeParseBody<IssueCredentialBody>(
         fromMessage.body,
         this.type
       );
@@ -102,7 +103,7 @@ export class IssueCredential {
     credentials: Map<string, T> = new Map()
   ): IssueCredential {
     const { formats, attachments } =
-      CredentialHelpers.parseCredentials(credentials);
+      ProtocolHelpers.parseCredentials(credentials);
 
     const issueCredentialBody = createIssueCredentialBody(formats);
     return new IssueCredential(
