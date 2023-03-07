@@ -42,17 +42,20 @@ export class RequestCredential {
         "Invalid request credential message error."
       );
     }
-    const body = CredentialHelpers.safeParseBody(fromMessage.body);
+    const reqiestCredentialBody = CredentialHelpers.safeParseBody<
+      CredentialBody,
+      typeof AgentError.InvalidCredentialBodyError,
+      typeof AgentError.InvalidCredentialFormats
+    >(
+      fromMessage.body,
+      AgentError.InvalidCredentialBodyError,
+      AgentError.InvalidCredentialFormats
+    );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fromDID = fromMessage.from!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toDID = fromMessage.to!;
 
-    const reqiestCredentialBody = createRequestCredentialBody(
-      body.formats,
-      body.goalCode,
-      body.comment
-    );
     return new RequestCredential(
       reqiestCredentialBody,
       fromMessage.attachments,

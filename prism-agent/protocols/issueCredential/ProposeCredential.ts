@@ -41,18 +41,17 @@ export class ProposeCredential {
         "Invalid proposed credential message error."
       );
     }
-    const body = CredentialHelpers.safeParseBody<ProposeCredentialBody>(
-      fromMessage.body
+    const proposeCredentialBody = CredentialHelpers.safeParseBody<
+      ProposeCredentialBody,
+      typeof AgentError.InvalidProposeCredentialBodyError,
+      typeof AgentError.InvalidCredentialFormats
+    >(
+      fromMessage.body,
+      AgentError.InvalidProposeCredentialBodyError,
+      AgentError.InvalidCredentialFormats
     );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;
-
-    const proposeCredentialBody = createProposeCredentialBody(
-      body.credentialPreview,
-      body.formats,
-      body.goalCode,
-      body.comment
-    );
     return new ProposeCredential(
       proposeCredentialBody,
       fromMessage.attachments,

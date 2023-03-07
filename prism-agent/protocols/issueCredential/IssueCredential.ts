@@ -60,20 +60,20 @@ export class IssueCredential {
         "Invalid issue credential message error."
       );
     }
+    const issueCredentialBody = CredentialHelpers.safeParseBody<
+      IssueCredentialBody,
+      typeof AgentError.InvalidIssueCredentialBodyError,
+      typeof AgentError.InvalidCredentialFormats
+    >(
+      fromMessage.body,
+      AgentError.InvalidIssueCredentialBodyError,
+      AgentError.InvalidCredentialFormats
+    );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fromDID = fromMessage.from!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toDID = fromMessage.to!;
-    const body = CredentialHelpers.safeParseBody<IssueCredentialBody>(
-      fromMessage.body
-    );
-    const issueCredentialBody = createIssueCredentialBody(
-      body.formats,
-      body.goalCode,
-      body.comment,
-      body.replacementId,
-      body.moreAvailable
-    );
+
     return new IssueCredential(
       issueCredentialBody,
       fromMessage.attachments,

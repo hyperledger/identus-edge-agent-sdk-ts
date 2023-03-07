@@ -65,19 +65,18 @@ export class OfferCredential {
         "Invalid offer credential message error."
       );
     }
-    const body = CredentialHelpers.safeParseBody<OfferCredentialBody>(
-      fromMessage.body
+    const offerCredentialBody = CredentialHelpers.safeParseBody<
+      OfferCredentialBody,
+      typeof AgentError.InvalidOfferCredentialBodyError,
+      typeof AgentError.InvalidCredentialFormats
+    >(
+      fromMessage.body,
+      AgentError.InvalidOfferCredentialBodyError,
+      AgentError.InvalidCredentialFormats
     );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;
 
-    const offerCredentialBody = createOfferCredentialBody(
-      body.credentialPreview,
-      body.formats,
-      body.goalCode,
-      body.replacementId,
-      body.multipleAvailable
-    );
     return new OfferCredential(
       offerCredentialBody,
       fromMessage.attachments,

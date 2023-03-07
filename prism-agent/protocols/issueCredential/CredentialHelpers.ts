@@ -1,5 +1,13 @@
 import { AttachmentDescriptor } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
+import {
+  InvalidCredentialBodyError,
+  InvalidIssueCredentialBodyError,
+  InvalidOfferCredentialBodyError,
+  InvalidProposeCredentialBodyError,
+  InvalidRequestCredentialBodyError,
+} from "../../../domain/models/errors/Agent";
+import Agent from "../../agent";
 import { CredentialFormat } from "./CredentialFormat";
 import { CredentialPreview } from "./CredentialPreview";
 export interface CredentialBody {
@@ -27,6 +35,13 @@ export type CredentialBodyTypes =
   | OfferCredentialBody
   | ProposeCredentialBody
   | CredentialBody;
+
+type CredentialBodyErrors =
+  | InvalidCredentialBodyError
+  | InvalidIssueCredentialBodyError
+  | InvalidRequestCredentialBodyError
+  | InvalidProposeCredentialBodyError
+  | InvalidOfferCredentialBodyError;
 
 export interface ParsedCredentialFormat {
   body: CredentialBodyTypes;
@@ -116,16 +131,20 @@ export class CredentialHelpers {
     };
   }
 
-  static safeParseBody<T extends CredentialBodyTypes>(body: string): T {
+  static safeParseBody<
+    T extends CredentialBodyTypes,
+    Y extends new (message?: string) => CredentialBodyErrors,
+    Z extends new () => AgentError.InvalidCredentialFormats
+  >(body: string, CredentialTypeError: Y, CredentialFormatError: Z): T {
     try {
       const parsed: ParsedCredentialFormat = JSON.parse(body);
       if (!parsed.body) {
-        throw new AgentError.InvalidCredentialBodyError();
+        throw new CredentialTypeError("Undefined Body");
       }
 
       const { formats = [], goalCode, comment } = parsed.body;
       if (!formats || !Array.isArray(formats)) {
-        throw new AgentError.InvalidCredentialFormats();
+        throw new CredentialFormatError();
       }
 
       const credentialFormats = formats.map((format) =>
@@ -134,9 +153,7 @@ export class CredentialHelpers {
 
       if (isProposeCredentialBody(parsed.body)) {
         if (!parsed.body.credentialPreview) {
-          throw new AgentError.InvalidProposeCredentialBodyError(
-            "Undefined credentialPreview"
-          );
+          throw new CredentialTypeError("Undefined credentialPreview");
         }
         return {
           formats: credentialFormats,
@@ -146,9 +163,7 @@ export class CredentialHelpers {
         } as T;
       } else if (isOfferCredentialBody(parsed.body)) {
         if (!parsed.body.credentialPreview) {
-          throw new AgentError.InvalidOfferCredentialBodyError(
-            "Undefined credentialPreview"
-          );
+          throw new CredentialTypeError("Undefined credentialPreview");
         }
         return {
           formats: credentialFormats,
@@ -160,7 +175,7 @@ export class CredentialHelpers {
         } as T;
       } else if (isIssueCredentialBody(parsed.body)) {
         if (parsed.body.replacementId && typeof parsed.body !== "string") {
-          throw new AgentError.InvalidIssueCredentialBodyError(
+          throw new CredentialTypeError(
             "Invalid replacementId, should be a string"
           );
         }
@@ -179,10 +194,10 @@ export class CredentialHelpers {
         } as T;
       }
 
-      throw new AgentError.InvalidCredentialBodyError();
+      throw new CredentialTypeError();
     } catch (e) {
       if (e instanceof Error) {
-        throw new AgentError.InvalidCredentialBodyError(e.message);
+        throw new CredentialTypeError(e.message);
       } else {
         throw e;
       }
