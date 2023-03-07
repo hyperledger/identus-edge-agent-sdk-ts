@@ -627,6 +627,22 @@ describe('Pluto tests', () => {
     const mediator = DID.fromString("did:prism:123");
     const host = DID.fromString("did:prism:321");
     const routing = DID.fromString("did:prism:432");
+    const mediatorPrivateKey: PrivateKey = {
+      value: "mediator test",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    const hostPrivateKey: PrivateKey = {
+      value: "host test",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    const routingPrivateKey: PrivateKey = {
+      value: "routing test",
+      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
+    };
+    instance.storePrismDID(mediator, 10, mediatorPrivateKey, null, "Mediator");
+    instance.storePrismDID(host, 11, mediatorPrivateKey, null, "Host");
+    instance.storePrismDID(routing, 12, mediatorPrivateKey, null, "Routing");
+
     instance.storeMediator(mediator, host, routing);
 
     const data = instance.getAllMediators(); // Issue: query invalid, needs solution, doesn't seem complete.
