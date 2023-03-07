@@ -34,12 +34,24 @@ export type CredentialBodyTypes =
 export interface ParsedCredentialFormat<T> {
   body: T;
 }
-export enum MediationKeysUpdateListActions {
-  add,
-}
+
 export interface MediationKeysUpdateListBody {
   updates: Array<{
     recipientDid: string;
     action: "add";
   }>;
+}
+
+export interface PickupReceivedBody {
+  messageIdList: string[];
+}
+
+export interface PickupRequestBody {
+  recipientKey?: string;
+  limit: string;
+}
+
+export interface PickupAttachment {
+  attachmentId: string;
+  data: string;
 }

@@ -46,6 +46,7 @@ export class ProtocolHelpers {
   ): body is MediationGrantBody {
     return type === ProtocolType.DidcommMediationGrant;
   }
+
   static parseCredentials<T>(credentials: Map<string, T>) {
     const initialValue = {
       formats: [] as CredentialFormat[],
@@ -93,6 +94,9 @@ export class ProtocolHelpers {
           "Undefined routingDid"
         );
       }
+      return {
+        routingDid: routingDid,
+      } as T;
     }
 
     if (this.isOfferCredentialBody(type, parsed.body)) {
