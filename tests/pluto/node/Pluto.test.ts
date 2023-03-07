@@ -254,7 +254,7 @@ describe('Pluto tests', () => {
     instance.storePrivateKeys(privateKey, did, keyPathIndex, null); // Question: Should we move this method into storePrismDID()?
 
     const result = instance.getPrismLastKeyPathIndex(); // Issue: this method does not work because of method written incorrect it should be "prism" instead of "Prism"
-    // expect(result).equals(keyPathIndex); // failing
+    expect(result).equals(keyPathIndex); // failing
   });
   //
   it('should get all peer DIDs', async function () {

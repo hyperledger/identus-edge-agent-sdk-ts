@@ -33,7 +33,7 @@ WHERE didId = ?;
 
   fetchLastkeyPathIndex: `
     SELECT keyPathIndex FROM PrivateKey
-WHERE didId IN (SELECT methodId FROM DID WHERE method = 'Prism')
+WHERE didId IN (SELECT methodId FROM DID WHERE method = 'prism')
 ORDER BY keyPathIndex DESC
 LIMIT 1;
     `,
