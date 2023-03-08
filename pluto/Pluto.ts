@@ -49,6 +49,43 @@ export default class Pluto extends Connection implements PlutoInterface {
     super(connection);
   }
 
+  private static transformCredentialToVerifiableCredentialInterface(result: CredentialDBResult): VerifiableCredential {
+    const json = JSON.parse(result.verifiableCredentialJson) as VerifiableCredential;
+    return {
+      ...json,
+      // override
+      id: result.id,
+      issuer: DID.fromString(result.issuerDIDId),
+    };
+  }
+
+  private static transformPrivateKeyToPrivateKeyInterface(result: PrivateKeyDBResult): PrivateKey {
+    return {
+      value: result.privateKey,
+      keyCurve: getKeyCurveByNameAndIndex(result.curve)
+    };
+  }
+
+  private static transformToMessageInterface(result: { id: string, createdTime: string, dataJson: string, from: string, thid: string, to: string, type: string, isReceived: string }) {
+    const data = JSON.parse(result.dataJson);
+    return {
+      piuri: result.type,
+      id: result.id,
+      direction: result.isReceived ? MessageDirection.RECEIVED : MessageDirection.SENT,
+      ack: data.ack,
+      body: data.body,
+      extraHeaders: data.extraHeaders as unknown as string[],
+      createdTime: result.createdTime,
+      expiresTimePlus: data.expiresTimePlus,
+      attachments: data.attachments as unknown as AttachmentDescriptor[],
+      from: DID.fromString(result.from),
+      to: DID.fromString(result.to),
+      fromPrior: data.fromPrior,
+      thid: result.thid,
+      pthid: data.pthid,
+    } as Message;
+  }
+
   getMethod<tablename>(tableName: TableName, method: MethodType<tablename>): string {
     let _method: string | null = null;
     switch (tableName) {
@@ -517,11 +554,11 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<CredentialDBResult>(fetch);
       if (Array.isArray(data)) {
-        return data.map(this.transformCredentialToVerifiableCredentialInterface);
+        return data.map(Pluto.transformCredentialToVerifiableCredentialInterface);
       } else {
         return new Promise((resolve, reject) => {
           data.then((dbData) => {
-            resolve(dbData.map(this.transformCredentialToVerifiableCredentialInterface));
+            resolve(dbData.map(Pluto.transformCredentialToVerifiableCredentialInterface));
           }).catch(error => reject(error));
         });
       }
@@ -542,42 +579,5 @@ export default class Pluto extends Connection implements PlutoInterface {
       JSON.stringify(credential),
       credential.issuer.toString(),
     ]);
-  }
-
-  private transformCredentialToVerifiableCredentialInterface(result: CredentialDBResult): VerifiableCredential {
-    const json = JSON.parse(result.verifiableCredentialJson) as VerifiableCredential;
-    return {
-      ...json,
-      // override
-      id: result.id,
-      issuer: DID.fromString(result.issuerDIDId),
-    };
-  }
-
-  private transformPrivateKeyToPrivateKeyInterface(result: PrivateKeyDBResult): PrivateKey {
-    return {
-      value: result.privateKey,
-      keyCurve: getKeyCurveByNameAndIndex(result.curve)
-    };
-  }
-
-  private transformToMessageInterface(result: { id: string, createdTime: string, dataJson: string, from: string, thid: string, to: string, type: string, isReceived: string }) {
-    const data = JSON.parse(result.dataJson);
-    return {
-      piuri: result.type,
-      id: result.id,
-      direction: result.isReceived ? MessageDirection.RECEIVED : MessageDirection.SENT,
-      ack: data.ack,
-      body: data.body,
-      extraHeaders: data.extraHeaders as unknown as string[],
-      createdTime: result.createdTime,
-      expiresTimePlus: data.expiresTimePlus,
-      attachments: data.attachments as unknown as AttachmentDescriptor[],
-      from: DID.fromString(result.from),
-      to: DID.fromString(result.to),
-      fromPrior: data.fromPrior,
-      thid: result.thid,
-      pthid: data.pthid,
-    } as Message;
   }
 }
