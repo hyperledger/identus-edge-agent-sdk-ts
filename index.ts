@@ -4,4 +4,4 @@ export * as Domain from "./domain";
 export { default as Mercury } from "./mercury/Mercury";
 export { default as Pluto } from "./pluto/Pluto";
 export { default as Pollux } from "./pollux/Pollux";
-export { default as Agent } from "./prism-agent/agent";
+export { default as Agent } from "./prism-agent/Agent";

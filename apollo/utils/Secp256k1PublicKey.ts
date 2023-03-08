@@ -1,7 +1,6 @@
 import BN from "bn.js";
 import * as elliptic from "elliptic";
 import BigInteger from "bn.js";
-import * as base64 from "multiformats/bases/base64";
 
 import { ECConfig } from "../../config/ECConfig";
 import { ECCoordinate } from "./ec/ECCoordinate";
@@ -86,6 +85,7 @@ export class Secp256k1PublicKey
     );
     return this.secp256k1FromByteCoordinates(xBytes, yBytes);
   }
+
   static secp256k1FromByteCoordinates(
     x: Uint8Array,
     y: Uint8Array
@@ -106,6 +106,7 @@ export class Secp256k1PublicKey
     const yInteger = new BN(yTrimmed);
     return this.secp256k1FromBigIntegerCoordinates(xInteger, yInteger);
   }
+
   static secp256k1FromBigIntegerCoordinates(
     x: BigInteger,
     y: BigInteger
@@ -118,6 +119,7 @@ export class Secp256k1PublicKey
     });
     return new Secp256k1PublicKey(keyPair.getPublic());
   }
+
   static secp256k1FromCompressed(compressed: Uint8Array): Secp256k1PublicKey {
     if (compressed.length !== ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE) {
       throw new Error(

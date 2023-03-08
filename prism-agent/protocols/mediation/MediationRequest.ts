@@ -17,9 +17,8 @@ export class MediationRequest {
   }
 
   makeMessage(): Message {
-    const body = JSON.stringify(this.body);
     return new Message(
-      body,
+      "{}",
       this.id,
       MediationRequest.type,
       this.from,

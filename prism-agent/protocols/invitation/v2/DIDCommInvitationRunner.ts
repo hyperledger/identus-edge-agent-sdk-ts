@@ -59,6 +59,6 @@ export class DIDCommInvitationRunner {
 
   run(): OutOfBandInvitation {
     const messageData = OutOfBandParser.parseMessage(this.url);
-    return this.safeParseBody(messageData, OutOfBandInvitation.type);
+    return this.safeParseBody(messageData, ProtocolType.Didcomminvitation);
   }
 }
