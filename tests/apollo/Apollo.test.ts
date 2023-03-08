@@ -1,18 +1,14 @@
 import BN from "bn.js";
 import { expect, assert } from "chai";
-import { base64url } from "multiformats/bases/base64";
 
 import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../apollo/Apollo";
 import { ECConfig } from "../../config/ECConfig";
-import { Curve, PrivateKey } from "../../domain/models";
+import { Curve } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
-
-import { Ed25519KeyPair } from "../../apollo/utils/Ed25519KeyPair";
-import { X25519KeyPair } from "../../apollo/utils/X25519KeyPair";
 
 let apollo: Apollo;
 
@@ -102,10 +98,6 @@ describe("Apollo Tests", () => {
     expect(
       Buffer.from(keyPair.privateKey.getEncoded()).toString("hex").length
     ).to.equal(ECConfig.PRIVATE_KEY_BYTE_SIZE * 2);
-    console.log(
-      keyPair.publicKey.getEncoded().length,
-      ECConfig.PUBLIC_KEY_BYTE_SIZE
-    );
     expect(keyPair.publicKey.getEncoded().length).to.equal(
       ECConfig.PUBLIC_KEY_BYTE_SIZE
     );
