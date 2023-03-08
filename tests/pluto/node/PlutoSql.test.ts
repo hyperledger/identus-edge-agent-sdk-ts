@@ -11,7 +11,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
 
     await instance.start();
@@ -20,7 +20,7 @@ describe('Pluto tests', () => {
   it('should store prism DID', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
@@ -38,7 +38,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const messageId = uuidv4();
@@ -59,15 +59,15 @@ describe('Pluto tests', () => {
     };
 
     instance.storeMessage(message);
-    const values = await instance.getAllMessages();
-    const value = await instance.getMessage(values[0].id);
+    const values = instance.getAllMessages();
+    const value = instance.getMessage(values[0].id);
     expect(value?.from?.toString()).equal(message.from.toString());
   });
 
   it('should store messages', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const messageId = uuidv4();
@@ -88,7 +88,7 @@ describe('Pluto tests', () => {
       extraHeaders: ['askdpaks']
     };
     instance.storeMessages(Array(10).fill("_").map(() => message));
-    const values = await instance.getAllMessages();
+    const values = instance.getAllMessages();
 
     expect(values.length).equals(10);
   });
@@ -96,7 +96,7 @@ describe('Pluto tests', () => {
   it('should store private keys', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const privateKey: PrivateKey = {
@@ -111,7 +111,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const mediator = DID.fromString("did:prism:123");
@@ -125,7 +125,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     instance.storeCredential({
@@ -174,7 +174,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
@@ -188,7 +188,7 @@ describe('Pluto tests', () => {
 
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const dids = await instance.getAllPrismDIDs();
+    const dids = instance.getAllPrismDIDs();
     expect(dids).not.empty;
   });
 
@@ -196,7 +196,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
@@ -210,7 +210,7 @@ describe('Pluto tests', () => {
 
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const result = await instance.getDIDInfoByDID(did);
+    const result = instance.getDIDInfoByDID(did);
     expect(result?.did.toString()).equals(did.toString());
   });
 
@@ -218,7 +218,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const did = DID.fromString("did:prism:dadsa:asdpijasiopdj");
@@ -231,7 +231,7 @@ describe('Pluto tests', () => {
 
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const result = await instance.getDIDInfoByAlias(alias);
+    const result = instance.getDIDInfoByAlias(alias);
     expect(!!result.find(item => item.alias === alias)).true;
   });
 
@@ -239,7 +239,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const did = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
@@ -261,7 +261,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const did = DID.fromString("did:prism:dadsa:92jsadn1");
@@ -282,7 +282,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const peerDid = DID.fromString("did:peer:3i21d");
@@ -303,7 +303,7 @@ describe('Pluto tests', () => {
     instance.storePrismDID(prismDid, keyPathIndex, prismPrivateKey, null, alias);
 
     instance.storePeerDID(peerDid, [privateKey]);
-    const dids = await instance.getAllPeerDIDs();
+    const dids = instance.getAllPeerDIDs();
     expect(dids.length).equals(1);
   });
 
@@ -311,7 +311,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const peerDid = DID.fromString("did:peer:3i21d");
     await instance.start();
@@ -321,7 +321,7 @@ describe('Pluto tests', () => {
     };
 
     instance.storePeerDID(peerDid, [privateKey]);
-    const result = await instance.getDIDPrivateKeysByDID(peerDid);
+    const result = instance.getDIDPrivateKeysByDID(peerDid);
     expect(!!result?.find(item => item.value.toString() === privateKey.value.toString())).true;
   });
   //
@@ -329,7 +329,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const peerDid = DID.fromString("did:peer:3i21d");
@@ -341,7 +341,7 @@ describe('Pluto tests', () => {
     instance.storePeerDID(peerDid, [privateKey]);
     // Question: Should we implement getAllPrivateKeys() method?
     const result = instance.database?.exec("SELECT id FROM PrivateKey;") as any;
-    const privateKeyResult = await instance.getDIDPrivateKeyByID(result[0].values[0][0]);
+    const privateKeyResult = instance.getDIDPrivateKeyByID(result[0].values[0][0]);
     expect(privateKeyResult?.keyCurve.curve).equals(Curve.ED25519);
   });
 
@@ -349,14 +349,14 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const host = DID.fromString("did:prism:123");
     const receiver = DID.fromString("did:prism:321");
     const name = "test";
     instance.storeDIDPair(host, receiver, name);
-    const dids = await instance.getAllDidPairs();
+    const dids = instance.getAllDidPairs();
     expect(dids).not.empty;
   });
 
@@ -364,35 +364,35 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const host = DID.fromString("did:prism:123");
     const receiver = DID.fromString("did:prism:321");
     const name = "test";
     instance.storeDIDPair(host, receiver, name);
-    const result = await instance.getPairByDID(host);
+    const result = instance.getPairByDID(host);
     expect(result?.host.toString()).equals(host.toString());
   });
 
   it('should get pair by name', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     const host = DID.fromString("did:prism:123");
     const receiver = DID.fromString("did:prism:321");
     const name = "test";
     instance.storeDIDPair(host, receiver, name);
-    const result = await instance.getPairByName(name);
+    const result = instance.getPairByName(name);
     expect(result?.name).equals(name);
   });
 
   it('should get all messages', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
     instance.storeMessage({
@@ -418,7 +418,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -446,7 +446,8 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`,
+
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -474,7 +475,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -502,7 +503,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -530,7 +531,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -558,7 +559,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -587,7 +588,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -609,7 +610,7 @@ describe('Pluto tests', () => {
       expiresTimePlus: new Date().toString(),
     };
     instance.storeMessage(message);
-    const result = await instance.getAllMessagesByFromToDID(message.from, message.to);
+    const result = instance.getAllMessagesByFromToDID(message.from, message.to);
     expect(result[0].body).equal(message.body);
   });
 
@@ -617,7 +618,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -639,9 +640,9 @@ describe('Pluto tests', () => {
       expiresTimePlus: new Date().toString(),
     };
     instance.storeMessage(message);
-    const messages = await instance.getAllMessages();
+    const messages = instance.getAllMessages();
 
-    const result = await instance.getMessage(messages[0].id);
+    const result = instance.getMessage(messages[0].id);
     expect(result?.body).equal(message.body);
   });
 
@@ -650,7 +651,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
 
@@ -684,7 +685,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist`
     });
     await instance.start();
 

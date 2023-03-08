@@ -183,71 +183,47 @@ export default class Pluto extends Connection implements PlutoInterface {
     ]);
   }
 
-  getAllPrismDIDs(): PrismDIDInfo[] | Promise<PrismDIDInfo[]> {
+  getAllPrismDIDs(): PrismDIDInfo[] {
     const fetch = this.getMethod<"DID">('DID', 'fetchAllPrismDID');
     return this.execAsMany<PrismDIDInfo>(fetch);
   }
 
-  getDIDInfoByDID(did: DID): PrismDIDInfo | null | Promise<PrismDIDInfo | null> {
+  getDIDInfoByDID(did: DID): PrismDIDInfo | null {
     const fetch = this.getMethod<"DID">('DID', 'fetchDIDInfoByDID');
     return this.execAsOne<PrismDIDInfo>(fetch, [did.toString()]);
   }
 
-  getDIDInfoByAlias(alias: string): PrismDIDInfo[] | Promise<PrismDIDInfo[]> {
+  getDIDInfoByAlias(alias: string): PrismDIDInfo[] {
     const fetch = this.getMethod<"DID">('DID', 'fetchDIDInfoByAlias');
     return this.execAsMany<PrismDIDInfo>(fetch, [alias]);
   }
 
-  getPrismDIDKeyPathIndex(did: DID): number | null | Promise<number | null> {
+  getPrismDIDKeyPathIndex(did: DID): number | null {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchKeyPathIndexByDID');
     const result = this.execAsOne<{ keyPathIndex: number } | null>(fetch, [
       did.toString()
     ]);
-    if (result instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        result.then(value => resolve(value?.keyPathIndex ?? null)).catch(reject);
-      });
-    }
     return result?.keyPathIndex ?? null;
   }
 
-  getPrismLastKeyPathIndex(): number | Promise<number> {
+  getPrismLastKeyPathIndex(): number {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchLastkeyPathIndex');
     const result = this.execAsOne<{ keyPathIndex: number }>(fetch);
-    if (result instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        result.then(value => resolve(value?.keyPathIndex ?? 0)).catch(reject);
-      });
-    }
-
     return result?.keyPathIndex ?? 0;
   }
 
-  getAllPeerDIDs(): PeerDID[] | Promise<PeerDID[]> {
+  getAllPeerDIDs(): PeerDID[] {
     const fetch = this.getMethod<"DID">('DID', 'fetchAllPeerDID');
     return this.execAsMany<PeerDID>(fetch);
   }
 
-  getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> | Promise<Array<PrivateKey>> | null {
+  getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchPrivateKeyByDID');
-    if (this.type === 'sqlite') {
-      const data = this.execAsMany<PrivateKeyDBResult>(fetch, [did.toString()]) as Promise<Array<PrivateKeyDBResult>>;
-      return new Promise((resolve, reject) => {
-        data
-            .then((dbData) => {
-              resolve(dbData.map(Pluto.transformPrivateKeyToPrivateKeyInterface));
-            })
-            .catch((error) => {
-              reject(error);
-            });
-      });
-    } else {
-      const data = this.execAsMany<PrivateKeyDBResult>(fetch, [did.toString()]) as PrivateKeyDBResult[];
-      return data.map(Pluto.transformPrivateKeyToPrivateKeyInterface);
-    }
+    const data = this.execAsMany<PrivateKeyDBResult>(fetch, [did.toString()]) as PrivateKeyDBResult[];
+    return data.map(Pluto.transformPrivateKeyToPrivateKeyInterface);
   }
 
-  getDIDPrivateKeyByID(id: string): PrivateKey | null | Promise<PrivateKey | null> {
+  getDIDPrivateKeyByID(id: string): PrivateKey | null {
     const fetch = this.getMethod<"PrivateKey">('PrivateKey', 'fetchPrivateKeyByID');
     const result = this.execAsOne<{
       id: string,
@@ -256,21 +232,6 @@ export default class Pluto extends Connection implements PlutoInterface {
       keyPathIndex: number,
       didId: string
     }>(fetch, [id]);
-    if (result instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        result.then(value => {
-          if (!value) {
-            return resolve(null);
-          }
-          resolve({
-            keyCurve: {
-              curve: value.curve,
-            },
-            value: Buffer.from(value.privateKey),
-          });
-        }).catch(reject);
-      });
-    }
 
     if (!result) {
       return result;
@@ -283,12 +244,12 @@ export default class Pluto extends Connection implements PlutoInterface {
     };
   }
 
-  getAllDidPairs(): DIDPair[] | Promise<DIDPair[]> {
+  getAllDidPairs(): DIDPair[] {
     const fetch = this.getMethod<"DIDPair">('DIDPair', 'fetchAllDIDPairs');
     return this.execAsMany<DIDPair>(fetch);
   }
 
-  getPairByDID(did: DID): DIDPair | null | Promise<DIDPair | null> {
+  getPairByDID(did: DID): DIDPair | null {
     const fetch = this.getMethod<"DIDPair">('DIDPair', 'fetchDIDPairByDID');
     const result = this.execAsOne<{
       id: string;
@@ -296,21 +257,6 @@ export default class Pluto extends Connection implements PlutoInterface {
       hostDID: string;
       receiverDID: string;
     }>(fetch, [did.toString()]);
-    if (result instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        result.then((value) => {
-
-          if (!value) {
-            return resolve(null);
-          }
-          resolve({
-            host: DID.fromString(value.hostDID),
-            receiver: DID.fromString(value.receiverDID),
-            name: value.name
-          });
-        }).catch(reject);
-      });
-    }
     if (!result) {
       return null;
     }
@@ -321,163 +267,84 @@ export default class Pluto extends Connection implements PlutoInterface {
     };
   }
 
-  getPairByName(name: string): DIDPair | null | Promise<DIDPair | null> {
+  getPairByName(name: string): DIDPair | null {
     const fetch = this.getMethod<"DIDPair">("DIDPair", 'fetchDIDPairByName');
     return this.execAsOne<DIDPair>(fetch, [name]);
   }
 
-  getAllMessages(): Promise<Message[]> | Message[] {
+  getAllMessages(): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessages');
     const data = this.execAsMany<MessageDBResult>(fetch);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data.then(dbData => dbData.map(Pluto.transformToMessageInterface)).catch(reject);
-      });
-    }
-
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesByDID(did: DID): Message[] | Promise<Message[]> {
+  getAllMessagesByDID(did: DID): Message[] {
     // Question: This method is not implemented in Kotlin, is it missing or just not wanted anymore?
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesReceivedFrom');
     const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data.then(dbData => dbData.map(Pluto.transformToMessageInterface)).catch(reject);
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesSent(): Message[] | Promise<Message[]> {
+  getAllMessagesSent(): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllSentMessages');
     const data = this.execAsMany<MessageDBResult>(fetch);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data
-            .then((dbData) => resolve(dbData.map(Pluto.transformToMessageInterface)))
-            .catch(error => reject(error));
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesReceived(): Message[] | Promise<Message[]> {
+  getAllMessagesReceived(): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllReceivedMessages');
     const data = this.execAsMany<MessageDBResult>(fetch);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data
-            .then(dbData => dbData.map(Pluto.transformToMessageInterface))
-            .catch(error => reject(error));
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesSentTo(did: DID): Message[] | Promise<Message[]> {
+  getAllMessagesSentTo(did: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesSentTo');
     const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data.then(dbData => dbData.map(Pluto.transformToMessageInterface)).catch(error => reject(error));
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesReceivedFrom(did: DID): Message[] | Promise<Message[]> {
+  getAllMessagesReceivedFrom(did: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesReceivedFrom');
     const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data
-            .then(dbData => resolve(dbData.map(Pluto.transformToMessageInterface)))
-            .catch(error => reject(error));
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesOfType(type: string, relatedWithDID?: DID): Message[] | Promise<Message[]> {
+  getAllMessagesOfType(type: string, relatedWithDID?: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesOfType');
     const data = this.execAsMany<MessageDBResult>(fetch, {
       ":type": type,
       ':relatedWithDID': relatedWithDID?.toString() ?? null,
     });
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data.then((dbData) => {
-          resolve(dbData.map(Pluto.transformToMessageInterface));
-        }).catch(error => reject(error));
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getAllMessagesByFromToDID(from: DID, to: DID): Message[] | Promise<Message[]> {
+  getAllMessagesByFromToDID(from: DID, to: DID): Message[] {
     const fetch = this.getMethod<"Message">('Message', 'fetchAllMessagesFromTo');
     const data = this.execAsMany<MessageDBResult>(fetch, {
       ":from": from.toString(),
       ":to": to.toString(),
     });
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformToMessageInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data.then((dbData) => {
-          resolve(dbData.map(Pluto.transformToMessageInterface));
-        }).catch(error => reject(error));
-      });
-    }
+    return data.map(Pluto.transformToMessageInterface);
   }
 
-  getMessage(id: string): Message | null | Promise<Message | null> {
+  getMessage(id: string): Message | null {
     const fetch = this.getMethod<"Message">('Message', 'fetchMessageById');
     const result = this.execAsOne<MessageDBResult>(fetch, [id]);
-    if (result instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        result.then((value) => {
-          if (!value) {
-            return resolve(value);
-          }
-
-          resolve(Pluto.transformToMessageInterface(value));
-        }).catch(reject);
-      });
-    }
     if (!result) {
       return null;
     }
     return Pluto.transformToMessageInterface(result);
   }
 
-  getAllMediators(): Mediator[] | Promise<Mediator[]> {
+  getAllMediators(): Mediator[] {
     const fetch = this.getMethod<"Mediator">('Mediator', 'fetchAllMediators');
     return this.execAsMany<Mediator>(fetch);
   }
 
-  getAllCredentials(): VerifiableCredential[] | Promise<VerifiableCredential[]> {
+  getAllCredentials(): VerifiableCredential[] {
     const fetch = this.getMethod<"VerifiableCredential">('VerifiableCredential', 'fetchAllCredentials');
     const data = this.execAsMany<CredentialDBResult>(fetch);
-    if (Array.isArray(data)) {
-      return data.map(Pluto.transformCredentialToVerifiableCredentialInterface);
-    } else {
-      return new Promise((resolve, reject) => {
-        data.then((dbData) => {
-          resolve(dbData.map(Pluto.transformCredentialToVerifiableCredentialInterface));
-        }).catch(error => reject(error));
-      });
-    }
-
+    return data.map(Pluto.transformCredentialToVerifiableCredentialInterface);
   }
 
   storeCredential(credential: VerifiableCredential) {

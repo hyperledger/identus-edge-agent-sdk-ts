@@ -30,47 +30,47 @@ export default interface Pluto {
 
   storeCredential(credential: VerifiableCredential): void;
 
-  getAllPrismDIDs(): Array<PrismDIDInfo> | Promise<Array<PrismDIDInfo>>;
+  getAllPrismDIDs(): Array<PrismDIDInfo>;
 
-  getDIDInfoByDID(did: DID): PrismDIDInfo | null | Promise<PrismDIDInfo | null>;
+  getDIDInfoByDID(did: DID): PrismDIDInfo | null;
 
-  getDIDInfoByAlias(alias: string): Array<PrismDIDInfo> | Promise<Array<PrismDIDInfo>>;
+  getDIDInfoByAlias(alias: string): Array<PrismDIDInfo>;
 
-  getPrismDIDKeyPathIndex(did: DID): number | null | Promise<number | null>;
+  getPrismDIDKeyPathIndex(did: DID): number | null;
 
-  getPrismLastKeyPathIndex(): number | Promise<number>;
+  getPrismLastKeyPathIndex(): number;
 
-  getAllPeerDIDs(): Array<PeerDID> | Promise<Array<PeerDID>>;
+  getAllPeerDIDs(): Array<PeerDID>;
 
-  getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> | null | Promise<Array<PrivateKey>>;
+  getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> | null;
 
-  getDIDPrivateKeyByID(id: string): PrivateKey | null | Promise<PrivateKey | null>;
+  getDIDPrivateKeyByID(id: string): PrivateKey | null;
 
-  getAllDidPairs(): Array<DIDPair> | Promise<Array<DIDPair>>;
+  getAllDidPairs(): Array<DIDPair>;
 
-  getPairByDID(did: DID): DIDPair | null | Promise<DIDPair | null>;
+  getPairByDID(did: DID): DIDPair | null;
 
-  getPairByName(name: string): DIDPair | null | Promise<DIDPair | null>;
+  getPairByName(name: string): DIDPair | null;
 
-  getAllMessages(): Array<Message> | Promise<Array<Message>>;
+  getAllMessages(): Array<Message>;
 
-  getAllMessagesByDID(did: DID): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesByDID(did: DID): Array<Message>;
 
-  getAllMessagesSent(): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesSent(): Array<Message>;
 
-  getAllMessagesReceived(): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesReceived(): Array<Message>;
 
-  getAllMessagesSentTo(did: DID): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesSentTo(did: DID): Array<Message>;
 
-  getAllMessagesReceivedFrom(did: DID): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesReceivedFrom(did: DID): Array<Message>;
 
-  getAllMessagesOfType(type: string, relatedWithDID?: DID): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesOfType(type: string, relatedWithDID?: DID): Array<Message>;
 
-  getAllMessagesByFromToDID(from: DID, to: DID): Array<Message> | Promise<Array<Message>>;
+  getAllMessagesByFromToDID(from: DID, to: DID): Array<Message>;
 
-  getMessage(id: string): Message | null | Promise<Message | null>;
+  getMessage(id: string): Message | null;
 
-  getAllMediators(): Array<Mediator> | Promise<Array<Mediator>>;
+  getAllMediators(): Array<Mediator>;
 
-  getAllCredentials(): Array<VerifiableCredential> | Promise<Array<VerifiableCredential>>;
+  getAllCredentials(): Array<VerifiableCredential>;
 }
