@@ -1,7 +1,6 @@
 import { expect, assert } from "chai";
 import { Message } from "../../../../domain";
 import { AgentError } from "../../../../domain/models/Errors";
-import Agent from "../../../../prism-agent/agent";
 import {
   createIssueCredentialBody,
   IssueCredential,

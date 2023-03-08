@@ -25,12 +25,6 @@ export interface ProposeCredentialBody extends CredentialBody {
   credentialPreview: CredentialPreview;
 }
 
-export type CredentialBodyTypes =
-  | IssueCredentialBody
-  | OfferCredentialBody
-  | ProposeCredentialBody
-  | CredentialBody;
-
 export interface ParsedCredentialFormat<T> {
   body: T;
 }
@@ -79,3 +73,11 @@ export interface ProofTypes {
   requiredFields?: string[];
   trustIssuers?: string[];
 }
+
+export interface HandshakeRequestBody {
+  goalCode?: string;
+  goal?: string;
+  accept?: string[];
+}
+
+export type OutOfBandInvitationBody = HandshakeRequestBody;

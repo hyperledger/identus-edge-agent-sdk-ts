@@ -107,7 +107,7 @@ export class ProtocolHelpers {
   //TODO: Improve this function to remove code that is almost equal
   //Would propose to move each validation to its own class + reuse from here what is needed
   static safeParseBody<T>(body: string, type: ProtocolType): T {
-    let parsed: ParsedCredentialFormat<T>;
+    let parsed: T;
     try {
       parsed = JSON.parse(body);
     } catch (err) {
