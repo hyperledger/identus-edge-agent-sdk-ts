@@ -1,4 +1,6 @@
 export class InvalidURLError extends Error {}
+export class InvalidMessageError extends Error {}
+
 export class CannotFindDIDKeyPairIndex extends Error {}
 export class CannotFindDIDPrivateKey extends Error {}
 export class InvitationHasNoFromDIDError extends Error {}
@@ -9,7 +11,11 @@ export class NoHandshakeResponseError extends Error {}
 export class UnknownInvitationTypeError extends Error {}
 export class UnknownPrismOnboardingTypeError extends Error {}
 export class FailedToOnboardError extends Error {}
-export class InvalidPickupDeliveryMessageError extends Error {}
+export class InvalidPickupDeliveryMessageError extends Error {
+  constructor() {
+    super("Invalid Pickup message type received");
+  }
+}
 export class InvalidOfferCredentialMessageError extends Error {}
 
 export class InvalidProposedCredentialMessageError extends Error {}
@@ -63,7 +69,7 @@ export class InvalidCredentialFormats extends Error {
     super("Invalid credential formats");
   }
 }
-export class InvalidMessageError extends Error {}
 export class NoMediatorAvailableError extends Error {}
 export class MediationRequestFailedError extends Error {}
 export class InvalidStepError extends Error {}
+export class UnsupportedAttachmentType extends Error {}

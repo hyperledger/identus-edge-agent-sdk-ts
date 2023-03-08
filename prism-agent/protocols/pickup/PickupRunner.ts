@@ -1,6 +1,7 @@
 import { base64url } from "multiformats/bases/base64";
 import {
   AttachmentBase64,
+  AttachmentData,
   AttachmentDescriptor,
   AttachmentJsonData,
   Message,
@@ -35,16 +36,15 @@ export class PickupRunner {
   private processAttachment(
     attachment: AttachmentDescriptor
   ): PickupAttachment | null {
-    if (attachment.data instanceof AttachmentBase64) {
+    if (Message.isBase64Attachment(attachment.data)) {
       return {
         attachmentId: attachment.id,
-        data: Buffer.from(
-          base64url.baseDecode(attachment.data.base64)
-        ).toString(),
+        data: attachment.data.base64,
       };
-    } else if (attachment.data instanceof AttachmentJsonData) {
+    } else if (Message.isJsonAttachment(attachment.data)) {
       return { attachmentId: attachment.id, data: attachment.data.data };
     }
+
     return null;
   }
 

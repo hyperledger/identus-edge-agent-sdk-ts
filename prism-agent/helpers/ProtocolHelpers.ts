@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AttachmentDescriptor } from "../../domain";
 import { AgentError } from "../../domain/models/Errors";
 import { ProtocolType } from "../protocols/ProtocolTypes";

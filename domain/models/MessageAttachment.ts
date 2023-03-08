@@ -1,34 +1,34 @@
 import { uuid } from "@stablelib/uuid";
 
-export class AttachmentHeader {
-  constructor(readonly children: string) {}
+export interface AttachmentHeader {
+  children: string;
 }
 
-export class AttachmentJws {
-  constructor(
-    readonly header: AttachmentHeader,
-    readonly protectedStr: string,
-    readonly signature: string
-  ) {}
+export interface AttachmentJws {
+  header: AttachmentHeader;
+  protectedStr: string;
+  signature: string;
 }
 
-export class AttachmentJwsData {
-  constructor(readonly base64: string, readonly jws: AttachmentJws) {}
+export interface AttachmentJwsData {
+  base64: string;
+  jws: AttachmentJws;
 }
 
-export class AttachmentBase64 {
-  constructor(readonly base64: string) {}
+export interface AttachmentBase64 {
+  base64: string;
 }
 
-export class AttachmentLinkData {
-  constructor(readonly links: string[], readonly hash: string) {}
+export interface AttachmentLinkData {
+  links: string[];
+  hash: string;
 }
 
-export class AttachmentJsonData {
-  constructor(readonly data: string) {}
+export interface AttachmentJsonData {
+  data: string;
 }
 
-type AttachmentData =
+export type AttachmentData =
   | AttachmentJsonData
   | AttachmentLinkData
   | AttachmentBase64
@@ -45,7 +45,7 @@ export class AttachmentDescriptor {
     public readonly format?: string,
     public readonly lastModTime?: string,
     public readonly byteCount?: number,
-    public readonly deascription?: string
+    public readonly description?: string
   ) {}
 
   static build<T>(

@@ -41,7 +41,7 @@ export class IssueCredential {
   getCredentialStrings(): string[] {
     const initialValue: string[] = [];
     return this.attachments.reduce((attachments, attachment) => {
-      if (attachment.data instanceof AttachmentBase64) {
+      if (Message.isBase64Attachment(attachment.data)) {
         const base64UrlEncodedAttachment = base64url.baseEncode(
           Buffer.from(attachment.data.base64)
         );

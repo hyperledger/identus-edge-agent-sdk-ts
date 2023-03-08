@@ -28,7 +28,7 @@ import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
-import { base64url } from "multiformats/bases/base64";
+
 const EC = elliptic.ec;
 
 export default class Apollo implements ApolloInterface {
