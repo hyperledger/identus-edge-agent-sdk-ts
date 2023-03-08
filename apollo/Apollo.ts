@@ -136,7 +136,7 @@ export default class Apollo implements ApolloInterface {
       value: secp256k1PublicKey.getEncodedCompressed(),
     };
   }
-  compressedPublicKeyFromCompresedData(
+  compressedPublicKeyFromCompressedData(
     compressedData: Uint8Array
   ): CompressedPublicKey {
     const secp256k1PublicKey =
