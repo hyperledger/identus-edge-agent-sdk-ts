@@ -16,6 +16,7 @@ import PrivateKeyQueries, {PrivateKeyQueriesTypes} from './queries/PrivateKey';
 import VerifiableCredentialQueries, {VerifiableCredentialQueriesTypes} from './queries/VerifiableCredential';
 import {AttachmentDescriptor} from '../domain/models/MessageAttachment';
 import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto';
+import {Buffer} from 'buffer';
 
 type TableName = "DID" | "DIDPair" | "Mediator" | "Message" | "PrivateKey" | "VerifiableCredential";
 type MethodType<tablename> =
@@ -38,7 +39,7 @@ type CredentialDBResult = {
 type PrivateKeyDBResult = {
   id: string;
   curve: string;
-  privateKey: string;
+  privateKey: Buffer;
   keyPathIndex: number;
   didId: string;
 }
@@ -61,7 +62,7 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   private static transformPrivateKeyToPrivateKeyInterface(result: PrivateKeyDBResult): PrivateKey {
     return {
-      value: result.privateKey,
+      value: Buffer.from(result.privateKey),
       keyCurve: getKeyCurveByNameAndIndex(result.curve)
     };
   }
@@ -282,7 +283,7 @@ export default class Pluto extends Connection implements PlutoInterface {
       const result = this.execAsOne<{
         id: string,
         curve: Curve,
-        privateKey: string,
+        privateKey: Buffer,
         keyPathIndex: number,
         didId: string
       }>(fetch, [id]);
@@ -296,7 +297,7 @@ export default class Pluto extends Connection implements PlutoInterface {
               keyCurve: {
                 curve: value.curve,
               },
-              value: value.privateKey,
+              value: Buffer.from(value.privateKey),
             });
           }).catch(reject);
         });

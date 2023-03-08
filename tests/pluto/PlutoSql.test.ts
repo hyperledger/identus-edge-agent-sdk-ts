@@ -4,6 +4,7 @@ import {MessageDirection} from '../../domain/models/Message';
 import {v4 as uuidv4} from 'uuid';
 import {expect} from 'chai';
 import {CredentialType} from '../../domain/models/VerifiableCredential';
+import {Buffer} from 'buffer';
 
 describe('Pluto tests', () => {
   it('should start successfully', async function () {
@@ -26,7 +27,7 @@ describe('Pluto tests', () => {
     const keyPathIndex = 0;
     const alias = "Did test";
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
 
@@ -99,7 +100,7 @@ describe('Pluto tests', () => {
     });
     await instance.start();
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
     const did = DID.fromString("did:prism:123");
@@ -181,7 +182,7 @@ describe('Pluto tests', () => {
     const alias = "Did test";
 
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
 
@@ -203,7 +204,7 @@ describe('Pluto tests', () => {
     const alias = "Did test";
 
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
 
@@ -224,7 +225,7 @@ describe('Pluto tests', () => {
     const keyPathIndex = 0;
     const alias = "Did test";
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
 
@@ -246,7 +247,7 @@ describe('Pluto tests', () => {
     const alias = "Did test";
 
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
 
@@ -268,7 +269,7 @@ describe('Pluto tests', () => {
     const alias = "Did test";
 
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
@@ -286,7 +287,7 @@ describe('Pluto tests', () => {
     await instance.start();
     const peerDid = DID.fromString("did:peer:3i21d");
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.ED25519),
     };
 
@@ -295,7 +296,7 @@ describe('Pluto tests', () => {
     const alias = "Did test";
 
     const prismPrivateKey: PrivateKey = {
-      value: "some key",
+      value: Buffer.from("some key"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.SECP256K1),
     };
 
@@ -315,14 +316,13 @@ describe('Pluto tests', () => {
     const peerDid = DID.fromString("did:peer:3i21d");
     await instance.start();
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.ED25519),
     };
 
     instance.storePeerDID(peerDid, [privateKey]);
     const result = await instance.getDIDPrivateKeysByDID(peerDid);
-
-    expect(!!result?.find(item => item.value === privateKey.value)).true;
+    expect(!!result?.find(item => item.value.toString() === privateKey.value.toString())).true;
   });
   //
   it('should get DID private key by ID', async function () {
@@ -334,7 +334,7 @@ describe('Pluto tests', () => {
     await instance.start();
     const peerDid = DID.fromString("did:peer:3i21d");
     const privateKey: PrivateKey = {
-      value: "some value",
+      value: Buffer.from("some value"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.ED25519),
     };
 
@@ -658,15 +658,15 @@ describe('Pluto tests', () => {
     const host = DID.fromString("did:prism:321");
     const routing = DID.fromString("did:prism:432");
     const mediatorPrivateKey: PrivateKey = {
-      value: "mediator test",
+      value: Buffer.from("mediator test"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
     const hostPrivateKey: PrivateKey = {
-      value: "host test",
+      value: Buffer.from("host test"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
     const routingPrivateKey: PrivateKey = {
-      value: "routing test",
+      value: Buffer.from("routing test"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
     instance.storePrismDID(mediator, 10, mediatorPrivateKey, null, "Mediator");
@@ -693,7 +693,7 @@ describe('Pluto tests', () => {
       credentialType: CredentialType.JWT,
       context: ["test0", "test1"],
       type: ['auth'],
-      credentialSceham: {
+      credentialSchema: {
         id: uuidv4(),
         type: "decode_jwt"
       }, // Question: Naming looks odd, I guess credentialSchema? .
