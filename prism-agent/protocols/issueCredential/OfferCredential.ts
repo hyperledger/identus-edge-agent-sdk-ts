@@ -27,7 +27,7 @@ export class OfferCredential {
   }
 
   makeMessage(): Message {
-    const body = JSON.stringify(this);
+    const body = JSON.stringify(this.body);
     return new Message(
       body,
       this.id,
@@ -62,14 +62,15 @@ export class OfferCredential {
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      new AgentError.InvalidOfferCredentialMessageError(
+      throw new AgentError.InvalidOfferCredentialMessageError(
         "Invalid offer credential message error."
       );
     }
+    const type = fromMessage.piuri as ProtocolType;
     const offerCredentialBody =
       ProtocolHelpers.safeParseBody<OfferCredentialBody>(
         fromMessage.body,
-        this.type
+        type
       );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;

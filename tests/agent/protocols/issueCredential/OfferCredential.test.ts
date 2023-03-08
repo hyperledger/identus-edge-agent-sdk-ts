@@ -1,5 +1,6 @@
 import { expect, assert } from "chai";
 import { Message } from "../../../../domain";
+import { AgentError } from "../../../../domain/models/Errors";
 import {
   createOfferCredentialBody,
   OfferCredential,
@@ -52,8 +53,8 @@ describe("OfferCredential", () => {
       () => {
         OfferCredential.fromMessage(invalidOfferCredential);
       },
-      Error,
-      "Invalid Offer CredentialBody Error"
+      AgentError.InvalidOfferCredentialMessageError,
+      "Invalid offer credential message error."
     );
   });
 });

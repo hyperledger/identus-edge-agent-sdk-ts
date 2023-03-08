@@ -45,6 +45,21 @@ export class InvalidRequestCredentialBodyError extends Error {
     super(message || "Invalid Request CredentialBody Error");
   }
 }
+export class InvalidRequestPresentationBodyError extends Error {
+  constructor(message?: string) {
+    super(message || "Invalid RequestPresentation body Error");
+  }
+}
+export class InvalidProposePresentationBodyError extends Error {
+  constructor(message?: string) {
+    super(message || "Invalid ProposePresentation body Error");
+  }
+}
+export class InvalidPresentationBodyError extends Error {
+  constructor(message?: string) {
+    super(message || "Invalid Presentation body Error");
+  }
+}
 export class InvalidProposeCredentialBodyError extends Error {
   constructor(message?: string) {
     super(message || "Invalid Propose CredentialBody Error");
@@ -64,7 +79,7 @@ export class InvalidMediationGrantBodyError extends Error {
 
 export class UnknownCredentialBodyError extends Error {
   constructor() {
-    super("Error: parsed unknown Credential Body");
+    super("Invalid Issue CredentialBody Error");
   }
 }
 

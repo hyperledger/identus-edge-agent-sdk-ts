@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { UnknownPrismOnboardingTypeError } from "../../../../domain/models/errors/Agent";
+import { AgentError } from "../../../../domain/models/Errors";
 import { PrismOnboardingInvitation } from "../../../../prism-agent/protocols/prismOnboarding/PrismOnboardingInvitation";
 import { ProtocolType } from "../../../../prism-agent/protocols/ProtocolTypes";
 import { PrismOnboardingInvitationBody } from "../../../../prism-agent/protocols/types";
@@ -29,7 +29,7 @@ describe("PrismOnboardingInvitation Tests", () => {
     };
     const exampleString: string = JSON.stringify(example);
     expect(() => new PrismOnboardingInvitation(exampleString)).to.throw(
-      UnknownPrismOnboardingTypeError,
+      AgentError.UnknownPrismOnboardingTypeError,
       "Invalid InvitationType received"
     );
   });

@@ -1,10 +1,13 @@
 import { expect, assert } from "chai";
 import { Message } from "../../../../domain";
+import { AgentError } from "../../../../domain/models/Errors";
+import Agent from "../../../../prism-agent/agent";
 import {
   createIssueCredentialBody,
   IssueCredential,
 } from "../../../../prism-agent/protocols/issueCredential/IssueCredential";
 import { RequestCredential } from "../../../../prism-agent/protocols/issueCredential/RequestCredential";
+import { ProtocolType } from "../../../../prism-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
 
 describe("IssueCredential", () => {
@@ -28,22 +31,28 @@ describe("IssueCredential", () => {
     expect(validIssueCredential).to.deep.equal(testIssueCredential);
   });
   it("Should throw an error when initializing an issue credential from an invalid message", () => {
+    const fromDID = DIDTest.fromIndex(0);
+    const toDID = DIDTest.fromIndex(1);
     const invalidIssueCredential = new Message(
-      '{"body":{}}',
+      "{}",
       "any id",
-      "invalidType"
+      "invalidType",
+      fromDID,
+      toDID
     );
     const invalidIssueCredential2 = new Message(
-      `{"body":{ "formats":[{"wrong": true}]}}`,
+      `{ "formats":[{"wrong": true}]}`,
       "any id",
-      "invalidType"
+      ProtocolType.DidcommIssueCredential,
+      fromDID,
+      toDID
     );
     assert.throws(
       () => {
         IssueCredential.fromMessage(invalidIssueCredential);
       },
-      Error,
-      "Invalid Issue CredentialBody Error"
+      AgentError.InvalidIssueCredentialMessageError,
+      "Invalid issue credential message error."
     );
     assert.throws(
       () => {

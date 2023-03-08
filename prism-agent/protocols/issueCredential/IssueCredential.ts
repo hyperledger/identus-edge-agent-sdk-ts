@@ -1,10 +1,5 @@
 import { uuid } from "@stablelib/uuid";
-import {
-  AttachmentBase64,
-  AttachmentDescriptor,
-  DID,
-  Message,
-} from "../../../domain";
+import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
@@ -26,7 +21,7 @@ export class IssueCredential {
   ) {}
 
   makeMessage(): Message {
-    const body = JSON.stringify(this);
+    const body = JSON.stringify(this.body);
     return new Message(
       body,
       this.id,
@@ -57,14 +52,15 @@ export class IssueCredential {
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      new AgentError.InvalidIssueCredentialMessageError(
+      throw new AgentError.InvalidIssueCredentialMessageError(
         "Invalid issue credential message error."
       );
     }
+    const type = fromMessage.piuri as ProtocolType;
     const issueCredentialBody =
       ProtocolHelpers.safeParseBody<IssueCredentialBody>(
         fromMessage.body,
-        this.type
+        type
       );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fromDID = fromMessage.from!;

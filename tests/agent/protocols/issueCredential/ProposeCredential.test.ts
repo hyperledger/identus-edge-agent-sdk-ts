@@ -1,5 +1,6 @@
 import { expect, assert } from "chai";
 import { Message } from "../../../../domain";
+import { AgentError } from "../../../../domain/models/Errors";
 
 import {
   createProposeCredentialBody,
@@ -42,8 +43,8 @@ describe("ProposeCredential", () => {
       () => {
         ProposeCredential.fromMessage(invalidProposeCredential);
       },
-      Error,
-      "Invalid Propose CredentialBody Error"
+      AgentError.InvalidProposedCredentialMessageError,
+      "Invalid proposed credential message error."
     );
   });
 });

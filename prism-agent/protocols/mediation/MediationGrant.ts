@@ -12,15 +12,13 @@ export class MediationGrant {
 
   static fromMessage(fromMessage: Message): MediationGrant {
     if (fromMessage.piuri !== ProtocolType.DidcommMediationGrant) {
-      new AgentError.InvalidMediationGrantMessageError(
+      throw new AgentError.InvalidMediationGrantMessageError(
         "Invalid request credential message error."
       );
     }
+    const type = fromMessage.piuri as ProtocolType;
     const mediationGrantBody =
-      ProtocolHelpers.safeParseBody<MediationGrantBody>(
-        fromMessage.body,
-        this.type
-      );
+      ProtocolHelpers.safeParseBody<MediationGrantBody>(fromMessage.body, type);
 
     return new MediationGrant(mediationGrantBody, fromMessage.id);
   }

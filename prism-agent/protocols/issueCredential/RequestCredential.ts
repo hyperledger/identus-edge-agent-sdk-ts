@@ -21,7 +21,7 @@ export class RequestCredential {
   ) {}
 
   makeMessage(): Message {
-    const body = JSON.stringify(this);
+    const body = JSON.stringify(this.body);
     return new Message(
       body,
       this.id,
@@ -39,13 +39,14 @@ export class RequestCredential {
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      new AgentError.InvalidRequestCredentialMessageError(
+      throw new AgentError.InvalidRequestCredentialMessageError(
         "Invalid request credential message error."
       );
     }
+    const type = fromMessage.piuri as ProtocolType;
     const reqiestCredentialBody = ProtocolHelpers.safeParseBody<CredentialBody>(
       fromMessage.body,
-      this.type
+      type
     );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fromDID = fromMessage.from!;

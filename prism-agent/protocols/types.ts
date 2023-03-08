@@ -61,3 +61,21 @@ export interface PrismOnboardingInvitationBody {
   onboardingEndpoint: string;
   from: string;
 }
+
+export interface PresentationBody {
+  goalCode?: string;
+  comment?: string;
+}
+
+export interface RequestPresentationBody extends PresentationBody {
+  willConfirm?: boolean;
+  proofTypes: ProofTypes[];
+}
+
+export type ProposePresentationBody = RequestPresentationBody;
+
+export interface ProofTypes {
+  schema: string;
+  requiredFields?: string[];
+  trustIssuers?: string[];
+}

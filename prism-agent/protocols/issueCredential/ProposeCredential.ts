@@ -20,7 +20,7 @@ export class ProposeCredential {
   ) {}
 
   makeMessage(): Message {
-    const body = JSON.stringify(this);
+    const body = JSON.stringify(this.body);
     return new Message(
       body,
       this.id,
@@ -38,14 +38,15 @@ export class ProposeCredential {
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      new AgentError.InvalidProposedCredentialMessageError(
+      throw new AgentError.InvalidProposedCredentialMessageError(
         "Invalid proposed credential message error."
       );
     }
+    const type = fromMessage.piuri as ProtocolType;
     const proposeCredentialBody =
       ProtocolHelpers.safeParseBody<ProposeCredentialBody>(
         fromMessage.body,
-        this.type
+        type
       );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;

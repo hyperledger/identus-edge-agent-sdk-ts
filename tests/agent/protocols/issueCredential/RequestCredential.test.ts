@@ -1,5 +1,6 @@
 import { expect, assert } from "chai";
 import { Message } from "../../../../domain";
+import { AgentError } from "../../../../domain/models/Errors";
 
 import {
   createRequestCredentialBody,
@@ -25,7 +26,7 @@ describe("RequestCredential", () => {
     expect(validRequestCredential).to.deep.equal(testRequestCredential);
   });
 
-  it("Should test failure when invalid RequestMessage is provided when Creating an ReqiestCredential", () => {
+  it("Should test failure when invalid RequestMessage is provided when Creating an RequestCredential", () => {
     const invalidRequestCredential = new Message(
       '{"body": {}}',
       "id",
@@ -35,8 +36,8 @@ describe("RequestCredential", () => {
       () => {
         RequestCredential.fromMessage(invalidRequestCredential);
       },
-      Error,
-      "Invalid CredentialBody Error"
+      AgentError.InvalidRequestCredentialMessageError,
+      "Invalid request credential message error."
     );
   });
 });
