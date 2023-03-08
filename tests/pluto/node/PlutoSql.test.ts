@@ -1,9 +1,9 @@
-import Pluto from '../../pluto/Pluto';
-import {Curve, DID, getKeyCurveByNameAndIndex, PrivateKey} from '../../domain';
-import {MessageDirection} from '../../domain/models/Message';
+import Pluto from '../../../pluto/Pluto';
+import {Curve, DID, getKeyCurveByNameAndIndex, PrivateKey} from '../../../domain';
+import {MessageDirection} from '../../../domain/models/Message';
 import {v4 as uuidv4} from 'uuid';
 import {expect} from 'chai';
-import {CredentialType} from '../../domain/models/VerifiableCredential';
+import {CredentialType} from '../../../domain/models/VerifiableCredential';
 import {Buffer} from 'buffer';
 
 describe('Pluto tests', () => {
@@ -11,7 +11,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
 
     await instance.start();
@@ -20,7 +20,7 @@ describe('Pluto tests', () => {
   it('should store prism DID', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
@@ -38,7 +38,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const messageId = uuidv4();
@@ -67,7 +67,7 @@ describe('Pluto tests', () => {
   it('should store messages', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const messageId = uuidv4();
@@ -96,7 +96,7 @@ describe('Pluto tests', () => {
   it('should store private keys', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const privateKey: PrivateKey = {
@@ -111,7 +111,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const mediator = DID.fromString("did:prism:123");
@@ -125,7 +125,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     instance.storeCredential({
@@ -174,7 +174,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
@@ -196,7 +196,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
@@ -218,7 +218,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const did = DID.fromString("did:prism:dadsa:asdpijasiopdj");
@@ -239,7 +239,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const did = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
@@ -261,7 +261,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const did = DID.fromString("did:prism:dadsa:92jsadn1");
@@ -282,7 +282,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const peerDid = DID.fromString("did:peer:3i21d");
@@ -311,7 +311,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const peerDid = DID.fromString("did:peer:3i21d");
     await instance.start();
@@ -329,7 +329,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const peerDid = DID.fromString("did:peer:3i21d");
@@ -349,7 +349,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const host = DID.fromString("did:prism:123");
@@ -364,7 +364,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const host = DID.fromString("did:prism:123");
@@ -378,7 +378,7 @@ describe('Pluto tests', () => {
   it('should get pair by name', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     const host = DID.fromString("did:prism:123");
@@ -392,7 +392,7 @@ describe('Pluto tests', () => {
   it('should get all messages', async function () {
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
     instance.storeMessage({
@@ -418,7 +418,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -446,7 +446,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -474,7 +474,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -502,7 +502,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -530,7 +530,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -558,7 +558,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -587,7 +587,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -617,7 +617,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     const to = DID.fromString("did:prism:123");
     const from = DID.fromString("did:prism:321");
@@ -650,7 +650,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
 
@@ -684,7 +684,7 @@ describe('Pluto tests', () => {
 
     const instance = new Pluto({
       type: 'sql',
-      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/sql-wasm.wasm`
+      wasmBinaryURL: `${process.cwd()}/node_modules/sql.js/dist/`
     });
     await instance.start();
 

@@ -31,7 +31,8 @@ export default class Connection implements ConnectionModel {
       this.getSQLPackage().then((sqlInit: InitSqlJsStatic) => {
         sqlInit({
           // In browser should load async from URL
-          locateFile: (file: string) => this.wasmBinaryURL ?? `https://sql.js.org/dist/${file}`
+          locateFile: (file: string) => `${this.wasmBinaryURL}${file}`
+          // locateFile: (file: string) => this.wasmBinaryURL ?? `https://sql.js.org/dist/${file}`
         }).then(SQL => resolve(new SQL.Database(this.sqliteDatabase))).catch(reject);
       });
 
