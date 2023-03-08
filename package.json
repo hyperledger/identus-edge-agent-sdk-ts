@@ -80,6 +80,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.10",
     "@scure/bip39": "^1.1.1",
     "@stablelib/base64": "^1.0.1",
     "@stablelib/ed25519": "^1.0.3",
@@ -87,6 +88,7 @@
     "@stablelib/wipe": "^1.0.1",
     "@stablelib/x25519": "^1.0.3",
     "antlr4ts": "^0.5.0-alpha.4",
+    "aws-sdk": "^2.1330.0",
     "bip32": "^2.0.6",
     "bn.js": "^5.2.1",
     "crypto": "^1.0.1",
@@ -95,9 +97,9 @@
     "google-protobuf": "^3.21.2",
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
-    "multiformats": "^9.9.0"
-  },
-  "peerDependencies": {
+    "mock-aws-s3": "^4.0.2",
+    "multiformats": "^9.9.0",
+    "nock": "^13.3.0",
     "sql.js": "^1.8.0",
     "sqlite3": "^5.1.4"
   }
