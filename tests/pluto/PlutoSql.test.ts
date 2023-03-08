@@ -132,10 +132,10 @@ describe('Pluto tests', () => {
       credentialType: CredentialType.JWT,
       context: ["test0", "test1"],
       type: ['auth'],
-      credentialSceham: {
+      credentialSchema: {
         id: uuidv4(),
         type: "decode_jwt"
-      }, // Issue: Naming looks odd, I guess credentialSchema? .
+      },
       credentialSubject: "",
       credentialStatus: {
         id: uuidv4(),
