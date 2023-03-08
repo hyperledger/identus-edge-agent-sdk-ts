@@ -2,13 +2,9 @@ import { VerifiableCredential } from "../../domain/models/VerifiableCredential";
 import { OutOfBandInvitation } from "../protocols/invitation/v2/OutOfBandInvitation";
 import {
   Service as DIDDocumentService,
-  ServiceEndpoint as DIDDocumentServiceEndpoint,
-  VerificationMethod as DIDDocumentVerificationMethod,
-  VerificationMethods as DIDDocumentVerificationMethods,
-  Seed,
   Signature,
   DID,
-  Curve,
+  Message,
 } from "../../domain";
 interface InvitationInterface {
   type: InvitationTypes;
@@ -59,4 +55,12 @@ export interface AgentInvitations {
   acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void>;
   parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation>;
   parseOOBInvitation(str: string): Promise<OutOfBandInvitation>;
+}
+
+export interface AgentMessageEvents {
+  startFetchingMessages(iterationPeriod: number): void;
+  stopFetchingMessages(): void;
+  handleMessagesEvents(): Promise<Message>;
+  handleReceivedMessagesEvents(): Promise<Message>;
+  sendMessage(message: Message): Promise<Message>;
 }

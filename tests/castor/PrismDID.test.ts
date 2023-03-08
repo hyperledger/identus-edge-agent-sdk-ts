@@ -10,7 +10,7 @@ describe("PRISMDID CreateTest", () => {
     const castor = new Castor(apollo);
 
     const didExample =
-      "did:prism:f87379b319e20d14135c8a25c9ada6a0cd01e93469107135c4958d0725559e13:CkUKQxJBCg1tYXN0ZXIoaW5kZXgpEAFKLgoJU2VjcDI1NmsxEiEDNLnN5hSQsJIAksjpotdFM9HGy0Is9QQjpOAGsBUIeTA";
+      "did:prism:cc0a75d1d1c36b0242c2250d71683be2e197aa84b7dc17568d69ad98eab16680:CmYKZBJiCg1tYXN0ZXIoaW5kZXgpEAFCTwoJU2VjcDI1NmsxEiA0uc3mFJCwkgCSyOmi10Uz0cbLQiz1BCOk4AawFQh5MBog5Pn35JaxyBVu6SpE_IvmJLF4vl14uYd9XM1DGlQpXKc";
     const resolvedDID = await castor.resolveDID(didExample);
 
     const pubHex =

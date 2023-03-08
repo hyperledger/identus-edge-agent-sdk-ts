@@ -213,9 +213,8 @@ export default class Apollo implements ApolloInterface {
     } else if (publicKey.keyCurve.curve == Curve.X25519) {
       throw new Error("Method not implemented.");
     } else if (publicKey.keyCurve.curve == Curve.SECP256K1) {
-      const compressed = this.compressedPublicKeyFromPublicKey(publicKey);
-      const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromCompressed(
-        compressed.value
+      const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromBytes(
+        publicKey.value
       );
       return secp256k1PublicKey.verify(challengeBuffer, signatureBuffer);
     }

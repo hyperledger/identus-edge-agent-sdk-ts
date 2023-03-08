@@ -82,16 +82,25 @@ export class LongFormPrismDIDResolver implements DIDResolver {
       const publicKeys: PrismDIDPublicKey[] =
         operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
+            const publicKey = key.has_compressed_ec_key_data
+              ? {
+                  keyCurve: {
+                    curve: Curve.SECP256K1,
+                  },
+                  value: key.compressed_ec_key_data.data,
+                }
+              : this.apollo.publicKeyFromPoints(
+                  {
+                    curve: Curve.SECP256K1,
+                  },
+                  key.ec_key_data.x,
+                  key.ec_key_data.y
+                );
+
             return new PrismDIDPublicKey(
-              this.apollo,
               getUsageId(getUsage(key.usage)),
               getUsage(key.usage),
-              {
-                keyCurve: {
-                  curve: Curve.SECP256K1,
-                },
-                value: key.compressed_ec_key_data.data,
-              }
+              publicKey
             );
           }
         ) || [];

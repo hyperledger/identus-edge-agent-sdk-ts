@@ -63,7 +63,6 @@ export default class Castor implements CastorInterface {
   ): Promise<DID> {
     const id = getUsageId(Usage.MASTER_KEY);
     const publicKey = new PrismDIDPublicKey(
-      this.apollo,
       id,
       Usage.MASTER_KEY,
       masterPublicKey
@@ -158,7 +157,7 @@ export default class Castor implements CastorInterface {
           );
         }
 
-        const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromCompressed(
+        const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromBytes(
           Buffer.from(base64.base64.decode(method.publicKeyMultibase))
         ).getEncoded();
 
