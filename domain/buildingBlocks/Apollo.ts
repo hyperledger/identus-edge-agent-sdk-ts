@@ -17,7 +17,7 @@ export default interface Apollo {
   createKeyPairFromKeyCurve(seed: Seed, curve: KeyCurve): KeyPair;
   createKeyPairFromPrivateKey(seed: Seed, privateKey: PrivateKey): KeyPair;
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey;
-  compressedPublicKeyFromCompresedData(
+  compressedPublicKeyFromCompressedData(
     compressedData: Uint8Array
   ): CompressedPublicKey;
   publicKeyFromPoints(curve: KeyCurve, x: Uint8Array, y: Uint8Array): PublicKey;
