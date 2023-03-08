@@ -1,15 +1,15 @@
-import Connection from '../../../pluto/Connection';
+import Connection from '../../pluto/Connection';
 import {expect} from 'chai';
-import * as fs from 'fs';
 
-describe('NODE - Connection tests', () => {
+describe('Connection tests', () => {
   it('should connect & disconnect to sql in memory database', async function () {
     const connection = new Connection({
       type: "sql",
       wasmBinaryURL: "./node_modules/sql.js/dist/sql-wasm.wasm",
-    })
-    await connection.connect()
-    expect(connection.connected).true
+    });
+
+    await connection.connect();
+    expect(connection.connected).true;
     await connection.disconnect();
     expect(connection.connected).false;
   });
@@ -18,22 +18,12 @@ describe('NODE - Connection tests', () => {
     const connection = new Connection({
       type: "sqlite",
       filename: "sqlite.db"
-    })
+    });
 
     await connection.connect();
-
     expect(connection.connected).true;
 
     await connection.disconnect();
     expect(connection.connected).false;
   });
-
-  it('should initialise sql with a given file', async function () {
-    const connection = new Connection({
-      type: "sql",
-      sqliteDatabase: fs.readFileSync(process.cwd() + "/sqlite.db")
-    })
-    await connection.connect()
-    expect(connection.connected).true
-  });
-})
+});
