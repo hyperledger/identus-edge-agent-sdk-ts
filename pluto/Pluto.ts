@@ -259,7 +259,7 @@ export default class Pluto extends Connection implements PlutoInterface {
         return new Promise((resolve, reject) => {
           data
               .then((dbData) => {
-                resolve(dbData.map(this.transformPrivateKeyToPrivateKeyInterface));
+                resolve(dbData.map(Pluto.transformPrivateKeyToPrivateKeyInterface));
               })
               .catch((error) => {
                 reject(error);
@@ -267,7 +267,7 @@ export default class Pluto extends Connection implements PlutoInterface {
         });
       } else {
         const data = this.execAsMany<PrivateKeyDBResult>(fetch, [did.toString()]) as PrivateKeyDBResult[];
-        return data.map(this.transformPrivateKeyToPrivateKeyInterface);
+        return data.map(Pluto.transformPrivateKeyToPrivateKeyInterface);
       }
 
       return null;
@@ -376,10 +376,10 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<MessageDBResult>(fetch);
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
-          data.then(dbData => dbData.map(this.transformToMessageInterface)).catch(reject);
+          data.then(dbData => dbData.map(Pluto.transformToMessageInterface)).catch(reject);
         });
       }
     } catch (error) {
@@ -393,10 +393,10 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
-          data.then(dbData => dbData.map(this.transformToMessageInterface)).catch(reject);
+          data.then(dbData => dbData.map(Pluto.transformToMessageInterface)).catch(reject);
         });
       }
     } catch (error) {
@@ -409,11 +409,11 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<MessageDBResult>(fetch);
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
           data
-              .then((dbData) => resolve(dbData.map(this.transformToMessageInterface)))
+              .then((dbData) => resolve(dbData.map(Pluto.transformToMessageInterface)))
               .catch(error => reject(error));
         });
       }
@@ -427,11 +427,11 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<MessageDBResult>(fetch);
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
           data
-              .then(dbData => dbData.map(this.transformToMessageInterface))
+              .then(dbData => dbData.map(Pluto.transformToMessageInterface))
               .catch(error => reject(error));
         });
       }
@@ -445,10 +445,10 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
-          data.then(dbData => dbData.map(this.transformToMessageInterface)).catch(error => reject(error));
+          data.then(dbData => dbData.map(Pluto.transformToMessageInterface)).catch(error => reject(error));
         });
       }
     } catch (error) {
@@ -461,11 +461,11 @@ export default class Pluto extends Connection implements PlutoInterface {
     try {
       const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
           data
-              .then(dbData => resolve(dbData.map(this.transformToMessageInterface)))
+              .then(dbData => resolve(dbData.map(Pluto.transformToMessageInterface)))
               .catch(error => reject(error));
         });
       }
@@ -482,11 +482,11 @@ export default class Pluto extends Connection implements PlutoInterface {
         ':relatedWithDID': relatedWithDID?.toString() ?? null,
       });
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
           data.then((dbData) => {
-            resolve(dbData.map(this.transformToMessageInterface));
+            resolve(dbData.map(Pluto.transformToMessageInterface));
           }).catch(error => reject(error));
         });
       }
@@ -503,11 +503,11 @@ export default class Pluto extends Connection implements PlutoInterface {
         ":to": to.toString(),
       });
       if (Array.isArray(data)) {
-        return data.map(this.transformToMessageInterface);
+        return data.map(Pluto.transformToMessageInterface);
       } else {
         return new Promise((resolve, reject) => {
           data.then((dbData) => {
-            resolve(dbData.map(this.transformToMessageInterface));
+            resolve(dbData.map(Pluto.transformToMessageInterface));
           }).catch(error => reject(error));
         });
       }
@@ -527,14 +527,14 @@ export default class Pluto extends Connection implements PlutoInterface {
               return resolve(value);
             }
 
-            resolve(this.transformToMessageInterface(value));
+            resolve(Pluto.transformToMessageInterface(value));
           }).catch(reject);
         });
       }
       if (!result) {
         return null;
       }
-      return this.transformToMessageInterface(result);
+      return Pluto.transformToMessageInterface(result);
     } catch (error) {
       throw error;
     }
