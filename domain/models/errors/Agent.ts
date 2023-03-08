@@ -9,7 +9,11 @@ export class InvitationIsInvalidError extends Error {}
 export class NoConnectionOpenError extends Error {}
 export class NoHandshakeResponseError extends Error {}
 export class UnknownInvitationTypeError extends Error {}
-export class UnknownPrismOnboardingTypeError extends Error {}
+export class UnknownPrismOnboardingTypeError extends Error {
+  constructor() {
+    super("Invalid InvitationType received");
+  }
+}
 export class FailedToOnboardError extends Error {}
 export class InvalidPickupDeliveryMessageError extends Error {
   constructor() {

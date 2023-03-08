@@ -55,3 +55,9 @@ export interface PickupAttachment {
   attachmentId: string;
   data: string;
 }
+
+export interface PrismOnboardingInvitationBody {
+  type: string;
+  onboardingEndpoint: string;
+  from: string;
+}
