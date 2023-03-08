@@ -1,5 +1,5 @@
 const Message = {
-  createTable: `CREATE TABLE Message (
+  createTable: `CREATE TABLE IF NOT EXISTS Message (
     id TEXT NOT NULL UNIQUE,
     createdTime TEXT NOT NULL ,
     dataJson TEXT NOT NULL,

@@ -1,5 +1,5 @@
 const DID = {
-  createTable: `CREATE TABLE DID (
+  createTable: `CREATE TABLE IF NOT EXISTS DID (
     did TEXT NOT NULL UNIQUE,
     method TEXT NOT NULL ,
     methodId TEXT NOT NULL ,

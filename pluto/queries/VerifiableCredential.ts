@@ -1,5 +1,5 @@
 const VerifiableCredential = {
-  createTable: `CREATE TABLE VerifiableCredential (
+  createTable: `CREATE TABLE IF NOT EXISTS VerifiableCredential (
     id TEXT NOT NULL UNIQUE, -- ID will be a hash of the values of a credential in a specific order
     credentialType TEXT,
     expirationDate TEXT,

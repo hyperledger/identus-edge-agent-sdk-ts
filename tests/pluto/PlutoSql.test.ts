@@ -58,8 +58,8 @@ describe('Pluto tests', () => {
     };
 
     instance.storeMessage(message);
-    const values = instance.getAllMessages();
-    const value = instance.getMessage(values[0].id);
+    const values = await instance.getAllMessages();
+    const value = await instance.getMessage(values[0].id);
     expect(value?.from?.toString()).equal(message.from.toString());
   });
 
@@ -87,7 +87,8 @@ describe('Pluto tests', () => {
       extraHeaders: ['askdpaks']
     };
     instance.storeMessages(Array(10).fill("_").map(() => message));
-    const values = instance.getAllMessages();
+    const values = await instance.getAllMessages();
+
     expect(values.length).equals(10);
   });
   //
@@ -186,7 +187,7 @@ describe('Pluto tests', () => {
 
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const dids = instance.getAllPrismDIDs();
+    const dids = await instance.getAllPrismDIDs();
     expect(dids).not.empty;
   });
 
@@ -208,7 +209,7 @@ describe('Pluto tests', () => {
 
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const result = instance.getDIDInfoByDID(did);
+    const result = await instance.getDIDInfoByDID(did);
     expect(result?.did.toString()).equals(did.toString());
   });
 
@@ -229,7 +230,7 @@ describe('Pluto tests', () => {
 
     instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
-    const result = instance.getDIDInfoByAlias(alias);
+    const result = await instance.getDIDInfoByAlias(alias);
     expect(!!result.find(item => item.alias === alias)).true;
   });
 
@@ -301,7 +302,7 @@ describe('Pluto tests', () => {
     instance.storePrismDID(prismDid, keyPathIndex, prismPrivateKey, null, alias);
 
     instance.storePeerDID(peerDid, [privateKey]);
-    const dids = instance.getAllPeerDIDs();
+    const dids = await instance.getAllPeerDIDs();
     expect(dids.length).equals(1);
   });
 
@@ -319,7 +320,8 @@ describe('Pluto tests', () => {
     };
 
     instance.storePeerDID(peerDid, [privateKey]);
-    const result = instance.getDIDPrivateKeysByDID(peerDid);
+    const result = await instance.getDIDPrivateKeysByDID(peerDid);
+
     expect(!!result?.find(item => item.value === privateKey.value)).true;
   });
   //
@@ -339,7 +341,7 @@ describe('Pluto tests', () => {
     instance.storePeerDID(peerDid, [privateKey]);
     // Question: Should we implement getAllPrivateKeys() method?
     const result = instance.database?.exec("SELECT id FROM PrivateKey;") as any;
-    const privateKeyResult = instance.getDIDPrivateKeyByID(result[0].values[0][0]);
+    const privateKeyResult = await instance.getDIDPrivateKeyByID(result[0].values[0][0]);
     expect(privateKeyResult?.keyCurve.curve).equals(Curve.ED25519);
   });
 
@@ -354,7 +356,7 @@ describe('Pluto tests', () => {
     const receiver = DID.fromString("did:prism:321");
     const name = "test";
     instance.storeDIDPair(host, receiver, name);
-    const dids = instance.getAllDidPairs();
+    const dids = await instance.getAllDidPairs();
     expect(dids).not.empty;
   });
 
@@ -369,7 +371,7 @@ describe('Pluto tests', () => {
     const receiver = DID.fromString("did:prism:321");
     const name = "test";
     instance.storeDIDPair(host, receiver, name);
-    const result = instance.getPairByDID(host);
+    const result = await instance.getPairByDID(host);
     expect(result?.host.toString()).equals(host.toString());
   });
 
@@ -383,7 +385,7 @@ describe('Pluto tests', () => {
     const receiver = DID.fromString("did:prism:321");
     const name = "test";
     instance.storeDIDPair(host, receiver, name);
-    const result = instance.getPairByName(name);
+    const result = await instance.getPairByName(name);
     expect(result?.name).equals(name);
   });
 
@@ -607,7 +609,7 @@ describe('Pluto tests', () => {
       expiresTimePlus: new Date().toString(),
     };
     instance.storeMessage(message);
-    const result = instance.getAllMessagesByFromToDID(message.from, message.to);
+    const result = await instance.getAllMessagesByFromToDID(message.from, message.to);
     expect(result[0].body).equal(message.body);
   });
 
@@ -637,9 +639,9 @@ describe('Pluto tests', () => {
       expiresTimePlus: new Date().toString(),
     };
     instance.storeMessage(message);
-    const messages = instance.getAllMessages();
+    const messages = await instance.getAllMessages();
 
-    const result = instance.getMessage(messages[0].id);
+    const result = await instance.getMessage(messages[0].id);
     expect(result?.body).equal(message.body);
   });
 

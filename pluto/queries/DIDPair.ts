@@ -1,5 +1,5 @@
 const DIDPair = {
-  createTable: `CREATE TABLE DIDPair (
+  createTable: `CREATE TABLE IF NOT EXISTS DIDPair (
     id TEXT NOT NULL UNIQUE, -- ID will be hostDID and receiverDID concatenated
     name TEXT,
     hostDID TEXT NOT NULL,

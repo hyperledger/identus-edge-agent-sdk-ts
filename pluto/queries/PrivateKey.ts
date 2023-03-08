@@ -1,5 +1,5 @@
 const PrivateKey = {
-  createTable: `CREATE TABLE PrivateKey (
+  createTable: `CREATE TABLE IF NOT EXISTS PrivateKey (
     id TEXT NOT NULL UNIQUE,
     curve TEXT NOT NULL,
     privateKey TEXT NOT NULL,

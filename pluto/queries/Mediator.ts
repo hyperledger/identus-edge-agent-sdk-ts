@@ -1,5 +1,5 @@
 const Mediator = {
-  createTable: `CREATE TABLE Mediator (
+  createTable: `CREATE TABLE IF NOT EXISTS Mediator (
     id TEXT NOT NULL UNIQUE, -- VARCHAR(36)
     mediatorDIDId TEXT NOT NULL,
     hostDIDId TEXT,
