@@ -7,6 +7,7 @@ import {
 } from "./types";
 import {
   Service as DIDDocumentService,
+  Service,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
 } from "../domain";
 import { AgentError } from "../domain/models/Errors";
@@ -15,12 +16,18 @@ import {
   ProtocolType,
 } from "./protocols/ProtocolTypes";
 import { Api } from "./helpers/Api";
+import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
+import { DIDCommConnectionRunner } from "./protocols/connection/DIDCommConnectionRunner";
+import Pluto from "../domain/buildingBlocks/Pluto";
 
 export class AgentInvitations implements AgentInvitationsClass {
   constructor(
+    private pluto: Pluto,
     private api: Api,
-    private agentDIDHigherFunctions: AgentDIDHigherFunctions
+    private agentDIDHigherFunctions: AgentDIDHigherFunctions,
+    private connection: ConnectionsManager
   ) {}
+
   async parseInvitation(str: string): Promise<InvitationType> {
     const json = JSON.parse(str);
     const typeString = findProtocolTypeByValue(json.type);
@@ -34,6 +41,32 @@ export class AgentInvitations implements AgentInvitationsClass {
 
     throw new AgentError.UnknownInvitationTypeError();
   }
+
+  async acceptDIDCommInvitation(invitation: OutOfBandInvitation) {
+    if (!this.connection.mediationHandler.mediator) {
+      throw new AgentError.NoMediatorAvailableError();
+    }
+    const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
+      [
+        new Service("#didcomm-1", ["DIDCommMessasing"], {
+          uri: this.connection.mediationHandler.mediator.routingDID.toString(),
+          accept: [],
+          routingKeys: [],
+        }),
+      ],
+      true
+    );
+
+    const pair = await new DIDCommConnectionRunner(
+      invitation,
+      this.pluto,
+      ownDID,
+      this.connection
+    ).run();
+
+    await this.connection.addConnection(pair);
+  }
+
   async acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void> {
     if (!invitation.from) {
       throw new AgentError.UnknownInvitationTypeError();
@@ -55,6 +88,7 @@ export class AgentInvitations implements AgentInvitationsClass {
       throw new AgentError.FailedToOnboardError();
     }
   }
+
   async parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation> {
     try {
       const prismOnboarding =
@@ -82,6 +116,7 @@ export class AgentInvitations implements AgentInvitationsClass {
       }
     }
   }
+
   async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
     return OutOfBandInvitation.parseOutOfBandInvitationFromJson(str);
   }

@@ -9,7 +9,6 @@ import {
   IssueCredentialBody,
   CredentialBody,
   MediationGrantBody,
-  ParsedCredentialFormat,
   PresentationBody,
   RequestPresentationBody,
   ProposePresentationBody,

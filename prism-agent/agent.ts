@@ -74,8 +74,10 @@ export default class Agent
       seed
     );
     this.agentInvitations = new AgentInvitations(
+      this.pluto,
       this.api,
-      this.agentDIDHigherFunctions
+      this.agentDIDHigherFunctions,
+      this.connectionManager
     );
     this.agentMessageEvents = new AgentMessageEvents(connectionManager, pluto);
   }
@@ -109,6 +111,7 @@ export default class Agent
     try {
       await this.pluto.start();
       await this.connectionManager.startMediator();
+      this.agentMessageEvents.startFetchingMessages(5);
     } catch (e) {
       if (e instanceof AgentError.NoMediatorAvailableError) {
         const hostDID = await this.createNewPeerDID(
@@ -196,6 +199,7 @@ export default class Agent
   handleReceivedMessagesEvents(): Promise<Message[]> {
     return this.agentMessageEvents.handleReceivedMessagesEvents();
   }
+
   sendMessage(message: Message): Promise<Message | undefined> {
     return this.agentMessageEvents.sendMessage(message);
   }

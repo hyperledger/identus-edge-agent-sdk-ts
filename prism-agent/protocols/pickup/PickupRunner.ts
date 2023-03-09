@@ -1,11 +1,4 @@
-import { base64url } from "multiformats/bases/base64";
-import {
-  AttachmentBase64,
-  AttachmentData,
-  AttachmentDescriptor,
-  AttachmentJsonData,
-  Message,
-} from "../../../domain";
+import { AttachmentDescriptor, Message } from "../../../domain";
 import Mercury from "../../../domain/buildingBlocks/Mercury";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";

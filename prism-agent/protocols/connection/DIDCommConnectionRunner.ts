@@ -1,7 +1,7 @@
 import { DID } from "../../../domain";
 import Pluto from "../../../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../../domain/models/DIDPair";
-import { DIDCommConnection } from "../../connectionsManager/DIDCommConnection";
+import { ConnectionsManager } from "../../types";
 import { OutOfBandInvitation } from "../invitation/v2/OutOfBandInvitation";
 import { HandshakeRequest } from "./HandshakeRequest";
 
@@ -10,7 +10,7 @@ export class DIDCommConnectionRunner {
     public invitationMessage: OutOfBandInvitation,
     public pluto: Pluto,
     public ownDID: DID,
-    public connection: DIDCommConnection
+    public connection: ConnectionsManager
   ) {}
 
   async run(): Promise<DIDPair> {
