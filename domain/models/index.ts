@@ -14,4 +14,5 @@ export * from "./PeerDID";
 export * from "./Message";
 export * from "./MessageAttachment";
 export * from "./Mediator";
+export * from "./Api";
 export type JsonString = string;

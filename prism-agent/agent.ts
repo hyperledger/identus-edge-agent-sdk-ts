@@ -10,7 +10,7 @@ import {
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import Mercury from "../domain/buildingBlocks/Mercury";
-import { Api } from "./helpers/Api";
+import { Api } from "../domain/models/Api";
 import { ApiImpl } from "./helpers/ApiImpl";
 
 import { AgentError } from "../domain/models/Errors";

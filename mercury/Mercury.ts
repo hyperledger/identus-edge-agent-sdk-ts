@@ -3,16 +3,14 @@ import Castor from "../castor/Castor";
 import { MercuryError } from "../domain/models/Errors";
 import { default as MercuryInterface } from "../domain/buildingBlocks/Mercury";
 import { DIDCommProtocol } from "./DIDCommProtocol";
-
-interface HttpManager {
-  postEncrypted: (url: string, body: string) => Promise<Uint8Array>;
-}
+import { Api, HttpResponse } from "../domain";
+import { MediaType } from "./helpers/MediaType";
 
 export default class Mercury implements MercuryInterface {
   constructor(
     private readonly castor: Castor,
     private readonly protocol: DIDCommProtocol,
-    private readonly HttpManager: HttpManager
+    private readonly api: Api
   ) {}
 
   packMessage(message: Domain.Message): Promise<string> {
@@ -44,17 +42,25 @@ export default class Mercury implements MercuryInterface {
 
     const packedMessage = await this.packMessage(message);
 
-    return this.HttpManager.postEncrypted(
+    const headers = new Map();
+    headers.set("Content-type", MediaType.ContentTypeEncrypted);
+
+    const response = await this.api.request<Uint8Array>(
+      "POST",
       service.serviceEndpoint.uri,
+      new Map(),
+      headers,
       packedMessage
     );
+
+    return response.body;
   }
 
   async sendMessageParseMessage(
     message: Domain.Message
   ): Promise<Domain.Message> {
-    const resultRaw = await this.sendMessage(message);
-    const decoded = new TextDecoder().decode(resultRaw);
+    const responseBody = await this.sendMessage(message);
+    const decoded = new TextDecoder().decode(responseBody);
     const unpacked = this.unpackMessage(decoded);
 
     return unpacked;
