@@ -49,6 +49,26 @@ export class PeerDIDCreate {
     );
   }
 
+  computeEncnumbasis(did: DID, keyPair: KeyPair): string {
+    let material:
+      | VerificationMaterialAgreement
+      | VerificationMaterialAuthentication;
+    let multibaseEcnumbasis: string;
+    switch (keyPair.keyCurve.curve) {
+      case Curve.X25519:
+        material = this.keyAgreementFromKeyPair(keyPair);
+        multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
+        return multibaseEcnumbasis.slice(1);
+      case Curve.ED25519:
+        material = this.authenticationFromKeyPair(keyPair);
+        multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
+        return multibaseEcnumbasis.slice(1);
+      default:
+        //TODO: Improve this error handling
+        throw new Error("computeEncnumbasis -> InvalidKeyPair Curve");
+    }
+  }
+
   private createMultibaseEncnumbasis(material: VerificationMaterial): string {
     if (material.format !== VerificationMaterialFormatPeerDID.JWK) {
       throw new CastorError.InvalidKeyError();

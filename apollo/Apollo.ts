@@ -29,15 +29,10 @@ import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
 import { ApolloError } from "../domain/models/Errors";
 
+import { OctetKeyPair } from "./models/OctetKeyPair";
 const EC = elliptic.ec;
 
 export default class Apollo implements ApolloInterface {
-  getPrivateJWKJson(id: string, keyPair: KeyPair): string {
-    throw new Error("Method not implemented.");
-  }
-  getPublicJWKJson(id: string, keyPair: KeyPair): string {
-    throw new Error("Method not implemented.");
-  }
   private getKeyPairForCurve(seed: Seed, curve: KeyCurve): KeyPair {
     const derivationPath = DerivationPath.fromPath(
       `m/${curve.index || 0}'/0'/0'`
@@ -219,5 +214,13 @@ export default class Apollo implements ApolloInterface {
       return secp256k1PublicKey.verify(challengeBuffer, signatureBuffer);
     }
     return false;
+  }
+  getPrivateJWKJson(id: string, keyPair: KeyPair): string {
+    const jsonString = new OctetKeyPair(id, keyPair).privateJson;
+    return jsonString;
+  }
+  getPublicJWKJson(id: string, keyPair: KeyPair): string {
+    const jsonString = new OctetKeyPair(id, keyPair).publicJson;
+    return jsonString;
   }
 }

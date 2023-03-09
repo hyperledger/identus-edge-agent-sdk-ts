@@ -223,4 +223,8 @@ export default class Castor implements CastorInterface {
 
     return false;
   }
+
+  getEcnumbasis(did: DID, keyPair: KeyPair): string {
+    return new PeerDIDCreate().computeEncnumbasis(did, keyPair);
+  }
 }
