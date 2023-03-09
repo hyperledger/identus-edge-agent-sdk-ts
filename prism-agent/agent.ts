@@ -5,6 +5,7 @@ import {
   Seed,
   Signature,
   DID,
+  Message,
 } from "../domain";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
@@ -17,6 +18,7 @@ import {
   AgentInvitations as AgentInvitationsClass,
   AgentCredentials as AgentCredentialsClass,
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
+  AgentMessageEvents as AgentMessageEventsClass,
   InvitationType,
   PrismOnboardingInvitation,
 } from "./types";
@@ -26,8 +28,8 @@ import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
 import { MediatorHandler } from "./mediator/MediatorHandler";
-import { ConnectionsManager as ConnectionsManagerClass } from "./types";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
+import { AgentMessageEvents } from "./Agent.MessageEvents";
 enum AgentState {
   STOPPED,
   STARTING,
@@ -39,11 +41,13 @@ export default class Agent
   implements
     AgentCredentialsClass,
     AgentDIDHigherFunctionsClass,
-    AgentInvitationsClass
+    AgentInvitationsClass,
+    AgentMessageEventsClass
 {
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
+  private agentMessageEvents: AgentMessageEvents;
 
   private state: AgentState = AgentState.STOPPED;
 
@@ -53,7 +57,7 @@ export default class Agent
     protected pluto: Pluto,
     protected mercury: Mercury,
     protected mediationHandler: MediatorHandler,
-    protected connectionManager: ConnectionsManagerClass = new ConnectionsManager(
+    protected connectionManager = new ConnectionsManager(
       castor,
       mercury,
       pluto,
@@ -73,10 +77,7 @@ export default class Agent
       this.api,
       this.agentDIDHigherFunctions
     );
-  }
-
-  verifiableCredentials(): VerifiableCredential[] {
-    return this.agentCredentials.verifiableCredentials();
+    this.agentMessageEvents = new AgentMessageEvents(connectionManager, pluto);
   }
 
   static instanceFromConnectionManager(
@@ -84,7 +85,7 @@ export default class Agent
     castor: Castor,
     pluto: Pluto,
     mercury: Mercury,
-    connectionManager: ConnectionsManagerClass,
+    connectionManager: ConnectionsManager,
     seed?: Seed,
     api?: Api
   ) {
@@ -133,6 +134,19 @@ export default class Agent
     return this.state;
   }
 
+  async stop(): Promise<void> {
+    if (this.state !== AgentState.RUNNING) {
+      return;
+    }
+    this.state = AgentState.STOPPING;
+    this.connectionManager.stopAllEvents();
+    this.state = AgentState.STOPPED;
+  }
+
+  async handleMessagesEvents(): Promise<Message[]> {
+    return this.agentMessageEvents.handleMessagesEvents();
+  }
+
   async createNewPrismDID(
     alias: string,
     services: DIDDocumentService[] = [],
@@ -169,5 +183,24 @@ export default class Agent
   }
   async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
     return this.agentInvitations.parseOOBInvitation(str);
+  }
+
+  startFetchingMessages(iterationPeriod: number): void {
+    this.agentMessageEvents.startFetchingMessages(iterationPeriod);
+  }
+
+  stopFetchingMessages(): void {
+    this.agentMessageEvents.stopFetchingMessages();
+  }
+
+  handleReceivedMessagesEvents(): Promise<Message[]> {
+    return this.agentMessageEvents.handleReceivedMessagesEvents();
+  }
+  sendMessage(message: Message): Promise<Message | undefined> {
+    return this.agentMessageEvents.sendMessage(message);
+  }
+
+  verifiableCredentials(): VerifiableCredential[] {
+    return this.agentCredentials.verifiableCredentials();
   }
 }

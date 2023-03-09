@@ -47,13 +47,15 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     this.messageStreamTask?.abort();
   }
 
-  async handleMessagesEvents(): Promise<Message> {
-    throw new Error("Method not implemented.");
+  async handleMessagesEvents(): Promise<Message[]> {
+    return this.pluto.getAllMessages();
   }
-  handleReceivedMessagesEvents(): Promise<Message> {
-    throw new Error("Method not implemented.");
+
+  async handleReceivedMessagesEvents(): Promise<Message[]> {
+    return this.pluto.getAllMessagesReceived();
   }
-  sendMessage(message: Message): Promise<Message> {
-    throw new Error("Method not implemented.");
+
+  async sendMessage(message: Message): Promise<Message | undefined> {
+    return this.manager.sendMessage(message);
   }
 }

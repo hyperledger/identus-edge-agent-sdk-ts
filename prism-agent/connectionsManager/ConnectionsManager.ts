@@ -10,7 +10,7 @@ import { ConnectionsManager as ConnectionsManagerClass } from "../types";
 
 export class ConnectionsManager implements ConnectionsManagerClass {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private cancellables: CancellableTask<any>[] = [];
+  public cancellables: CancellableTask<any>[] = [];
 
   constructor(
     public castor: Castor,

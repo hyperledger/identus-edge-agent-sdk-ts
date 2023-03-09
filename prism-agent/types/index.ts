@@ -11,6 +11,7 @@ import Castor from "../../domain/buildingBlocks/Castor";
 import Mercury from "../../domain/buildingBlocks/Mercury";
 import Pluto from "../../domain/buildingBlocks/Pluto";
 import { MediatorHandler } from "../mediator/MediatorHandler";
+import { CancellableTask } from "../helpers/Task";
 interface InvitationInterface {
   type: InvitationTypes;
   from?: DID;
@@ -65,9 +66,9 @@ export interface AgentInvitations {
 export interface AgentMessageEvents {
   startFetchingMessages(iterationPeriod: number): void;
   stopFetchingMessages(): void;
-  handleMessagesEvents(): Promise<Message>;
-  handleReceivedMessagesEvents(): Promise<Message>;
-  sendMessage(message: Message): Promise<Message>;
+  handleMessagesEvents(): Promise<Message[]>;
+  handleReceivedMessagesEvents(): Promise<Message[]>;
+  sendMessage(message: Message): Promise<Message | undefined>;
 }
 
 export interface ConnectionsManager {
@@ -76,6 +77,9 @@ export interface ConnectionsManager {
   pluto: Pluto;
   mediationHandler: MediatorHandler;
   pairings: DIDPair[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cancellables: CancellableTask<any>[];
+  stopAllEvents(): void;
   addConnection(paired: DIDPair): Promise<void>;
   removeConnection(pair: DIDPair): Promise<void>;
   awaitMessages(): Promise<Array<Message>>;
