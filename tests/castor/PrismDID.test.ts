@@ -1,6 +1,12 @@
 import { expect } from "chai";
-
-import { Curve, DID, KeyPair } from "../../domain";
+import { base64 } from "multiformats/bases/base64";
+import {
+  Curve,
+  DID,
+  KeyPair,
+  VerificationMethod,
+  VerificationMethods,
+} from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 
@@ -22,9 +28,23 @@ describe("PRISMDID CreateTest", () => {
       },
       value: Buffer.from(pubHex, "hex"),
     }).uncompressed;
+
     const createdDID = await castor.createPrismDID(masterPublicKey, []);
     const resolveCreated = await castor.resolveDID(createdDID.toString());
 
+    const verificationMethod = resolveCreated.coreProperties.find(
+      (prop): prop is VerificationMethods => prop instanceof VerificationMethods
+    );
+
+    const resolvedPublicKeyBase64 =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+      verificationMethod?.values[0]?.publicKeyMultibase!;
+
+    const resolvedPublicKeyBuffer = Buffer.from(
+      base64.baseDecode(resolvedPublicKeyBase64)
+    );
+
+    expect(resolvedPublicKeyBuffer).to.deep.equal(masterPublicKey.value);
     expect(resolveCreated.id.toString()).to.be.equal(resolvedDID.id.toString());
   });
 
