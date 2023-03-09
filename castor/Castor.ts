@@ -158,7 +158,7 @@ export default class Castor implements CastorInterface {
         }
 
         const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromBytes(
-          Buffer.from(base64.base64.decode(method.publicKeyMultibase))
+          Buffer.from(base64.base64.baseDecode(method.publicKeyMultibase))
         ).getEncoded();
 
         publicKey = {
