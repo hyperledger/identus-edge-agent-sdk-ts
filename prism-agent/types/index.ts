@@ -7,6 +7,10 @@ import {
   Message,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
+import Castor from "../../domain/buildingBlocks/Castor";
+import Mercury from "../../domain/buildingBlocks/Mercury";
+import Pluto from "../../domain/buildingBlocks/Pluto";
+import { MediatorHandler } from "../mediator/MediatorHandler";
 interface InvitationInterface {
   type: InvitationTypes;
   from?: DID;
@@ -67,9 +71,16 @@ export interface AgentMessageEvents {
 }
 
 export interface ConnectionsManager {
+  castor: Castor;
+  mercury: Mercury;
+  pluto: Pluto;
+  mediationHandler: MediatorHandler;
+  pairings: DIDPair[];
   addConnection(paired: DIDPair): Promise<void>;
   removeConnection(pair: DIDPair): Promise<void>;
   awaitMessages(): Promise<Array<Message>>;
   awaitMessageResponse(id: string): Promise<Message | undefined>;
   sendMessage(message: Message): Promise<Message | undefined>;
+  startMediator(): Promise<void>;
+  registerMediator(hostDID: DID): Promise<void>;
 }

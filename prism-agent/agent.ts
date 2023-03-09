@@ -9,10 +9,8 @@ import {
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import Mercury from "../domain/buildingBlocks/Mercury";
-import { MediationHandler } from "./mediation/types/MediationHandler";
 import { Api } from "./helpers/Api";
 import { ApiImpl } from "./helpers/ApiImpl";
-import { ConnectionManager } from "./ConnectionManager";
 
 import { AgentError } from "../domain/models/Errors";
 import {
@@ -27,7 +25,9 @@ import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
-
+import { MediatorHandler } from "./mediator/MediatorHandler";
+import { ConnectionsManager as ConnectionsManagerClass } from "./types";
+import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 enum AgentState {
   STOPPED,
   STARTING,
@@ -52,10 +52,10 @@ export default class Agent
     protected castor: Castor,
     protected pluto: Pluto,
     protected mercury: Mercury,
-    protected mediationHandler: MediationHandler,
-    protected connectionManager: ConnectionManager = new ConnectionManager(
-      mercury,
+    protected mediationHandler: MediatorHandler,
+    protected connectionManager: ConnectionsManagerClass = new ConnectionsManager(
       castor,
+      mercury,
       pluto,
       mediationHandler
     ),
@@ -84,7 +84,7 @@ export default class Agent
     castor: Castor,
     pluto: Pluto,
     mercury: Mercury,
-    connectionManager: ConnectionManager,
+    connectionManager: ConnectionsManagerClass,
     seed?: Seed,
     api?: Api
   ) {

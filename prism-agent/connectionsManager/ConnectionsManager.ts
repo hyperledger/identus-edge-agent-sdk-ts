@@ -17,7 +17,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public mercury: Mercury,
     public pluto: Pluto,
     public mediationHandler: MediatorHandler,
-    public pairings: DIDPair[]
+    public pairings: DIDPair[] = []
   ) {}
 
   async startMediator(): Promise<void> {
