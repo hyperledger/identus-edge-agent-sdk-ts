@@ -3,11 +3,11 @@
 import { default as PlutoInterface } from "../domain/buildingBlocks/Pluto";
 import { DID, PrivateKey } from "../domain/models";
 import { DIDPair } from "../domain/models/DIDPair";
-import { Mediator } from "../domain/models/Mediator";
 import { Message } from "../domain/models/Message";
 import { PeerDID } from "../domain/models/PeerDID";
 import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
+import { Mediator } from "../prism-agent/mediator/Mediator";
 
 export default class Pluto implements PlutoInterface {
   start(): Promise<void> {

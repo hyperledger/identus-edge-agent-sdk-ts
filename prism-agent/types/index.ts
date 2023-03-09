@@ -6,6 +6,7 @@ import {
   DID,
   Message,
 } from "../../domain";
+import { DIDPair } from "../../domain/models/DIDPair";
 interface InvitationInterface {
   type: InvitationTypes;
   from?: DID;
@@ -63,4 +64,9 @@ export interface AgentMessageEvents {
   handleMessagesEvents(): Promise<Message>;
   handleReceivedMessagesEvents(): Promise<Message>;
   sendMessage(message: Message): Promise<Message>;
+}
+
+export interface ConnectionsManager {
+  addConnection(paired: DIDPair): Promise<void>;
+  removeConnection(pair: DIDPair): Promise<void>;
 }
