@@ -21,7 +21,7 @@
     "build": "tsc -b tsconfig.cjs.json tsconfig.esm.json tsconfig.types.json",
     "build:test": "tsc -b tsconfig.tests.cjs.json",
     "test": "npm run test:node && npm run test:browser",
-    "test:node": "npx nyc node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/**/*.ts",
+    "test:node": "npx nyc node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/**/*.ts tests/**/node/*.ts",
     "test:browser": "npx karma start karma.conf.js",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
     "protos": "yarn protos:node && yarn protos:common",
@@ -40,6 +40,7 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.2",
     "@types/sinon": "^10.0.13",
+    "@types/sql.js": "^1.4.4",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
@@ -62,6 +63,7 @@
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "run-all": "^1.0.1",
     "secp256k1": "^5.0.0",
     "semantic-release": "19.0.5",
@@ -70,6 +72,7 @@
     "ts-node": "^10.8.1",
     "ts-protoc-gen": "^0.15.0",
     "typescript": "^4.9.5",
+    "uuid": "^9.0.0",
     "watchify": "^4.0.0"
   },
   "keywords": [],
@@ -91,7 +94,9 @@
     "google-protobuf": "^3.21.2",
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
-    "multiformats": "^9.9.0",
-    "uuid": "^9.0.0"
+    "multiformats": "^9.9.0"
+  },
+  "peerDependencies": {
+    "sql.js": "^1.8.0"
   }
 }

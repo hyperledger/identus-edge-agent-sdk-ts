@@ -3,14 +3,23 @@
     "target": "ES2020",
     "moduleResolution": "node",
     "strict": true,
+    "module": "commonjs",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": false,
-    "declarationMap" : false,
+    "declarationMap": false
   },
-  "include": ["."],
-  "exclude": ["node_modules", "build", "rollup", "examples", "lib"],
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "rollup",
+    "examples",
+    "lib"
+  ],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"
 }
