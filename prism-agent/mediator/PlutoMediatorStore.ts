@@ -1,5 +1,5 @@
+import { Mediator } from "../../domain";
 import Pluto from "../../domain/buildingBlocks/Pluto";
-import { Mediator } from "./Mediator";
 import { MediatorStore } from "./MediatorStore";
 
 export class PublicMediatorStore implements MediatorStore {

@@ -2,7 +2,7 @@ import { DID, Message } from "../../../domain";
 import { ProtocolType } from "../ProtocolTypes";
 import { PickupRequestBody } from "../types";
 
-export class PickupReceived {
+export class PickupRequest {
   public static type: ProtocolType.PickupRequest;
 
   constructor(
@@ -21,12 +21,6 @@ export class PickupReceived {
       },
     });
 
-    return new Message(
-      body,
-      undefined,
-      PickupReceived.type,
-      this.from,
-      this.to
-    );
+    return new Message(body, undefined, PickupRequest.type, this.from, this.to);
   }
 }

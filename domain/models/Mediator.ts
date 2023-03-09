@@ -1,4 +1,4 @@
-import { DID } from "../../domain";
+import { DID } from "./DID";
 
 export interface Mediator {
   hostDID: DID;

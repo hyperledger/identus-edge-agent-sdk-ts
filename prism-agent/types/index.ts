@@ -69,4 +69,7 @@ export interface AgentMessageEvents {
 export interface ConnectionsManager {
   addConnection(paired: DIDPair): Promise<void>;
   removeConnection(pair: DIDPair): Promise<void>;
+  awaitMessages(): Promise<Array<Message>>;
+  awaitMessageResponse(id: string): Promise<Message | undefined>;
+  sendMessage(message: Message): Promise<Message | undefined>;
 }
