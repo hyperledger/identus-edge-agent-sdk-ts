@@ -19,16 +19,20 @@ describe("Mercury", () => {
 
   afterEach(() => {
     sandbox.restore();
-  })
+  });
 
-  const makeTestContext = () => {
+  const makeTestContext = (message?: Message) => {
     const castor: Pick<Castor, "resolveDID"> = {
-      resolveDID: async (did: string) => ({ id: DID.fromString(did), coreProperties: [] })
+      resolveDID: async (did: string) => ({
+        id: DID.fromString(did),
+        coreProperties: [],
+      }),
     };
     const httpManager = { postEncrypted: async () => new Uint8Array() };
     const didProtocol: DIDCommProtocol = {
       packEncrypted: async () => "",
-      unpack: async () => new Message("", "", undefined, [], "")
+      unpack: async () =>
+        message || new Message("{}", undefined, "TypeofMessage"),
     };
     const mercury = new Mercury(castor as any, didProtocol, httpManager);
 
@@ -37,30 +41,44 @@ describe("Mercury", () => {
 
   describe("PackMessage", () => {
     it("should call DIDCommProtocol.packEncrypted with [message, message.to, message.from]", () => {
-      const ctx = makeTestContext();
       const fromDid = DID.fromString("test:did:from");
       const toDid = DID.fromString("test:did:to");
-      const message = new Message("", "", undefined, [], "", [], "", "", [], fromDid, toDid);
+      const message = new Message(
+        "{}",
+        undefined,
+        "TypeofMessage",
+        fromDid,
+        toDid,
+        []
+      );
+      const ctx = makeTestContext(message);
 
       sandbox.stub(ctx.didProtocol, "packEncrypted");
       ctx.mercury.packMessage(message);
 
-      expect(ctx.didProtocol.packEncrypted).to.have.been.calledWith(message, toDid, fromDid);
+      expect(ctx.didProtocol.packEncrypted).to.have.been.calledWith(
+        message,
+        toDid,
+        fromDid
+      );
     });
 
     describe("Errors", () => {
       it("should throw error when Messsage.to is not a DID", () => {
-        const ctx = makeTestContext();
         const message = {} as any;
+        const ctx = makeTestContext(message);
 
-        expect(() => ctx.mercury.packMessage(message)).to.throw(MercuryError.NoRecipientDIDSetError);
+        expect(() => ctx.mercury.packMessage(message)).to.throw(
+          MercuryError.NoRecipientDIDSetError
+        );
       });
 
       it("should throw error when Messsage.from is not a DID", () => {
-        const ctx = makeTestContext();
         const message = { to: DID.fromString("test:did:to") } as any;
-
-        expect(() => ctx.mercury.packMessage(message)).to.throw(MercuryError.NoSenderDIDSetError);
+        const ctx = makeTestContext(message);
+        expect(() => ctx.mercury.packMessage(message)).to.throw(
+          MercuryError.NoSenderDIDSetError
+        );
       });
     });
   });
@@ -68,7 +86,7 @@ describe("Mercury", () => {
   describe("UnpackMessage", () => {
     it("should call DIDCommProtocol.unpack with [message]", () => {
       const ctx = makeTestContext();
-      const messageString = "someMessageString"
+      const messageString = "someMessageString";
 
       sandbox.stub(ctx.didProtocol, "unpack");
       ctx.mercury.unpackMessage(messageString);
@@ -82,14 +100,20 @@ describe("Mercury", () => {
       const ctx = makeTestContext();
       const fromDid = DID.fromString("test:did:from");
       const toDid = DID.fromString("test:did:to");
-      const message = new Message("", "", undefined, [], "", [], "", "", [], fromDid, toDid);
+      const message = new Message(
+        "{}",
+        undefined,
+        "TypeofMessage",
+        fromDid,
+        toDid
+      );
       const endpoint = new ServiceEndpoint("testUri");
       const service = new Service("testService", [], endpoint);
       const packedMessage = "qwerty";
 
       ctx.castor.resolveDID = async () => ({
         id: toDid,
-        coreProperties: [service]
+        coreProperties: [service],
       });
 
       ctx.didProtocol.packEncrypted = async () => packedMessage;
@@ -101,9 +125,11 @@ describe("Mercury", () => {
         ctx.mercury.sendMessage(message);
 
         expect(ctx.castor.resolveDID).to.have.been.calledWith(toDid);
-        expect(ctx.httpManager.postEncrypted).to.have.been.called(endpoint.uri, packedMessage);
-      }
-      catch {
+        expect(ctx.httpManager.postEncrypted).to.have.been.called(
+          endpoint.uri,
+          packedMessage
+        );
+      } catch {
         // should never be here
       }
     });
@@ -115,9 +141,10 @@ describe("Mercury", () => {
 
         try {
           await ctx.mercury.sendMessage(message);
-        }
-        catch (thrownError) {
-          expect(thrownError).to.be.instanceOf(MercuryError.NoRecipientDIDSetError);
+        } catch (thrownError) {
+          expect(thrownError).to.be.instanceOf(
+            MercuryError.NoRecipientDIDSetError
+          );
         }
       });
 
@@ -125,13 +152,20 @@ describe("Mercury", () => {
         const ctx = makeTestContext();
         const fromDid = DID.fromString("test:did:from");
         const toDid = DID.fromString("test:did:to");
-        const message = new Message("", "", undefined, [], "", [], "", "", [], fromDid, toDid);
+        const message = new Message(
+          "{}",
+          undefined,
+          "TypeofMessage",
+          fromDid,
+          toDid
+        );
 
         try {
           await ctx.mercury.sendMessage(message);
-        }
-        catch (thrownError) {
-          expect(thrownError).to.be.instanceOf(MercuryError.NoValidServiceFoundError);
+        } catch (thrownError) {
+          expect(thrownError).to.be.instanceOf(
+            MercuryError.NoValidServiceFoundError
+          );
         }
       });
     });
@@ -140,17 +174,21 @@ describe("Mercury", () => {
   describe("SendMessageParseMessage", () => {
     it("passes the result of sendMessage to unpackMessage", async () => {
       const ctx = makeTestContext();
-      const message = new Message("", "", undefined, [], "input");
+      const message = new Message("{}", undefined, "TypeofMessage");
       const returnedMessage = "returnedMessage";
-      const unpackedMessage = new Message("", "", undefined, [], "output")
+      const unpackedMessage = new Message("{}", undefined, "TypeofMessage");
       const encoded = new TextEncoder().encode(returnedMessage);
 
       sandbox.stub(ctx.mercury, "sendMessage").callsFake(async () => encoded);
-      sandbox.stub(ctx.mercury, "unpackMessage").callsFake(async () => unpackedMessage);
+      sandbox
+        .stub(ctx.mercury, "unpackMessage")
+        .callsFake(async () => unpackedMessage);
 
       const result = await ctx.mercury.sendMessageParseMessage(message);
       expect(ctx.mercury.sendMessage).to.have.been.calledWith(message);
-      expect(ctx.mercury.unpackMessage).to.have.been.calledWith(returnedMessage);
+      expect(ctx.mercury.unpackMessage).to.have.been.calledWith(
+        returnedMessage
+      );
       expect(result).to.equal(unpackedMessage);
     });
   });

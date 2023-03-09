@@ -15,6 +15,7 @@
         "${workspaceFolder}/tests/agent/**/*.ts",
         "${workspaceFolder}/tests/apollo/**/*.ts",
         "${workspaceFolder}/tests/castor/**/*.ts",
+        "${workspaceFolder}/tests/mercury/**/*.ts",
         "${workspaceFolder}/tests/pollux/**/*.ts",
         "${workspaceFolder}/tests/pluto/node/*.ts"
       ],

@@ -27,11 +27,12 @@ export class MercuryStub implements Mercury {
     return Message.fromJson(jsonStr.toString());
   }
 
-  async sendMessage(message: Message): Promise<Uint8Array | undefined> {
+  async sendMessage(message: Message): Promise<Uint8Array> {
     if (this.throwSendMessageError) {
       throw this.throwSendMessageError;
     }
-    return this.sendMessageDataReturn;
+    const encoded = await this.packMessage(message);
+    return Buffer.from(encoded);
   }
 
   async sendMessageParseMessage(
