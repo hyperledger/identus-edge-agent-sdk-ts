@@ -25,9 +25,9 @@ import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
-import { X25519PrivateKey } from "./utils/X25519PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
+import { ApolloError } from "../domain/models/Errors";
 
 const EC = elliptic.ec;
 
@@ -135,7 +135,7 @@ export default class Apollo implements ApolloInterface {
       value: secp256k1PublicKey.getEncodedCompressed(),
     };
   }
-  compressedPublicKeyFromCompresedData(
+  compressedPublicKeyFromCompressedData(
     compressedData: Uint8Array
   ): CompressedPublicKey {
     const secp256k1PublicKey =
@@ -170,21 +170,18 @@ export default class Apollo implements ApolloInterface {
   }
   signByteArrayMessage(privateKey: PrivateKey, message: Uint8Array): Signature {
     const messageBuffer = Buffer.from(message);
-    if (privateKey.keyCurve.curve == Curve.ED25519) {
+    if (privateKey.keyCurve.curve === Curve.ED25519) {
       const ed25519PrivateKey = new Ed25519PrivateKey(
         Buffer.from(privateKey.value)
       );
       return {
         value: Buffer.from(ed25519PrivateKey.sign(messageBuffer)),
       };
-    } else if (privateKey.keyCurve.curve == Curve.X25519) {
-      const x25519PrivateKeyPair = new X25519PrivateKey(
-        Buffer.from(privateKey.value)
+    } else if (privateKey.keyCurve.curve === Curve.X25519) {
+      throw new ApolloError.InvalidKeyCurve(
+        "X25519 key cannot be used for signatures"
       );
-      return {
-        value: Buffer.from(x25519PrivateKeyPair.sign(messageBuffer)),
-      };
-    } else if (privateKey.keyCurve.curve == Curve.SECP256K1) {
+    } else if (privateKey.keyCurve.curve === Curve.SECP256K1) {
       const secp256k1PrivateKey = Secp256k1PrivateKey.secp256k1FromBytes(
         privateKey.value
       );
@@ -207,14 +204,17 @@ export default class Apollo implements ApolloInterface {
   ): boolean {
     const challengeBuffer = Buffer.from(challenge);
     const signatureBuffer = Buffer.from(signature);
-    if (publicKey.keyCurve.curve == Curve.ED25519) {
+    if (publicKey.keyCurve.curve === Curve.ED25519) {
       const ed25519PublicKey = new Ed25519PublicKey(publicKey.value);
       return ed25519PublicKey.verify(challengeBuffer, signatureBuffer);
-    } else if (publicKey.keyCurve.curve == Curve.X25519) {
-      throw new Error("Method not implemented.");
-    } else if (publicKey.keyCurve.curve == Curve.SECP256K1) {
-      const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromBytes(
-        publicKey.value
+    } else if (publicKey.keyCurve.curve === Curve.X25519) {
+      throw new ApolloError.InvalidKeyCurve(
+        "X25519 key cannot be used for signatures"
+      );
+    } else if (publicKey.keyCurve.curve === Curve.SECP256K1) {
+      const compressed = this.compressedPublicKeyFromPublicKey(publicKey);
+      const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromCompressed(
+        compressed.value
       );
       return secp256k1PublicKey.verify(challengeBuffer, signatureBuffer);
     }

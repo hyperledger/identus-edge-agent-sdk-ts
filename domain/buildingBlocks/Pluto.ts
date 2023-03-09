@@ -1,6 +1,6 @@
-import { Mediator } from "../../prism-agent/mediator/Mediator";
 import { DID, PrivateKey } from "../models";
 import { DIDPair } from "../models/DIDPair";
+import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
@@ -9,7 +9,13 @@ import { VerifiableCredential } from "../models/VerifiableCredential";
 export default interface Pluto {
   start(): Promise<void>;
 
-  storePrismDID(did: DID, keyPathIndex: number, alias?: string): void;
+  storePrismDID(
+    did: DID,
+    keyPathIndex: number,
+    privateKey: PrivateKey,
+    privateKeyMetaId: string | null,
+    alias?: string
+  ): void;
 
   storePeerDID(did: DID, privateKeys: Array<PrivateKey>): void;
 

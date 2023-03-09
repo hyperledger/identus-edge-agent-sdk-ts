@@ -9,6 +9,7 @@ import { Curve } from "../../domain/models";
 import { MnemonicWordList } from "../../domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
+import { ApolloError } from "../../domain/models/Errors";
 
 let apollo: Apollo;
 
@@ -197,5 +198,22 @@ describe("Apollo Tests", () => {
       signature.value
     );
     expect(verified).to.be.equal(false);
+  });
+
+  it("Throws error when sign and verify is attempted with X25519 KeyPair", async () => {
+    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const apollo = new Apollo();
+    const seed = apollo.createRandomSeed().seed;
+    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
+      curve: Curve.X25519,
+    });
+
+    expect(() =>
+      apollo.signByteArrayMessage(keyPair.privateKey, text)
+    ).to.throw(ApolloError.InvalidKeyCurve);
+
+    expect(() =>
+      apollo.verifySignature(keyPair.publicKey, text, new Uint8Array())
+    ).to.throw(ApolloError.InvalidKeyCurve);
   });
 });

@@ -120,7 +120,7 @@ export class PrismDIDPublicKey {
 
     switch (proto.key_data) {
       case "compressed_ec_key_data":
-        keyData = apollo.compressedPublicKeyFromCompresedData(
+        keyData = apollo.compressedPublicKeyFromCompressedData(
           proto.compressed_ec_key_data.data
         ).uncompressed;
         break;
