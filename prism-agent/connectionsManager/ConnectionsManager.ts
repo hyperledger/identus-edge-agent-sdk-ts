@@ -5,8 +5,10 @@ import Pluto from "../../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { AgentError } from "../../domain/models/Errors";
 import { CancellableTask } from "../helpers/Task";
-import { MediatorHandler } from "../mediator/MediatorHandler";
-import { ConnectionsManager as ConnectionsManagerClass } from "../types";
+import {
+  ConnectionsManager as ConnectionsManagerClass,
+  MediatorHandler,
+} from "../types";
 
 export class ConnectionsManager implements ConnectionsManagerClass {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
