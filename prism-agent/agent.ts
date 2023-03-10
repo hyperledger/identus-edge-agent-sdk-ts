@@ -21,13 +21,13 @@ import {
   AgentMessageEvents as AgentMessageEventsClass,
   InvitationType,
   PrismOnboardingInvitation,
+  MediatorHandler,
 } from "./types";
 import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
-import { MediatorHandler } from "./mediator/MediatorHandler";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { AgentMessageEvents } from "./Agent.MessageEvents";
 enum AgentState {
