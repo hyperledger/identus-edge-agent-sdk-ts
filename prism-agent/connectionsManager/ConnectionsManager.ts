@@ -78,9 +78,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
 
     this.cancellables.push(storeDIDPairTask);
 
-    const pair = await storeDIDPairTask.then();
-
-    this.pairings.push(pair);
+    storeDIDPairTask.callback((pair: DIDPair) => this.pairings.push(pair));
   }
 
   findIndex(pair: DIDPair) {
