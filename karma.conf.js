@@ -14,6 +14,7 @@ module.exports = function (config) {
         type: "js",
       },
     ],
+    exclude: ['/tests/**/node/*.ts'],
     preprocessors: {
       "build/tests/**/*.js": ["browserify", "sourcemap"],
     },
