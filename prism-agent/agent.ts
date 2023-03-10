@@ -22,6 +22,7 @@ import {
   InvitationType,
   PrismOnboardingInvitation,
   MediatorHandler,
+  EventCallback,
 } from "./types";
 import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
@@ -30,6 +31,7 @@ import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { AgentMessageEvents } from "./Agent.MessageEvents";
+
 enum AgentState {
   STOPPED,
   STARTING,
@@ -143,11 +145,8 @@ export default class Agent
     }
     this.state = AgentState.STOPPING;
     this.connectionManager.stopAllEvents();
+    this.agentMessageEvents.cancellable?.cancel();
     this.state = AgentState.STOPPED;
-  }
-
-  async handleMessagesEvents(): Promise<Message[]> {
-    return this.agentMessageEvents.handleMessagesEvents();
   }
 
   async createNewPrismDID(
@@ -196,15 +195,15 @@ export default class Agent
     this.agentMessageEvents.stopFetchingMessages();
   }
 
-  handleReceivedMessagesEvents(): Promise<Message[]> {
-    return this.agentMessageEvents.handleReceivedMessagesEvents();
-  }
-
   sendMessage(message: Message): Promise<Message | undefined> {
     return this.agentMessageEvents.sendMessage(message);
   }
 
   verifiableCredentials(): VerifiableCredential[] {
     return this.agentCredentials.verifiableCredentials();
+  }
+
+  onMessage(callback: EventCallback): void {
+    this.agentMessageEvents.onMessage(callback);
   }
 }

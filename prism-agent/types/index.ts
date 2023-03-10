@@ -63,11 +63,12 @@ export interface AgentInvitations {
   parseOOBInvitation(str: string): Promise<OutOfBandInvitation>;
 }
 
+export type EventCallback = (messages: Message[]) => void;
+export type ListenerKey = "message";
 export interface AgentMessageEvents {
+  onMessage(callback: EventCallback): void;
   startFetchingMessages(iterationPeriod: number): void;
   stopFetchingMessages(): void;
-  handleMessagesEvents(): Promise<Message[]>;
-  handleReceivedMessagesEvents(): Promise<Message[]>;
   sendMessage(message: Message): Promise<Message | undefined>;
 }
 

@@ -28,7 +28,7 @@ export class CancellableTask<T> {
     }
   }
 
-  private loopOnTaskEvery(task: Task<T>, reject: (reason?: any) => void) {
+  private loopOnTaskEvery(task: Task<T>, reject: (reason?: Error) => void) {
     task()
       .then(() => {
         this.clearTimer();
@@ -48,7 +48,7 @@ export class CancellableTask<T> {
     return this.cancellationToken;
   }
 
-  callback(fn: (response: T) => any) {
+  callback(fn: (response: T) => void) {
     if (this.period) {
       throw new Error("Can't call callback on non periodic cancellable task");
     }
