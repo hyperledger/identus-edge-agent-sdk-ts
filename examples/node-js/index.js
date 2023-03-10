@@ -6,7 +6,6 @@ const pluto = new sdk.Pluto({
   type: "sql",
   wasmBinaryURL: `${process.cwd()}/node_modules/@input-output-hk/atala-prism-wallet-sdk/node_modules/sql.js/dist`,
 });
-const mercury = new sdk.Mercury();
 
 (async () => {
   await pluto.start();
@@ -18,6 +17,7 @@ const mercury = new sdk.Mercury();
   const handler = new sdk.BasicMediatorHandler(mediatorDID, mercury, store);
   const manager = new sdk.ConnectionsManager(castor, mercury, pluto, handler);
   const seed = apollo.createRandomSeed().seed;
+  const mercury = new sdk.Mercury();
 
   const agent = new sdk.Agent(
     apollo,
