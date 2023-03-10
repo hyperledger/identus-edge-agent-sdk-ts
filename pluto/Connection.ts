@@ -101,14 +101,14 @@ export default class Connection implements ConnectionModel {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = this.exec<param>(query, params) as any;
+    if (!result.length) {
+      return [];
+    }
     return result[0].values.map((values: any) => this.transformResponseToObject(values, result[0].columns));
   }
 
   exec<Interface>(query: string, params?: any): Interface {
-    switch (this.type) {
-      case "sql":
-        return this.database?.exec(query, params) as Interface;
-    }
+    return this.database?.exec(query, params) as Interface;
   }
 
   private async getSQLPackage() {
