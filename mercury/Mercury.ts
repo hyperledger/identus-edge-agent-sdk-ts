@@ -3,7 +3,7 @@ import Castor from "../castor/Castor";
 import { MercuryError } from "../domain/models/Errors";
 import { default as MercuryInterface } from "../domain/buildingBlocks/Mercury";
 import { DIDCommProtocol } from "./DIDCommProtocol";
-import { Api, HttpResponse } from "../domain";
+import { Api } from "../domain";
 import { MediaType } from "./helpers/MediaType";
 
 export default class Mercury implements MercuryInterface {
@@ -30,17 +30,59 @@ export default class Mercury implements MercuryInterface {
 
   async sendMessage(message: Domain.Message): Promise<Uint8Array> {
     const toDid = message.to;
+    const fromDid = message.from;
 
-    if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
+    if (this.notDid(toDid))
+      throw new MercuryError.NoRecipientDIDSetError();
 
-    const document = await this.castor.resolveDID(toDid.toString());
-    const service = document.coreProperties.find(
-      (x): x is Domain.Service => x instanceof Domain.Service
-    );
-
-    if (service == undefined) throw new MercuryError.NoValidServiceFoundError();
+    if (this.notDid(fromDid))
+      throw new MercuryError.NoSenderDIDSetError();
 
     const packedMessage = await this.packMessage(message);
+    const document = await this.castor.resolveDID(toDid.toString());
+    const service = document.services.find(x => x.isDIDCommMessaging);
+
+    if (service == undefined)
+      throw new MercuryError.NoValidServiceFoundError();
+
+    const mediatorDid = this.getMediatorDID(service);
+
+    if (mediatorDid instanceof Domain.DID) {
+      const forwardMsg = new Domain.Message(
+        JSON.stringify({ next: toDid.toString() }),
+        undefined,
+        "https://didcomm.org/routing/2.0/forward",
+        fromDid,
+        mediatorDid,
+        [
+          new Domain.AttachmentDescriptor({ data: packedMessage }, "application/json")
+        ]
+      );
+
+      const mediatorDocument = await this.castor.resolveDID(mediatorDid.toString());
+      const packedForwardMsg = await this.packMessage(forwardMsg);
+      const mediatorService = mediatorDocument.services.find(x => x.isDIDCommMessaging);
+
+      return this.makeRequest(mediatorService, packedForwardMsg);
+    }
+
+    return this.makeRequest(service, packedMessage);
+  }
+
+  private getMediatorDID(service: Domain.Service): Domain.DID | undefined {
+    try {
+
+      const url = service.serviceEndpoint.uri;
+      return this.castor.parseDID(url);
+    }
+    catch {
+      return undefined;
+    }
+  }
+
+  private async makeRequest(service: Domain.Service | undefined, message: string) {
+    if (service == undefined)
+      throw new MercuryError.NoValidServiceFoundError();
 
     const headers = new Map();
     headers.set("Content-type", MediaType.ContentTypeEncrypted);
@@ -50,7 +92,7 @@ export default class Mercury implements MercuryInterface {
       service.serviceEndpoint.uri,
       new Map(),
       headers,
-      packedMessage
+      message
     );
 
     return response.body;

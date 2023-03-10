@@ -14,7 +14,7 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
     const services: DIDComm.Service[] = [];
     const verificationMethods: DIDComm.VerificationMethod[] = [];
 
-    doc.coreProperties.forEach((coreProperty) => {
+    doc.coreProperties.forEach(coreProperty => {
       if ("verificationMethods" in coreProperty) {
         coreProperty.verificationMethods.forEach((method) => {
           const curve = Domain.VerificationMethod.getCurveByType(method.type);
@@ -45,7 +45,7 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
       ) {
         services.push({
           id: coreProperty.id,
-          type: "DIDCommMessaging",
+          type: PeerDIDService.DIDCommMessagingKey,
           serviceEndpoint: {
             uri: coreProperty.serviceEndpoint.uri,
             accept: coreProperty.serviceEndpoint.accept,

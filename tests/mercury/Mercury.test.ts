@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import Castor from "../../castor/Castor";
 import { DID, Message, Service, ServiceEndpoint } from "../../domain";
+import * as Domain from "../../domain";
 import { MercuryError } from "../../domain/models/Errors";
 import { DIDCommProtocol } from "../../mercury/DIDCommProtocol";
 import Mercury from "../../mercury/Mercury";
@@ -23,18 +24,15 @@ describe("Mercury", () => {
 
   const makeTestContext = (message?: Message) => {
     const castor: Pick<Castor, "resolveDID"> = {
-      resolveDID: async (did: string) => ({
-        id: DID.fromString(did),
-        coreProperties: [],
-      }),
+      resolveDID: async (did: string) => new Domain.DIDDocument(DID.fromString(did), [])
     };
-    const httpManager = { postEncrypted: async () => new Uint8Array() };
+    const httpManager = { request: async () => new Uint8Array() };
     const didProtocol: DIDCommProtocol = {
       packEncrypted: async () => "",
       unpack: async () =>
         message || new Message("{}", undefined, "TypeofMessage"),
     };
-    const mercury = new Mercury(castor as any, didProtocol, httpManager);
+    const mercury = new Mercury(castor as any, didProtocol, httpManager as any);
 
     return { castor, httpManager, didProtocol, mercury };
   };
@@ -111,21 +109,17 @@ describe("Mercury", () => {
       const service = new Service("testService", [], endpoint);
       const packedMessage = "qwerty";
 
-      ctx.castor.resolveDID = async () => ({
-        id: toDid,
-        coreProperties: [service],
-      });
-
+      ctx.castor.resolveDID = async () => new Domain.DIDDocument(toDid, [service]);
       ctx.didProtocol.packEncrypted = async () => packedMessage;
 
       sandbox.stub(ctx.castor, "resolveDID");
-      sandbox.stub(ctx.httpManager, "postEncrypted");
+      sandbox.stub(ctx.httpManager, "request");
 
       try {
         ctx.mercury.sendMessage(message);
 
         expect(ctx.castor.resolveDID).to.have.been.calledWith(toDid);
-        expect(ctx.httpManager.postEncrypted).to.have.been.called(
+        expect(ctx.httpManager.request).to.have.been.called(
           endpoint.uri,
           packedMessage
         );
