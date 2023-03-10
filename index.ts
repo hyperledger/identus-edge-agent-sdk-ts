@@ -8,3 +8,5 @@ export { default as Agent } from "./prism-agent/Agent";
 export * from "./prism-agent/connectionsManager/ConnectionsManager";
 export * from "./prism-agent/mediator/BasicMediatorHandler";
 export * from "./prism-agent/mediator/PlutoMediatorStore";
+export * from "./mercury/didcomm/Wrapper";
+export * from "./prism-agent/helpers/ApiImpl";
