@@ -5,3 +5,6 @@ export { default as Mercury } from "./mercury/Mercury";
 export { default as Pluto } from "./pluto/Pluto";
 export { default as Pollux } from "./pollux/Pollux";
 export { default as Agent } from "./prism-agent/Agent";
+export * from "./prism-agent/connectionsManager/ConnectionsManager";
+export * from "./prism-agent/mediator/BasicMediatorHandler";
+export * from "./prism-agent/mediator/PlutoMediatorStore";
