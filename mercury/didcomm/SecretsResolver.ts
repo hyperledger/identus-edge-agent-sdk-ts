@@ -11,25 +11,25 @@ export class DIDCommSecretsResolver implements DIDComm.SecretsResolver {
     private readonly pluto: Pluto
   ) {}
 
-  async get_secret(secret_id: string): Promise<DIDComm.Secret | null> {
-    const peerDids = this.pluto.getAllPeerDIDs();
-    const secrets = peerDids.flatMap((x) => this.mapToSecret(x));
-    const secret = secrets.find((x) => x.id === secret_id);
-
-    return secret ?? null;
-  }
-
   async find_secrets(secret_ids: string[]): Promise<string[]> {
     const peerDids = this.pluto.getAllPeerDIDs();
-    const secrets = peerDids.flatMap((x) => this.mapToSecret(x));
-    const filtered = secrets.filter((x) => secret_ids.includes(x.id));
-    const mapped = filtered.map((x) => x.id);
+    const secrets = peerDids.flatMap(x => this.mapToSecret(x));
+    const filtered = secrets.filter(x => secret_ids.includes(x.id));
+    const mapped = filtered.map(x => x.id);
 
     return mapped;
   }
 
+  async get_secret(secret_id: string): Promise<DIDComm.Secret | null> {
+    const peerDids = this.pluto.getAllPeerDIDs();
+    const secrets = peerDids.flatMap(x => this.mapToSecret(x));
+    const secret = secrets.find(x => x.id === secret_id);
+
+    return secret ?? null;
+  }
+
   private mapToSecret(peerDid: Domain.PeerDID): DIDComm.Secret[] {
-    return peerDid.privateKeys.map((privateKey) => {
+    return peerDid.privateKeys.map(privateKey => {
       const seed: Domain.Seed = { value: new Uint8Array() };
       const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
       const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
