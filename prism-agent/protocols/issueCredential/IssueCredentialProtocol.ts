@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { DIDCommConnection } from "../../connectionsManager/DIDCommConnection";
+import { ConnectionsManager } from "../../types";
 import { ProtocolType } from "../ProtocolTypes";
 import { IssueCredential } from "./IssueCredential";
 import { OfferCredential } from "./OfferCredential";
@@ -21,7 +21,7 @@ export class IssueCredentialProtocol {
   private request?: RequestCredential;
   private _stage: keyof typeof IssueCredentialProtocol.Stage;
 
-  constructor(message: Message, public connector: DIDCommConnection) {
+  constructor(message: Message, public connector: ConnectionsManager) {
     const type = message.piuri;
     switch (type) {
       case ProtocolType.DidcommProposeCredential:

@@ -61,7 +61,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
     return encryptedMsg;
   }
 
-
   async unpack(message: string): Promise<Domain.Message> {
     const [didcommMsg] = await DIDComm.Message.unpack(
       message,
@@ -76,58 +75,66 @@ export class DIDCommWrapper implements DIDCommProtocol {
     const msgObj = didcommMsg.as_value();
 
     const domainMessage = new Domain.Message(
-      msgObj.type,
-      msgObj.id,
-      undefined,
-      [],
       msgObj.body, // parse
-      msgObj.extraHeaders,
-      msgObj.created_time?.toString(),
-      msgObj.expires_time?.toString(),
-      this.parseAttachmentsToDomain(msgObj.attachments),
+      msgObj.id,
+      msgObj.type,
       typeof msgObj.from === "string"
         ? Domain.DID.fromString(msgObj.from)
         : undefined,
       typeof msgObj.to === "string"
         ? Domain.DID.fromString(msgObj.to)
         : undefined,
-      msgObj.from_prior,
+      this.parseAttachmentsToDomain(msgObj.attachments),
       msgObj.thid,
+      msgObj.extraHeaders,
+      msgObj.created_time?.toString(),
+      msgObj.expires_time?.toString(),
+      [],
+      undefined,
+      msgObj.from_prior,
       msgObj.pthid
     );
 
     return domainMessage;
   }
 
-  private parseAttachmentsToDomain(attachments?: DIDComm.Attachment[]): Domain.AttachmentDescriptor[] {
-    return (attachments ?? []).reduce<Domain.AttachmentDescriptor[]>((acc, x) => {
-      try {
-        const parsed = this.parseAttachmentToDomain(x);
-        return acc.concat(parsed);
-      }
-      catch {
-        return acc;
-      }
-    }, []);
+  private parseAttachmentsToDomain(
+    attachments?: DIDComm.Attachment[]
+  ): Domain.AttachmentDescriptor[] {
+    return (attachments ?? []).reduce<Domain.AttachmentDescriptor[]>(
+      (acc, x) => {
+        try {
+          const parsed = this.parseAttachmentToDomain(x);
+          return acc.concat(parsed);
+        } catch {
+          return acc;
+        }
+      },
+      []
+    );
   }
 
-  private parseAttachmentToDomain(attachment: DIDComm.Attachment): Domain.AttachmentDescriptor {
+  private parseAttachmentToDomain(
+    attachment: DIDComm.Attachment
+  ): Domain.AttachmentDescriptor {
     if (typeof attachment.id !== "string" || attachment.id.length === 0)
       throw new MercuryError.MessageAttachmentWithoutIDError();
 
     return {
       id: attachment.id,
       data: this.parseAttachmentDataToDomain(attachment.data),
-      byteCount: attachment.byte_count ?? null,
-      description: attachment.description ?? null,
-      filename: attachment.filename?.split("/") ?? null,
-      format: attachment.format ?? null,
-      lastModTime: attachment.lastmod_time?.toString() ?? null,
-      mediaType: attachment.media_type ?? null
+      byteCount: attachment.byte_count,
+      description: attachment.description,
+      filename: attachment.filename?.split("/"),
+      format: attachment.format,
+      lastModTime: attachment.lastmod_time?.toString(),
+      mediaType: attachment.media_type,
     };
   }
 
-  private parseAttachmentDataToDomain(data: DIDComm.AttachmentData): Domain.AttachmentData {
+  private parseAttachmentDataToDomain(
+    data: DIDComm.AttachmentData
+  ): Domain.AttachmentData {
     if ("base64" in data) {
       const parsed: Domain.AttachmentBase64 = {
         base64: data.base64,
@@ -138,7 +145,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     if ("json" in data) {
       const parsed: Domain.AttachmentJsonData = {
-        data: Buffer.from(base64url.decode(data.json)).toString()
+        data: Buffer.from(base64url.decode(data.json)).toString(),
       };
 
       return parsed;
@@ -147,7 +154,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
     if ("links" in data) {
       const parsed: Domain.AttachmentLinkData = {
         hash: data.hash,
-        links: data.links
+        links: data.links,
       };
 
       return parsed;
@@ -156,19 +163,22 @@ export class DIDCommWrapper implements DIDCommProtocol {
     throw new MercuryError.UnknownAttachmentDataError();
   }
 
-  private parseAttachments(attachments?: Domain.AttachmentDescriptor[]): DIDComm.Attachment[] | undefined {
+  private parseAttachments(
+    attachments?: Domain.AttachmentDescriptor[]
+  ): DIDComm.Attachment[] | undefined {
     return attachments?.reduce<DIDComm.Attachment[]>((acc, x) => {
       try {
         const parsed = this.parseAttachment(x);
         return acc.concat(parsed);
-      }
-      catch {
+      } catch {
         return acc;
       }
     }, []);
   }
 
-  private parseAttachment(attachment: Domain.AttachmentDescriptor): DIDComm.Attachment {
+  private parseAttachment(
+    attachment: Domain.AttachmentDescriptor
+  ): DIDComm.Attachment {
     return {
       data: this.parseAttachmentData(attachment.data),
       id: attachment.id,
@@ -176,16 +186,21 @@ export class DIDCommWrapper implements DIDCommProtocol {
       description: attachment.description ?? undefined,
       filename: attachment.filename?.join("/"),
       format: attachment.format ?? undefined,
-      lastmod_time: typeof attachment.lastModTime === "string" ? Number(attachment.lastModTime) : undefined,
-      media_type: attachment.mediaType ?? undefined
+      lastmod_time:
+        typeof attachment.lastModTime === "string"
+          ? Number(attachment.lastModTime)
+          : undefined,
+      media_type: attachment.mediaType ?? undefined,
     };
   }
 
-  private parseAttachmentData(data: Domain.AttachmentData): DIDComm.AttachmentData {
+  private parseAttachmentData(
+    data: Domain.AttachmentData
+  ): DIDComm.AttachmentData {
     if ("base64" in data) {
       const parsed: DIDComm.Base64AttachmentData = {
         base64: data.base64,
-        jws: "jws" in data ? data.jws.signature : undefined
+        jws: "jws" in data ? data.jws.signature : undefined,
       };
 
       return parsed;
@@ -193,7 +208,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     if ("data" in data) {
       const parsed: DIDComm.JsonAttachmentData = {
-        json: base64url.encode(Buffer.from(data.data))
+        json: base64url.encode(Buffer.from(data.data)),
       };
 
       return parsed;
@@ -202,7 +217,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
     if ("links" in data) {
       const parsed: DIDComm.LinksAttachmentData = {
         hash: data.hash,
-        links: data.links
+        links: data.links,
       };
 
       return parsed;
