@@ -9,6 +9,7 @@ import {
 } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
+import { ECConfig } from "../../config/ECConfig";
 
 describe("PRISMDID CreateTest", () => {
   it("Should correctly create a prismDID from an existing HexKey", async () => {
@@ -66,5 +67,29 @@ describe("PRISMDID CreateTest", () => {
       Buffer.from(signature.value)
     );
     expect(result).to.be.equal(true);
+  });
+  it("Should resolve prismDID key correctly", async () => {
+    const apollo = new Apollo();
+    const castor = new Castor(apollo);
+    const did =
+      "did:prism:2c6e089b137b566e97bf8e1c234755f9f8690194c3bc52c6431ff4bb960394b1:CtADCs0DElsKBmF1dGgtMRAEQk8KCXNlY3AyNTZrMRIgvMs2bdoiICUhwR4BGk2hip8QWzG0YUfKaOa1xDyxMNUaIHm3gJ0eaeiqadY0NFlXOcAidM1SUyupvouHKsaCr0IaEmAKC2Fzc2VydGlvbi0xEAJCTwoJc2VjcDI1NmsxEiCr03dJu2xHHYCOBKNK4JNwh3ypp2JX6-Cr8tXiI17KnBogK9A6g0btjurK8n1R2ZeACOFmZkzPs2wDUy01UtqLH4sSXAoHbWFzdGVyMBABQk8KCXNlY3AyNTZrMRIgA1ltJZ4-5OmDYoiP2ZiKg-MMDR3BfDdw-oHYCvpGZEQaIAh1R73E0DW_wi4Ng5xxkDQ77ocpSz_iiEGE9svSPxtaGjoKE2h0dHBzOi8vZm9vLmJhci5jb20SDUxpbmtlZERvbWFpbnMaFGh0dHBzOi8vZm9vLmJhci5jb20vGjgKEmh0dHBzOi8vdXBkYXRlLmNvbRINTGlua2VkRG9tYWlucxoTaHR0cHM6Ly91cGRhdGUuY29tLxo4ChJodHRwczovL3JlbW92ZS5jb20SDUxpbmtlZERvbWFpbnMaE2h0dHBzOi8vcmVtb3ZlLmNvbS8";
+    const resolved = await castor.resolveDID(did);
+
+    const verificationMethod = resolved.coreProperties.find(
+      (prop): prop is VerificationMethods => prop instanceof VerificationMethods
+    );
+
+    const resolvedPublicKeyBase64 =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+      verificationMethod?.values[0]?.publicKeyMultibase!;
+
+    const resolvedPublicKeyBuffer = Buffer.from(
+      base64.baseDecode(resolvedPublicKeyBase64)
+    );
+
+    resolvedPublicKeyBuffer.length;
+    expect(resolvedPublicKeyBuffer.length).to.be.equal(
+      ECConfig.PUBLIC_KEY_BYTE_SIZE
+    );
   });
 });
