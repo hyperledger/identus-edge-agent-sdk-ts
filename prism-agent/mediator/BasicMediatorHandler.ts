@@ -7,8 +7,7 @@ import { MediationRequest } from "../protocols/mediation/MediationRequest";
 import { PickupReceived } from "../protocols/pickup/PickupReceived";
 import { PickupRequest } from "../protocols/pickup/PickupRequest";
 import { PickupRunner } from "../protocols/pickup/PickupRunner";
-import { MediatorHandler } from "./MediatorHandler";
-import { MediatorStore } from "./MediatorStore";
+import { MediatorHandler, MediatorStore } from "../types";
 
 export class BasicMediatorHandler implements MediatorHandler {
   public mediator?: Mediator;

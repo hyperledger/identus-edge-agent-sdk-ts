@@ -1,6 +1,6 @@
 import { Mediator } from "../../domain";
 import Pluto from "../../domain/buildingBlocks/Pluto";
-import { MediatorStore } from "./MediatorStore";
+import { MediatorStore } from "../types";
 
 export class PublicMediatorStore implements MediatorStore {
   constructor(private pluto: Pluto) {}

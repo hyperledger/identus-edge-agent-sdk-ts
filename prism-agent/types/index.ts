@@ -5,12 +5,12 @@ import {
   Signature,
   DID,
   Message,
+  Mediator,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import Castor from "../../domain/buildingBlocks/Castor";
 import Mercury from "../../domain/buildingBlocks/Mercury";
 import Pluto from "../../domain/buildingBlocks/Pluto";
-import { MediatorHandler } from "../mediator/MediatorHandler";
 import { CancellableTask } from "../helpers/Task";
 interface InvitationInterface {
   type: InvitationTypes;
@@ -87,4 +87,23 @@ export interface ConnectionsManager {
   sendMessage(message: Message): Promise<Message | undefined>;
   startMediator(): Promise<void>;
   registerMediator(hostDID: DID): Promise<void>;
+}
+
+export interface MediatorStore {
+  storeMediator(mediator: Mediator): Promise<void>;
+  getAllMediators(): Promise<Mediator[]>;
+}
+
+export abstract class MediatorHandler {
+  abstract mediatorDID: DID;
+
+  abstract mediator?: Mediator;
+
+  abstract bootRegisteredMediator(): Promise<Mediator | undefined>;
+  abstract achieveMediation(host: DID): Promise<Mediator>;
+  abstract updateKeyListWithDIDs(dids: DID[]): Promise<void>;
+  abstract pickupUnreadMessages(
+    limit: number
+  ): Promise<Array<{ attachmentId: string; message: Message }>>;
+  abstract registerMessagesAsRead(ids: string[]): Promise<void>;
 }
