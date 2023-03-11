@@ -2,7 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./build/tests",
-    "module": "commonjs"
+    "module": "commonjs",
+    "types": ["jasmine"]
   },
   "include": ["tests"]
 }

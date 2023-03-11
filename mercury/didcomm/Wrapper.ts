@@ -1,4 +1,4 @@
-import * as DIDComm from "didcomm";
+import DIDComm from "didcomm";
 import { base64url } from "multiformats/bases/base64";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";

@@ -1,16 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "types": ["jasmine"],
     "baseUrl": ".",
     "paths": {
-      "didcomm": [
-        "./node_modules/didcomm-node"
-      ]
+      "didcomm": ["./node_modules/didcomm-node"]
     }
   },
   "ts-node": {
-    "require": [
-      "tsconfig-paths/register"
-    ]
-  },
+    "require": ["tsconfig-paths/register"]
+  }
 }

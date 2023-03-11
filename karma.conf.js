@@ -1,44 +1,54 @@
+const sucrase = require("@rollup/plugin-sucrase");
+const resolve = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+const builtins = require("rollup-plugin-node-builtins");
+const globals = require("rollup-plugin-node-globals");
+const json = require("@rollup/plugin-json");
+process.env.CHROME_BIN = require("puppeteer").executablePath();
+
 module.exports = function (config) {
   config.set({
-    // Base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: ".",
+    basePath: "",
+    frameworks: ["jasmine"],
 
-    // Frameworks to use
-    frameworks: ["browserify", "mocha"],
+    files: ["tests/**/*.test.ts"],
 
-    // List of files / patterns to load in the browser
-    files: [
-      {
-        pattern: "build/tests/**/*.js",
-        watched: true,
-        type: "js",
-      },
-    ],
-    exclude: ['/tests/**/node/*.ts'],
     preprocessors: {
-      "build/tests/**/*.js": ["browserify", "sourcemap"],
+      "**/*.ts": ["rollup"],
     },
-    browserify: {
-      debug: true,
-      transform: [],
-    },
-    // Test results reporter to use
-    // Possible values: 'dots', 'progress'
-    reporters: ["mocha"],
-    // Plugins to use
-    plugins: [
-      require("karma-mocha"),
-      require("karma-mocha-reporter"),
-      require("karma-chrome-launcher"),
-      require("karma-sourcemap-loader"),
-      require("karma-browserify"),
-    ],
 
-    // Browser launcher
+    rollupPreprocessor: {
+      external: ["antlr4ts", "chai"],
+      plugins: [
+        json(),
+        globals(),
+        builtins(),
+        resolve(),
+        commonjs(),
+        sucrase({
+          exclude: [],
+          transforms: ["typescript"],
+        }),
+      ],
+      output: {
+        format: "iife",
+        name: "postoffice",
+        sourcemap: "inline",
+      },
+    },
+
     browsers: ["ChromeHeadless"],
 
-    // Continuous Integration mode
-    // If true, Karma captures browsers, runs the tests and exits
+    reporters: ["progress"],
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
+    autoWatch: false,
     singleRun: true,
+    concurrency: Infinity,
+
+    client: {
+      captureConsole: true,
+    },
   });
 };
