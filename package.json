@@ -18,9 +18,8 @@
     "directory": "@input-output-hk/atala-prism-wallet-sdk"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.cjs.json tsconfig.esm.json tsconfig.types.json",
-    "build:test": "npx rollup -c",
-    "test": "npm run test:node && npm run test:browser",
+    "build": "tsc -b tsconfig.cjs.json tsconfig.esm.json tsconfig.types.json tsconfig.tests.cjs.json",
+    "test": " npm run test:browser && npm run test:node",
     "test:node": "npx nyc ts-mocha -p tsconfig.test.node.json --timeout 9999 --colors tests/agent/**/*.ts tests/apollo/**/*.ts tests/castor/**/*.ts tests/mercury/**/*.ts tests/pollux/**/*.ts  tests/pluto/node/*.ts",
     "test:browser": "npx karma start karma.conf.js",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
