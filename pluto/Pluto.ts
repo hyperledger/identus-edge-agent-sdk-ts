@@ -125,11 +125,12 @@ export default class Pluto extends Connection implements PlutoInterface {
     } as Message;
   }
 
-  private static transformMediatorResponse(props: MediatorResponse) {
+  //TODO: THIS NEEDS FIX
+  private static transformMediatorResponse(props: any) {
     return {
-      mediatorDID: DID.fromString(props.mediatorDIDId),
-      hostDID: DID.fromString(props.hostDIDId),
-      routingDID: DID.fromString(props.routingDIDId)
+      mediatorDID: DID.fromString(props.MediatorDID),
+      hostDID: DID.fromString(props.HostDID),
+      routingDID: DID.fromString(props.RoutingDID)
     };
   }
 
@@ -345,7 +346,7 @@ export default class Pluto extends Connection implements PlutoInterface {
     }>(fetch, [id]);
 
     if (!result) {
-      return result;
+      return null;
     }
     return {
       keyCurve: {

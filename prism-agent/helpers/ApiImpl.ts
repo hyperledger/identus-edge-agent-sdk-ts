@@ -6,7 +6,6 @@ import axios, {
 import { ApiError } from "../../domain/models/Errors";
 import { Api, HttpResponse } from "../../domain/models/Api";
 import { HttpError } from "./HttpError";
-import { URL } from "url";
 
 export class ApiImpl implements Api {
   client: AxiosStatic = axios;

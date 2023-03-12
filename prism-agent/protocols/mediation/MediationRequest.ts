@@ -17,12 +17,13 @@ export class MediationRequest {
   }
 
   makeMessage(): Message {
-    return new Message(
+     const message = new Message(
       "{}",
       this.id,
       MediationRequest.type,
       this.from,
       this.to
     );
+    return message;
   }
 }

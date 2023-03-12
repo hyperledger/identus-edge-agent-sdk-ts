@@ -1,10 +1,10 @@
-import * as DIDComm from "didcomm";
+import {Secret, SecretsResolver} from "didcomm";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import Pluto from "../../pluto/Pluto";
 
-export class DIDCommSecretsResolver implements DIDComm.SecretsResolver {
+export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
     private readonly apollo: Apollo,
     private readonly castor: Castor,
@@ -20,7 +20,7 @@ export class DIDCommSecretsResolver implements DIDComm.SecretsResolver {
     return mapped;
   }
 
-  async get_secret(secret_id: string): Promise<DIDComm.Secret | null> {
+  async get_secret(secret_id: string): Promise<Secret | null> {
     const peerDids = this.pluto.getAllPeerDIDs();
     const secrets = peerDids.flatMap(x => this.mapToSecret(x));
     const secret = secrets.find(x => x.id === secret_id);
@@ -28,14 +28,14 @@ export class DIDCommSecretsResolver implements DIDComm.SecretsResolver {
     return secret ?? null;
   }
 
-  private mapToSecret(peerDid: Domain.PeerDID): DIDComm.Secret[] {
+  private mapToSecret(peerDid: Domain.PeerDID): Secret[] {
     return peerDid.privateKeys.map(privateKey => {
       const seed: Domain.Seed = { value: new Uint8Array() };
       const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
       const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
       const id = `${peerDid.did.toString()}#${ecnumbasis}`;
 
-      const secret: DIDComm.Secret = {
+      const secret: Secret = {
         id,
         type: "JsonWebKey2020",
         privateKeyJwk: {

@@ -1,18 +1,20 @@
-import * as DIDComm from "didcomm";
+import {DIDResolver, Service, VerificationMethod, DIDDoc} from "didcomm";
+
 import * as Domain from "../../domain";
 import Castor from "../../castor/Castor";
 import { PeerDIDService } from "../../peer-did/PeerDID";
 
-export class DIDCommDIDResolver implements DIDComm.DIDResolver {
+
+export class DIDCommDIDResolver implements DIDResolver {
   constructor(private readonly castor: Castor) {}
 
-  async resolve(did: string): Promise<DIDComm.DIDDoc | null> {
+  async resolve(did: string): Promise<DIDDoc | null> {
     const doc = await this.castor.resolveDID(did);
 
     const authentications: string[] = [];
     const keyAgreements: string[] = [];
-    const services: DIDComm.Service[] = [];
-    const verificationMethods: DIDComm.VerificationMethod[] = [];
+    const services: Service[] = [];
+    const verificationMethods: VerificationMethod[] = [];
 
     doc.coreProperties.forEach(coreProperty => {
       if ("verificationMethods" in coreProperty) {
@@ -55,7 +57,7 @@ export class DIDCommDIDResolver implements DIDComm.DIDResolver {
       }
     });
 
-    const dcdoc: DIDComm.DIDDoc = {
+    const dcdoc: DIDDoc = {
       id: doc.id.toString(),
       authentication: authentications,
       keyAgreement: keyAgreements,

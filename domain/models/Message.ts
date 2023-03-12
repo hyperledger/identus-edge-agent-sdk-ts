@@ -27,7 +27,7 @@ export class Message {
     public readonly createdTime: string = Date.now().toString(),
     public readonly expiresTimePlus: string = (
       createdTime +
-      1 * 24 * 60 * 60 * 1000
+      1 * 24 * 60 * 60 
     ).toString(),
     public readonly ack: string[] = [],
     public readonly direction: MessageDirection = MessageDirection.RECEIVED,

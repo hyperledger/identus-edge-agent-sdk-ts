@@ -5,7 +5,7 @@ export class HttpResponse<T> {
 }
 
 export interface Api {
-  client: AxiosStatic;
+  client?: AxiosStatic;
 
   request<T>(
     httpMethod: string,

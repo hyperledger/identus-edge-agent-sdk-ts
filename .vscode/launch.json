@@ -1,36 +1,20 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/examples/node-js/index.js",
-      "request": "launch",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "node",
-      "cwd": "${workspaceFolder}/examples/node-js"
-    },
-
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Mocha All",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "-r",
-        "ts-node/register",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceFolder}/tests/agent/**/*.ts",
-        "${workspaceFolder}/tests/apollo/**/*.ts",
-        "${workspaceFolder}/tests/castor/**/*.ts",
-        "${workspaceFolder}/tests/mercury/**/*.ts",
-        "${workspaceFolder}/tests/pollux/**/*.ts",
-        "${workspaceFolder}/tests/pluto/node/*.ts"
-      ],
-      "env": {
-        "TS_NODE_COMPILER_OPTIONS": "{\"module\": \"commonjs\" }"
-      }
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test Spec File",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "args": [
+              "--colors",
+              "--maxWorkers",
+              "1",
+            ],
+            "skipFiles": [
+              "${workspaceRoot}/../../node_modules/**/*",
+              "<node_internals>/**/*"
+            ],
+          }
+    ]
 }
