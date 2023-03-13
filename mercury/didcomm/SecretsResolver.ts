@@ -3,8 +3,8 @@ import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import Pluto from "../../pluto/Pluto";
-import { base64 } from "multiformats/bases/base64";
-import { DID } from "../../domain";
+import { base64url } from "multiformats/bases/base64";
+import { DID, VerificationMethod, VerificationMethods } from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
@@ -16,29 +16,13 @@ export class DIDCommSecretsResolver implements SecretsResolver {
 
   async find_secrets(secret_ids: string[]): Promise<string[]> {
     const peerDids = this.pluto.getAllPeerDIDs();
-
     return secret_ids.filter((secretId) => {
       const secretDID = DIDURLParser.parse(secretId);
-
       return peerDids.find((peerDIDSecret: any) => {
         const xDID = DIDURLParser.parse(peerDIDSecret.did);
-        debugger;
         return secretDID.did.toString() === xDID.did.toString();
       });
     });
-
-    // const secrets = peerDids.flatMap((x) => this.mapToSecret(x));
-    // const filtered = secrets.filter((x) => {
-    //   const xDID = DIDURLParser.parse(x.id);
-    //   const secretMatch = secret_ids.find((did) => {
-    //     const parsed = DIDURLParser.parse(did);
-
-    //     return xDID.did.toString() === parsed.did.toString();
-    //   });
-    //   return secretMatch;
-    // });
-    // const mapped = filtered.map((x) => x.id);
-    // return mapped;
   }
 
   async get_secret(secret_id: string): Promise<Secret | null> {
@@ -53,39 +37,40 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     }) as any;
 
     if (found) {
-      const privateKey = {
-        keyCurve: {
-          curve: found.curve,
-        },
-        value: Buffer.from(found.privateKey),
-      };
-      debugger;
-      const seed: Domain.Seed = { value: new Uint8Array() };
-      const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
-      const ecnumbasis = this.castor.getEcnumbasis(found.did, keyPair);
-      const id = `${found.did.toString()}#${ecnumbasis}`;
-      const secret: Secret = {
-        id,
-        type: "JsonWebKey2020",
-        privateKeyJwk: {
-          format: "JWK",
-          value: this.apollo.getPrivateJWKJson(id, keyPair),
-        },
-      };
-      debugger;
-      return secret;
+      const did = await this.castor.resolveDID(found.did);
+
+      const [publicKeyJWK] = did.coreProperties.reduce((all, property) => {
+        if (property instanceof VerificationMethods) {
+          const matchingValue: VerificationMethod | undefined =
+            property.values.find((verificationMethod) => {
+              return verificationMethod.id === secret_id;
+            });
+
+          if (matchingValue && matchingValue.publicKeyJwk) {
+            return [...all, matchingValue.publicKeyJwk];
+          }
+        }
+        return all;
+      }, [] as Domain.PublicKeyJWK[]);
+
+      if (publicKeyJWK) {
+        const secret = this.mapToSecret(found, publicKeyJWK);
+        debugger;
+        return secret;
+      }
     }
 
     return null;
   }
 
   //TODO: Get rid of this ANY for peerDID pluto should return correct type
-  private mapToSecret(peerDid: any): Secret {
+  //TODO: DATA DOES NOT NEED TO EXIST THERE IN JWK
+  private mapToSecret(peerDid: any, publicKeyJWK: Domain.PublicKeyJWK): Secret {
     const privateKey = {
       keyCurve: {
         curve: peerDid.curve,
       },
-      value: base64.baseDecode(peerDid.privateKey),
+      value: Buffer.from(peerDid.privateKey),
     };
     const seed: Domain.Seed = { value: new Uint8Array() };
     const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
@@ -96,11 +81,12 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       id,
       type: "JsonWebKey2020",
       privateKeyJwk: {
-        format: "JWK",
-        value: this.apollo.getPrivateJWKJson(id, keyPair),
+        crv: peerDid.curve,
+        kty: "OKP",
+        d: peerDid.privateKey,
+        x: (publicKeyJWK.x as any).data,
       },
     };
-
     return secret;
   }
 }

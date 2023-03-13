@@ -115,7 +115,12 @@ export class DIDDocument {
   ) {}
 
   get services(): Service[] {
-    return this.coreProperties.filter((x): x is Service => x instanceof Service);
+    return this.coreProperties.reduce((serviceArray, coreProperty) => {
+      if (coreProperty instanceof Services) {
+        return [...serviceArray, ...coreProperty.values];
+      }
+      return serviceArray;
+    }, [] as Service[]);
   }
 }
 

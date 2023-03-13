@@ -1,7 +1,6 @@
-import * as elliptic from "elliptic";
+import * as x25519 from "@stablelib/x25519";
 
-const ec = new elliptic.ec("curve25519");
 export abstract class X25519KeyCommon {
-  public static ec = ec;
-  public ec = ec;
+  public static ec = x25519;
+  public ec = x25519;
 }

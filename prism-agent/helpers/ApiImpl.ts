@@ -16,9 +16,6 @@ export class ApiImpl implements Api {
     httpHeaders: Map<string, string>,
     body?: any
   ): Promise<HttpResponse<T>> {
-    if (url.slice(0, 1) !== "/") {
-      throw new ApiError.InvalidRequestPath(url);
-    }
     const rawUrl = new URL(`${url}`);
     const rawHeaders: RawAxiosRequestHeaders = {};
 
@@ -29,9 +26,11 @@ export class ApiImpl implements Api {
     for (const [name, value] of httpHeaders) {
       rawHeaders[name] = value;
     }
+    debugger;
 
     const requestConfig: AxiosRequestConfig = {
-      url: rawUrl.toString(),
+      baseURL: rawUrl.toString(),
+      url: rawUrl.pathname,
       method: httpMethod,
       headers: rawHeaders,
     };

@@ -39,15 +39,12 @@ export default class Connection implements ConnectionModel {
         .then(async (sqlInit: InitSqlJsStatic) => {
           const SQL = await sqlInit({
             locateFile: (file: string) => {
-              debugger;
               return `${
                 this.wasmBinaryURL ??
                 "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0"
               }/${file}`;
             },
           });
-          debugger;
-
           return resolve(new SQL.Database(db));
         })
         .catch(reject);

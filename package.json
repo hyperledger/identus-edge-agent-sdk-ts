@@ -34,6 +34,7 @@
     "@babel/plugin-transform-typescript": "^7.21.0",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.20.2",
+    "@stablelib/x25519": "^1.0.3",
     "@types/antlr4": "^4.11.2",
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",

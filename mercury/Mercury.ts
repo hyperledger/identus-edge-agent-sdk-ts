@@ -37,15 +37,15 @@ export default class Mercury implements MercuryInterface {
     if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
 
     const packedMessage = await this.packMessage(message);
-
+    debugger;
     const document = await this.castor.resolveDID(toDid.toString());
-
+    debugger;
     const service = document.services.find((x) => x.isDIDCommMessaging);
-
+    debugger;
     if (service == undefined) throw new MercuryError.NoValidServiceFoundError();
-
+    debugger;
     const mediatorDid = this.getMediatorDID(service);
-
+    debugger;
     if (mediatorDid instanceof Domain.DID) {
       const forwardMsg = new Domain.Message(
         JSON.stringify({ next: toDid.toString() }),
@@ -93,7 +93,7 @@ export default class Mercury implements MercuryInterface {
 
     const headers = new Map();
     headers.set("Content-type", MediaType.ContentTypeEncrypted);
-
+    debugger;
     const response = await this.api.request<Uint8Array>(
       "POST",
       service.serviceEndpoint.uri,

@@ -43,50 +43,39 @@ export class DIDCommWrapper implements DIDCommProtocol {
     toDid: Domain.DID,
     fromDid: Domain.DID
   ): Promise<string> {
-    try {
-      const didcomm = await getDIDComm();
+    const didcomm = await getDIDComm();
 
-      const to = toDid.toString();
-      const from = fromDid.toString();
+    const to = toDid.toString();
+    const from = fromDid.toString();
 
-      const resolved1 = await this.castor.resolveDID(to);
-      const resolved2 = await this.castor.resolveDID(from);
-
-      const didcommMsg = new didcomm.Message({
-        id: message.id,
-        typ: "application/didcomm-plain+json",
-        type: message.piuri,
-        body: message.body ?? "{}",
-        to: [to],
-        from: from,
-        from_prior: message.fromPrior,
-        attachments: this.parseAttachments(message.attachments),
-        created_time: Number(message.createdTime),
-        expires_time: Number(message.expiresTimePlus),
-        thid: message.thid,
-        pthid: message.pthid,
-      });
-      debugger;
-      const encryptedMsg = await didcommMsg.pack_encrypted(
-        to,
-        from,
-        null,
-        this.didResolver,
-        this.secretsResolver,
-        {
-          enc_alg_anon: "Xc20pEcdhEsA256kw",
-          enc_alg_auth: "A256cbcHs512Ecdh1puA256kw",
-          forward: false,
-          protect_sender: false,
-        }
-      );
-      debugger;
-      return encryptedMsg;
-    } catch (err) {
-      console.log(err);
-      debugger;
-      throw err;
-    }
+    const didcommMsg = new didcomm.Message({
+      id: message.id,
+      typ: "application/didcomm-plain+json",
+      type: message.piuri,
+      body: message.body ?? "{}",
+      to: [to],
+      from: from,
+      from_prior: message.fromPrior,
+      attachments: this.parseAttachments(message.attachments),
+      created_time: Number(message.createdTime),
+      expires_time: Number(message.expiresTimePlus),
+      thid: message.thid,
+      pthid: message.pthid,
+    });
+    const [encryptedMsg] = await didcommMsg.pack_encrypted(
+      to,
+      from,
+      null,
+      this.didResolver,
+      this.secretsResolver,
+      {
+        enc_alg_anon: "Xc20pEcdhEsA256kw",
+        enc_alg_auth: "A256cbcHs512Ecdh1puA256kw",
+        forward: false,
+        protect_sender: false,
+      }
+    );
+    return encryptedMsg;
   }
 
   async unpack(message: string): Promise<Domain.Message> {

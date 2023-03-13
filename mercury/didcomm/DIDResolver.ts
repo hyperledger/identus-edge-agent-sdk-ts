@@ -32,12 +32,19 @@ export class DIDCommDIDResolver implements DIDResolver {
                 keyAgreements.push(method.id);
                 break;
             }
-
+            //TODO FIX THIS
+            const publicKeyBase64 = (method.publicKeyJwk?.x as any).data;
+            const publicKeyKid = (method.publicKeyJwk as any).kid;
             verificationMethods.push({
               controller: method.controller,
               id: method.id,
               type: "JsonWebKey2020",
-              publicKeyJwk: method.publicKeyJwk,
+              publicKeyJwk: {
+                crv: method.publicKeyJwk?.crv,
+                kid: publicKeyKid,
+                kty: "OKP",
+                x: publicKeyBase64,
+              },
             });
           });
         }
