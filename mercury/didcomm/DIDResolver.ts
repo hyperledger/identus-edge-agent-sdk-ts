@@ -1,4 +1,4 @@
-import {DIDResolver, Service, VerificationMethod, DIDDoc} from "didcomm";
+import { DIDResolver, Service, VerificationMethod, DIDDoc } from "didcomm";
 
 import * as Domain from "../../domain";
 import Castor from "../../castor/Castor";
@@ -29,15 +29,14 @@ export class DIDCommDIDResolver implements DIDResolver {
             case Domain.Curve.X25519:
               keyAgreements.push(method.id);
               break;
-
-            default:
-              verificationMethods.push({
-                controller: method.controller,
-                id: method.id,
-                type: "JsonWebKey2020",
-                publicKeyJwk: method.publicKeyJwk,
-              });
           }
+
+          verificationMethods.push({
+            controller: method.controller,
+            id: method.id,
+            type: "JsonWebKey2020",
+            publicKeyJwk: method.publicKeyJwk,
+          });
         });
       }
 
