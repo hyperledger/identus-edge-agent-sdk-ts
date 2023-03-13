@@ -53,14 +53,27 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     }) as any;
 
     if (found) {
-      const base64UrlDecoded = base64.baseDecode(found.privateKey);
-      const jwk = Buffer.from(base64UrlDecoded).toString();
-      debugger;
-      return {
-        id: found.id,
-        type: "JsonWebKey2020",
-        privateKeyJwk: base64UrlDecoded,
+      const privateKey = {
+        keyCurve: {
+          curve: found.curve,
+        },
+        value: Buffer.from(found.privateKey),
       };
+      debugger;
+      const seed: Domain.Seed = { value: new Uint8Array() };
+      const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
+      const ecnumbasis = this.castor.getEcnumbasis(found.did, keyPair);
+      const id = `${found.did.toString()}#${ecnumbasis}`;
+      const secret: Secret = {
+        id,
+        type: "JsonWebKey2020",
+        privateKeyJwk: {
+          format: "JWK",
+          value: this.apollo.getPrivateJWKJson(id, keyPair),
+        },
+      };
+      debugger;
+      return secret;
     }
 
     return null;
@@ -72,7 +85,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       keyCurve: {
         curve: peerDid.curve,
       },
-      value: base64url.baseDecode(peerDid.privateKey),
+      value: base64.baseDecode(peerDid.privateKey),
     };
     const seed: Domain.Seed = { value: new Uint8Array() };
     const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
