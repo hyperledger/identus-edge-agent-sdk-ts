@@ -34,6 +34,7 @@ Atala PRISM TypeScript SDK provides the following building blocks:
 | Protocol | Supported | Notes |
 | --- | :--: | -- |
 | [Mediator Coordinator](https://didcomm.org/mediator-coordination/2.0/) | :white_check_mark: | -- |
+| Connection | :white_check_mark: | Atala PRISM proprietary |
 | [DIDComm V2 Issue Credential](https://github.com/decentralized-identity/waci-didcomm/tree/main/issue_credential) | :white_check_mark: | -- |
 | [DIDComm V2 Present Proof](https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md) | :white_check_mark: | -- |
 
