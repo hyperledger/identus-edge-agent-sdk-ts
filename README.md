@@ -75,20 +75,25 @@ const castor = new prismSDK.Castor(apollo);
 const pluto = new prismSDK.Pluto({
     type: "sql",
 });
-const didcomm = new prismSDK.DIDCommWrapper(apollo, castor, pluto);
-const mercury = new prismSDK.Mercury(castor, didcomm, api);
-const store = new prismSDK.PublicMediatorStore(pluto);
-const handler = new prismSDK.BasicMediatorHandler(mediatorDID, mercury, store);
-const manager = new prismSDK.ConnectionsManager(castor, mercury, pluto, handler);
+const didcommWrapper = new prismSDK.DIDCommWrapper(apollo, castor, pluto);
+const mercury = new prismSDK.Mercury(castor, didcommWrapper, api);
+const mediatorDID = prismSDK.Domain.DID.fromString(
+    "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+);
+const mediatorStore = new prismSDK.PublicMediatorStore(pluto);
+const mediatorHandler = new prismSDK.BasicMediatorHandler(mediatorDID, mercury, mediatorStore);
+const connectionsManager = new prismSDK.ConnectionsManager(castor, mercury, pluto, mediatorHandler);
+
+const seedWords = apollo.createRandomSeed();
 
 const agent = new prismSDK.Agent(
     apollo,
     castor,
     pluto,
     mercury,
-    handler,
-    manager,
-    seed.seed
+    mediatorHandler,
+    connectionsManager,
+    seedWords.seed
   );
 
 await agent.start();
