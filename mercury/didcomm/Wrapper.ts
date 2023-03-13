@@ -1,4 +1,12 @@
-import {DIDResolver,Base64AttachmentData, SecretsResolver,  JsonAttachmentData, LinksAttachmentData, Attachment, AttachmentData } from "didcomm";
+import {
+  DIDResolver,
+  Base64AttachmentData,
+  SecretsResolver,
+  JsonAttachmentData,
+  LinksAttachmentData,
+  Attachment,
+  AttachmentData,
+} from "didcomm";
 import { base64url } from "multiformats/bases/base64";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
@@ -12,11 +20,10 @@ import { MercuryError } from "../../domain/models/Errors";
 let didcomm: typeof import("didcomm");
 async function getDIDComm() {
   if (!didcomm) {
-    didcomm = await import("didcomm")
+    didcomm = await import("didcomm");
   }
-  return didcomm
+  return didcomm;
 }
-
 
 export class DIDCommWrapper implements DIDCommProtocol {
   private readonly didResolver: DIDResolver;
@@ -36,49 +43,50 @@ export class DIDCommWrapper implements DIDCommProtocol {
     toDid: Domain.DID,
     fromDid: Domain.DID
   ): Promise<string> {
-    debugger;
-    const didcomm = await getDIDComm();
-    debugger;
-    const to = toDid.toString();
-    const from = fromDid.toString();
+    try {
+      const didcomm = await getDIDComm();
 
-    
-try {  
-  debugger;  
-  const didcommMsg = new didcomm.Message({
-  id: message.id,
-  typ: "application/didcomm-plain+json",
-  type: message.piuri,
-  body: message.body ?? "{}",
-  to: [to],
-  from: from,
-  from_prior: message.fromPrior,
-  attachments: this.parseAttachments(message.attachments),
-  created_time: Number(message.createdTime),
-  expires_time: Number(message.expiresTimePlus),
-  thid: message.thid,
-  pthid: message.pthid,
-});
-debugger;
-const [encryptedMsg] = await didcommMsg.pack_encrypted(
-  to,
-  from,
-  null,
-  this.didResolver,
-  this.secretsResolver,
-  {
-    enc_alg_anon: "Xc20pEcdhEsA256kw",
-    enc_alg_auth: "A256cbcHs512Ecdh1puA256kw",
-    forward: false,
-    protect_sender: false,
-  }
-);
+      const to = toDid.toString();
+      const from = fromDid.toString();
 
-return encryptedMsg;} catch (err) {
-  console.log(err);
-  debugger;
-  throw err
-}
+      const resolved1 = await this.castor.resolveDID(to);
+      const resolved2 = await this.castor.resolveDID(from);
+
+      const didcommMsg = new didcomm.Message({
+        id: message.id,
+        typ: "application/didcomm-plain+json",
+        type: message.piuri,
+        body: message.body ?? "{}",
+        to: [to],
+        from: from,
+        from_prior: message.fromPrior,
+        attachments: this.parseAttachments(message.attachments),
+        created_time: Number(message.createdTime),
+        expires_time: Number(message.expiresTimePlus),
+        thid: message.thid,
+        pthid: message.pthid,
+      });
+      debugger;
+      const encryptedMsg = await didcommMsg.pack_encrypted(
+        to,
+        from,
+        null,
+        this.didResolver,
+        this.secretsResolver,
+        {
+          enc_alg_anon: "Xc20pEcdhEsA256kw",
+          enc_alg_auth: "A256cbcHs512Ecdh1puA256kw",
+          forward: false,
+          protect_sender: false,
+        }
+      );
+      debugger;
+      return encryptedMsg;
+    } catch (err) {
+      console.log(err);
+      debugger;
+      throw err;
+    }
   }
 
   async unpack(message: string): Promise<Domain.Message> {
@@ -197,9 +205,7 @@ return encryptedMsg;} catch (err) {
     }, []);
   }
 
-  private parseAttachment(
-    attachment: Domain.AttachmentDescriptor
-  ): Attachment {
+  private parseAttachment(attachment: Domain.AttachmentDescriptor): Attachment {
     return {
       data: this.parseAttachmentData(attachment.data),
       id: attachment.id,
@@ -215,9 +221,7 @@ return encryptedMsg;} catch (err) {
     };
   }
 
-  private parseAttachmentData(
-    data: Domain.AttachmentData
-  ): AttachmentData {
+  private parseAttachmentData(data: Domain.AttachmentData): AttachmentData {
     if ("base64" in data) {
       const parsed: Base64AttachmentData = {
         base64: data.base64,
@@ -236,7 +240,7 @@ return encryptedMsg;} catch (err) {
     }
 
     if ("links" in data) {
-      const parsed:LinksAttachmentData = {
+      const parsed: LinksAttachmentData = {
         hash: data.hash,
         links: data.links,
       };

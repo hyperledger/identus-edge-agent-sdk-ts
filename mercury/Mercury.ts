@@ -20,7 +20,7 @@ export default class Mercury implements MercuryInterface {
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
 
     if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
-    debugger;
+
     return this.protocol.packEncrypted(message, toDid, fromDid);
   }
 
@@ -36,11 +36,10 @@ export default class Mercury implements MercuryInterface {
 
     if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
 
-    debugger;
     const packedMessage = await this.packMessage(message);
-    debugger;
+
     const document = await this.castor.resolveDID(toDid.toString());
-    debugger;
+
     const service = document.services.find((x) => x.isDIDCommMessaging);
 
     if (service == undefined) throw new MercuryError.NoValidServiceFoundError();
@@ -109,13 +108,12 @@ export default class Mercury implements MercuryInterface {
   async sendMessageParseMessage(
     message: Domain.Message
   ): Promise<Domain.Message> {
-    debugger;
     const responseBody = await this.sendMessage(message);
-    debugger;
+
     const decoded = new TextDecoder().decode(responseBody);
-    debugger;
+
     const unpacked = this.unpackMessage(decoded);
-    debugger;
+
     return unpacked;
   }
 
