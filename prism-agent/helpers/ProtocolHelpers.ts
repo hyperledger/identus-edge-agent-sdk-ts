@@ -112,7 +112,6 @@ export class ProtocolHelpers {
     } catch (err) {
       throw new AgentError.UnknownCredentialBodyError();
     }
-
     if (
       this.isProposePresentationBody(type, parsed) ||
       this.isRequestPresentationBody(type, parsed)
@@ -185,14 +184,14 @@ export class ProtocolHelpers {
     }
 
     if (this.isMediationGrantBody(type, parsed)) {
-      const { routingDid } = parsed;
-      if (!routingDid) {
+      const { routing_did } = parsed;
+      if (!routing_did) {
         throw new AgentError.InvalidMediationGrantBodyError(
           "Undefined routingDid"
         );
       }
       return {
-        routingDid: routingDid,
+        routing_did: routing_did,
       } as T;
     }
 

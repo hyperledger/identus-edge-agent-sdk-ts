@@ -13,7 +13,7 @@ export interface IssueCredentialBody extends CredentialBody {
 }
 
 export interface MediationGrantBody {
-  routingDid: string;
+  routing_did: string;
 }
 
 export interface OfferCredentialBody extends CredentialBody {

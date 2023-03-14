@@ -124,10 +124,7 @@ export default class Mercury implements MercuryInterface {
     const responseBody = await this.sendMessage<any>(message);
     const responseJSON = JSON.stringify(responseBody);
     const decoded = new TextDecoder().decode(Buffer.from(responseJSON));
-
-    const unpacked = await this.unpackMessage(decoded);
-
-    return unpacked;
+    return this.unpackMessage(decoded);
   }
 
   private notDid(did: Domain.DID | undefined): did is undefined {

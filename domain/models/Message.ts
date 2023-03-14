@@ -23,7 +23,7 @@ export class Message {
     public readonly to?: DID,
     public readonly attachments: AttachmentDescriptor[] = [],
     public readonly thid?: string,
-    public readonly extraHeaders: [string, string][] = [],
+    public readonly extraHeaders: string[] = [],
     public readonly createdTime: string = Date.now().toString(),
     public readonly expiresTimePlus: string = (
       createdTime +

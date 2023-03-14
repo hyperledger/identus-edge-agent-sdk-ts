@@ -79,7 +79,7 @@ export class InvalidMediationGrantBodyError extends Error {
 
 export class UnknownCredentialBodyError extends Error {
   constructor() {
-    super("Invalid Issue CredentialBody Error");
+    super("Unknown Credential Body Error");
   }
 }
 

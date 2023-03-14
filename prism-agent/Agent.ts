@@ -33,10 +33,10 @@ import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { AgentMessageEvents } from "./Agent.MessageEvents";
 
 enum AgentState {
-  STOPPED,
-  STARTING,
-  RUNNING,
-  STOPPING,
+  STOPPED = "stopped",
+  STARTING = "starting",
+  RUNNING = "running",
+  STOPPING = "stopping",
 }
 
 export default class Agent
@@ -51,7 +51,7 @@ export default class Agent
   private agentInvitations: AgentInvitations;
   private agentMessageEvents: AgentMessageEvents;
 
-  private state: AgentState = AgentState.STOPPED;
+  public state: AgentState = AgentState.STOPPED;
 
   constructor(
     protected apollo: Apollo,

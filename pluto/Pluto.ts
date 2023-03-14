@@ -1,44 +1,57 @@
-import {Curve, DID, getKeyCurveByNameAndIndex, PrivateKey,} from "../domain/models";
-import {DIDPair} from "../domain/models/DIDPair";
-import {Mediator} from "../domain/models/Mediator";
-import {Message, MessageDirection} from "../domain/models/Message";
-import {PeerDID} from "../domain/models/PeerDID";
-import {PrismDIDInfo} from "../domain/models/PrismDIDInfo";
-import {VerifiableCredential} from "../domain/models/VerifiableCredential";
+import {
+  Curve,
+  DID,
+  getKeyCurveByNameAndIndex,
+  PrivateKey,
+} from "../domain/models";
+import { DIDPair } from "../domain/models/DIDPair";
+import { Mediator } from "../domain/models/Mediator";
+import { Message, MessageDirection } from "../domain/models/Message";
+import { PeerDID } from "../domain/models/PeerDID";
+import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
+import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import Connection from "./Connection";
-import {ConnectionParams} from "../domain/models/Connection";
-import {v4 as uuidv4} from "uuid";
-import DIDQueries, {DIDQueriesTypes} from "./queries/DID";
-import DIDPairQueries, {DIDPairQueriesTypes} from "./queries/DIDPair";
-import MediatorQueries, {MediatorQueriesTypes} from "./queries/Mediator";
-import MessageQueries, {MessageQueriesTypes} from "./queries/Message";
-import PrivateKeyQueries, {PrivateKeyQueriesTypes,} from "./queries/PrivateKey";
-import VerifiableCredentialQueries, {VerifiableCredentialQueriesTypes,} from "./queries/VerifiableCredential";
-import {AttachmentDescriptor} from "../domain/models/MessageAttachment";
-import {default as PlutoInterface} from "../domain/buildingBlocks/Pluto";
-import {Buffer} from "buffer";
+import { ConnectionParams } from "../domain/models/Connection";
+import { v4 as uuidv4 } from "uuid";
+import DIDQueries, { DIDQueriesTypes } from "./queries/DID";
+import DIDPairQueries, { DIDPairQueriesTypes } from "./queries/DIDPair";
+import MediatorQueries, { MediatorQueriesTypes } from "./queries/Mediator";
+import MessageQueries, { MessageQueriesTypes } from "./queries/Message";
+import PrivateKeyQueries, {
+  PrivateKeyQueriesTypes,
+} from "./queries/PrivateKey";
+import VerifiableCredentialQueries, {
+  VerifiableCredentialQueriesTypes,
+} from "./queries/VerifiableCredential";
+import { AttachmentDescriptor } from "../domain/models/MessageAttachment";
+import { default as PlutoInterface } from "../domain/buildingBlocks/Pluto";
+import { Buffer } from "buffer";
 
-type MediatorResponse = { mediatorDIDId: string, hostDIDId: string, routingDIDId: string };
+type MediatorResponse = {
+  mediatorDIDId: string;
+  hostDIDId: string;
+  routingDIDId: string;
+};
 type TableName =
-    | "DID"
-    | "DIDPair"
-    | "Mediator"
-    | "Message"
-    | "PrivateKey"
-    | "VerifiableCredential";
+  | "DID"
+  | "DIDPair"
+  | "Mediator"
+  | "Message"
+  | "PrivateKey"
+  | "VerifiableCredential";
 type MethodType<tablename> = tablename extends "DID"
-    ? DIDQueriesTypes
-    : tablename extends "DIDPair"
-        ? DIDPairQueriesTypes
-        : tablename extends "Mediator"
-            ? MediatorQueriesTypes
-            : tablename extends "Message"
-                ? MessageQueriesTypes
-                : tablename extends "PrivateKey"
-                    ? PrivateKeyQueriesTypes
-                    : tablename extends "VerifiableCredential"
-                        ? VerifiableCredentialQueriesTypes
-                        : null;
+  ? DIDQueriesTypes
+  : tablename extends "DIDPair"
+  ? DIDPairQueriesTypes
+  : tablename extends "Mediator"
+  ? MediatorQueriesTypes
+  : tablename extends "Message"
+  ? MessageQueriesTypes
+  : tablename extends "PrivateKey"
+  ? PrivateKeyQueriesTypes
+  : tablename extends "VerifiableCredential"
+  ? VerifiableCredentialQueriesTypes
+  : null;
 
 type MessageDBResult = {
   id: string;
@@ -72,10 +85,10 @@ export default class Pluto extends Connection implements PlutoInterface {
   }
 
   private static transformCredentialToVerifiableCredentialInterface(
-      result: CredentialDBResult
+    result: CredentialDBResult
   ): VerifiableCredential {
     const json = JSON.parse(
-        result.verifiableCredentialJson
+      result.verifiableCredentialJson
     ) as VerifiableCredential;
     return {
       ...json,
@@ -86,7 +99,7 @@ export default class Pluto extends Connection implements PlutoInterface {
   }
 
   private static transformPrivateKeyToPrivateKeyInterface(
-      result: PrivateKeyDBResult
+    result: PrivateKeyDBResult
   ): PrivateKey {
     return {
       value: Buffer.from(result.privateKey),
@@ -109,8 +122,8 @@ export default class Pluto extends Connection implements PlutoInterface {
       piuri: result.type,
       id: result.id,
       direction: result.isReceived
-          ? MessageDirection.RECEIVED
-          : MessageDirection.SENT,
+        ? MessageDirection.RECEIVED
+        : MessageDirection.SENT,
       ack: data.ack,
       body: data.body,
       extraHeaders: data.extraHeaders as unknown as string[],
@@ -130,13 +143,13 @@ export default class Pluto extends Connection implements PlutoInterface {
     return {
       mediatorDID: DID.fromString(props.MediatorDID),
       hostDID: DID.fromString(props.HostDID),
-      routingDID: DID.fromString(props.RoutingDID)
+      routingDID: DID.fromString(props.RoutingDID),
     };
   }
 
   getMethod<tablename>(
-      tableName: TableName,
-      method: MethodType<tablename>
+    tableName: TableName,
+    method: MethodType<tablename>
   ): string {
     let _method: string | null = null;
     switch (tableName) {
@@ -157,9 +170,9 @@ export default class Pluto extends Connection implements PlutoInterface {
         break;
       case "VerifiableCredential":
         _method =
-            VerifiableCredentialQueries[
-                method as VerifiableCredentialQueriesTypes
-                ];
+          VerifiableCredentialQueries[
+            method as VerifiableCredentialQueriesTypes
+          ];
         break;
     }
     if (_method === null) {
@@ -184,11 +197,11 @@ export default class Pluto extends Connection implements PlutoInterface {
   }
 
   storePrismDID(
-      did: DID,
-      keyPathIndex: number,
-      privateKey: PrivateKey,
-      privateKeyMetaId: string | null,
-      alias?: string
+    did: DID,
+    keyPathIndex: number,
+    privateKey: PrivateKey,
+    privateKeyMetaId: string | null,
+    alias?: string
   ) {
     const insert = this.getMethod<"DID">("DID", "insert");
     const result = this.database?.run(insert, [
@@ -205,8 +218,8 @@ export default class Pluto extends Connection implements PlutoInterface {
   storePeerDID(did: DID, privateKeys: PrivateKey[]) {
     const insertPeerDid = this.getMethod<"DID">("DID", "insert");
     const insertPrivateKeys = this.getMethod<"PrivateKey">(
-        "PrivateKey",
-        "insert"
+      "PrivateKey",
+      "insert"
     );
     this.database?.run(insertPeerDid, [
       did.toString(),
@@ -216,13 +229,13 @@ export default class Pluto extends Connection implements PlutoInterface {
       null,
     ]);
     privateKeys.forEach((privateKey) =>
-        this.database?.run(insertPrivateKeys, [
-          uuidv4(),
-          privateKey.keyCurve.curve,
-          privateKey.value.toString(),
-          privateKey.keyCurve?.index ?? 0,
-          did.toString(),
-        ])
+      this.database?.run(insertPrivateKeys, [
+        uuidv4(),
+        privateKey.keyCurve.curve,
+        privateKey.value.toString(),
+        privateKey.keyCurve?.index ?? 0,
+        did.toString(),
+      ])
     );
   }
 
@@ -256,10 +269,10 @@ export default class Pluto extends Connection implements PlutoInterface {
   }
 
   storePrivateKeys(
-      privateKey: PrivateKey,
-      did: DID,
-      keyPathIndex: number,
-      metaId: string | null
+    privateKey: PrivateKey,
+    did: DID,
+    keyPathIndex: number,
+    metaId: string | null
   ) {
     const insert = this.getMethod<"PrivateKey">("PrivateKey", "insert");
     this.database?.run(insert, [
@@ -298,8 +311,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getPrismDIDKeyPathIndex(did: DID): number | null {
     const fetch = this.getMethod<"PrivateKey">(
-        "PrivateKey",
-        "fetchKeyPathIndexByDID"
+      "PrivateKey",
+      "fetchKeyPathIndexByDID"
     );
     const result = this.execAsOne<{ keyPathIndex: number } | null>(fetch, [
       did.toString(),
@@ -309,8 +322,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getPrismLastKeyPathIndex(): number {
     const fetch = this.getMethod<"PrivateKey">(
-        "PrivateKey",
-        "fetchLastkeyPathIndex"
+      "PrivateKey",
+      "fetchLastkeyPathIndex"
     );
     const result = this.execAsOne<{ keyPathIndex: number }>(fetch);
     return result?.keyPathIndex ?? 0;
@@ -323,8 +336,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> {
     const fetch = this.getMethod<"PrivateKey">(
-        "PrivateKey",
-        "fetchPrivateKeyByDID"
+      "PrivateKey",
+      "fetchPrivateKeyByDID"
     );
     const data = this.execAsMany<PrivateKeyDBResult>(fetch, [
       did.toString(),
@@ -334,8 +347,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getDIDPrivateKeyByID(id: string): PrivateKey | null {
     const fetch = this.getMethod<"PrivateKey">(
-        "PrivateKey",
-        "fetchPrivateKeyByID"
+      "PrivateKey",
+      "fetchPrivateKeyByID"
     );
     const result = this.execAsOne<{
       id: string;
@@ -393,8 +406,8 @@ export default class Pluto extends Connection implements PlutoInterface {
   getAllMessagesByDID(did: DID): Message[] {
     // Question: This method is not implemented in Kotlin, is it missing or just not wanted anymore?
     const fetch = this.getMethod<"Message">(
-        "Message",
-        "fetchAllMessagesReceivedFrom"
+      "Message",
+      "fetchAllMessagesReceivedFrom"
     );
     const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
     return data.map(Pluto.transformToMessageInterface);
@@ -408,8 +421,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesReceived(): Message[] {
     const fetch = this.getMethod<"Message">(
-        "Message",
-        "fetchAllReceivedMessages"
+      "Message",
+      "fetchAllReceivedMessages"
     );
     const data = this.execAsMany<MessageDBResult>(fetch);
     return data.map(Pluto.transformToMessageInterface);
@@ -417,8 +430,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesSentTo(did: DID): Message[] {
     const fetch = this.getMethod<"Message">(
-        "Message",
-        "fetchAllMessagesSentTo"
+      "Message",
+      "fetchAllMessagesSentTo"
     );
     const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
     return data.map(Pluto.transformToMessageInterface);
@@ -426,8 +439,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesReceivedFrom(did: DID): Message[] {
     const fetch = this.getMethod<"Message">(
-        "Message",
-        "fetchAllMessagesReceivedFrom"
+      "Message",
+      "fetchAllMessagesReceivedFrom"
     );
     const data = this.execAsMany<MessageDBResult>(fetch, [did.toString()]);
     return data.map(Pluto.transformToMessageInterface);
@@ -435,8 +448,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesOfType(type: string, relatedWithDID?: DID): Message[] {
     const fetch = this.getMethod<"Message">(
-        "Message",
-        "fetchAllMessagesOfType"
+      "Message",
+      "fetchAllMessagesOfType"
     );
     const data = this.execAsMany<MessageDBResult>(fetch, {
       ":type": type,
@@ -447,8 +460,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllMessagesByFromToDID(from: DID, to: DID): Message[] {
     const fetch = this.getMethod<"Message">(
-        "Message",
-        "fetchAllMessagesFromTo"
+      "Message",
+      "fetchAllMessagesFromTo"
     );
     const data = this.execAsMany<MessageDBResult>(fetch, {
       ":from": from.toString(),
@@ -474,8 +487,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   getAllCredentials(): VerifiableCredential[] {
     const fetch = this.getMethod<"VerifiableCredential">(
-        "VerifiableCredential",
-        "fetchAllCredentials"
+      "VerifiableCredential",
+      "fetchAllCredentials"
     );
     const data = this.execAsMany<CredentialDBResult>(fetch);
     return data.map(Pluto.transformCredentialToVerifiableCredentialInterface);
@@ -483,8 +496,8 @@ export default class Pluto extends Connection implements PlutoInterface {
 
   storeCredential(credential: VerifiableCredential) {
     const insert = this.getMethod<"VerifiableCredential">(
-        "VerifiableCredential",
-        "insert"
+      "VerifiableCredential",
+      "insert"
     );
 
     this.database?.run(insert, [

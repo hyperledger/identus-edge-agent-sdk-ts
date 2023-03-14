@@ -61,7 +61,7 @@ export class BasicMediatorHandler implements MediatorHandler {
         }
 
         const grandMessage = MediationGrant.fromMessage(message);
-        const routingDID = DID.fromString(grandMessage.body.routingDid);
+        const routingDID = DID.fromString(grandMessage.body.routing_did);
 
         const mediator: Mediator = {
           hostDID: host,
