@@ -6,7 +6,6 @@ import {
   LinksAttachmentData,
   Attachment,
   AttachmentData,
-  Message,
 } from "didcomm";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
@@ -18,6 +17,7 @@ import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
 export class DIDCommWrapper implements DIDCommProtocol {
+  public static didcomm: typeof import("didcomm");
   private readonly didResolver: DIDResolver;
   private readonly secretsResolver: SecretsResolver;
 
@@ -30,15 +30,24 @@ export class DIDCommWrapper implements DIDCommProtocol {
     this.secretsResolver = new DIDCommSecretsResolver(apollo, castor, pluto);
   }
 
+  public static async getDIDComm() {
+    if (!this.didcomm) {
+      this.didcomm = await import("didcomm");
+    }
+    return this.didcomm;
+  }
+
   async packEncrypted(
     message: Domain.Message,
     toDid: Domain.DID,
     fromDid: Domain.DID
   ): Promise<string> {
+    const didcomm = await DIDCommWrapper.getDIDComm();
+
     const to = toDid.toString();
     const from = fromDid.toString();
     const body = JSON.parse(message.body ?? "{}");
-    const didcommMsg = new Message({
+    const didcommMsg = new didcomm.Message({
       id: message.id,
       typ: "application/didcomm-plain+json",
       type: message.piuri,
@@ -51,8 +60,8 @@ export class DIDCommWrapper implements DIDCommProtocol {
       expires_time: Number(message.expiresTimePlus),
       thid: message.thid,
       pthid: message.pthid,
+      return_route: "all",
     });
-
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,
       from,
@@ -70,7 +79,8 @@ export class DIDCommWrapper implements DIDCommProtocol {
   }
 
   async unpack(message: string): Promise<Domain.Message> {
-    const [didcommMsg] = await Message.unpack(
+    const didcomm = await DIDCommWrapper.getDIDComm();
+    const [didcommMsg] = await didcomm.Message.unpack(
       message,
       this.didResolver,
       this.secretsResolver,

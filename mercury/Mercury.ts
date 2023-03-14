@@ -28,7 +28,17 @@ export default class Mercury implements MercuryInterface {
     return this.protocol.unpack(message);
   }
 
-  async sendMessage(message: Domain.Message): Promise<Uint8Array> {
+  private shouldForwardMessage(service: Domain.Service): boolean {
+    try {
+      this.castor.parseDID(service.serviceEndpoint.uri);
+      return true;
+    } catch {
+      new URL(service.serviceEndpoint.uri);
+      return false;
+    }
+  }
+
+  async sendMessage<T>(message: Domain.Message): Promise<T> {
     const toDid = message.to;
     const fromDid = message.from;
 
@@ -45,8 +55,9 @@ export default class Mercury implements MercuryInterface {
     if (service == undefined) throw new MercuryError.NoValidServiceFoundError();
 
     const mediatorDid = this.getMediatorDID(service);
+    const shouldForwardMessage = this.shouldForwardMessage(service);
 
-    if (mediatorDid instanceof Domain.DID) {
+    if (mediatorDid instanceof Domain.DID && shouldForwardMessage) {
       const forwardMsg = new Domain.Message(
         JSON.stringify({ next: toDid.toString() }),
         undefined,
@@ -71,10 +82,10 @@ export default class Mercury implements MercuryInterface {
         (x) => x.isDIDCommMessaging
       );
 
-      return this.makeRequest(mediatorService, packedForwardMsg);
+      return this.makeRequest<T>(mediatorService, packedForwardMsg);
     }
 
-    return this.makeRequest(service, packedMessage);
+    return this.makeRequest<T>(service, packedMessage);
   }
 
   private getMediatorDID(service: Domain.Service): Domain.DID | undefined {
@@ -87,7 +98,7 @@ export default class Mercury implements MercuryInterface {
     }
   }
 
-  private async makeRequest(
+  private async makeRequest<T>(
     service: Domain.Service | undefined,
     message: string
   ) {
@@ -96,23 +107,23 @@ export default class Mercury implements MercuryInterface {
     const headers = new Map();
     headers.set("Content-type", MediaType.ContentTypeEncrypted);
 
-    const response = await this.api.request<Uint8Array>(
+    const response = await this.api.request<T>(
       "POST",
       service.serviceEndpoint.uri,
       new Map(),
       headers,
       message
     );
-    debugger;
+
     return response.body;
   }
 
   async sendMessageParseMessage(
     message: Domain.Message
   ): Promise<Domain.Message> {
-    const responseBody = await this.sendMessage(message);
-    debugger;
-    const decoded = new TextDecoder().decode(Buffer.from(responseBody || ""));
+    const responseBody = await this.sendMessage<any>(message);
+    const responseJSON = JSON.stringify(responseBody);
+    const decoded = new TextDecoder().decode(Buffer.from(responseJSON));
 
     const unpacked = await this.unpackMessage(decoded);
 
