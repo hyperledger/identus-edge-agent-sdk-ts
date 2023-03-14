@@ -19,7 +19,7 @@ const apollo = new Apollo();
 `Domain` contains a domain-specific types and models used by Apollo and other 
 modules in the SDK.
 
-## API
+## API Overview
 Here's a brief explanation of the most important primitives:
 
 
