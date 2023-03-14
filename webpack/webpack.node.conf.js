@@ -36,7 +36,7 @@ module.exports = (env, argv) => {
     mode: isProduction ? "production" : "development",
     devtool: "source-map",
     entry: {
-      entry: isProduction ? "./index.ts" : "./test-node.ts",
+      entry: isProduction ? "./index.ts" : "./demos/test-node.ts",
     },
     output: {
       filename: "index.js",

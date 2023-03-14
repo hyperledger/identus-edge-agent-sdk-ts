@@ -1,8 +1,10 @@
+import { webcrypto } from "node:crypto";
+(globalThis as any).crypto = webcrypto;
+
 import * as SDK from ".";
-import createTestScenario from "./createTestScenario";
+import { createTestScenario } from "./demos/createTestScenario";
 
 (async () => {
-  const body = document.querySelector("body");
   const Fabio = SDK.Domain.DID.fromString(
     "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9hbGljZS5kaWQuZm1ncC5hcHAvIiwiciI6W10sImEiOlsiZGlkY29tbS92MiJdfQ"
   );
@@ -12,7 +14,7 @@ import createTestScenario from "./createTestScenario";
 
   const { seed, agent } = createTestScenario(
     mediatorDID,
-    `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0`
+    `${process.cwd()}/node_modules/sql.js/dist`
   );
 
   agent.onMessage((messages) => {
@@ -21,11 +23,9 @@ import createTestScenario from "./createTestScenario";
 
   await agent.start();
 
-  if (body) {
-    body.innerHTML = `<h1>Welcome to AtalaPrism</h1><p>Agent ${
+  console.log(
+    `Welcome to PrismEdge Agent, state ${
       agent.state
-    } correctly.</p><p>Your mnemonics are <b>${seed.mnemonics.join(
-      ", "
-    )}</b></p>`;
-  }
+    } with mnemonics ${seed.mnemonics.join(", ")}`
+  );
 })();

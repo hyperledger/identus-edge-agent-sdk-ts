@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
     target: "web",
     mode: isProduction ? "production" : "development",
     devtool: "source-map",
-    entry: isProduction ? "./index.ts" : "./test-browser.ts",
+    entry: isProduction ? "./index.ts" : "./demos/test-browser.ts",
     devServer: {
       static: {
         directory: path.join(__dirname, "../build/browser"),

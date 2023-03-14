@@ -115,10 +115,10 @@ export default class Apollo implements ApolloInterface {
       mnemonics: mnemonics,
     };
   }
-  createKeyPairFromKeyCurve(curve: KeyCurve, seed: Seed): KeyPair {
+  createKeyPairFromKeyCurve(curve: KeyCurve, seed?: Seed): KeyPair {
     return this.getKeyPairForCurve(curve, seed);
   }
-  createKeyPairFromPrivateKey(privateKey: PrivateKey, seed: Seed): KeyPair {
+  createKeyPairFromPrivateKey(privateKey: PrivateKey, seed?: Seed): KeyPair {
     return this.getKeyPairForCurve(privateKey.keyCurve, seed);
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
