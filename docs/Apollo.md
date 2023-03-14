@@ -1,7 +1,10 @@
 # Apollo
 
-Apollo module provides a suite of cryptographic primitives for generating seeds,
-key pairs, signatures and signature verification. 
+Apollo module provides a suite of cryptographic primitives designed to ensure
+the integrity, authenticity, and confidentiality of data that is stored and
+processed. Currently, Apollo offers primitives for generating mnemonics, seeds
+and key pairs; and primitives for cryptographically signing data and verification of
+signatures.
 
 ## Apollo setup
 
@@ -19,7 +22,7 @@ const apollo = new Apollo();
 `Domain` contains a domain-specific types and models used by Apollo and other 
 modules in the SDK.
 
-## API
+## API Overview
 Here's a brief explanation of the most important primitives:
 
 
