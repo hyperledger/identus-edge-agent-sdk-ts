@@ -1,8 +1,8 @@
 import { webcrypto } from "node:crypto";
 (globalThis as any).crypto = webcrypto;
 
-import * as SDK from ".";
-import { createTestScenario } from "./demos/createTestScenario";
+import * as SDK from "..";
+import { createTestScenario } from "./createTestScenario";
 
 (async () => {
   const Fabio = SDK.Domain.DID.fromString(

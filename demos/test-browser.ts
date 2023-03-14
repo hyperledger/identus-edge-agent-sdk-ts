@@ -1,5 +1,5 @@
-import * as SDK from ".";
-import { createTestScenario } from "./demos/createTestScenario";
+import * as SDK from "..";
+import { createTestScenario } from "./createTestScenario";
 
 (async () => {
   const body = document.querySelector("body");
