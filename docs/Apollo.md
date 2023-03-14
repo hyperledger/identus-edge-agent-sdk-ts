@@ -1,10 +1,10 @@
 # Apollo
 
-Apollo module provides a suite of cryptographic primitives designed to ensure 
-the integrity, authenticity, and confidentiality of data that is stored and 
-processed. Currently, Apollo offers primitives for generating mnemonics, seeds 
-and key pairs; primitives for cryptographically signing data and verification of
-signatures.
+Apollo module provides a suite of cryptographic primitives designed to ensure
+the integrity, authenticity, and confidentiality of data that is stored and
+processed. Currently, Apollo offers primitives for generating mnemonics, seeds
+and key pairs; and primitives for cryptographically signing data and 
+verification of signatures.
 
 ## Apollo setup
 
