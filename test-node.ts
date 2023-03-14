@@ -1,3 +1,6 @@
+import { webcrypto } from 'node:crypto'
+(globalThis as any).crypto = webcrypto
+
 import * as SDK from ".";
 
 (async () => {

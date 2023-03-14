@@ -20,7 +20,10 @@ module.exports = (env, argv) => {
       "window.SQL": "sql.js/dist/sql-wasm.js",
     }),
     new CopyPlugin({
-      patterns: [{ from: "./node_modules/sql.js/dist/sql-wasm.wasm" }],
+      patterns: [
+        { from: "./node_modules/sql.js/dist/sql-wasm.wasm" },
+        { from: "./node_modules/didcomm-node/index_bg.wasm" }
+      ],
     }),
   ];
   const minimizer = [];
@@ -83,6 +86,9 @@ module.exports = (env, argv) => {
       syncWebAssembly: true,
     },
     resolve: {
+      alias: {
+        "didcomm": "didcomm-node"
+      },
       extensions: [".ts", ".js", ".json"],
       fallback: {
         url: require.resolve("url/"),
