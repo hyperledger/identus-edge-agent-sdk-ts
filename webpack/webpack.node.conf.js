@@ -3,6 +3,7 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const exec = require("child_process").exec;
 const TerserPlugin = require("terser-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === "production";
@@ -11,6 +12,15 @@ module.exports = (env, argv) => {
     new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({
       Buffer: ["buffer", "Buffer"],
+    }),
+    new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
+      result.request = result.request.replace(/typeorm/, "typeorm/browser");
+    }),
+    new webpack.ProvidePlugin({
+      "window.SQL": "sql.js/dist/sql-wasm.js",
+    }),
+    new CopyPlugin({
+      patterns: [{ from: "./node_modules/sql.js/dist/sql-wasm.wasm" }],
     }),
   ];
   const minimizer = [];
@@ -51,6 +61,7 @@ module.exports = (env, argv) => {
       minimizer: minimizer,
     },
     module: {
+      noParse: /sql.js/,
       rules: [
         {
           test: /\.wasm$/,
