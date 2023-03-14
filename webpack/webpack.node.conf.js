@@ -22,26 +22,13 @@ module.exports = (env, argv) => {
     new CopyPlugin({
       patterns: [
         { from: "./node_modules/sql.js/dist/sql-wasm.wasm" },
-        { from: "./node_modules/didcomm-node/index_bg.wasm" }
+        { from: "./node_modules/didcomm-node/index_bg.wasm" },
       ],
     }),
   ];
   const minimizer = [];
   if (isProduction) {
     minimizer.push(new TerserPlugin({ extractComments: true }));
-  }
-
-  if (!isProduction) {
-    plugins.push({
-      apply: (compiler) => {
-        compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
-          exec("node build/node-test/index.js", (err, stdout, stderr) => {
-            if (stdout) process.stdout.write(stdout);
-            if (stderr) process.stderr.write(stderr);
-          });
-        });
-      },
-    });
   }
 
   return {
@@ -87,7 +74,7 @@ module.exports = (env, argv) => {
     },
     resolve: {
       alias: {
-        "didcomm": "didcomm-node"
+        didcomm: "didcomm-node",
       },
       extensions: [".ts", ".js", ".json"],
       fallback: {

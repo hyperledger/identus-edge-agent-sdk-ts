@@ -103,7 +103,7 @@ export default class Mercury implements MercuryInterface {
       headers,
       message
     );
-
+    debugger;
     return response.body;
   }
 
@@ -111,10 +111,10 @@ export default class Mercury implements MercuryInterface {
     message: Domain.Message
   ): Promise<Domain.Message> {
     const responseBody = await this.sendMessage(message);
+    debugger;
+    const decoded = new TextDecoder().decode(Buffer.from(responseBody || ""));
 
-    const decoded = new TextDecoder().decode(responseBody);
-
-    const unpacked = this.unpackMessage(decoded);
+    const unpacked = await this.unpackMessage(decoded);
 
     return unpacked;
   }

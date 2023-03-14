@@ -6,8 +6,8 @@ import {
   LinksAttachmentData,
   Attachment,
   AttachmentData,
+  Message,
 } from "didcomm";
-import { base64url } from "multiformats/bases/base64";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
@@ -16,14 +16,6 @@ import { DIDCommDIDResolver } from "./DIDResolver";
 import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
-
-let didcomm: typeof import("didcomm");
-async function getDIDComm() {
-  if (!didcomm) {
-    didcomm = await import("didcomm");
-  }
-  return didcomm;
-}
 
 export class DIDCommWrapper implements DIDCommProtocol {
   private readonly didResolver: DIDResolver;
@@ -43,12 +35,10 @@ export class DIDCommWrapper implements DIDCommProtocol {
     toDid: Domain.DID,
     fromDid: Domain.DID
   ): Promise<string> {
-    const didcomm = await getDIDComm();
-
     const to = toDid.toString();
     const from = fromDid.toString();
     const body = JSON.parse(message.body ?? "{}");
-    const didcommMsg = new didcomm.Message({
+    const didcommMsg = new Message({
       id: message.id,
       typ: "application/didcomm-plain+json",
       type: message.piuri,
@@ -80,8 +70,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
   }
 
   async unpack(message: string): Promise<Domain.Message> {
-    const didcomm = await getDIDComm();
-    const [didcommMsg] = await didcomm.Message.unpack(
+    const [didcommMsg] = await Message.unpack(
       message,
       this.didResolver,
       this.secretsResolver,

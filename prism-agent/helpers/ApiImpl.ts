@@ -40,10 +40,14 @@ export class ApiImpl implements Api {
 
     const response = await this.client.request<T>(requestConfig);
 
-    if (response.status !== 200 && response.status !== 201) {
+    if (
+      response.status !== 200 &&
+      response.status !== 201 &&
+      response.status !== 202
+    ) {
       throw new HttpError<T>(response);
     }
-
+    console.log("RES", response.data);
     return new HttpResponse<T>(response.data, response.status);
   }
 }

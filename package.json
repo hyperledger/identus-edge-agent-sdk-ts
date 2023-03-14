@@ -10,11 +10,10 @@
     "types": "rm -rf build/typings && tsc",
     "build:browser": "webpack --mode=production --config webpack/webpack.browser.conf.js",
     "build:node": "webpack --mode=production --config webpack/webpack.node.conf.js",
-    "dev:browser": "webpack serve --mode=development --config webpack/webpack.browser.conf.js",
-    "dev:node": "webpack  --watch --mode=development --config webpack/webpack.node.conf.js",
+    "dev:browser": "rm -rf builf && npm run types && webpack serve --mode=development --config webpack/webpack.browser.conf.js",
+    "dev:node": "rm -rf builf && npm run types && webpack  --watch --mode=development --config webpack/webpack.node.conf.js",
     "test": "jest",
-    "coverage": "npm run test -- --coverage",
-    "prepare": "npm run build"
+    "coverage": "npm run test -- --coverage"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
