@@ -48,7 +48,7 @@ module.exports = (env, argv) => {
         __dirname,
         `../build/browser${isProduction ? "" : "-test"}`
       ),
-      libraryTarget: "commonjs2",
+      chunkFormat: "commonjs",
     },
     optimization: {
       // splitChunks: {
