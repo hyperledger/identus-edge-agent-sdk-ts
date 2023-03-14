@@ -1,9 +1,8 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn} from 'typeorm';
-import Did from './DID';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export default class PrivateKey {
-  @PrimaryColumn({type: 'text'})
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({type: 'text'})
@@ -17,8 +16,4 @@ export default class PrivateKey {
 
   @Column({type: 'text'})
   didId!: string;
-
-  @OneToOne(() => Did)
-  @JoinColumn({name: 'didId', referencedColumnName: 'did'})
-  did!: Did;
 }

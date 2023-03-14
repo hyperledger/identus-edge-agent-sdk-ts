@@ -1,9 +1,8 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn} from 'typeorm';
-import Did from './DID';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export default class VerifiableCredential {
-  @PrimaryColumn({type: 'text'})
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({type: 'text', nullable: true})
@@ -18,10 +17,6 @@ export default class VerifiableCredential {
   @Column({type: 'text'})
   verifiableCredentialJson!: string;
 
-  @Column({type: 'text', nullable: true})
-  issuerDIDId?: string;
-
-  @OneToOne(() => Did)
-  @JoinColumn({name: 'issuerDIDId', referencedColumnName: 'did'})
-  issuerDID?: Did;
+  @Column({type: 'text'})
+  issuerDIDId!: string;
 }

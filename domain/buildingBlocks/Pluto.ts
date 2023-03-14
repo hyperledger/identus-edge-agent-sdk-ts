@@ -5,72 +5,111 @@ import {Message} from "../models/Message";
 import {PeerDID} from "../models/PeerDID";
 import {PrismDIDInfo} from "../models/PrismDIDInfo";
 import {VerifiableCredential} from "../models/VerifiableCredential";
+import {MysqlConnectionOptions} from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import {CockroachConnectionOptions} from 'typeorm/driver/cockroachdb/CockroachConnectionOptions';
+import {SqliteConnectionOptions} from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import {SqlServerConnectionOptions} from 'typeorm/driver/sqlserver/SqlServerConnectionOptions';
+import {SapConnectionOptions} from 'typeorm/driver/sap/SapConnectionOptions';
+import {OracleConnectionOptions} from 'typeorm/driver/oracle/OracleConnectionOptions';
+import {CordovaConnectionOptions} from 'typeorm/driver/cordova/CordovaConnectionOptions';
+import {NativescriptConnectionOptions} from 'typeorm/driver/nativescript/NativescriptConnectionOptions';
+import {ReactNativeConnectionOptions} from 'typeorm/driver/react-native/ReactNativeConnectionOptions';
+import {SqljsConnectionOptions} from 'typeorm/driver/sqljs/SqljsConnectionOptions';
+import {MongoConnectionOptions} from 'typeorm/driver/mongodb/MongoConnectionOptions';
+import {AuroraMysqlConnectionOptions} from 'typeorm/driver/aurora-mysql/AuroraMysqlConnectionOptions';
+import {AuroraPostgresConnectionOptions} from 'typeorm/driver/aurora-postgres/AuroraPostgresConnectionOptions';
+import {ExpoConnectionOptions} from 'typeorm/driver/expo/ExpoConnectionOptions';
+import {BetterSqlite3ConnectionOptions} from 'typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions';
+import {CapacitorConnectionOptions} from 'typeorm/driver/capacitor/CapacitorConnectionOptions';
+import {SpannerConnectionOptions} from 'typeorm/driver/spanner/SpannerConnectionOptions';
+
+type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
+export type PlutoConnectionProps =
+    Omit<MysqlConnectionOptions, IgnoreProps>
+    | Omit<PostgresConnectionOptions, IgnoreProps>
+    | Omit<CockroachConnectionOptions, IgnoreProps>
+    | Omit<SqliteConnectionOptions, IgnoreProps>
+    | Omit<SqlServerConnectionOptions, IgnoreProps>
+    | Omit<SapConnectionOptions, IgnoreProps>
+    | Omit<OracleConnectionOptions, IgnoreProps>
+    | Omit<CordovaConnectionOptions, IgnoreProps>
+    | Omit<NativescriptConnectionOptions, IgnoreProps>
+    | Omit<ReactNativeConnectionOptions, IgnoreProps>
+    | Omit<SqljsConnectionOptions, IgnoreProps>
+    | Omit<MongoConnectionOptions, IgnoreProps>
+    | Omit<AuroraMysqlConnectionOptions, IgnoreProps>
+    | Omit<AuroraPostgresConnectionOptions, IgnoreProps>
+    | Omit<ExpoConnectionOptions, IgnoreProps>
+    | Omit<BetterSqlite3ConnectionOptions, IgnoreProps>
+    | Omit<CapacitorConnectionOptions, IgnoreProps>
+    | Omit<SpannerConnectionOptions, IgnoreProps>;
 
 export default interface Pluto {
   start(): Promise<void>;
 
-  storePrismDID(did: DID, keyPathIndex: number, privateKey: PrivateKey, privateKeyMetaId: string | null, alias?: string): void;
+  storePrismDID(did: DID, keyPathIndex: number, privateKey: PrivateKey, privateKeyMetaId: string | null, alias?: string): Promise<void>;
 
-  storePeerDID(did: DID, privateKeys: Array<PrivateKey>): void;
+  storePeerDID(did: DID, privateKeys: Array<PrivateKey>): Promise<void>;
 
-  storeDIDPair(host: DID, receiver: DID, name: string): void;
+  storeDIDPair(host: DID, receiver: DID, name: string): Promise<void>;
 
-  storeMessage(message: Message): void;
+  storeMessage(message: Message): Promise<void>;
 
-  storeMessages(messages: Array<Message>): void;
+  storeMessages(messages: Array<Message>): Promise<void>;
 
   storePrivateKeys(
       privateKey: PrivateKey,
       did: DID,
       keyPathIndex: number,
       metaId: string | null
-  ): void;
+  ): Promise<void>;
 
-  storeMediator(mediator: DID, host: DID, routing: DID): void;
+  storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
 
-  storeCredential(credential: VerifiableCredential): void;
+  storeCredential(credential: VerifiableCredential): Promise<void>;
 
-  getAllPrismDIDs(): Array<PrismDIDInfo>;
+  getAllPrismDIDs(): Promise<PrismDIDInfo[]>;
 
-  getDIDInfoByDID(did: DID): PrismDIDInfo | null;
+  getDIDInfoByDID(did: DID): Promise<PrismDIDInfo | null>;
 
-  getDIDInfoByAlias(alias: string): Array<PrismDIDInfo>;
+  getDIDInfoByAlias(alias: string): Promise<PrismDIDInfo[]>;
 
-  getPrismDIDKeyPathIndex(did: DID): number | null;
+  getPrismDIDKeyPathIndex(did: DID): Promise<number | null>;
 
-  getPrismLastKeyPathIndex(): number;
+  getPrismLastKeyPathIndex(): Promise<number>;
 
-  getAllPeerDIDs(): Array<PeerDID>;
+  getAllPeerDIDs(): Promise<Array<PeerDID>>;
 
-  getDIDPrivateKeysByDID(did: DID): Array<PrivateKey> | null;
+  getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey> | null>;
 
-  getDIDPrivateKeyByID(id: string): PrivateKey | null;
+  getDIDPrivateKeyByID(id: string): Promise<PrivateKey | null>;
 
-  getAllDidPairs(): Array<DIDPair>;
+  getAllDidPairs(): Promise<Array<DIDPair>>;
 
-  getPairByDID(did: DID): DIDPair | null;
+  getPairByDID(did: DID): Promise<DIDPair | null>;
 
-  getPairByName(name: string): DIDPair | null;
+  getPairByName(name: string): Promise<DIDPair | null>;
 
-  getAllMessages(): Array<Message>;
+  getAllMessages(): Promise<Array<Message>>;
 
-  getAllMessagesByDID(did: DID): Array<Message>;
+  getAllMessagesByDID(did: DID): Promise<Array<Message>>;
 
-  getAllMessagesSent(): Array<Message>;
+  getAllMessagesSent(): Promise<Array<Message>>;
 
-  getAllMessagesReceived(): Array<Message>;
+  getAllMessagesReceived(): Promise<Array<Message>>;
 
-  getAllMessagesSentTo(did: DID): Array<Message>;
+  getAllMessagesSentTo(did: DID): Promise<Array<Message>>;
 
-  getAllMessagesReceivedFrom(did: DID): Array<Message>;
+  getAllMessagesReceivedFrom(did: DID): Promise<Array<Message>>;
 
-  getAllMessagesOfType(type: string, relatedWithDID?: DID): Array<Message>;
+  getAllMessagesOfType(type: string, relatedWithDID?: DID): Promise<Array<Message>>;
 
-  getAllMessagesByFromToDID(from: DID, to: DID): Array<Message>;
+  getAllMessagesByFromToDID(from: DID, to: DID): Promise<Array<Message>>;
 
-  getMessage(id: string): Message | null;
+  getMessage(id: string): Promise<Message | null>;
 
-  getAllMediators(): Array<Mediator>;
+  getAllMediators(): Promise<Array<Mediator>>;
 
-  getAllCredentials(): Array<VerifiableCredential>;
+  getAllCredentials(): Promise<Array<VerifiableCredential>>;
 }

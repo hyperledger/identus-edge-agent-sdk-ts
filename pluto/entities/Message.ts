@@ -1,8 +1,8 @@
-import {Column, Entity, PrimaryColumn} from 'typeorm';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export default class Message {
-  @PrimaryColumn({type: 'text'})
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({type: 'text'})

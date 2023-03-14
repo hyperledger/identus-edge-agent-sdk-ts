@@ -1,29 +1,29 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import Did from './DID';
 
 @Entity()
 export default class Mediator {
-  @PrimaryColumn({type: 'text'})
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({type: 'text'})
   mediatorDidId!: string;
 
   @OneToOne(() => Did)
-  @JoinColumn({name: 'mediatorDidId', referencedColumnName: 'Did'})
+  @JoinColumn({name: 'mediatorDidId', referencedColumnName: 'did'})
   mediatorDid!: Did;
 
   @Column({type: 'text', nullable: true})
-  hostDidId?: string;
+  hostDidId!: string;
 
   @OneToOne(() => Did)
-  @JoinColumn({name: 'hostDidId', referencedColumnName: 'Did'})
-  hostDid?: Did;
+  @JoinColumn({name: 'hostDidId', referencedColumnName: 'did'})
+  hostDid!: Did;
 
   @Column({type: 'text', nullable: true})
-  routingDidId?: string;
+  routingDidId!: string;
 
   @OneToOne(() => Did)
-  @JoinColumn({name: 'routingDidId', referencedColumnName: 'Did'})
-  routingDid?: Did;
+  @JoinColumn({name: 'routingDidId', referencedColumnName: 'did'})
+  routingDid!: Did;
 }

@@ -22,6 +22,7 @@
     "build:test": "tsc -b tsconfig.tests.cjs.json",
     "test": "npm run test:node && npm run test:browser",
     "test:node": "npx nyc node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/**/*.ts tests/**/node/*.ts",
+    "test:pluto": "node_modules/mocha/bin/_mocha -r ts-node/register --timeout 9999 --colors tests/pluto/node/*.ts",
     "test:browser": "npx karma start karma.conf.js",
     "amtlr": "./node_modules/.bin/antlr4ts ./castor/parser/DIDAbnf.g4  -long-messages  && ./node_modules/.bin/antlr4ts  -long-messages ./castor/parser/DIDUrlAbnf.g4",
     "protos": "yarn protos:node && yarn protos:common",
@@ -95,6 +96,7 @@
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
     "multiformats": "^9.9.0",
+    "sqlite3": "^5.1.4",
     "typeorm": "^0.3.12"
   },
   "peerDependencies": {

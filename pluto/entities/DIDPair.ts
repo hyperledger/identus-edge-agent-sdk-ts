@@ -10,14 +10,14 @@ export default class DidPair {
   name?: string;
 
   @Column({type: 'text'})
-  hostDID?: string;
+  hostDID!: string;
 
   @OneToOne(() => Did)
   @JoinColumn({name: 'hostDID', referencedColumnName: 'did'})
-  hostDidEntity?: Did;
+  hostDidEntity!: Did;
 
   @Column({type: 'text'})
-  receiverDID?: string;
+  receiverDID!: string;
 
   @OneToOne(() => Did)
   @JoinColumn({name: 'receiverDID', referencedColumnName: 'did'})
