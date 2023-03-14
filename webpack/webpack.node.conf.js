@@ -31,18 +31,18 @@ module.exports = (env, argv) => {
     minimizer.push(new TerserPlugin({ extractComments: true }));
   }
 
-  // if (!isProduction) {
-  //   plugins.push({
-  //     apply: (compiler) => {
-  //       compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
-  //         exec("node build/node-test/index.js", (err, stdout, stderr) => {
-  //           if (stdout) process.stdout.write(stdout);
-  //           if (stderr) process.stderr.write(stderr);
-  //         });
-  //       });
-  //     },
-  //   });
-  // }
+  if (!isProduction) {
+    plugins.push({
+      apply: (compiler) => {
+        compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
+          exec("node build/node-test/index.js", (err, stdout, stderr) => {
+            if (stdout) process.stdout.write(stdout);
+            if (stderr) process.stderr.write(stderr);
+          });
+        });
+      },
+    });
+  }
 
   return {
     target: "node",
