@@ -1,6 +1,15 @@
 # Castor
 
-The Castor protocol defines a set of functions for working with Decentralized Identifiers (DIDs) and DID Documents. Here's a brief explanation of each function:
+Castor module provides a suite of primitives for working with Decentralized 
+Identifiers (DIDs). It allows developers to create and manage DIDs, manage their 
+associated keys and service endpoints, and resolve DIDs to retrieve corresponding 
+DID Documents.
+
+Castor currently supports creation and resolution of PRISM and Peer DID methods.
+
+> NOTE: Castor depends on Apollo module for cryptographic operations.
+
+Here's a brief explanation of each function:
 
 - `parseDID`: This function takes a string representation of a DID and returns a `DID` object. It may throw an error if the string is not a valid DID.
 
