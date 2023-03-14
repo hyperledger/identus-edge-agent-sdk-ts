@@ -9,9 +9,9 @@ describe("Mercury DIDComm DIDResolver", () => {
   describe("resolve", () => {
     it("should transform Domain.DIDDocument into DIDComm.DIDDoc", async () => {
       const idDid = Domain.DID.fromString("did:test:id");
-      const vmAuthentication = new Domain.VerificationMethod("vm-ED25519", "1", Domain.Curve.ED25519);
-      const vmKeyAgreements = new Domain.VerificationMethod("vm-X25519", "2", Domain.Curve.X25519);
-      const vmOther = new Domain.VerificationMethod("vm-SECP256K1", "3", Domain.Curve.SECP256K1);
+      const vmAuthentication = new Domain.VerificationMethod("vm-ED25519", "1", "type", { crv: Domain.Curve.ED25519, kid: "kid", x: { data: "xData" } } as any);
+      const vmKeyAgreements = new Domain.VerificationMethod("vm-X25519", "2", "type", { crv: Domain.Curve.X25519, kid: "kid", x: { data: "xData" } } as any);
+      const vmOther = new Domain.VerificationMethod("vm-SECP256K1", "3", "type", { crv: Domain.Curve.SECP256K1, kid: "kid", x: { data: "xData" } } as any);
       const service = new Domain.Service("", [PeerDIDService.DIDCommMessagingKey], new Domain.ServiceEndpoint(""));
 
       const castor: Pick<Castor, "resolveDID"> = {
@@ -35,12 +35,41 @@ describe("Mercury DIDComm DIDResolver", () => {
       expect(result?.id).to.equal(idDid.toString());
       expect(result?.authentication).to.contain(vmAuthentication.id);
       expect(result?.keyAgreement).to.contain(vmKeyAgreements.id);
-      expect(result?.verificationMethod).to.deep.contain({
-        controller: vmOther.controller,
-        id: vmOther.id,
-        type: "JsonWebKey2020",
-        publicKeyJwk: vmOther.publicKeyJwk
-      });
+      expect(result?.verificationMethod).to.deep.include.members([
+        {
+          controller: vmAuthentication.controller,
+          id: vmAuthentication.id,
+          type: "JsonWebKey2020",
+          publicKeyJwk: {
+            crv: vmAuthentication.publicKeyJwk?.crv,
+            kid: (vmAuthentication.publicKeyJwk as any)?.kid,
+            kty: "OKP",
+            x: (vmAuthentication.publicKeyJwk?.x as any).data
+          }
+        },
+        {
+          controller: vmKeyAgreements.controller,
+          id: vmKeyAgreements.id,
+          type: "JsonWebKey2020",
+          publicKeyJwk: {
+            crv: vmKeyAgreements.publicKeyJwk?.crv,
+            kid: (vmKeyAgreements.publicKeyJwk as any)?.kid,
+            kty: "OKP",
+            x: (vmKeyAgreements.publicKeyJwk?.x as any).data
+          }
+        },
+        {
+          controller: vmOther.controller,
+          id: vmOther.id,
+          type: "JsonWebKey2020",
+          publicKeyJwk: {
+            crv: vmOther.publicKeyJwk?.crv,
+            kid: (vmOther.publicKeyJwk as any)?.kid,
+            kty: "OKP",
+            x: (vmOther.publicKeyJwk?.x as any).data
+          }
+        },
+      ]);
       expect(result?.service).to.deep.contain({
         id: service.id,
         type: PeerDIDService.DIDCommMessagingKey,
