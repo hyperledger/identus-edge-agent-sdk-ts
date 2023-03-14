@@ -93,7 +93,7 @@ describe("PEERDID CreateTest", () => {
           [],
           ["did:example:somemediator#somekey"]
         )
-      )
+      ),
     ];
     const did = await castor.createPeerDID(keyPairs, services);
     expect(did.toString()).to.equal(validPeerDID);
@@ -158,7 +158,7 @@ describe("PEERDID CreateTest", () => {
           [],
           ["did:example:somemediator#somekey"]
         )
-      )
+      ),
     ];
     const did = await castor.createPeerDID(keyPairs, services);
     const keyPair = authenticationKeyPair;
@@ -179,17 +179,17 @@ describe("PEERDID CreateTest", () => {
     const seed = apollo.createRandomSeed().seed;
 
     const authenticationKeyPair: KeyPair = apollo.createKeyPairFromKeyCurve(
-      seed,
       {
         curve: Curve.ED25519,
-      }
+      },
+      seed
     );
 
     const KeyAgreementKeyPair: KeyPair = apollo.createKeyPairFromKeyCurve(
-      seed,
       {
         curve: Curve.X25519,
-      }
+      },
+      seed
     );
 
     const keyPairs = [KeyAgreementKeyPair, authenticationKeyPair];
@@ -202,7 +202,7 @@ describe("PEERDID CreateTest", () => {
           [],
           ["did:example:somemediator#somekey"]
         )
-      )
+      ),
     ];
     const did = await castor.createPeerDID(keyPairs, services);
     const text = "The quick brown fox jumps over the lazy dog";

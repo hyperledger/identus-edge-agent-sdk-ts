@@ -69,7 +69,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       value: Buffer.from(peerDid.privateKey),
     };
     const seed: Domain.Seed = { value: new Uint8Array() };
-    const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
+    const keyPair = this.apollo.createKeyPairFromPrivateKey(privateKey, seed);
     const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
     const secret: Secret = {

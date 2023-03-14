@@ -127,4 +127,5 @@ export class DIDDocument {
 export interface PublicKeyJWK {
   crv: string;
   x: string;
+  kid: string;
 }

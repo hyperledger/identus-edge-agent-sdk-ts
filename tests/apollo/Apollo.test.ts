@@ -128,9 +128,12 @@ describe("Apollo Tests", () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.SECP256K1,
-    });
+    const keyPair = apollo.createKeyPairFromKeyCurve(
+      {
+        curve: Curve.SECP256K1,
+      },
+      seed
+    );
     const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
     const verified = apollo.verifySignature(
       keyPair.publicKey,
@@ -144,14 +147,17 @@ describe("Apollo Tests", () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.SECP256K1,
-    });
-    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
-      apollo.createRandomSeed().seed,
+    const keyPair = apollo.createKeyPairFromKeyCurve(
       {
         curve: Curve.SECP256K1,
-      }
+      },
+      seed
+    );
+    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
+      {
+        curve: Curve.SECP256K1,
+      },
+      apollo.createRandomSeed().seed
     );
     const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
     const verified = apollo.verifySignature(
@@ -166,9 +172,12 @@ describe("Apollo Tests", () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.ED25519,
-    });
+    const keyPair = apollo.createKeyPairFromKeyCurve(
+      {
+        curve: Curve.ED25519,
+      },
+      seed
+    );
     const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
     const verified = apollo.verifySignature(
       keyPair.publicKey,
@@ -182,14 +191,17 @@ describe("Apollo Tests", () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.ED25519,
-    });
-    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
-      apollo.createRandomSeed().seed,
+    const keyPair = apollo.createKeyPairFromKeyCurve(
       {
         curve: Curve.ED25519,
-      }
+      },
+      seed
+    );
+    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
+      {
+        curve: Curve.ED25519,
+      },
+      apollo.createRandomSeed().seed
     );
     const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
     const verified = apollo.verifySignature(
@@ -204,9 +216,12 @@ describe("Apollo Tests", () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(seed, {
-      curve: Curve.X25519,
-    });
+    const keyPair = apollo.createKeyPairFromKeyCurve(
+      {
+        curve: Curve.X25519,
+      },
+      seed
+    );
 
     expect(() =>
       apollo.signByteArrayMessage(keyPair.privateKey, text)

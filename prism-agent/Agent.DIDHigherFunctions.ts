@@ -36,18 +36,18 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
   ): Promise<DID> {
     const index = this.pluto.getPrismLastKeyPathIndex();
     const keyAgreementKeyPair = this.apollo.createKeyPairFromKeyCurve(
-      this.seed,
       {
         curve: Curve.X25519,
         index: index,
-      }
+      },
+      this.seed
     );
     const authenticationKeyPair = this.apollo.createKeyPairFromKeyCurve(
-      this.seed,
       {
         curve: Curve.ED25519,
         index: index,
-      }
+      },
+      this.seed
     );
 
     const did = await this.castor.createPeerDID(
@@ -102,10 +102,13 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     const index = keyPathIndex
       ? keyPathIndex
       : this.pluto.getPrismLastKeyPathIndex();
-    const keyPair = this.apollo.createKeyPairFromKeyCurve(this.seed, {
-      curve: Curve.SECP256K1,
-      index: index,
-    });
+    const keyPair = this.apollo.createKeyPairFromKeyCurve(
+      {
+        curve: Curve.SECP256K1,
+        index: index,
+      },
+      this.seed
+    );
     const did = await this.castor.createPrismDID(keyPair.publicKey, services);
     //this.pluto.storePrivateKeys(keyPair.privateKey, did, index, null);
     this.pluto.storePrismDID(did, index, keyPair.privateKey, null, alias);

@@ -14,7 +14,30 @@ interface TestScenario {
   seed: SeedWords;
   agent: SDK.Agent;
 }
-export default function createTestScenario(
+
+interface TestOutOfBand {
+  outOfBand: string;
+  did: DID;
+}
+
+export function outOfBandConnection(apollo: Apollo): TestOutOfBand {
+  const createdPeerDID = "";
+  return {
+    outOfBand: JSON.stringify({
+      id: "9f00d185-a0dd-4727-bcb5-d01746b0acd4",
+      type: "https://didcomm.org/out-of-band/2.0/invitation",
+      from: "did:peer:2.Ez6LSfuXdp4rncpBvqjyWaQ5gR1XpwtUGo6UbjfCyH6WJc8Bn.Vz6MkoYQdhVmkHKaThYSVR8Toc5dejuem2LCsX4eSo4XtXCVC.SeyJ0IjoiZG0iLCJzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwODAvZGlkY29tbSIsInIiOltdLCJhIjpbImRpZGNvbW0vdjIiXX0",
+      body: {
+        goal_code: "connect",
+        goal: "Establish a trust connection between two peers",
+        accept: [],
+      },
+    }),
+    did: createdPeerDID,
+  };
+}
+
+export function createTestScenario(
   mediatorDID: DID,
   sqlWasmBinaryUrl: string
 ): TestScenario {

@@ -53,10 +53,10 @@ describe("PRISMDID CreateTest", () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
     const keyPair = apollo.createKeyPairFromKeyCurve(
-      apollo.createRandomSeed().seed,
       {
         curve: Curve.SECP256K1,
-      }
+      },
+      apollo.createRandomSeed().seed
     );
     const did = await castor.createPrismDID(keyPair.publicKey, []);
     const text = "The quick brown fox jumps over the lazy dog";
