@@ -9,12 +9,15 @@ Assuming the Wallet SDK has been installed as a dependency, here's an example of
 how to import and init Apollo module:
 
 ```ts
-import { Apollo } from '@input-output-hk/atala-prism-wallet-sdk';
+import { Apollo, Domain } from '@input-output-hk/atala-prism-wallet-sdk';
 
 const apollo = new Apollo();
 
 // use apollo...
 ```
+
+`Domain` contains a domain-specific types and models used by Apollo and other 
+modules in the SDK.
 
 ## API
 Here's a brief explanation of the most important primitives:
@@ -23,100 +26,65 @@ Here's a brief explanation of the most important primitives:
 - `createRandomMnemonics`: This function creates a random mnemonic phrase that 
 can be used as a seed for generating a private key.
 
-```swift
-// Example usage:
-let mnemonics = ApolloImpl().createRandomMnemonics()
+```ts
+const mnemonics = apollo.createRandomMnemonics();
 ```
 
-- `createSeed`: This function takes in a set of mnemonics and a passphrase, and returns a seed object used to generate a private key. It may throw an error if the mnemonics or passphrase are invalid.
+- `createSeed`: This function takes mnemonics and passphrase, and creates a seed
+object used to generate a private key. It may throw an error if the mnemonics are
+invalid.
 
-```swift
-// Example usage:
-do {
-    let apollo = ApolloImpl()
-    let mnemonics = ["word1", "word2", "word3", ...]
-    let passphrase = "passphrase"
-    let seed = try apollo.createSeed(mnemonics: mnemonics, passphrase: passphrase)
-} catch {
-    // Handle error
-}
+```ts
+const seed = apollo.createSeed(mnemonics, "my-secret-passphrase");
 ```
 
-- `createRandomSeed`: This function creates a random seed and a corresponding set of mnemonic phrases.
+- `createRandomSeed`: This function creates a random mnemonic phrase and seed.
 
-```swift
-// Example usage:
-let (mnemonics, seed) = ApolloImpl().createRandomSeed()
+```ts
+const {mnemonics, seed} = apollo.createRandomSeed();
 ```
 
-- `createKeyPair`: This function creates a key pair (a private and public key) using a given seed and key curve.
+- `createKeyPairFromKeyCurve`: This function creates a key pair (a private and 
+public key) using a given seed and key curve.
 
-```swift
-// Example usage:
-let seed = Seed(...)
-let curve = KeyCurve.secp256k1
-let keyPair = ApolloImpl().createKeyPair(seed: seed, curve: curve)
+```ts
+const keyPairSecp256K1 = apollo.createKeyPairFromKeyCurve(seed, {
+    curve: Domain.Curve.SECP256K1
+});
 ```
 
-- `createKeyPair`: This function creates a key pair using a given seed and a specified private key. It may throw an error if the private key is invalid.
+Supported key curves are: `SECP256K1`, `ED25519` and `X25519`.
 
-```swift
-// Example usage:
-do {
-    let apollo = ApolloImpl()
-    let seed = Seed(...)
-    let privateKey = PrivateKey(...)
-    let keyPair = try apollo.createKeyPair(seed: seed, privateKey: privateKey)
-} catch {
-    // Handle error
-}
+- `compressedPublicKeyFromPublicKey`: This function compresses a given public 
+key into a shorter, more efficient form.
+
+```ts
+let compressedPublicKey = apollo.compressedPublicKeyFromPublicKey(keyPairSecp256K1.publicKey);
 ```
 
-- `compressedPublicKey`: This function compresses a given public key into a shorter, more efficient form.
+> NOTE: This API works only with `SECP256K1` key curve.
 
-```swift
-// Example usage:
-let publicKey = PublicKey(...)
-let compressedPublicKey = ApolloImpl().compressedPublicKey(publicKey: publicKey)
+- `signStringMessage`, `signByteArrayMessage`: This function signs a message 
+using a given private key, returning the signature.
+
+```ts
+const message = "data to sign";
+const messageBytes = new TextEncoder().encode(message);
+
+const signatureSecp256K1 = apollo.signStringMessage(keyPairSecp256K1.privateKey, message);
+const signatureEd25519 = apollo.signByteArrayMessage(keyPairEd25519.privateKey, messageBytes);
 ```
 
-- `compressedPublicKey`: This function decompresses a given compressed public key into its original form.
+> NOTE: Signing data is possible only with `SECP256K1` and `ED25519` key curves.
 
-```swift
-// Example usage:
-let compressedData = Data(...)
-let decompressedPublicKey = ApolloImpl().compressedPublicKey(compressedData: compressedData)
-```
+- `verifySignature`: This function verifies the authenticity of a signature using 
+the corresponding public key, challenge, and signature. It returns a boolean 
+value indicating whether the signature is valid or not.
 
-- `signMessage`: This function signs a message using a given private key, returning the signature.
-
-```swift
-// Example usage:
-let privateKey = PrivateKey(...)
-let message = Data(...)
-let signature = ApolloImpl().signMessage(privateKey: privateKey, message: message)
-```
-
-- `signMessage`: This function signs a message using a given private key, returning the signature. It may throw an error if the message is invalid.
-
-```swift
-// Example usage:
-do {
-    let apollo = ApolloImpl()
-    let privateKey = PrivateKey(...)
-    let message = "hello world"
-    let signature = try apollo.signMessage(privateKey: privateKey, message: message)
-} catch {
-    // Handle error
-}
-```
-
-- `verifySignature`: This function verifies the authenticity of a signature using the corresponding public key, challenge, and signature. It returns a boolean value indicating whether the signature is valid or not.
-
-```swift
-// Example usage:
-let publicKey = PublicKey(...)
-let challenge = Data(...)
-let signature = Signature(...)
-let isValid = ApolloImpl().verifySignature(publicKey: publicKey, challenge: challenge, signature: signature)
+```ts
+let isValid = apollo.verifySignature( 
+    keyPairFromCurveSecp256K1.publicKey,
+    messageBytes,
+    signatureSecp256K1.value
+);
 ```
