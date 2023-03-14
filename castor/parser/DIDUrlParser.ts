@@ -21,7 +21,7 @@ class DIDUrlListener implements DIDUrlAbnfListener {
   public scheme?: string;
   public methodName?: string;
   public methodId?: string;
-  public path: Array<string> =[];
+  public path: Array<string> = [];
   public query: Map<string, string> = new Map();
   public fragment?: string;
 

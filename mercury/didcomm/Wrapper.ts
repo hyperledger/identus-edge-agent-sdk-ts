@@ -47,12 +47,12 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     const to = toDid.toString();
     const from = fromDid.toString();
-
+    const body = JSON.parse(message.body ?? "{}");
     const didcommMsg = new didcomm.Message({
       id: message.id,
       typ: "application/didcomm-plain+json",
       type: message.piuri,
-      body: message.body ?? "{}",
+      body: body,
       to: [to],
       from: from,
       from_prior: message.fromPrior,
@@ -62,6 +62,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       thid: message.thid,
       pthid: message.pthid,
     });
+
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,
       from,
@@ -163,7 +164,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     if ("json" in data) {
       const parsed: Domain.AttachmentJsonData = {
-        data: Buffer.from(base64url.decode(data.json)).toString(),
+        data: data.json,
       };
 
       return parsed;
@@ -222,7 +223,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     if ("data" in data) {
       const parsed: JsonAttachmentData = {
-        json: base64url.encode(Buffer.from(data.data)),
+        json: JSON.parse(data.data),
       };
 
       return parsed;

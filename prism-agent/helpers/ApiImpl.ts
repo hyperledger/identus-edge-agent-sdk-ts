@@ -26,7 +26,6 @@ export class ApiImpl implements Api {
     for (const [name, value] of httpHeaders) {
       rawHeaders[name] = value;
     }
-    debugger;
 
     const requestConfig: AxiosRequestConfig = {
       baseURL: rawUrl.toString(),

@@ -134,7 +134,7 @@ export default class Agent
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
       this.state = AgentState.RUNNING;
     } else {
-      throw new AgentError.MediationRequestFailedError();
+      throw new AgentError.MediationRequestFailedError("Mediation failed");
     }
     return this.state;
   }

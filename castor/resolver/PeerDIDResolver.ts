@@ -222,7 +222,7 @@ export class PeerDIDResolver implements DIDResolver {
 
       return services.map((service, offset) => {
         return new DIDDocumentService(
-          did.toString() + service.type + "-" + offset,
+          did.toString() + "#" + service.type + "-" + offset,
           [service.type],
           new ServiceEndpoint(
             service.serviceEndpoint,

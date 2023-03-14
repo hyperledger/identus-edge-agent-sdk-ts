@@ -68,6 +68,7 @@ export class IssueCredentialProtocol {
           this.offer
         );
         const requestMessage = request.makeMessage();
+
         await this.connector.sendMessage(requestMessage);
         this.request = request;
         this._stage = IssueCredentialProtocol.Stage.request;

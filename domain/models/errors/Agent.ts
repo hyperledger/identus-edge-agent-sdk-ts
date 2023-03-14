@@ -89,6 +89,10 @@ export class InvalidCredentialFormats extends Error {
   }
 }
 export class NoMediatorAvailableError extends Error {}
-export class MediationRequestFailedError extends Error {}
+export class MediationRequestFailedError extends Error {
+  constructor(message?: string) {
+    super(message || "MediationRequestFailed Error");
+  }
+}
 export class InvalidStepError extends Error {}
 export class UnsupportedAttachmentType extends Error {}

@@ -75,7 +75,11 @@ export class BasicMediatorHandler implements MediatorHandler {
 
         return mediator;
       } catch (err) {
-        throw new AgentError.MediationRequestFailedError();
+        if (err instanceof Error) {
+          throw new AgentError.MediationRequestFailedError(err.message);
+        } else {
+          throw err;
+        }
       }
     }
 

@@ -5,7 +5,7 @@ import { DIDCommProtocol } from "./DIDCommProtocol";
 import { Api } from "../domain";
 import { MediaType } from "./helpers/MediaType";
 import Castor from "../domain/buildingBlocks/Castor";
-
+import * as DIDURLParser from "../castor/parser/DIDUrlParser";
 export default class Mercury implements MercuryInterface {
   constructor(
     public castor: Castor,
@@ -37,15 +37,15 @@ export default class Mercury implements MercuryInterface {
     if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
 
     const packedMessage = await this.packMessage(message);
-    debugger;
+
     const document = await this.castor.resolveDID(toDid.toString());
-    debugger;
+
     const service = document.services.find((x) => x.isDIDCommMessaging);
-    debugger;
+
     if (service == undefined) throw new MercuryError.NoValidServiceFoundError();
-    debugger;
+
     const mediatorDid = this.getMediatorDID(service);
-    debugger;
+
     if (mediatorDid instanceof Domain.DID) {
       const forwardMsg = new Domain.Message(
         JSON.stringify({ next: toDid.toString() }),
@@ -64,6 +64,7 @@ export default class Mercury implements MercuryInterface {
       const mediatorDocument = await this.castor.resolveDID(
         mediatorDid.toString()
       );
+
       const packedForwardMsg = await this.packMessage(forwardMsg);
 
       const mediatorService = mediatorDocument.services.find(
@@ -78,8 +79,9 @@ export default class Mercury implements MercuryInterface {
 
   private getMediatorDID(service: Domain.Service): Domain.DID | undefined {
     try {
-      const url = service.serviceEndpoint.uri;
-      return this.castor.parseDID(url);
+      const didURL = DIDURLParser.parse(service.id);
+
+      return didURL.did;
     } catch {
       return undefined;
     }
@@ -93,7 +95,7 @@ export default class Mercury implements MercuryInterface {
 
     const headers = new Map();
     headers.set("Content-type", MediaType.ContentTypeEncrypted);
-    debugger;
+
     const response = await this.api.request<Uint8Array>(
       "POST",
       service.serviceEndpoint.uri,

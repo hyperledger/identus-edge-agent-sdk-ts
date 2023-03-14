@@ -3,8 +3,7 @@ import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import Pluto from "../../pluto/Pluto";
-import { base64url } from "multiformats/bases/base64";
-import { DID, VerificationMethod, VerificationMethods } from "../../domain";
+import { VerificationMethod, VerificationMethods } from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
@@ -28,8 +27,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
   async get_secret(secret_id: string): Promise<Secret | null> {
     const peerDids = this.pluto.getAllPeerDIDs();
     const secretDID = DIDURLParser.parse(secret_id);
-
-    //TODO: URGENT TO CHANGE TYPES IN PLUTO
     const found = peerDids.find((peerDIDSecret: any) => {
       const xDID = DIDURLParser.parse(peerDIDSecret.did);
 
@@ -55,7 +52,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
 
       if (publicKeyJWK) {
         const secret = this.mapToSecret(found, publicKeyJWK);
-        debugger;
         return secret;
       }
     }
@@ -76,7 +72,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     const keyPair = this.apollo.createKeyPairFromPrivateKey(seed, privateKey);
     const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
-
     const secret: Secret = {
       id,
       type: "JsonWebKey2020",
