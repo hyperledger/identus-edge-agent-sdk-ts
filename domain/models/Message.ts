@@ -23,11 +23,11 @@ export class Message {
     public readonly to?: DID,
     public readonly attachments: AttachmentDescriptor[] = [],
     public readonly thid?: string,
-    public readonly extraHeaders: string[] = [],
+    public readonly extraHeaders: [string, string][] = [],
     public readonly createdTime: string = Date.now().toString(),
     public readonly expiresTimePlus: string = (
       createdTime +
-      1 * 24 * 60 * 60 
+      1 * 24 * 60 * 60
     ).toString(),
     public readonly ack: string[] = [],
     public readonly direction: MessageDirection = MessageDirection.RECEIVED,

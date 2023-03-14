@@ -5,7 +5,18 @@ import chaiAsPromised from "chai-as-promised";
 
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import { Api, DID, DIDDocument, HttpResponse, KeyPair, Message, PublicKey, Service, ServiceEndpoint, Services } from "../../domain";
+import {
+  Api,
+  DID,
+  DIDDocument,
+  HttpResponse,
+  KeyPair,
+  Message,
+  PublicKey,
+  Service,
+  ServiceEndpoint,
+  Services,
+} from "../../domain";
 import * as Domain from "../../domain";
 import { MercuryError } from "../../domain/models/Errors";
 import { DIDCommProtocol } from "../../mercury/DIDCommProtocol";
@@ -22,7 +33,7 @@ describe("Mercury", () => {
     httpManager: Api;
     didProtocol: DIDCommProtocol;
     mercury: Mercury;
-  }
+  };
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -37,7 +48,10 @@ describe("Mercury", () => {
       parseDID(did: string): DID {
         throw new Error("Method not implemented.");
       },
-      createPrismDID(masterPublicKey: PublicKey, services?: Service[] | undefined): Promise<DID> {
+      createPrismDID(
+        masterPublicKey: PublicKey,
+        services?: Service[] | undefined
+      ): Promise<DID> {
         throw new Error("Method not implemented.");
       },
       createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
@@ -46,15 +60,19 @@ describe("Mercury", () => {
       resolveDID(did: string): Promise<DIDDocument> {
         throw new Error("Method not implemented.");
       },
-      verifySignature(did: DID, challenge: Uint8Array, signature: Uint8Array): Promise<boolean> {
+      verifySignature(
+        did: DID,
+        challenge: Uint8Array,
+        signature: Uint8Array
+      ): Promise<boolean> {
         throw new Error("Method not implemented.");
       },
       getEcnumbasis(did: DID, keyPair: KeyPair): string {
         throw new Error("Method not implemented.");
-      }
-    }
+      },
+    };
     const httpManager: Api = {
-      request: async () => new HttpResponse<any>(new Uint8Array(), 200)
+      request: async () => new HttpResponse<any>(new Uint8Array(), 200),
     };
     const didProtocol: DIDCommProtocol = {
       packEncrypted: async () => "",
@@ -68,8 +86,12 @@ describe("Mercury", () => {
 
   describe("PackMessage", () => {
     it("should call DIDCommProtocol.packEncrypted with [message, message.to, message.from]", () => {
-      const fromDid = DID.fromString("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0");
-      const toDid = DID.fromString("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0");
+      const fromDid = DID.fromString(
+        "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      );
+      const toDid = DID.fromString(
+        "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      );
       const message = new Message(
         "{}",
         undefined,
@@ -128,11 +150,17 @@ describe("Mercury", () => {
 
     beforeEach(() => {
       ctx = makeTestContext();
-      fromDID = DID.fromString("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0");
-      toDID = DID.fromString("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0");
+      fromDID = DID.fromString(
+        "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      );
+      toDID = DID.fromString(
+        "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      );
 
       sandbox.stub(ctx.castor, "parseDID").returns(fromDID);
-      sandbox.stub(ctx.httpManager, "request").resolves(new HttpResponse<any>(new Uint8Array(), 200));
+      sandbox
+        .stub(ctx.httpManager, "request")
+        .resolves(new HttpResponse<any>({}, 200));
     });
 
     it("should call HttpManager.postEncrypted with [ServiceEndpoint.uri, packedMessage]", async () => {
@@ -147,19 +175,30 @@ describe("Mercury", () => {
 
       const endpoint = new ServiceEndpoint("testUri");
       const services = new Services([
-        new Service("testService", ["DIDCommMessaging"], endpoint)
+        new Service("testService", ["DIDCommMessaging"], endpoint),
       ]);
-      sandbox.stub(ctx.castor, "resolveDID").resolves(new Domain.DIDDocument(toDID, [services]));
+      sandbox
+        .stub(ctx.castor, "resolveDID")
+        .resolves(new Domain.DIDDocument(toDID, [services]));
       sandbox.stub(ctx.didProtocol, "packEncrypted").resolves(packedMessage);
 
       await ctx.mercury.sendMessage(message);
 
-      expect(ctx.didProtocol.packEncrypted).to.have.been.calledWith(message, toDID, fromDID);
-      expect(ctx.mercury.castor.resolveDID).to.have.been.calledWith(toDID.toString());
-      expect(ctx.mercury.api.request).to.have.been.calledWith(
-        'POST', endpoint.uri, new Map(), new Map([["Content-type", "application/didcomm-encrypted+json"]]), packedMessage
+      expect(ctx.didProtocol.packEncrypted).to.have.been.calledWith(
+        message,
+        toDID,
+        fromDID
       );
-
+      expect(ctx.mercury.castor.resolveDID).to.have.been.calledWith(
+        toDID.toString()
+      );
+      expect(ctx.mercury.api.request).to.have.been.calledWith(
+        "POST",
+        endpoint.uri,
+        new Map(),
+        new Map([["Content-type", "application/didcomm-encrypted+json"]]),
+        packedMessage
+      );
     });
 
     describe("Errors", () => {
@@ -180,9 +219,13 @@ describe("Mercury", () => {
           fromDID
         );
 
-        sandbox.stub(ctx.castor, "resolveDID").resolves(new Domain.DIDDocument(toDID, []));
+        sandbox
+          .stub(ctx.castor, "resolveDID")
+          .resolves(new Domain.DIDDocument(toDID, []));
 
-        expect(ctx.mercury.sendMessage(message)).to.eventually.be.rejectedWith(MercuryError.NoValidServiceFoundError)
+        expect(ctx.mercury.sendMessage(message)).to.eventually.be.rejectedWith(
+          MercuryError.NoValidServiceFoundError
+        );
       });
     });
   });
@@ -191,20 +234,20 @@ describe("Mercury", () => {
     it("passes the result of sendMessage to unpackMessage", async () => {
       const ctx = makeTestContext();
       const message = new Message("{}", undefined, "TypeofMessage");
-      const returnedMessage = "returnedMessage";
+      const returnedMessage = { message: "returnedMessage" };
       const unpackedMessage = new Message("{}", undefined, "TypeofMessage");
-      const encoded = new TextEncoder().encode(returnedMessage);
 
-      sandbox.stub(ctx.mercury, "sendMessage").callsFake(async () => encoded);
+      sandbox
+        .stub(ctx.mercury, "sendMessage")
+        .callsFake(async () => returnedMessage);
       sandbox
         .stub(ctx.mercury, "unpackMessage")
         .callsFake(async () => unpackedMessage);
 
       const result = await ctx.mercury.sendMessageParseMessage(message);
+      const jsonMessage = JSON.stringify(returnedMessage);
       expect(ctx.mercury.sendMessage).to.have.been.calledWith(message);
-      expect(ctx.mercury.unpackMessage).to.have.been.calledWith(
-        returnedMessage
-      );
+      expect(ctx.mercury.unpackMessage).to.have.been.calledWith(jsonMessage);
       expect(result).to.equal(unpackedMessage);
     });
   });
