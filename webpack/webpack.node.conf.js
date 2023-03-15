@@ -5,6 +5,8 @@ const exec = require("child_process").exec;
 const TerserPlugin = require("terser-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
+const nodeExternals = require('webpack-node-externals');
+
 module.exports = (env, argv) => {
     const isProduction = argv.mode === "production";
 
@@ -28,29 +30,7 @@ module.exports = (env, argv) => {
 
     return {
         target: "node",
-        externals: {
-            sqlite3: 'commonjs sqlite3',
-            'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
-            'mysql': 'commonjs mysql',
-            'better-sqlite3': 'commonjs better-sqlite3',
-            "request": 'commonjs request',
-            "@google-cloud/spanner": "commonjs @google-cloud/spanner",
-            "@sap/hana-client": "commonjs @sap/hana-client",
-            "hdb-pool": "commonjs hdb-pool",
-            "ioredis": "commonjs ioredis",
-            "mongodb": "commonjs mongodb",
-            "mssql": "commonjs mssql",
-            "mysql2": "commonjs mysql2",
-            "oracledb": "commonjs oracledb",
-            "pg": "commonjs pg",
-            "pg-native": "commonjs pg-native",
-            "pg-query-stream": "commonjs pg-query-stream",
-            "redis": "commonjs redis",
-            "sql.js": "commonjs sql.js",
-            "ts-node": "commonjs ts-node",
-            "typeorm-aurora-data-api-driver": "commonjs typeorm-aurora-data-api-driver",
-            // typeorm: 'commonjs typeorm',
-        },
+        externals: [nodeExternals()],
         mode: isProduction ? "production" : "development",
         devtool: "source-map",
         entry: {
