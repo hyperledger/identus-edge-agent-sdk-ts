@@ -20,7 +20,21 @@ module.exports = (env, argv) => {
   ];
 
   if (!isProduction) {
-    plugins.push(new HtmlWebpackPlugin());
+    plugins.push(
+      new HtmlWebpackPlugin({
+        templateContent: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Webpack App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"><script defer src="index.js"></script></head>
+        <body>
+        <div id="root"></div>
+        </body>
+      </html>`,
+      })
+    );
   }
 
   const minimizer = [];
@@ -32,7 +46,7 @@ module.exports = (env, argv) => {
     target: "web",
     mode: isProduction ? "production" : "development",
     devtool: "source-map",
-    entry: isProduction ? "./index.ts" : "./demos/test-browser.ts",
+    entry: isProduction ? "./index.ts" : "./demos/test-browser.tsx",
     devServer: {
       static: {
         directory: path.join(__dirname, "../build/browser"),
@@ -62,12 +76,16 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.(sa|sc|c)ss$/,
+          use: [{ loader: "css-loader", options: { sourceMap: true } }],
+        },
+        {
           test: /\.wasm$/,
           type: "webassembly/async",
         },
         { test: /\.json$/, type: "json" },
         {
-          test: /\.(m|j|t)s$/,
+          test: /(\.(m|j|t)s)|(\.tsx)$/,
           exclude: /(node_modules|bower_components)/,
           use: {
             loader: "babel-loader",
@@ -81,7 +99,7 @@ module.exports = (env, argv) => {
       syncWebAssembly: true,
     },
     resolve: {
-      extensions: [".ts", ".js", ".json"],
+      extensions: [".ts", ".tsx", ".jsx", ".js", ".json"],
       fallback: {
         fs: false,
         crypto: require.resolve("crypto-browserify"),

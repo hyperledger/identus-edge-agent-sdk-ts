@@ -15,4 +15,5 @@ export * from "./Message";
 export * from "./MessageAttachment";
 export * from "./Mediator";
 export * from "./Api";
+export * from "./WordList";
 export type JsonString = string;
