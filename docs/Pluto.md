@@ -15,8 +15,6 @@ or more implementations which we could recommend for production use.
 Here's the part of Pluto interface, just to give you an idea of what it looks 
 like. For the full interface specification, check `domain` folder.
 
-
-
 ```ts
 interface Pluto {
   start(): Promise<void>;
