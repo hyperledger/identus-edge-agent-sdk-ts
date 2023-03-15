@@ -59,6 +59,10 @@ module.exports = (env, argv) => {
         target: "web",
         mode: isProduction ? "production" : "development",
         devtool: "source-map",
+        externals: {
+            "sql.js": "commonjs sql.js",
+            'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
+        },
         entry: isProduction ? "./index.ts" : "./demos/test-browser.tsx",
         devServer: {
             static: {
