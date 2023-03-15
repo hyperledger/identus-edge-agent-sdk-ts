@@ -87,10 +87,6 @@ using given DID, challenge, and signature data. It returns a boolean value
 indicating whether the signature is valid or not. It may throw an error if the 
 DID or signature data are invalid.
 
-This function is similar to the `verifySignature` function in the Apollo module,
-but it facilitates the process of parsing the DID and extracting the right 
-public key.
-
 ```ts
 const message = "data to sign";
 const messageBytes = new TextEncoder().encode(message);
@@ -106,3 +102,7 @@ const isValid = castor.verifySignature(
     signature // Uint8Array
 );
 ```
+
+> NOTE: This function is similar to the `verifySignature` function in the Apollo
+> module, but it facilitates the process of parsing the DID and extracting the 
+> right public key.
