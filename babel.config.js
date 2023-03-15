@@ -11,10 +11,9 @@ module.exports = {
         "@babel/preset-react",
     ],
     plugins: [
-        ["@babel/plugin-proposal-class-properties"],
         ["@babel/plugin-transform-typescript"],
-        ["@babel/plugin-proposal-decorators", {
-            decoratorsBeforeExport: true,
-        }]
+        "babel-plugin-transform-typescript-metadata",
+        ["@babel/plugin-proposal-decorators", {"legacy": true}],
+        ["@babel/plugin-proposal-class-properties", {"loose": false}],
     ],
 };

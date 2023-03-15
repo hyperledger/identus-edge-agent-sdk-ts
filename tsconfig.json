@@ -13,6 +13,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "lib": [

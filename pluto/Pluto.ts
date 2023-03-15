@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {DID, getKeyCurveByNameAndIndex, Mediator, Message, PeerDID, PrivateKey} from '../domain';
 import {PrismDIDInfo} from '../domain/models/PrismDIDInfo';
 import {VerifiableCredential} from '../domain/models/VerifiableCredential';
@@ -13,7 +14,7 @@ export default class Pluto implements PlutoInterface {
   constructor(connection: PlutoConnectionProps) {
     this.dataSource = new DataSource({
       ...connection,
-      entities: ["./entities/*.ts"],
+      entities: Object.values(entities),
       synchronize: true
     });
   }
