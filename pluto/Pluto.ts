@@ -1,5 +1,4 @@
-import {DID, getKeyCurveByNameAndIndex, PeerDID, PrivateKey} from '../domain/models';
-import {Message} from '../domain/models/Message';
+import {DID, getKeyCurveByNameAndIndex, Mediator, Message, PeerDID, PrivateKey} from '../domain';
 import {PrismDIDInfo} from '../domain/models/PrismDIDInfo';
 import {VerifiableCredential} from '../domain/models/VerifiableCredential';
 import {default as PlutoInterface, PlutoConnectionProps} from '../domain/buildingBlocks/Pluto';
@@ -7,7 +6,6 @@ import {DataSource} from 'typeorm';
 import * as entities from './entities';
 import Did from './entities/DID';
 import {DIDPair} from '../domain/models/DIDPair';
-import {Mediator} from '../domain/models/Mediator';
 
 export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
@@ -92,9 +90,9 @@ export default class Pluto implements PlutoInterface {
     const messageEntity = new entities.Message();
     messageEntity.createdTime = message.createdTime;
     messageEntity.dataJson = JSON.stringify(message);
-    messageEntity.from = message.from?.toString();
+    messageEntity.from = message.from?.toString() ?? "";
     messageEntity.thid = message.thid;
-    messageEntity.to = message.to.toString();
+    messageEntity.to = message.to?.toString() ?? "";
     messageEntity.type = message.piuri ?? null;
     messageEntity.isReceived = message.direction;
     await this.dataSource.manager.save(messageEntity);

@@ -12,11 +12,19 @@
     "sourceMap": true,
     "declaration": true,
     "emitDeclarationOnly": true,
+    "experimentalDecorators": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["es2020", "dom", "dom.iterable", "esnext"],
+    "lib": [
+      "es2020",
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "moduleResolution": "node",
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "jsx": "react-jsx"
   },
   "include": [
@@ -30,5 +38,8 @@
     "castor",
     "demos"
   ],
-  "exclude": ["tests", "build"]
+  "exclude": [
+    "tests",
+    "build"
+  ]
 }
