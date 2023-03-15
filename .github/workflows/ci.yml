@@ -37,8 +37,5 @@ jobs:
       - name: Eslint
         run: npx eslint .
 
-      - name: Tests
-        run: npm run test
-
-      - name: Check coverage
-        run: yarn coverage:check
+      - name: Tests with Code Coverage
+        run: npm run coverage

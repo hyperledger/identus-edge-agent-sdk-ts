@@ -40,5 +40,5 @@ jobs:
           GIT_AUTHOR_NAME: ${{ steps.import_gpg.outputs.name }}
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
-          yarn install
+          npm install
           npx semantic-release
