@@ -1,44 +1,62 @@
+import { uuid } from "@stablelib/uuid";
 
 export interface AttachmentHeader {
-  readonly children: string;
+  children: string;
 }
 
 export interface AttachmentJws {
-  readonly header: AttachmentHeader;
-  readonly protectedStr: string;
-  readonly signature: string;
+  header: AttachmentHeader;
+  protectedStr: string;
+  signature: string;
 }
 
 export interface AttachmentJwsData {
-  readonly base64: string;
-  readonly jws: AttachmentJws;
+  base64: string;
+  jws: AttachmentJws;
 }
 
 export interface AttachmentBase64 {
-  readonly base64: string;
+  base64: string;
 }
 
 export interface AttachmentLinkData {
-  readonly links: string[];
-  readonly hash: string;
+  links: string[];
+  hash: string;
 }
 
 export interface AttachmentJsonData {
-  readonly data: string;
+  data: string;
 }
 
-
-type AttachmentData = AttachmentJsonData | AttachmentLinkData | AttachmentBase64 | AttachmentJwsData | AttachmentJws | AttachmentHeader
+export type AttachmentData =
+  | AttachmentJsonData
+  | AttachmentLinkData
+  | AttachmentBase64
+  | AttachmentJwsData
+  | AttachmentJws
+  | AttachmentHeader;
 
 export class AttachmentDescriptor {
   constructor(
-    public readonly id: string,
-    public readonly mediaType: string | null = null,
     public readonly data: AttachmentData,
-    public readonly filename: Array<string> | null,
-    public readonly format: string | null = null,
-    public readonly lastModTime: string | null = null,
-    public readonly byteCount: number | null = null,
-    public readonly deascription: string | null = null
+    public readonly mediaType?: string,
+    public readonly id: string = uuid(),
+    public readonly filename?: Array<string>,
+    public readonly format?: string,
+    public readonly lastModTime?: string,
+    public readonly byteCount?: number,
+    public readonly description?: string
   ) {}
+
+  static build<T>(
+    payload: T,
+    id: string = uuid(),
+    mediaType = "application/json"
+  ): AttachmentDescriptor {
+    const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
+    const attachment: AttachmentBase64 = {
+      base64: encoded,
+    };
+    return new AttachmentDescriptor(attachment, mediaType, id);
+  }
 }

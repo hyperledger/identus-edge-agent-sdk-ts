@@ -14,8 +14,8 @@ export default interface Apollo {
   createRandomMnemonics(): MnemonicWordList;
   createSeed(mnemonics: MnemonicWordList, passphrase: string): Seed;
   createRandomSeed(passphrase?: string): SeedWords;
-  createKeyPairFromKeyCurve(seed: Seed, curve: KeyCurve): KeyPair;
-  createKeyPairFromPrivateKey(seed: Seed, privateKey: PrivateKey): KeyPair;
+  createKeyPairFromKeyCurve(curve: KeyCurve, seed?: Seed): KeyPair;
+  createKeyPairFromPrivateKey(privateKey: PrivateKey, seed?: Seed): KeyPair;
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey;
   compressedPublicKeyFromCompressedData(
     compressedData: Uint8Array
@@ -29,7 +29,6 @@ export default interface Apollo {
     challenge: Uint8Array,
     signature: Uint8Array
   ): boolean;
-
   getPrivateJWKJson(id: string, keyPair: KeyPair): string;
   getPublicJWKJson(id: string, keyPair: KeyPair): string;
 }

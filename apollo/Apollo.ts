@@ -25,25 +25,24 @@ import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
-import { X25519PrivateKey } from "./utils/X25519PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
 import { ApolloError } from "../domain/models/Errors";
 
+import { OctetKeyPair } from "./models/OctetKeyPair";
 const EC = elliptic.ec;
 
 export default class Apollo implements ApolloInterface {
-  getPrivateJWKJson(id: string, keyPair: KeyPair): string {
-    throw new Error("Method not implemented.");
-  }
-  getPublicJWKJson(id: string, keyPair: KeyPair): string {
-    throw new Error("Method not implemented.");
-  }
-  private getKeyPairForCurve(seed: Seed, curve: KeyCurve): KeyPair {
+  private getKeyPairForCurve(curve: KeyCurve, seed?: Seed): KeyPair {
     const derivationPath = DerivationPath.fromPath(
       `m/${curve.index || 0}'/0'/0'`
     );
     if (curve.curve == Curve.SECP256K1) {
+      if (!seed) {
+        throw new Error(
+          "Please provide a seed when creating a secp256k1 keypair"
+        );
+      }
       const extendedKey = KeyDerivation.deriveKey(seed.value, derivationPath);
       const keyPair = extendedKey.keyPair();
       return {
@@ -116,11 +115,11 @@ export default class Apollo implements ApolloInterface {
       mnemonics: mnemonics,
     };
   }
-  createKeyPairFromKeyCurve(seed: Seed, curve: KeyCurve): KeyPair {
-    return this.getKeyPairForCurve(seed, curve);
+  createKeyPairFromKeyCurve(curve: KeyCurve, seed?: Seed): KeyPair {
+    return this.getKeyPairForCurve(curve, seed);
   }
-  createKeyPairFromPrivateKey(seed: Seed, privateKey: PrivateKey): KeyPair {
-    return this.getKeyPairForCurve(seed, privateKey.keyCurve);
+  createKeyPairFromPrivateKey(privateKey: PrivateKey, seed?: Seed): KeyPair {
+    return this.getKeyPairForCurve(privateKey.keyCurve, seed);
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
     const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromBytes(
@@ -220,5 +219,13 @@ export default class Apollo implements ApolloInterface {
       return secp256k1PublicKey.verify(challengeBuffer, signatureBuffer);
     }
     return false;
+  }
+  getPrivateJWKJson(id: string, keyPair: KeyPair): string {
+    const jsonString = new OctetKeyPair(id, keyPair).privateJson;
+    return jsonString;
+  }
+  getPublicJWKJson(id: string, keyPair: KeyPair): string {
+    const jsonString = new OctetKeyPair(id, keyPair).publicJson;
+    return jsonString;
   }
 }

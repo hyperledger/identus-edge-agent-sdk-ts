@@ -12,13 +12,12 @@ export class X25519KeyPair extends X25519KeyCommon {
   constructor() {
     super();
 
-    const keyPair = this.ec.genKeyPair();
-    const pub = Buffer.from(keyPair.getPublic().encode("array", false));
+    const keyPair = this.ec.generateKeyPair();
+
+    const pub = keyPair.publicKey;
 
     this.privateKey = new X25519PrivateKey(
-      Buffer.from(
-        base64url.baseEncode(Buffer.from(keyPair.getPrivate().toArray()))
-      )
+      Buffer.from(base64url.baseEncode(Buffer.from(keyPair.secretKey)))
     );
     this.publicKey = new X25519PublicKey(
       Buffer.from(base64url.baseEncode(Uint8Array.from(pub)))
@@ -31,13 +30,5 @@ export class X25519KeyPair extends X25519KeyCommon {
 
   public getPublic(): Buffer {
     return this.publicKey.getEncoded();
-  }
-
-  public sign(message: Buffer) {
-    return this.privateKey.sign(message);
-  }
-
-  public verify(message: Buffer, sig: Buffer) {
-    return this.publicKey.verify(message, sig);
   }
 }

@@ -39,6 +39,10 @@ export class Service {
     public type: Array<string>,
     public serviceEndpoint: ServiceEndpoint
   ) {}
+
+  get isDIDCommMessaging(): boolean {
+    return this.type.includes("DIDCommMessaging");
+  }
 }
 
 export class AlsoKnownAs {
@@ -109,9 +113,19 @@ export class DIDDocument {
     public id: DID,
     public coreProperties: Array<DIDDocumentCoreProperty>
   ) {}
+
+  get services(): Service[] {
+    return this.coreProperties.reduce((serviceArray, coreProperty) => {
+      if (coreProperty instanceof Services) {
+        return [...serviceArray, ...coreProperty.values];
+      }
+      return serviceArray;
+    }, [] as Service[]);
+  }
 }
 
 export interface PublicKeyJWK {
   crv: string;
   x: string;
+  kid: string;
 }

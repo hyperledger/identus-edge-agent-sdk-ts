@@ -5,7 +5,6 @@ import {
   DID,
   KeyPair,
   Service as DIDDocumentService,
-  PublicKey,
 } from "../domain/models";
 
 import { CastorError } from "../domain/models/Errors";
@@ -22,7 +21,6 @@ import {
   VerificationMethodTypeAuthentication,
 } from "./types";
 
-import { base64url } from "multiformats/bases/base64";
 import { base58btc } from "multiformats/bases/base58";
 
 export class PeerDIDCreate {
@@ -49,6 +47,26 @@ export class PeerDIDCreate {
         `did:peer:2${encodedEncryptionKeysStr}${encodedSigningKeysStr}.${Numalgo2Prefix.service}${encodedService}`
       )
     );
+  }
+
+  computeEncnumbasis(did: DID, keyPair: KeyPair): string {
+    let material:
+      | VerificationMaterialAgreement
+      | VerificationMaterialAuthentication;
+    let multibaseEcnumbasis: string;
+    switch (keyPair.keyCurve.curve) {
+      case Curve.X25519:
+        material = this.keyAgreementFromKeyPair(keyPair);
+        multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
+        return multibaseEcnumbasis.slice(1);
+      case Curve.ED25519:
+        material = this.authenticationFromKeyPair(keyPair);
+        multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
+        return multibaseEcnumbasis.slice(1);
+      default:
+        //TODO: Improve this error handling
+        throw new Error("computeEncnumbasis -> InvalidKeyPair Curve");
+    }
   }
 
   private createMultibaseEncnumbasis(material: VerificationMaterial): string {
