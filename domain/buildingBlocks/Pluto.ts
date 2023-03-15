@@ -14,7 +14,6 @@ import {SapConnectionOptions} from 'typeorm/driver/sap/SapConnectionOptions';
 import {OracleConnectionOptions} from 'typeorm/driver/oracle/OracleConnectionOptions';
 import {CordovaConnectionOptions} from 'typeorm/driver/cordova/CordovaConnectionOptions';
 import {NativescriptConnectionOptions} from 'typeorm/driver/nativescript/NativescriptConnectionOptions';
-import {ReactNativeConnectionOptions} from 'typeorm/driver/react-native/ReactNativeConnectionOptions';
 import {SqljsConnectionOptions} from 'typeorm/driver/sqljs/SqljsConnectionOptions';
 import {MongoConnectionOptions} from 'typeorm/driver/mongodb/MongoConnectionOptions';
 import {AuroraMysqlConnectionOptions} from 'typeorm/driver/aurora-mysql/AuroraMysqlConnectionOptions';
@@ -35,7 +34,6 @@ export type PlutoConnectionProps =
     | Omit<OracleConnectionOptions, IgnoreProps>
     | Omit<CordovaConnectionOptions, IgnoreProps>
     | Omit<NativescriptConnectionOptions, IgnoreProps>
-    | Omit<ReactNativeConnectionOptions, IgnoreProps>
     | Omit<SqljsConnectionOptions, IgnoreProps>
     | Omit<MongoConnectionOptions, IgnoreProps>
     | Omit<AuroraMysqlConnectionOptions, IgnoreProps>
