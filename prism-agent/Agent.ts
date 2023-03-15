@@ -73,6 +73,7 @@ export default class Agent
       apollo,
       castor,
       pluto,
+      connectionManager,
       mediationHandler,
       seed
     );
