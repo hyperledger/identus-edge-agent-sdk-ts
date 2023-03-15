@@ -6,18 +6,25 @@ import {
   Seed,
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
+  ServiceEndpoint,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import { AgentError } from "../domain/models/Errors";
-import { AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass } from "./types";
+import {
+  AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
+  ConnectionsManager,
+  MediatorHandler,
+} from "./types";
 
 export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
   constructor(
     protected apollo: Apollo,
     protected castor: Castor,
     protected pluto: Pluto,
+    protected manager: ConnectionsManager,
+    protected mediationHandler: MediatorHandler,
     protected seed: Seed
   ) {}
 
@@ -49,14 +56,24 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       },
       this.seed
     );
+    const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
+    const keyPairs = [keyAgreementKeyPair, authenticationKeyPair];
 
-    const did = await this.castor.createPeerDID(
-      [keyAgreementKeyPair, authenticationKeyPair],
-      services
-    );
+    if (updateMediator && mediatorDID) {
+      //TODO(): This still needs to be done update the key List
+      services.push(
+        new Service(
+          "#didcomm-1",
+          ["DIDCommMessaging"],
+          new ServiceEndpoint(mediatorDID.toString())
+        )
+      );
+    }
+
+    const did = await this.castor.createPeerDID(keyPairs, services);
 
     if (updateMediator) {
-      //TODO(): This still needs to be done update the key List
+      await this.mediationHandler.updateKeyListWithDIDs([did]);
     }
 
     this.pluto.storePeerDID(did, [

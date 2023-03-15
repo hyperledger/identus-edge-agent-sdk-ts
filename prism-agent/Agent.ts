@@ -73,6 +73,7 @@ export default class Agent
       apollo,
       castor,
       pluto,
+      mediationHandler,
       seed
     );
     this.agentInvitations = new AgentInvitations(
