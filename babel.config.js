@@ -14,7 +14,7 @@ module.exports = {
         ["@babel/plugin-proposal-class-properties"],
         ["@babel/plugin-transform-typescript"],
         ["@babel/plugin-proposal-decorators", {
-            decoratorsBeforeExport: true
+            decoratorsBeforeExport: true,
         }]
     ],
 };

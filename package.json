@@ -83,6 +83,7 @@
     "react-dom": "^18.2.0",
     "sinon": "^15.0.1",
     "sinon-chai": "^3.7.0",
+    "sqlite3": "^5.1.6",
     "stream-browserify": "^3.0.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.7",
@@ -119,7 +120,6 @@
     "typeorm": "^0.3.12"
   },
   "peerDependencies": {
-    "sql.js": "^1.8.0",
-    "sqlite3": "^5.1.4"
+    "sql.js": "^1.8.0"
   }
 }

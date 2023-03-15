@@ -13,8 +13,8 @@ export default class Pluto implements PlutoInterface {
   constructor(connection: PlutoConnectionProps) {
     this.dataSource = new DataSource({
       ...connection,
-      synchronize: true,
-      entities: Object.values(entities),
+      entities: ["./entities/*.ts"],
+      synchronize: true
     });
   }
 
