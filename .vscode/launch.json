@@ -2,21 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "NODE DEBUG",
+      "program": "${workspaceFolder}/build/node-test/index.js",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
+    {
       "type": "node",
       "request": "launch",
-      "name": "Mocha All",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "-r",
-        "ts-node/register",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceFolder}/tests/**/*.ts"
-      ],
-      "env": {
-        "TS_NODE_COMPILER_OPTIONS": "{\"module\": \"commonjs\" }"
-      }
+      "name": "TEST",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": ["--colors", "--maxWorkers", "1"],
+      "skipFiles": [
+        "${workspaceRoot}/../../node_modules/**/*",
+        "<node_internals>/**/*"
+      ]
     }
   ]
 }

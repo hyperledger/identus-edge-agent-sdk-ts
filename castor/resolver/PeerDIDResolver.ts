@@ -57,6 +57,7 @@ export class PeerDIDResolver implements DIDResolver {
         VerificationMaterialAuthentication | VerificationMaterialAgreement
       ];
       const type = part.slice(0, 1);
+
       switch (type) {
         case Numalgo2Prefix.authentication:
           decoded = this.decodeMultibaseEncnumbasisAuth(part.slice(1), format);
@@ -74,7 +75,6 @@ export class PeerDIDResolver implements DIDResolver {
           break;
       }
     });
-
     return new DIDDocument(did, [
       new VerificationMethods([
         ...authenticationMethods,
@@ -82,11 +82,11 @@ export class PeerDIDResolver implements DIDResolver {
       ]),
       new DIDDocumentAuthentication(
         authenticationMethods.map(({ id }) => id),
-        []
+        authenticationMethods
       ),
       new DIDDocumentKeyAgreement(
         keyAgreementMethods.map(({ id }) => id),
-        []
+        keyAgreementMethods
       ),
       new DIDDocumentServices(services),
     ]);
@@ -222,7 +222,7 @@ export class PeerDIDResolver implements DIDResolver {
 
       return services.map((service, offset) => {
         return new DIDDocumentService(
-          did.toString() + service.type + "-" + offset,
+          did.toString() + "#" + service.type + "-" + offset,
           [service.type],
           new ServiceEndpoint(
             service.serviceEndpoint,

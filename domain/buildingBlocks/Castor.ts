@@ -22,4 +22,5 @@ export default interface Castor {
     challenge: Uint8Array,
     signature: Uint8Array
   ): Promise<boolean>;
+  getEcnumbasis(did: DID, keyPair: KeyPair): string;
 }
