@@ -23,6 +23,20 @@ import { createTestScenario } from "./createTestScenario";
 
   await agent.start();
 
+  /**
+   * 1. Create a new PEERDID
+   * 2. Create an out of band invitation
+   *{
+    "id":"9f00d185-a0dd-4727-bcb5-d01746b0acd4",
+    "type":"https://didcomm.org/out-of-band/2.0/invitation",
+    "from":"did:peer:2.Ez6LSfuXdp4rncpBvqjyWaQ5gR1XpwtUGo6UbjfCyH6WJc8Bn.Vz6MkoYQdhVmkHKaThYSVR8Toc5dejuem2LCsX4eSo4XtXCVC.SeyJ0IjoiZG0iLCJzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwODAvZGlkY29tbSIsInIiOltdLCJhIjpbImRpZGNvbW0vdjIiXX0",
+    "body":{"goal_code":"connect","goal":"Establish a trust connection between two peers","accept":[]}
+  *}
+  * 3. We want to start listening for messages from the event and run some code on the received messaged
+  * 4. We want to parse this out of band message + send the message to agent.acceptDIDCommInvitation
+  *   4.1 This method internally runs some code that is not yet ready fromt he agent, inside the createPeeerDID, the updateMedioatorList.
+  */
+
   console.log(
     `Welcome to PrismEdge Agent, state ${
       agent.state

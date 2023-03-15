@@ -15,7 +15,6 @@ import { DIDCommDIDResolver } from "./DIDResolver";
 import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
-import { json } from "stream/consumers";
 
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm");
@@ -63,7 +62,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       pthid: message.pthid,
       //TODO: Remove comment once fixed by rootsID or we are sure this works,
       //if not message is not correctly formatted
-      //return_route: "all",
+      return_route: "all",
     });
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,
