@@ -1,8 +1,21 @@
-import ConnectionModel, {ConnectionDatabaseType, ConnectionParams,} from '../domain/models/Connection';
-import ConnectionError from '../domain/models/errors/Connection';
-import {Database as SQLDatabaseType, InitSqlJsStatic} from 'sql.js';
+import { Database as SQLDatabaseType, InitSqlJsStatic } from "sql.js";
+
+import ConnectionModel, {
+  ConnectionDatabaseType,
+  ConnectionParams,
+} from "../domain/models/Connection";
+import ConnectionError from "../domain/models/errors/Connection";
 
 type ParamsType = string | number | null;
+
+let wasm: typeof import("sql.js");
+async function getSQLWASM() {
+  if (!wasm) {
+    wasm = await (await import("sql.js")).default;
+  }
+  return wasm;
+}
+
 export default class Connection implements ConnectionModel {
   readonly sqliteDatabase;
   wasmBinaryURL?: string;
@@ -13,23 +26,28 @@ export default class Connection implements ConnectionModel {
 
   constructor(params: ConnectionParams) {
     this.type = params.type;
-    if (params.type === 'sql') {
+    if (params.type === "sql") {
       this.wasmBinaryURL = params.wasmBinaryURL;
       this.sqliteDatabase = params.sqliteDatabase ?? null;
     }
   }
 
   private get SQLDatabase(): Promise<SQLDatabaseType> {
-
+    const db = this.sqliteDatabase;
     return new Promise((resolve, reject) => {
-      // console.log(this.wasmBinaryURL);
-      this.getSQLPackage().then((sqlInit: InitSqlJsStatic) => {
-        sqlInit({
-          // In browser should load async from URL
-          locateFile: (file: string) => `${this.wasmBinaryURL ?? "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0"}/${file}`
-        }).then(SQL => resolve(new SQL.Database(this.sqliteDatabase))).catch(reject);
-      });
-
+      getSQLWASM()
+        .then(async (sqlInit: InitSqlJsStatic) => {
+          const SQL = await sqlInit({
+            locateFile: (file: string) => {
+              return `${
+                this.wasmBinaryURL ??
+                "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0"
+              }/${file}`;
+            },
+          });
+          return resolve(new SQL.Database(db));
+        })
+        .catch(reject);
     });
   }
 
@@ -44,36 +62,36 @@ export default class Connection implements ConnectionModel {
 
   async connect(): Promise<any> {
     switch (this.type) {
-      case 'sql':
+      case "sql":
         this.database = await this.SQLDatabase;
         this.connected = true;
         break;
-        // this.database = await this.SqliteDatabase;
-        // this.connected = await new Promise<boolean>((resolve, reject) => {
-        //   const openHandler = () => {
-        //     resolve(true);
-        //   };
-        //   const errorHandler = () => {
-        //     reject(false);
-        //   };
-        //   (this.database as any).on("open", openHandler);
-        //   (this.database as any).on('error', errorHandler);
-        // });
+      // this.database = await this.SqliteDatabase;
+      // this.connected = await new Promise<boolean>((resolve, reject) => {
+      //   const openHandler = () => {
+      //     resolve(true);
+      //   };
+      //   const errorHandler = () => {
+      //     reject(false);
+      //   };
+      //   (this.database as any).on("open", openHandler);
+      //   (this.database as any).on('error', errorHandler);
+      // });
     }
   }
 
   async disconnect() {
     if (this.database) {
       switch (this.type) {
-        case 'sql':
+        case "sql":
           this.database.close();
           this.connected = false;
           break;
-          // this.connected = await new Promise<boolean>((resolve) => {
-          //   this.database?.close(() => {
-          //     resolve(false);
-          //   });
-          // });
+        // this.connected = await new Promise<boolean>((resolve) => {
+        //   this.database?.close(() => {
+        //     resolve(false);
+        //   });
+        // });
       }
     }
   }
@@ -86,7 +104,10 @@ export default class Connection implements ConnectionModel {
     return object;
   }
 
-  execAsOne<param>(query: string, params?: ParamsType[] | { [key: string]: ParamsType }): param | null {
+  execAsOne<param>(
+    query: string,
+    params?: ParamsType[] | { [key: string]: ParamsType }
+  ): param | null {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = this.exec<param>(query, params, true) as any;
@@ -94,28 +115,38 @@ export default class Connection implements ConnectionModel {
     if (!result.length) {
       return null;
     }
-    return this.transformResponseToObject(result[0].values[0], result[0].columns) as unknown as param;
+    return this.transformResponseToObject(
+      result[0].values[0],
+      result[0].columns
+    ) as unknown as param;
   }
 
-  execAsMany<param>(query: string, params?: ParamsType[] | { [key: string]: ParamsType }): param[] {
+  execAsMany<param>(
+    query: string,
+    params?: ParamsType[] | { [key: string]: ParamsType }
+  ): param[] {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = this.exec<param>(query, params) as any;
-    return result[0].values.map((values: any) => this.transformResponseToObject(values, result[0].columns));
+    if (!result.length) {
+      return [];
+    }
+    return result[0].values.map((values: any) =>
+      this.transformResponseToObject(values, result[0].columns)
+    );
   }
 
   exec<Interface>(query: string, params?: any): Interface {
-    switch (this.type) {
-      case "sql":
-        return this.database?.exec(query, params) as Interface;
-    }
+    return this.database?.exec(query, params) as Interface;
   }
 
   private async getSQLPackage() {
     try {
-      return (await import('sql.js') as { default: InitSqlJsStatic }).default;
+      return ((await import("sql.js")) as { default: InitSqlJsStatic }).default;
     } catch (error) {
-      throw new ConnectionError(`Unable to import sql driver, please install sql.js and try again.`);
+      throw new ConnectionError(
+        `Unable to import sql driver, please install sql.js and try again.`
+      );
     }
   }
 
@@ -127,5 +158,4 @@ export default class Connection implements ConnectionModel {
   //     throw new ConnectionError("Unable to sqlite driver, please install sqlite3");
   //   }
   // }
-
 }

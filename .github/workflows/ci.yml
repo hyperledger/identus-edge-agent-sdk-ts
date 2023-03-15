@@ -37,17 +37,5 @@ jobs:
       - name: Eslint
         run: npx eslint .
 
-      - name: Build
-        run: npm run build
-
-      - name: Build tests
-        run: npm run build:test
-
-      - name: Test node
-        run: npm run test:node
-
-      - name: Test browser
-        run: npm run test:browser
-
-      - name: Check coverage
-        run: yarn coverage:check
+      - name: Tests with Code Coverage
+        run: npm run coverage
