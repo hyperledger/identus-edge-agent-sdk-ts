@@ -29,8 +29,6 @@ modules in the SDK.
 ## API Overview
 Here's a brief explanation of the most important primitives:
 
-Here's a brief explanation of each function:
-
 - `parseDID`: This function takes a string representation of a DID and returns 
 an instance of `Domain.DID`. It may throw an error if the string is not a valid
 DID.
