@@ -1,19 +1,25 @@
 import React, {FormEventHandler, useCallback, useEffect, useLayoutEffect, useState} from "react";
 import "./App.css";
-import {useAtom} from "jotai";
-import {mnemonicsAtom} from "./state";
-import {trimString} from "./utils";
-import Spacer from "./Spacer";
 import * as jose from "jose";
-import {Box} from "./Box";
-import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
-import Apollo from '../../apollo/Apollo';
-import Castor from '../../castor/Castor';
+import {useAtom} from "jotai";
+
+import * as SDK from "../../index";
 import * as Domain from '../../domain';
+import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
 import Pluto from '../../pluto/Pluto';
 
-const apollo = new Apollo();
-const castor = new Castor(apollo);
+import { mnemonicsAtom } from "./state";
+import { trimString } from "./utils";
+import Spacer from "./Spacer";
+import { Box } from "./Box";
+
+const mediatorDID = SDK.Domain.DID.fromString(
+  "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+);
+
+const apollo = new SDK.Apollo();
+const castor = new SDK.Castor(apollo);
+const api = new SDK.ApiImpl();
 
 function Mnemonics() {
   const [mnemonics, setMnemonics] = useAtom(mnemonicsAtom);
@@ -23,39 +29,41 @@ function Mnemonics() {
   }
 
   return (
-      <>
-        <button onClick={createMnemonics}>Generate random mnemonics</button>
-        <Spacer/>
-        <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-            }}
-        >
-          {mnemonics
-              ? mnemonics.map((word, i) => (
-                  <span
-                      key={i + word}
-                      style={{
-                        margin: 7,
-                        padding: "4px 10px",
-                        background: "lightgray",
-                        borderRadius: 6,
-                      }}
-                  >
-                {i + 1}. {word}
-              </span>
-              ))
-              : null}
-        </div>
-      </>
+    <Box>
+      <h2>Mnemonics and keys</h2>
+
+      <button onClick={createMnemonics}>Generate random mnemonics</button>
+      <Spacer />
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+        }}
+      >
+        {mnemonics
+          ? mnemonics.map((word, i) => (
+            <span
+              key={i + word}
+              style={{
+                margin: 7,
+                padding: "4px 10px",
+                background: "lightgray",
+                borderRadius: 6,
+              }}
+            >
+              {i + 1}. {word}
+            </span>
+          ))
+          : null}
+      </div>
+    </Box>
   );
 }
 
-function KeyPair({curve = Domain.Curve.SECP256K1}: { curve?: Domain.Curve }) {
+function KeyPair({ curve = SDK.Domain.Curve.SECP256K1 }: { curve?: SDK.Domain.Curve }) {
   const [mnemonics] = useAtom(mnemonicsAtom);
   // let [keyPair, setKeyPair] = React.useState<Domain.KeyPair | null>(null);
-  const [keyPair, setKeyPair] = React.useState<Domain.KeyPair>();
+  const [keyPair, setKeyPair] = React.useState<SDK.Domain.KeyPair>();
 
   function createKeyPair() {
     if (!mnemonics) return;
@@ -143,7 +151,7 @@ function Signatures({keyPair}: { keyPair: Domain.KeyPair }) {
     setIsSignatureValid(isValid);
   }
 
-  if (keyPair.keyCurve.curve === Domain.Curve.X25519) {
+  if (keyPair.keyCurve.curve === SDK.Domain.Curve.X25519) {
     return <b>Signatures not supported for X25519 keys!</b>;
   }
 
@@ -168,10 +176,10 @@ function Signatures({keyPair}: { keyPair: Domain.KeyPair }) {
 
 function Dids() {
   const [mnemonics] = useAtom(mnemonicsAtom);
-  const [prismDid, setPrismDid] = React.useState<Domain.DID | null>(null);
-  const [peerDid, setPeerDid] = React.useState<Domain.DID | null>(null);
+  const [prismDid, setPrismDid] = React.useState<SDK.Domain.DID | null>(null);
+  const [peerDid, setPeerDid] = React.useState<SDK.Domain.DID | null>(null);
 
-  const exampleService = new Domain.Service("didcomm", ["DIDCommMessaging"], {
+  const exampleService = new SDK.Domain.Service("didcomm", ["DIDCommMessaging"], {
     uri: "https://example.com/endpoint",
     accept: ["didcomm/v2"],
     routingKeys: ["did:example:somemediator#somekey"],
@@ -182,7 +190,7 @@ function Dids() {
 
     const seed = apollo.createSeed(mnemonics, "my-secret");
     const keyPair = apollo.createKeyPairFromKeyCurve({
-      curve: Domain.Curve.SECP256K1,
+      curve: SDK.Domain.Curve.SECP256K1,
     }, seed);
     const prismDID = await castor.createPrismDID(keyPair.publicKey, [
       exampleService,
@@ -288,6 +296,7 @@ function Dids() {
 
 export function usePluto() {
   const [pluto, set] = useState<Pluto | null>(null);
+
   useEffect(() => {
     (async () => {
       const instance = new Pluto({
@@ -313,11 +322,13 @@ export function usePluto() {
   return pluto;
 }
 
-export function PlutoApp() {
-  const pluto = usePluto();
+export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
+  // const pluto = usePluto();
+  const pluto = props.pluto;
   const [dids, setDids] = useState<PrismDIDInfo[] | null>(null);
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+
   const createDid = useCallback<FormEventHandler>(async (event) => {
     event.preventDefault();
     if (!pluto) {
@@ -360,6 +371,8 @@ export function PlutoApp() {
     })();
   }, [pluto, dids]);
   return (
+    <Box>
+      <h2>Pluto</h2>
       <div className="App">
         <form onSubmit={createDid}>
           <input type="text" name="did" onChange={handleInputChange} value={value}/>
@@ -372,27 +385,108 @@ export function PlutoApp() {
             )) ?? null
         }
       </div>
+    </Box>
   );
 }
 
+const Agent: React.FC<{ agent: SDK.Agent }> = props => {
+  const [state, setState] = React.useState<string>(props.agent.state);
+  const [error, setError] = React.useState<any>();
+
+  const handleStart = async () => {
+    setState("starting");
+    try {
+      const status = await props.agent.start();
+      setState(status);
+    }
+    catch (e) {
+      setError(e);
+      setState("failed");
+      throw e;
+    }
+  }
+
+  const handleStop = async () => {
+    setState("stopping");
+    await props.agent.stop();
+    setState("stopped");
+  }
+
+  return (
+    <Box>
+      <h2>Agent</h2>
+      <p>
+        <b>Status:</b>&nbsp; {props.agent.state}
+      </p>
+      <div>
+
+        {state === "stopped" && (
+          <button style={{ width: 120 }} onClick={handleStart}>Start</button>
+        )}
+
+        {props.agent.state === "running" && (
+          <button style={{ width: 120 }} onClick={handleStop}>Stop</button>
+        )}
+      </div>
+
+      {error instanceof Error && (
+        <pre>
+          Error: {error.message}
+        </pre>
+      )}
+    </Box>
+  );
+}
+
+const useSDK = () => {
+  const pluto = new Pluto({
+    type: 'sqljs',
+    synchronize: true,
+    location: "pluto",
+    dropSchema: true,
+    // sqlJsConfig: {
+    //   locateFile: (filename: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.2.1/dist/${filename}`
+    // },
+    autoSave: true,
+    useLocalForage: true,
+  });
+  const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
+  const mercury = new SDK.Mercury(castor, didcomm, api);
+  const store = new SDK.PublicMediatorStore(pluto);
+  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
+  const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
+  const seed = apollo.createRandomSeed();
+  const agent = new SDK.Agent(
+    apollo,
+    castor,
+    pluto,
+    mercury,
+    handler,
+    manager,
+    seed.seed
+  );
+
+  return { agent, pluto };
+}
 
 function App() {
+  const sdk = useSDK();
+
   return (
-      <div className="App">
-        <h1>Atala PRISM Wallet SDK Usage Examples</h1>
-        <h2>Mnemonics and keys</h2>
-        <Mnemonics/>
+    <div className="App">
+      <h1>Atala PRISM Wallet SDK Usage Examples</h1>
+      <Agent agent={sdk.agent} />
+      <Mnemonics />
+      <Spacer />
 
-        <Spacer/>
+      <KeyPair curve={SDK.Domain.Curve.SECP256K1} />
+      <KeyPair curve={SDK.Domain.Curve.ED25519} />
+      <KeyPair curve={SDK.Domain.Curve.X25519} />
 
-        <KeyPair curve={Domain.Curve.SECP256K1}/>
-        <KeyPair curve={Domain.Curve.ED25519}/>
-        <KeyPair curve={Domain.Curve.X25519}/>
-
-        <Dids/>
-        <PlutoApp/>
-        <Spacer/>
-      </div>
+      <Dids />
+      <PlutoApp pluto={sdk.pluto} />
+      <Spacer />
+    </div>
   );
 }
 
