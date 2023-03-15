@@ -115,7 +115,6 @@ export default class Agent
     try {
       await this.pluto.start();
       await this.connectionManager.startMediator();
-      this.agentMessageEvents.startFetchingMessages(5);
     } catch (e) {
       if (e instanceof AgentError.NoMediatorAvailableError) {
         const hostDID = await this.createNewPeerDID(
@@ -134,6 +133,7 @@ export default class Agent
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
+      this.agentMessageEvents.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");
@@ -187,6 +187,12 @@ export default class Agent
   }
   async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
     return this.agentInvitations.parseOOBInvitation(str);
+  }
+
+  async acceptDIDCommInvitation(
+    invitation: OutOfBandInvitation
+  ): Promise<void> {
+    return this.agentInvitations.acceptDIDCommInvitation(invitation);
   }
 
   startFetchingMessages(iterationPeriod: number): void {

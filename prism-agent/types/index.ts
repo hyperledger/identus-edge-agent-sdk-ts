@@ -57,6 +57,7 @@ export interface AgentDIDHigherFunctions {
 }
 
 export interface AgentInvitations {
+  acceptDIDCommInvitation(invitation: OutOfBandInvitation): Promise<void>;
   parseInvitation(str: string): Promise<InvitationType>;
   acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void>;
   parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation>;
