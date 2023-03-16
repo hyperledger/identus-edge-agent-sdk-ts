@@ -78,7 +78,9 @@ export default class Pluto implements PlutoInterface {
 
   async start() {
     try {
-      await this.dataSource.initialize();
+      if (this.dataSource.isInitialized === false) {
+        await this.dataSource.initialize();
+      }
     } catch (error) {
       throw new Error((error as Error).message);
     }
