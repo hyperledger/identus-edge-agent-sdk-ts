@@ -14,21 +14,22 @@ module.exports = (env, argv) => {
     if (!isProduction) {
         providePlutin.process = "process/browser";
     }
-
+    const copyStuff = !isProduction ? [new CopyPlugin({
+        patterns: [
+            {from: './node_modules/sql.js/dist/sql-wasm.wasm'}
+        ]
+    })] : [];
+    const providePluginStuff = !isProduction ? [new webpack.ProvidePlugin({
+        'window.SQL': 'sql.js/dist/sql-wasm.js',
+        'window.localforage': 'localforage/dist/localforage.js',
+    })] : [];
     const plugins = [
 
         new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
             result.request = result.request.replace(/typeorm/, "typeorm/browser");
         }),
-        new webpack.ProvidePlugin(!isProduction ? {
-            'window.SQL': 'sql.js/dist/sql-wasm.js',
-            'window.localforage': 'localforage/dist/localforage.js',
-        } : {}),
-        new CopyPlugin({
-            patterns: !isProduction ? [
-                {from: './node_modules/sql.js/dist/sql-wasm.wasm'}
-            ] : []
-        }),
+        ...providePluginStuff,
+        ...copyStuff,
         new CleanWebpackPlugin(),
         new webpack.ProvidePlugin(providePlutin),
     ];

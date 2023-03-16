@@ -303,7 +303,6 @@ export function usePluto() {
       });
       try {
         await instance.start();
-        console.log("Started pluto");
         set(instance);
       } catch (error) {
         console.log(error);
