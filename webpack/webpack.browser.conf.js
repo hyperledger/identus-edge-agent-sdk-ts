@@ -52,7 +52,8 @@ module.exports = (env, argv) => {
 
     const minimizer = [];
     if (isProduction) {
-        minimizer.push(new TerserPlugin({extractComments: true}));
+        // Important: disable mangle, so it does not break Pluto's insert queries 🙂
+        minimizer.push(new TerserPlugin({extractComments: true, terserOptions: {mangle: false}}));
     }
 
     return {
