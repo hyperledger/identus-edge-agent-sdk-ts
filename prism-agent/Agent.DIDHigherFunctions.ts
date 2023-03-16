@@ -1,35 +1,32 @@
 import {
-  DID,
-  Signature,
-  Service,
   Curve,
+  DID,
   Seed,
+  Service,
+  ServiceEndpoint,
+  Signature,
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
-  ServiceEndpoint,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
-import { AgentError } from "../domain/models/Errors";
-import {
-  AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
-  ConnectionsManager,
-  MediatorHandler,
-} from "./types";
+import {AgentError} from "../domain/models/Errors";
+import {AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass, ConnectionsManager, MediatorHandler,} from "./types";
 
 export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
   constructor(
-    protected apollo: Apollo,
-    protected castor: Castor,
-    protected pluto: Pluto,
-    protected manager: ConnectionsManager,
-    protected mediationHandler: MediatorHandler,
-    protected seed: Seed
-  ) {}
+      protected apollo: Apollo,
+      protected castor: Castor,
+      protected pluto: Pluto,
+      protected manager: ConnectionsManager,
+      protected mediationHandler: MediatorHandler,
+      protected seed: Seed
+  ) {
+  }
 
   async signWith(did: DID, message: Uint8Array): Promise<Signature> {
-    const privateKeys = this.pluto.getDIDPrivateKeysByDID(did);
+    const privateKeys = await this.pluto.getDIDPrivateKeysByDID(did);
     if (!privateKeys || privateKeys.length <= 0) {
       throw new AgentError.CannotFindDIDPrivateKey();
     }
@@ -38,23 +35,23 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
   }
 
   async createNewPeerDID(
-    services: Service[],
-    updateMediator: boolean
+      services: Service[],
+      updateMediator: boolean
   ): Promise<DID> {
-    const index = this.pluto.getPrismLastKeyPathIndex();
+    const index = await this.pluto.getPrismLastKeyPathIndex();
     const keyAgreementKeyPair = this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.X25519,
-        index: index,
-      },
-      this.seed
+        {
+          curve: Curve.X25519,
+          index: index,
+        },
+        this.seed
     );
     const authenticationKeyPair = this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.ED25519,
-        index: index,
-      },
-      this.seed
+        {
+          curve: Curve.ED25519,
+          index: index,
+        },
+        this.seed
     );
     const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
     const keyPairs = [keyAgreementKeyPair, authenticationKeyPair];
@@ -62,11 +59,11 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     if (updateMediator && mediatorDID) {
       //TODO(): This still needs to be done update the key List
       services.push(
-        new Service(
-          "#didcomm-1",
-          ["DIDCommMessaging"],
-          new ServiceEndpoint(mediatorDID.toString())
-        )
+          new Service(
+              "#didcomm-1",
+              ["DIDCommMessaging"],
+              new ServiceEndpoint(mediatorDID.toString())
+          )
       );
     }
 
@@ -90,9 +87,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     // So when the secret resolver asks for the secret we can identify it.
     const didDocument = await this.castor.resolveDID(did.toString());
 
-    const verificationMethods = didDocument.coreProperties.reduce<
-      DIDDocumentVerificationMethod[]
-    >((result, property) => {
+    const verificationMethods = didDocument.coreProperties.reduce<DIDDocumentVerificationMethod[]>((result, property) => {
       if (property instanceof DIDDocumentVerificationMethods) {
         result.push(...property.values);
       }
@@ -101,9 +96,9 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
     verificationMethods.forEach((verificationMethod, i) => {
       const privateKey =
-        verificationMethod.type.indexOf("X25519") !== -1
-          ? keyAgreementKeyPair.privateKey
-          : authenticationKeyPair.privateKey;
+          verificationMethod.type.indexOf("X25519") !== -1
+              ? keyAgreementKeyPair.privateKey
+              : authenticationKeyPair.privateKey;
 
       this.pluto.storePrivateKeys(privateKey, did, i, verificationMethod.id);
     });
@@ -112,23 +107,23 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
   }
 
   async createNewPrismDID(
-    alias: string,
-    services: Service[],
-    keyPathIndex?: number
+      alias: string,
+      services: Service[],
+      keyPathIndex?: number
   ): Promise<DID> {
     const index = keyPathIndex
-      ? keyPathIndex
-      : this.pluto.getPrismLastKeyPathIndex();
+        ? keyPathIndex
+        : await this.pluto.getPrismLastKeyPathIndex();
     const keyPair = this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-        index: index,
-      },
-      this.seed
+        {
+          curve: Curve.SECP256K1,
+          index: index,
+        },
+        this.seed
     );
     const did = await this.castor.createPrismDID(keyPair.publicKey, services);
     //this.pluto.storePrivateKeys(keyPair.privateKey, did, index, null);
-    this.pluto.storePrismDID(did, index, keyPair.privateKey, null, alias);
+    await this.pluto.storePrismDID(did, index, keyPair.privateKey, null, alias);
     return did;
   }
 }
