@@ -12,6 +12,7 @@ import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
+import { MnemonicWordList } from "../../domain";
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
@@ -468,7 +469,33 @@ const useSDK = () => {
   const store = new SDK.PublicMediatorStore(pluto);
   const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
   const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
-  const seed = apollo.createRandomSeed();
+  const words = [
+    "trumpet",
+    "mass",
+    "anger",
+    "eyebrow",
+    "gadget",
+    "sword",
+    "debate",
+    "spend",
+    "move",
+    "noble",
+    "motor",
+    "common",
+    "junk",
+    "feed",
+    "alone",
+    "whip",
+    "feed",
+    "front",
+    "radio",
+    "rookie",
+    "settle",
+    "provide",
+    "admit",
+    "peanut"
+  ] as MnemonicWordList;
+  const seed = apollo.createSeed(words)
   const agent = new SDK.Agent(
     apollo,
     castor,
@@ -476,7 +503,7 @@ const useSDK = () => {
     mercury,
     handler,
     manager,
-    seed.seed
+    seed
   );
 
   return { agent, pluto };
