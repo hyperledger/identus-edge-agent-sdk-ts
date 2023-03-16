@@ -285,6 +285,7 @@ function Dids() {
   );
 }
 
+
 export function usePluto() {
   const [pluto, set] = useState<Pluto | null>(null);
   useEffect(() => {
@@ -293,10 +294,10 @@ export function usePluto() {
         type: 'sqljs',
         synchronize: true,
         location: "pluto",
-        // dropSchema: true,
-        sqlJsConfig: {
-          locateFile: (filename: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.2.1/dist/${filename}`
-        },
+        dropSchema: true,
+        // sqlJsConfig: {
+        //   locateFile: (filename: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.2.1/dist/${filename}`
+        // },
         autoSave: true,
         useLocalForage: true,
       });
@@ -389,7 +390,7 @@ function App() {
         <KeyPair curve={Domain.Curve.X25519}/>
 
         <Dids/>
-
+        <PlutoApp/>
         <Spacer/>
       </div>
   );

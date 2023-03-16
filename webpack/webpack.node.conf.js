@@ -4,23 +4,20 @@ const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const exec = require("child_process").exec;
 const TerserPlugin = require("terser-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-
 const nodeExternals = require('webpack-node-externals');
-
 module.exports = (env, argv) => {
     const isProduction = argv.mode === "production";
+    const copyPluginPatterns = [
+        {from: "./node_modules/didcomm-node/index_bg.wasm"},
+    ];
 
     const plugins = [
         new CleanWebpackPlugin(),
         new webpack.ProvidePlugin({
             Buffer: ["buffer", "Buffer"],
         }),
-
         new CopyPlugin({
-            patterns: [
-                {from: "./node_modules/sql.js/dist/sql-wasm.wasm"},
-                {from: "./node_modules/didcomm-node/index_bg.wasm"},
-            ],
+            patterns: copyPluginPatterns,
         }),
     ];
     const minimizer = [];
