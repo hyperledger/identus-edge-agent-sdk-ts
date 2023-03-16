@@ -31,7 +31,7 @@ export interface ParsedCredentialFormat<T> {
 
 export interface MediationKeysUpdateListBody {
   updates: Array<{
-    recipientDid: string;
+    recipient_did: string;
     action: "add";
   }>;
 }

@@ -42,7 +42,9 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     const timeInterval = Math.max(iterationPeriod, 5) * 1000;
     this.cancellable = new CancellableTask(async () => {
       const unreadMessages = await this.manager.awaitMessages();
-      this.emitMessage(unreadMessages);
+      if (unreadMessages.length) {
+        this.emitMessage(unreadMessages);
+      }
     }, timeInterval);
   }
 
