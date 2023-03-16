@@ -2,11 +2,48 @@ import 'reflect-metadata';
 import {DID, getKeyCurveByNameAndIndex, Mediator, Message, PeerDID, PrivateKey} from '../domain';
 import {PrismDIDInfo} from '../domain/models/PrismDIDInfo';
 import {VerifiableCredential} from '../domain/models/VerifiableCredential';
-import {default as PlutoInterface, PlutoConnectionProps} from '../domain/buildingBlocks/Pluto';
+import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto';
 import {DataSource} from 'typeorm';
 import * as entities from './entities';
 import Did from './entities/DID';
 import {DIDPair} from '../domain/models/DIDPair';
+import {MysqlConnectionOptions} from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import {CockroachConnectionOptions} from 'typeorm/driver/cockroachdb/CockroachConnectionOptions';
+import {SqliteConnectionOptions} from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import {SqlServerConnectionOptions} from 'typeorm/driver/sqlserver/SqlServerConnectionOptions';
+import {SapConnectionOptions} from 'typeorm/driver/sap/SapConnectionOptions';
+import {OracleConnectionOptions} from 'typeorm/driver/oracle/OracleConnectionOptions';
+import {CordovaConnectionOptions} from 'typeorm/driver/cordova/CordovaConnectionOptions';
+import {NativescriptConnectionOptions} from 'typeorm/driver/nativescript/NativescriptConnectionOptions';
+import {SqljsConnectionOptions} from 'typeorm/driver/sqljs/SqljsConnectionOptions';
+import {MongoConnectionOptions} from 'typeorm/driver/mongodb/MongoConnectionOptions';
+import {AuroraMysqlConnectionOptions} from 'typeorm/driver/aurora-mysql/AuroraMysqlConnectionOptions';
+import {AuroraPostgresConnectionOptions} from 'typeorm/driver/aurora-postgres/AuroraPostgresConnectionOptions';
+import {ExpoConnectionOptions} from 'typeorm/driver/expo/ExpoConnectionOptions';
+import {BetterSqlite3ConnectionOptions} from 'typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions';
+import {CapacitorConnectionOptions} from 'typeorm/driver/capacitor/CapacitorConnectionOptions';
+import {SpannerConnectionOptions} from 'typeorm/driver/spanner/SpannerConnectionOptions';
+
+type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
+export type PlutoConnectionProps =
+    Omit<MysqlConnectionOptions, IgnoreProps>
+    | Omit<PostgresConnectionOptions, IgnoreProps>
+    | Omit<CockroachConnectionOptions, IgnoreProps>
+    | Omit<SqliteConnectionOptions, IgnoreProps>
+    | Omit<SqlServerConnectionOptions, IgnoreProps>
+    | Omit<SapConnectionOptions, IgnoreProps>
+    | Omit<OracleConnectionOptions, IgnoreProps>
+    | Omit<CordovaConnectionOptions, IgnoreProps>
+    | Omit<NativescriptConnectionOptions, IgnoreProps>
+    | Omit<SqljsConnectionOptions, IgnoreProps>
+    | Omit<MongoConnectionOptions, IgnoreProps>
+    | Omit<AuroraMysqlConnectionOptions, IgnoreProps>
+    | Omit<AuroraPostgresConnectionOptions, IgnoreProps>
+    | Omit<ExpoConnectionOptions, IgnoreProps>
+    | Omit<BetterSqlite3ConnectionOptions, IgnoreProps>
+    | Omit<CapacitorConnectionOptions, IgnoreProps>
+    | Omit<SpannerConnectionOptions, IgnoreProps>;
 
 export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
