@@ -1,6 +1,5 @@
 import React, {FormEventHandler, useCallback, useEffect, useLayoutEffect, useState} from "react";
 import "./App.css";
-import {Apollo, Castor, Domain, Pluto,} from "../..";
 import {useAtom} from "jotai";
 import {mnemonicsAtom} from "./state";
 import {trimString} from "./utils";
@@ -8,6 +7,10 @@ import Spacer from "./Spacer";
 import * as jose from "jose";
 import {Box} from "./Box";
 import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
+import Apollo from '../../apollo/Apollo';
+import Castor from '../../castor/Castor';
+import * as Domain from '../../domain';
+import Pluto from '../../pluto/Pluto';
 
 const apollo = new Apollo();
 const castor = new Castor(apollo);

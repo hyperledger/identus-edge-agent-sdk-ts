@@ -40,7 +40,7 @@ module.exports = (env, argv) => {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Webpack App</title>
+          <title>Webpack test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"><script defer src="index.js"></script></head>
         <body>
         <div id="root"></div>
@@ -61,7 +61,6 @@ module.exports = (env, argv) => {
         mode: isProduction ? "production" : "development",
         devtool: "source-map",
         externals: {
-            "sql.js": "commonjs sql.js",
             'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
         },
         entry: isProduction ? "./index.ts" : "./demos/test-browser.tsx",
