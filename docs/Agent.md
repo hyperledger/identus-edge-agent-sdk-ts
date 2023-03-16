@@ -90,9 +90,57 @@ utilities, usable in different contexts.
 themselves. That's why mediators are used to provide public endpoints and 
 mailboxes to agents. `PublicMediatorStore`, `BasicMediatorHandler`, and 
 `ConnectionsManager` are abstractions for interacting with mediators.
+- Once an instance of `Agent` is prepared, `start` method is called to start the
+agent and mediator services.
 
 ## Establishing Connection
+Established connection is usually a prerequisite for other DIDComm protocols. 
+Let's see how to establish a connection with another agent and what it means.
+
+In DIDComm Agent's world, a connection is nothing more than a pair of DIDs and
+a label. Agent creates a new `peer` DID for each connection, and stores it in 
+the wallet storage (Pluto), along with the DID of the other agent and the 
+human-readable label used to help users navigate through the list of connections.
+
+High-level steps for establishing a connection are as follows:
+
+- An agent, typically a cloud agent representing an issuer or verifier, creates a
+new DID for connection.
+- New DID and usually a human-readable label, used to represent an inviter, are
+used as inputs to create an out-of-band invitation message. The invitation 
+message is encoded in appropriate format (QR code, deep link, etc.) and shared 
+with the other party.
+- Other agent, typically an edge agent representing a holder, receives the 
+invitation and if accepted, creates a new DID for connection.
+- Now both agents have a pair of DIDs and can store new connection to be used in
+future interactions.
+
+### Example code
+
+Here is an example of how to establish a connection with another agent assuming
+that the invitation is received as a QR code and that agent has already been 
+started:
+
+```ts
+// ... QR code scaned and decoded
+const qrCodeDecoded = "https://domain.com/path?_oob=eyJpZCI6ImUzNzZlZGYyLWVmNmQtNDk4ZS1hMTk3LWMwZTI2MGQxNTA2OCIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNoQUFxY1ZlZXRQNmlrdHk1bXl5OFFweE5wVlk3NEF0YUZuVmFrOFRwYnRkSy5WejZNa2dlYUVWZ0FVSHoyQWczaUZLRDIxMjZTR0tERnpIS28zSEFxYmM4eExOM1paLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjRG92TDJodmMzUXVaRzlqYTJWeUxtbHVkR1Z5Ym1Gc09qZ3dPREF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImNvbm5lY3QiLCJnb2FsIjoiRXN0YWJsaXNoIGEgdHJ1c3QgY29ubmVjdGlvbiBiZXR3ZWVuIHR3byBwZWVycyIsImFjY2VwdCI6W119fQ==";
+const oobMessage = await agent.parseOOBInvitation(qrCodeDecoded);
+
+// check if received message is a connection invitation
+if (
+    oobMessage.type === "https://didcomm.org/out-of-band/2.0/invitation" &&
+    oobMessage.body.goal_code === "connect"
+) {
+    // accept invitation: this will create a new DID for connection and send response messege to the other agent
+    await agent.acceptDIDCommInvitation(message);
+    console.info(
+        `Connection established with ${oobMessage.body.label}`
+    );
+}
+```
 
 ## Receiving a credential
+TODO
 
 ## Presenting a proof in verification flow
+TODO
