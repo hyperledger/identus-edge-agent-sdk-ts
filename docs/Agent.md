@@ -106,12 +106,13 @@ High-level steps for establishing a connection are as follows:
 
 - An agent, typically a cloud agent representing an issuer or verifier, creates a
 new DID for connection.
-- New DID and usually a human-readable label, used to represent an inviter, are
+- New DID and usually a human-readable label, used to represent the inviter, are
 used as inputs to create an out-of-band invitation message. The invitation 
 message is encoded in appropriate format (QR code, deep link, etc.) and shared 
 with the other party.
 - Other agent, typically an edge agent representing a holder, receives the 
-invitation and if accepted, creates a new DID for connection.
+invitation and if accepted, creates a new DID for connection and sends a response
+back to the inviter.
 - Now both agents have a pair of DIDs and can store new connection to be used in
 future interactions.
 
