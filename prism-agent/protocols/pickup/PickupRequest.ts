@@ -3,7 +3,7 @@ import { ProtocolType } from "../ProtocolTypes";
 import { PickupRequestBody } from "../types";
 
 export class PickupRequest {
-  public static type: ProtocolType.PickupRequest;
+  public static type = ProtocolType.PickupRequest;
 
   constructor(
     public body: PickupRequestBody,
