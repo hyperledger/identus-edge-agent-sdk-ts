@@ -75,3 +75,24 @@ const agent = new Agent(
 await agent.start();
 console.info(`Welcome to Atala PRISM Edge Agent [state=${agent.state}]`);
 ```
+
+Quite a lot of things are happening here, so let's break it down:
+- `Apollo`, `Castor`, `Pluto`, `Mercury`, and `Agent` are the main building 
+blocks of the SDK. First three have already been covered in more detail in the 
+previous sections, as they are user-facing modules, usable on their own. Other 
+modules could be considered as internal modules, and are not meant to be used 
+directly.
+- `Mercury` is a module which deals with DIDComm V2 messaging, and is used 
+primarily by the `Agent` to handle DIDComm messages.
+- As already mentioned, `Domain` is a set of domain-specific types, models and 
+utilities, usable in different contexts.
+- Edge Agents are not able to provide highly-available service endpoints by 
+themselves. That's why mediators are used to provide public endpoints and 
+mailboxes to agents. `PublicMediatorStore`, `BasicMediatorHandler`, and 
+`ConnectionsManager` are abstractions for interacting with mediators.
+
+## Establishing Connection
+
+## Receiving a credential
+
+## Presenting a proof in verification flow
