@@ -360,19 +360,32 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
     const {value} = event.currentTarget;
     setValue(value);
   }, []);
+
   useLayoutEffect(() => {
     if (!pluto || Array.isArray(dids)) {
       return;
     }
     (async () => {
 
-      const prismDids = await pluto.getAllPrismDIDs();
-      setDids(prismDids);
+      // const prismDids = await pluto.getAllPrismDIDs();
+      // setDids(prismDids);
     })();
   }, [pluto, dids]);
+
   return (
     <Box>
       <h2>Pluto</h2>
+
+      <button
+        onClick={async () => {
+          console.log("Fetch PrismDIDs")
+          const prismDids = await pluto.getAllPrismDIDs();
+          console.log({ prismDids })
+          setDids(prismDids);
+        }}
+      >Fetch DIDs</button>
+      <Spacer />
+
       <div className="App">
         <form onSubmit={createDid}>
           <input type="text" name="did" onChange={handleInputChange} value={value}/>
