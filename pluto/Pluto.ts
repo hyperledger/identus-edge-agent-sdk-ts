@@ -107,14 +107,14 @@ export default class Pluto implements PlutoInterface {
   }
 
   async storeDIDPair(host: DID, receiver: DID, name: string) {
-    const hostInfo = await this.getDIDInfoByDID(host);
-    const receiverInfo = await this.getDIDInfoByDID(receiver);
-    if (!hostInfo) {
-      throw new Error("Your host DID is not stored, therefore can't store didPair");
-    }
-    if (!receiverInfo) {
-      throw new Error("Your receiver DID is not stored, therefore can't store didPair");
-    }
+    // const hostInfo = await this.getDIDInfoByDID(host);
+    // const receiverInfo = await this.getDIDInfoByDID(receiver);
+    // if (!hostInfo) {
+    //   throw new Error("Your host DID is not stored, therefore can't store didPair");
+    // }
+    // if (!receiverInfo) {
+    //   throw new Error("Your receiver DID is not stored, therefore can't store didPair");
+    // }
     const didPairEntity = new entities.DIDPair();
     didPairEntity.id = `${host.toString()}${receiver.toString()}`;
     didPairEntity.name = name;
@@ -151,20 +151,19 @@ export default class Pluto implements PlutoInterface {
   }
 
   async storeMediator(mediator: DID, host: DID, routing: DID) {
-
-    const mediatorInfo = await this.getDIDInfoByDID(mediator);
-    const hostInfo = await this.getDIDInfoByDID(host);
-    const routingInfo = await this.getDIDInfoByDID(routing);
-
-    if (!hostInfo) {
-      throw new Error("Your host DID is not stored, therefore can't store didPair");
-    }
-    if (!mediatorInfo) {
-      throw new Error("Your mediator DID is not stored, therefore can't store didPair");
-    }
-    if (!routingInfo) {
-      throw new Error("Your routing DID is not stored, therefore can't store didPair");
-    }
+    // const mediatorInfo = await this.getDIDInfoByDID(mediator);
+    // const hostInfo = await this.getDIDInfoByDID(host);
+    // const routingInfo = await this.getDIDInfoByDID(routing);
+    //
+    // if (!hostInfo) {
+    //   throw new Error("Your host DID is not stored, therefore can't store didPair");
+    // }
+    // if (!mediatorInfo) {
+    //   throw new Error("Your mediator DID is not stored, therefore can't store didPair");
+    // }
+    // if (!routingInfo) {
+    //   throw new Error("Your routing DID is not stored, therefore can't store didPair");
+    // }
     const mediatorEntity = new entities.Mediator();
     mediatorEntity.mediatorDidId = mediator.toString();
     mediatorEntity.hostDidId = host.toString();
