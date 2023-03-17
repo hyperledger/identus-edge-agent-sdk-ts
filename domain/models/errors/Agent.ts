@@ -55,6 +55,11 @@ export class InvalidProposePresentationBodyError extends Error {
     super(message || "Invalid ProposePresentation body Error");
   }
 }
+export class InvalidBasicMEssageBodyError extends Error {
+  constructor(message?: string) {
+    super(message || "Invalid BasicMessage body Error");
+  }
+}
 export class InvalidPresentationBodyError extends Error {
   constructor(message?: string) {
     super(message || "Invalid Presentation body Error");

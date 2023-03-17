@@ -131,6 +131,6 @@ export class Message {
   }
 
   static isJsonAttachment(data: any): data is AttachmentJsonData {
-    return data.data === undefined;
+    return data.data !== undefined;
   }
 }

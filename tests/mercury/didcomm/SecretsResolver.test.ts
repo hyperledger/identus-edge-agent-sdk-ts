@@ -6,6 +6,7 @@ import Castor from "../../../castor/Castor";
 import Pluto from "../../../pluto/Pluto";
 import * as Domain from "../../../domain";
 import { DIDCommSecretsResolver } from "../../../mercury/didcomm/SecretsResolver";
+import { Curve } from "../../../domain";
 
 chai.use(SinonChai);
 const expect = chai.expect;
@@ -38,7 +39,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
     };
 
     const pluto: Pick<Pluto, "getAllPeerDIDs"> = {
-      getAllPeerDIDs: () => [],
+      getAllPeerDIDs: async () => [],
     };
 
     const secretsResolver = new DIDCommSecretsResolver(
@@ -58,7 +59,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
       );
       const secret = did.toString();
 
-      sandbox.stub(ctx.pluto, "getAllPeerDIDs").returns([
+      sandbox.stub(ctx.pluto, "getAllPeerDIDs").resolves([
         // TODO: update when PeerDID Types are fixed
         { did: secret } as any,
       ]);
@@ -78,7 +79,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
 
       sandbox
         .stub(ctx.pluto, "getAllPeerDIDs")
-        .returns([{ did: secret } as any, { did: secret } as any]);
+        .resolves([{ did: secret } as any, { did: secret } as any]);
 
       const result = await ctx.secretsResolver.find_secrets([secret]);
 
@@ -93,7 +94,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
       );
       const secret = did.toString();
 
-      sandbox.stub(ctx.pluto, "getAllPeerDIDs").returns([]);
+      sandbox.stub(ctx.pluto, "getAllPeerDIDs").resolves([]);
 
       const result = await ctx.secretsResolver.find_secrets([secret]);
 
@@ -111,18 +112,27 @@ describe("Mercury DIDComm SecretsResolver", () => {
       const publicKeyJwk: Domain.PublicKeyJWK = {
         crv: Domain.Curve.X25519,
         kid: "kid",
-        kty: "kty",
+        kty: "OKP",
         // TODO: fix when Types are fixed
-        x: { data: "toBeFixed" } as any,
+        x: {
+          data: Buffer.from(new Uint8Array()).toString(),
+        } as any,
       };
       const ecnum = "ecnum123";
       const peerDid = {
         did: secret,
-        curve: "curve",
-        privateKey: new Uint8Array(),
+        curve: Curve.X25519,
+        privateKeys: [
+          {
+            keyCurve: {
+              curve: Curve.X25519,
+            },
+            value: new Uint8Array(),
+          },
+        ],
       } as any;
 
-      sandbox.stub(ctx.pluto, "getAllPeerDIDs").returns([peerDid]);
+      sandbox.stub(ctx.pluto, "getAllPeerDIDs").resolves([peerDid]);
 
       sandbox
         .stub(ctx.castor, "resolveDID")
@@ -146,6 +156,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
       sandbox.stub(ctx.castor, "getEcnumbasis").returns(ecnum);
 
       const result = await ctx.secretsResolver.get_secret(secret);
+      const [privateKey] = peerDid.privateKeys;
 
       expect(result).not.to.be.null;
       expect(result).to.eql({
@@ -154,8 +165,8 @@ describe("Mercury DIDComm SecretsResolver", () => {
         privateKeyJwk: {
           crv: peerDid.curve,
           kty: "OKP",
-          d: peerDid.privateKey,
-          x: (publicKeyJwk.x as any).data,
+          d: privateKey.value.toString(),
+          x: (publicKeyJwk.x as any).data.toString(),
         },
       });
     });
@@ -167,7 +178,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
       );
       const secret = did.toString();
 
-      sandbox.stub(ctx.pluto, "getAllPeerDIDs").returns([]);
+      sandbox.stub(ctx.pluto, "getAllPeerDIDs").resolves([]);
 
       const result = await ctx.secretsResolver.get_secret(secret);
 
