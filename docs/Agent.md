@@ -141,7 +141,7 @@ if (
 ```
 
 ## Receiving a credential
-TODO
+Coming soon...
 
 ## Presenting a proof in verification flow
-TODO
+Coming soon...
