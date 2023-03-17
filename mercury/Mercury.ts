@@ -2,11 +2,9 @@ import * as Domain from "../domain";
 import { MercuryError } from "../domain/models/Errors";
 import { default as MercuryInterface } from "../domain/buildingBlocks/Mercury";
 import { DIDCommProtocol } from "./DIDCommProtocol";
-import { Api, AttachmentJsonData, DID } from "../domain";
+import { Api, DID } from "../domain";
 import { MediaType } from "./helpers/MediaType";
 import Castor from "../domain/buildingBlocks/Castor";
-import * as DIDURLParser from "../castor/parser/DIDUrlParser";
-import * as DIDParser from "../castor/parser/DIDParser";
 import { ForwardMessage } from "./forward/ForwardMessage";
 
 export default class Mercury implements MercuryInterface {
