@@ -118,28 +118,11 @@ describe('Pluto tests', () => {
       database: "pluto.db",
       dropSchema: true
     });
-
-    const mediatorPrivateKey: PrivateKey = {
-      value: Buffer.from("mediator test"),
-      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
-    };
-    const hostPrivateKey: PrivateKey = {
-      value: Buffer.from("host test"),
-      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
-    };
-    const routingPrivateKey: PrivateKey = {
-      value: Buffer.from("routing test"),
-      keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
-    };
-
     await instance.start();
     const mediator = DID.fromString("did:prism:123");
     const host = DID.fromString("did:prism:321");
     const routing = DID.fromString("did:prism:432");
 
-    await instance.storePrismDID(mediator, 10, mediatorPrivateKey, null, "Mediator");
-    await instance.storePrismDID(host, 11, hostPrivateKey, null, "Host");
-    await instance.storePrismDID(routing, 12, routingPrivateKey, null, "Routing");
     await instance.storeMediator(mediator, host, routing);
   });
 
