@@ -132,6 +132,10 @@ export default class Agent
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
+      //TODO: How to check if current mediationHandler works
+      await this.connectionManager.mediationHandler.updateKeyListWithDIDs([
+        this.connectionManager.mediationHandler.mediator.hostDID,
+      ]);
       this.agentMessageEvents.startFetchingMessages(10);
       this.state = AgentState.RUNNING;
     } else {

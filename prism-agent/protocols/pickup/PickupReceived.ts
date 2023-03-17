@@ -13,11 +13,7 @@ export class PickupReceived {
 
   makeMessage(): Message {
     const body = JSON.stringify({
-      to: this.to,
-      from: this.from,
-      body: {
-        messageIdList: this.body.messageIdList || [],
-      },
+      messageIdList: this.body.messageIdList || [],
     });
     return new Message(
       body,

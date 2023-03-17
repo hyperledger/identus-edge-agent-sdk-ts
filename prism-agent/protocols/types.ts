@@ -42,7 +42,7 @@ export interface PickupReceivedBody {
 
 export interface PickupRequestBody {
   recipientKey?: string;
-  limit: string;
+  limit: number;
 }
 
 export interface PickupAttachment {

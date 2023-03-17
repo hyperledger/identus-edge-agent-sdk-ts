@@ -55,9 +55,13 @@ export class ConnectionsManager implements ConnectionsManagerClass {
       .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
       .map(({ attachmentId }) => attachmentId);
 
-    await this.pluto.storeMessages(messages);
+    if (messages.length) {
+      await this.pluto.storeMessages(messages);
+    }
 
-    await this.mediationHandler.registerMessagesAsRead(messageIds);
+    if (messageIds.length) {
+      await this.mediationHandler.registerMessagesAsRead(messageIds);
+    }
 
     return messages;
   }
