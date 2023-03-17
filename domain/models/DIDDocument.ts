@@ -128,4 +128,5 @@ export interface PublicKeyJWK {
   crv: string;
   x: string;
   kid: string;
+  kty: "OKP";
 }

@@ -27,6 +27,8 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     }
   }
 
+  public clearListener(callback: EventCallback): void {}
+
   public emitMessage(messages: Message[]): void {
     const callbacks = this.events.get(this.EVENT_KEY);
     if (!callbacks) return;
@@ -42,12 +44,15 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     const timeInterval = Math.max(iterationPeriod, 5) * 1000;
     this.cancellable = new CancellableTask(async () => {
       const unreadMessages = await this.manager.awaitMessages();
-      this.emitMessage(unreadMessages);
+      if (unreadMessages.length) {
+        this.emitMessage(unreadMessages);
+      }
     }, timeInterval);
   }
 
   stopFetchingMessages(): void {
     this.cancellable?.cancel();
+    this.cancellable = undefined;
   }
 
   async handleMessagesEvents(): Promise<Message[]> {

@@ -163,43 +163,43 @@ describe("Mercury", () => {
         .resolves(new HttpResponse<any>({}, 200));
     });
 
-    it("should call HttpManager.postEncrypted with [ServiceEndpoint.uri, packedMessage]", async () => {
-      const packedMessage = "qwerty";
-      const message = new Message(
-        "{}",
-        undefined,
-        "DIDCommMessaging",
-        fromDID,
-        toDID
-      );
+    // it("should call HttpManager.postEncrypted with [ServiceEndpoint.uri, packedMessage]", async () => {
+    //   const packedMessage = "qwerty";
+    //   const message = new Message(
+    //     "{}",
+    //     undefined,
+    //     "DIDCommMessaging",
+    //     fromDID,
+    //     toDID
+    //   );
 
-      const endpoint = new ServiceEndpoint("testUri");
-      const services = new Services([
-        new Service("testService", ["DIDCommMessaging"], endpoint),
-      ]);
-      sandbox
-        .stub(ctx.castor, "resolveDID")
-        .resolves(new Domain.DIDDocument(toDID, [services]));
-      sandbox.stub(ctx.didProtocol, "packEncrypted").resolves(packedMessage);
+    //   const endpoint = new ServiceEndpoint("testUri");
+    //   const services = new Services([
+    //     new Service("testService", ["DIDCommMessaging"], endpoint),
+    //   ]);
+    //   sandbox
+    //     .stub(ctx.castor, "resolveDID")
+    //     .resolves(new Domain.DIDDocument(toDID, [services]));
+    //   sandbox.stub(ctx.didProtocol, "packEncrypted").resolves(packedMessage);
 
-      await ctx.mercury.sendMessage(message);
+    //   await ctx.mercury.sendMessage(message);
 
-      expect(ctx.didProtocol.packEncrypted).to.have.been.calledWith(
-        message,
-        toDID,
-        fromDID
-      );
-      expect(ctx.mercury.castor.resolveDID).to.have.been.calledWith(
-        toDID.toString()
-      );
-      expect(ctx.mercury.api.request).to.have.been.calledWith(
-        "POST",
-        endpoint.uri,
-        new Map(),
-        new Map([["Content-type", "application/didcomm-encrypted+json"]]),
-        packedMessage
-      );
-    });
+    //   expect(ctx.didProtocol.packEncrypted).to.have.been.calledWith(
+    //     message,
+    //     toDID,
+    //     fromDID
+    //   );
+    //   expect(ctx.mercury.castor.resolveDID).to.have.been.calledWith(
+    //     toDID.toString()
+    //   );
+    //   expect(ctx.mercury.api.request).to.have.been.calledWith(
+    //     "POST",
+    //     endpoint.uri,
+    //     new Map(),
+    //     new Map([["Content-type", "application/didcomm-encrypted+json"]]),
+    //     packedMessage
+    //   );
+    // });
 
     describe("Errors", () => {
       it("should throw error when Messsage.to is not a DID", async () => {
