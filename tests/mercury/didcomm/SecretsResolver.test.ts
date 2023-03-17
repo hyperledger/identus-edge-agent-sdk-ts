@@ -114,7 +114,9 @@ describe("Mercury DIDComm SecretsResolver", () => {
         kid: "kid",
         kty: "OKP",
         // TODO: fix when Types are fixed
-        x: { data: new Uint8Array() } as any,
+        x: {
+          data: Buffer.from(new Uint8Array()).toString(),
+        } as any,
       };
       const ecnum = "ecnum123";
       const peerDid = {
@@ -163,8 +165,8 @@ describe("Mercury DIDComm SecretsResolver", () => {
         privateKeyJwk: {
           crv: peerDid.curve,
           kty: "OKP",
-          d: privateKey.value,
-          x: (publicKeyJwk.x as any).data,
+          d: privateKey.value.toString(),
+          x: (publicKeyJwk.x as any).data.toString(),
         },
       });
     });

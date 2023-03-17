@@ -46,7 +46,11 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     const to = toDid.toString();
     const from = fromDid.toString();
-    const body = JSON.parse(message.body ?? "{}");
+    const body =
+      message.body && Object.keys(JSON.parse(message.body)).length
+        ? JSON.parse(message.body)
+        : "{}";
+
     const didcommMsg = new didcomm.Message({
       id: message.id,
       typ: "application/didcomm-plain+json",
@@ -56,13 +60,13 @@ export class DIDCommWrapper implements DIDCommProtocol {
       from: from,
       from_prior: message.fromPrior,
       attachments: this.parseAttachments(message.attachments),
-      created_time: Number(message.createdTime),
+      //created_time: Number(message.createdTime),
       //expires_time: Number(message.expiresTimePlus),
       thid: message.thid,
       pthid: message.pthid,
       //TODO: Remove comment once fixed by rootsID or we are sure this works,
       //if not message is not correctly formatted
-      //return_route: "all",
+      return_route: "all",
     });
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,

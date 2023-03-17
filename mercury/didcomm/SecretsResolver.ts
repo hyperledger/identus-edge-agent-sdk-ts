@@ -78,7 +78,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       privateKeyJwk: {
         crv: privateKey.keyCurve.curve,
         kty: "OKP",
-        d: privateKey.value,
+        d: privateKey.value.toString(),
         x: (publicKeyJWK.x as any).data,
       },
     };
