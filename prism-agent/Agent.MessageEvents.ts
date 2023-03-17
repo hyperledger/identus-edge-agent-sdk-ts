@@ -27,9 +27,7 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     }
   }
 
-  public clearListener(callback: EventCallback): void {
-    debugger;
-  }
+  public clearListener(callback: EventCallback): void {}
 
   public emitMessage(messages: Message[]): void {
     const callbacks = this.events.get(this.EVENT_KEY);
