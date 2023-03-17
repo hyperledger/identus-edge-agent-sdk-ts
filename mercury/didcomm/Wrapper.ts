@@ -56,7 +56,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       from: from,
       from_prior: message.fromPrior,
       attachments: this.parseAttachments(message.attachments),
-      //created_time: Number(message.createdTime),
+      created_time: Number(message.createdTime),
       //expires_time: Number(message.expiresTimePlus),
       thid: message.thid,
       pthid: message.pthid,
