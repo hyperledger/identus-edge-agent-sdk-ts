@@ -49,7 +49,9 @@ export default class Agent
     AgentMessageEventsClass
 {
   public state: AgentState = AgentState.STOPPED;
-  public currentMediatorDID = this.mediationHandler?.mediator?.mediatorDID;
+  public get currentMediatorDID() {
+    return this.mediationHandler.mediator?.mediatorDID;
+  }
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
@@ -60,7 +62,7 @@ export default class Agent
     protected castor: Castor,
     protected pluto: Pluto,
     protected mercury: Mercury,
-    protected mediationHandler: MediatorHandler,
+    public mediationHandler: MediatorHandler,
     protected connectionManager = new ConnectionsManager(
       castor,
       mercury,
@@ -135,31 +137,6 @@ export default class Agent
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      // //TODO: How to check if current mediationHandler works
-      // const secondaryDID = await this.createNewPeerDID(
-      //   [
-      //     new DIDDocumentService(
-      //       "#didcomm-1",
-      //       ["DIDCommMessaging"],
-      //       new DIDDocumentServiceEndpoint(
-      //         this.connectionManager.mediationHandler.mediatorDID.toString()
-      //       )
-      //     ),
-      //   ],
-      //   true
-      // );
-      // //TODO: this should be placed in demo directly
-      // console.log(
-      //   "HOSTDID",
-      //   secondaryDID.toString(),
-      //   this.connectionManager.mediationHandler.mediator.hostDID.toString()
-      // );
-      // const testMessage = new BasicMessage(
-      //   { content: "Hello" },
-      //   secondaryDID,
-      //   secondaryDID
-      // ).makeMessage();
-      // await this.mercury.sendMessage(testMessage);
       this.agentMessageEvents.startFetchingMessages(10);
       this.state = AgentState.RUNNING;
     } else {

@@ -442,7 +442,7 @@ const Agent: React.FC<{ agent: SDK.Agent }> = props => {
     setState("starting");
     try {
       const status = await props.agent.start();
-      const mediator = props.agent.mediationHandler.mediator?.mediatorDID
+      const mediator = props.agent.currentMediatorDID
       if (!mediator) {
         throw new Error("Mediator not available")
       }
