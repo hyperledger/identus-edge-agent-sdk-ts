@@ -49,7 +49,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
     const body =
       message.body && Object.keys(JSON.parse(message.body)).length
         ? JSON.parse(message.body)
-        : "{}";
+        : JSON.parse("{}");
 
     const didcommMsg = new didcomm.Message({
       id: message.id,
@@ -66,7 +66,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       pthid: message.pthid,
       //TODO: Remove comment once fixed by rootsID or we are sure this works,
       //if not message is not correctly formatted
-      return_route: "all",
+      //return_route: "all",
     });
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,

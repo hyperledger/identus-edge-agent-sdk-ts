@@ -53,12 +53,12 @@ export class PickupRunner {
         this.message.message.attachments
           .map(this.processAttachment)
           .filter(this.filterNullAttachments)
-          .map(async (attachment) => {
-            return {
-              attachmentId: attachment.attachmentId,
-              message: await this.mercury.unpackMessage(attachment.data),
-            };
-          })
+          .map(async (attachment) => ({
+            attachmentId: attachment.attachmentId,
+            message: await this.mercury.unpackMessage(
+              JSON.stringify(attachment.data)
+            ),
+          }))
       );
     }
 

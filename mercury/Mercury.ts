@@ -123,8 +123,7 @@ export default class Mercury implements MercuryInterface {
   ): Promise<Domain.Message> {
     const responseBody = await this.sendMessage<any>(message);
     const responseJSON = JSON.stringify(responseBody);
-    const decoded = new TextDecoder().decode(Buffer.from(responseJSON));
-    return this.unpackMessage(decoded);
+    return this.unpackMessage(responseJSON);
   }
 
   private notDid(did: Domain.DID | undefined): did is undefined {
