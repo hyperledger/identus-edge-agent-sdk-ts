@@ -459,7 +459,7 @@ const useSDK = () => {
     type: 'sqljs',
     synchronize: true,
     location: "pluto",
-    dropSchema: true,
+    dropSchema: false,
     // sqlJsConfig: {
     //   locateFile: (filename: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.2.1/dist/${filename}`
     // },
