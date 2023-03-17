@@ -19,7 +19,9 @@ const sidebars = {
       },
       items: [
         'Apollo',
-        'Castor'
+        'Castor',
+        'Agent',
+        'Pluto'
       ]
     },
   ]
