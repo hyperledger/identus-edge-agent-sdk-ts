@@ -11,10 +11,6 @@ export class PublicMediatorStore implements MediatorStore {
       mediator.hostDID,
       mediator.routingDID
     );
-    //TODO: FIX THIS, how can the mediator be empty if we just inserted it.
-    const mediators = await this.getAllMediators();
-    console.log(mediators);
-    debugger;
     return response;
   }
 

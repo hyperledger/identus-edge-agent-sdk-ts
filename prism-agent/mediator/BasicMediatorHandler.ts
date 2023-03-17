@@ -119,12 +119,12 @@ export class BasicMediatorHandler implements MediatorHandler {
       throw new AgentError.NoMediatorAvailableError();
     }
     const message = new PickupReceived(
+      {
         messageIdList: ids,
       },
       this.mediator.hostDID,
       this.mediator.mediatorDID
     ).makeMessage();
-
     await this.mercury.sendMessage(message);
   }
 }

@@ -27,6 +27,10 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     }
   }
 
+  public clearListener(callback: EventCallback): void {
+    debugger;
+  }
+
   public emitMessage(messages: Message[]): void {
     const callbacks = this.events.get(this.EVENT_KEY);
     if (!callbacks) return;
@@ -50,6 +54,7 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
 
   stopFetchingMessages(): void {
     this.cancellable?.cancel();
+    this.cancellable = undefined;
   }
 
   async handleMessagesEvents(): Promise<Message[]> {

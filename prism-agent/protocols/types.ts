@@ -61,6 +61,10 @@ export interface PresentationBody {
   comment?: string;
 }
 
+export interface BasicMessageBody {
+  content: string;
+}
+
 export interface RequestPresentationBody extends PresentationBody {
   willConfirm?: boolean;
   proofTypes: ProofTypes[];

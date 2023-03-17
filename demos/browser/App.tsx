@@ -7,12 +7,16 @@ import * as SDK from "../../index";
 import * as Domain from '../../domain';
 import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
 import Pluto from '../../pluto/Pluto';
-
+import {
+  Service as DIDDocumentService,
+  ServiceEndpoint as DIDDocumentServiceEndpoint,
+} from "../../domain";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
 import { MnemonicWordList } from "../../domain";
+import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
@@ -406,13 +410,64 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
 const Agent: React.FC<{ agent: SDK.Agent }> = props => {
   const [state, setState] = React.useState<string>(props.agent.state);
   const [error, setError] = React.useState<any>();
-  props.agent.onMessage((message) => {
-    console.log("message", message)
-  })
+  const [newMessage, setNewMessage] = React.useState<any>([]);
+  const [messages, setMessages] = React.useState<any>([]);
+
+  const handleMessages = useCallback((event:any) => {
+    const joinedMessages = [...messages, ...event];
+    setMessages(joinedMessages)
+    setNewMessage(joinedMessages.map(() => ""))
+  }, [])
+
+  
+  useEffect(() => {
+    props.agent.onMessage(handleMessages)
+    return () => {
+      props.agent.clearOnMessage(handleMessages)
+    }
+  }, [])
+
+  const handleOnChange = (e:any, i:number) => {
+    setNewMessage([
+      ...newMessage.map((message:any, z:number) => {
+        if (z === i) {
+          return e.target.value
+        }
+        return message
+      })
+    ])
+  }
+
   const handleStart = async () => {
     setState("starting");
     try {
       const status = await props.agent.start();
+      const mediator = props.agent.mediationHandler.mediator?.mediatorDID
+      if (!mediator) {
+        throw new Error("Mediator not available")
+      }
+      const secondaryDID = await props.agent.createNewPeerDID(
+        [
+          new DIDDocumentService(
+            "#didcomm-1",
+            ["DIDCommMessaging"],
+            new DIDDocumentServiceEndpoint(
+              mediator.toString()
+            )
+          ),
+        ],
+        true
+      );
+      const testMessage = new BasicMessage(
+        { content: "Test Message" },
+        secondaryDID,
+        secondaryDID
+      ).makeMessage();
+      try {
+        await props.agent.sendMessage(testMessage);
+      } catch (err) {
+        console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.")
+      }
       setState(status);
     }
     catch (e) {
@@ -420,6 +475,19 @@ const Agent: React.FC<{ agent: SDK.Agent }> = props => {
       setState("failed");
       throw e;
     }
+  }
+
+  const handleSend = async (responseMessageIndex: number) => {
+    const text = newMessage[responseMessageIndex];
+    setNewMessage(newMessage.map((message: any, i:number) => (i === responseMessageIndex) ? "": message))
+    const message = messages[responseMessageIndex];
+    await props.agent.sendMessage(
+      new BasicMessage(
+        { content: text },
+        message.from,
+        message.from
+      ).makeMessage()
+    )
   }
 
   const handleStop = async () => {
@@ -435,13 +503,22 @@ const Agent: React.FC<{ agent: SDK.Agent }> = props => {
         <b>Status:</b>&nbsp; {props.agent.state}
       </p>
       <div>
-
         {state === "stopped" && (
           <button style={{ width: 120 }} onClick={handleStart}>Start</button>
         )}
-
         {props.agent.state === "running" && (
-          <button style={{ width: 120 }} onClick={handleStop}>Stop</button>
+          <>
+            <button style={{ width: 120 }} onClick={handleStop}>Stop</button>
+            {messages.map((message:any, i: number) => {
+              return <div key={`responseField${i}`}>
+              <p>Message {message.id} {JSON.parse(message.body).content}</p>
+              <input type="text" value={newMessage[i]}  onChange={(e) => handleOnChange(e, i)} />
+              <button style={{ width: 120 }} onClick={() => {
+                handleSend(i)
+              }}>Respond</button>
+              </div>
+            })}
+          </>
         )}
       </div>
 

@@ -1,4 +1,5 @@
 export enum ProtocolType {
+  DidcommBasicMessage = "https://didcomm.org/basicmessage/2.0/message",
   DidcommMediationRequest = "https://didcomm.org/coordinate-mediation/2.0/mediate-request",
   DidcommMediationGrant = "https://didcomm.org/coordinate-mediation/2.0/mediate-grant",
   DidcommMediationDeny = "https://didcomm.org/coordinate-mediation/2.0/mediate-deny",
