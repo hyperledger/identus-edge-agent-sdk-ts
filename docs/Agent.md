@@ -13,7 +13,7 @@ functionality is based on the **DIDComm V2** specification.
 | Protocol | Supported | Notes |
 | --- | :--: | -- |
 | [Mediator Coordinator](https://didcomm.org/mediator-coordination/2.0/) | :white_check_mark: | -- |
-| Connection | :white_check_mark: | Atala PRISM proprietary |
+| Connection | :white_check_mark: | Custom protocol based on DID exchange protocol |
 | [DIDComm V2 Issue Credential](https://github.com/decentralized-identity/waci-didcomm/tree/main/issue_credential) | :white_check_mark: | -- |
 | [DIDComm V2 Present Proof](https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md) | :white_check_mark: | -- |
 
@@ -72,8 +72,12 @@ const agent = new Agent(
     seedAndMnemonics.seed
 );
 
-await agent.start();
-console.info(`Welcome to Atala PRISM Edge Agent [state=${agent.state}]`);
+try {
+    await agent.start();
+    console.info(`Welcome to Atala PRISM Edge Agent [state=${agent.state}]`);
+} catch (e) {
+    console.error("Failed to start agent", e);
+}
 ```
 
 Quite a lot of things are happening here, so let's break it down:
@@ -93,8 +97,7 @@ mailboxes to agents. `PublicMediatorStore`, `BasicMediatorHandler`, and
 - Once an instance of `Agent` is prepared, `start` method is called to start the
 agent and mediator services.
 
-## Establishing Connection
-Established connection is usually a prerequisite for other DIDComm protocols. 
+## Establishing Connection 
 Let's see how to establish a connection with another agent and what it means.
 
 In DIDComm Agent's world, a connection is nothing more than a pair of DIDs and
