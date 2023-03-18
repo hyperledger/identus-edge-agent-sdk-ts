@@ -28,25 +28,6 @@ import { base64url } from "multiformats/bases/base64";
       agent.state
     } with mnemonics ${seed.mnemonics.join(", ")}`
   );
-
-  const did = await agent.createNewPeerDID([], false);
-  const obbJson = {
-    id: uuid(),
-    type: "https://didcomm.org/out-of-band/2.0/invitation",
-    from: did.toString(),
-    body: {
-      goal_code: "connect",
-      goal: "Establish a trust connection between two peers",
-      accept: [],
-    },
-  };
-  const obbUrl = `https://domain.com/path?_obb=${base64url.baseEncode(
-    Buffer.from(JSON.stringify(obbJson))
-  )}`;
-
-  const message = await agent.parseOOBInvitation(obbUrl);
-  await agent.acceptDIDCommInvitation(message);
-
   /**
    * 1. Create a new PEERDID
    * 2. Create an out of band invitation

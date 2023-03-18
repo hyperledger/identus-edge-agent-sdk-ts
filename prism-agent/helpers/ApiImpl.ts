@@ -19,7 +19,6 @@ export class ApiImpl implements Api {
   ): Promise<HttpResponse<T>> {
     const rawUrl = new URL(`${url}`);
     const rawHeaders: RawAxiosRequestHeaders = {};
-
     for (const [name, value] of urlParameters) {
       rawUrl.searchParams.append(name, value);
     }
@@ -29,7 +28,7 @@ export class ApiImpl implements Api {
     }
 
     const requestConfig: AxiosRequestConfig = {
-      baseURL: rawUrl.toString(),
+      baseURL: rawUrl.origin.toString(),
       url: rawUrl.pathname,
       method: httpMethod,
       headers: rawHeaders,

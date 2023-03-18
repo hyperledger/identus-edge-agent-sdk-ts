@@ -77,8 +77,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
 
     const storeDIDPairTask = new CancellableTask<DIDPair>(async () => {
-      //TODO: BETTER HANDLE WHEN PAIRED IS NOT DEFINED
-      this.pluto.storeDIDPair(paired.host, paired.receiver, paired.name || "");
+      this.pluto.storeDIDPair(paired.host, paired.receiver, paired.name);
       return paired;
     });
 

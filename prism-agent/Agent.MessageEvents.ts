@@ -9,28 +9,32 @@ import {
 } from "./types";
 
 export class AgentMessageEvents implements AgentMessageEventsClass {
-  private readonly EVENT_KEY = "message";
+  private manager: ConnectionsManager;
+  private events: Map<ListenerKey, Set<EventCallback>> = new Map();
+  private cancellable?: CancellableTask<void>;
 
-  public cancellable?: CancellableTask<void>;
-
-  private events: Map<ListenerKey, EventCallback[]> = new Map();
-
-  constructor(private manager: ConnectionsManager, private pluto: Pluto) {}
-
-  public onMessage(callback: EventCallback): void {
-    if (!this.events.has(this.EVENT_KEY)) {
-      this.events.set(this.EVENT_KEY, []);
-    }
-    const callbacks = this.events.get(this.EVENT_KEY);
-    if (callbacks) {
-      callbacks.push(callback);
-    }
+  constructor(manager: ConnectionsManager) {
+    this.manager = manager;
   }
 
-  public clearListener(callback: EventCallback): void {}
+  public addListener(eventName: ListenerKey, callback: EventCallback): number {
+    if (!this.events.has(eventName)) {
+      this.events.set(eventName, new Set());
+    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const callbacks = this.events.get(eventName)!;
+    callbacks.add(callback);
+    return callbacks.size - 1;
+  }
+
+  public removeListener(eventName: ListenerKey, callback: EventCallback): void {
+    const callbacks = this.events.get(eventName);
+    if (!callbacks) return;
+    callbacks.delete(callback);
+  }
 
   public emitMessage(messages: Message[]): void {
-    const callbacks = this.events.get(this.EVENT_KEY);
+    const callbacks = this.events.get(ListenerKey.MESSAGE);
     if (!callbacks) return;
     for (const callback of callbacks) {
       callback(messages);
@@ -53,14 +57,6 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
   stopFetchingMessages(): void {
     this.cancellable?.cancel();
     this.cancellable = undefined;
-  }
-
-  async handleMessagesEvents(): Promise<Message[]> {
-    return this.pluto.getAllMessages();
-  }
-
-  async handleReceivedMessagesEvents(): Promise<Message[]> {
-    return this.pluto.getAllMessagesReceived();
   }
 
   async sendMessage(message: Message): Promise<Message | undefined> {

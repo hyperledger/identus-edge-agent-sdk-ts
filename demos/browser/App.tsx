@@ -8,6 +8,7 @@ import * as Domain from '../../domain';
 import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
 import Pluto from '../../pluto/Pluto';
 import {
+  DID,
   Service as DIDDocumentService,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
 } from "../../domain";
@@ -17,9 +18,10 @@ import Spacer from "./Spacer";
 import { Box } from "./Box";
 import { MnemonicWordList } from "../../domain";
 import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
+import { ListenerKey } from "../../prism-agent/types";
 
 const mediatorDID = SDK.Domain.DID.fromString(
-  "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+  "https://domain.com/path?_oob=eyJpZCI6ImZjMjRkNTRlLTg1NzMtNDBkNi04NDUyLTk4YTkxYTEyY2Y5NSIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNvWnNtdUh5ejZlRTMzZHY2cGgxTldrc2VYUjIyU1VlTGRCcEFWUVpWY3Blby5WejZNa3RNU0pOR3FNS0tvU2NKVGFoaXhYWnpWUXVzdFUzaXlFVEVaQWZiSm12dHFrLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
 );
 
 const apollo = new SDK.Apollo();
@@ -407,9 +409,23 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
   );
 }
 
-const Agent: React.FC<{ agent: SDK.Agent }> = props => {
+const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
+  const [step, setStep] = React.useState<number>();
+  const testOOB = "https://domain.com/path?_oob=eyJpZCI6ImU5YWRlMmNkLTI4Y2YtNDMxZS1iMWI3LTAzYmQ1NGViY2I1MCIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNlc2NjaTZudWU3NVdxajhzbjhWb0JLMUpXMzFLR0dvaEdIalZWWlM3ZUx1WS5WejZNa21ya2lGVGZVd1EyckNuTXNmNUtmRUE0ank5cXplV3FmYTVoMXJLU3NXd2FhLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
+  async function handleParseOOB() {
+    const parsed = await props.agent.parseOOBInvitation(new URL(testOOB));
+    await props.agent.acceptDIDCommInvitation(parsed)
+  }
+  return <>
+  <p>PRISM Agent connection</p>
+  <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
+  </>
+}
+
+const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const [state, setState] = React.useState<string>(props.agent.state);
   const [error, setError] = React.useState<any>();
+
   const [newMessage, setNewMessage] = React.useState<any>([]);
   const [messages, setMessages] = React.useState<any>([]);
 
@@ -421,9 +437,9 @@ const Agent: React.FC<{ agent: SDK.Agent }> = props => {
 
   
   useEffect(() => {
-    props.agent.onMessage(handleMessages)
+    props.agent.addListener(ListenerKey.MESSAGE,handleMessages)
     return () => {
-      props.agent.clearOnMessage(handleMessages)
+      props.agent.removeListener(ListenerKey.MESSAGE,handleMessages)
     }
   }, [])
 
@@ -518,6 +534,7 @@ const Agent: React.FC<{ agent: SDK.Agent }> = props => {
               }}>Respond</button>
               </div>
             })}
+            <OOB agent={props.agent} pluto={props.pluto} />
           </>
         )}
       </div>
@@ -594,7 +611,7 @@ function App() {
   return (
     <div className="App">
       <h1>Atala PRISM Wallet SDK Usage Examples</h1>
-      <Agent agent={sdk.agent} />
+      <Agent agent={sdk.agent} pluto={sdk.pluto} />
       <Mnemonics />
       <Spacer />
 

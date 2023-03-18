@@ -19,6 +19,7 @@ import { Api } from "../domain/models/Api";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { DIDCommConnectionRunner } from "./protocols/connection/DIDCommConnectionRunner";
 import Pluto from "../domain/buildingBlocks/Pluto";
+import { DIDCommInvitationRunner } from "./protocols/invitation/v2/DIDCommInvitationRunner";
 
 export class AgentInvitations implements AgentInvitationsClass {
   constructor(
@@ -36,7 +37,7 @@ export class AgentInvitations implements AgentInvitationsClass {
       case ProtocolType.PrismOnboarding:
         return this.parsePrismInvitation(str);
       case ProtocolType.Didcomminvitation:
-        return this.parseOOBInvitation(str);
+        return this.parseOOBInvitation(new URL(str));
     }
 
     throw new AgentError.UnknownInvitationTypeError();
@@ -117,7 +118,7 @@ export class AgentInvitations implements AgentInvitationsClass {
     }
   }
 
-  async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
-    return OutOfBandInvitation.parseOutOfBandInvitationFromJson(str);
+  async parseOOBInvitation(str: URL): Promise<OutOfBandInvitation> {
+    return new DIDCommInvitationRunner(str).run();
   }
 }

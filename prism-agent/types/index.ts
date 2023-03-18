@@ -1,11 +1,17 @@
-import {VerifiableCredential} from "../../domain/models/VerifiableCredential";
-import {OutOfBandInvitation} from "../protocols/invitation/v2/OutOfBandInvitation";
-import {DID, Mediator, Message, Service as DIDDocumentService, Signature,} from "../../domain";
-import {DIDPair} from "../../domain/models/DIDPair";
+import { VerifiableCredential } from "../../domain/models/VerifiableCredential";
+import { OutOfBandInvitation } from "../protocols/invitation/v2/OutOfBandInvitation";
+import {
+  DID,
+  Mediator,
+  Message,
+  Service as DIDDocumentService,
+  Signature,
+} from "../../domain";
+import { DIDPair } from "../../domain/models/DIDPair";
 import Castor from "../../domain/buildingBlocks/Castor";
 import Mercury from "../../domain/buildingBlocks/Mercury";
 import Pluto from "../../domain/buildingBlocks/Pluto";
-import {CancellableTask} from "../helpers/Task";
+import { CancellableTask } from "../helpers/Task";
 
 interface InvitationInterface {
   type: InvitationTypes;
@@ -23,9 +29,9 @@ export class PrismOnboardingInvitation implements InvitationInterface {
   public type: InvitationTypes = InvitationTypes.PRISM_ONBOARD;
 
   constructor(
-      public onboardEndpoint: string,
-      public from?: DID,
-      type?: InvitationTypes
+    public onboardEndpoint: string,
+    public from?: DID,
+    type?: InvitationTypes
   ) {
     if (type) {
       this.type = type;
@@ -41,14 +47,14 @@ export interface AgentDIDHigherFunctions {
   signWith(did: DID, message: Uint8Array): Promise<Signature>;
 
   createNewPeerDID(
-      services: DIDDocumentService[],
-      updateMediator: boolean
+    services: DIDDocumentService[],
+    updateMediator: boolean
   ): Promise<DID>;
 
   createNewPrismDID(
-      alias: string,
-      services: DIDDocumentService[],
-      keyPathIndex?: number
+    alias: string,
+    services: DIDDocumentService[],
+    keyPathIndex?: number
   ): Promise<DID>;
 }
 
@@ -61,14 +67,18 @@ export interface AgentInvitations {
 
   parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation>;
 
-  parseOOBInvitation(str: string): Promise<OutOfBandInvitation>;
+  parseOOBInvitation(str: URL): Promise<OutOfBandInvitation>;
 }
 
 export type EventCallback = (messages: Message[]) => void;
-export type ListenerKey = "message";
+export enum ListenerKey {
+  "MESSAGE" = "message",
+  "CONNECTION" = "connection",
+}
 
 export interface AgentMessageEvents {
-  onMessage(callback: EventCallback): void;
+  addListener(eventName: ListenerKey, callback: EventCallback): void;
+  removeListener(eventName: ListenerKey, callback: EventCallback): void;
 
   startFetchingMessages(iterationPeriod: number): void;
 
@@ -121,7 +131,7 @@ export abstract class MediatorHandler {
   abstract updateKeyListWithDIDs(dids: DID[]): Promise<void>;
 
   abstract pickupUnreadMessages(
-      limit: number
+    limit: number
   ): Promise<Array<{ attachmentId: string; message: Message }>>;
 
   abstract registerMessagesAsRead(ids: string[]): Promise<void>;

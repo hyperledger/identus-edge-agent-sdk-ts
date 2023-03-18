@@ -21,6 +21,7 @@ import {
   AgentMessageEvents as AgentMessageEventsClass,
   EventCallback,
   InvitationType,
+  ListenerKey,
   MediatorHandler,
   PrismOnboardingInvitation,
 } from "./types";
@@ -87,7 +88,7 @@ export default class Agent
       this.agentDIDHigherFunctions,
       this.connectionManager
     );
-    this.agentMessageEvents = new AgentMessageEvents(connectionManager, pluto);
+    this.agentMessageEvents = new AgentMessageEvents(connectionManager);
   }
 
   static instanceFromConnectionManager(
@@ -137,7 +138,7 @@ export default class Agent
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      this.agentMessageEvents.startFetchingMessages(10);
+      this.agentMessageEvents.startFetchingMessages(300);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");
@@ -193,7 +194,7 @@ export default class Agent
     return this.agentInvitations.parsePrismInvitation(str);
   }
 
-  async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
+  async parseOOBInvitation(str: URL): Promise<OutOfBandInvitation> {
     return this.agentInvitations.parseOOBInvitation(str);
   }
 
@@ -219,11 +220,11 @@ export default class Agent
     return this.agentCredentials.verifiableCredentials();
   }
 
-  onMessage(callback: EventCallback): void {
-    this.agentMessageEvents.onMessage(callback);
+  addListener(eventName: ListenerKey, callback: EventCallback): number {
+    return this.agentMessageEvents.addListener(eventName, callback);
   }
 
-  clearOnMessage(callback: EventCallback): void {
-    console.log(callback);
+  removeListener(eventName: ListenerKey, callback: EventCallback): void {
+    return this.agentMessageEvents.removeListener(eventName, callback);
   }
 }
