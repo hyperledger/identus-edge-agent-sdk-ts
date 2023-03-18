@@ -4,15 +4,21 @@ import Mercury from "../../domain/buildingBlocks/Mercury";
 import Pluto from "../../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { AgentError } from "../../domain/models/Errors";
+import { AgentMessageEvents } from "../Agent.MessageEvents";
 import { CancellableTask } from "../helpers/Task";
 import {
+  AgentMessageEvents as AgentMessageEventsClass,
   ConnectionsManager as ConnectionsManagerClass,
+  ListenerKey,
   MediatorHandler,
 } from "../types";
 
 export class ConnectionsManager implements ConnectionsManagerClass {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public cancellables: CancellableTask<any>[] = [];
+  public cancellable?: CancellableTask<void>;
+
+  public events: AgentMessageEventsClass;
 
   constructor(
     public castor: Castor,
@@ -20,7 +26,9 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public pluto: Pluto,
     public mediationHandler: MediatorHandler,
     public pairings: DIDPair[] = []
-  ) {}
+  ) {
+    this.events = new AgentMessageEvents();
+  }
 
   async startMediator(): Promise<void> {
     const mediationHandler =
@@ -77,7 +85,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
 
     const storeDIDPairTask = new CancellableTask<DIDPair>(async () => {
-      this.pluto.storeDIDPair(paired.host, paired.receiver, paired.name);
+      await this.pluto.storeDIDPair(paired.host, paired.receiver, paired.name);
+      this.events.emit(ListenerKey.CONNECTION, paired);
       return paired;
     });
 
@@ -109,5 +118,24 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   async sendMessage(message: Message): Promise<Message | undefined> {
     await this.pluto.storeMessage(message);
     return this.mercury.sendMessageParseMessage(message);
+  }
+
+  startFetchingMessages(iterationPeriod: number): void {
+    if (this.cancellable) {
+      return;
+    }
+    const timeInterval = Math.max(iterationPeriod, 5) * 1000;
+    this.cancellable = new CancellableTask(async () => {
+      const unreadMessages = await this.awaitMessages();
+      if (unreadMessages.length) {
+        debugger;
+        this.events.emit(ListenerKey.MESSAGE, unreadMessages);
+      }
+    }, timeInterval);
+  }
+
+  stopFetchingMessages(): void {
+    this.cancellable?.cancel();
+    this.cancellable = undefined;
   }
 }

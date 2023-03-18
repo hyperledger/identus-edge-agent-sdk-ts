@@ -18,7 +18,6 @@ import {
   AgentCredentials as AgentCredentialsClass,
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
   AgentInvitations as AgentInvitationsClass,
-  AgentMessageEvents as AgentMessageEventsClass,
   EventCallback,
   InvitationType,
   ListenerKey,
@@ -31,9 +30,6 @@ import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
-import { AgentMessageEvents } from "./Agent.MessageEvents";
-import { ProtocolType } from "./protocols/ProtocolTypes";
-import { BasicMessage } from "./protocols/other/BasicMessage";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -46,8 +42,7 @@ export default class Agent
   implements
     AgentCredentialsClass,
     AgentDIDHigherFunctionsClass,
-    AgentInvitationsClass,
-    AgentMessageEventsClass
+    AgentInvitationsClass
 {
   public state: AgentState = AgentState.STOPPED;
   public get currentMediatorDID() {
@@ -56,23 +51,37 @@ export default class Agent
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
-  private agentMessageEvents: AgentMessageEvents;
+  private apollo: Apollo;
+  private castor: Castor;
+  private pluto: Pluto;
+  private mercury: Mercury;
+  private mediationHandler: MediatorHandler;
+  private connectionManager;
+  private seed: Seed;
+  private api: Api;
 
   constructor(
-    protected apollo: Apollo,
-    protected castor: Castor,
-    protected pluto: Pluto,
-    protected mercury: Mercury,
-    public mediationHandler: MediatorHandler,
-    protected connectionManager = new ConnectionsManager(
-      castor,
-      mercury,
-      pluto,
-      mediationHandler
-    ),
-    protected seed: Seed = apollo.createRandomSeed().seed,
-    protected api: Api = new ApiImpl()
+    apollo: Apollo,
+    castor: Castor,
+    pluto: Pluto,
+    mercury: Mercury,
+    mediationHandler: MediatorHandler,
+    connectionManager: ConnectionsManager,
+    seed: Seed = apollo.createRandomSeed().seed,
+    api: Api = new ApiImpl()
   ) {
+    this.apollo = apollo;
+    this.castor = castor;
+    this.pluto = pluto;
+    this.mercury = mercury;
+    this.mediationHandler = mediationHandler;
+    this.seed = seed;
+    this.api = api;
+
+    this.connectionManager =
+      connectionManager ||
+      new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
+
     this.agentCredentials = new AgentCredentials(pluto);
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
@@ -88,7 +97,6 @@ export default class Agent
       this.agentDIDHigherFunctions,
       this.connectionManager
     );
-    this.agentMessageEvents = new AgentMessageEvents(connectionManager);
   }
 
   static instanceFromConnectionManager(
@@ -138,7 +146,7 @@ export default class Agent
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      this.agentMessageEvents.startFetchingMessages(300);
+      this.connectionManager.startFetchingMessages(300);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");
@@ -152,7 +160,7 @@ export default class Agent
     }
     this.state = AgentState.STOPPING;
     this.connectionManager.stopAllEvents();
-    this.agentMessageEvents.stopFetchingMessages();
+    this.connectionManager.stopFetchingMessages();
     this.state = AgentState.STOPPED;
   }
 
@@ -205,26 +213,26 @@ export default class Agent
   }
 
   startFetchingMessages(iterationPeriod: number): void {
-    this.agentMessageEvents.startFetchingMessages(iterationPeriod);
+    this.connectionManager.startFetchingMessages(iterationPeriod);
   }
 
   stopFetchingMessages(): void {
-    this.agentMessageEvents.stopFetchingMessages();
+    this.connectionManager.stopFetchingMessages();
   }
 
   sendMessage(message: Message): Promise<Message | undefined> {
-    return this.agentMessageEvents.sendMessage(message);
+    return this.connectionManager.sendMessage(message);
   }
 
   verifiableCredentials(): Promise<VerifiableCredential[]> {
     return this.agentCredentials.verifiableCredentials();
   }
 
-  addListener(eventName: ListenerKey, callback: EventCallback): number {
-    return this.agentMessageEvents.addListener(eventName, callback);
+  addListener(eventName: ListenerKey, callback: EventCallback): void {
+    return this.connectionManager.events.addListener(eventName, callback);
   }
 
   removeListener(eventName: ListenerKey, callback: EventCallback): void {
-    return this.agentMessageEvents.removeListener(eventName, callback);
+    return this.connectionManager.events.removeListener(eventName, callback);
   }
 }

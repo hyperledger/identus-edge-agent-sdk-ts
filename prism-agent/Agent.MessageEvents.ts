@@ -9,13 +9,7 @@ import {
 } from "./types";
 
 export class AgentMessageEvents implements AgentMessageEventsClass {
-  private manager: ConnectionsManager;
   private events: Map<ListenerKey, Set<EventCallback>> = new Map();
-  private cancellable?: CancellableTask<void>;
-
-  constructor(manager: ConnectionsManager) {
-    this.manager = manager;
-  }
 
   public addListener(eventName: ListenerKey, callback: EventCallback): number {
     if (!this.events.has(eventName)) {
@@ -33,33 +27,11 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     callbacks.delete(callback);
   }
 
-  public emitMessage(messages: Message[]): void {
-    const callbacks = this.events.get(ListenerKey.MESSAGE);
+  public emit(eventName: ListenerKey, data: any): void {
+    const callbacks = this.events.get(eventName);
     if (!callbacks) return;
     for (const callback of callbacks) {
-      callback(messages);
+      callback(data);
     }
-  }
-
-  startFetchingMessages(iterationPeriod: number): void {
-    if (this.cancellable) {
-      return;
-    }
-    const timeInterval = Math.max(iterationPeriod, 5) * 1000;
-    this.cancellable = new CancellableTask(async () => {
-      const unreadMessages = await this.manager.awaitMessages();
-      if (unreadMessages.length) {
-        this.emitMessage(unreadMessages);
-      }
-    }, timeInterval);
-  }
-
-  stopFetchingMessages(): void {
-    this.cancellable?.cancel();
-    this.cancellable = undefined;
-  }
-
-  async sendMessage(message: Message): Promise<Message | undefined> {
-    return this.manager.sendMessage(message);
   }
 }

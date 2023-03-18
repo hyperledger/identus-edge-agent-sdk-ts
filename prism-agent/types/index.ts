@@ -79,12 +79,10 @@ export enum ListenerKey {
 export interface AgentMessageEvents {
   addListener(eventName: ListenerKey, callback: EventCallback): void;
   removeListener(eventName: ListenerKey, callback: EventCallback): void;
-
-  startFetchingMessages(iterationPeriod: number): void;
-
-  stopFetchingMessages(): void;
-
-  sendMessage(message: Message): Promise<Message | undefined>;
+  emit(eventName: ListenerKey, data: any): void;
+  // startFetchingMessages(iterationPeriod: number): void;
+  // stopFetchingMessages(): void;
+  // sendMessage(message: Message): Promise<Message | undefined>;
 }
 
 export interface ConnectionsManager {

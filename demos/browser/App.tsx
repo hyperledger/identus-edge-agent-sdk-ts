@@ -410,15 +410,29 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
 }
 
 const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
-  const [step, setStep] = React.useState<number>();
-  const testOOB = "https://domain.com/path?_oob=eyJpZCI6ImU5YWRlMmNkLTI4Y2YtNDMxZS1iMWI3LTAzYmQ1NGViY2I1MCIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNlc2NjaTZudWU3NVdxajhzbjhWb0JLMUpXMzFLR0dvaEdIalZWWlM3ZUx1WS5WejZNa21ya2lGVGZVd1EyckNuTXNmNUtmRUE0ank5cXplV3FmYTVoMXJLU3NXd2FhLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
+  const CONNECTION_EVENT = ListenerKey.CONNECTION
+  const [connections, setConnections] = React.useState<Array<any>>([]);
+  const testOOB = "https://domain.com/path?_oob=eyJpZCI6ImY0NTdiZWZkLWQ3ODMtNGQyMS05MmU3LWNkMTIwZTVkNzI0ZiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNoUUw3NEw2Z1h1d1FQYzVucXZDbXVuY2c4TjZ1VHFTTlJhR29ucnhVd2Zuei5WejZNa3FXSmVtakQ0WDYxaXBxU25QWlp0RFZ5Z1hYcjl1dGRid01OdW1EQWhuOXoyLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
+  
+  const handleConnections = useCallback((event: any) => {
+    setConnections([...connections, event])
+  }, [])
+  
+  useEffect(( ) => {
+    props.agent.addListener(CONNECTION_EVENT, handleConnections);
+    return () => {
+      props.agent.removeListener(CONNECTION_EVENT, handleConnections)
+    }
+  })
+
   async function handleParseOOB() {
     const parsed = await props.agent.parseOOBInvitation(new URL(testOOB));
     await props.agent.acceptDIDCommInvitation(parsed)
   }
   return <>
   <p>PRISM Agent connection</p>
-  <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
+  {connections.length <= 0 && <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>}
+  {connections.length > 0 && <p>Connection ready with <pre>{JSON.stringify(connections[0])}</pre></p>}
   </>
 }
 
