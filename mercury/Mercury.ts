@@ -64,23 +64,6 @@ export default class Mercury implements MercuryInterface {
     return this.makeRequest<T>(service, packedMessage);
   }
 
-  private async getServiceFromMediator(mediatorDID: DID) {
-    const mediatorDocument = await this.castor.resolveDID(
-      mediatorDID.toString()
-    );
-    const mediatorService = mediatorDocument.services.find(
-      (x) => x.isDIDCommMessaging
-    );
-    if (!mediatorService) {
-      throw new Error("Wrong mediator service");
-    }
-    const didService = await this.castor.resolveDID(
-      mediatorService?.serviceEndpoint.uri
-    );
-
-    return didService.services.find((x) => x.isDIDCommMessaging);
-  }
-
   private async makeRequest<T>(
     service: Domain.Service | URL | undefined,
     message: string
@@ -100,7 +83,6 @@ export default class Mercury implements MercuryInterface {
       headers,
       message
     );
-
     return response.body;
   }
 

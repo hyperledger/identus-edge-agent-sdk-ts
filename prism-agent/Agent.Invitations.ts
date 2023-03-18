@@ -48,6 +48,7 @@ export class AgentInvitations implements AgentInvitationsClass {
     if (!this.connection.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
+    debugger;
     const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
       [
         new Service(

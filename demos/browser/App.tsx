@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, {FormEventHandler, useCallback, useEffect, useLayoutEffect, useState} from "react";
 import "./App.css";
 import * as jose from "jose";
@@ -411,27 +412,35 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
 const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const CONNECTION_EVENT = ListenerKey.CONNECTION
   const [connections, setConnections] = React.useState<Array<any>>([]);
-  const testOOB = "https://domain.com/path?_oob=eyJpZCI6IjczMTc1NTQ5LTcxMzgtNGMxNS04ZjcwLTExMjRlOWI0MmViZiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNkSzhBQmtwclFVN3dVVjNYWUJBbnNiczNLUTZ0VWpDUW41UHpDNTEyejd1ay5WejZNa3VMQktQbmhzRnV3R3dtcnM0QVZQRm84MlJqUGZWY1ExazdjbUNXSDhOU242LlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
-  
+  const [oob, setOOB] = React.useState<string>("https://domain.com/path?_oob=eyJpZCI6ImM2NTdhYmFkLWFhNDktNDk2NS1iOTQyLWNmMDdmMzY0NTQ4NyIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNmallKRDdHU2N4WmJSN3I1aUtQVU05MVQ1SHR4dXRSeTNtWjFmczZBb1pBeS5WejZNa3E5Q0Jqc1B6dHlBZDhCZmRKS3BDaXNIcW5nenpGZE1VNzJtRExER0xEb0FuLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19")
   const handleConnections = useCallback((event: any) => {
     setConnections([...connections, event])
   }, [])
-  
   useEffect(() => {
     props.agent.addListener(CONNECTION_EVENT, handleConnections);
     return () => {
       props.agent.removeListener(CONNECTION_EVENT, handleConnections)
     }
   }, [])
-
+  const handleOnChange = (e:any) => {
+    setOOB(e.target.value)
+  }
   async function handleParseOOB() {
-    const parsed = await props.agent.parseOOBInvitation(new URL(testOOB));
+    if (!oob) {
+      return 
+    }
+    const parsed = await props.agent.parseOOBInvitation(new URL(oob));
     await props.agent.acceptDIDCommInvitation(parsed)
   }
   return <>
   <p>PRISM Agent connection</p>
-  {connections.length <= 0 && <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>}
-  {connections.length > 0 && <p>Connection ready with <b>{JSON.stringify(connections[0])}</b></p>}
+  {connections.length <= 0 && <>
+    <p>
+      <input type="text" value={oob}  onChange={handleOnChange} />
+    </p>
+    <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
+  </>}
+  {connections.length > 0 && <p>Process OOB Invitation <b>{JSON.stringify(connections[0])}</b></p>}
   </>
 }
 
@@ -440,7 +449,7 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const [error, setError] = React.useState<any>();
 
   const [newMessage, setNewMessage] = React.useState<any>([]);
-  const [messages, setMessages] = React.useState<any>([]);
+  const [messages, setMessages] = React.useState<SDK.Domain.Message[]>([]);
 
   const handleMessages = useCallback((event:any) => {
     const joinedMessages = [...messages, ...event];
@@ -509,11 +518,14 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
     const text = newMessage[responseMessageIndex];
     setNewMessage(newMessage.map((message: any, i:number) => (i === responseMessageIndex) ? "": message))
     const message = messages[responseMessageIndex];
+    // ok for demo
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const from = message.from!;
     await props.agent.sendMessage(
       new BasicMessage(
         { content: text },
-        message.from,
-        message.from
+        from,
+        from
       ).makeMessage()
     )
   }
@@ -537,14 +549,22 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
         {props.agent.state === "running" && (
           <>
             <button style={{ width: 120 }} onClick={handleStop}>Stop</button>
-            {messages.map((message:any, i: number) => {
+            {messages.map((message, i: number) => {
+              const body = JSON.parse(message.body)
+              if (message.piuri === "https://atalaprism.io/mercury/connections/1.0/response") {
+                return <div key={`responseField${i}`}>
+                <p>Connection Established with {message.from!.toString()} (Goal: {body.goal})?</p>
+                <p>Message {message.id} {JSON.stringify(message)}</p>
+                </div>
+              }
+
               return <div key={`responseField${i}`}>
-              <p>Message {message.id} {message.body}</p>
-              <input type="text" value={newMessage[i]}  onChange={(e) => handleOnChange(e, i)} />
-              <button style={{ width: 120 }} onClick={() => {
-                handleSend(i)
-              }}>Respond</button>
-              </div>
+                <p>Message {message.id} {JSON.stringify(message)}</p>
+                <input type="text" value={newMessage[i]}  onChange={(e) => handleOnChange(e, i)} />
+                <button style={{ width: 120 }} onClick={() => {
+                  handleSend(i)
+                }}>Respond</button>
+                </div>
             })}
             <OOB agent={props.agent} pluto={props.pluto} />
           </>

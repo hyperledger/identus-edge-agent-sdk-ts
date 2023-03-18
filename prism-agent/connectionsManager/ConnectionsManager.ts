@@ -128,7 +128,6 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     this.cancellable = new CancellableTask(async () => {
       const unreadMessages = await this.awaitMessages();
       if (unreadMessages.length) {
-        debugger;
         this.events.emit(ListenerKey.MESSAGE, unreadMessages);
       }
     }, timeInterval);
