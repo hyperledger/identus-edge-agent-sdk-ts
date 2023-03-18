@@ -440,7 +440,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
     </p>
     <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
   </>}
-  {connections.length > 0 && <p>Process OOB Invitation <b>{JSON.stringify(connections[0])}</b></p>}
+  {connections.length > 0 && <p>Stored OOB Connection at <b>{connections[0].name}</b></p>}
   </>
 }
 
@@ -451,11 +451,11 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const [newMessage, setNewMessage] = React.useState<any>([]);
   const [messages, setMessages] = React.useState<SDK.Domain.Message[]>([]);
 
-  const handleMessages = useCallback((event:any) => {
+  const handleMessages = (event:any) => {
     const joinedMessages = [...messages, ...event];
     setMessages(joinedMessages)
     setNewMessage(joinedMessages.map(() => ""))
-  }, [])
+  }
 
   useEffect(() => {
     props.agent.addListener(ListenerKey.MESSAGE,handleMessages)
