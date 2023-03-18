@@ -146,7 +146,7 @@ export default class Agent
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      this.connectionManager.startFetchingMessages(300);
+      this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");

@@ -8,7 +8,6 @@ import * as Domain from '../../domain';
 import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
 import Pluto from '../../pluto/Pluto';
 import {
-  DID,
   Service as DIDDocumentService,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
 } from "../../domain";
@@ -21,7 +20,7 @@ import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
 import { ListenerKey } from "../../prism-agent/types";
 
 const mediatorDID = SDK.Domain.DID.fromString(
-  "https://domain.com/path?_oob=eyJpZCI6ImZjMjRkNTRlLTg1NzMtNDBkNi04NDUyLTk4YTkxYTEyY2Y5NSIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNvWnNtdUh5ejZlRTMzZHY2cGgxTldrc2VYUjIyU1VlTGRCcEFWUVpWY3Blby5WejZNa3RNU0pOR3FNS0tvU2NKVGFoaXhYWnpWUXVzdFUzaXlFVEVaQWZiSm12dHFrLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
+  "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
 );
 
 const apollo = new SDK.Apollo();
@@ -412,18 +411,18 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
 const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const CONNECTION_EVENT = ListenerKey.CONNECTION
   const [connections, setConnections] = React.useState<Array<any>>([]);
-  const testOOB = "https://domain.com/path?_oob=eyJpZCI6ImY0NTdiZWZkLWQ3ODMtNGQyMS05MmU3LWNkMTIwZTVkNzI0ZiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNoUUw3NEw2Z1h1d1FQYzVucXZDbXVuY2c4TjZ1VHFTTlJhR29ucnhVd2Zuei5WejZNa3FXSmVtakQ0WDYxaXBxU25QWlp0RFZ5Z1hYcjl1dGRid01OdW1EQWhuOXoyLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
+  const testOOB = "https://domain.com/path?_oob=eyJpZCI6IjczMTc1NTQ5LTcxMzgtNGMxNS04ZjcwLTExMjRlOWI0MmViZiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNkSzhBQmtwclFVN3dVVjNYWUJBbnNiczNLUTZ0VWpDUW41UHpDNTEyejd1ay5WejZNa3VMQktQbmhzRnV3R3dtcnM0QVZQRm84MlJqUGZWY1ExazdjbUNXSDhOU242LlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19"
   
   const handleConnections = useCallback((event: any) => {
     setConnections([...connections, event])
   }, [])
   
-  useEffect(( ) => {
+  useEffect(() => {
     props.agent.addListener(CONNECTION_EVENT, handleConnections);
     return () => {
       props.agent.removeListener(CONNECTION_EVENT, handleConnections)
     }
-  })
+  }, [])
 
   async function handleParseOOB() {
     const parsed = await props.agent.parseOOBInvitation(new URL(testOOB));
@@ -432,7 +431,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   return <>
   <p>PRISM Agent connection</p>
   {connections.length <= 0 && <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>}
-  {connections.length > 0 && <p>Connection ready with <pre>{JSON.stringify(connections[0])}</pre></p>}
+  {connections.length > 0 && <p>Connection ready with <b>{JSON.stringify(connections[0])}</b></p>}
   </>
 }
 
@@ -449,7 +448,6 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
     setNewMessage(joinedMessages.map(() => ""))
   }, [])
 
-  
   useEffect(() => {
     props.agent.addListener(ListenerKey.MESSAGE,handleMessages)
     return () => {
@@ -541,7 +539,7 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
             <button style={{ width: 120 }} onClick={handleStop}>Stop</button>
             {messages.map((message:any, i: number) => {
               return <div key={`responseField${i}`}>
-              <p>Message {message.id} {JSON.parse(message.body).content}</p>
+              <p>Message {message.id} {message.body}</p>
               <input type="text" value={newMessage[i]}  onChange={(e) => handleOnChange(e, i)} />
               <button style={{ width: 120 }} onClick={() => {
                 handleSend(i)
