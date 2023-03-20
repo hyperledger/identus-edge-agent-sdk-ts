@@ -3,6 +3,8 @@ import React, {FormEventHandler, useCallback, useEffect, useLayoutEffect, useSta
 import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
+import crypto from 'crypto';
+
 
 import * as SDK from "../../index";
 import * as Domain from '../../domain';
@@ -19,7 +21,9 @@ import { Box } from "./Box";
 import { MnemonicWordList } from "../../domain";
 import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
 import { ListenerKey } from "../../prism-agent/types";
-
+import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
+import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
+import { base64url } from "multiformats/bases/base64";
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
 );
@@ -27,6 +31,9 @@ const mediatorDID = SDK.Domain.DID.fromString(
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const api = new SDK.ApiImpl();
+
+const WebCrypto = crypto;
+
 
 function Mnemonics() {
   const [mnemonics, setMnemonics] = useAtom(mnemonicsAtom);
@@ -451,10 +458,82 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const [newMessage, setNewMessage] = React.useState<any>([]);
   const [messages, setMessages] = React.useState<SDK.Domain.Message[]>([]);
 
-  const handleMessages = (event:any) => {
-    const joinedMessages = [...messages, ...event];
+  const handleMessages = async (messages:SDK.Domain.Message[]) => {
+    const filteredMessages = messages.filter((message) => message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
+    const joinedMessages = [...messages, ...filteredMessages];
     setMessages(joinedMessages)
     setNewMessage(joinedMessages.map(() => ""))
+
+    const credentialOffers = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
+    if (credentialOffers.length) {
+      for(const credentialOfferMessage of credentialOffers) {
+
+        const credentialOffer = OfferCredential.fromMessage(credentialOfferMessage);
+        const attachment = credentialOffer.attachments.reduce((_, attachment:any) => ({
+          challenge: attachment.data.data.options.challenge,
+          domain: attachment.data.data.options.domain
+        }), { challenge: undefined, domain: undefined })
+        const {seed} = apollo.createRandomSeed();
+        const keyPairFromCurveSecp256K1 = apollo.createKeyPairFromKeyCurve(
+            {
+                curve: Domain.Curve.SECP256K1,
+            },
+            seed,
+        );
+        const prismDid = await castor.createPrismDID(
+            keyPairFromCurveSecp256K1.publicKey,
+            []
+        );
+
+        const jwks = await jose.createLocalJWKSet({keys:[
+          {
+            kty:"EC",
+            crv: "secp256k1",
+            d: Buffer.from(keyPairFromCurveSecp256K1.privateKey.value).toString('base64'),
+            x: Buffer.from(keyPairFromCurveSecp256K1.privateKey.value).toString('base64'),
+          },
+        ]})
+
+        debugger;
+
+
+        // debugger;
+        const jwt = new jose.SignJWT({
+          iss: prismDid.toString(),
+          aud: attachment.domain,
+          nonce: attachment.challenge,
+          vp: {
+            "@context": [
+              "https://www.w3.org/2018/presentations/v1"
+            ],
+            "type": [
+              "VerifiablePresentation"
+            ]
+          },
+        });
+        // debugger;
+        
+
+        
+         jwt.setProtectedHeader({alg: "secp256k1", typ: "JWT"})
+
+        // debugger;
+        
+        
+        
+         const signature = await jwt.sign(await jwks())
+        
+      
+        console.log("atta", attachment);
+        
+        debugger;
+        const requestCredentialMessage = RequestCredential.makeRequestFromOfferCredential(credentialOffer).makeMessage();
+        console.log("Sending Request Credential Message", requestCredentialMessage)
+        await props.agent.sendMessage(requestCredentialMessage);
+        console.log("OK");
+      }
+    }
+
   }
 
   useEffect(() => {

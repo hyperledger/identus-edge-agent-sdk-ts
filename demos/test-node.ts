@@ -18,9 +18,9 @@ import { base64url } from "multiformats/bases/base64";
     `${process.cwd()}/node_modules/sql.js/dist`
   );
 
-  agent.onMessage((messages) => {
-    console.log(messages);
-  });
+  // agent.onMessage((messages) => {
+  //   console.log(messages);
+  // });
 
   await agent.start();
   console.log(

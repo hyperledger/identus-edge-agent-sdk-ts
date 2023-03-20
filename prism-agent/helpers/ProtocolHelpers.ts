@@ -223,14 +223,14 @@ export class ProtocolHelpers {
       if (!formats || !Array.isArray(formats)) {
         throw new AgentError.InvalidCredentialFormats();
       }
-      if (!parsed.credentialPreview) {
+      if (!parsed.credential_preview) {
         throw new AgentError.InvalidOfferCredentialBodyError(
           "Undefined credentialPreview"
         );
       }
       return {
         formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        credentialPreview: parsed.credentialPreview,
+        credential_preview: parsed.credential_preview,
         replacementId: parsed.replacementId,
         multipleAvailable: parsed.multipleAvailable,
         goalCode,
@@ -272,14 +272,14 @@ export class ProtocolHelpers {
       if (!formats || !Array.isArray(formats)) {
         throw new AgentError.InvalidCredentialFormats();
       }
-      if (!parsed.credentialPreview) {
+      if (!parsed.credential_preview) {
         throw new AgentError.InvalidProposeCredentialBodyError(
           "Undefined credentialPreview"
         );
       }
       return {
         formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        credentialPreview: parsed.credentialPreview,
+        credential_preview: parsed.credential_preview,
         goalCode,
         comment,
       } as T;

@@ -116,11 +116,13 @@
     "axios": "^1.3.4",
     "bip32": "^2.0.6",
     "bn.js": "^5.2.1",
+    "crypto": "^1.0.1",
     "didcomm": "^0.4.0",
     "elliptic": "^6.5.4",
     "google-protobuf": "^3.21.2",
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
+    "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
     "typeorm": "^0.3.12"
   }
