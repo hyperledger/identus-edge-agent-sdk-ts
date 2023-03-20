@@ -30,6 +30,8 @@ import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
+import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
+import { RequestCredential } from "./protocols/issueCredential/RequestCredential";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -82,7 +84,7 @@ export default class Agent
       connectionManager ||
       new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
 
-    this.agentCredentials = new AgentCredentials(pluto);
+    this.agentCredentials = new AgentCredentials(apollo, castor, pluto, seed);
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
@@ -234,5 +236,11 @@ export default class Agent
 
   removeListener(eventName: ListenerKey, callback: EventCallback): void {
     return this.connectionManager.events.removeListener(eventName, callback);
+  }
+
+  async prepareRequestCredentialWithIssuer(
+    offer: OfferCredential
+  ): Promise<RequestCredential> {
+    return this.agentCredentials.prepareRequestCredentialWithIssuer(offer);
   }
 }

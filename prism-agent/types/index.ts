@@ -12,6 +12,8 @@ import Castor from "../../domain/buildingBlocks/Castor";
 import Mercury from "../../domain/buildingBlocks/Mercury";
 import Pluto from "../../domain/buildingBlocks/Pluto";
 import { CancellableTask } from "../helpers/Task";
+import { OfferCredential } from "../protocols/issueCredential/OfferCredential";
+import { RequestCredential } from "../protocols/issueCredential/RequestCredential";
 
 interface InvitationInterface {
   type: InvitationTypes;
@@ -41,6 +43,9 @@ export class PrismOnboardingInvitation implements InvitationInterface {
 
 export interface AgentCredentials {
   verifiableCredentials(): Promise<VerifiableCredential[]>;
+  prepareRequestCredentialWithIssuer(
+    offer: OfferCredential
+  ): Promise<RequestCredential>;
 }
 
 export interface AgentDIDHigherFunctions {

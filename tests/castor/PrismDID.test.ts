@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { base64 } from "multiformats/bases/base64";
+import { base58btc } from "multiformats/bases/base58";
 import {
   Curve,
   DID,
@@ -17,7 +17,7 @@ describe("PRISMDID CreateTest", () => {
     const castor = new Castor(apollo);
 
     const didExample =
-      "did:prism:cc0a75d1d1c36b0242c2250d71683be2e197aa84b7dc17568d69ad98eab16680:CmYKZBJiCg1tYXN0ZXIoaW5kZXgpEAFCTwoJU2VjcDI1NmsxEiA0uc3mFJCwkgCSyOmi10Uz0cbLQiz1BCOk4AawFQh5MBog5Pn35JaxyBVu6SpE_IvmJLF4vl14uYd9XM1DGlQpXKc";
+      "did:prism:9ad7945660ea1ac6b1152544d5b0cd6c9c4e68b0a5d575e6a5ddb22a814d02a1:CssBCsgBEmIKDW1hc3RlcihpbmRleCkQAUJPCglTZWNwMjU2azESIDS5zeYUkLCSAJLI6aLXRTPRxstCLPUEI6TgBrAVCHkwGiDk-ffklrHIFW7pKkT8i-YksXi-XXi5h31czUMaVClcpxJiCg1tYXN0ZXIoaW5kZXgpEARCTwoJU2VjcDI1NmsxEiA0uc3mFJCwkgCSyOmi10Uz0cbLQiz1BCOk4AawFQh5MBog5Pn35JaxyBVu6SpE_IvmJLF4vl14uYd9XM1DGlQpXKc";
     const resolvedDID = await castor.resolveDID(didExample);
 
     const pubHex =
@@ -37,12 +37,12 @@ describe("PRISMDID CreateTest", () => {
       (prop): prop is VerificationMethods => prop instanceof VerificationMethods
     );
 
-    const resolvedPublicKeyBase64 =
+    const resolvedPublicKeyMultibase =
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       verificationMethod?.values[0]?.publicKeyMultibase!;
 
     const resolvedPublicKeyBuffer = Buffer.from(
-      base64.baseDecode(resolvedPublicKeyBase64)
+      base58btc.decode(resolvedPublicKeyMultibase)
     );
 
     expect(resolvedPublicKeyBuffer).to.deep.equal(masterPublicKey.value);
@@ -84,7 +84,7 @@ describe("PRISMDID CreateTest", () => {
       verificationMethod?.values[0]?.publicKeyMultibase!;
 
     const resolvedPublicKeyBuffer = Buffer.from(
-      base64.baseDecode(resolvedPublicKeyBase64)
+      base58btc.decode(resolvedPublicKeyBase64)
     );
 
     resolvedPublicKeyBuffer.length;

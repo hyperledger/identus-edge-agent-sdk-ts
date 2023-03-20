@@ -86,7 +86,7 @@ export class IssueCredential {
         request.body.comment
       ),
       request.attachments,
-      request.to,
+      request.to!,
       request.from,
       msg.id
     );

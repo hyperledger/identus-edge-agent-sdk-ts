@@ -15,7 +15,7 @@ export class RequestCredential {
     public body: CredentialBody,
     public attachments: AttachmentDescriptor[],
     public from: DID,
-    public to: DID,
+    public to?: DID,
     public thid?: string,
     public id: string = uuid()
   ) {}
@@ -36,8 +36,7 @@ export class RequestCredential {
   static fromMessage(fromMessage: Message): RequestCredential {
     if (
       fromMessage.piuri !== ProtocolType.DidcommRequestCredential ||
-      !fromMessage.from ||
-      !fromMessage.to
+      !fromMessage.from
     ) {
       throw new AgentError.InvalidRequestCredentialMessageError(
         "Invalid request credential message error."
@@ -60,32 +59,6 @@ export class RequestCredential {
       toDID,
       fromMessage.thid,
       fromMessage.id
-    );
-  }
-
-  static makeRequestFromOfferCredential(
-    offer: OfferCredential
-  ): RequestCredential {
-    if (!offer.to || !offer.from) {
-      new AgentError.InvalidOfferCredentialMessageError(
-        "Invalid offer credential message error."
-      );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const to = offer.to!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const from = offer.from!;
-    return new RequestCredential(
-      createRequestCredentialBody(
-        offer.body.formats,
-        offer.body.goalCode,
-        offer.body.comment
-      ),
-      offer.attachments,
-      to,
-      from,
-      offer.thid
     );
   }
 

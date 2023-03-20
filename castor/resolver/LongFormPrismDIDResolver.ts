@@ -25,6 +25,7 @@ import {
   PrismDIDPublicKey,
 } from "../../castor/did/prismDID/PrismDIDPublicKey";
 import * as base64 from "multiformats/bases/base64";
+import * as base58 from "multiformats/bases/base58";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
@@ -127,7 +128,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
             did.toString(),
             publicKey.keyData.keyCurve.curve,
             undefined,
-            base64.base64.baseEncode(publicKey.keyData.value)
+            base58.base58btc.encode(publicKey.keyData.value)
           );
           partialResult.set(didUrl.string(), method);
           return partialResult;

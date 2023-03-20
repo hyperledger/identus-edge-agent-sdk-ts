@@ -32,6 +32,8 @@ import {
   VerificationMethods as DIDDocumentVerificationMethods,
 } from "../domain";
 import * as base64 from "multiformats/bases/base64";
+import * as base58 from "multiformats/bases/base58";
+
 import { JWKHelper } from "../peer-did/helpers/JWKHelper";
 import {
   VerificationMaterialAgreement,
@@ -163,7 +165,7 @@ export default class Castor implements CastorInterface {
         }
 
         const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromBytes(
-          Buffer.from(base64.base64.baseDecode(method.publicKeyMultibase))
+          Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
         ).getEncoded();
 
         publicKey = {

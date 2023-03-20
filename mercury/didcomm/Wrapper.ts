@@ -40,12 +40,11 @@ export class DIDCommWrapper implements DIDCommProtocol {
   async packEncrypted(
     message: Domain.Message,
     toDid: Domain.DID,
-    fromDid: Domain.DID
+    fromDid?: Domain.DID
   ): Promise<string> {
     const didcomm = await DIDCommWrapper.getDIDComm();
 
     const to = toDid.toString();
-    const from = fromDid.toString();
     const body =
       message.body && Object.keys(JSON.parse(message.body)).length
         ? JSON.parse(message.body)
@@ -57,7 +56,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       type: message.piuri,
       body: body,
       to: [to],
-      from: from,
+      from: fromDid ? fromDid.toString() : undefined,
       from_prior: message.fromPrior,
       attachments: this.parseAttachments(message.attachments),
       created_time: Number(message.createdTime),
@@ -70,7 +69,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
     });
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,
-      from,
+      fromDid ? fromDid.toString() : null,
       null,
       this.didResolver,
       this.secretsResolver,

@@ -20,8 +20,6 @@ export default class Mercury implements MercuryInterface {
 
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
 
-    if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
-
     return this.protocol.packEncrypted(message, toDid, fromDid);
   }
 
@@ -31,11 +29,8 @@ export default class Mercury implements MercuryInterface {
 
   async sendMessage<T>(message: Domain.Message): Promise<T> {
     const toDid = message.to;
-    const fromDid = message.from;
 
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
-
-    if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
 
     const document = await this.castor.resolveDID(toDid.toString());
     const packedMessage = await this.packMessage(message);
