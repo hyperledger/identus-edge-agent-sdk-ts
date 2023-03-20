@@ -4,15 +4,20 @@ import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
 import crypto from 'crypto';
-
+import * as didJWT from 'did-jwt';
+import {Resolver, DIDDocument as DIDResolverDocument, ParsedDID as DIDResolverParsedDID} from 'did-resolver';
 
 import * as SDK from "../../index";
 import * as Domain from '../../domain';
 import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
 import Pluto from '../../pluto/Pluto';
 import {
+  AlsoKnownAs,
+  Controller,
   Service as DIDDocumentService,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
+  Services,
+  VerificationMethods,
 } from "../../domain";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
@@ -24,6 +29,7 @@ import { ListenerKey } from "../../prism-agent/types";
 import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
 import { base64url } from "multiformats/bases/base64";
+import { LongFormPrismDIDResolver } from "../../castor/resolver/LongFormPrismDIDResolver";
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
 );
@@ -485,46 +491,79 @@ const Agent: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
             []
         );
 
-        const jwks = await jose.createLocalJWKSet({keys:[
-          {
-            kty:"EC",
-            crv: "secp256k1",
-            d: Buffer.from(keyPairFromCurveSecp256K1.privateKey.value).toString('base64'),
-            x: Buffer.from(keyPairFromCurveSecp256K1.privateKey.value).toString('base64'),
-          },
-        ]})
+        // eslint-disable-next-line no-inner-declarations
+        function getResolver() {
+          const resolve = async (
+            did: string,
+          ) => {
+            const resolved = await new LongFormPrismDIDResolver(apollo).resolve(did)
+            const alsoKnownAs = resolved.coreProperties.find((prop): prop is AlsoKnownAs => prop instanceof AlsoKnownAs);
+            const controller = resolved.coreProperties.find((prop): prop is Controller => prop instanceof Controller);
+            const verificationMethods = resolved.coreProperties.find((prop): prop is VerificationMethods => prop instanceof VerificationMethods);
+            const service = resolved.coreProperties.find((prop): prop is Services => prop instanceof Services);
 
-        debugger;
+            debugger;
 
+            return {
+              didResolutionMetadata: { contentType: 'application/did+ld+json' },
+              didDocumentMetadata: {},
+             didDocument: {
+              id: resolved.id.toString(),
+              alsoKnownAs: alsoKnownAs && alsoKnownAs.values,
+              controller: controller && controller.values ? controller.values.map((v) => v.toString()): [],
+              verificationMethod: verificationMethods && verificationMethods.values ? verificationMethods.values.map((vm) => {
+                if (vm.publicKeyMultibase) {
+                  debugger;
+                  return {
+                    id: vm.id,
+                    type: "ES256K",
+                    controller: vm.controller,
+                    publicKeyMultibase: vm.publicKeyMultibase,
+                  }
+                }
+                debugger;
+                return  {
+                  id: vm.id,
+                  type: "ES256K",
+                  controller: vm.controller,
+                  publicKeyJwk: vm.publicKeyJwk,
+                }
+              }) : [],
+              service: service && service.values ? service.values.map((service) => {
+                return {
+                  id: service.id,
+                  type: service.type[0],
+                  serviceEndpoint: service.serviceEndpoint
+                }
+              }) : []
+             }
+            }
+          }
+          return { prism: resolve }
+        }
 
-        // debugger;
-        const jwt = new jose.SignJWT({
-          iss: prismDid.toString(),
-          aud: attachment.domain,
-          nonce: attachment.challenge,
-          vp: {
+        const signer = didJWT.ES256KSigner(keyPairFromCurveSecp256K1.privateKey.value)
+        const jwt = await didJWT.createJWT(
+          { aud: attachment.domain, nonce: attachment.challenge, vp: {
             "@context": [
               "https://www.w3.org/2018/presentations/v1"
             ],
             "type": [
               "VerifiablePresentation"
             ]
-          },
-        });
-        // debugger;
-        
+          } },
+          { issuer: prismDid.toString(), signer },
+          { alg: 'ES256K' }
+        )
 
-        
-         jwt.setProtectedHeader({alg: "secp256k1", typ: "JWT"})
-
-        // debugger;
-        
-        
-        
-         const signature = await jwt.sign(await jwks())
-        
-      
-        console.log("atta", attachment);
+        const resolver = new Resolver(getResolver());
+        debugger;
+        const verificationResponse = await didJWT.verifyJWT(jwt, {
+          resolver,
+          audience: attachment.domain
+        })
+        debugger;
+        console.log("atta", verificationResponse);
         
         debugger;
         const requestCredentialMessage = RequestCredential.makeRequestFromOfferCredential(credentialOffer).makeMessage();
