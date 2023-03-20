@@ -1,21 +1,21 @@
-import { webcrypto } from "node:crypto";
+import {webcrypto} from "node:crypto";
+import {uuid} from "@stablelib/uuid";
+import * as SDK from "..";
+import {createTestScenario} from "./createTestScenario";
+import {base64url} from "multiformats/bases/base64";
+
 (globalThis as any).crypto = webcrypto;
 
-import { uuid } from "@stablelib/uuid";
-import * as SDK from "..";
-import { createTestScenario } from "./createTestScenario";
-import { base64url } from "multiformats/bases/base64";
 (async () => {
   const Fabio = SDK.Domain.DID.fromString(
-    "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9hbGljZS5kaWQuZm1ncC5hcHAvIiwiciI6W10sImEiOlsiZGlkY29tbS92MiJdfQ"
+      "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9hbGljZS5kaWQuZm1ncC5hcHAvIiwiciI6W10sImEiOlsiZGlkY29tbS92MiJdfQ"
   );
   const mediatorDID = SDK.Domain.DID.fromString(
-    "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
   );
 
-  const { seed, agent } = createTestScenario(
-    mediatorDID,
-    `${process.cwd()}/node_modules/sql.js/dist`
+  const {seed, agent} = createTestScenario(
+      mediatorDID,
   );
 
   agent.onMessage((messages) => {
@@ -24,9 +24,9 @@ import { base64url } from "multiformats/bases/base64";
 
   await agent.start();
   console.log(
-    `Welcome to PrismEdge Agent, state ${
-      agent.state
-    } with mnemonics ${seed.mnemonics.join(", ")}`
+      `Welcome to PrismEdge Agent, state ${
+          agent.state
+      } with mnemonics ${seed.mnemonics.join(", ")}`
   );
 
   const did = await agent.createNewPeerDID([], false);
@@ -41,7 +41,7 @@ import { base64url } from "multiformats/bases/base64";
     },
   };
   const obbUrl = `https://domain.com/path?_obb=${base64url.baseEncode(
-    Buffer.from(JSON.stringify(obbJson))
+      Buffer.from(JSON.stringify(obbJson))
   )}`;
 
   const message = await agent.parseOOBInvitation(obbUrl);
