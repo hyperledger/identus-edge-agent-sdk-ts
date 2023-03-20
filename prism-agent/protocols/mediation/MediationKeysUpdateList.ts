@@ -18,7 +18,7 @@ export class MediationKeysUpdateList {
     this.to = to;
     this.body = {
       updates: recipientDids.map((did) => ({
-        recipientDid: did.toString(),
+        recipient_did: did.toString(),
         action: "add",
       })),
     };

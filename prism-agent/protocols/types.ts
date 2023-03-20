@@ -31,7 +31,7 @@ export interface ParsedCredentialFormat<T> {
 
 export interface MediationKeysUpdateListBody {
   updates: Array<{
-    recipientDid: string;
+    recipient_did: string;
     action: "add";
   }>;
 }
@@ -42,7 +42,7 @@ export interface PickupReceivedBody {
 
 export interface PickupRequestBody {
   recipientKey?: string;
-  limit: string;
+  limit: number;
 }
 
 export interface PickupAttachment {
@@ -59,6 +59,10 @@ export interface PrismOnboardingInvitationBody {
 export interface PresentationBody {
   goalCode?: string;
   comment?: string;
+}
+
+export interface BasicMessageBody {
+  content: string;
 }
 
 export interface RequestPresentationBody extends PresentationBody {

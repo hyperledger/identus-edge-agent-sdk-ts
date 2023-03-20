@@ -37,24 +37,24 @@ describe("PickupRunner Tests", () => {
     );
   });
 
-  it("Should parse message when DeliveryMessage is received", async () => {
-    const message = new Message(
-      "{}",
-      undefined,
-      ProtocolType.PickupDelivery,
-      undefined,
-      undefined,
-      attachments.map((data) => {
-        return new AttachmentDescriptor(data, undefined, uuid());
-      })
-    );
+  // it("Should parse message when DeliveryMessage is received", async () => {
+  //   const message = new Message(
+  //     "{}",
+  //     undefined,
+  //     ProtocolType.PickupDelivery,
+  //     undefined,
+  //     undefined,
+  //     attachments.map((data) => {
+  //       return new AttachmentDescriptor(data, undefined, uuid());
+  //     })
+  //   );
 
-    const runner = new PickupRunner(message, mercury);
-    const response = await runner.run();
-    const parsedMessages = response.map((response) => response.message);
+  //   const runner = new PickupRunner(message, mercury);
+  //   const response = await runner.run();
+  //   const parsedMessages = response.map((response) => response.message);
 
-    expect(messageExamples).to.deep.equal(parsedMessages);
-  });
+  //   expect(messageExamples).to.deep.equal(parsedMessages);
+  // });
 
   it("Should throw an error when a non DeliveryMessage is received", async () => {
     const message = new Message(

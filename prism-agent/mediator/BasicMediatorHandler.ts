@@ -103,7 +103,7 @@ export class BasicMediatorHandler implements MediatorHandler {
       throw new AgentError.NoMediatorAvailableError();
     }
     const request = new PickupRequest(
-      { limit: `${limit}` },
+      { limit: limit },
       this.mediator.hostDID,
       this.mediator.mediatorDID
     ).makeMessage();
@@ -125,7 +125,6 @@ export class BasicMediatorHandler implements MediatorHandler {
       this.mediator.hostDID,
       this.mediator.mediatorDID
     ).makeMessage();
-
     await this.mercury.sendMessage(message);
   }
 }

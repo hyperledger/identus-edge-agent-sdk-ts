@@ -1,5 +1,4 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn} from 'typeorm';
-import Did from './DID';
+import {Column, Entity, PrimaryColumn} from 'typeorm';
 
 @Entity()
 export default class DidPair {
@@ -12,14 +11,6 @@ export default class DidPair {
   @Column({type: 'text'})
   hostDID!: string;
 
-  @OneToOne(() => Did)
-  @JoinColumn({name: 'hostDID', referencedColumnName: 'did'})
-  hostDidEntity!: Did;
-
   @Column({type: 'text'})
   receiverDID!: string;
-
-  @OneToOne(() => Did)
-  @JoinColumn({name: 'receiverDID', referencedColumnName: 'did'})
-  receiverDidEntity?: Did;
 }

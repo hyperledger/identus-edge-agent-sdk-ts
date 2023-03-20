@@ -12,6 +12,7 @@ import {
   PresentationBody,
   RequestPresentationBody,
   ProposePresentationBody,
+  BasicMessageBody,
 } from "../protocols/types";
 
 export class ProtocolHelpers {
@@ -71,6 +72,13 @@ export class ProtocolHelpers {
     return type === ProtocolType.DidcommProposePresentation;
   }
 
+  private static isBasicMessageBody(
+    type: ProtocolType,
+    body: any
+  ): body is BasicMessageBody {
+    return type === ProtocolType.DidcommBasicMessage;
+  }
+
   static parseCredentials<T>(credentials: Map<string, T>) {
     const initialValue = {
       formats: [] as CredentialFormat[],
@@ -112,6 +120,16 @@ export class ProtocolHelpers {
     } catch (err) {
       throw new AgentError.UnknownCredentialBodyError();
     }
+
+    if (this.isBasicMessageBody(type, parsed)) {
+      if (parsed.content && typeof parsed.content !== "string") {
+        throw new AgentError.InvalidBasicMEssageBodyError("Invalid content");
+      }
+      return {
+        content: parsed.content,
+      } as T;
+    }
+
     if (
       this.isProposePresentationBody(type, parsed) ||
       this.isRequestPresentationBody(type, parsed)

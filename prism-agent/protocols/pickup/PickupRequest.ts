@@ -3,7 +3,7 @@ import { ProtocolType } from "../ProtocolTypes";
 import { PickupRequestBody } from "../types";
 
 export class PickupRequest {
-  public static type: ProtocolType.PickupRequest;
+  public static type = ProtocolType.PickupRequest;
 
   constructor(
     public body: PickupRequestBody,
@@ -12,15 +12,15 @@ export class PickupRequest {
   ) {}
 
   makeMessage(): Message {
-    const body = JSON.stringify({
-      to: this.to,
-      from: this.from,
-      body: {
-        recipientKey: this.body.recipientKey || null,
-        limit: this.body.limit,
-      },
-    });
+    const body = JSON.stringify(this.body);
+    const message = new Message(
+      body,
+      undefined,
+      PickupRequest.type,
+      this.from,
+      this.to
+    );
 
-    return new Message(body, undefined, PickupRequest.type, this.from, this.to);
+    return message;
   }
 }
