@@ -56,10 +56,10 @@ export default class Pluto implements PlutoInterface {
       }
     } : {};
     this.dataSource = new DataSource({
+      ...presetSqlJSConfig,
       ...connection,
       entities: Object.values(entities),
       synchronize: true,
-      ...presetSqlJSConfig
     });
   }
 
