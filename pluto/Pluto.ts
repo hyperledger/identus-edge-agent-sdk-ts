@@ -49,10 +49,17 @@ export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
 
   constructor(connection: PlutoConnectionProps) {
+    const presetSqlJSConfig = connection.type === 'sqljs' ? {
+      useLocalForage: true,
+      sqlJsConfig: {
+        locateFile: (file: string) => `https://sql.js.org/dist/${file}`
+      }
+    } : {};
     this.dataSource = new DataSource({
       ...connection,
       entities: Object.values(entities),
-      synchronize: true
+      synchronize: true,
+      ...presetSqlJSConfig
     });
   }
 
