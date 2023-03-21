@@ -1,6 +1,6 @@
 import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
-@Entity()
+@Entity("Mediator")
 export default class Mediator {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

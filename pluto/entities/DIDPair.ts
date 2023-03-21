@@ -1,6 +1,6 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
 
-@Entity()
+@Entity("DidPair")
 export default class DidPair {
   @PrimaryColumn({type: 'text'})
   id?: string; // ID will be hostDID and receiverDID concatenated
