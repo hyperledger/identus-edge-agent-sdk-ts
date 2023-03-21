@@ -1,6 +1,6 @@
 import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
-@Entity("PrivateKey")
+@Entity()
 export default class PrivateKey {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

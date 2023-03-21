@@ -1,6 +1,7 @@
 import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
-@Entity("VerifiableCredential")
+
+@Entity()
 export default class VerifiableCredential {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
