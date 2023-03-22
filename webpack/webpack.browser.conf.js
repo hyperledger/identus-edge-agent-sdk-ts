@@ -19,16 +19,16 @@ module.exports = (env, argv) => {
             {from: './node_modules/sql.js/dist/sql-wasm.wasm'}
         ]
     })] : [];
-    const providePluginStuff = !isProduction ? [new webpack.ProvidePlugin({
-        'window.SQL': 'sql.js/dist/sql-wasm.js',
+    const providePluginStuff = new webpack.ProvidePlugin({
+        'window.SQL': "sql.js/dist/sql-wasm.js",
         'window.localforage': 'localforage/dist/localforage.js',
-    })] : [];
+    });
     const plugins = [
 
         new webpack.NormalModuleReplacementPlugin(/typeorm$/, function (result) {
             result.request = result.request.replace(/typeorm/, "typeorm/browser");
         }),
-        ...providePluginStuff,
+        providePluginStuff,
         ...copyStuff,
         new CleanWebpackPlugin(),
         new webpack.ProvidePlugin(providePlutin),
@@ -63,7 +63,7 @@ module.exports = (env, argv) => {
         mode: isProduction ? "production" : "development",
         devtool: "source-map",
         externals: {
-            'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
+            "sql.js": "sql.js"
         },
         entry: isProduction ? "./index.ts" : "./demos/test-browser.tsx",
         devServer: {
@@ -77,10 +77,14 @@ module.exports = (env, argv) => {
         },
         output: {
             filename: "index.js",
+            libraryTarget: "umd",
+            library: "prism",
             path: path.resolve(
                 __dirname,
                 `../build/browser${isProduction ? "" : "-test"}`
             ),
+            publicPath: "/",
+            webassemblyModuleFilename: "index_bg.module.wasm",
             chunkFormat: "commonjs",
         },
         optimization: {

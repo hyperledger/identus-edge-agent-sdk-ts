@@ -3,7 +3,7 @@ import {DID, getKeyCurveByNameAndIndex, Mediator, Message, PeerDID, PrivateKey} 
 import {PrismDIDInfo} from '../domain/models/PrismDIDInfo';
 import {VerifiableCredential} from '../domain/models/VerifiableCredential';
 import {default as PlutoInterface} from '../domain/buildingBlocks/Pluto';
-import {DataSource} from 'typeorm';
+import {DataSource, Repository} from 'typeorm';
 import * as entities from './entities';
 import Did from './entities/DID';
 import {DIDPair} from '../domain/models/DIDPair';
@@ -49,10 +49,19 @@ export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
 
   constructor(connection: PlutoConnectionProps) {
+    const presetSqlJSConfig = connection.type === 'sqljs' ? {
+      location: "pluto",
+      useLocalForage: true,
+      autoSave: true,
+      sqlJsConfig: {
+        locateFile: (file: string) => `https://sql.js.org/dist/${file}`
+      }
+    } : {};
     this.dataSource = new DataSource({
+      ...presetSqlJSConfig,
       ...connection,
       entities: Object.values(entities),
-      synchronize: true
+      synchronize: true,
     });
   }
 
@@ -174,10 +183,10 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllPrismDIDs() {
-    const didRepository = this.dataSource.manager.getRepository(entities.DID);
+    const didRepository = this.dataSource.manager.getRepository("did");
     try {
       const dids: (Did & Record<"keyPathIndex", number>)[] = await didRepository.createQueryBuilder('did')
-          .innerJoin('PrivateKey', 'private_key', 'did.did = private_key.didId')
+          .innerJoin('private_key', 'private_key', 'did.did = private_key.didId')
           .select('did.*, private_key.keyPathIndex')
           .where('did.method = :method', {method: "prism"})
           .getRawMany();
@@ -192,7 +201,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getDIDInfoByDID(did: DID) {
-    const didRepository = this.dataSource.manager.getRepository(entities.DID);
+    const didRepository = this.dataSource.manager.getRepository("did");
     try {
       const didResponse: (Did & Record<"keyPathIndex", number>) | undefined = await didRepository.createQueryBuilder('did')
           .innerJoin('private_key', 'private_key', 'did.did = private_key.didId')
@@ -220,7 +229,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getDIDInfoByAlias(alias: string) {
-    const didRepository = this.dataSource.manager.getRepository(entities.DID);
+    const didRepository = this.dataSource.manager.getRepository("did");
     try {
 
       const didResponse: (Did & Record<"private_key_keyPathIndex", number>)[] = await didRepository.createQueryBuilder('did')
@@ -242,7 +251,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getPrismDIDKeyPathIndex(did: DID) {
-    const repository = this.dataSource.manager.getRepository(entities.PrivateKey);
+    const repository = this.dataSource.manager.getRepository("private_key");
     try {
       const data = await repository.findOne({
         where: {
@@ -259,7 +268,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getPrismLastKeyPathIndex() {
-    const repository = this.dataSource.manager.getRepository(entities.PrivateKey);
+    const repository = this.dataSource.manager.getRepository("private_key");
     try {
       const data = await repository.createQueryBuilder('private_key')
           .select('private_key.keyPathIndex')
@@ -281,8 +290,8 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllPeerDIDs() {
-    const didRepository = this.dataSource.manager.getRepository(entities.DID);
-    const privateKeysRepository = this.dataSource.manager.getRepository(entities.PrivateKey);
+    const didRepository: Repository<entities.DID> = this.dataSource.manager.getRepository("did");
+    const privateKeysRepository = this.dataSource.manager.getRepository("private_key");
     /*
     * This method is overcomplicated, dids should have relations.
     * */
@@ -317,7 +326,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getDIDPrivateKeysByDID(did: DID) {
-    const repository = this.dataSource.manager.getRepository(entities.PrivateKey);
+    const repository = this.dataSource.manager.getRepository("private_key");
     try {
       const data = await repository.find({
         where: {
@@ -336,7 +345,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getDIDPrivateKeyByID(id: string) {
-    const repository = this.dataSource.manager.getRepository(entities.PrivateKey);
+    const repository = this.dataSource.manager.getRepository("private_key");
 
     try {
       const data = await repository.findOne({
@@ -357,7 +366,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllDidPairs() {
-    const repository = this.dataSource.manager.getRepository(entities.DIDPair);
+    const repository = this.dataSource.manager.getRepository("did_pair");
     try {
       const data = await repository.find({
         relationLoadStrategy: "join"
@@ -374,7 +383,7 @@ export default class Pluto implements PlutoInterface {
 
   async getPairByDID(did: DID) {
 
-    const repository = this.dataSource.manager.getRepository(entities.DIDPair);
+    const repository = this.dataSource.manager.getRepository("did_pair");
     try {
       const data = await repository.findOne({
         where: {
@@ -396,7 +405,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getPairByName(name: string) {
-    const repository = this.dataSource.manager.getRepository(entities.DIDPair);
+    const repository = this.dataSource.manager.getRepository("did_pair");
     try {
       const data = await repository.findOne({
         where: {
@@ -418,7 +427,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessages() {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find();
 
     return data.map(Pluto.transformMessageDBToInterface);
@@ -426,7 +435,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesByDID(did: DID) {
 
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         from: did.toString()
@@ -437,7 +446,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessagesSent() {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         isReceived: 0
@@ -447,7 +456,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessagesReceived() {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         isReceived: 1
@@ -457,7 +466,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessagesSentTo(did: DID) {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         to: did.toString()
@@ -467,7 +476,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessagesReceivedFrom(did: DID) {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         from: did.toString()
@@ -477,7 +486,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessagesOfType(type: string, relatedWithDID?: DID) {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.createQueryBuilder('message')
         .where('message.type = :type', {type})
         .andWhere(':relatedWithDID IS NULL OR :relatedWithDID IN (message.from, message.to)', {relatedWithDID: relatedWithDID?.toString() ?? null})
@@ -487,7 +496,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMessagesByFromToDID(from: DID, to: DID) {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         from: from.toString(),
@@ -498,7 +507,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getMessage(id: string) {
-    const repository = this.dataSource.manager.getRepository(entities.Message);
+    const repository: Repository<entities.Message> = this.dataSource.manager.getRepository("message");
     const data = await repository.findOne({
       where: {
         id
@@ -511,7 +520,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllMediators() {
-    const repository = this.dataSource.manager.getRepository(entities.Mediator);
+    const repository: Repository<entities.Mediator> = this.dataSource.manager.getRepository("mediator");
     const data = await repository.find({
       relationLoadStrategy: "join"
     });
@@ -524,7 +533,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllCredentials() {
-    const repository = this.dataSource.manager.getRepository(entities.VerifiableCredential);
+    const repository: Repository<entities.VerifiableCredential> = this.dataSource.manager.getRepository("verifiable_credential");
     const data = await repository.find();
     return data.map(credential => {
       const json = JSON.parse(credential.verifiableCredentialJson) as VerifiableCredential;
