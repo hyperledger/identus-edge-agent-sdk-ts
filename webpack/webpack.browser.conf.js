@@ -78,6 +78,7 @@ module.exports = (env, argv) => {
         output: {
             filename: "index.js",
             libraryTarget: "umd",
+            library: "prism",
             path: path.resolve(
                 __dirname,
                 `../build/browser${isProduction ? "" : "-test"}`
