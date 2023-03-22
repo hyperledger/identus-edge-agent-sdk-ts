@@ -16,4 +16,5 @@ export * from "./MessageAttachment";
 export * from "./Mediator";
 export * from "./Api";
 export * from "./WordList";
+export * from "./VerifiableCredential";
 export type JsonString = string;

@@ -23,9 +23,10 @@ import { ListenerKey } from "../../prism-agent/types";
 import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
 import { JWT } from "../../apollo/utils/jwt/JWT";
+import { IssueCredential } from "../../prism-agent/protocols/issueCredential/IssueCredential";
 
 const mediatorDID = SDK.Domain.DID.fromString(
-  "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+  "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
 );
 
 const apollo = new SDK.Apollo();
@@ -461,26 +462,30 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
   const [messages, setMessages] = React.useState<SDK.Domain.Message[]>([]);
 
   const handleMessages = async (messages:SDK.Domain.Message[]) => {
-    const filteredMessages = messages.filter((message) => message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
+    
+    const filteredMessages = messages.filter((message) => message.piuri !== "https://didcomm.org/issue-credential/2.0/issue-credential" && message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
     const joinedMessages = [...messages, ...filteredMessages];
     setMessages(joinedMessages)
     setNewMessage(joinedMessages.map(() => ""))
     const credentialOffers = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
+    const issuedCredentials = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/issue-credential");
+    debugger;
     if (credentialOffers.length) {
-
       for(const credentialOfferMessage of credentialOffers) {
-        debugger;
         const credentialOffer = OfferCredential.fromMessage(credentialOfferMessage);
-        debugger;
-
         const requestCredential = await props.agent.prepareRequestCredentialWithIssuer(credentialOffer);
         try {
-          debugger;
           await props.agent.sendMessage(requestCredential.makeMessage())
         } catch (err) {
           console.log("continue after err", err)
-          debugger;
         }
+      }
+    }
+    if (issuedCredentials) {
+      for(const issuedCredential of issuedCredentials) {
+        const issueCredential = IssueCredential.fromMessage(issuedCredential);
+        const credential = await props.agent.processIssuedCredentialMessage(issueCredential)
+        debugger;
       }
     }
   }
@@ -512,15 +517,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
         throw new Error("Mediator not available")
       }
       const secondaryDID = await props.agent.createNewPeerDID(
-        [
-          new DIDDocumentService(
-            "#didcomm-1",
-            ["DIDCommMessaging"],
-            new DIDDocumentServiceEndpoint(
-              mediator.toString()
-            )
-          ),
-        ],
+        [],
         true
       );
       const testMessage = new BasicMessage(
@@ -625,33 +622,7 @@ const useSDK = () => {
   const store = new SDK.PublicMediatorStore(pluto);
   const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
   const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
-  const words = [
-    "trumpet",
-    "mass",
-    "anger",
-    "eyebrow",
-    "gadget",
-    "sword",
-    "debate",
-    "spend",
-    "move",
-    "noble",
-    "motor",
-    "common",
-    "junk",
-    "feed",
-    "alone",
-    "whip",
-    "feed",
-    "front",
-    "radio",
-    "rookie",
-    "settle",
-    "provide",
-    "admit",
-    "peanut"
-  ] as MnemonicWordList;
-  const seed = apollo.createSeed(words)
+  const seed = apollo.createRandomSeed()
   const agent = new SDK.Agent(
     apollo,
     castor,
@@ -659,7 +630,7 @@ const useSDK = () => {
     mercury,
     handler,
     manager,
-    seed
+    seed.seed
   );
 
   return { agent, pluto };

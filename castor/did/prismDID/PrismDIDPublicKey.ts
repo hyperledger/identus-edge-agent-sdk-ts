@@ -45,21 +45,21 @@ export function getProtosUsage(
 export function getUsageId(index: Usage): string {
   switch (index) {
     case Usage.MASTER_KEY:
-      return "master(index)";
+      return `master${index}`;
     case Usage.ISSUING_KEY:
-      return "issuing(index)";
+      return `issuing${index}`;
     case Usage.KEY_AGREEMENT_KEY:
-      return "agreement(index)";
+      return `agreement${index}`;
     case Usage.AUTHENTICATION_KEY:
-      return "authentication(index)";
+      return `authentication${index}`;
     case Usage.REVOCATION_KEY:
-      return "revocation(index)";
+      return `revocation${index}`;
     case Usage.CAPABILITY_DELEGATION_KEY:
-      return "delegation(index)";
+      return `delegation${index}`;
     case Usage.CAPABILITY_INVOCATION_KEY:
-      return "invocation(index)";
+      return `invocation${index}`;
     default:
-      return "unknown(index)";
+      return `unknown${index}`;
   }
 }
 
@@ -142,9 +142,9 @@ export class PrismDIDPublicKey {
     const key = Secp256k1PublicKey.secp256k1FromBytes(this.keyData.value);
     const points = key.getCurvePoint();
     const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
-      curve: Curve.SECP256K1,
-      x: points.x.bytes(),
-      y: points.y.bytes(),
+      curve: Curve.SECP256K1.toLocaleLowerCase(),
+      x: points.x.coordinate.toBuffer(),
+      y: points.y.coordinate.toBuffer(),
     });
     const usage = getProtosUsage(this.usage);
     const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({

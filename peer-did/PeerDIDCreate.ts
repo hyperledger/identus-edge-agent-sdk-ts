@@ -93,6 +93,7 @@ export class PeerDIDCreate {
   }
 
   private encodeService(services: DIDDocumentService[]): string {
+    console.log("Created did with ", services);
     const peerDIDServices = services.map((service) =>
       new PeerDIDService(
         service.type[0],
@@ -101,6 +102,7 @@ export class PeerDIDCreate {
         service.serviceEndpoint.accept
       ).encode()
     );
+    console.log("Created did with ", peerDIDServices);
     if (peerDIDServices.length === 1) {
       const peerDIDService = peerDIDServices[0];
       return base64.base64url.baseEncode(

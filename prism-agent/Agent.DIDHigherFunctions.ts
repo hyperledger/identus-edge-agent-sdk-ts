@@ -59,7 +59,13 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
     const keyPairs = [keyAgreementKeyPair, authenticationKeyPair];
 
-    if (updateMediator && mediatorDID) {
+    if (
+      updateMediator &&
+      mediatorDID &&
+      !services.find((service) => {
+        return service.isDIDCommMessaging;
+      })
+    ) {
       //TODO(): This still needs to be done update the key List
       services.push(
         new Service(

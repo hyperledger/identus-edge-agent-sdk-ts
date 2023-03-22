@@ -1,9 +1,16 @@
 import Castor from "../domain/buildingBlocks/Castor";
 import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
-import { DID } from '../domain'
-import { InvalidCredentialError, InvalidJWTString } from '../domain/models/errors/Pollux'
-import { CredentialType, VerifiableCredential, VerifiableCredentialTypeContainer } from '../domain/models/VerifiableCredential'
-
+import { DID } from "../domain";
+import {
+  InvalidCredentialError,
+  InvalidJWTString,
+} from "../domain/models/errors/Pollux";
+import {
+  CredentialType,
+  VerifiableCredential,
+  VerifiableCredentialTypeContainer,
+} from "../domain/models/VerifiableCredential";
+import { base64, base64url } from "multiformats/bases/base64";
 export default class Pollux implements PolluxInterface {
   private castor: Castor;
 
@@ -16,17 +23,12 @@ export default class Pollux implements PolluxInterface {
 
     if (parts.length != 3) throw new InvalidJWTString();
 
-    const decoded = Buffer.from(parts[1], "base64").toString();
-    const verifiableCredential = this.parseCredential(decoded);
-    const type = this.parseCredentialType(verifiableCredential);
+    const credentialString = parts[2];
+    const base64Data = base64url.baseDecode(credentialString);
+    const jsonString = Buffer.from(base64Data).toString();
 
-    switch (type) {
-      case CredentialType.JWT:
-        return this.parseJWTCredential(verifiableCredential, jwtString);
-
-      case CredentialType.W3C:
-        return this.parseW3CCredential(verifiableCredential);
-    }
+    const dataValue = JSON.parse(jsonString);
+    debugger;
 
     throw new InvalidCredentialError();
   }
@@ -35,11 +37,13 @@ export default class Pollux implements PolluxInterface {
     try {
       const verifiableCredential = JSON.parse(value);
 
-      if (typeof verifiableCredential === "object" && verifiableCredential !== null) {
+      if (
+        typeof verifiableCredential === "object" &&
+        verifiableCredential !== null
+      ) {
         return verifiableCredential;
       }
-    }
-    catch (e) {
+    } catch (e) {
       throw new InvalidCredentialError();
     }
 
@@ -50,17 +54,18 @@ export default class Pollux implements PolluxInterface {
     if ("type" in credential && Array.isArray(credential.type)) {
       const type = credential.type[0];
 
-      if (type === CredentialType.JWT)
-        return CredentialType.JWT;
+      if (type === CredentialType.JWT) return CredentialType.JWT;
 
-      if (type === CredentialType.W3C)
-        return CredentialType.W3C;
+      if (type === CredentialType.W3C) return CredentialType.W3C;
     }
 
     return CredentialType.Unknown;
   }
 
-  private parseJWTCredential(val: any, jwtString: string): VerifiableCredential {
+  private parseJWTCredential(
+    val: any,
+    jwtString: string
+  ): VerifiableCredential {
     return {
       id: jwtString,
       aud: val.aud,
@@ -71,14 +76,20 @@ export default class Pollux implements PolluxInterface {
       expirationDate: val.expirationDate,
       issuanceDate: val.issuanceDate,
       issuer: this.parseDID(val.issuer),
-      refreshService: this.parseVerifiableCredentialTypeContainer(val.refreshService),
+      refreshService: this.parseVerifiableCredentialTypeContainer(
+        val.refreshService
+      ),
       termsOfUse: this.parseVerifiableCredentialTypeContainer(val.termsOfUse),
       type: val.type,
       validFrom: this.parseVerifiableCredentialTypeContainer(val.validFrom),
       validUntil: this.parseVerifiableCredentialTypeContainer(val.validUntil),
-      credentialSchema: this.parseVerifiableCredentialTypeContainer(val.credentialSchema),
-      credentialStatus: this.parseVerifiableCredentialTypeContainer(val.credentialStatus),
-      proof: val.proof
+      credentialSchema: this.parseVerifiableCredentialTypeContainer(
+        val.credentialSchema
+      ),
+      credentialStatus: this.parseVerifiableCredentialTypeContainer(
+        val.credentialStatus
+      ),
+      proof: val.proof,
     };
   }
 
@@ -93,23 +104,33 @@ export default class Pollux implements PolluxInterface {
       expirationDate: val.expirationDate,
       issuanceDate: val.issuanceDate,
       issuer: this.parseDID(val.issuer),
-      refreshService: this.parseVerifiableCredentialTypeContainer(val.refreshService),
+      refreshService: this.parseVerifiableCredentialTypeContainer(
+        val.refreshService
+      ),
       termsOfUse: this.parseVerifiableCredentialTypeContainer(val.termsOfUse),
       type: val.type,
       validFrom: this.parseVerifiableCredentialTypeContainer(val.validFrom),
       validUntil: this.parseVerifiableCredentialTypeContainer(val.validUntil),
-      credentialSchema: this.parseVerifiableCredentialTypeContainer(val.credentialSchema),
-      credentialStatus: this.parseVerifiableCredentialTypeContainer(val.credentialStatus),
-      proof: val.proof
+      credentialSchema: this.parseVerifiableCredentialTypeContainer(
+        val.credentialSchema
+      ),
+      credentialStatus: this.parseVerifiableCredentialTypeContainer(
+        val.credentialStatus
+      ),
+      proof: val.proof,
     };
   }
 
   private parseDID(value: unknown) {
     if (
-      typeof value === "object" && value !== null
-      && "schema" in value && typeof value.schema === "string"
-      && "method" in value && typeof value.method === "string"
-      && "methodId" in value && typeof value.methodId === "string"
+      typeof value === "object" &&
+      value !== null &&
+      "schema" in value &&
+      typeof value.schema === "string" &&
+      "method" in value &&
+      typeof value.method === "string" &&
+      "methodId" in value &&
+      typeof value.methodId === "string"
     ) {
       return new DID(value.schema, value.method, value.methodId);
     }
@@ -119,9 +140,12 @@ export default class Pollux implements PolluxInterface {
 
   private parseVerifiableCredentialTypeContainer(value: unknown) {
     if (
-      typeof value === "object" && value !== null
-      && "id" in value && typeof value.id === "string"
-      && "type" in value && typeof value.type === "string"
+      typeof value === "object" &&
+      value !== null &&
+      "id" in value &&
+      typeof value.id === "string" &&
+      "type" in value &&
+      typeof value.type === "string"
     ) {
       return new VerifiableCredentialTypeContainer(value.id, value.type);
     }

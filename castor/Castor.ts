@@ -63,20 +63,19 @@ export default class Castor implements CastorInterface {
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
   ): Promise<DID> {
-    const id = getUsageId(Usage.MASTER_KEY);
     const publicKey = new PrismDIDPublicKey(
-      id,
+      getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
       masterPublicKey
     );
     const authenticateKey = new PrismDIDPublicKey(
-      id,
+      getUsageId(Usage.AUTHENTICATION_KEY),
       Usage.AUTHENTICATION_KEY,
       masterPublicKey
     );
     const didCreationData =
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
-        public_keys: [publicKey.toProto(), authenticateKey.toProto()],
+        public_keys: [authenticateKey.toProto(), publicKey.toProto()],
         services: services?.map((service) => {
           return new Protos.io.iohk.atala.prism.protos.Service({
             service_endpoint: [service.serviceEndpoint.uri],

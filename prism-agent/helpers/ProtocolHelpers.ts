@@ -89,7 +89,7 @@ export class ProtocolHelpers {
       ({ formats, attachments }, [key, credential]) => {
         const attachment = AttachmentDescriptor.build(credential);
         const format: CredentialFormat = {
-          attachId: attachment.id,
+          attach_id: attachment.id,
           format: key,
         };
         return {
@@ -102,11 +102,11 @@ export class ProtocolHelpers {
   }
 
   static getFormatFromJsonObject(object: CredentialFormat): CredentialFormat {
-    if (!object.attachId || !object.format) {
+    if (!object.attach_id || !object.format) {
       throw new AgentError.InvalidCredentialFormats();
     }
     return {
-      attachId: object.attachId,
+      attach_id: object.attach_id,
       format: object.format,
     };
   }

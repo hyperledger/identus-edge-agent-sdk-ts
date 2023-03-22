@@ -50,15 +50,7 @@ export class AgentInvitations implements AgentInvitationsClass {
     }
 
     const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
-      [
-        new Service(
-          "#didcomm-1",
-          ["DIDCommMessasing"],
-          new ServiceEndpoint(
-            this.connection.mediationHandler.mediator.routingDID.toString()
-          )
-        ),
-      ],
+      [],
       true
     );
 

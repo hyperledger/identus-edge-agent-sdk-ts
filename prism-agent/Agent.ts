@@ -32,6 +32,9 @@ import { AgentInvitations } from "./Agent.Invitations";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "./protocols/issueCredential/RequestCredential";
+import { default as PolluxType } from "../domain/buildingBlocks/Pollux";
+import Pollux from "../pollux/Pollux";
+import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -84,7 +87,14 @@ export default class Agent
       connectionManager ||
       new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
 
-    this.agentCredentials = new AgentCredentials(apollo, castor, pluto, seed);
+    const pollux = new Pollux(castor);
+    this.agentCredentials = new AgentCredentials(
+      apollo,
+      castor,
+      pluto,
+      pollux,
+      seed
+    );
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
@@ -132,18 +142,7 @@ export default class Agent
       await this.connectionManager.startMediator();
     } catch (e) {
       if (e instanceof AgentError.NoMediatorAvailableError) {
-        const hostDID = await this.createNewPeerDID(
-          [
-            new DIDDocumentService(
-              "#didcomm-1",
-              ["DIDCommMessaging"],
-              new DIDDocumentServiceEndpoint(
-                this.connectionManager.mediationHandler.mediatorDID.toString()
-              )
-            ),
-          ],
-          false
-        );
+        const hostDID = await this.createNewPeerDID([], false);
         await this.connectionManager.registerMediator(hostDID);
       } else throw e;
     }
@@ -242,5 +241,11 @@ export default class Agent
     offer: OfferCredential
   ): Promise<RequestCredential> {
     return this.agentCredentials.prepareRequestCredentialWithIssuer(offer);
+  }
+
+  async processIssuedCredentialMessage(
+    message: IssueCredential
+  ): Promise<VerifiableCredential> {
+    return this.agentCredentials.processIssuedCredentialMessage(message);
   }
 }

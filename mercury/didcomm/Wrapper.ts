@@ -15,6 +15,7 @@ import { DIDCommDIDResolver } from "./DIDResolver";
 import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
+import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
 
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm");
@@ -96,7 +97,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
     );
 
     const msgObj = didcommMsg.as_value();
-
     const domainMessage = new Domain.Message(
       JSON.stringify(msgObj.body), // parse
       msgObj.id,
@@ -104,8 +104,8 @@ export class DIDCommWrapper implements DIDCommProtocol {
       typeof msgObj.from === "string"
         ? Domain.DID.fromString(msgObj.from)
         : undefined,
-      typeof msgObj.to === "string"
-        ? Domain.DID.fromString(msgObj.to)
+      Array.isArray(msgObj.to)
+        ? Domain.DID.fromString(msgObj.to[0])
         : undefined,
       this.parseAttachmentsToDomain(msgObj.attachments || []),
       msgObj.thid,

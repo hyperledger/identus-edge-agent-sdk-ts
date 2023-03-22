@@ -14,6 +14,7 @@ import Pluto from "../../domain/buildingBlocks/Pluto";
 import { CancellableTask } from "../helpers/Task";
 import { OfferCredential } from "../protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../protocols/issueCredential/RequestCredential";
+import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 
 interface InvitationInterface {
   type: InvitationTypes;
@@ -46,6 +47,9 @@ export interface AgentCredentials {
   prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential>;
+  processIssuedCredentialMessage(
+    message: IssueCredential
+  ): Promise<VerifiableCredential>;
 }
 
 export interface AgentDIDHigherFunctions {

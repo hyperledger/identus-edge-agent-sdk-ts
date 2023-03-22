@@ -1,10 +1,14 @@
-import { off } from "process";
 import { JWT } from "../apollo/utils/jwt/JWT";
-import { AttachmentDescriptor, Curve, DID, Seed } from "../domain";
+import {
+  AttachmentBase64,
+  AttachmentDescriptor,
+  Curve,
+  DID,
+  Seed,
+} from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
-import { AgentError } from "../domain/models/Errors";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import {
@@ -12,17 +16,42 @@ import {
   RequestCredential,
 } from "./protocols/issueCredential/RequestCredential";
 import { AgentCredentials as AgentCredentialsClass } from "./types";
-
+import { base64, base64url } from "multiformats/bases/base64";
+import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
+import Pollux from "../domain/buildingBlocks/Pollux";
 export class AgentCredentials implements AgentCredentialsClass {
   constructor(
     protected apollo: Apollo,
     protected castor: Castor,
     protected pluto: Pluto,
+    protected pollux: Pollux,
     protected seed: Seed
   ) {}
 
   async verifiableCredentials(): Promise<VerifiableCredential[]> {
     return await this.pluto.getAllCredentials();
+  }
+
+  async processIssuedCredentialMessage(
+    message: IssueCredential
+  ): Promise<VerifiableCredential> {
+    const attachment = message.attachments && message.attachments[0].data;
+    if (!attachment) {
+      throw new Error("No attachment");
+    }
+    const jwtData = base64url.baseDecode(
+      (attachment as AttachmentBase64).base64
+    );
+
+    const credential = this.pollux.parseVerifiableCredential(
+      Buffer.from(jwtData).toString()
+    );
+
+    console.log(credential);
+
+    await this.pluto.storeCredential(credential);
+
+    return credential;
   }
 
   async prepareRequestCredentialWithIssuer(
@@ -36,7 +65,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       },
       this.seed
     );
-
     const did = await this.castor.createPrismDID(keyPair.publicKey);
     const attachment = offer.attachments.reduce(
       (_, attachment: any) => ({
@@ -48,14 +76,11 @@ export class AgentCredentials implements AgentCredentialsClass {
         domain?: string;
       }
     );
-
     const jwt = new JWT(this.castor);
-
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const challenge = attachment.challenge!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const domain = attachment.domain!;
-
     const signedJWT = await jwt.sign(did, keyPair.privateKey.value, {
       aud: domain,
       nonce: challenge,
@@ -64,26 +89,23 @@ export class AgentCredentials implements AgentCredentialsClass {
         type: ["VerifiablePresentation"],
       },
     });
-
     const requestCredentialBody = createRequestCredentialBody(
       offer.body.formats,
       offer.body.goalCode,
       offer.body.comment
     );
 
-    debugger;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const from = offer.to!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const to = offer.from!;
     const thid = offer.thid;
-
-    return new RequestCredential(
+    const requestCredential = new RequestCredential(
       requestCredentialBody,
       [
         new AttachmentDescriptor(
           {
-            data: signedJWT,
+            base64: base64.baseEncode(Buffer.from(signedJWT)),
           },
           "prism/jwt"
         ),
@@ -92,5 +114,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       to,
       thid
     );
+    return requestCredential;
   }
 }
