@@ -99,6 +99,7 @@
     "url-loader": "^4.1.1",
     "util": "^0.12.5",
     "webpack": "^5.76.0",
+    "sql.js": "^1.8.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "4.11.1",
     "webpack-node-externals": "^3.0.0"
@@ -124,11 +125,8 @@
     "google-protobuf": "^3.21.2",
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
+    "localforage": "^1.10.0",
     "multiformats": "^9.9.0",
     "typeorm": "^0.3.12"
-  },
-  "peerDependencies": {
-    "sql.js": "^1.8.0",
-    "localforage": "^1.10.0"
   }
 }

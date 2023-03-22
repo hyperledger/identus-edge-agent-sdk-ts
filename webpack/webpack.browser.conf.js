@@ -63,7 +63,6 @@ module.exports = (env, argv) => {
         mode: isProduction ? "production" : "development",
         devtool: "source-map",
         externals: {
-            "react-native-sqlite-storage": "react-native-sqlite-storage",
             "sql.js": "sql.js"
         },
         entry: isProduction ? "./index.ts" : "./demos/test-browser.tsx",
