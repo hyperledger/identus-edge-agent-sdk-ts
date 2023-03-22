@@ -83,6 +83,8 @@ module.exports = (env, argv) => {
                 __dirname,
                 `../build/browser${isProduction ? "" : "-test"}`
             ),
+            publicPath: "/",
+            webassemblyModuleFilename: "index_bg.module.wasm",
             chunkFormat: "commonjs",
         },
         optimization: {
