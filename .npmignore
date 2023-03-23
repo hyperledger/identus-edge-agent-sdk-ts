@@ -34,6 +34,3 @@ README.md
 .eslintrc.json
 webpack.config.js
 babel.config.js
-build/browser-test
-build/node-test
-build/types/demos

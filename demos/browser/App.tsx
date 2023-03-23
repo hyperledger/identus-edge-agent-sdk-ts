@@ -7,9 +7,8 @@ import crypto from 'crypto';
 
 import * as SDK from "../../index";
 import * as Domain from '../../domain';
-import {PrismDIDInfo} from '../../domain/models/PrismDIDInfo';
-import Pluto from '../../pluto/Pluto';
 import {
+  MnemonicWordList,
   Service as DIDDocumentService,
   ServiceEndpoint as DIDDocumentServiceEndpoint
 } from "../../domain";
@@ -17,7 +16,6 @@ import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
-import { MnemonicWordList } from "../../domain";
 import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
 import { ListenerKey } from "../../prism-agent/types";
 import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
@@ -29,7 +27,6 @@ import { RequestPresentation } from "../../prism-agent/protocols/proofPresentati
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
 );
-
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const api = new SDK.ApiImpl();
@@ -45,38 +42,38 @@ function Mnemonics() {
   }
 
   return (
-    <Box>
-      <h2>Mnemonics and keys</h2>
+      <Box>
+        <h2>Mnemonics and keys</h2>
 
-      <button onClick={createMnemonics}>Generate random mnemonics</button>
-      <Spacer />
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-        }}
-      >
-        {mnemonics
-          ? mnemonics.map((word, i) => (
-            <span
-              key={i + word}
-              style={{
-                margin: 7,
-                padding: "4px 10px",
-                background: "lightgray",
-                borderRadius: 6,
-              }}
-            >
+        <button onClick={createMnemonics}>Generate random mnemonics</button>
+        <Spacer/>
+        <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+        >
+          {mnemonics
+              ? mnemonics.map((word, i) => (
+                  <span
+                      key={i + word}
+                      style={{
+                        margin: 7,
+                        padding: "4px 10px",
+                        background: "lightgray",
+                        borderRadius: 6,
+                      }}
+                  >
               {i + 1}. {word}
             </span>
-          ))
-          : null}
-      </div>
-    </Box>
+              ))
+              : null}
+        </div>
+      </Box>
   );
 }
 
-function KeyPair({ curve = SDK.Domain.Curve.SECP256K1 }: { curve?: SDK.Domain.Curve }) {
+function KeyPair({curve = SDK.Domain.Curve.SECP256K1}: { curve?: SDK.Domain.Curve }) {
   const [mnemonics] = useAtom(mnemonicsAtom);
   // let [keyPair, setKeyPair] = React.useState<Domain.KeyPair | null>(null);
   const [keyPair, setKeyPair] = React.useState<SDK.Domain.KeyPair>();
@@ -389,34 +386,35 @@ export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
   }, [pluto, dids]);
 
   return (
-    <Box>
-      <h2>Pluto</h2>
+      <Box>
+        <h2>Pluto</h2>
 
-      <button
-        onClick={async () => {
-          console.log("Fetch PrismDIDs")
-          const prismDids = await pluto.getAllPrismDIDs();
-          console.log({ prismDids })
-          setDids(prismDids);
-        }}
-      >Fetch DIDs</button>
-      <Spacer />
+        <button
+            onClick={async () => {
+              console.log("Fetch PrismDIDs");
+              const prismDids = await pluto.getAllPrismDIDs();
+              console.log({prismDids});
+              setDids(prismDids);
+            }}
+        >Fetch DIDs
+        </button>
+        <Spacer/>
 
-      <div className="App">
-        <form onSubmit={createDid}>
-          <input type="text" name="did" onChange={handleInputChange} value={value}/>
-        </form>
-        <button onClick={createDid}>Create DID</button>
-        {error}
-        {
-            dids?.map((item, index) => (
-                <div key={index}>{item.did.toString()}</div>
-            )) ?? null
-        }
-      </div>
-    </Box>
+        <div className="App">
+          <form onSubmit={createDid}>
+            <input type="text" name="did" onChange={handleInputChange} value={value}/>
+          </form>
+          <button onClick={createDid}>Create DID</button>
+          {error}
+          {
+              dids?.map((item, index) => (
+                  <div key={index}>{item.did.toString()}</div>
+              )) ?? null
+          }
+        </div>
+      </Box>
   );
-}
+};
 
 const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const CONNECTION_EVENT = ListenerKey.CONNECTION
@@ -507,51 +505,50 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
     }
   }, [])
 
-  const handleOnChange = (e:any, i:number) => {
+  const handleOnChange = (e: any, i: number) => {
     setNewMessage([
-      ...newMessage.map((message:any, z:number) => {
+      ...newMessage.map((message: any, z: number) => {
         if (z === i) {
-          return e.target.value
+          return e.target.value;
         }
-        return message
+        return message;
       })
-    ])
-  }
+    ]);
+  };
 
   const handleStart = async () => {
     setState("starting");
     try {
       const status = await props.agent.start();
-      const mediator = props.agent.currentMediatorDID
+      const mediator = props.agent.currentMediatorDID;
       if (!mediator) {
-        throw new Error("Mediator not available")
+        throw new Error("Mediator not available");
       }
       const secondaryDID = await props.agent.createNewPeerDID(
         [],
         true
       );
       const testMessage = new BasicMessage(
-        { content: "Test Message" },
-        secondaryDID,
-        secondaryDID
+          {content: "Test Message"},
+          secondaryDID,
+          secondaryDID
       ).makeMessage();
       try {
         await props.agent.sendMessage(testMessage);
       } catch (err) {
-        console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.")
+        console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.");
       }
       setState(status);
-    }
-    catch (e) {
+    } catch (e) {
       setError(e);
       setState("failed");
       throw e;
     }
-  }
+  };
 
   const handleSend = async (responseMessageIndex: number) => {
     const text = newMessage[responseMessageIndex];
-    setNewMessage(newMessage.map((message: any, i:number) => (i === responseMessageIndex) ? "": message))
+    setNewMessage(newMessage.map((message: any, i: number) => (i === responseMessageIndex) ? "" : message));
     const message = messages[responseMessageIndex];
     // ok for demo
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -569,7 +566,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
     setState("stopping");
     await props.agent.stop();
     setState("stopped");
-  }
+  };
 
   return (
     <Box>
@@ -606,14 +603,14 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
         )}
       </div>
 
-      {error instanceof Error && (
-        <pre>
+        {error instanceof Error && (
+            <pre>
           Error: {error.message}
         </pre>
-      )}
-    </Box>
+        )}
+      </Box>
   );
-}
+};
 
 const useSDK = () => {
   const pluto = new Pluto({
@@ -643,8 +640,8 @@ const useSDK = () => {
     seed.seed
   );
 
-  return { agent, pluto };
-}
+  return {agent, pluto};
+};
 
 function App() {
   const sdk = useSDK();

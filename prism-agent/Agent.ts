@@ -32,7 +32,6 @@ import { AgentInvitations } from "./Agent.Invitations";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "./protocols/issueCredential/RequestCredential";
-import { default as PolluxType } from "../domain/buildingBlocks/Pollux";
 import Pollux from "../pollux/Pollux";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import { Presentation } from "./protocols/proofPresentation/Presentation";
@@ -52,9 +51,6 @@ export default class Agent
     AgentInvitationsClass
 {
   public state: AgentState = AgentState.STOPPED;
-  public get currentMediatorDID() {
-    return this.mediationHandler.mediator?.mediatorDID;
-  }
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
@@ -111,6 +107,10 @@ export default class Agent
       this.agentDIDHigherFunctions,
       this.connectionManager
     );
+  }
+
+  public get currentMediatorDID() {
+    return this.mediationHandler.mediator?.mediatorDID;
   }
 
   static instanceFromConnectionManager(
