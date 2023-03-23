@@ -17,4 +17,5 @@ export * from "./Mediator";
 export * from "./Api";
 export * from "./WordList";
 export * from "./VerifiableCredential";
+export * from "./JWTVerifiableCredential";
 export type JsonString = string;

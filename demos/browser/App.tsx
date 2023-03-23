@@ -469,7 +469,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
     setNewMessage(joinedMessages.map(() => ""))
     const credentialOffers = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
     const issuedCredentials = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/issue-credential");
-    debugger;
+
     if (credentialOffers.length) {
       for(const credentialOfferMessage of credentialOffers) {
         const credentialOffer = OfferCredential.fromMessage(credentialOfferMessage);

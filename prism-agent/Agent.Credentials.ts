@@ -47,8 +47,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       Buffer.from(jwtData).toString()
     );
 
-    console.log(credential);
-
     await this.pluto.storeCredential(credential);
 
     return credential;
@@ -66,6 +64,14 @@ export class AgentCredentials implements AgentCredentialsClass {
       this.seed
     );
     const did = await this.castor.createPrismDID(keyPair.publicKey);
+
+    await this.pluto.storePrismDID(
+      did,
+      keyIndex,
+      keyPair.privateKey,
+      `offer${offer.id}`
+    );
+
     const attachment = offer.attachments.reduce(
       (_, attachment: any) => ({
         challenge: attachment.data.data.options.challenge,

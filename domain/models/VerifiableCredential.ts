@@ -1,37 +1,38 @@
-import { JsonString } from "."
-import { DID } from "./DID"
-
+import { JsonString } from ".";
+import { DID } from "./DID";
 
 export enum CredentialType {
   JWT = "jwt",
   W3C = "w3c",
-  Unknown = "Unknown"
+  Unknown = "Unknown",
 }
 
+export interface CredentialSubject {
+  [name: string]: string;
+}
 
-export class VerifiableCredentialTypeContainer {
-  constructor(
-    public readonly id: string,
-    public readonly type: string
-  ) { }
+export interface VerifiableCredentialTypeContainer {
+  id: string;
+  type: string;
 }
 
 export interface VerifiableCredential {
-  readonly id?: string
-  readonly credentialType: CredentialType
-  readonly context: Array<string>
-  readonly type: Array<string>
-  readonly credentialSchema?: VerifiableCredentialTypeContainer
-  readonly credentialSubject: string
-  readonly credentialStatus?: VerifiableCredentialTypeContainer
-  readonly refreshService: VerifiableCredentialTypeContainer
-  readonly evidence: VerifiableCredentialTypeContainer
-  readonly termsOfUse: VerifiableCredentialTypeContainer
-  readonly issuer: DID
-  readonly issuanceDate: string
-  readonly expirationDate: string
-  readonly validFrom: VerifiableCredentialTypeContainer
-  readonly validUntil: VerifiableCredentialTypeContainer
-  readonly proof?: JsonString
-  readonly aud: Array<string>
+  id?: string;
+  credentialType: CredentialType;
+  context: Array<string>;
+  type: Array<string>;
+  credentialSchema?: VerifiableCredentialTypeContainer;
+  credentialSubject: CredentialSubject;
+  credentialStatus?: VerifiableCredentialTypeContainer;
+  refreshService: VerifiableCredentialTypeContainer;
+  evidence: VerifiableCredentialTypeContainer;
+  subject?: DID;
+  termsOfUse: VerifiableCredentialTypeContainer;
+  issuer: DID;
+  issuanceDate: number;
+  expirationDate?: number;
+  validFrom?: VerifiableCredentialTypeContainer;
+  validUntil?: VerifiableCredentialTypeContainer;
+  proof?: JsonString;
+  aud: Array<string>;
 }
