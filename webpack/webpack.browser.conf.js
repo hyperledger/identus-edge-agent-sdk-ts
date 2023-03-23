@@ -43,7 +43,7 @@ module.exports = (env, argv) => {
         <head>
           <meta charset="utf-8">
           <title>Webpack test</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1"><script defer src="index.js"></script></head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"></head>
         <body>
         <div id="root"></div>
         </body>
@@ -56,6 +56,13 @@ module.exports = (env, argv) => {
     if (isProduction) {
         // Important: disable mangle, so it does not break Pluto's insert queries 🙂
         minimizer.push(new TerserPlugin({extractComments: true, terserOptions: {mangle: false}}));
+    }
+
+    const conditionalOutputProps = isProduction ? {
+        chunkFormat: "commonjs",
+        filename: "index.js",
+    } : {
+        filename: "[hash].module.js"
     }
 
     return {
@@ -76,7 +83,7 @@ module.exports = (env, argv) => {
             port: 9000,
         },
         output: {
-            filename: "index.js",
+            ...conditionalOutputProps,
             libraryTarget: "umd",
             library: "prism",
             path: path.resolve(
@@ -85,7 +92,6 @@ module.exports = (env, argv) => {
             ),
             publicPath: "/",
             webassemblyModuleFilename: "index_bg.module.wasm",
-            chunkFormat: "commonjs",
         },
         optimization: {
             // splitChunks: {

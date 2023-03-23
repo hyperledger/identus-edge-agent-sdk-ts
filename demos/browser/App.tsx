@@ -21,7 +21,6 @@ import {BasicMessage} from "../../prism-agent/protocols/other/BasicMessage";
 const mediatorDID = SDK.Domain.DID.fromString(
     "did:peer:2.Ez6LScuuNiWo8rwnpYy5dXbq7JnVDv6yCgsAz6viRUWCUbCJk.Vz6MkfzL1tPPvpXioYDwuGQRdpATV1qb4x7mKmcXyhCmLcUGK.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLmpyaWJvLmtpd2kiLCJhIjpbImRpZGNvbW0vdjIiXX0"
 );
-
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const api = new SDK.ApiImpl();
