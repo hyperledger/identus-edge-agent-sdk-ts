@@ -20,6 +20,11 @@ export class InvalidPickupDeliveryMessageError extends Error {
     super("Invalid Pickup message type received");
   }
 }
+export class OfferDoesntProvideEnoughInformation extends Error {
+  constructor() {
+    super("Offer does not provide enough information");
+  }
+}
 export class InvalidOfferCredentialMessageError extends Error {}
 
 export class InvalidProposedCredentialMessageError extends Error {}

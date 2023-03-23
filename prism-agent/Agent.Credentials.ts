@@ -2,6 +2,7 @@ import { JWT } from "../apollo/utils/jwt/JWT";
 import {
   AttachmentBase64,
   AttachmentDescriptor,
+  AttachmentJsonData,
   Curve,
   DID,
   Seed,
@@ -19,6 +20,9 @@ import { AgentCredentials as AgentCredentialsClass } from "./types";
 import { base64, base64url } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import Pollux from "../domain/buildingBlocks/Pollux";
+import { Presentation } from "./protocols/proofPresentation/Presentation";
+import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
+import { AgentError } from "../domain/models/Errors";
 export class AgentCredentials implements AgentCredentialsClass {
   constructor(
     protected apollo: Apollo,
@@ -46,12 +50,24 @@ export class AgentCredentials implements AgentCredentialsClass {
     const credential = this.pollux.parseVerifiableCredential(
       Buffer.from(jwtData).toString()
     );
-
+    debugger;
     await this.pluto.storeCredential(credential);
-
+    debugger;
     return credential;
   }
 
+  private extractDomainChallenge(attachments: AttachmentDescriptor[]) {
+    return attachments.reduce(
+      (_, attachment: any) => ({
+        challenge: attachment?.data?.data?.options?.challenge,
+        domain: attachment?.data?.data?.options?.domain,
+      }),
+      { challenge: undefined, domain: undefined } as {
+        challenge?: string;
+        domain?: string;
+      }
+    );
+  }
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
@@ -64,24 +80,17 @@ export class AgentCredentials implements AgentCredentialsClass {
       this.seed
     );
     const did = await this.castor.createPrismDID(keyPair.publicKey);
-
+    debugger;
     await this.pluto.storePrismDID(
       did,
       keyIndex,
       keyPair.privateKey,
-      `offer${offer.id}`
+      null,
+      did.toString()
     );
+    debugger;
+    const attachment = this.extractDomainChallenge(offer.attachments);
 
-    const attachment = offer.attachments.reduce(
-      (_, attachment: any) => ({
-        challenge: attachment.data.data.options.challenge,
-        domain: attachment.data.data.options.domain,
-      }),
-      { challenge: undefined, domain: undefined } as {
-        challenge?: string;
-        domain?: string;
-      }
-    );
     const jwt = new JWT(this.castor);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const challenge = attachment.challenge!;
@@ -121,5 +130,38 @@ export class AgentCredentials implements AgentCredentialsClass {
       thid
     );
     return requestCredential;
+  }
+
+  async createPresentationForRequestProof(
+    request: RequestPresentation,
+    credential: VerifiableCredential
+  ): Promise<Presentation> {
+    const requestData = request.attachments.find(
+      (attachment) =>
+        attachment &&
+        attachment.data &&
+        (attachment.data as AttachmentJsonData).data
+    );
+    debugger;
+    if (!requestData) {
+      throw new AgentError.OfferDoesntProvideEnoughInformation();
+    }
+    //TODO: Improve attributes in Request & AttachmentData
+    const data = requestData.data as any;
+    const jsonObject = data.data;
+
+    const options = jsonObject.options;
+
+    const challenge = options.challenge;
+    const domain = options.domain;
+    debugger;
+    const subjectDID = credential.subject;
+    if (!subjectDID) {
+      throw new Error("Credential subject not found");
+    }
+
+    const prismPrivateKey = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+    debugger;
+    throw new Error("Not implemented");
   }
 }

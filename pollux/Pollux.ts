@@ -34,9 +34,9 @@ export default class Pollux implements PolluxInterface {
     const jsonString = Buffer.from(base64Data).toString();
 
     const dataValue = JSON.parse(jsonString);
-    debugger;
+
     const jwtCredential = new JWTCredential(jwtString, dataValue);
-    debugger;
+
     return jwtCredential.makeVerifiableCredential();
   }
 

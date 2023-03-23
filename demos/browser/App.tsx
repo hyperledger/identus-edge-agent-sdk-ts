@@ -24,6 +24,7 @@ import { OfferCredential } from "../../prism-agent/protocols/issueCredential/Off
 import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
 import { JWT } from "../../apollo/utils/jwt/JWT";
 import { IssueCredential } from "../../prism-agent/protocols/issueCredential/IssueCredential";
+import { RequestPresentation } from "../../prism-agent/protocols/proofPresentation/RequestPresentation";
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
@@ -463,13 +464,22 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
 
   const handleMessages = async (messages:SDK.Domain.Message[]) => {
     
-    const filteredMessages = messages.filter((message) => message.piuri !== "https://didcomm.org/issue-credential/2.0/issue-credential" && message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
+    const filteredMessages = messages.filter((message) => message.piuri !== "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation" &&  message.piuri !== "https://didcomm.org/issue-credential/2.0/issue-credential" && message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
     const joinedMessages = [...messages, ...filteredMessages];
     setMessages(joinedMessages)
     setNewMessage(joinedMessages.map(() => ""))
     const credentialOffers = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
     const issuedCredentials = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/issue-credential");
+    const requestPresentations = messages.filter((message) => message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation");
 
+    if (requestPresentations.length) {
+      for(const requestPresentation of requestPresentations) {
+        const lastCredential = await props.pluto.getAllCredentials();
+        const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
+        const presentation = await props.agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential[lastCredential.length-1])
+        debugger;
+      }
+    }
     if (credentialOffers.length) {
       for(const credentialOfferMessage of credentialOffers) {
         const credentialOffer = OfferCredential.fromMessage(credentialOfferMessage);
@@ -481,13 +491,13 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
         }
       }
     }
-    if (issuedCredentials) {
+    if (issuedCredentials.length) {
       for(const issuedCredential of issuedCredentials) {
         const issueCredential = IssueCredential.fromMessage(issuedCredential);
-        const credential = await props.agent.processIssuedCredentialMessage(issueCredential)
-        debugger;
+        await props.agent.processIssuedCredentialMessage(issueCredential);
       }
     }
+
   }
 
   useEffect(() => {

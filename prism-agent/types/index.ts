@@ -15,7 +15,8 @@ import { CancellableTask } from "../helpers/Task";
 import { OfferCredential } from "../protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../protocols/issueCredential/RequestCredential";
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
-
+import { RequestPresentation } from "../protocols/proofPresentation/RequestPresentation";
+import { Presentation } from "../protocols/proofPresentation/Presentation";
 interface InvitationInterface {
   type: InvitationTypes;
   from?: DID;
@@ -50,6 +51,10 @@ export interface AgentCredentials {
   processIssuedCredentialMessage(
     message: IssueCredential
   ): Promise<VerifiableCredential>;
+  createPresentationForRequestProof(
+    request: RequestPresentation,
+    credential: VerifiableCredential
+  ): Promise<Presentation>;
 }
 
 export interface AgentDIDHigherFunctions {

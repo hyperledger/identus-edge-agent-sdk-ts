@@ -35,6 +35,8 @@ import { RequestCredential } from "./protocols/issueCredential/RequestCredential
 import { default as PolluxType } from "../domain/buildingBlocks/Pollux";
 import Pollux from "../pollux/Pollux";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
+import { Presentation } from "./protocols/proofPresentation/Presentation";
+import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -247,5 +249,15 @@ export default class Agent
     message: IssueCredential
   ): Promise<VerifiableCredential> {
     return this.agentCredentials.processIssuedCredentialMessage(message);
+  }
+
+  async createPresentationForRequestProof(
+    request: RequestPresentation,
+    credential: VerifiableCredential
+  ): Promise<Presentation> {
+    return this.agentCredentials.createPresentationForRequestProof(
+      request,
+      credential
+    );
   }
 }
