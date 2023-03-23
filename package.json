@@ -8,15 +8,12 @@
   "scripts": {
     "build": "npm run build:browser && npm run build:node && npm run types",
     "types": "rm -rf build/typings && tsc",
-    "postinstall": "npm run cleanup-typeorm:1 && npm run cleanup-typeorm:2 && npm run cleanup-typeorm:3",
+    "postinstall": "./scripts/typeorm-cleanup.sh",
     "build:browser": "webpack --mode=production --config webpack/webpack.browser.conf.js",
     "build:node": "webpack --mode=production --config webpack/webpack.node.conf.js",
     "dev:browser": "rm -rf build && npm run types && webpack serve --mode=development --config webpack/webpack.browser.conf.js",
     "dev:node": "rm -rf build && npm run types && webpack  --watch --mode=development --config webpack/webpack.node.conf.js",
     "test": "jest",
-    "cleanup-typeorm:1": "node ./node_modules/replace/bin/replace.js 'import { ReactNativeDriver } from \"./react-native/ReactNativeDriver\";' '' node_modules/typeorm/browser/driver/DriverFactory.js",
-    "cleanup-typeorm:2": "node ./node_modules/replace/bin/replace.js 'case \"react-native\":' '' node_modules/typeorm/browser/driver/DriverFactory.js",
-    "cleanup-typeorm:3": "node ./node_modules/replace/bin/replace.js 'return new ReactNativeDriver\\(connection\\);' '' node_modules/typeorm/browser/driver/DriverFactory.js",
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint ."
   },
