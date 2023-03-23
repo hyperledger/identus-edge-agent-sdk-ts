@@ -52,7 +52,6 @@ export default class Pluto implements PlutoInterface {
     const presetSqlJSConfig = connection.type === 'sqljs' ? {
       location: "pluto",
       useLocalForage: true,
-      autoSave: true,
       sqlJsConfig: {
         locateFile: (file: string) => `https://sql.js.org/dist/${file}`
       }
@@ -86,10 +85,11 @@ export default class Pluto implements PlutoInterface {
   }
 
   async start() {
+    if (this.dataSource.isInitialized) {
+      throw new Error("Database is already initialised");
+    }
     try {
-      if (this.dataSource.isInitialized === false) {
-        await this.dataSource.initialize();
-      }
+      await this.dataSource.initialize();
     } catch (error) {
       throw new Error((error as Error).message);
     }
