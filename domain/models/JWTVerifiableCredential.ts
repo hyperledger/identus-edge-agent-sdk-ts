@@ -42,7 +42,7 @@ export class JWTVerifiablePayload implements VerifiableCredential {
   proof?: string | undefined;
 
   constructor(
-    public iss: DID,
+    public iss: string,
     public verifiableCredential: JWTVerifiableCredential,
     public jti: string,
     public nbf: number,
@@ -54,7 +54,8 @@ export class JWTVerifiablePayload implements VerifiableCredential {
     this.context = verifiableCredential.context;
     this.type = verifiableCredential.type;
     this.id = jti;
-    this.issuer = iss;
+
+    this.issuer = DID.fromString(iss);
     if (sub) {
       this.subject = DID.fromString(sub);
     }

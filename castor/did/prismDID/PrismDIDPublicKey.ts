@@ -143,8 +143,8 @@ export class PrismDIDPublicKey {
     const points = key.getCurvePoint();
     const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
       curve: Curve.SECP256K1.toLocaleLowerCase(),
-      x: points.x.coordinate.toBuffer(),
-      y: points.y.coordinate.toBuffer(),
+      x: points.x.bytes(),
+      y: points.y.bytes(),
     });
     const usage = getProtosUsage(this.usage);
     const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({

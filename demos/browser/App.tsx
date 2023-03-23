@@ -23,6 +23,7 @@ import { RequestCredential } from "../../prism-agent/protocols/issueCredential/R
 import { JWT } from "../../apollo/utils/jwt/JWT";
 import { IssueCredential } from "../../prism-agent/protocols/issueCredential/IssueCredential";
 import { RequestPresentation } from "../../prism-agent/protocols/proofPresentation/RequestPresentation";
+import { PrismDIDInfo } from "../../domain/models/PrismDIDInfo";
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
@@ -307,34 +308,6 @@ function Dids() {
 }
 
 
-export function usePluto() {
-  const [pluto, set] = useState<Pluto | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const instance = new Pluto({
-        type: 'sqljs',
-        synchronize: true,
-        location: "pluto",
-        dropSchema: true,
-        // sqlJsConfig: {
-        //   locateFile: (filename: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.2.1/dist/${filename}`
-        // },
-        autoSave: true,
-        useLocalForage: true,
-      });
-      try {
-        await instance.start();
-        console.log("Started pluto");
-        set(instance);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
-  return pluto;
-}
-
 export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
   // const pluto = usePluto();
   const pluto = props.pluto;
@@ -460,22 +433,29 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
   const [newMessage, setNewMessage] = React.useState<any>([]);
   const [messages, setMessages] = React.useState<SDK.Domain.Message[]>([]);
 
-  const handleMessages = async (messages:SDK.Domain.Message[]) => {
+  const handleMessages = async (newMessages:SDK.Domain.Message[]) => {
     
-    const filteredMessages = messages.filter((message) => message.piuri !== "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation" &&  message.piuri !== "https://didcomm.org/issue-credential/2.0/issue-credential" && message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
+    const filteredMessages = newMessages.filter((message) => message.piuri !== "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation" &&  message.piuri !== "https://didcomm.org/issue-credential/2.0/issue-credential" && message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
     const joinedMessages = [...messages, ...filteredMessages];
+
     setMessages(joinedMessages)
     setNewMessage(joinedMessages.map(() => ""))
-    const credentialOffers = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
-    const issuedCredentials = messages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/issue-credential");
-    const requestPresentations = messages.filter((message) => message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation");
+
+    const credentialOffers = newMessages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
+    const issuedCredentials = newMessages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/issue-credential");
+    const requestPresentations = newMessages.filter((message) => message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation");
 
     if (requestPresentations.length) {
       for(const requestPresentation of requestPresentations) {
         const lastCredential = await props.pluto.getAllCredentials();
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
         const presentation = await props.agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential[lastCredential.length-1])
-        debugger;
+        try {
+          debugger;
+          await props.agent.sendMessage(presentation.makeMessage())
+        } catch (err) {
+          console.log("continue after err", err)
+        }
       }
     }
     if (credentialOffers.length) {
@@ -613,7 +593,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
 };
 
 const useSDK = () => {
-  const pluto = new Pluto({
+  const pluto = new SDK.Pluto({
     type: 'sqljs',
     synchronize: true,
     location: "pluto",

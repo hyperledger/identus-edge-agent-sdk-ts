@@ -20,7 +20,10 @@ import { AgentCredentials as AgentCredentialsClass } from "./types";
 import { base64, base64url } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import Pollux from "../domain/buildingBlocks/Pollux";
-import { Presentation } from "./protocols/proofPresentation/Presentation";
+import {
+  createPresentationBody,
+  Presentation,
+} from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
 export class AgentCredentials implements AgentCredentialsClass {
@@ -50,9 +53,9 @@ export class AgentCredentials implements AgentCredentialsClass {
     const credential = this.pollux.parseVerifiableCredential(
       Buffer.from(jwtData).toString()
     );
-    debugger;
+
     await this.pluto.storeCredential(credential);
-    debugger;
+
     return credential;
   }
 
@@ -84,10 +87,14 @@ export class AgentCredentials implements AgentCredentialsClass {
     await this.pluto.storePrismDID(
       did,
       keyIndex,
-      keyPair.privateKey,
+      {
+        keyCurve: keyPair.privateKey.keyCurve,
+        value: Buffer.from(base64url.baseEncode(keyPair.privateKey.value)),
+      },
       null,
       did.toString()
     );
+    console.log("STORING PRisM DID ", did.toString());
     debugger;
     const attachment = this.extractDomainChallenge(offer.attachments);
 
@@ -161,7 +168,57 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
 
     const prismPrivateKey = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+
+    if (!prismPrivateKey || prismPrivateKey.length <= 0) {
+      throw new Error("DID PrivateKeys not found");
+    }
+
+    const jwt = new JWT(this.castor);
+    //TODO: type safe this
+    const originalJWTString = (credential as any).originalJWTString;
+
+    const didInfo = await this.pluto.getDIDInfoByDID(subjectDID);
+    if (!didInfo) {
+      throw new Error("DID not found");
+    }
     debugger;
-    throw new Error("Not implemented");
+
+    const signedJWT = await jwt.sign(
+      didInfo.did,
+      base64url.baseDecode(Buffer.from(prismPrivateKey[0].value).toString()),
+      {
+        iss: didInfo.did.toString(),
+        aud: domain,
+        nonce: challenge,
+        vp: {
+          "@context": ["https://www.w3.org/2018/presentations/v1"],
+          type: ["VerifiablePresentation"],
+          verifiableCredential: [originalJWTString],
+        },
+      }
+    );
+
+    const base64JWT = base64.baseEncode(Buffer.from(signedJWT));
+    const presentationBody = createPresentationBody(
+      request.body.goalCode,
+      request.body.comment
+    );
+
+    const presentation = new Presentation(
+      presentationBody,
+      [
+        new AttachmentDescriptor(
+          {
+            base64: base64JWT,
+          },
+          "prism/jwt"
+        ),
+      ],
+      request.to,
+      request.from,
+      request.thid
+    );
+
+    return presentation;
   }
 }
