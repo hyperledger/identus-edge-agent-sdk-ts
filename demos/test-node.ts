@@ -11,22 +11,10 @@ import { createTestScenario } from "./createTestScenario";
 
   const { seed, agent } = createTestScenario(mediatorDID);
 
-  // agent.onMessage((messages) => {
-  //   console.log(messages);
-  // });
-
   await agent.start();
   console.log(
     `Welcome to PrismEdge Agent, state ${
       agent.state
     } with mnemonics ${seed.mnemonics.join(", ")}`
   );
-  /**
-   * 1. Create a new PEERDID
-   * 2. Create an out of band invitation
-   *
-   * 3. We want to start listening for messages from the event and run some code on the received messaged
-   * 4. We want to parse this out of band message + send the message to agent.acceptDIDCommInvitation
-   *   4.1 This method internally runs some code that is not yet ready fromt he agent, inside the createPeeerDID, the updateMedioatorList.
-   */
 })();
