@@ -11,7 +11,7 @@ describe("PRISMDID CreateTest", () => {
     const castor = new Castor(apollo);
 
     const didExample =
-      "did:prism:9ad7945660ea1ac6b1152544d5b0cd6c9c4e68b0a5d575e6a5ddb22a814d02a1:CssBCsgBEmIKDW1hc3RlcihpbmRleCkQAUJPCglTZWNwMjU2azESIDS5zeYUkLCSAJLI6aLXRTPRxstCLPUEI6TgBrAVCHkwGiDk-ffklrHIFW7pKkT8i-YksXi-XXi5h31czUMaVClcpxJiCg1tYXN0ZXIoaW5kZXgpEARCTwoJU2VjcDI1NmsxEiA0uc3mFJCwkgCSyOmi10Uz0cbLQiz1BCOk4AawFQh5MBog5Pn35JaxyBVu6SpE_IvmJLF4vl14uYd9XM1DGlQpXKc";
+      "did:prism:733e594871d7700d35e6116011a08fc11e88ff9d366d8b5571ffc1aa18d249ea:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIDS5zeYUkLCSAJLI6aLXRTPRxstCLPUEI6TgBrAVCHkwGiDk-ffklrHIFW7pKkT8i-YksXi-XXi5h31czUMaVClcpxJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIDS5zeYUkLCSAJLI6aLXRTPRxstCLPUEI6TgBrAVCHkwGiDk-ffklrHIFW7pKkT8i-YksXi-XXi5h31czUMaVClcpw";
     const resolvedDID = await castor.resolveDID(didExample);
 
     const pubHex =

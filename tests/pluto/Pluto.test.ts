@@ -1,31 +1,37 @@
-import Pluto from '../../pluto/Pluto';
-import {Curve, DID, getKeyCurveByNameAndIndex, PrivateKey} from '../../domain';
-import {expect} from 'chai';
-import {randomUUID} from 'crypto';
-import {MessageDirection} from '../../domain/models/Message';
-import {CredentialType} from '../../domain/models/VerifiableCredential';
+import Pluto from "../../pluto/Pluto";
+import {
+  Curve,
+  DID,
+  getKeyCurveByNameAndIndex,
+  PrivateKey,
+} from "../../domain";
+import { expect } from "chai";
+import { randomUUID } from "crypto";
+import { MessageDirection } from "../../domain/models/Message";
+import { CredentialType } from "../../domain/models/VerifiableCredential";
 
-describe('Pluto tests', () => {
-  it('should start successfully', async function () {
-
+describe("Pluto tests", () => {
+  it("should start successfully", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
+      type: "sqlite",
       dropSchema: true,
       database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
   });
-  it('should store prism DID', async function () {
+  it("should store prism DID", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
+      type: "sqlite",
       dropSchema: true,
       database: "pluto.db",
       logger: "debug",
       synchronize: true,
     });
     await instance.start();
-    const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
+    const did = DID.fromString(
+      "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
+    );
     const keyPathIndex = 0;
     const alias = "Did test";
     const privateKey: PrivateKey = {
@@ -35,11 +41,11 @@ describe('Pluto tests', () => {
     await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
   });
 
-  it('should store message', async function () {
-
+  it("should store message", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -47,7 +53,7 @@ describe('Pluto tests', () => {
     const message = {
       piuri: "test a",
       from: DID.fromString("did:prism:100"),
-      thid: 'test',
+      thid: "test",
       body: "Message",
       createdTime: "2000000",
       ack: ["Some string", "saodkas"],
@@ -57,7 +63,7 @@ describe('Pluto tests', () => {
       to: DID.fromString("did:prism:200"),
       direction: MessageDirection.RECEIVED,
       fromPrior: "sdomasd",
-      extraHeaders: ['askdpaks']
+      extraHeaders: ["askdpaks"],
     };
 
     await instance.storeMessage(message);
@@ -66,10 +72,11 @@ describe('Pluto tests', () => {
     expect(value?.from?.toString()).equal(message.from.toString());
   });
 
-  it('should store messages', async function () {
+  it("should store messages", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -78,7 +85,7 @@ describe('Pluto tests', () => {
     const message = {
       piuri: "test a",
       from: DID.fromString("did:prism:100"),
-      thid: 'test',
+      thid: "test",
       body: "Message",
       createdTime: "2000000",
       ack: ["Some string", "saodkas"],
@@ -88,18 +95,23 @@ describe('Pluto tests', () => {
       to: DID.fromString("did:prism:200"),
       direction: MessageDirection.RECEIVED,
       fromPrior: "sdomasd",
-      extraHeaders: ['askdpaks']
+      extraHeaders: ["askdpaks"],
     };
-    await instance.storeMessages(Array(10).fill("_").map(() => message));
+    await instance.storeMessages(
+      Array(10)
+        .fill("_")
+        .map(() => message)
+    );
     const values = await instance.getAllMessages();
 
     expect(values.length).equals(10);
   });
   //
-  it('should store private keys', async function () {
+  it("should store private keys", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -111,12 +123,11 @@ describe('Pluto tests', () => {
     await instance.storePrivateKeys(privateKey, did, 0, null);
   });
 
-  it('should store mediator', async function () {
-
+  it("should store mediator", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
+      type: "sqlite",
       database: "pluto.db",
-      dropSchema: true
+      dropSchema: true,
     });
     await instance.start();
     const mediator = DID.fromString("did:prism:123");
@@ -126,11 +137,11 @@ describe('Pluto tests', () => {
     await instance.storeMediator(mediator, host, routing);
   });
 
-  it('should store credential', async function () {
-
+  it("should store credential", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -138,53 +149,55 @@ describe('Pluto tests', () => {
       id: "",
       credentialType: CredentialType.JWT,
       context: ["test0", "test1"],
-      type: ['auth'],
+      type: ["auth"],
       credentialSchema: {
         id: randomUUID(),
-        type: "decode_jwt"
+        type: "decode_jwt",
       },
       credentialSubject: "",
       credentialStatus: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       refreshService: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       evidence: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       termsOfUse: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       issuer: DID.fromString("did:prism:123"),
       issuanceDate: new Date().toDateString(),
       expirationDate: new Date().toDateString(),
       validFrom: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       validUntil: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       proof: "",
-      aud: ["test0", 'test1'],
+      aud: ["test0", "test1"],
     });
   });
 
-  it('should get all prism DIDs', async function () {
-
+  it("should get all prism DIDs", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
-    const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
+    const did = DID.fromString(
+      "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
+    );
     const keyPathIndex = 0;
     const alias = "Did test";
 
@@ -199,15 +212,17 @@ describe('Pluto tests', () => {
     expect(dids).not.empty;
   });
 
-  it('should get DID info by DID', async function () {
-
+  it("should get DID info by DID", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
-    const did = DID.fromString("did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx");
+    const did = DID.fromString(
+      "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
+    );
     const keyPathIndex = 0;
     const alias = "Did test";
 
@@ -223,11 +238,11 @@ describe('Pluto tests', () => {
     expect(result?.did.toString()).equals(did.toString());
   });
 
-  it('should get DID info by alias', async function () {
-
+  it("should get DID info by alias", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -242,14 +257,14 @@ describe('Pluto tests', () => {
     await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
     const result = await instance.getDIDInfoByAlias(alias);
-    expect(!!result.find(item => item.alias === alias)).true;
+    expect(!!result.find((item) => item.alias === alias)).true;
   });
 
-  it('should get prism DID key path index', async function () {
-
+  it("should get prism DID key path index", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -268,11 +283,11 @@ describe('Pluto tests', () => {
     expect(result).equals(keyPathIndex);
   });
 
-  it('should get prism last key path index', async function () {
-
+  it("should get prism last key path index", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -290,11 +305,11 @@ describe('Pluto tests', () => {
     expect(result).equals(keyPathIndex);
   });
   //
-  it('should get all peer DIDs', async function () {
-
+  it("should get all peer DIDs", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -317,7 +332,13 @@ describe('Pluto tests', () => {
       keyCurve: getKeyCurveByNameAndIndex(Curve.SECP256K1),
     };
 
-    await instance.storePrismDID(prismDid, keyPathIndex, prismPrivateKey, null, alias);
+    await instance.storePrismDID(
+      prismDid,
+      keyPathIndex,
+      prismPrivateKey,
+      null,
+      alias
+    );
 
     await instance.storePeerDID(peerDid, [privateKey1, privateKey2]);
     const dids = await instance.getAllPeerDIDs();
@@ -325,11 +346,11 @@ describe('Pluto tests', () => {
     expect(dids[0].privateKeys.length).equals(2);
   });
 
-  it('should get DID private keys by DID', async function () {
-
+  it("should get DID private keys by DID", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     const peerDid = DID.fromString("did:peer:3i21d");
@@ -341,14 +362,19 @@ describe('Pluto tests', () => {
 
     await instance.storePeerDID(peerDid, [privateKey]);
     const result = await instance.getDIDPrivateKeysByDID(peerDid);
-    expect(!!result?.find(item => item.value.toString() === privateKey.value.toString())).true;
+    expect(
+      !!result?.find(
+        (item) => item.value.toString() === privateKey.value.toString()
+      )
+    ).true;
   });
   //
-  it('should get DID private key by ID', async function () {
+  it("should get DID private key by ID", async function () {
     const id = randomUUID();
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -363,11 +389,11 @@ describe('Pluto tests', () => {
     expect(data?.value.toString()).equals(privateKey.value.toString());
   });
 
-  it('should get all did pairs', async function () {
-
+  it("should get all did pairs", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -388,11 +414,11 @@ describe('Pluto tests', () => {
     expect(dids).not.empty;
   });
 
-  it('should get pair by DID', async function () {
-
+  it("should get pair by DID", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -415,11 +441,11 @@ describe('Pluto tests', () => {
     expect(data?.host.toString()).equals(host.toString());
   });
 
-  it('should get pair by name', async function () {
-
+  it("should get pair by name", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -441,10 +467,11 @@ describe('Pluto tests', () => {
     expect(data?.name).equals(name);
   });
   //
-  it('should get all messages', async function () {
+  it("should get all messages", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -460,17 +487,18 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     });
     const messages = await instance.getAllMessages();
     expect(messages).not.empty;
   });
 
-  it('should get all messages by DID', async function () {
+  it("should get all messages by DID", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -486,7 +514,7 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     };
     await instance.storeMessage(message);
@@ -494,10 +522,11 @@ describe('Pluto tests', () => {
     expect(messages).not.empty;
   });
 
-  it('should get all messages sent', async function () {
+  it("should get all messages sent", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -513,7 +542,7 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     };
     await instance.storeMessage(message);
@@ -521,11 +550,11 @@ describe('Pluto tests', () => {
     expect(messages).not.empty;
   });
   //
-  it('should get all messages received', async function () {
-
+  it("should get all messages received", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -541,7 +570,7 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     };
     await instance.storeMessage(message);
@@ -549,11 +578,11 @@ describe('Pluto tests', () => {
     expect(messages).not.empty;
   });
   //
-  it('should get all messages sent to', async function () {
-
+  it("should get all messages sent to", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     const to = DID.fromString("did:prism:123");
@@ -571,19 +600,18 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     });
     const messages = await instance.getAllMessagesSentTo(to);
     expect(messages).not.empty;
   });
   //
-  it('should get all messages received from', async function () {
-
-
+  it("should get all messages received from", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     const to = DID.fromString("did:prism:123");
@@ -601,18 +629,18 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     });
     const messages = await instance.getAllMessagesReceivedFrom(from);
     expect(messages).not.empty;
   });
   //
-  it('should get all messages of type', async function () {
-
+  it("should get all messages of type", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     const to = DID.fromString("did:prism:123");
@@ -630,7 +658,7 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "type-example",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     };
     await instance.storeMessage(message);
@@ -638,11 +666,11 @@ describe('Pluto tests', () => {
     expect(messages).not.empty;
   });
   //
-  it('should get all messages by from to DID', async function () {
-
+  it("should get all messages by from to DID", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     const to = DID.fromString("did:prism:123");
@@ -661,20 +689,23 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "type-example",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     };
     await instance.storeMessage(message);
-    const result = await instance.getAllMessagesByFromToDID(message.from, message.to);
+    const result = await instance.getAllMessagesByFromToDID(
+      message.from,
+      message.to
+    );
 
     expect(result[0].body).equal(message.body);
   });
 
-  it('should get message', async function () {
-
+  it("should get message", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     const to = DID.fromString("did:prism:123");
@@ -693,7 +724,7 @@ describe('Pluto tests', () => {
       createdTime: new Date().toDateString(),
       attachments: [],
       piuri: "type-example",
-      extraHeaders: ['x-extra-header'],
+      extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toString(),
     };
     await instance.storeMessage(message);
@@ -703,12 +734,11 @@ describe('Pluto tests', () => {
     expect(result?.body).equal(message.body);
   });
   //
-  it('should get all mediators', async function () {
-
-
+  it("should get all mediators", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -728,9 +758,21 @@ describe('Pluto tests', () => {
       value: Buffer.from("routing test"),
       keyCurve: getKeyCurveByNameAndIndex(Curve.X25519),
     };
-    await instance.storePrismDID(mediator, 10, mediatorPrivateKey, null, "Mediator");
+    await instance.storePrismDID(
+      mediator,
+      10,
+      mediatorPrivateKey,
+      null,
+      "Mediator"
+    );
     await instance.storePrismDID(host, 11, hostPrivateKey, null, "Host");
-    await instance.storePrismDID(routing, 12, routingPrivateKey, null, "Routing");
+    await instance.storePrismDID(
+      routing,
+      12,
+      routingPrivateKey,
+      null,
+      "Routing"
+    );
 
     await instance.storeMediator(mediator, host, routing);
 
@@ -738,12 +780,11 @@ describe('Pluto tests', () => {
     expect(data).not.empty;
   });
 
-  it('should get all credentials', async function () {
-
-
+  it("should get all credentials", async function () {
     const instance = new Pluto({
-      type: 'sqlite',
-      dropSchema: true, database: "pluto.db",
+      type: "sqlite",
+      dropSchema: true,
+      database: "pluto.db",
       synchronize: true,
     });
     await instance.start();
@@ -752,41 +793,44 @@ describe('Pluto tests', () => {
       id: "",
       credentialType: CredentialType.JWT,
       context: ["test0", "test1"],
-      type: ['auth'],
+      type: ["auth"],
       credentialSchema: {
         id: randomUUID(),
-        type: "decode_jwt"
+        type: "decode_jwt",
       }, // Question: Naming looks odd, I guess credentialSchema? .
-      credentialSubject: "",
+      credentialSubject: {
+        test: "yes",
+      },
       credentialStatus: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       refreshService: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       evidence: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       termsOfUse: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       issuer: DID.fromString("did:prism:123"),
-      issuanceDate: new Date().toDateString(),
-      expirationDate: new Date().toDateString(),
+      subject: DID.fromString("did:prism:123"),
+      issuanceDate: 1234345,
+      expirationDate: 45321,
       validFrom: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       validUntil: {
         id: randomUUID(),
-        type: "test"
+        type: "test",
       },
       proof: "",
-      aud: ["test0", 'test1'],
+      aud: ["test0", "test1"],
     });
 
     const data = await instance.getAllCredentials();
