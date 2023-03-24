@@ -26,7 +26,7 @@ describe("OfferCredential", () => {
         },
         [
           {
-            attachId: "test1",
+            attach_id: "test1",
             format: "test",
           },
         ]

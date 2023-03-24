@@ -16,7 +16,7 @@ describe("IssueCredential", () => {
     const validIssueCredential = new IssueCredential(
       createIssueCredentialBody([
         {
-          attachId: "test1",
+          attach_id: "test1",
           format: "test",
         },
       ]),
@@ -67,7 +67,7 @@ describe("IssueCredential", () => {
     const validRequestCredential = new RequestCredential(
       createIssueCredentialBody([
         {
-          attachId: "test1",
+          attach_id: "test1",
           format: "test",
         },
       ]),
@@ -83,8 +83,8 @@ describe("IssueCredential", () => {
     expect(validRequestCredential.from.toString()).to.equal(
       testIssueCredential.to.toString()
     );
-    expect(validRequestCredential.to.toString()).to.equal(
-      testIssueCredential.from.toString()
+    expect(validRequestCredential.to?.toString()).to.equal(
+      testIssueCredential.from?.toString()
     );
     expect(validRequestCredential.attachments).to.deep.equal(
       testIssueCredential.attachments
