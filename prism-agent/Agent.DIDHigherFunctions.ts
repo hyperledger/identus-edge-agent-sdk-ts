@@ -5,8 +5,6 @@ import {
   Service,
   ServiceEndpoint,
   Signature,
-  VerificationMethod as DIDDocumentVerificationMethod,
-  VerificationMethods as DIDDocumentVerificationMethods,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";

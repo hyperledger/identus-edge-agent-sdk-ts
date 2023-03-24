@@ -4,7 +4,6 @@ import axios, {
   RawAxiosRequestHeaders,
   AxiosError,
 } from "axios";
-import { ApiError } from "../../domain/models/Errors";
 import { Api, HttpResponse } from "../../domain/models/Api";
 import { HttpError } from "./HttpError";
 

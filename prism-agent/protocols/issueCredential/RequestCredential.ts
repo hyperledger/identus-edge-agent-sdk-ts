@@ -5,7 +5,6 @@ import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
 import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
-import { OfferCredential } from "./OfferCredential";
 import { CredentialBody } from "../types";
 
 export class RequestCredential {

@@ -6,7 +6,6 @@ import { Api, DID } from "../domain";
 import { MediaType } from "./helpers/MediaType";
 import Castor from "../domain/buildingBlocks/Castor";
 import { ForwardMessage } from "./forward/ForwardMessage";
-import { ProtocolType } from "../prism-agent/protocols/ProtocolTypes";
 
 export default class Mercury implements MercuryInterface {
   constructor(

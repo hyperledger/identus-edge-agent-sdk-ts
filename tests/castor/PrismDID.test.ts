@@ -1,12 +1,6 @@
 import { expect } from "chai";
 import { base58btc } from "multiformats/bases/base58";
-import {
-  Curve,
-  DID,
-  KeyPair,
-  VerificationMethod,
-  VerificationMethods,
-} from "../../domain";
+import { Curve, VerificationMethods } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import { ECConfig } from "../../config/ECConfig";

@@ -4,7 +4,6 @@ import {
   AttachmentDescriptor,
   AttachmentJsonData,
   Curve,
-  DID,
   Seed,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
@@ -83,7 +82,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       this.seed
     );
     const did = await this.castor.createPrismDID(keyPair.publicKey);
-    debugger;
+
     await this.pluto.storePrismDID(
       did,
       keyIndex,
@@ -94,8 +93,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       null,
       did.toString()
     );
-    console.log("STORING PRisM DID ", did.toString());
-    debugger;
     const attachment = this.extractDomainChallenge(offer.attachments);
 
     const jwt = new JWT(this.castor);
@@ -149,7 +146,6 @@ export class AgentCredentials implements AgentCredentialsClass {
         attachment.data &&
         (attachment.data as AttachmentJsonData).data
     );
-    debugger;
     if (!requestData) {
       throw new AgentError.OfferDoesntProvideEnoughInformation();
     }
@@ -161,7 +157,6 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const challenge = options.challenge;
     const domain = options.domain;
-    debugger;
     const subjectDID = credential.subject;
     if (!subjectDID) {
       throw new Error("Credential subject not found");
@@ -181,7 +176,6 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (!didInfo) {
       throw new Error("DID not found");
     }
-    debugger;
 
     const signedJWT = await jwt.sign(
       didInfo.did,

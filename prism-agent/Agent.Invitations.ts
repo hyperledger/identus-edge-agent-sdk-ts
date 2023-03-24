@@ -7,9 +7,7 @@ import {
 } from "./types";
 import {
   Service as DIDDocumentService,
-  Service,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
-  ServiceEndpoint,
 } from "../domain";
 import { AgentError } from "../domain/models/Errors";
 import {

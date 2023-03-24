@@ -25,12 +25,12 @@ describe("Mercury DIDComm SecretsResolver", () => {
       Apollo,
       "createKeyPairFromPrivateKey" | "getPrivateJWKJson"
     > = {
-      createKeyPairFromPrivateKey: (privateKey, seed) => ({
+      createKeyPairFromPrivateKey: (privateKey) => ({
         keyCurve: privateKey.keyCurve,
         privateKey,
         publicKey: privateKey,
       }),
-      getPrivateJWKJson: (id, keyPair) => `${id}`,
+      getPrivateJWKJson: (id) => `${id}`,
     };
 
     const castor: Pick<Castor, "getEcnumbasis" | "resolveDID"> = {

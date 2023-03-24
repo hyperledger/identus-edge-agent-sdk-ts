@@ -1,10 +1,4 @@
-import {
-  CredentialType,
-  DID,
-  JWTVerifiablePayload,
-  VerifiableCredential,
-} from "../../domain";
-import { InvalidCredentialError } from "../../domain/models/errors/Pollux";
+import { JWTVerifiablePayload, VerifiableCredential } from "../../domain";
 
 export class JWTCredential {
   private jwtVerifiableCredential: JWTVerifiablePayload;

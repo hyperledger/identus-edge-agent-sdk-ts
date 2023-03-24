@@ -3,8 +3,6 @@ import { uuid } from "@stablelib/uuid";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
-import { CredentialFormat } from "../issueCredential/CredentialFormat";
-import { CredentialPreview } from "../issueCredential/CredentialPreview";
 import { ProtocolType } from "../ProtocolTypes";
 import { RequestPresentationBody } from "../types";
 import { ProposePresentation } from "./ProposePresentation";

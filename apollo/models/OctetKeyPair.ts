@@ -1,4 +1,3 @@
-import { curve } from "elliptic";
 import { KeyPair } from "../../domain";
 
 interface PublicJson {

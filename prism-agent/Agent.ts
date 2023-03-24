@@ -4,7 +4,6 @@ import {
   Message,
   Seed,
   Service as DIDDocumentService,
-  ServiceEndpoint as DIDDocumentServiceEndpoint,
   Signature,
 } from "../domain";
 import Castor from "../domain/buildingBlocks/Castor";

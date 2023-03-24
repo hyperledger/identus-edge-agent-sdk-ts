@@ -1,15 +1,7 @@
 import Castor from "../domain/buildingBlocks/Castor";
 import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
-import { DID, PrivateKey } from "../domain";
-import {
-  InvalidCredentialError,
-  InvalidJWTString,
-} from "../domain/models/errors/Pollux";
-import {
-  CredentialType,
-  VerifiableCredential,
-  VerifiableCredentialTypeContainer,
-} from "../domain/models/VerifiableCredential";
+import { InvalidJWTString } from "../domain/models/errors/Pollux";
+import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { base64url } from "multiformats/bases/base64";
 
 import { JWTCredential } from "./models/JWTCredential";
@@ -38,15 +30,5 @@ export default class Pollux implements PolluxInterface {
     const jwtCredential = new JWTCredential(jwtString, dataValue);
 
     return jwtCredential.makeVerifiableCredential();
-  }
-
-  async createVerifiablePresentation(
-    did: DID,
-    privateKey: PrivateKey,
-    credential: VerifiableCredential,
-    challenge: string,
-    domain: string
-  ): Promise<string> {
-    throw new Error();
   }
 }

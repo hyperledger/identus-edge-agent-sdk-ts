@@ -86,6 +86,7 @@ export class IssueCredential {
         request.body.comment
       ),
       request.attachments,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       request.to!,
       request.from,
       msg.id

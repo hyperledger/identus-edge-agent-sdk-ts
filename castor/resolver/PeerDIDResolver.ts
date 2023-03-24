@@ -72,10 +72,6 @@ export class PeerDIDResolver implements DIDResolver {
           break;
         case Numalgo2Prefix.service:
           services.push(...this.decodeService(did, part.slice(1)));
-          if (services.length > 1) {
-            debugger;
-          }
-          break;
       }
     });
     return new DIDDocument(did, [
@@ -234,9 +230,6 @@ export class PeerDIDResolver implements DIDResolver {
           )
         );
       });
-      if (didcommServices.length > 1) {
-        debugger;
-      }
       return didcommServices;
     } catch (e) {
       throw new CastorError.NotPossibleToResolveDID();

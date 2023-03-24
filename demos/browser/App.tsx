@@ -1,17 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, {FormEventHandler, useCallback, useEffect, useLayoutEffect, useState} from "react";
+import React, {useCallback, useEffect} from "react";
 import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
-import crypto from 'crypto';
-
 import * as SDK from "../../index";
 import * as Domain from '../../domain';
-import {
-  MnemonicWordList,
-  Service as DIDDocumentService,
-  ServiceEndpoint as DIDDocumentServiceEndpoint
-} from "../../domain";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
@@ -19,11 +12,8 @@ import { Box } from "./Box";
 import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
 import { ListenerKey } from "../../prism-agent/types";
 import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
-import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
-import { JWT } from "../../apollo/utils/jwt/JWT";
 import { IssueCredential } from "../../prism-agent/protocols/issueCredential/IssueCredential";
 import { RequestPresentation } from "../../prism-agent/protocols/proofPresentation/RequestPresentation";
-import { PrismDIDInfo } from "../../domain/models/PrismDIDInfo";
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
@@ -32,7 +22,6 @@ const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const api = new SDK.ApiImpl();
 
-const WebCrypto = crypto;
 
 
 function Mnemonics() {
@@ -172,7 +161,7 @@ function Signatures({keyPair}: { keyPair: Domain.KeyPair }) {
   return (
       <div>
         <button onClick={signData}>Sign</button>
-        <p>Signature of "hello world":</p>
+        <p>Signature of &quot;hello world&quot;:</p>
         <textarea
             value={signatureEncoded}
             onChange={(e) => setSignatureEncoded(e.target.value)}
@@ -307,88 +296,6 @@ function Dids() {
   );
 }
 
-
-export const PlutoApp: React.FC<{ pluto: SDK.Pluto }> = props => {
-  // const pluto = usePluto();
-  const pluto = props.pluto;
-  const [dids, setDids] = useState<PrismDIDInfo[] | null>(null);
-  const [value, setValue] = useState("");
-  const [error, setError] = useState("");
-
-  const createDid = useCallback<FormEventHandler>(async (event) => {
-    event.preventDefault();
-    if (!pluto) {
-      return;
-    }
-    const did = Domain.DID.fromString(value);
-    const keyPathIndex = await pluto.getPrismLastKeyPathIndex();
-    const privateKey: Domain.PrivateKey = {
-      value: Buffer.from(`some value ${Math.random() * 100}`),
-      keyCurve: Domain.getKeyCurveByNameAndIndex(Domain.Curve.X25519, keyPathIndex),
-    };
-    try {
-      await pluto.storePrismDID(did, keyPathIndex + 1, privateKey, null, `alias: ${Math.random() * 100}`);
-
-    } catch (error) {
-      setError((error as Error).message);
-    }
-    const data = await pluto.getAllPrismDIDs();
-    if (!data) {
-      return;
-    }
-
-    setValue("");
-    setError("");
-    setDids(data);
-  }, [pluto, value, setValue]);
-
-  const handleInputChange = useCallback<FormEventHandler<HTMLInputElement>>((event) => {
-    const {value} = event.currentTarget;
-    setValue(value);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!pluto || Array.isArray(dids)) {
-      return;
-    }
-    (async () => {
-
-      // const prismDids = await pluto.getAllPrismDIDs();
-      // setDids(prismDids);
-    })();
-  }, [pluto, dids]);
-
-  return (
-      <Box>
-        <h2>Pluto</h2>
-
-        <button
-            onClick={async () => {
-              console.log("Fetch PrismDIDs");
-              const prismDids = await pluto.getAllPrismDIDs();
-              console.log({prismDids});
-              setDids(prismDids);
-            }}
-        >Fetch DIDs
-        </button>
-        <Spacer/>
-
-        <div className="App">
-          <form onSubmit={createDid}>
-            <input type="text" name="did" onChange={handleInputChange} value={value}/>
-          </form>
-          <button onClick={createDid}>Create DID</button>
-          {error}
-          {
-              dids?.map((item, index) => (
-                  <div key={index}>{item.did.toString()}</div>
-              )) ?? null
-          }
-        </div>
-      </Box>
-  );
-};
-
 const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   const CONNECTION_EVENT = ListenerKey.CONNECTION
   const [connections, setConnections] = React.useState<Array<any>>([]);
@@ -425,8 +332,6 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
 }
 
 const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }> = props => {
-  const jwt = new JWT(castor);
-
   const [state, setState] = React.useState<string>(props.agent.state);
   const [error, setError] = React.useState<any>();
 
@@ -435,7 +340,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
 
   const handleMessages = async (newMessages:SDK.Domain.Message[]) => {
     
-    const filteredMessages = newMessages.filter((message) => message.piuri !== "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation" &&  message.piuri !== "https://didcomm.org/issue-credential/2.0/issue-credential" && message.piuri !== "https://didcomm.org/issue-credential/2.0/offer-credential");
+    const filteredMessages = newMessages;
     const joinedMessages = [...messages, ...filteredMessages];
 
     setMessages(joinedMessages)
@@ -451,7 +356,6 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
         const presentation = await props.agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential[lastCredential.length-1])
         try {
-          debugger;
           await props.agent.sendMessage(presentation.makeMessage())
         } catch (err) {
           console.log("continue after err", err)
@@ -638,7 +542,6 @@ function App() {
       <KeyPair curve={SDK.Domain.Curve.X25519} />
 
       <Dids />
-      <PlutoApp pluto={sdk.pluto} />
       <Spacer />
     </div>
   );

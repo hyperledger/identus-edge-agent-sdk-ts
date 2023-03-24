@@ -262,7 +262,6 @@ export default class Pluto implements PlutoInterface {
       if (!didResponse) {
         return null;
       }
-      debugger;
       return {
         did: DID.fromString(didResponse?.did ?? ""),
         alias: didResponse.alias,
@@ -391,7 +390,6 @@ export default class Pluto implements PlutoInterface {
       const data = await repository.findBy({
         didId: Like(`${didString}%`),
       });
-      debugger;
       return data.map((item) => ({
         keyCurve: getKeyCurveByNameAndIndex(item.curve),
         value: Buffer.from(item.privateKey),

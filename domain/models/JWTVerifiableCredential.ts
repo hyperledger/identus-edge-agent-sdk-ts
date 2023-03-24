@@ -1,4 +1,3 @@
-import { JsonString } from ".";
 import { DID } from "./DID";
 import {
   CredentialSubject,
