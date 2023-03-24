@@ -6,7 +6,8 @@ specific use case, it's up to the application to provide an appropriate
 implementation of this interface.
 
 As part of TypeScript Wallet SDK, Pluto also provides a default implementation
-based on TypeORM and `sql.js` that serves as an example and can be used for
+based on TypeORM supporting various drivers, but on frontend if the type is set to`sqljs`, it will preset
+to use `sqljs` together with `indexedDB`. Pluto serves as an example and can be used for
 prototyping and testing before investing in a more robust use-case specific
 solution. In the future, we might provide one or more implementations which we
 could recommend for production use.
