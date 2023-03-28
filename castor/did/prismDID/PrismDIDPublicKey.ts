@@ -1,6 +1,6 @@
 import { Secp256k1PublicKey } from "../../../apollo/utils/Secp256k1PublicKey";
 import Apollo from "../../../domain/buildingBlocks/Apollo";
-import { CompressedPublicKey, Curve, PublicKey } from "../../../domain/models";
+import { Curve, PublicKey } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 
 import * as Protos from "../../protos/node_models";
@@ -45,21 +45,21 @@ export function getProtosUsage(
 export function getUsageId(index: Usage): string {
   switch (index) {
     case Usage.MASTER_KEY:
-      return "master(index)";
+      return `master${index}`;
     case Usage.ISSUING_KEY:
-      return "issuing(index)";
+      return `issuing${index}`;
     case Usage.KEY_AGREEMENT_KEY:
-      return "agreement(index)";
+      return `agreement${index}`;
     case Usage.AUTHENTICATION_KEY:
-      return "authentication(index)";
+      return `authentication${index}`;
     case Usage.REVOCATION_KEY:
-      return "revocation(index)";
+      return `revocation${index}`;
     case Usage.CAPABILITY_DELEGATION_KEY:
-      return "delegation(index)";
+      return `delegation${index}`;
     case Usage.CAPABILITY_INVOCATION_KEY:
-      return "invocation(index)";
+      return `invocation${index}`;
     default:
-      return "unknown(index)";
+      return `unknown${index}`;
   }
 }
 
@@ -142,7 +142,7 @@ export class PrismDIDPublicKey {
     const key = Secp256k1PublicKey.secp256k1FromBytes(this.keyData.value);
     const points = key.getCurvePoint();
     const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
-      curve: Curve.SECP256K1,
+      curve: Curve.SECP256K1.toLocaleLowerCase(),
       x: points.x.bytes(),
       y: points.y.bytes(),
     });

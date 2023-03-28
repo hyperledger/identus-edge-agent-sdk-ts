@@ -17,12 +17,12 @@ export interface MediationGrantBody {
 }
 
 export interface OfferCredentialBody extends CredentialBody {
-  credentialPreview: CredentialPreview;
+  credential_preview: CredentialPreview;
   replacementId?: string;
   multipleAvailable?: string;
 }
 export interface ProposeCredentialBody extends CredentialBody {
-  credentialPreview: CredentialPreview;
+  credential_preview: CredentialPreview;
 }
 
 export interface ParsedCredentialFormat<T> {

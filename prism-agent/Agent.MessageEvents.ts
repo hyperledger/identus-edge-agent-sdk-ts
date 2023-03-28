@@ -1,7 +1,3 @@
-import { Message } from "../domain";
-import Pluto from "../domain/buildingBlocks/Pluto";
-import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
-import { CancellableTask } from "./helpers/Task";
 import {
   AgentMessageEvents as AgentMessageEventsClass,
   EventCallback,
@@ -9,61 +5,29 @@ import {
 } from "./types";
 
 export class AgentMessageEvents implements AgentMessageEventsClass {
-  private readonly EVENT_KEY = "message";
+  private events: Map<ListenerKey, Set<EventCallback>> = new Map();
 
-  public cancellable?: CancellableTask<void>;
-
-  private events: Map<ListenerKey, EventCallback[]> = new Map();
-
-  constructor(private manager: ConnectionsManager, private pluto: Pluto) {}
-
-  public onMessage(callback: EventCallback): void {
-    if (!this.events.has(this.EVENT_KEY)) {
-      this.events.set(this.EVENT_KEY, []);
+  public addListener(eventName: ListenerKey, callback: EventCallback): number {
+    if (!this.events.has(eventName)) {
+      this.events.set(eventName, new Set());
     }
-    const callbacks = this.events.get(this.EVENT_KEY);
-    if (callbacks) {
-      callbacks.push(callback);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const callbacks = this.events.get(eventName)!;
+    callbacks.add(callback);
+    return callbacks.size - 1;
   }
 
-  public clearListener(callback: EventCallback): void {}
+  public removeListener(eventName: ListenerKey, callback: EventCallback): void {
+    const callbacks = this.events.get(eventName);
+    if (!callbacks) return;
+    callbacks.delete(callback);
+  }
 
-  public emitMessage(messages: Message[]): void {
-    const callbacks = this.events.get(this.EVENT_KEY);
+  public emit(eventName: ListenerKey, data: any): void {
+    const callbacks = this.events.get(eventName);
     if (!callbacks) return;
     for (const callback of callbacks) {
-      callback(messages);
+      callback(data);
     }
-  }
-
-  startFetchingMessages(iterationPeriod: number): void {
-    if (this.cancellable) {
-      return;
-    }
-    const timeInterval = Math.max(iterationPeriod, 5) * 1000;
-    this.cancellable = new CancellableTask(async () => {
-      const unreadMessages = await this.manager.awaitMessages();
-      if (unreadMessages.length) {
-        this.emitMessage(unreadMessages);
-      }
-    }, timeInterval);
-  }
-
-  stopFetchingMessages(): void {
-    this.cancellable?.cancel();
-    this.cancellable = undefined;
-  }
-
-  async handleMessagesEvents(): Promise<Message[]> {
-    return this.pluto.getAllMessages();
-  }
-
-  async handleReceivedMessagesEvents(): Promise<Message[]> {
-    return this.pluto.getAllMessagesReceived();
-  }
-
-  async sendMessage(message: Message): Promise<Message | undefined> {
-    return this.manager.sendMessage(message);
   }
 }

@@ -13,7 +13,7 @@ describe("RequestCredential", () => {
     const fromDID = DIDTest.fromIndex(0);
     const toDID = DIDTest.fromIndex(1);
     const validRequestCredential = new RequestCredential(
-      createRequestCredentialBody([{ attachId: "test1", format: "test" }]),
+      createRequestCredentialBody([{ attach_id: "test1", format: "test" }]),
       [],
       fromDID,
       toDID,

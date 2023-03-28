@@ -78,3 +78,13 @@ export class Presentation {
     );
   }
 }
+
+export function createPresentationBody(
+  goalCode?: string,
+  comment?: string
+): PresentationBody {
+  return {
+    goalCode,
+    comment,
+  };
+}

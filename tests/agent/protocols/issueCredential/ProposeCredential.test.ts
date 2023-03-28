@@ -19,7 +19,7 @@ describe("ProposeCredential", () => {
           type: ProtocolType.DidcommCredentialPreview,
           attributes: [{ name: "test1", value: "test", mimeType: "test.x" }],
         },
-        [{ attachId: "test1", format: "test" }]
+        [{ attach_id: "test1", format: "test" }]
       ),
       [],
       fromDID,

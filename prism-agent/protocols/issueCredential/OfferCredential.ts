@@ -44,7 +44,7 @@ export class OfferCredential {
   ): OfferCredential {
     return new OfferCredential(
       createOfferCredentialBody(
-        proposed.body.credentialPreview,
+        proposed.body.credential_preview,
         proposed.body.formats,
         proposed.body.goalCode,
         proposed.body.comment
@@ -59,8 +59,7 @@ export class OfferCredential {
   static fromMessage(fromMessage: Message): OfferCredential {
     if (
       fromMessage.piuri !== ProtocolType.DidcommOfferCredential ||
-      !fromMessage.from ||
-      !fromMessage.to
+      !fromMessage.from
     ) {
       throw new AgentError.InvalidOfferCredentialMessageError(
         "Invalid offer credential message error."
@@ -74,7 +73,6 @@ export class OfferCredential {
       );
     const fromDID = fromMessage.from;
     const toDID = fromMessage.to;
-
     return new OfferCredential(
       offerCredentialBody,
       fromMessage.attachments,
@@ -120,7 +118,7 @@ export function createOfferCredentialBody(
 ): OfferCredentialBody {
   return {
     formats,
-    credentialPreview,
+    credential_preview: credentialPreview,
     goalCode,
     comment,
     replacementId,

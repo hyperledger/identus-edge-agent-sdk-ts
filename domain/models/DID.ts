@@ -33,6 +33,6 @@ export class DID {
 
   static getMethodIdFromString(text: string): string {
     const split = text.split(":");
-    return split[2];
+    return split.slice(2).join(":");
   }
 }

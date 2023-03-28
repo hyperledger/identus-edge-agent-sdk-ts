@@ -1,7 +1,11 @@
 import * as Domain from "../domain";
 
 export interface DIDCommProtocol {
-  packEncrypted(message: Domain.Message, to: Domain.DID, from: Domain.DID): Promise<string>;
+  packEncrypted(
+    message: Domain.Message,
+    to: Domain.DID,
+    from?: Domain.DID
+  ): Promise<string>;
 
   // packPlaintext: (msg: DIDComm.Message) => string;
   // packSigned(msg: Message, signBy: String, cb: OnPackSignedResult )  -> ErrorCode

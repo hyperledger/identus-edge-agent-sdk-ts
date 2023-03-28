@@ -89,7 +89,7 @@ export class ProtocolHelpers {
       ({ formats, attachments }, [key, credential]) => {
         const attachment = AttachmentDescriptor.build(credential);
         const format: CredentialFormat = {
-          attachId: attachment.id,
+          attach_id: attachment.id,
           format: key,
         };
         return {
@@ -102,11 +102,11 @@ export class ProtocolHelpers {
   }
 
   static getFormatFromJsonObject(object: CredentialFormat): CredentialFormat {
-    if (!object.attachId || !object.format) {
+    if (!object.attach_id || !object.format) {
       throw new AgentError.InvalidCredentialFormats();
     }
     return {
-      attachId: object.attachId,
+      attach_id: object.attach_id,
       format: object.format,
     };
   }
@@ -223,14 +223,14 @@ export class ProtocolHelpers {
       if (!formats || !Array.isArray(formats)) {
         throw new AgentError.InvalidCredentialFormats();
       }
-      if (!parsed.credentialPreview) {
+      if (!parsed.credential_preview) {
         throw new AgentError.InvalidOfferCredentialBodyError(
           "Undefined credentialPreview"
         );
       }
       return {
         formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        credentialPreview: parsed.credentialPreview,
+        credential_preview: parsed.credential_preview,
         replacementId: parsed.replacementId,
         multipleAvailable: parsed.multipleAvailable,
         goalCode,
@@ -272,14 +272,14 @@ export class ProtocolHelpers {
       if (!formats || !Array.isArray(formats)) {
         throw new AgentError.InvalidCredentialFormats();
       }
-      if (!parsed.credentialPreview) {
+      if (!parsed.credential_preview) {
         throw new AgentError.InvalidProposeCredentialBodyError(
           "Undefined credentialPreview"
         );
       }
       return {
         formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        credentialPreview: parsed.credentialPreview,
+        credential_preview: parsed.credential_preview,
         goalCode,
         comment,
       } as T;

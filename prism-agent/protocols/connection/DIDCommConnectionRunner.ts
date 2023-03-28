@@ -19,8 +19,11 @@ export class DIDCommConnectionRunner {
       this.ownDID
     );
 
-    await this.connection.sendMessage(request.makeMessage());
-
-    return new DIDPair(this.ownDID, request.to);
+    try {
+      await this.connection.sendMessage(request.makeMessage());
+      return new DIDPair(this.ownDID, request.to, `Connection${request.id}`);
+    } catch (err) {
+      return new DIDPair(this.ownDID, request.to, `Connection${request.id}`);
+    }
   }
 }

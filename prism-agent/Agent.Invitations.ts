@@ -7,7 +7,6 @@ import {
 } from "./types";
 import {
   Service as DIDDocumentService,
-  Service,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
 } from "../domain";
 import { AgentError } from "../domain/models/Errors";
@@ -19,6 +18,7 @@ import { Api } from "../domain/models/Api";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { DIDCommConnectionRunner } from "./protocols/connection/DIDCommConnectionRunner";
 import Pluto from "../domain/buildingBlocks/Pluto";
+import { DIDCommInvitationRunner } from "./protocols/invitation/v2/DIDCommInvitationRunner";
 
 export class AgentInvitations implements AgentInvitationsClass {
   constructor(
@@ -36,7 +36,7 @@ export class AgentInvitations implements AgentInvitationsClass {
       case ProtocolType.PrismOnboarding:
         return this.parsePrismInvitation(str);
       case ProtocolType.Didcomminvitation:
-        return this.parseOOBInvitation(str);
+        return this.parseOOBInvitation(new URL(str));
     }
 
     throw new AgentError.UnknownInvitationTypeError();
@@ -46,14 +46,9 @@ export class AgentInvitations implements AgentInvitationsClass {
     if (!this.connection.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
+
     const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
-      [
-        new Service("#didcomm-1", ["DIDCommMessasing"], {
-          uri: this.connection.mediationHandler.mediator.routingDID.toString(),
-          accept: [],
-          routingKeys: [],
-        }),
-      ],
+      [],
       true
     );
 
@@ -117,7 +112,7 @@ export class AgentInvitations implements AgentInvitationsClass {
     }
   }
 
-  async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
-    return OutOfBandInvitation.parseOutOfBandInvitationFromJson(str);
+  async parseOOBInvitation(str: URL): Promise<OutOfBandInvitation> {
+    return new DIDCommInvitationRunner(str).run();
   }
 }
