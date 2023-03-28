@@ -122,11 +122,11 @@ describe("Mercury", () => {
         );
       });
 
-      it("should throw error when Messsage.from is not a DID", () => {
-        const message = { to: DID.fromString("test:did:to") } as any;
+      it("should throw error when Messsage.to is not a DID", () => {
+        const message = new Message("{}", "", "");
         const ctx = makeTestContext(message);
         expect(() => ctx.mercury.packMessage(message)).to.throw(
-          MercuryError.NoSenderDIDSetError
+          MercuryError.NoRecipientDIDSetError
         );
       });
     });
@@ -203,7 +203,7 @@ describe("Mercury", () => {
 
     describe("Errors", () => {
       it("should throw error when Messsage.to is not a DID", async () => {
-        const message = {} as any;
+        const message = new Message("{}", "", "");
 
         expect(ctx.mercury.sendMessage(message)).to.eventually.be.rejectedWith(
           MercuryError.NoRecipientDIDSetError

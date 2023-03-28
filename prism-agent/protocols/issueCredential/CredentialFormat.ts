@@ -1,4 +1,4 @@
 export interface CredentialFormat {
-  attachId: string;
+  attach_id: string;
   format: string;
 }

@@ -20,8 +20,6 @@ export default class Mercury implements MercuryInterface {
 
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
 
-    if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
-
     return this.protocol.packEncrypted(message, toDid, fromDid);
   }
 
@@ -31,13 +29,11 @@ export default class Mercury implements MercuryInterface {
 
   async sendMessage<T>(message: Domain.Message): Promise<T> {
     const toDid = message.to;
-    const fromDid = message.from;
 
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
 
-    if (this.notDid(fromDid)) throw new MercuryError.NoSenderDIDSetError();
-
     const document = await this.castor.resolveDID(toDid.toString());
+
     const packedMessage = await this.packMessage(message);
 
     if (this.requiresForwarding(document)) {
@@ -64,23 +60,6 @@ export default class Mercury implements MercuryInterface {
     return this.makeRequest<T>(service, packedMessage);
   }
 
-  private async getServiceFromMediator(mediatorDID: DID) {
-    const mediatorDocument = await this.castor.resolveDID(
-      mediatorDID.toString()
-    );
-    const mediatorService = mediatorDocument.services.find(
-      (x) => x.isDIDCommMessaging
-    );
-    if (!mediatorService) {
-      throw new Error("Wrong mediator service");
-    }
-    const didService = await this.castor.resolveDID(
-      mediatorService?.serviceEndpoint.uri
-    );
-
-    return didService.services.find((x) => x.isDIDCommMessaging);
-  }
-
   private async makeRequest<T>(
     service: Domain.Service | URL | undefined,
     message: string
@@ -100,7 +79,6 @@ export default class Mercury implements MercuryInterface {
       headers,
       message
     );
-
     return response.body;
   }
 

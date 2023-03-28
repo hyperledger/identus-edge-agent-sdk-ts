@@ -32,6 +32,8 @@ import {
   VerificationMethods as DIDDocumentVerificationMethods,
 } from "../domain";
 import * as base64 from "multiformats/bases/base64";
+import * as base58 from "multiformats/bases/base58";
+
 import { JWKHelper } from "../peer-did/helpers/JWKHelper";
 import {
   VerificationMaterialAgreement,
@@ -61,15 +63,19 @@ export default class Castor implements CastorInterface {
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
   ): Promise<DID> {
-    const id = getUsageId(Usage.MASTER_KEY);
     const publicKey = new PrismDIDPublicKey(
-      id,
+      getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
+      masterPublicKey
+    );
+    const authenticateKey = new PrismDIDPublicKey(
+      getUsageId(Usage.AUTHENTICATION_KEY),
+      Usage.AUTHENTICATION_KEY,
       masterPublicKey
     );
     const didCreationData =
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
-        public_keys: [publicKey.toProto()],
+        public_keys: [authenticateKey.toProto(), publicKey.toProto()],
         services: services?.map((service) => {
           return new Protos.io.iohk.atala.prism.protos.Service({
             service_endpoint: [service.serviceEndpoint.uri],
@@ -158,7 +164,7 @@ export default class Castor implements CastorInterface {
         }
 
         const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromBytes(
-          Buffer.from(base64.base64.baseDecode(method.publicKeyMultibase))
+          Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
         ).getEncoded();
 
         publicKey = {

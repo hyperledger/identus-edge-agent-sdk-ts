@@ -24,7 +24,7 @@ export class DIDCommInvitationRunner {
       throw new AgentError.UnknownInvitationTypeError();
     }
 
-    if (parsed && parsed.piuri !== ProtocolType.Didcomminvitation) {
+    if (parsed && parsed.type !== ProtocolType.Didcomminvitation) {
       throw new AgentError.UnknownInvitationTypeError();
     }
 

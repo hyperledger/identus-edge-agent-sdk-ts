@@ -5,8 +5,6 @@ import {
   Service,
   ServiceEndpoint,
   Signature,
-  VerificationMethod as DIDDocumentVerificationMethod,
-  VerificationMethods as DIDDocumentVerificationMethods,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
@@ -59,7 +57,13 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
     const keyPairs = [keyAgreementKeyPair, authenticationKeyPair];
 
-    if (updateMediator && mediatorDID) {
+    if (
+      updateMediator &&
+      mediatorDID &&
+      !services.find((service) => {
+        return service.isDIDCommMessaging;
+      })
+    ) {
       //TODO(): This still needs to be done update the key List
       services.push(
         new Service(
@@ -81,24 +85,6 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       authenticationKeyPair.privateKey,
     ]);
 
-    const didDocument = await this.castor.resolveDID(did.toString());
-    const verificationMethods = didDocument.coreProperties.reduce<
-      DIDDocumentVerificationMethod[]
-    >((result, property) => {
-      if (property instanceof DIDDocumentVerificationMethods) {
-        result.push(...property.values);
-      }
-      return result;
-    }, []);
-
-    verificationMethods.forEach((verificationMethod, i) => {
-      const privateKey =
-        verificationMethod.publicKeyJwk?.crv.indexOf("X25519") !== -1
-          ? keyAgreementKeyPair.privateKey
-          : authenticationKeyPair.privateKey;
-      this.pluto.storePrivateKeys(privateKey, did, i, verificationMethod.id);
-    });
-
     return did;
   }
 
@@ -118,7 +104,6 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       this.seed
     );
     const did = await this.castor.createPrismDID(keyPair.publicKey, services);
-    //this.pluto.storePrivateKeys(keyPair.privateKey, did, index, null);
     await this.pluto.storePrismDID(did, index, keyPair.privateKey, null, alias);
     return did;
   }

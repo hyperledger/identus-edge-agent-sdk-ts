@@ -93,7 +93,7 @@ export function createProposeCredentialBody(
 ): ProposeCredentialBody {
   return {
     formats,
-    credentialPreview,
+    credential_preview: credentialPreview,
     goalCode,
     comment,
   };

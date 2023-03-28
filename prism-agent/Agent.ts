@@ -4,33 +4,37 @@ import {
   Message,
   Seed,
   Service as DIDDocumentService,
-  ServiceEndpoint as DIDDocumentServiceEndpoint,
   Signature,
 } from "../domain";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
 import Mercury from "../domain/buildingBlocks/Mercury";
-import {Api} from "../domain/models/Api";
-import {ApiImpl} from "./helpers/ApiImpl";
+import { Api } from "../domain/models/Api";
+import { ApiImpl } from "./helpers/ApiImpl";
 
-import {AgentError} from "../domain/models/Errors";
+import { AgentError } from "../domain/models/Errors";
 import {
   AgentCredentials as AgentCredentialsClass,
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
   AgentInvitations as AgentInvitationsClass,
-  AgentMessageEvents as AgentMessageEventsClass,
   EventCallback,
   InvitationType,
+  ListenerKey,
   MediatorHandler,
   PrismOnboardingInvitation,
 } from "./types";
-import {OutOfBandInvitation} from "./protocols/invitation/v2/OutOfBandInvitation";
-import {VerifiableCredential} from "../domain/models/VerifiableCredential";
-import {AgentCredentials} from "./Agent.Credentials";
-import {AgentDIDHigherFunctions} from "./Agent.DIDHigherFunctions";
-import {AgentInvitations} from "./Agent.Invitations";
-import {ConnectionsManager} from "./connectionsManager/ConnectionsManager";
-import {AgentMessageEvents} from "./Agent.MessageEvents";
+import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
+import { VerifiableCredential } from "../domain/models/VerifiableCredential";
+import { AgentCredentials } from "./Agent.Credentials";
+import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
+import { AgentInvitations } from "./Agent.Invitations";
+import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
+import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
+import { RequestCredential } from "./protocols/issueCredential/RequestCredential";
+import Pollux from "../pollux/Pollux";
+import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
+import { Presentation } from "./protocols/proofPresentation/Presentation";
+import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -40,47 +44,68 @@ enum AgentState {
 }
 
 export default class Agent
-    implements AgentCredentialsClass,
-        AgentDIDHigherFunctionsClass,
-        AgentInvitationsClass,
-        AgentMessageEventsClass {
+  implements
+    AgentCredentialsClass,
+    AgentDIDHigherFunctionsClass,
+    AgentInvitationsClass
+{
   public state: AgentState = AgentState.STOPPED;
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
-  private agentMessageEvents: AgentMessageEvents;
+  private apollo: Apollo;
+  private castor: Castor;
+  private pluto: Pluto;
+  private mercury: Mercury;
+  private mediationHandler: MediatorHandler;
+  private connectionManager;
+  private seed: Seed;
+  private api: Api;
 
   constructor(
-      protected apollo: Apollo,
-      protected castor: Castor,
-      protected pluto: Pluto,
-      protected mercury: Mercury,
-      public mediationHandler: MediatorHandler,
-      protected connectionManager = new ConnectionsManager(
-          castor,
-          mercury,
-          pluto,
-          mediationHandler
-      ),
-      protected seed: Seed = apollo.createRandomSeed().seed,
-      protected api: Api = new ApiImpl()
+    apollo: Apollo,
+    castor: Castor,
+    pluto: Pluto,
+    mercury: Mercury,
+    mediationHandler: MediatorHandler,
+    connectionManager: ConnectionsManager,
+    seed: Seed = apollo.createRandomSeed().seed,
+    api: Api = new ApiImpl()
   ) {
-    this.agentCredentials = new AgentCredentials(pluto);
+    this.apollo = apollo;
+    this.castor = castor;
+    this.pluto = pluto;
+    this.mercury = mercury;
+    this.mediationHandler = mediationHandler;
+    this.seed = seed;
+    this.api = api;
+
+    this.connectionManager =
+      connectionManager ||
+      new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
+
+    const pollux = new Pollux(castor);
+    this.agentCredentials = new AgentCredentials(
+      apollo,
+      castor,
+      pluto,
+      pollux,
+      seed
+    );
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
-        apollo,
-        castor,
-        pluto,
-        connectionManager,
-        mediationHandler,
-        seed
+      apollo,
+      castor,
+      pluto,
+      connectionManager,
+      mediationHandler,
+      seed
     );
     this.agentInvitations = new AgentInvitations(
-        this.pluto,
-        this.api,
-        this.agentDIDHigherFunctions,
-        this.connectionManager
+      this.pluto,
+      this.api,
+      this.agentDIDHigherFunctions,
+      this.connectionManager
     );
-    this.agentMessageEvents = new AgentMessageEvents(connectionManager, pluto);
   }
 
   public get currentMediatorDID() {
@@ -88,23 +113,23 @@ export default class Agent
   }
 
   static instanceFromConnectionManager(
-      apollo: Apollo,
-      castor: Castor,
-      pluto: Pluto,
-      mercury: Mercury,
-      connectionManager: ConnectionsManager,
-      seed?: Seed,
-      api?: Api
+    apollo: Apollo,
+    castor: Castor,
+    pluto: Pluto,
+    mercury: Mercury,
+    connectionManager: ConnectionsManager,
+    seed?: Seed,
+    api?: Api
   ) {
     return new Agent(
-        apollo,
-        castor,
-        pluto,
-        mercury,
-        connectionManager.mediationHandler,
-        connectionManager,
-        seed ? seed : apollo.createRandomSeed().seed,
-        api ? api : new ApiImpl()
+      apollo,
+      castor,
+      pluto,
+      mercury,
+      connectionManager.mediationHandler,
+      connectionManager,
+      seed ? seed : apollo.createRandomSeed().seed,
+      api ? api : new ApiImpl()
     );
   }
 
@@ -118,23 +143,12 @@ export default class Agent
       await this.connectionManager.startMediator();
     } catch (e) {
       if (e instanceof AgentError.NoMediatorAvailableError) {
-        const hostDID = await this.createNewPeerDID(
-            [
-              new DIDDocumentService(
-                  "#didcomm-1",
-                  ["DIDCommMessaging"],
-                  new DIDDocumentServiceEndpoint(
-                      this.connectionManager.mediationHandler.mediatorDID.toString()
-                  )
-              ),
-            ],
-            false
-        );
+        const hostDID = await this.createNewPeerDID([], false);
         await this.connectionManager.registerMediator(hostDID);
       } else throw e;
     }
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      this.agentMessageEvents.startFetchingMessages(10);
+      this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");
@@ -148,29 +162,29 @@ export default class Agent
     }
     this.state = AgentState.STOPPING;
     this.connectionManager.stopAllEvents();
-    this.agentMessageEvents.stopFetchingMessages();
+    this.connectionManager.stopFetchingMessages();
     this.state = AgentState.STOPPED;
   }
 
   async createNewPrismDID(
-      alias: string,
-      services: DIDDocumentService[] = [],
-      keyPathIndex?: number
+    alias: string,
+    services: DIDDocumentService[] = [],
+    keyPathIndex?: number
   ): Promise<DID> {
     return this.agentDIDHigherFunctions.createNewPrismDID(
-        alias,
-        services,
-        keyPathIndex
+      alias,
+      services,
+      keyPathIndex
     );
   }
 
   async createNewPeerDID(
-      services: DIDDocumentService[] = [],
-      updateMediator = true
+    services: DIDDocumentService[] = [],
+    updateMediator = true
   ): Promise<DID> {
     return this.agentDIDHigherFunctions.createNewPeerDID(
-        services,
-        updateMediator
+      services,
+      updateMediator
     );
   }
 
@@ -190,37 +204,59 @@ export default class Agent
     return this.agentInvitations.parsePrismInvitation(str);
   }
 
-  async parseOOBInvitation(str: string): Promise<OutOfBandInvitation> {
+  async parseOOBInvitation(str: URL): Promise<OutOfBandInvitation> {
     return this.agentInvitations.parseOOBInvitation(str);
   }
 
   async acceptDIDCommInvitation(
-      invitation: OutOfBandInvitation
+    invitation: OutOfBandInvitation
   ): Promise<void> {
     return this.agentInvitations.acceptDIDCommInvitation(invitation);
   }
 
   startFetchingMessages(iterationPeriod: number): void {
-    this.agentMessageEvents.startFetchingMessages(iterationPeriod);
+    this.connectionManager.startFetchingMessages(iterationPeriod);
   }
 
   stopFetchingMessages(): void {
-    this.agentMessageEvents.stopFetchingMessages();
+    this.connectionManager.stopFetchingMessages();
   }
 
   sendMessage(message: Message): Promise<Message | undefined> {
-    return this.agentMessageEvents.sendMessage(message);
+    return this.connectionManager.sendMessage(message);
   }
 
   verifiableCredentials(): Promise<VerifiableCredential[]> {
     return this.agentCredentials.verifiableCredentials();
   }
 
-  onMessage(callback: EventCallback): void {
-    this.agentMessageEvents.onMessage(callback);
+  addListener(eventName: ListenerKey, callback: EventCallback): void {
+    return this.connectionManager.events.addListener(eventName, callback);
   }
 
-  clearOnMessage(callback: EventCallback): void {
-    console.log(callback);
+  removeListener(eventName: ListenerKey, callback: EventCallback): void {
+    return this.connectionManager.events.removeListener(eventName, callback);
+  }
+
+  async prepareRequestCredentialWithIssuer(
+    offer: OfferCredential
+  ): Promise<RequestCredential> {
+    return this.agentCredentials.prepareRequestCredentialWithIssuer(offer);
+  }
+
+  async processIssuedCredentialMessage(
+    message: IssueCredential
+  ): Promise<VerifiableCredential> {
+    return this.agentCredentials.processIssuedCredentialMessage(message);
+  }
+
+  async createPresentationForRequestProof(
+    request: RequestPresentation,
+    credential: VerifiableCredential
+  ): Promise<Presentation> {
+    return this.agentCredentials.createPresentationForRequestProof(
+      request,
+      credential
+    );
   }
 }
