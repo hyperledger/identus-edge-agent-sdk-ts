@@ -1,6 +1,5 @@
 branches:
   - 'master'
-  - 'ci/pipelines'
 
 plugins:
   - '@semantic-release/commit-analyzer'
