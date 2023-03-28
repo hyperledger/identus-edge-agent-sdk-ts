@@ -6,9 +6,9 @@ plugins:
   - '@semantic-release/release-notes-generator'
   - [ '@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' } ]
   - [ '@semantic-release/exec', {
-    prepareCmd: 'yarn publish --no-git-tag-version --access restricted --new-version ${nextRelease.version}' } ]
+    prepareCmd: 'npm version ${nextRelease.version} --git-tag-version false' } ]
   - [ '@semantic-release/git', {
-    assets: [ 'package.json' , 'yarn.lock' , 'CHANGELOG.md' ],
+    assets: [ 'package.json' , 'package-lock.json' , 'CHANGELOG.md' ],
     message: 'chore(release): release ${nextRelease.version}
 
     ${nextRelease.notes}' } ]
