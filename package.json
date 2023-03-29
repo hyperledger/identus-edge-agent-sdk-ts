@@ -6,9 +6,9 @@
   "browser": "build/browser/index.js",
   "types": "build/typings/index.d.ts",
   "scripts": {
-    "build": "npm run build:browser && npm run build:node && npm run types",
+    "build": "npm run clean-up && npm run build:browser && npm run build:node && npm run types",
     "types": "rm -rf build/typings && tsc",
-    "postinstall": "./scripts/typeorm-cleanup.sh",
+    "clean-up": "./scripts/typeorm-cleanup.sh",
     "build:browser": "webpack --mode=production --config webpack/webpack.browser.conf.js",
     "build:node": "webpack --mode=production --config webpack/webpack.node.conf.js",
     "dev:browser": "webpack serve --mode=development --config webpack/webpack.browser.conf.js",
