@@ -1,4 +1,4 @@
-name: Release
+name: Release wallet-sdk-ts
 
 on:
   workflow_dispatch:
@@ -26,6 +26,12 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@input-output-hk"
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
       - uses: crazy-max/ghaction-import-gpg@v5
         id: import_gpg
         with:
@@ -42,3 +48,6 @@ jobs:
         run: |
           npm install
           npx semantic-release
+
+      - name: Publish artifact
+        run: npm publish
