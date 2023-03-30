@@ -34,11 +34,11 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Build
-        run: npm run build
-
       - name: Eslint
         run: npx eslint .
+
+      - name: Build
+        run: npm run build
 
       - name: Tests with Code Coverage
         run: npm run coverage
