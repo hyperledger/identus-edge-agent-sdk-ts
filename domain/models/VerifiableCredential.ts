@@ -29,8 +29,8 @@ export interface VerifiableCredential {
   subject?: DID;
   termsOfUse: VerifiableCredentialTypeContainer;
   issuer: DID;
-  issuanceDate: number;
-  expirationDate?: number;
+  issuanceDate: string;
+  expirationDate?: string;
   validFrom?: VerifiableCredentialTypeContainer;
   validUntil?: VerifiableCredentialTypeContainer;
   proof?: JsonString;

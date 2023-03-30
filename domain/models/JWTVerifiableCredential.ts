@@ -34,8 +34,8 @@ export class JWTVerifiablePayload implements VerifiableCredential {
   termsOfUse: VerifiableCredentialTypeContainer;
   issuer: DID;
   subject?: DID;
-  issuanceDate: number;
-  expirationDate?: number;
+  issuanceDate: string;
+  expirationDate?: string;
   validFrom?: VerifiableCredentialTypeContainer;
   validUntil?: VerifiableCredentialTypeContainer;
   proof?: string | undefined;
@@ -58,9 +58,9 @@ export class JWTVerifiablePayload implements VerifiableCredential {
     if (sub) {
       this.subject = DID.fromString(sub);
     }
-    this.issuanceDate = nbf;
+    this.issuanceDate = new Date(nbf).toDateString();
     if (exp) {
-      this.expirationDate = exp;
+      this.expirationDate = new Date(exp).toDateString();
     }
     if (verifiableCredential.credentialSchema) {
       this.credentialSchema = verifiableCredential.credentialSchema;
