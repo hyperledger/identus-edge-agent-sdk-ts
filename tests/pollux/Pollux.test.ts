@@ -83,8 +83,8 @@ describe("Pollux", () => {
             id: "evidenceId",
             type: "evidenceType",
           },
-          expirationDate: 1324567,
-          issuanceDate: 2345678,
+          expirationDate: new Date().toDateString(),
+          issuanceDate: new Date().toDateString(),
           issuer: new DID(
             "did",
             "peer",
@@ -138,8 +138,8 @@ describe("Pollux", () => {
         expect(result.credentialSubject).to.eql(cred.credentialSubject);
         expect(result.credentialType).to.equal(CredentialType.JWT);
 
-        expect(result.expirationDate).to.equal(jsonPayload.exp);
-        expect(result.issuanceDate).to.equal(jsonPayload.nbf);
+        expect(result.expirationDate).to.equal(new Date(jsonPayload.exp).toDateString());
+        expect(result.issuanceDate).to.equal(new Date(jsonPayload.nbf).toDateString());
 
         expect(result.type).to.eql(cred.type);
 
@@ -177,8 +177,8 @@ describe("Pollux", () => {
             id: "evidenceId",
             type: "evidenceType",
           },
-          expirationDate: 1324567,
-          issuanceDate: 2345678,
+          expirationDate: new Date().toDateString(),
+          issuanceDate: new Date().toDateString(),
           issuer: new DID(
             "did",
             "peer",
