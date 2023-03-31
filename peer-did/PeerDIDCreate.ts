@@ -10,7 +10,7 @@ import {
 import { CastorError } from "../domain/models/Errors";
 import { JWKHelper, VerificationMaterial } from "./helpers/JWKHelper";
 import { MultiCodec } from "./helpers/Multicodec";
-import { PeerDID, PeerDIDService } from "./PeerDID";
+import { PeerDID, PeerDIDEncoded, PeerDIDService } from "./PeerDID";
 import {
   Numalgo2Prefix,
   OctetPublicKey,
@@ -93,20 +93,28 @@ export class PeerDIDCreate {
   }
 
   private encodeService(services: DIDDocumentService[]): string {
-    const peerDIDServices = services.map((service) =>
-      new PeerDIDService(
-        service.type[0],
+    const peerDIDServices = services.reduce<PeerDIDEncoded[]>((acc, service) => {
+      const type = service.type[0];
+
+      if (type === undefined) return acc;
+
+      const encoded = new PeerDIDService(
+        type,
         service.serviceEndpoint.uri,
         service.serviceEndpoint.routingKeys,
         service.serviceEndpoint.accept
-      ).encode()
-    );
+      ).encode();
+
+      return acc.concat(encoded)
+    }, []);
+
     if (peerDIDServices.length === 1) {
       const peerDIDService = peerDIDServices[0];
       return base64.base64url.baseEncode(
         Buffer.from(JSON.stringify(peerDIDService))
       );
     }
+
     return base64.base64url.baseEncode(
       Buffer.from(JSON.stringify(peerDIDServices))
     );

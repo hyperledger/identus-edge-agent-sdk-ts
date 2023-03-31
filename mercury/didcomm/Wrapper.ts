@@ -103,7 +103,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       typeof msgObj.from === "string"
         ? Domain.DID.fromString(msgObj.from)
         : undefined,
-      Array.isArray(msgObj.to)
+      typeof msgObj.to?.[0] === "string"
         ? Domain.DID.fromString(msgObj.to[0])
         : undefined,
       this.parseAttachmentsToDomain(msgObj.attachments || []),

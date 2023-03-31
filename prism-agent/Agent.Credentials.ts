@@ -41,10 +41,12 @@ export class AgentCredentials implements AgentCredentialsClass {
   async processIssuedCredentialMessage(
     message: IssueCredential
   ): Promise<VerifiableCredential> {
-    const attachment = message.attachments && message.attachments[0].data;
+    const attachment = message.attachments[0]?.data;
+
     if (!attachment) {
       throw new Error("No attachment");
     }
+
     const jwtData = base64url.baseDecode(
       (attachment as AttachmentBase64).base64
     );
@@ -162,9 +164,10 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("Credential subject not found");
     }
 
-    const prismPrivateKey = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+    const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+    const prismPrivateKey = prismPrivateKeys[0];
 
-    if (!prismPrivateKey || prismPrivateKey.length <= 0) {
+    if (prismPrivateKey === undefined) {
       throw new Error("DID PrivateKeys not found");
     }
 
@@ -179,7 +182,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const signedJWT = await jwt.sign(
       didInfo.did,
-      base64url.baseDecode(Buffer.from(prismPrivateKey[0].value).toString()),
+      base64url.baseDecode(Buffer.from(prismPrivateKey.value).toString()),
       {
         iss: didInfo.did.toString(),
         aud: domain,

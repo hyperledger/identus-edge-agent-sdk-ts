@@ -107,15 +107,18 @@ export class LongFormPrismDIDResolver implements DIDResolver {
         ) || [];
 
       const services =
-        operation.create_did?.did_data?.services?.map(
-          (service: Protos.io.iohk.atala.prism.protos.Service) => {
-            return new DIDDocumentService(
+        operation.create_did?.did_data?.services?.reduce<DIDDocumentService[]>(
+          (acc, service) => {
+            const endpoint = service.service_endpoint[0];
+
+            if (endpoint === undefined) return acc;
+
+            return acc.concat(new DIDDocumentService(
               service.id,
               [service.type],
-              new DIDDocumentServiceEndpoint(service.service_endpoint[0])
-            );
-          }
-        ) || [];
+              new DIDDocumentServiceEndpoint(endpoint)
+            ));
+          }, []) ?? [];
 
       const verificationMethods = publicKeys.reduce(
         (partialResult, publicKey) => {

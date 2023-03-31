@@ -33,7 +33,9 @@ export class Secp256k1PublicKey
     const curvePoint = this.getCurvePoint();
     const yArr = curvePoint.y.bytes();
     const xArr = curvePoint.x.bytes();
-    const prefix = 2 + (yArr[yArr.length - 1] & 1);
+    // TO-RESOLVE: should this throw or default
+    const lastY = yArr[yArr.length - 1] ?? 0;
+    const prefix = 2 + (lastY & 1);
     const arr = new Uint8Array(1 + size);
     arr[0] = prefix;
     arr.set(xArr, 1);

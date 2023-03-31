@@ -1,7 +1,7 @@
 import * as didJWT from "did-jwt";
+import didResolver from "did-resolver";
 
 import Castor from "../../../domain/buildingBlocks/Castor";
-import { DIDResolutionResult } from "did-resolver";
 import {
   AlsoKnownAs,
   Controller,
@@ -17,7 +17,7 @@ export class JWT {
     this.castor = castor;
   }
 
-  private async resolve(did: string): Promise<DIDResolutionResult> {
+  private async resolve(did: string): Promise<didResolver.DIDResolutionResult> {
     const resolved = await this.castor.resolveDID(did);
     const alsoKnownAs = resolved.coreProperties.find(
       (prop): prop is AlsoKnownAs => prop instanceof AlsoKnownAs
@@ -64,16 +64,17 @@ export class JWT {
                 throw new Error("Invalid KeyType");
               })
             : [],
-        service:
-          service && service.values
-            ? service.values.map((service) => {
-                return {
-                  id: service.id,
-                  type: service.type[0],
-                  serviceEndpoint: service.serviceEndpoint,
-                };
-              })
-            : [],
+        service: service?.values?.reduce<didResolver.Service[]>((acc, service) => {
+          const type = service.type[0];
+
+          if (type === undefined) return acc;
+
+          return acc.concat({
+            id: service.id,
+            type: type,
+            serviceEndpoint: service.serviceEndpoint,
+          });
+        }, []) ?? [],
       },
     };
   }
