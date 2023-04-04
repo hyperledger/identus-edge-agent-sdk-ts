@@ -1,15 +1,8 @@
-import { expect } from "chai";
-import { DID } from "../../domain";
+import {expect} from "chai";
+import {CredentialType, DID, VerifiableCredential} from "../../domain";
 import Castor from "../../castor/Castor";
 import Apollo from "../../domain/buildingBlocks/Apollo";
-import {
-  InvalidCredentialError,
-  InvalidJWTString,
-} from "../../domain/models/errors/Pollux";
-import {
-  CredentialType,
-  VerifiableCredential,
-} from "../../domain/models/VerifiableCredential";
+import {InvalidJWTString,} from "../../domain/models/errors/Pollux";
 import Pollux from "../../pollux/Pollux";
 
 const jwtParts = [
@@ -66,197 +59,115 @@ describe("Pollux", () => {
     const encodeCredential = (cred: object): string => {
       const json = JSON.stringify(cred);
       const encoded = Buffer.from(json).toString("base64");
-      const value = `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
-      return value;
+      return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
     };
 
     describe("Valid Credential", () => {
       it(`should return JWTVerifiableCredential`, () => {
-        const cred: VerifiableCredential = {
-          id: "jwtid",
-          credentialType: CredentialType.JWT,
-          type: [CredentialType.JWT],
-          aud: ["aud-cred"],
-          context: ["context"],
-          credentialSubject: { subj: "credSubject" },
-          evidence: {
-            id: "evidenceId",
-            type: "evidenceType",
-          },
-          expirationDate: 1324567,
-          issuanceDate: 2345678,
-          issuer: new DID(
-            "did",
-            "peer",
-            "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
-          ),
-          refreshService: {
-            id: "refreshServiceId",
-            type: "refreshServiceType",
-          },
-          termsOfUse: {
-            id: "termsOfUseId",
-            type: "termsOfUseType",
-          },
-          validFrom: {
-            id: "validFromId",
-            type: "validFromType",
-          },
-          validUntil: {
-            id: "validUntilId",
-            type: "validUntilType",
-          },
-          credentialSchema: {
-            id: "credentialSchemaId",
-            type: "credentialSchemaType",
-          },
-          credentialStatus: {
-            id: "credentialStatusId",
-            type: "credentialStatusType",
-          },
-          proof: "proof",
-        };
-
-        const jsonPayload: any = {
-          id: "123",
-          iss: "did:peer:2.issuer",
-          nbf: "nbf",
-          sub: "sub",
-          exp: "exp",
-          aud: ["aud-json"],
-          vc: cred
-        };
-
-        const encoded = encodeCredential(jsonPayload);
+        const jwtPayload = createPayload("jwtid", "proof", CredentialType.JWT)
+        const encoded = encodeCredential(jwtPayload);
         const result = pollux.parseVerifiableCredential(encoded);
 
         expect(result).to.not.be.undefined;
         expect(result.id).to.equal(encoded);
-
-        expect(result.aud).to.eql(jsonPayload.aud);
-        expect(result.context).to.eql(cred.context);
-        expect(result.credentialSubject).to.eql(cred.credentialSubject);
-        expect(result.credentialType).to.equal(CredentialType.JWT);
-
-        expect(result.expirationDate).to.equal(jsonPayload.exp);
-        expect(result.issuanceDate).to.equal(jsonPayload.nbf);
-
-        expect(result.type).to.eql(cred.type);
-
-        // expect(result.proof).to.equal(cred.proof);
-
-        expect(result.issuer).to.be.an.instanceOf(DID);
-        expect(result.issuer.toString()).to.eql(jsonPayload.iss);
-
-        expect(result.evidence).to.be.deep.equal(cred.evidence);
-        expect(result.evidence).to.eql(cred.evidence);
-
-        expect(result.refreshService).to.deep.equal(cred.refreshService);
-        expect(result.refreshService).to.eql(cred.refreshService);
-
-        expect(result.termsOfUse).to.deep.equal(cred.termsOfUse);
-        expect(result.termsOfUse).to.eql(cred.termsOfUse);
-
-        // expect(result.validFrom).to.deep.equal(cred.validFrom);
-        // expect(result.validUntil).to.deep.equal(cred.validUntil);
-
-        expect(result.credentialSchema).to.deep.equal(cred.credentialSchema);
-        expect(result.credentialStatus).to.deep.equal(cred.credentialStatus);
+        validateCredential(result, jwtPayload)
       });
 
       // currently not handled
       it.skip(`should return W3CVerifiableCredential`, () => {
-        const cred: VerifiableCredential = {
-          id: "w3cid",
-          credentialType: CredentialType.W3C,
-          type: [CredentialType.W3C],
-          aud: ["aud"],
-          context: ["context"],
-          credentialSubject: { whatever: "credSubject" },
-          evidence: {
-            id: "evidenceId",
-            type: "evidenceType",
-          },
-          expirationDate: 1324567,
-          issuanceDate: 2345678,
-          issuer: new DID(
-            "did",
-            "peer",
-            "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
-          ),
-          refreshService: {
-            id: "refreshServiceId",
-            type: "refreshServiceType",
-          },
-          termsOfUse: {
-            id: "termsOfUseId",
-            type: "termsOfUseType",
-          },
-          validFrom: {
-            id: "validFromId",
-            type: "validFromType",
-          },
-          validUntil: {
-            id: "validUntilId",
-            type: "validUntilType",
-          },
-          credentialSchema: {
-            id: "credentialSchemaId",
-            type: "credentialSchemaType",
-          },
-          credentialStatus: {
-            id: "credentialStatusId",
-            type: "credentialStatusType",
-          },
-          proof: "proofW3c",
-        };
-
-        const jsonPayload: any = {
-          id: "123",
-          iss: "did:peer:2.issuer",
-          nbf: "nbf",
-          sub: "sub",
-          exp: "exp",
-          aud: ["aud-json"],
-          vc: cred
-        };
-
-        const encoded = encodeCredential(jsonPayload);
+        const jwtPayload = createPayload("w3cid", "proofW3c", CredentialType.W3C)
+        const encoded = encodeCredential(jwtPayload);
         const result = pollux.parseVerifiableCredential(encoded);
 
         expect(result).to.not.be.undefined;
         expect(result.id).to.equal(encoded);
-
-        expect(result.aud).to.eql(jsonPayload.aud);
-        expect(result.context).to.eql(cred.context);
-        expect(result.credentialSubject).to.eql(cred.credentialSubject);
-        expect(result.credentialType).to.equal(CredentialType.W3C);
-
-        expect(result.expirationDate).to.equal(jsonPayload.exp);
-        expect(result.issuanceDate).to.equal(jsonPayload.nbf);
-
-        expect(result.type).to.eql(cred.type);
-
-        // expect(result.proof).to.equal(cred.proof);
-
-        expect(result.issuer).to.be.an.instanceOf(DID);
-        expect(result.issuer.toString()).to.eql(jsonPayload.iss);
-
-        expect(result.evidence).to.deep.equal(cred.evidence);
-        expect(result.evidence).to.eql(cred.evidence);
-
-        expect(result.refreshService).to.deep.equal(cred.refreshService);
-        expect(result.refreshService).to.eql(cred.refreshService);
-
-        expect(result.termsOfUse).to.deep.equal(cred.termsOfUse);
-        expect(result.termsOfUse).to.eql(cred.termsOfUse);
-
-        // expect(result.validFrom).to.deep.equal(cred.validFrom);
-        // expect(result.validUntil).to.deep.equal(cred.validUntil);
-
-        expect(result.credentialSchema).to.deep.equal(cred.credentialSchema);
-        expect(result.credentialStatus).to.deep.equal(cred.credentialStatus);
+        validateCredential(result, jwtPayload.vc)
       });
     });
   });
+
+  function createPayload(id: string, proof: string, credentialType: CredentialType) {
+    const cred: VerifiableCredential = {
+      id,
+      credentialType: credentialType,
+      type: [credentialType],
+      aud: ["aud"],
+      context: ["context"],
+      credentialSubject: { whatever: "credSubject" },
+      evidence: {
+        id: "evidenceId",
+        type: "evidenceType",
+      },
+      expirationDate: new Date().toISOString(),
+      issuanceDate: new Date().toISOString(),
+      issuer: new DID(
+          "did",
+          "peer",
+          "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      ),
+      refreshService: {
+        id: "refreshServiceId",
+        type: "refreshServiceType",
+      },
+      termsOfUse: {
+        id: "termsOfUseId",
+        type: "termsOfUseType",
+      },
+      validFrom: {
+        id: "validFromId",
+        type: "validFromType",
+      },
+      validUntil: {
+        id: "validUntilId",
+        type: "validUntilType",
+      },
+      credentialSchema: {
+        id: "credentialSchemaId",
+        type: "credentialSchemaType",
+      },
+      credentialStatus: {
+        id: "credentialStatusId",
+        type: "credentialStatusType",
+      },
+      proof: proof,
+    };
+
+    const jwtPayload: any = {
+      id: "123",
+      iss: "did:peer:2.issuer",
+      nbf: 1680615608435,
+      sub: "sub",
+      exp: 1680615608435,
+      aud: ["aud-json"],
+      vc: cred
+    };
+    return jwtPayload
+  }
+  function validateCredential(result: VerifiableCredential, jwtPayload: any) {
+    let credential = jwtPayload.vc;
+
+    expect(result.aud).to.be.deep.equal(jwtPayload.aud);
+    expect(result.context).to.be.deep.equal(credential.context);
+    expect(result.credentialSubject).to.be.deep.equal(credential.credentialSubject);
+    expect(result.credentialType).to.be.equal(credential.credentialType);
+
+    expect(result.expirationDate).to.be.equal(new Date(jwtPayload.exp).toISOString());
+    expect(result.issuanceDate).to.be.equal(new Date(jwtPayload.nbf).toISOString());
+
+    expect(result.type).to.be.deep.equal(credential.type);
+
+    // expect(result.proof).to.be.equal(cred.proof);
+
+    expect(result.issuer).to.be.an.instanceOf(DID);
+    expect(result.issuer.toString()).to.be.equal(jwtPayload.iss);
+    expect(result.evidence).to.be.deep.equal(credential.evidence);
+    expect(result.refreshService).to.deep.equal(credential.refreshService);
+    expect(result.termsOfUse).to.deep.equal(credential.termsOfUse);
+
+    // expect(result.validFrom).to.be.deep.equal(credential.validFrom);
+    // expect(result.validUntil).to.be.deep.equal(credential.validUntil);
+
+    expect(result.credentialSchema).to.be.deep.equal(credential.credentialSchema);
+    expect(result.credentialStatus).to.be.deep.equal(credential.credentialStatus);
+  }
 });
