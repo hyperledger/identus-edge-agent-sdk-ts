@@ -58,9 +58,9 @@ export class JWTVerifiablePayload implements VerifiableCredential {
     if (sub) {
       this.subject = DID.fromString(sub);
     }
-    this.issuanceDate = new Date(nbf).toDateString();
+    this.issuanceDate = new Date(nbf).toISOString();
     if (exp) {
-      this.expirationDate = new Date(exp).toDateString();
+      this.expirationDate = new Date(exp).toISOString();
     }
     if (verifiableCredential.credentialSchema) {
       this.credentialSchema = verifiableCredential.credentialSchema;
