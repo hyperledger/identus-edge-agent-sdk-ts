@@ -610,8 +610,8 @@ export default class Pluto implements PlutoInterface {
   async storeCredential(credential: VerifiableCredential) {
     const verifiableCredentialEntity = new entities.VerifiableCredential();
     verifiableCredentialEntity.credentialType = credential.credentialType;
-    verifiableCredentialEntity.expirationDate = credential.expirationDate?.toString();
-    verifiableCredentialEntity.issuanceDate = credential.issuanceDate?.toString();
+    verifiableCredentialEntity.expirationDate = credential.expirationDate;
+    verifiableCredentialEntity.issuanceDate = credential.issuanceDate;
     verifiableCredentialEntity.verifiableCredentialJson = JSON.stringify({
       ...credential,
       subject: credential.subject?.toString(),
