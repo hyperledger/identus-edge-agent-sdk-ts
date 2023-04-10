@@ -25,7 +25,6 @@ modules in the SDK.
 ## API Overview
 Here's a brief explanation of the most important primitives:
 
-
 - `createRandomMnemonics`: This function creates a random mnemonic phrase that 
 can be used as a seed for generating a private key.
 
@@ -51,12 +50,13 @@ const {mnemonics, seed} = apollo.createRandomSeed();
 public key) using a given seed and key curve.
 
 ```ts
-const keyPairSecp256K1 = apollo.createKeyPairFromKeyCurve(seed, {
+const keyPairSecp256K1 = apollo.createKeyPairFromKeyCurve({
     curve: Domain.Curve.SECP256K1
-});
+}, seed);
 ```
 
-Supported key curves are: `SECP256K1`, `ED25519` and `X25519`.
+Supported key curves are: `SECP256K1`, `ED25519` and `X25519`. `seed` is optional
+param used only for `SECP256K1` keys.
 
 - `compressedPublicKeyFromPublicKey`: This function compresses a given public 
 key into a shorter, more efficient form.
