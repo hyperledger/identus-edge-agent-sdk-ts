@@ -15,7 +15,7 @@ export default class Pollux implements PolluxInterface {
 
   parseVerifiableCredential(jwtString: string): VerifiableCredential {
     const parts = jwtString.split(".");
-    const credentialString = parts[1];
+    const credentialString = parts.at(1);
 
     if (parts.length != 3 || credentialString === undefined) throw new InvalidJWTString();
 

@@ -327,7 +327,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
     </p>
     <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
   </>}
-  {connections.length > 0 && <p>Stored OOB Connection at <b>{connections[0].name}</b></p>}
+    {connections.length > 0 && <p>Stored OOB Connection at <b>{connections.at(0).name}</b></p>}
   </>
 }
 
@@ -353,7 +353,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
     if (requestPresentations.length) {
       for(const requestPresentation of requestPresentations) {
         const lastCredentials = await props.pluto.getAllCredentials();
-        const lastCredential = lastCredentials[lastCredentials.length - 1];
+        const lastCredential = lastCredentials.at(-1);
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
         try {
           if (lastCredential === undefined) throw new Error("last credential not found");

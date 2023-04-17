@@ -109,7 +109,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
       const services =
         operation.create_did?.did_data?.services?.reduce<DIDDocumentService[]>(
           (acc, service) => {
-            const endpoint = service.service_endpoint[0];
+            const endpoint = service.service_endpoint.at(0);
 
             if (endpoint === undefined) return acc;
 

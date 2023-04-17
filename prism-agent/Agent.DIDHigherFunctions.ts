@@ -28,8 +28,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
   async signWith(did: DID, message: Uint8Array): Promise<Signature> {
     const privateKeys = await this.pluto.getDIDPrivateKeysByDID(did);
-    // TO-RESOLVE: this looks logically incorrect, why do we take the first key found?
-    const privateKey = privateKeys[0];
+    const privateKey = privateKeys.at(0);
 
     if (privateKey === undefined) {
       throw new AgentError.CannotFindDIDPrivateKey();

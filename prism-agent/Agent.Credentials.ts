@@ -41,7 +41,7 @@ export class AgentCredentials implements AgentCredentialsClass {
   async processIssuedCredentialMessage(
     message: IssueCredential
   ): Promise<VerifiableCredential> {
-    const attachment = message.attachments[0]?.data;
+    const attachment = message.attachments.at(0)?.data;
 
     if (!attachment) {
       throw new Error("No attachment");
@@ -165,7 +165,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
 
     const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
-    const prismPrivateKey = prismPrivateKeys[0];
+    const prismPrivateKey = prismPrivateKeys.at(0);
 
     if (prismPrivateKey === undefined) {
       throw new Error("DID PrivateKeys not found");

@@ -94,7 +94,7 @@ export class PeerDIDCreate {
 
   private encodeService(services: DIDDocumentService[]): string {
     const peerDIDServices = services.reduce<PeerDIDEncoded[]>((acc, service) => {
-      const type = service.type[0];
+      const type = service.type.at(0);
 
       if (type === undefined) return acc;
 
@@ -109,7 +109,8 @@ export class PeerDIDCreate {
     }, []);
 
     if (peerDIDServices.length === 1) {
-      const peerDIDService = peerDIDServices[0];
+      const peerDIDService = peerDIDServices.at(0);
+
       return base64.base64url.baseEncode(
         Buffer.from(JSON.stringify(peerDIDService))
       );

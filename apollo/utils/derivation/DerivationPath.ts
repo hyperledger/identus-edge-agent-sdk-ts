@@ -30,7 +30,7 @@ export class DerivationPath {
    */
   static fromPath(path: string): DerivationPath {
     const splitPath = path.split("/");
-    if (splitPath[0]?.trim().toLowerCase() !== "m") {
+    if (splitPath.at(0)?.trim().toLowerCase() !== "m") {
       throw new Error("Path needs to start with m or M");
     }
 

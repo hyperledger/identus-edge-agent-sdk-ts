@@ -35,15 +35,15 @@ export class DID {
 
   static getSchemaFromString(text: string): string | undefined {
     const split = text.split(":");
-    return split[0];
+    return split.at(0);
   }
 
   static getMethodFromString(text: string): string | undefined {
     const split = text.split(":");
-    return split[1];
+    return split.at(1);
   }
 
-  static getMethodIdFromString(text: string): string | undefined {
+  static getMethodIdFromString(text: string): string {
     const split = text.split(":");
     return split.slice(2).join(":");
   }

@@ -9,8 +9,8 @@ export class LongFormPrismDID {
 
   constructor(public readonly did: DID) {
     const methodId = new PrismDIDMethodId(did.methodId);
-    const stateHash = methodId.sections[0];
-    const encodedState = methodId.sections[1];
+    const stateHash = methodId.sections.at(0);
+    const encodedState = methodId.sections.at(1);
 
     if (methodId.sections.length !== 2 || stateHash === undefined || encodedState === undefined) {
       throw new CastorError.InvalidLongFormDID();

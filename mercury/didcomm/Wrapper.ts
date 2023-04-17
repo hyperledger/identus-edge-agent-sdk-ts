@@ -96,6 +96,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
     );
 
     const msgObj = didcommMsg.as_value();
+    const toString = msgObj.to?.at(0);
     const domainMessage = new Domain.Message(
       JSON.stringify(msgObj.body), // parse
       msgObj.id,
@@ -103,10 +104,10 @@ export class DIDCommWrapper implements DIDCommProtocol {
       typeof msgObj.from === "string"
         ? Domain.DID.fromString(msgObj.from)
         : undefined,
-      typeof msgObj.to?.[0] === "string"
-        ? Domain.DID.fromString(msgObj.to[0])
+      typeof toString === "string"
+        ? Domain.DID.fromString(toString)
         : undefined,
-      this.parseAttachmentsToDomain(msgObj.attachments || []),
+      this.parseAttachmentsToDomain(msgObj.attachments ?? []),
       msgObj.thid,
       msgObj.extraHeaders,
       msgObj.created_time?.toString(),

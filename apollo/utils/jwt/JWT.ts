@@ -65,7 +65,7 @@ export class JWT {
               })
             : [],
         service: service?.values?.reduce<didResolver.Service[]>((acc, service) => {
-          const type = service.type[0];
+          const type = service.type.at(0);
 
           if (type === undefined) return acc;
 
