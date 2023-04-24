@@ -1,12 +1,12 @@
 # Agent
 
-Agent is a module which brings together all the building blocks of the PRISM
+The Agent is a module which combines all the building blocks of the PRISM
 Wallet SDK - Apollo, Castor, Pluto, Mercury, and Pollux - to provide a
 streamlined experience for developers to build Edge Agents and applications on
 top of it. Agent implements core capabilities of an Edge Agent, such as DID
 management and support for a range of DIDComm protocols, including mediation,
-proof presentation, issue credential, and out-of-band messages. DIDComm related
-functionality is based on the **DIDComm V2** specification.
+proof presentation, issue credentials, and out-of-band messages. DIDComm-related
+functionality comes from the **DIDComm V2** specification.
 
 ## DIDComm Protocol Support
 
@@ -21,11 +21,9 @@ white_check_mark: | -- |
 
 ## Agent Setup
 
-Before getting to import modules, make sure you have the DIDComm wasm file in the public directory of your app/website,
-you can copy using this
-command `cp ./node_modules/@input-output-hk/atala-prism-wallet-sdk/build/browser/index_bg.wasm ./public/index_bg.wasm`.
+Before importing modules, ensure you have the DIDComm wasm file in the public directory of your app/website. You can copy using this command `cp ./node_modules/@input-output-hk/atala-prism-wallet-sdk/build/browser/index_bg.wasm ./public/index_bg.wasm`.
 
-Assuming the Wallet SDK has been installed as a dependency and the wasm file exists in your public/static directory,
+Assuming the installation Wallet SDK is a dependency, and the wasm file exists in your public/static directory,
 here's an example of
 how to import and init Agent module:
 
@@ -82,28 +80,19 @@ try {
 
 Quite a lot of things are happening here, so let's break it down:
 
-- `Apollo`, `Castor`, `Pluto`, `Mercury`, and `Agent` are the main building
-  blocks of the SDK. First three have already been covered in more detail in the
-  previous sections, as they are user-facing modules, usable on their own. Other
-  modules could be considered as internal modules, and are not meant to be used
-  directly.
-- `Mercury` is a module which deals with DIDComm V2 messaging, and is used
+- `Apollo`, `Castor`, `Pluto`, `Mercury`, and `Agent` are the main building blocks of the SDK. The first three have already been covered in more detail in the previous sections, as they are user-facing modules usable independently. Other modules could be considered internal, and the intention is not to use them directly.
+- `Mercury` is a module that deals with DIDComm V2 messaging and is used
   primarily by the `Agent` to handle DIDComm messages.
-- As already mentioned, `Domain` is a set of domain-specific types, models and
-  utilities, usable in different contexts.
-- Edge Agents are not able to provide highly-available service endpoints by
-  themselves. That's why mediators are used to provide public endpoints and
-  mailboxes to agents. `PublicMediatorStore`, `BasicMediatorHandler`, and
+- `Domain` is a set of domain-specific types, models, and utilities usable in different contexts.
+- Edge Agents need help to provide highly-available service endpoints for providing public endpoints and mailboxes to agents. `PublicMediatorStore`, `BasicMediatorHandler`, and
   `ConnectionsManager` are abstractions for interacting with mediators.
-- Once an instance of `Agent` is prepared, `start` method is called to start the
+- Once an instance of `Agent` is prepared, call the `start` method to start the
   agent and mediator services.
 
 ## Establishing Connection
 
-Let's see how to establish a connection with another agent and what it means.
-
 In DIDComm Agent's world, a connection is nothing more than a pair of DIDs and
-a label. Agent creates a new `peer` DID for each connection, and stores it in
+a label. The Agent creates a new `peer` DID for each connection and stores it in
 the wallet storage (Pluto), along with the DID of the other agent and the
 human-readable label used to help users navigate through the list of connections.
 
@@ -111,21 +100,16 @@ High-level steps for establishing a connection are as follows:
 
 - An agent, typically a cloud agent representing an issuer or verifier, creates a
   new DID for connection.
-- New DID and usually a human-readable label, used to represent the inviter, are
-  used as inputs to create an out-of-band invitation message. The invitation
-  message is encoded in appropriate format (QR code, deep link, etc.) and shared
-  with the other party.
+- New DID and, usually, a human-readable label, used to represent the inviter, are used as inputs to create an out-of-band invitation message. The invitation message is encoded appropriately (QR code, deep-link, etc.) and shared with the other party.
 - Other agent, typically an edge agent representing a holder, receives the
-  invitation and if accepted, creates a new DID for connection and sends a response
+  invitation and, if accepted, creates a new DID for connection and sends a response
   back to the inviter.
-- Now both agents have a pair of DIDs and can store new connection to be used in
+- Both agents have a pair of DIDs and can store the new connection for
   future interactions.
 
 ### Example code
 
-Here is an example of how to establish a connection with another agent assuming
-that the invitation is received as a QR code and that agent has already been
-started:
+Here is an example of how to establish a connection with another agent assuming that the receipt of the invitation as a QR code and that agent has started:
 
 ```ts
 // ... QR code scaned and decoded

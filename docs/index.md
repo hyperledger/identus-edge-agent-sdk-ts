@@ -1,6 +1,6 @@
 # Wallet SDK Typescript
 
-Atala PRISM TypeScript SDK provides a library and documentation for developers to build TypeScript-based SSI applications with Atala PRISM. It provides a set of utilities for building SSI Edge Agents speaking DIDComm V2 protocols.
+Atala PRISM TypeScript SDK provides a library and documentation for developers to build TypeScript-based SSI applications with Atala PRISM. It offers a set of utilities for building SSI Edge Agents speaking DIDComm V2 protocols.
 
 Atala PRISM TypeScript SDK provides the following building blocks:
 
@@ -9,7 +9,7 @@ Atala PRISM TypeScript SDK provides the following building blocks:
 * **Pollux**: Provides a suite of operations for handling verifiable credentials.
 * **Mercury**: Provides a suite of operations for handling DIDComm V2 messages.
 * **Pluto**: Provides an interface for storage operations in a portable, storage-agnostic manner.
-* **PrismAgent**: PrismAgent, a component using all other building blocks, provides a basic edge agent capabilities, including implementation of DIDComm V2 protocols.
+* **PrismAgent**: PrismAgent, a component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
 
 ## DIDComm Protocol Support
 
