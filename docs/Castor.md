@@ -1,10 +1,10 @@
 # Castor
 
-The Castor module provides a suite of primitives for working with Decentralized  Identifiers (DIDs). It allows developers to create and manage DIDs, associated keys, and service endpoints and resolve DIDs to retrieve corresponding  DID Documents.
+The Castor module provides a suite of primitives for working with [Decentralized  Identifiers (DIDs)](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#decentralized-identifer). It allows developers to create and manage DIDs, associated keys, and service endpoints and resolve DIDs to retrieve corresponding [DID Documents](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#did-document).
 
-Castor currently supports the creation and resolution of `prism` and `peer` DID methods.
+Castor currently supports the creation and resolution of `prism` and `peer` [DID methods](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#did-method).
 
-> **Note**: Castor depends on the Apollo module for cryptographic operations.
+> **Note:** Castor depends on the Apollo module for cryptographic operations.
 
 ## Castor setup
 
@@ -65,7 +65,7 @@ const peerDid = await castor.createPeerDID(
 
 - `resolveDID`: This function asynchronously resolves a DID to its corresponding DID Document. It may throw an error if the DID is invalid or the document is unretrievable.
 
-> NOTE: only `prism` and `peer` DID methods are currently supported!
+> **Note:** only `prism` and `peer` DID methods are currently supported!
 
 ```ts
 const didDoc = await castor.resolveDID("did:prism:123456");
@@ -89,4 +89,4 @@ const isValid = castor.verifySignature(
 );
 ```
 
-> **Note**: This function is similar to the `verifySignature` function in the Apollo module, but it facilitates parsing the DID and extracting the right public key.
+> **Note:** This function is similar to the `verifySignature` function in the Apollo module, but it facilitates parsing the DID and extracting the right public key.

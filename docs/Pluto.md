@@ -1,8 +1,8 @@
 # Pluto
 
-Pluto defines PRISM's data storage interface for working with SSI artifacts such as DIDs, private keys, and DIDComm messages. Depending on the platform and specific use case, it's up to the application to appropriately implement this interface.
+Pluto defines PRISM's data storage interface for working with [SSI](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#self-sovereign-identity) artifacts such as [DIDs](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#decentralized-identifier), private keys, and [DIDComm](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#didcomm) messages. Depending on the platform and specific use case, it's up to the application to appropriately implement this interface.
 
-As part of TypeScript Wallet SDK, Pluto also provides a default implementation based on TypeORM supporting various drivers. Still, on the frontend, if the type is sqljs, it will preset to use sqljs together with indexedDB. Pluto is an example and can get used for prototyping and testing before investing in a more robust use-case-specific solution. In the future, we might provide one or more implementations we could recommend for production use.
+As part of TypeScript Wallet SDK, Pluto also provides a default implementation based on TypeORM supporting various drivers. Still, on the frontend, if the type is `sqljs`, it will preset to use `sqljs` together with indexedDB. Pluto is an example and can get used for prototyping and testing before investing in a more robust use-case-specific solution. In the future, we might provide one or more implementations we could recommend for production use.
 
 ## Interface preview
 

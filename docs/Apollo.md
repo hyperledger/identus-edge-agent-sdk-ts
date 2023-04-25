@@ -67,7 +67,7 @@ const signatureSecp256K1 = apollo.signStringMessage(keyPairSecp256K1.privateKey,
 const signatureEd25519 = apollo.signByteArrayMessage(keyPairEd25519.privateKey, messageBytes);
 ```
 
-> NOTE: Signing data is possible only with `SECP256K1` and `ED25519` key curves.
+> **Note:** Signing data is possible only with `SECP256K1` and `ED25519` key curves.
 
 - `verifySignature`: This function verifies the authenticity of a signature using the corresponding public key, challenge, and signature. It returns a boolean value indicating whether the signature is valid or not.
 

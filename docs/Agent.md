@@ -3,10 +3,9 @@
 The Agent is a module which combines all the building blocks of the PRISM
 Wallet SDK - Apollo, Castor, Pluto, Mercury, and Pollux - to provide a
 streamlined experience for developers to build Edge Agents and applications on
-top of it. Agent implements core capabilities of an Edge Agent, such as DID
-management and support for a range of DIDComm protocols, including mediation,
+top of it. Agent implements core capabilities of an Edge Agent, such as [DID](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#decentralized-identifer) management and support for a range of DIDComm protocols, including mediation,
 proof presentation, issue credentials, and out-of-band messages. DIDComm-related
-functionality comes from the **DIDComm V2** specification.
+functionality comes from the [DIDComm V2](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#didcomm) specification.
 
 ## DIDComm Protocol Support
 
@@ -80,13 +79,13 @@ try {
 
 Quite a lot of things are happening here, so let's break it down:
 
-- `Apollo`, `Castor`, `Pluto`, `Mercury`, and `Agent` are the main building blocks of the SDK. The first three have already been covered in more detail in the previous sections, as they are user-facing modules usable independently. Other modules could be considered internal, and the intention is not to use them directly.
-- `Mercury` is a module that deals with DIDComm V2 messaging and is used
-  primarily by the `Agent` to handle DIDComm messages.
-- `Domain` is a set of domain-specific types, models, and utilities usable in different contexts.
+- [Apollo](/apollo.md), [Castor](/castor.md), [Pluto](/pluto.md), [Mercury](), and Agent are the main building blocks of the SDK. The first three have already been covered in more detail in the previous sections, as they are user-facing modules usable independently. Other modules could be considered internal, and the intention is not to use them directly.
+- Mercury is a module that deals with DIDComm V2 messaging and is used
+  primarily by the Agent to handle DIDComm messages.
+- Domain is a set of domain-specific types, models, and utilities usable in different contexts.
 - Edge Agents need help to provide highly-available service endpoints for providing public endpoints and mailboxes to agents. `PublicMediatorStore`, `BasicMediatorHandler`, and
   `ConnectionsManager` are abstractions for interacting with mediators.
-- Once an instance of `Agent` is prepared, call the `start` method to start the
+- Once an instance of Agent is prepared, call the `start` method to start the
   agent and mediator services.
 
 ## Establishing Connection
