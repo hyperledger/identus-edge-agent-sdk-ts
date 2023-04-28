@@ -68,8 +68,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     if (!privateKey) {
       throw new Error(`Invalid PrivateKey Curve ${Curve.X25519}`);
     }
-    const seed: Domain.Seed = { value: new Uint8Array() };
-    const keyPair = this.apollo.createKeyPairFromPrivateKey(privateKey, seed);
+    const keyPair = this.apollo.createKeyPairFromPrivateKey(privateKey);
     const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
     const secret: Secret = {
