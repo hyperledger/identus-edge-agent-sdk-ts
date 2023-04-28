@@ -118,8 +118,23 @@ export default class Apollo implements ApolloInterface {
   createKeyPairFromKeyCurve(curve: KeyCurve, seed?: Seed): KeyPair {
     return this.getKeyPairForCurve(curve, seed);
   }
-  createKeyPairFromPrivateKey(privateKey: PrivateKey, seed?: Seed): KeyPair {
-    return this.getKeyPairForCurve(privateKey.keyCurve, seed);
+  createKeyPairFromPrivateKey(privateKey: PrivateKey): KeyPair {
+    const secp256k1PrivateKey = Secp256k1PrivateKey.secp256k1FromBytes(
+      privateKey.value
+    );
+    const secp256k1PublicKey = secp256k1PrivateKey.getPublicKey();
+    const curve = privateKey.keyCurve;
+    return {
+      keyCurve: curve,
+      privateKey: {
+        keyCurve: curve,
+        value: secp256k1PrivateKey.getEncoded(),
+      },
+      publicKey: {
+        keyCurve: curve,
+        value: secp256k1PublicKey.getEncoded(),
+      },
+    };
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
     const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromBytes(

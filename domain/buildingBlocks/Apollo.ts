@@ -15,7 +15,7 @@ export default interface Apollo {
   createSeed(mnemonics: MnemonicWordList, passphrase: string): Seed;
   createRandomSeed(passphrase?: string): SeedWords;
   createKeyPairFromKeyCurve(curve: KeyCurve, seed?: Seed): KeyPair;
-  createKeyPairFromPrivateKey(privateKey: PrivateKey, seed?: Seed): KeyPair;
+  createKeyPairFromPrivateKey(privateKey: PrivateKey): KeyPair;
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey;
   compressedPublicKeyFromCompressedData(
     compressedData: Uint8Array
