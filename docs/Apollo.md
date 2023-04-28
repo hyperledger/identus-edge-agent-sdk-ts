@@ -55,6 +55,17 @@ const keyPairSecp256K1 = apollo.createKeyPairFromKeyCurve({
 }, seed);
 ```
 
+- `createKeyPairFromPrivateKey`: This function creates a key pair (a private and 
+public key) using a given privateKey.
+
+In the following example, privateKey is of type PrivateKey
+
+```ts
+const keyPairSecp256K1 = apollo.createKeyPairFromPrivateKey(
+   privateKey
+);
+```
+
 Supported key curves are: `SECP256K1`, `ED25519` and `X25519`. `seed` is optional
 param used only for `SECP256K1` keys.
 
