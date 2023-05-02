@@ -43,7 +43,7 @@ export default interface Pluto {
 
   getAllPeerDIDs(): Promise<Array<PeerDID>>;
 
-  getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey> | null>;
+  getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey>>;
 
   getDIDPrivateKeyByID(id: string): Promise<PrivateKey | null>;
 

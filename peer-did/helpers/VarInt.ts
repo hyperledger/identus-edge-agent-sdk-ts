@@ -14,7 +14,11 @@ export function putUVarInt(value: number, buffer: number[]): number[] {
   } while (val > 0);
 
   for (let i = tmpBuffer.length - 1; i >= 0; i--) {
-    buffer.unshift(tmpBuffer[i]);
+    const value = tmpBuffer.at(i);
+
+    if (typeof value === "number") {
+      buffer.unshift(value);
+    }
   }
 
   return buffer;
