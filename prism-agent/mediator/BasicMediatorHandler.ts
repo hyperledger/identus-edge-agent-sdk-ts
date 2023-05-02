@@ -35,7 +35,7 @@ export class BasicMediatorHandler implements MediatorHandler {
   async bootRegisteredMediator(): Promise<Mediator | undefined> {
     if (!this.mediator) {
       const mediators = await this.store.getAllMediators();
-      const mediator = mediators.slice(0, 1)[0];
+      const mediator = mediators.slice(0, 1).at(0);
       if (mediator) {
         this.mediator = mediator;
       }

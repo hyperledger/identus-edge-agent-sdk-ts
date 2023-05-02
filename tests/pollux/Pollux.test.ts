@@ -136,7 +136,7 @@ describe("Pollux", () => {
       id: "123",
       iss: "did:peer:2.issuer",
       nbf: 1680615608435,
-      sub: "sub",
+      sub: "did:peer:2.sub",
       exp: 1680615608435,
       aud: ["aud-json"],
       vc: cred

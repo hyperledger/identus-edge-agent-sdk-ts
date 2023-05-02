@@ -28,10 +28,12 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
   async signWith(did: DID, message: Uint8Array): Promise<Signature> {
     const privateKeys = await this.pluto.getDIDPrivateKeysByDID(did);
-    if (!privateKeys || privateKeys.length <= 0) {
+    const privateKey = privateKeys.at(0);
+
+    if (privateKey === undefined) {
       throw new AgentError.CannotFindDIDPrivateKey();
     }
-    const [privateKey] = privateKeys;
+
     return this.apollo.signByteArrayMessage(privateKey, message);
   }
 

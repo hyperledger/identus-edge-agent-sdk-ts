@@ -18,7 +18,7 @@ describe("PEERDID CreateTest", () => {
 
     const multicodec = new MultiCodec(testData);
 
-    expect(testData).to.deep.equal(multicodec.decode()[1]);
+    expect(testData).to.deep.equal(multicodec.decode().at(1));
   });
   it("Should decode ecnumbasic", () => {
     const ecnumBasis = "z6MkqRYqQiSgvZQdnBytw86Qbs2ZWUkGv22od935YF4s8M7V";

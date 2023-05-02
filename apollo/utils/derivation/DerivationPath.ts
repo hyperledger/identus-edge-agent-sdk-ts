@@ -30,13 +30,13 @@ export class DerivationPath {
    */
   static fromPath(path: string): DerivationPath {
     const splitPath = path.split("/");
-    if (splitPath[0].trim().toLowerCase() !== "m") {
+    if (splitPath.at(0)?.trim().toLowerCase() !== "m") {
       throw new Error("Path needs to start with m or M");
-    } else {
-      return new DerivationPath(
-        splitPath.slice(1).map(DerivationPath.parseAxis)
-      );
     }
+
+    return new DerivationPath(
+      splitPath.slice(1).map(DerivationPath.parseAxis)
+    );
   }
 
   private static parseAxis(axis: string): DerivationAxis {
