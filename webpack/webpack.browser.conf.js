@@ -131,7 +131,7 @@ module.exports = (env, argv) => {
             extensions: [".ts", ".tsx", ".jsx", ".js", ".json"],
             fallback: {
                 fs: false,
-                crypto: require.resolve("crypto-browserify"),
+                crypto: false,
                 assert: require.resolve("assert/"),
                 url: require.resolve("url/"),
                 buffer: require.resolve("buffer/"),
