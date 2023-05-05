@@ -11,7 +11,7 @@
     "clean-up": "./scripts/typeorm-cleanup.sh",
     "build:browser": "webpack --mode=production --config webpack/webpack.browser.conf.js",
     "build:node": "webpack --mode=production --config webpack/webpack.node.conf.js",
-    "dev:browser": "webpack serve --mode=development --config webpack/webpack.browser.conf.js",
+    "dev:browser": "npm run clean-up && webpack serve --mode=development --config webpack/webpack.browser.conf.js",
     "dev:node": "rm -rf build && npm run types && webpack  --watch --mode=development --config webpack/webpack.node.conf.js",
     "test": "jest",
     "coverage": "npm run test -- --coverage",
