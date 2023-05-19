@@ -28,11 +28,17 @@ import { createTestScenario } from "./createTestScenario";
 
   const secondaryDID = await agent.createNewPeerDID([], true);
 
-  await agent.sendMessage(
-    new BasicMessage(
-      { content: "Test Message" },
-      secondaryDID,
-      secondaryDID
-    ).makeMessage()
-  );
+  try {
+    await agent.sendMessage(
+      new BasicMessage(
+        { content: "Test Message" },
+        secondaryDID,
+        secondaryDID
+      ).makeMessage()
+    );
+  } catch (err) {
+    console.log(
+      "Safe to ignore, mediator returns null on successfully receiving the message, unpack fails."
+    );
+  }
 })();
