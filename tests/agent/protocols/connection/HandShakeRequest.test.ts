@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import { Message } from "../../../../domain";
+import { Message } from "../../../../src/domain";
 
-import { HandshakeRequest } from "../../../../prism-agent/protocols/connection/HandshakeRequest";
-import { ProtocolType } from "../../../../prism-agent/protocols/ProtocolTypes";
-import { HandshakeRequestBody } from "../../../../prism-agent/protocols/types";
+import { HandshakeRequest } from "../../../../src/prism-agent/protocols/connection/HandshakeRequest";
+import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
+import { HandshakeRequestBody } from "../../../../src/prism-agent/protocols/types";
 import { DIDTest } from "../../helpers/DID";
 
 describe("HandShakeRequest Test", () => {

@@ -2,11 +2,11 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import Agent from "../../prism-agent/Agent";
-import Pluto from "../../pluto/Pluto";
-import Mercury from "../../mercury/Mercury";
+import Agent from "../../src/prism-agent/Agent";
+import Pluto from "../../src/pluto/Pluto";
+import Mercury from "../../src/mercury/Mercury";
 import * as UUIDLib from "@stablelib/uuid";
-import Apollo from "../../apollo/Apollo";
+import Apollo from "../../src/apollo/Apollo";
 import { CastorMock } from "./mocks/CastorMock";
 import { ConnectionsManagerMock } from "./mocks/ConnectionManagerMock";
 
@@ -17,11 +17,11 @@ import {
   Message,
   Service,
   ServiceEndpoint,
-} from "../../domain/models";
-import { DIDCommProtocol } from "../../mercury/DIDCommProtocol";
-import Castor from "../../domain/buildingBlocks/Castor";
-import { AgentError } from "../../domain/models/Errors";
-import { HandshakeRequest } from "../../prism-agent/protocols/connection/HandshakeRequest";
+} from "../../src/domain/models";
+import { DIDCommProtocol } from "../../src/mercury/DIDCommProtocol";
+import Castor from "../../src/domain/buildingBlocks/Castor";
+import { AgentError } from "../../src/domain/models/Errors";
+import { HandshakeRequest } from "../../src/prism-agent/protocols/connection/HandshakeRequest";
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 const expect = chai.expect;

@@ -4,14 +4,14 @@ import chaiAsPromised from "chai-as-promised";
 
 import { expect } from "chai";
 
-import Mercury from "../../../../domain/buildingBlocks/Mercury";
+import Mercury from "../../../../src/domain/buildingBlocks/Mercury";
 import { MercuryStub } from "../../mocks/MercuryMock";
 import {
   AttachmentData,
   AttachmentDescriptor,
   Message,
-} from "../../../../domain";
-import { PickupRunner } from "../../../../prism-agent/protocols/pickup/PickupRunner";
+} from "../../../../src/domain";
+import { PickupRunner } from "../../../../src/prism-agent/protocols/pickup/PickupRunner";
 
 chai.use(chaiAsPromised);
 

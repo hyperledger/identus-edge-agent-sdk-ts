@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DID, DIDDocument, KeyPair, PublicKey, Service } from "../../../domain";
-import Castor from "../../../domain/buildingBlocks/Castor";
+import {
+  DID,
+  DIDDocument,
+  KeyPair,
+  PublicKey,
+  Service,
+} from "../../../src/domain";
+import Castor from "../../../src/domain/buildingBlocks/Castor";
 
 export const CastorMock: Castor = {
   parseDID(did: string): DID {
