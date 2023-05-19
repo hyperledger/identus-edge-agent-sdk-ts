@@ -162,6 +162,36 @@ describe("Apollo Tests", () => {
     );
   });
 
+  it("Should create a ED25519 publicKey from a privateKey", async () => {
+    const apollo = new Apollo();
+    const keyPair = apollo.createKeyPairFromKeyCurve({
+      curve: Curve.ED25519,
+    });
+
+    const keyPairFromPrivate = apollo.createKeyPairFromPrivateKey(
+      keyPair.privateKey
+    );
+
+    expect(Buffer.from(keyPair.publicKey.value).toString("hex")).to.equal(
+      Buffer.from(keyPairFromPrivate.publicKey.value).toString("hex")
+    );
+  });
+
+  it("Should create a x25519 publicKey from a privateKey", async () => {
+    const apollo = new Apollo();
+    const keyPair = apollo.createKeyPairFromKeyCurve({
+      curve: Curve.X25519,
+    });
+
+    const keyPairFromPrivate = apollo.createKeyPairFromPrivateKey(
+      keyPair.privateKey
+    );
+
+    expect(Buffer.from(keyPair.publicKey.value).toString("hex")).to.equal(
+      Buffer.from(keyPairFromPrivate.publicKey.value).toString("hex")
+    );
+  });
+
   it("Should only verify signed message using the correct SECP256K1 KeyPair", async () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
