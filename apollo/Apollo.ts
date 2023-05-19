@@ -1,6 +1,7 @@
 import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
+import { base64url } from "multiformats/bases/base64";
 
 import * as elliptic from "elliptic";
 import {
@@ -30,6 +31,7 @@ import { X25519KeyPair } from "./utils/X25519KeyPair";
 import { ApolloError } from "../domain/models/Errors";
 
 import { OctetKeyPair } from "./models/OctetKeyPair";
+import { X25519PrivateKey } from "./utils/X25519PrivateKey";
 const EC = elliptic.ec;
 
 export default class Apollo implements ApolloInterface {
@@ -119,22 +121,65 @@ export default class Apollo implements ApolloInterface {
     return this.getKeyPairForCurve(curve, seed);
   }
   createKeyPairFromPrivateKey(privateKey: PrivateKey): KeyPair {
-    const secp256k1PrivateKey = Secp256k1PrivateKey.secp256k1FromBytes(
-      privateKey.value
-    );
-    const secp256k1PublicKey = secp256k1PrivateKey.getPublicKey();
     const curve = privateKey.keyCurve;
-    return {
-      keyCurve: curve,
-      privateKey: {
+    if (privateKey.keyCurve.curve == Curve.SECP256K1) {
+      const secp256k1PrivateKey = Secp256k1PrivateKey.secp256k1FromBytes(
+        privateKey.value
+      );
+      const secp256k1PublicKey = secp256k1PrivateKey.getPublicKey();
+
+      return {
         keyCurve: curve,
-        value: secp256k1PrivateKey.getEncoded(),
-      },
-      publicKey: {
+        privateKey: {
+          keyCurve: curve,
+          value: secp256k1PrivateKey.getEncoded(),
+        },
+        publicKey: {
+          keyCurve: curve,
+          value: secp256k1PublicKey.getEncoded(),
+        },
+      };
+    } else if (privateKey.keyCurve.curve == Curve.ED25519) {
+      const ed25519PrivateKey = Ed25519PrivateKey.eddsa.keyFromSecret(
+        Buffer.from(
+          base64url.baseDecode(Buffer.from(privateKey.value).toString())
+        )
+      );
+      const ed25519PublicKey = ed25519PrivateKey.getPublic();
+      return {
         keyCurve: curve,
-        value: secp256k1PublicKey.getEncoded(),
-      },
-    };
+        privateKey: {
+          keyCurve: curve,
+          value: Buffer.from(
+            base64url.baseEncode(ed25519PrivateKey.getSecret())
+          ),
+        },
+        publicKey: {
+          keyCurve: curve,
+          value: Buffer.from(base64url.baseEncode(ed25519PublicKey)),
+        },
+      };
+    } else if (privateKey.keyCurve.curve == Curve.X25519) {
+      const x25519PrivateKey = X25519PrivateKey.ec.generateKeyPairFromSeed(
+        Buffer.from(
+          base64url.baseDecode(Buffer.from(privateKey.value).toString())
+        )
+      );
+      const x25519PublicKey = x25519PrivateKey.publicKey;
+      return {
+        keyCurve: curve,
+        privateKey: {
+          keyCurve: curve,
+          value: Buffer.from(base64url.baseEncode(x25519PrivateKey.secretKey)),
+        },
+        publicKey: {
+          keyCurve: curve,
+          value: Buffer.from(base64url.baseEncode(x25519PublicKey)),
+        },
+      };
+    }
+
+    throw new Error("Method not implemented.");
   }
   compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey {
     const secp256k1PublicKey = Secp256k1PublicKey.secp256k1FromBytes(
