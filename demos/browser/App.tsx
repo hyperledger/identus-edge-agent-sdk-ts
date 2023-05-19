@@ -314,7 +314,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   }
   async function handleParseOOB() {
     if (!oob) {
-      return 
+      return
     }
     const parsed = await props.agent.parseOOBInvitation(new URL(oob));
     await props.agent.acceptDIDCommInvitation(parsed)
@@ -327,7 +327,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
     </p>
     <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
   </>}
-  {connections.length > 0 && <p>Stored OOB Connection at <b>{connections[0].name}</b></p>}
+    {connections.length > 0 && <p>Stored OOB Connection at <b>{connections.at(0).name}</b></p>}
   </>
 }
 
@@ -339,7 +339,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
   const [messages, setMessages] = React.useState<SDK.Domain.Message[]>([]);
 
   const handleMessages = async (newMessages:SDK.Domain.Message[]) => {
-    
+
     const filteredMessages = newMessages;
     const joinedMessages = [...messages, ...filteredMessages];
 
@@ -352,10 +352,13 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
 
     if (requestPresentations.length) {
       for(const requestPresentation of requestPresentations) {
-        const lastCredential = await props.pluto.getAllCredentials();
+        const lastCredentials = await props.pluto.getAllCredentials();
+        const lastCredential = lastCredentials.at(-1);
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
-        const presentation = await props.agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential[lastCredential.length-1])
         try {
+          if (lastCredential === undefined) throw new Error("last credential not found");
+
+          const presentation = await props.agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential)
           await props.agent.sendMessage(presentation.makeMessage())
         } catch (err) {
           console.log("continue after err", err)
@@ -436,7 +439,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
     const message = messages[responseMessageIndex];
     // ok for demo
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const from = message.from!;
+    const from = message?.from as SDK.Domain.DID;
     await props.agent.sendMessage(
       new BasicMessage(
         { content: text },

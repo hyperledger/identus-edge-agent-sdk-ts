@@ -80,7 +80,7 @@ export default class Castor implements CastorInterface {
           return new Protos.io.iohk.atala.prism.protos.Service({
             service_endpoint: [service.serviceEndpoint.uri],
             id: service.id,
-            type: service.type[0],
+            type: service.type.at(0),
           });
         }),
       });
