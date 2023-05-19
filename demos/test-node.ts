@@ -1,8 +1,11 @@
 import { webcrypto } from "node:crypto";
-import * as SDK from "..";
-import { createTestScenario } from "./createTestScenario";
 
 (globalThis as any).crypto = webcrypto;
+
+import * as SDK from "../src";
+import { BasicMessage } from "../src";
+import { ListenerKey } from "../src/prism-agent/types";
+import { createTestScenario } from "./createTestScenario";
 
 (async () => {
   const mediatorDID = SDK.Domain.DID.fromString(
@@ -11,10 +14,25 @@ import { createTestScenario } from "./createTestScenario";
 
   const { seed, agent } = createTestScenario(mediatorDID);
 
+  agent.addListener(ListenerKey.MESSAGE, (message) => {
+    console.log("Got new message", message);
+  });
+
   await agent.start();
+
   console.log(
     `Welcome to PrismEdge Agent, state ${
       agent.state
     } with mnemonics ${seed.mnemonics.join(", ")}`
+  );
+
+  const secondaryDID = await agent.createNewPeerDID([], true);
+
+  await agent.sendMessage(
+    new BasicMessage(
+      { content: "Test Message" },
+      secondaryDID,
+      secondaryDID
+    ).makeMessage()
   );
 })();
