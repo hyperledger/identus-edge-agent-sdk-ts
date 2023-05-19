@@ -32,10 +32,10 @@ export class PickupRunner {
     if (Message.isBase64Attachment(attachment.data)) {
       return {
         attachmentId: attachment.id,
-        data: attachment.data.base64,
+        data: Buffer.from(attachment.data.base64, 'base64').toString('utf8'),
       };
     } else if (Message.isJsonAttachment(attachment.data)) {
-      return { attachmentId: attachment.id, data: attachment.data.data };
+      return { attachmentId: attachment.id, data: JSON.stringify(attachment.data.data) };
     }
 
     return null;
@@ -55,9 +55,7 @@ export class PickupRunner {
           .filter(this.filterNullAttachments)
           .map(async (attachment) => ({
             attachmentId: attachment.attachmentId,
-            message: await this.mercury.unpackMessage(
-              JSON.stringify(attachment.data)
-            ),
+            message: await this.mercury.unpackMessage(attachment.data),
           }))
       );
     }

@@ -33,7 +33,7 @@ describe("PRISMDID CreateTest", () => {
 
     const resolvedPublicKeyMultibase =
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-      verificationMethod?.values[0]?.publicKeyMultibase!;
+      verificationMethod?.values.at(0)?.publicKeyMultibase!;
 
     const resolvedPublicKeyBuffer = Buffer.from(
       base58btc.decode(resolvedPublicKeyMultibase)
@@ -75,7 +75,7 @@ describe("PRISMDID CreateTest", () => {
 
     const resolvedPublicKeyBase64 =
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-      verificationMethod?.values[0]?.publicKeyMultibase!;
+      verificationMethod?.values.at(0)?.publicKeyMultibase!;
 
     const resolvedPublicKeyBuffer = Buffer.from(
       base58btc.decode(resolvedPublicKeyBase64)

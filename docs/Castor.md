@@ -1,17 +1,14 @@
 # Castor
 
-Castor module provides a suite of primitives for working with Decentralized 
-Identifiers (DIDs). It allows developers to create and manage DIDs, manage their 
-associated keys and service endpoints, and resolve DIDs to retrieve corresponding 
-DID Documents.
+The Castor module provides a suite of primitives for working with [Decentralized  Identifiers (DIDs)](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#decentralized-identifer). It allows developers to create and manage DIDs, associated keys, and service endpoints and resolve DIDs to retrieve corresponding [DID Documents](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#did-document).
 
-Castor currently supports creation and resolution of `prism` and `peer` DID methods.
+Castor currently supports the creation and resolution of `prism` and `peer` [DID methods](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#did-method).
 
-> NOTE: Castor depends on Apollo module for cryptographic operations.
+> **Note:** Castor depends on the Apollo module for cryptographic operations.
 
 ## Castor setup
 
-Assuming the Wallet SDK has been installed as a dependency, here's an example of
+Assuming the Wallet SDK installation, here's an example of
 how to import and init Castor module:
 
 ```ts
@@ -23,14 +20,12 @@ const castor = new Castor(apollo);
 // use castor...
 ```
 
-`Domain` contains a domain-specific types and models used by Apollo and other 
-modules in the SDK.
+`Domain` contains domain-specific types and models used by Apollo and other modules in the SDK.
 
 ## API Overview
-Here's a brief explanation of the most important primitives:
+Here's a brief explanation of the essential primitives:
 
-- `parseDID`: This function takes a string representation of a DID and returns 
-an instance of `Domain.DID`. It may throw an error if the string is not a valid
+- `parseDID`: This function takes a string representation of a DID and returns an instance of `Domain.DID`. It may throw an error if the string is not a valid
 DID.
 
 ```ts
@@ -42,9 +37,7 @@ const parsedPeerDid = castor.parseDID(
 );
 ```
 
-- `createPrismDID`: This function creates new `prism` DID, using a given master 
-public key and a list of services. It may throw an error if the master public 
-key or services are invalid.
+- `createPrismDID`: This function creates a new `prism` DID, using a given master public key and a list of services. It may throw an error if the master public key or services are invalid.
 
 ```ts
 const exampleServiceEndpoint = new Domain.Service("didcomm", ["DIDCommMessaging"], {
@@ -61,9 +54,7 @@ const prismDid = await castor.createPrismDID(
 );
 ```
 
-- `createPeerDID`: This function creates new `peer` DID, using given key 
-agreement and authentication key pairs, and a list of services. It may throw an 
-error if the key pairs or services are invalid.
+- `createPeerDID`: This function creates new peer DID, using a given key agreement, authentication key pairs, and a list of services. It may throw an error if the key pairs or services are invalid.
 
 ```ts
 const peerDid = await castor.createPeerDID(
@@ -72,20 +63,15 @@ const peerDid = await castor.createPeerDID(
 );
 ```
 
-- `resolveDID`: This function asynchronously resolves a DID to its corresponding
-DID Document. It may throw an error if the DID is invalid or the document cannot
-be retrieved.
+- `resolveDID`: This function asynchronously resolves a DID to its corresponding DID Document. It may throw an error if the DID is invalid or the document is unretrievable.
 
-> NOTE: only `prism` and `peer` DID methods are currently supported!
+> **Note:** only `prism` and `peer` DID methods are currently supported!
 
 ```ts
 const didDoc = await castor.resolveDID("did:prism:123456");
 ```
 
-- `verifySignature`: This function verifies the authenticity of a signature 
-using given DID, challenge, and signature data. It returns a boolean value 
-indicating whether the signature is valid or not. It may throw an error if the 
-DID or signature data are invalid.
+- `verifySignature`: This function verifies the authenticity of a signature using given DID, challenge, and signature data. It returns a boolean value indicating whether the signature is valid or not. It may throw an error if the DID or signature data are invalid.
 
 ```ts
 const message = "data to sign";
@@ -103,6 +89,4 @@ const isValid = castor.verifySignature(
 );
 ```
 
-> NOTE: This function is similar to the `verifySignature` function in the Apollo
-> module, but it facilitates the process of parsing the DID and extracting the 
-> right public key.
+> **Note:** This function is similar to the `verifySignature` function in the Apollo module, but it facilitates parsing the DID and extracting the right public key.

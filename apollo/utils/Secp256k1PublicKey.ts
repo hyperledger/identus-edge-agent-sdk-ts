@@ -33,7 +33,8 @@ export class Secp256k1PublicKey
     const curvePoint = this.getCurvePoint();
     const yArr = curvePoint.y.bytes();
     const xArr = curvePoint.x.bytes();
-    const prefix = 2 + (yArr[yArr.length - 1] & 1);
+    const lastY = yArr.at(-1) ?? 0;
+    const prefix = 2 + (lastY & 1);
     const arr = new Uint8Array(1 + size);
     arr[0] = prefix;
     arr.set(xArr, 1);
@@ -72,9 +73,9 @@ export class Secp256k1PublicKey
         `Encoded byte array's expected length is ${expectedLength}, but got ${encoded.length} bytes`
       );
     }
-    if (encoded[0] !== 0x04) {
+    if (encoded.at(0) !== 0x04) {
       throw new Error(
-        `First byte was expected to be 0x04, but got ${encoded[0]}`
+        `First byte was expected to be 0x04, but got ${encoded.at(0)}`
       );
     }
 

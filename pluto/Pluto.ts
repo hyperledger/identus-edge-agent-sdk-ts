@@ -47,15 +47,16 @@ export type PlutoConnectionProps =
 
 export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
+  wasmUrl: string = typeof window !== "undefined" ? `https://sql.js.org` : `node_modules/sql.js`;
 
   constructor(connection: PlutoConnectionProps) {
     const presetSqlJSConfig =
         connection.type === "sqljs"
             ? {
               location: "pluto",
-              useLocalForage: true,
+              useLocalForage: typeof window !== 'undefined',
               sqlJsConfig: {
-                locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
+                locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
               },
             }
             : {};

@@ -1,32 +1,22 @@
 # Pluto
 
-Pluto defines PRISM's data storage interface for working with SSI artifacts such
-as DIDs, private keys, and DIDComm messages. Depending on the platform and
-specific use case, it's up to the application to provide an appropriate
-implementation of this interface.
+Pluto defines PRISM's data storage interface for working with [SSI](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#self-sovereign-identity) artifacts such as [DIDs](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#decentralized-identifier), private keys, and [DIDComm](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#didcomm) messages. Depending on the platform and specific use case, it's up to the application to appropriately implement this interface.
 
-As part of TypeScript Wallet SDK, Pluto also provides a default implementation
-based on TypeORM supporting various drivers, but on frontend if the type is set to`sqljs`, it will preset
-to use `sqljs` together with `indexedDB`. Pluto serves as an example and can be used for
-prototyping and testing before investing in a more robust use-case specific
-solution. In the future, we might provide one or more implementations which we
-could recommend for production use.
+As part of TypeScript Wallet SDK, Pluto also provides a default implementation based on TypeORM supporting various drivers. Still, on the frontend, if the type is `sqljs`, it will preset to use `sqljs` together with indexedDB. Pluto is an example and can get used for prototyping and testing before investing in a more robust use-case-specific solution. In the future, we might provide one or more implementations we could recommend for production use.
 
 ## Interface preview
 
-Here's the part of Pluto interface, just to give you an idea of what it looks
-like. For the full interface specification, please check `Domain` module in the
-SDK.
+Here's the part of the Pluto interface to give you an idea of what it looks like. Please check the `Domain` module in the SDK for the full interface specification.
 
 ```ts
 interface Pluto {
   /**
-   * A place to put initialisation logic, if needed for the particular implementation.
+   * A place to put initialization logic, if needed, for the particular implementation.
    */
   start(): Promise<void>;
 
   /**
-   * This method should implement a mechanism to persist given PRISM DID along with its private key (SECP256K1).
+   * This method should implement a persistent mechanism given PRISM DID and its private key (SECP256K1).
    */
   storePrismDID(
       did: DID,
@@ -37,12 +27,12 @@ interface Pluto {
   ): Promise<void>;
 
   /**
-   * This method should implement a mechanism to persist given Peer DID along with its private keys (ED25519 and X25519).
+   * This method should implement a mechanism persistent mechanism given Peer DID and its private keys (ED25519 and X25519).
    */
   storePeerDID(did: DID, privateKeys: Array<PrivateKey>): Promise<void>;
 
   /**
-   * This method should implement a mechanism to persist private keys (SECP256K1, ED25519 and X25519).
+   * This method should implement a mechanism to persist private keys (SECP256K1, ED25519, and X25519).
    */
   storePrivateKeys(
       privateKey: PrivateKey,
@@ -52,7 +42,7 @@ interface Pluto {
   ): Promise<void>;
 
   /**
-   * This method should implement a mechanism to persist given DIDComm message.
+   * This method should implement a mechanism to persist the given DIDComm message.
    */
   storeMessage(message: Message): Promise<void>;
 
