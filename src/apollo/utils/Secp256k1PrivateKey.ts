@@ -1,6 +1,6 @@
 import BN from "bn.js";
 
-import { ECConfig } from "../../../config/ECConfig";
+import { ECConfig } from "../../config/ECConfig";
 import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { ApolloError } from "../../domain/models/Errors";

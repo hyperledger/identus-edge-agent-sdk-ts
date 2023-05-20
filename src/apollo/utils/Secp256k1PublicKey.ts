@@ -2,7 +2,7 @@ import BN from "bn.js";
 import * as elliptic from "elliptic";
 import BigInteger from "bn.js";
 
-import { ECConfig } from "../../../config/ECConfig";
+import { ECConfig } from "../../config/ECConfig";
 import { ECCoordinate } from "./ec/ECCoordinate";
 import { ECPoint } from "./ec/ECPoint";
 import { ApolloError } from "../../domain/models/Errors";
