@@ -1,9 +1,9 @@
-import {expect} from "chai";
-import {CredentialType, DID, VerifiableCredential} from "../../domain";
-import Castor from "../../castor/Castor";
-import Apollo from "../../domain/buildingBlocks/Apollo";
-import {InvalidJWTString,} from "../../domain/models/errors/Pollux";
-import Pollux from "../../pollux/Pollux";
+import { expect } from "chai";
+import { CredentialType, DID, VerifiableCredential } from "../../src/domain";
+import Castor from "../../src/castor/Castor";
+import Apollo from "../../src/domain/buildingBlocks/Apollo";
+import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
+import Pollux from "../../src/pollux/Pollux";
 
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -64,29 +64,37 @@ describe("Pollux", () => {
 
     describe("Valid Credential", () => {
       it(`should return JWTVerifiableCredential`, () => {
-        const jwtPayload = createPayload("jwtid", "proof", CredentialType.JWT)
+        const jwtPayload = createPayload("jwtid", "proof", CredentialType.JWT);
         const encoded = encodeCredential(jwtPayload);
         const result = pollux.parseVerifiableCredential(encoded);
 
         expect(result).to.not.be.undefined;
         expect(result.id).to.equal(encoded);
-        validateCredential(result, jwtPayload)
+        validateCredential(result, jwtPayload);
       });
 
       // currently not handled
       it.skip(`should return W3CVerifiableCredential`, () => {
-        const jwtPayload = createPayload("w3cid", "proofW3c", CredentialType.W3C)
+        const jwtPayload = createPayload(
+          "w3cid",
+          "proofW3c",
+          CredentialType.W3C
+        );
         const encoded = encodeCredential(jwtPayload);
         const result = pollux.parseVerifiableCredential(encoded);
 
         expect(result).to.not.be.undefined;
         expect(result.id).to.equal(encoded);
-        validateCredential(result, jwtPayload.vc)
+        validateCredential(result, jwtPayload.vc);
       });
     });
   });
 
-  function createPayload(id: string, proof: string, credentialType: CredentialType) {
+  function createPayload(
+    id: string,
+    proof: string,
+    credentialType: CredentialType
+  ) {
     const cred: VerifiableCredential = {
       id,
       credentialType: credentialType,
@@ -101,9 +109,9 @@ describe("Pollux", () => {
       expirationDate: new Date().toISOString(),
       issuanceDate: new Date().toISOString(),
       issuer: new DID(
-          "did",
-          "peer",
-          "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+        "did",
+        "peer",
+        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
       ),
       refreshService: {
         id: "refreshServiceId",
@@ -139,20 +147,26 @@ describe("Pollux", () => {
       sub: "did:peer:2.sub",
       exp: 1680615608435,
       aud: ["aud-json"],
-      vc: cred
+      vc: cred,
     };
-    return jwtPayload
+    return jwtPayload;
   }
   function validateCredential(result: VerifiableCredential, jwtPayload: any) {
-    let credential = jwtPayload.vc;
+    const credential = jwtPayload.vc;
 
     expect(result.aud).to.be.deep.equal(jwtPayload.aud);
     expect(result.context).to.be.deep.equal(credential.context);
-    expect(result.credentialSubject).to.be.deep.equal(credential.credentialSubject);
+    expect(result.credentialSubject).to.be.deep.equal(
+      credential.credentialSubject
+    );
     expect(result.credentialType).to.be.equal(credential.credentialType);
 
-    expect(result.expirationDate).to.be.equal(new Date(jwtPayload.exp).toISOString());
-    expect(result.issuanceDate).to.be.equal(new Date(jwtPayload.nbf).toISOString());
+    expect(result.expirationDate).to.be.equal(
+      new Date(jwtPayload.exp).toISOString()
+    );
+    expect(result.issuanceDate).to.be.equal(
+      new Date(jwtPayload.nbf).toISOString()
+    );
 
     expect(result.type).to.be.deep.equal(credential.type);
 
@@ -167,7 +181,11 @@ describe("Pollux", () => {
     // expect(result.validFrom).to.be.deep.equal(credential.validFrom);
     // expect(result.validUntil).to.be.deep.equal(credential.validUntil);
 
-    expect(result.credentialSchema).to.be.deep.equal(credential.credentialSchema);
-    expect(result.credentialStatus).to.be.deep.equal(credential.credentialStatus);
+    expect(result.credentialSchema).to.be.deep.equal(
+      credential.credentialSchema
+    );
+    expect(result.credentialStatus).to.be.deep.equal(
+      credential.credentialStatus
+    );
   }
 });

@@ -1,12 +1,12 @@
 import { expect, assert } from "chai";
-import { Message } from "../../../../domain";
-import { AgentError } from "../../../../domain/models/Errors";
+import { Message } from "../../../../src/domain";
+import { AgentError } from "../../../../src/domain/models/Errors";
 import {
   createIssueCredentialBody,
   IssueCredential,
-} from "../../../../prism-agent/protocols/issueCredential/IssueCredential";
-import { RequestCredential } from "../../../../prism-agent/protocols/issueCredential/RequestCredential";
-import { ProtocolType } from "../../../../prism-agent/protocols/ProtocolTypes";
+} from "../../../../src/prism-agent/protocols/issueCredential/IssueCredential";
+import { RequestCredential } from "../../../../src/prism-agent/protocols/issueCredential/RequestCredential";
+import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
 
 describe("IssueCredential", () => {

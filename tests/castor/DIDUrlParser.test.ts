@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import * as DIDUrlParser from "../../castor/parser/DIDUrlParser";
+import * as DIDUrlParser from "../../src/castor/parser/DIDUrlParser";
 
 describe("DIDUrlParser", () => {
   it("should test valid URLs", () => {

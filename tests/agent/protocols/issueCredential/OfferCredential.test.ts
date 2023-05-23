@@ -1,11 +1,11 @@
 import { expect, assert } from "chai";
-import { Message } from "../../../../domain";
-import { AgentError } from "../../../../domain/models/Errors";
+import { Message } from "../../../../src/domain";
+import { AgentError } from "../../../../src/domain/models/Errors";
 import {
   createOfferCredentialBody,
   OfferCredential,
-} from "../../../../prism-agent/protocols/issueCredential/OfferCredential";
-import { ProtocolType } from "../../../../prism-agent/protocols/ProtocolTypes";
+} from "../../../../src/prism-agent/protocols/issueCredential/OfferCredential";
+import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
 
 describe("OfferCredential", () => {

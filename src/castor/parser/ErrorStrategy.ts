@@ -14,7 +14,7 @@ export class ErrorStrategy extends DefaultErrorStrategy {
     );
   }
   recoverInline(recognizer: Parser): Token {
-    var context = recognizer.context;
+    let context = recognizer.context;
     while (context != null) {
       context = context.parent!;
     }

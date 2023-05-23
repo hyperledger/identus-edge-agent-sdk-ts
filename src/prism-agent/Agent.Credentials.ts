@@ -164,7 +164,9 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("Credential subject not found");
     }
 
-    const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+    const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(
+      subjectDID
+    );
     const prismPrivateKey = prismPrivateKeys.at(0);
 
     if (prismPrivateKey === undefined) {

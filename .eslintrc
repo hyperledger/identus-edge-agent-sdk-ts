@@ -7,7 +7,7 @@
       "jsx": true
     }
   },
-  "ignorePatterns": ["castor/parser", "castor/protos", "webpack", "scripts"],
+  "ignorePatterns": ["src/castor/parser", "src/castor/protos", "webpack", "scripts", "tests"],
   "plugins": ["@typescript-eslint", "react"],
   "extends": [
     "eslint:recommended",

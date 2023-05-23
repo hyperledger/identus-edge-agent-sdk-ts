@@ -16,12 +16,12 @@ import {
   Service,
   ServiceEndpoint,
   Services,
-} from "../../domain";
-import * as Domain from "../../domain";
-import { MercuryError } from "../../domain/models/Errors";
-import { DIDCommProtocol } from "../../mercury/DIDCommProtocol";
-import Mercury from "../../mercury/Mercury";
-import Castor from "../../domain/buildingBlocks/Castor";
+} from "../../src/domain";
+import * as Domain from "../../src/domain";
+import { MercuryError } from "../../src/domain/models/Errors";
+import { DIDCommProtocol } from "../../src/mercury/DIDCommProtocol";
+import Mercury from "../../src/mercury/Mercury";
+import Castor from "../../src/domain/buildingBlocks/Castor";
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 const expect = chai.expect;

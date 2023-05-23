@@ -1,14 +1,14 @@
 import {
   ConnectionsManager as ConnectionsManagerClass,
   MediatorHandler,
-} from "../../../prism-agent/types";
-import Castor from "../../../domain/buildingBlocks/Castor";
-import Mercury from "../../../domain/buildingBlocks/Mercury";
-import Pluto from "../../../domain/buildingBlocks/Pluto";
-import { DIDPair } from "../../../domain/models/DIDPair";
-import { CancellableTask } from "../../../prism-agent/helpers/Task";
-import { DID, Message } from "../../../domain";
-import { AgentMessageEvents } from "../../../prism-agent/Agent.MessageEvents";
+} from "../../../src/prism-agent/types";
+import Castor from "../../../src/domain/buildingBlocks/Castor";
+import Mercury from "../../../src/domain/buildingBlocks/Mercury";
+import Pluto from "../../../src/domain/buildingBlocks/Pluto";
+import { DIDPair } from "../../../src/domain/models/DIDPair";
+import { CancellableTask } from "../../../src/prism-agent/helpers/Task";
+import { DID, Message } from "../../../src/domain";
+import { AgentMessageEvents } from "../../../src/prism-agent/Agent.MessageEvents";
 
 export class ConnectionsManagerMock implements ConnectionsManagerClass {
   events = new AgentMessageEvents();

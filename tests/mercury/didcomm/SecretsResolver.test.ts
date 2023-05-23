@@ -4,9 +4,9 @@ import SinonChai from "sinon-chai";
 import Apollo from "../../../apollo/Apollo";
 import Castor from "../../../castor/Castor";
 import Pluto from "../../../pluto/Pluto";
-import * as Domain from "../../../domain";
-import { DIDCommSecretsResolver } from "../../../mercury/didcomm/SecretsResolver";
-import { Curve } from "../../../domain";
+import * as Domain from "../../../src/domain";
+import { DIDCommSecretsResolver } from "../../../src/mercury/didcomm/SecretsResolver";
+import { Curve } from "../../../src/domain";
 
 chai.use(SinonChai);
 const expect = chai.expect;

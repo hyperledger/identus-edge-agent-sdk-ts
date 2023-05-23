@@ -1,10 +1,10 @@
 import chai from "chai";
 import { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { Message } from "../../../../../domain";
-import Mercury from "../../../../../domain/buildingBlocks/Mercury";
-import { AgentError } from "../../../../../domain/models/Errors";
-import { DIDCommInvitationRunner } from "../../../../../prism-agent/protocols/invitation/v2/DIDCommInvitationRunner";
+import { Message } from "../../../../../src/domain";
+import Mercury from "../../../../../src/domain/buildingBlocks/Mercury";
+import { AgentError } from "../../../../../src/domain/models/Errors";
+import { DIDCommInvitationRunner } from "../../../../../src/prism-agent/protocols/invitation/v2/DIDCommInvitationRunner";
 import { MercuryStub } from "../../../mocks/MercuryMock";
 
 let mercury: Mercury;

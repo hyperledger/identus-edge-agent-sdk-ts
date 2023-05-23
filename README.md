@@ -99,3 +99,8 @@ const agent = new prismSDK.Agent(
 await agent.start();
 ```
 
+### Running demos
+
+To run browser demo app, just run `npm run dev:browser` and browser will automatically open and load the demo app.
+
+To run Node.js demo app, run `npm run dev:node` to build the demo app and then run it with `node build/node-test/index.js`.

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { base64 } from "multiformats/bases/base64";
-import { Message } from "../../../domain";
-import Mercury from "../../../domain/buildingBlocks/Mercury";
+import { Message } from "../../../src/domain";
+import Mercury from "../../../src/domain/buildingBlocks/Mercury";
 
 export class MercuryStub implements Mercury {
   private throwSendMessageError?: Error;

@@ -1,4 +1,4 @@
-import { DID } from "../../../domain";
+import { DID } from "../../../src/domain";
 
 export class DIDTest extends DID {
   constructor(testMethod = "test", testMethodId = "testableId") {
