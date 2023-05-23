@@ -4,7 +4,7 @@ import { expect, assert } from "chai";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../src/apollo/Apollo";
-import { ECConfig } from "../../config/ECConfig";
+import { ECConfig } from "../../src/config/ECConfig";
 import { Curve } from "../../src/domain/models";
 import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
