@@ -152,7 +152,7 @@ describe("Pollux", () => {
     return jwtPayload;
   }
   function validateCredential(result: VerifiableCredential, jwtPayload: any) {
-    let credential = jwtPayload.vc;
+    const credential = jwtPayload.vc;
 
     expect(result.aud).to.be.deep.equal(jwtPayload.aud);
     expect(result.context).to.be.deep.equal(credential.context);
