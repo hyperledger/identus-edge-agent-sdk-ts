@@ -93,20 +93,23 @@ export class PeerDIDCreate {
   }
 
   private encodeService(services: DIDDocumentService[]): string {
-    const peerDIDServices = services.reduce<PeerDIDEncoded[]>((acc, service) => {
-      const type = service.type.at(0);
+    const peerDIDServices = services.reduce<PeerDIDEncoded[]>(
+      (acc, service) => {
+        const type = service.type.at(0);
 
-      if (type === undefined) return acc;
+        if (type === undefined) return acc;
 
-      const encoded = new PeerDIDService(
-        type,
-        service.serviceEndpoint.uri,
-        service.serviceEndpoint.routingKeys,
-        service.serviceEndpoint.accept
-      ).encode();
+        const encoded = new PeerDIDService(
+          type,
+          service.serviceEndpoint.uri,
+          service.serviceEndpoint.routingKeys,
+          service.serviceEndpoint.accept
+        ).encode();
 
-      return acc.concat(encoded)
-    }, []);
+        return acc.concat(encoded);
+      },
+      []
+    );
 
     if (peerDIDServices.length === 1) {
       const peerDIDService = peerDIDServices.at(0);

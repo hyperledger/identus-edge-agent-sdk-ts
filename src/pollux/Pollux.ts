@@ -17,7 +17,8 @@ export default class Pollux implements PolluxInterface {
     const parts = jwtString.split(".");
     const credentialString = parts.at(1);
 
-    if (parts.length != 3 || credentialString === undefined) throw new InvalidJWTString();
+    if (parts.length != 3 || credentialString === undefined)
+      throw new InvalidJWTString();
 
     const base64Data = base64url.baseDecode(credentialString);
     const jsonString = Buffer.from(base64Data).toString();

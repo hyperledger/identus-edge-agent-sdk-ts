@@ -1,5 +1,5 @@
 import { expect, assert } from "chai";
-import * as DIDParser from "../../castor/parser/DIDParser";
+import * as DIDParser from "../../src/castor/parser/DIDParser";
 
 describe("DIDParser", () => {
   it("should test valid DIDs", () => {

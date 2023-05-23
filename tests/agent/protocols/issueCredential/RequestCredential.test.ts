@@ -1,11 +1,11 @@
 import { expect, assert } from "chai";
-import { Message } from "../../../../domain";
-import { AgentError } from "../../../../domain/models/Errors";
+import { Message } from "../../../../src/domain";
+import { AgentError } from "../../../../src/domain/models/Errors";
 
 import {
   createRequestCredentialBody,
   RequestCredential,
-} from "../../../../prism-agent/protocols/issueCredential/RequestCredential";
+} from "../../../../src/prism-agent/protocols/issueCredential/RequestCredential";
 import { DIDTest } from "../../helpers/DID";
 
 describe("RequestCredential", () => {

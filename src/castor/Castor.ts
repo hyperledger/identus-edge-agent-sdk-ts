@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SHA256 } from "@stablelib/sha256";
 import { base64url } from "multiformats/bases/base64";
+import * as base64 from "multiformats/bases/base64";
+import * as base58 from "multiformats/bases/base58";
 
 import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
@@ -31,8 +33,6 @@ import {
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
 } from "../domain";
-import * as base64 from "multiformats/bases/base64";
-import * as base58 from "multiformats/bases/base58";
 
 import { JWKHelper } from "../peer-did/helpers/JWKHelper";
 import {

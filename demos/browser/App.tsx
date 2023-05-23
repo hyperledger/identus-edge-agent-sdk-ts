@@ -3,17 +3,17 @@ import React, {useCallback, useEffect} from "react";
 import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
-import * as SDK from "../../index";
-import * as Domain from '../../domain';
+import * as SDK from "../../src";
+import * as Domain from '../../src/domain';
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
-import { BasicMessage } from "../../prism-agent/protocols/other/BasicMessage";
-import { ListenerKey } from "../../prism-agent/types";
-import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
-import { IssueCredential } from "../../prism-agent/protocols/issueCredential/IssueCredential";
-import { RequestPresentation } from "../../prism-agent/protocols/proofPresentation/RequestPresentation";
+import { BasicMessage } from "../../src/prism-agent/protocols/other/BasicMessage";
+import { ListenerKey } from "../../src/prism-agent/types";
+import { OfferCredential } from "../../src/prism-agent/protocols/issueCredential/OfferCredential";
+import { IssueCredential } from "../../src/prism-agent/protocols/issueCredential/IssueCredential";
+import { RequestPresentation } from "../../src/prism-agent/protocols/proofPresentation/RequestPresentation";
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"

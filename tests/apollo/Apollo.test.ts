@@ -1,15 +1,15 @@
 import BN from "bn.js";
 import { expect, assert } from "chai";
 
-import { Secp256k1KeyPair } from "../../apollo/utils/Secp256k1KeyPair";
+import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 
-import Apollo from "../../apollo/Apollo";
-import { ECConfig } from "../../config/ECConfig";
-import { Curve } from "../../domain/models";
-import { MnemonicWordList } from "../../domain/models/WordList";
+import Apollo from "../../src/apollo/Apollo";
+import { ECConfig } from "../../src/config/ECConfig";
+import { Curve } from "../../src/domain/models";
+import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
-import { Secp256k1PrivateKey } from "../../apollo/utils/Secp256k1PrivateKey";
-import { ApolloError } from "../../domain/models/Errors";
+import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
+import { ApolloError } from "../../src/domain/models/Errors";
 
 let apollo: Apollo;
 

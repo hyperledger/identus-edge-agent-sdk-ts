@@ -1,65 +1,75 @@
 import "reflect-metadata";
-import {DID, getKeyCurveByNameAndIndex, Mediator, Message, PeerDID, PrivateKey,} from "../domain";
-import {PrismDIDInfo} from "../domain/models/PrismDIDInfo";
-import {VerifiableCredential} from "../domain/models/VerifiableCredential";
-import {default as PlutoInterface} from "../domain/buildingBlocks/Pluto";
-import {DataSource, Like, Repository} from "typeorm";
+import {
+  DID,
+  getKeyCurveByNameAndIndex,
+  Mediator,
+  Message,
+  PeerDID,
+  PrivateKey,
+} from "../domain";
+import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
+import { VerifiableCredential } from "../domain/models/VerifiableCredential";
+import { default as PlutoInterface } from "../domain/buildingBlocks/Pluto";
+import { DataSource, Like, Repository } from "typeorm";
 import * as entities from "./entities";
 import Did from "./entities/DID";
-import {DIDPair} from "../domain/models/DIDPair";
-import {MysqlConnectionOptions} from "typeorm/driver/mysql/MysqlConnectionOptions";
-import {PostgresConnectionOptions} from "typeorm/driver/postgres/PostgresConnectionOptions";
-import {CockroachConnectionOptions} from "typeorm/driver/cockroachdb/CockroachConnectionOptions";
-import {SqliteConnectionOptions} from "typeorm/driver/sqlite/SqliteConnectionOptions";
-import {SqlServerConnectionOptions} from "typeorm/driver/sqlserver/SqlServerConnectionOptions";
-import {SapConnectionOptions} from "typeorm/driver/sap/SapConnectionOptions";
-import {OracleConnectionOptions} from "typeorm/driver/oracle/OracleConnectionOptions";
-import {CordovaConnectionOptions} from "typeorm/driver/cordova/CordovaConnectionOptions";
-import {NativescriptConnectionOptions} from "typeorm/driver/nativescript/NativescriptConnectionOptions";
-import {SqljsConnectionOptions} from "typeorm/driver/sqljs/SqljsConnectionOptions";
-import {MongoConnectionOptions} from "typeorm/driver/mongodb/MongoConnectionOptions";
-import {AuroraMysqlConnectionOptions} from "typeorm/driver/aurora-mysql/AuroraMysqlConnectionOptions";
-import {AuroraPostgresConnectionOptions} from "typeorm/driver/aurora-postgres/AuroraPostgresConnectionOptions";
-import {ExpoConnectionOptions} from "typeorm/driver/expo/ExpoConnectionOptions";
-import {BetterSqlite3ConnectionOptions} from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
-import {CapacitorConnectionOptions} from "typeorm/driver/capacitor/CapacitorConnectionOptions";
-import {SpannerConnectionOptions} from "typeorm/driver/spanner/SpannerConnectionOptions";
+import { DIDPair } from "../domain/models/DIDPair";
+import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import { CockroachConnectionOptions } from "typeorm/driver/cockroachdb/CockroachConnectionOptions";
+import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
+import { SqlServerConnectionOptions } from "typeorm/driver/sqlserver/SqlServerConnectionOptions";
+import { SapConnectionOptions } from "typeorm/driver/sap/SapConnectionOptions";
+import { OracleConnectionOptions } from "typeorm/driver/oracle/OracleConnectionOptions";
+import { CordovaConnectionOptions } from "typeorm/driver/cordova/CordovaConnectionOptions";
+import { NativescriptConnectionOptions } from "typeorm/driver/nativescript/NativescriptConnectionOptions";
+import { SqljsConnectionOptions } from "typeorm/driver/sqljs/SqljsConnectionOptions";
+import { MongoConnectionOptions } from "typeorm/driver/mongodb/MongoConnectionOptions";
+import { AuroraMysqlConnectionOptions } from "typeorm/driver/aurora-mysql/AuroraMysqlConnectionOptions";
+import { AuroraPostgresConnectionOptions } from "typeorm/driver/aurora-postgres/AuroraPostgresConnectionOptions";
+import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions";
+import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
+import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
+import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
-    | Omit<MysqlConnectionOptions, IgnoreProps>
-    | Omit<PostgresConnectionOptions, IgnoreProps>
-    | Omit<CockroachConnectionOptions, IgnoreProps>
-    | Omit<SqliteConnectionOptions, IgnoreProps>
-    | Omit<SqlServerConnectionOptions, IgnoreProps>
-    | Omit<SapConnectionOptions, IgnoreProps>
-    | Omit<OracleConnectionOptions, IgnoreProps>
-    | Omit<CordovaConnectionOptions, IgnoreProps>
-    | Omit<NativescriptConnectionOptions, IgnoreProps>
-    | Omit<SqljsConnectionOptions, IgnoreProps>
-    | Omit<MongoConnectionOptions, IgnoreProps>
-    | Omit<AuroraMysqlConnectionOptions, IgnoreProps>
-    | Omit<AuroraPostgresConnectionOptions, IgnoreProps>
-    | Omit<ExpoConnectionOptions, IgnoreProps>
-    | Omit<BetterSqlite3ConnectionOptions, IgnoreProps>
-    | Omit<CapacitorConnectionOptions, IgnoreProps>
-    | Omit<SpannerConnectionOptions, IgnoreProps>;
+  | Omit<MysqlConnectionOptions, IgnoreProps>
+  | Omit<PostgresConnectionOptions, IgnoreProps>
+  | Omit<CockroachConnectionOptions, IgnoreProps>
+  | Omit<SqliteConnectionOptions, IgnoreProps>
+  | Omit<SqlServerConnectionOptions, IgnoreProps>
+  | Omit<SapConnectionOptions, IgnoreProps>
+  | Omit<OracleConnectionOptions, IgnoreProps>
+  | Omit<CordovaConnectionOptions, IgnoreProps>
+  | Omit<NativescriptConnectionOptions, IgnoreProps>
+  | Omit<SqljsConnectionOptions, IgnoreProps>
+  | Omit<MongoConnectionOptions, IgnoreProps>
+  | Omit<AuroraMysqlConnectionOptions, IgnoreProps>
+  | Omit<AuroraPostgresConnectionOptions, IgnoreProps>
+  | Omit<ExpoConnectionOptions, IgnoreProps>
+  | Omit<BetterSqlite3ConnectionOptions, IgnoreProps>
+  | Omit<CapacitorConnectionOptions, IgnoreProps>
+  | Omit<SpannerConnectionOptions, IgnoreProps>;
 
 export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
-  wasmUrl: string = typeof window !== "undefined" ? `https://sql.js.org` : `node_modules/sql.js`;
+  wasmUrl: string =
+    typeof window !== "undefined"
+      ? `https://sql.js.org`
+      : `node_modules/sql.js`;
 
   constructor(connection: PlutoConnectionProps) {
     const presetSqlJSConfig =
-        connection.type === "sqljs"
-            ? {
-              location: "pluto",
-              useLocalForage: typeof window !== 'undefined',
-              sqlJsConfig: {
-                locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
-              },
-            }
-            : {};
+      connection.type === "sqljs"
+        ? {
+            location: "pluto",
+            useLocalForage: typeof window !== "undefined",
+            sqlJsConfig: {
+              locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
+            },
+          }
+        : {};
     this.dataSource = new DataSource({
       ...presetSqlJSConfig,
       ...connection,
@@ -69,7 +79,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   private static transformMessageDBToInterface(
-      item: entities.Message
+    item: entities.Message
   ): Message {
     const jsonData = JSON.parse(item.dataJson);
     return {
@@ -102,11 +112,11 @@ export default class Pluto implements PlutoInterface {
   }
 
   async storePrismDID(
-      did: DID,
-      keyPathIndex: number,
-      privateKey: PrivateKey,
-      privateKeyMetaId: string | null,
-      alias?: string
+    did: DID,
+    keyPathIndex: number,
+    privateKey: PrivateKey,
+    privateKeyMetaId: string | null,
+    alias?: string
   ) {
     const didEntity = new entities.DID();
     didEntity.did = did.toString();
@@ -116,10 +126,10 @@ export default class Pluto implements PlutoInterface {
     didEntity.alias = alias ?? "";
     await this.dataSource.manager.save(didEntity);
     await this.storePrivateKeys(
-        privateKey,
-        did,
-        keyPathIndex,
-        privateKeyMetaId
+      privateKey,
+      did,
+      keyPathIndex,
+      privateKeyMetaId
     );
   }
 
@@ -132,14 +142,14 @@ export default class Pluto implements PlutoInterface {
     didEntity.alias = null;
     await this.dataSource.manager.save(didEntity);
     await Promise.all(
-        privateKeys.map((privateKey) =>
-            this.storePrivateKeys(
-                privateKey,
-                did,
-                privateKey.keyCurve?.index ?? 0,
-                null
-            )
+      privateKeys.map((privateKey) =>
+        this.storePrivateKeys(
+          privateKey,
+          did,
+          privateKey.keyCurve?.index ?? 0,
+          null
         )
+      )
     );
   }
 
@@ -178,10 +188,10 @@ export default class Pluto implements PlutoInterface {
   }
 
   async storePrivateKeys(
-      privateKey: PrivateKey,
-      did: DID,
-      keyPathIndex: number,
-      metaId: string | null
+    privateKey: PrivateKey,
+    did: DID,
+    keyPathIndex: number,
+    metaId: string | null
   ) {
     const privateKeysEntity = new entities.PrivateKey();
     metaId && (privateKeysEntity.id = metaId); // question: Where should I store metaId
@@ -217,11 +227,11 @@ export default class Pluto implements PlutoInterface {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
       const dids: (Did & Record<"keyPathIndex", number>)[] = await didRepository
-          .createQueryBuilder("did")
-          .innerJoin("private_key", "private_key", "did.did = private_key.didId")
-          .select("did.*, private_key.keyPathIndex")
-          .where("did.method = :method", {method: "prism"})
-          .getRawMany();
+        .createQueryBuilder("did")
+        .innerJoin("private_key", "private_key", "did.did = private_key.didId")
+        .select("did.*, private_key.keyPathIndex")
+        .where("did.method = :method", { method: "prism" })
+        .getRawMany();
       return dids.map((item) => ({
         did: DID.fromString(item.did),
         alias: item.alias,
@@ -236,23 +246,23 @@ export default class Pluto implements PlutoInterface {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
       const didResponse: (Did & Record<"keyPathIndex", number>) | undefined =
-          await didRepository
-              .createQueryBuilder("did")
-              .innerJoin(
-                  "private_key",
-                  "private_key",
-                  "did.did = private_key.didId"
-              )
-              .select("did.*, privateKey.keyPathIndex", "keyPathIndex")
-              .from((subQuery) => {
-                return subQuery
-                    .select("pk.didId", "didId")
-                    .addSelect("pk.keyPathIndex", "keyPathIndex")
-                    .from("private_key", "pk")
-                    .where("pk.didId LIKE :didId", {didId: did.toString() + "%"});
-              }, "privateKey")
-              .where("did.did LIKE :didId", {didId: did.toString() + "%"})
-              .getRawOne();
+        await didRepository
+          .createQueryBuilder("did")
+          .innerJoin(
+            "private_key",
+            "private_key",
+            "did.did = private_key.didId"
+          )
+          .select("did.*, privateKey.keyPathIndex", "keyPathIndex")
+          .from((subQuery) => {
+            return subQuery
+              .select("pk.didId", "didId")
+              .addSelect("pk.keyPathIndex", "keyPathIndex")
+              .from("private_key", "pk")
+              .where("pk.didId LIKE :didId", { didId: did.toString() + "%" });
+          }, "privateKey")
+          .where("did.did LIKE :didId", { didId: did.toString() + "%" })
+          .getRawOne();
       if (!didResponse) {
         return null;
       }
@@ -270,26 +280,26 @@ export default class Pluto implements PlutoInterface {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
       const didResponse: (Did & Record<"private_key_keyPathIndex", number>)[] =
-          await didRepository
-              .createQueryBuilder("did")
-              .innerJoin(
-                  "private_key",
-                  "private_key",
-                  "did.did = private_key.didId"
-              )
-              .select(["did.*", "private_key.keyPathIndex"])
-              .where("did.alias = :alias", {alias})
-              .getRawMany();
+        await didRepository
+          .createQueryBuilder("did")
+          .innerJoin(
+            "private_key",
+            "private_key",
+            "did.did = private_key.didId"
+          )
+          .select(["did.*", "private_key.keyPathIndex"])
+          .where("did.alias = :alias", { alias })
+          .getRawMany();
       if (!didResponse) {
         return [];
       }
       return didResponse.map(
-          (item) =>
-              ({
-                did: DID.fromString(item.did),
-                alias: item.alias,
-                keyPathIndex: item.private_key_keyPathIndex,
-              } as PrismDIDInfo)
+        (item) =>
+          ({
+            did: DID.fromString(item.did),
+            alias: item.alias,
+            keyPathIndex: item.private_key_keyPathIndex,
+          } as PrismDIDInfo)
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -317,20 +327,20 @@ export default class Pluto implements PlutoInterface {
     const repository = this.dataSource.manager.getRepository("private_key");
     try {
       const data = await repository
-          .createQueryBuilder("private_key")
-          .select("private_key.keyPathIndex")
-          .where((qb) => {
-            const subQuery = qb
-                .subQuery()
-                .select("did.did")
-                .from(Did, "did")
-                .where("did.method = :method", {method: "prism"})
-                .getQuery();
-            return `private_key.didId IN ${subQuery}`;
-          })
-          .orderBy("private_key.keyPathIndex", "DESC")
-          .limit(1)
-          .getOne();
+        .createQueryBuilder("private_key")
+        .select("private_key.keyPathIndex")
+        .where((qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select("did.did")
+            .from(Did, "did")
+            .where("did.method = :method", { method: "prism" })
+            .getQuery();
+          return `private_key.didId IN ${subQuery}`;
+        })
+        .orderBy("private_key.keyPathIndex", "DESC")
+        .limit(1)
+        .getOne();
       return data?.keyPathIndex ?? 0;
     } catch (error) {
       throw new Error((error as Error).message);
@@ -339,9 +349,9 @@ export default class Pluto implements PlutoInterface {
 
   async getAllPeerDIDs() {
     const didRepository: Repository<entities.DID> =
-        this.dataSource.manager.getRepository("did");
+      this.dataSource.manager.getRepository("did");
     const privateKeysRepository =
-        this.dataSource.manager.getRepository("private_key");
+      this.dataSource.manager.getRepository("private_key");
     /*
      * This method is overcomplicated, dids should have relations.
      * */
@@ -353,16 +363,16 @@ export default class Pluto implements PlutoInterface {
       });
 
       const didsWithKeys = await Promise.all(
-          dids.map(async (item) => {
-            return {
-              ...item,
-              privateKeys: await privateKeysRepository.find({
-                where: {
-                  didId: item.did,
-                },
-              }),
-            };
-          })
+        dids.map(async (item) => {
+          return {
+            ...item,
+            privateKeys: await privateKeysRepository.find({
+              where: {
+                didId: item.did,
+              },
+            }),
+          };
+        })
       );
 
       return didsWithKeys.map((item) => ({
@@ -476,7 +486,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessages() {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find();
 
     return data.map(Pluto.transformMessageDBToInterface);
@@ -484,7 +494,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesByDID(did: DID) {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         from: did.toString(),
@@ -496,7 +506,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesSent() {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         isReceived: 0,
@@ -507,7 +517,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesReceived() {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         isReceived: 1,
@@ -518,7 +528,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesSentTo(did: DID) {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         to: did.toString(),
@@ -529,7 +539,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesReceivedFrom(did: DID) {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         from: did.toString(),
@@ -540,22 +550,22 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMessagesOfType(type: string, relatedWithDID?: DID) {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository
-        .createQueryBuilder("message")
-        .where("message.type = :type", {type})
-        .andWhere(
-            ":relatedWithDID IS NULL OR :relatedWithDID IN (message.from, message.to)",
-            {relatedWithDID: relatedWithDID?.toString() ?? null}
-        )
-        .getMany();
+      .createQueryBuilder("message")
+      .where("message.type = :type", { type })
+      .andWhere(
+        ":relatedWithDID IS NULL OR :relatedWithDID IN (message.from, message.to)",
+        { relatedWithDID: relatedWithDID?.toString() ?? null }
+      )
+      .getMany();
 
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
   async getAllMessagesByFromToDID(from: DID, to: DID) {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.find({
       where: {
         from: from.toString(),
@@ -567,7 +577,7 @@ export default class Pluto implements PlutoInterface {
 
   async getMessage(id: string) {
     const repository: Repository<entities.Message> =
-        this.dataSource.manager.getRepository("message");
+      this.dataSource.manager.getRepository("message");
     const data = await repository.findOne({
       where: {
         id,
@@ -581,7 +591,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllMediators() {
     const repository: Repository<entities.Mediator> =
-        this.dataSource.manager.getRepository("mediator");
+      this.dataSource.manager.getRepository("mediator");
     const data = await repository.find({
       relationLoadStrategy: "join",
     });
@@ -595,7 +605,7 @@ export default class Pluto implements PlutoInterface {
 
   async getAllCredentials() {
     const repository: Repository<entities.VerifiableCredential> =
-        this.dataSource.manager.getRepository("verifiable_credential");
+      this.dataSource.manager.getRepository("verifiable_credential");
     const data = await repository.find();
     return data.map((credential) => {
       const json = JSON.parse(credential.verifiableCredentialJson);

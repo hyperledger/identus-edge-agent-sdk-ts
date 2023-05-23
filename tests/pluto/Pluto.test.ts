@@ -1,17 +1,17 @@
-import Pluto from "../../pluto/Pluto";
+import Pluto from "../../src/pluto/Pluto";
 import {
   Curve,
   DID,
   getKeyCurveByNameAndIndex,
   PrivateKey,
-} from "../../domain";
+} from "../../src/domain";
 import { expect } from "chai";
 import { randomUUID } from "crypto";
-import { MessageDirection } from "../../domain";
-import { CredentialType } from "../../domain";
+import { MessageDirection } from "../../src/domain";
+import { CredentialType } from "../../src/domain";
 
 describe("Pluto tests", () => {
-  let instance: Pluto
+  let instance: Pluto;
 
   beforeEach(async () => {
     instance = new Pluto({
@@ -19,10 +19,10 @@ describe("Pluto tests", () => {
       dropSchema: true,
       database: "pluto.db",
       logger: "debug",
-      synchronize: true
+      synchronize: true,
     });
-    await instance.start()
-  })
+    await instance.start();
+  });
 
   it("should store prism DID", async function () {
     const did = DID.fromString(
@@ -547,7 +547,7 @@ describe("Pluto tests", () => {
       attachments: [],
       piuri: "type-example",
       extraHeaders: ["x-extra-header"],
-      expiresTimePlus: new Date().toISOString()
+      expiresTimePlus: new Date().toISOString(),
     };
     await instance.storeMessage(message);
     const messages = await instance.getAllMessages();

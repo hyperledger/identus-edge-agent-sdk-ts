@@ -32,7 +32,10 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
   public static async getDIDComm() {
     if (!this.didcomm) {
-      this.didcomm = await import("didcomm");
+      this.didcomm =
+        typeof window !== undefined
+          ? await import("didcomm")
+          : await import("didcomm-node");
     }
     return this.didcomm;
   }

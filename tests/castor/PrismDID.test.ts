@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { base58btc } from "multiformats/bases/base58";
-import { Curve, VerificationMethods } from "../../domain";
-import Apollo from "../../apollo/Apollo";
-import Castor from "../../castor/Castor";
-import { ECConfig } from "../../config/ECConfig";
+import { Curve, VerificationMethods } from "../../src/domain";
+import Apollo from "../../src/apollo/Apollo";
+import Castor from "../../src/castor/Castor";
+import { ECConfig } from "../../src/config/ECConfig";
 
 describe("PRISMDID CreateTest", () => {
   it("Should correctly create a prismDID from an existing HexKey", async () => {

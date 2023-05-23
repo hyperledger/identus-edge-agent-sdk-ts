@@ -89,3 +89,12 @@ let isValid = apollo.verifySignature(
     signatureSecp256K1.value
 );
 ```
+
+- `apollo utils`: Specific operations can be applied with Public, Private and KeyPairs of the supported algorithms and keycurves (secp256k1, x25519 and ed25519) to import and export keys from any format used by the user into an instance we can manage.
+
+All private and public key instances can be exported into a buffer by calling public.getEncoded, private.getEncoded.
+Also, the impport process should be similar using fromBytes as follows:
+
+```ts
+ const publicKey = Secp256k1PublicKey.secp256k1FromBytes(Buffer.from(keyInHex, 'hex'))
+```

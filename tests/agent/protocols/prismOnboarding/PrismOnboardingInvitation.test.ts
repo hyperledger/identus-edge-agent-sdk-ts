@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import { AgentError } from "../../../../domain/models/Errors";
-import { PrismOnboardingInvitation } from "../../../../prism-agent/protocols/prismOnboarding/PrismOnboardingInvitation";
-import { ProtocolType } from "../../../../prism-agent/protocols/ProtocolTypes";
-import { PrismOnboardingInvitationBody } from "../../../../prism-agent/protocols/types";
+import { AgentError } from "../../../../src/domain/models/Errors";
+import { PrismOnboardingInvitation } from "../../../../src/prism-agent/protocols/prismOnboarding/PrismOnboardingInvitation";
+import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
+import { PrismOnboardingInvitationBody } from "../../../../src/prism-agent/protocols/types";
 
 describe("PrismOnboardingInvitation Tests", () => {
   it("Should create a valid PrismOnboardingInvitation from json", async () => {
