@@ -4,7 +4,7 @@ import { InvalidDIDString } from "../../domain/models/errors/Castor";
 
 export function parse(didString: string): DID {
   const regex =
-    /^did:(?<method>[a-z0-9]+):(?<idstring>[a-z0-9.\-_%]+:[a-z0-9.\-_%]+[^#?:]+)$/gi;
+    /^did:(?<method>[a-z0-9]+):(?<idstring>[a-z0-9.\-_%]+:*[a-z0-9.\-_%]+[^#?:]+)$/gi;
   const match = regex.exec(didString);
 
   if (!match || !match.groups) {
