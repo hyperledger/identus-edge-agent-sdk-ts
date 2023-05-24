@@ -1,4 +1,4 @@
-import * as elliptic from "elliptic";
+import elliptic from "elliptic";
 
 const ec = new elliptic.ec("secp256k1");
 export abstract class Secp256k1KeyCommon {

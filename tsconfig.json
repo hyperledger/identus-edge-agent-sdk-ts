@@ -3,7 +3,7 @@
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "declarationDir": "build/typings",
+    "declarationDir": "build",
     "module": "esnext",
     "target": "es2020",
     "resolveJsonModule": true,

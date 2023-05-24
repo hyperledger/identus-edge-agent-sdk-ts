@@ -3,7 +3,7 @@ import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import { base64url } from "multiformats/bases/base64";
 
-import * as elliptic from "elliptic";
+import elliptic from "elliptic";
 import {
   Seed,
   SeedWords,
@@ -33,7 +33,6 @@ import { ApolloError } from "../domain/models/Errors";
 import { OctetKeyPair } from "./models/OctetKeyPair";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
 const EC = elliptic.ec;
-
 export default class Apollo implements ApolloInterface {
   private getKeyPairForCurve(curve: KeyCurve, seed?: Seed): KeyPair {
     const derivationPath = DerivationPath.fromPath(

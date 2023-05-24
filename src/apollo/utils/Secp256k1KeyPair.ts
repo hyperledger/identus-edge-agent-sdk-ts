@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import * as elliptic from "elliptic";
+import elliptic from "elliptic";
 import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 
 import { Secp256k1PrivateKey } from "./Secp256k1PrivateKey";
