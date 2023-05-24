@@ -1,31 +1,29 @@
-import typescript from "@rollup/plugin-typescript";
+import typescript from "rollup-plugin-typescript2";
+
 import terser from "@rollup/plugin-terser";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
 import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
 import json from "@rollup/plugin-json";
 
-export function Base(mode, type) {
+export default (mode, plugins = []) => {
   return {
     input: ["src/index.ts"],
     output: {
       sourcemap: true,
-      dir: `build`,
-      format: `${type}`,
+      dir: `build/${mode}`,
+      format: mode === "node" ? "cjs" : "umd",
+      name: "prism",
     },
     plugins: [
       ignore(["@input-output-hk/atala-prism-sdk", "elliptic"]),
       json(),
+
       typescript({
-        compilerOptions: {
-          declaration: true,
-          declarationMap: true,
-        },
+        useTsconfigDeclarationDir: true,
       }),
-      // terser(),
-      nodeResolve({
-        exportConditions: ["node"],
-      }),
+      //terser(),
+
+      ...plugins,
       cleanup(),
     ],
     external: [
@@ -61,13 +59,12 @@ export function Base(mode, type) {
       "@stablelib/x25519",
       "@stablelib/uuid",
       "bn.js",
-      "bip32",
+
       "typeorm",
       "did-jwt",
       "antlr4ts/atn/ATN",
       "axios",
+      "stream",
     ],
   };
-}
-
-export default Base("node", "cjs");
+};
