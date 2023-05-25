@@ -1,4 +1,4 @@
-import { DIDResolver, Service, VerificationMethod, DIDDoc } from "didcomm";
+import { DIDResolver, Service, VerificationMethod, DIDDoc } from "didcomm-node";
 
 import * as Domain from "../../domain";
 import Castor from "../../castor/Castor";

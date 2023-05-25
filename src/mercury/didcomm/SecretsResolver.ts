@@ -1,4 +1,4 @@
-import { Secret, SecretsResolver } from "didcomm";
+import { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
 import { Curve, VerificationMethod, VerificationMethods } from "../../domain";
 import Apollo from "../../apollo/Apollo";

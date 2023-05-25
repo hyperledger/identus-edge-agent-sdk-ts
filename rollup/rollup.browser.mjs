@@ -1,15 +1,17 @@
-import { nodeResolve } from "@rollup/plugin-node-resolve";
 import nodePolyfills from "rollup-plugin-polyfill-node";
+import inject from '@rollup/plugin-inject';
 
 import Base from "./base.mjs";
 import replace from "@rollup/plugin-replace";
 
 export default Base("browser", [
-  nodePolyfills({ exclude: ["crypto"], include: ["stream"] }),
-  nodeResolve({ preferBuiltins: false, browser: true }),
+  inject({
+    SQL: "sql.js/dist/sql-wasm.js",
+    localforage: "localforage/dist/localforage.js",
+  }),
+  nodePolyfills(),
   replace({
     preventAssignment: true,
     "didcomm-node": "didcomm",
-    stream: "stream-browserify",
   }),
 ]);

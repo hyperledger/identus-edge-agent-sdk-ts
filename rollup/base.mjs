@@ -4,6 +4,7 @@ import terser from "@rollup/plugin-terser";
 import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
 import json from "@rollup/plugin-json";
+import commonjs from "@rollup/plugin-commonjs";
 
 export default (mode, plugins = []) => {
   return {
@@ -24,6 +25,7 @@ export default (mode, plugins = []) => {
       //terser(),
 
       ...plugins,
+      commonjs(),
       cleanup(),
     ],
     external: [
