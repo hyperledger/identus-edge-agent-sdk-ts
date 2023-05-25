@@ -51,7 +51,8 @@ export default (mode, plugins = []) => {
       "google-protobuf",
       "protobufjs",
       "@scure/bip39",
-
+      "typeorm",
+      "sql.js",
       "google-protobuf/google/protobuf/timestamp_pb",
       "@stablelib/sha256",
       "Buffer",
@@ -62,7 +63,6 @@ export default (mode, plugins = []) => {
       "@stablelib/uuid",
       "bn.js",
 
-      "typeorm",
       "did-jwt",
       "antlr4ts/atn/ATN",
       "axios",
