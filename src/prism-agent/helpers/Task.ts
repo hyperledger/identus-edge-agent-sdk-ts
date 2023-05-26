@@ -41,7 +41,13 @@ export class CancellableTask<T> {
 
   cancel() {
     this.clearTimer();
-    this.controller.abort();
+    try {
+      this.controller.abort();
+    } catch (err) {
+      if ((err as Error).message !== "Task was cancelled") {
+        throw err;
+      }
+    }
   }
 
   async then(): Promise<T> {
