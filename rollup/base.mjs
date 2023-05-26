@@ -39,6 +39,11 @@ export default (mode, plugins = []) => {
       json(),
       typescript({
         useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          compilerOptions: {
+            emitDeclarationOnly: false,
+          },
+        },
       }),
       terser(),
       ...plugins,
