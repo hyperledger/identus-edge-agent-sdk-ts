@@ -40,7 +40,7 @@ export default (mode, plugins = []) => {
       typescript({
         useTsconfigDeclarationDir: true,
       }),
-      //terser(),
+      terser(),
       ...plugins,
       commonjs(),
       cleanup(),
