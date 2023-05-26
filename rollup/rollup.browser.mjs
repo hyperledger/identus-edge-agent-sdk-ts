@@ -1,8 +1,7 @@
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import inject from '@rollup/plugin-inject';
-
+import inject from "@rollup/plugin-inject";
+import { wasm } from "@rollup/plugin-wasm";
 import Base from "./base.mjs";
-import replace from "@rollup/plugin-replace";
 
 export default Base("browser", [
   inject({
@@ -10,8 +9,9 @@ export default Base("browser", [
     localforage: "localforage/dist/localforage.js",
   }),
   nodePolyfills(),
-  replace({
-    preventAssignment: true,
-    "didcomm-node": "didcomm",
+  wasm({
+    targetEnv: "browser",
+    fileName: "didcomm_js_bg.wasm",
+    publicPath: "/",
   }),
 ]);

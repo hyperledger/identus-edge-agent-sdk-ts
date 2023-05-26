@@ -1,9 +1,15 @@
-import { nodeResolve } from "@rollup/plugin-node-resolve";
+import modify from "rollup-plugin-modify";
+import { wasm } from "@rollup/plugin-wasm";
 
 import Base from "./base.mjs";
 export default Base("node", [
-  nodeResolve({
-    exportConditions: ["node"],
-    preferBuiltins: false,
+  modify({
+    find: '"didcomm"',
+    replace: '"didcomm-node"',
+  }),
+  wasm({
+    targetEnv: "node",
+    fileName: "didcomm_js_bg.wasm",
+    publicPath: "/",
   }),
 ]);

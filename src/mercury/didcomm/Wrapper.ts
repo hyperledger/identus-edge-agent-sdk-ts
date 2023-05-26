@@ -6,7 +6,7 @@ import {
   LinksAttachmentData,
   Attachment,
   AttachmentData,
-} from "didcomm-node";
+} from "didcomm";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
@@ -16,8 +16,22 @@ import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
+import type * as DIDCommLibTypes from "../../../didcomm-rust/didcomm-browser/didcomm_js";
+
+export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
+  const DIDCommLib = await import(
+    "../../../didcomm-rust/didcomm-browser/didcomm_js.js"
+  );
+  const wasmInit = DIDCommLib.default;
+  const { default: wasm } = await import(
+    "../../../didcomm-rust/didcomm-browser/didcomm_js_bg.wasm"
+  );
+  // @ts-ignore
+  await wasmInit(await wasm());
+  return DIDCommLib;
+}
 export class DIDCommWrapper implements DIDCommProtocol {
-  public static didcomm: typeof import("didcomm-node");
+  public static didcomm: typeof import("didcomm");
   private readonly didResolver: DIDResolver;
   private readonly secretsResolver: SecretsResolver;
 
@@ -32,7 +46,9 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
   public static async getDIDComm() {
     if (!this.didcomm) {
-      this.didcomm = await import("didcomm-node");
+      if (typeof window !== "undefined")
+        this.didcomm = await getDidcommLibInstance();
+      else this.didcomm = await import("didcomm-node");
     }
     return this.didcomm;
   }

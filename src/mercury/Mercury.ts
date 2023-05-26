@@ -33,9 +33,7 @@ export default class Mercury implements MercuryInterface {
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
 
     const document = await this.castor.resolveDID(toDid.toString());
-
     const packedMessage = await this.packMessage(message);
-
     if (this.requiresForwarding(document)) {
       const mediatorDid = this.getDIDCommDID(document);
       if (!mediatorDid) {
