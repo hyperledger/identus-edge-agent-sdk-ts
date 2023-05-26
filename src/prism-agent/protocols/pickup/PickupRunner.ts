@@ -51,7 +51,6 @@ export class PickupRunner {
   }
 
   async run(): Promise<Array<{ attachmentId: string; message: Message }>> {
-    debugger;
     if (this.message.type === "delivery") {
       return Promise.all(
         this.message.message.attachments

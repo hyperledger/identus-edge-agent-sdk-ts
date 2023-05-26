@@ -26,6 +26,7 @@ export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
   const { default: wasm } = await import(
     "../../../didcomm-rust/didcomm-browser/didcomm_js_bg.wasm"
   );
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   await wasmInit(await wasm());
   return DIDCommLib;
