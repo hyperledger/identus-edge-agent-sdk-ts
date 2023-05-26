@@ -1,4 +1,4 @@
-import * as elliptic from "elliptic";
+import elliptic from "elliptic";
 
 const eddsa = new elliptic.eddsa("ed25519");
 export abstract class Ed25519KeyCommon {

@@ -1,28 +1,28 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name: "message"})
+@Entity({ name: "message" })
 export default class Message {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   createdTime!: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   dataJson!: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   from!: string;
 
-  @Column({type: 'text', nullable: true})
+  @Column({ type: "text", nullable: true })
   thid?: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   to!: string;
 
-  @Column({type: 'text', nullable: true})
+  @Column({ type: "text", nullable: true })
   type?: string;
 
-  @Column({type: 'int', default: 0})
+  @Column({ type: "int", default: 0 })
   isReceived!: number;
 }

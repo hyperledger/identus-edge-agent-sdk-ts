@@ -1,23 +1,22 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-
-@Entity({name: "verifiable_credential"})
+@Entity({ name: "verifiable_credential" })
 export default class VerifiableCredential {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({type: 'text', nullable: true})
+  @Column({ type: "text", nullable: true })
   credentialType?: string;
 
-  @Column({type: 'text', nullable: true})
+  @Column({ type: "text", nullable: true })
   expirationDate?: string;
 
-  @Column({type: 'text', nullable: true})
+  @Column({ type: "text", nullable: true })
   issuanceDate?: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   verifiableCredentialJson!: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   issuerDIDId!: string;
 }

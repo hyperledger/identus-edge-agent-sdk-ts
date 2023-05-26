@@ -39,7 +39,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
   async createNewPeerDID(
     services: Service[],
-    updateMediator: boolean
+    updateMediator = false
   ): Promise<DID> {
     const index = await this.pluto.getPrismLastKeyPathIndex();
     const keyAgreementKeyPair = this.apollo.createKeyPairFromKeyCurve(

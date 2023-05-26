@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import * as elliptic from "elliptic";
+import elliptic from "elliptic";
 import BigInteger from "bn.js";
 
 import { ECConfig } from "../../config/ECConfig";

@@ -1,0 +1,24 @@
+{
+  "name": "didcomm-js",
+  "collaborators": [
+    "Vyacheslav Gudkov <vyacheslav.gudkov@dsr-corporation.com>"
+  ],
+  "description": "WASM based javascript wrapper for DIDComm",
+  "version": "0.4.1",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sicpa-dlab/didcomm-rust/tree/main/wasm"
+  },
+  "files": [
+    "didcomm_js_bg.wasm",
+    "didcomm_js.js",
+    "didcomm_js.d.ts"
+  ],
+  "module": "didcomm_js.js",
+  "homepage": "https://github.com/sicpa-dlab/didcomm-rust/tree/main/wasm#readme",
+  "types": "didcomm_js.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

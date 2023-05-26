@@ -1,3 +1,5 @@
+import "./globals";
+
 export { default as Apollo } from "./apollo/Apollo";
 export { default as Castor } from "./castor/Castor";
 export * as Domain from "./domain";

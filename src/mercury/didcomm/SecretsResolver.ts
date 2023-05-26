@@ -1,4 +1,4 @@
-import { Secret, SecretsResolver } from "didcomm";
+import { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
 import { Curve, VerificationMethod, VerificationMethods } from "../../domain";
 import Apollo from "../../apollo/Apollo";
@@ -15,7 +15,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
 
   async find_secrets(secret_ids: string[]): Promise<string[]> {
     const peerDids = await this.pluto.getAllPeerDIDs();
-
     return secret_ids.filter((secretId) => {
       const secretDID = DIDURLParser.parse(secretId);
       return peerDids.find((peerDIDSecret: any) => {
@@ -26,7 +25,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
 
   async get_secret(secret_id: string): Promise<Secret | null> {
     const peerDids = await this.pluto.getAllPeerDIDs();
-
     const secretDID = DIDURLParser.parse(secret_id);
     const found = peerDids.find((peerDIDSecret: any) => {
       return secretDID.did.toString() === peerDIDSecret.did.toString();

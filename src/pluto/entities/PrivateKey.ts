@@ -1,19 +1,19 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name: "private_key"})
+@Entity({ name: "private_key" })
 export default class PrivateKey {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   curve!: string;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   privateKey!: string;
 
-  @Column({type: 'int', default: 0})
+  @Column({ type: "int", default: 0 })
   keyPathIndex!: number;
 
-  @Column({type: 'text'})
+  @Column({ type: "text" })
   didId!: string;
 }

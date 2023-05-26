@@ -7,7 +7,14 @@
       "jsx": true
     }
   },
-  "ignorePatterns": ["src/castor/parser", "src/castor/protos", "webpack", "scripts", "tests"],
+  "ignorePatterns": [
+    "src/castor/parser",
+    "src/castor/protos",
+    "webpack",
+    "scripts",
+    "tests",
+    "didcomm-rust"
+  ],
   "plugins": ["@typescript-eslint", "react"],
   "extends": [
     "eslint:recommended",
