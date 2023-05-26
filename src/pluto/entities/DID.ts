@@ -1,18 +1,17 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name: "did"})
+@Entity({ name: "did" })
 export default class Did {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id?: string;
-  @Column({type: 'text', unique: true, nullable: false, primary: true})
+  @Column({ type: "text", unique: true, nullable: false, primary: true })
   did!: string;
-  @Column({type: 'text', nullable: false})
+  @Column({ type: "text", nullable: false })
   method?: string;
-  @Column({type: 'text', nullable: false})
+  @Column({ type: "text", nullable: false })
   methodId?: string;
-  @Column({type: 'text', nullable: false})
+  @Column({ type: "text", nullable: false })
   schema?: string;
-  @Column({type: 'text', nullable: true})
+  @Column({ type: "text", nullable: true })
   alias?: string | null;
-
 }

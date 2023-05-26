@@ -1,4 +1,4 @@
-import * as elliptic from "elliptic";
+import elliptic from "elliptic";
 import { base64url } from "multiformats/bases/base64";
 
 import { Ed25519KeyCommon } from "./Ed25519KeyCommon";

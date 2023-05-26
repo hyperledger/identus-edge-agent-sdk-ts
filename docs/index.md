@@ -19,3 +19,8 @@ Atala PRISM TypeScript SDK provides the following building blocks:
 | Connection | :white_check_mark: | Atala PRISM proprietary |
 | [DIDComm V2 Issue Credential](https://github.com/decentralized-identity/waci-didcomm/tree/main/issue_credential) | :white_check_mark: | -- |
 | [DIDComm V2 Present Proof](https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md) | :white_check_mark: | -- |
+
+### How to use didcomm inside your webpack application
+It is required for you to copy the wasm file "didcomm-rust/didcomm-browser/didcomm_js_bg.wasm"
+inside the public folder that your react application has, usually "./public".
+It is important also to keep the filename as it comes, without changing anything to it.

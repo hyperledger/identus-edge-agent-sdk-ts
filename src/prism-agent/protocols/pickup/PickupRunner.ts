@@ -32,10 +32,13 @@ export class PickupRunner {
     if (Message.isBase64Attachment(attachment.data)) {
       return {
         attachmentId: attachment.id,
-        data: Buffer.from(attachment.data.base64, 'base64').toString('utf8'),
+        data: Buffer.from(attachment.data.base64, "base64").toString("utf8"),
       };
     } else if (Message.isJsonAttachment(attachment.data)) {
-      return { attachmentId: attachment.id, data: JSON.stringify(attachment.data.data) };
+      return {
+        attachmentId: attachment.id,
+        data: JSON.stringify(attachment.data.data),
+      };
     }
 
     return null;

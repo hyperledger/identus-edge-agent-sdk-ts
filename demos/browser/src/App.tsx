@@ -3,17 +3,18 @@ import React, {useCallback, useEffect} from "react";
 import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
-import * as SDK from "../../src";
-import * as Domain from '../../src/domain';
+import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
-import { BasicMessage } from "../../src/prism-agent/protocols/other/BasicMessage";
-import { ListenerKey } from "../../src/prism-agent/types";
-import { OfferCredential } from "../../src/prism-agent/protocols/issueCredential/OfferCredential";
-import { IssueCredential } from "../../src/prism-agent/protocols/issueCredential/IssueCredential";
-import { RequestPresentation } from "../../src/prism-agent/protocols/proofPresentation/RequestPresentation";
+
+const Domain = SDK.Domain;
+const BasicMessage = SDK.BasicMessage;
+const ListenerKey = SDK.ListenerKey;
+const OfferCredential = SDK.OfferCredential;
+const IssueCredential = SDK.IssueCredential;
+const RequestPresentation = SDK.RequestPresentation;
 
 const mediatorDID = SDK.Domain.DID.fromString(
   "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
@@ -25,10 +26,11 @@ const api = new SDK.ApiImpl();
 
 
 function Mnemonics() {
-  const [mnemonics, setMnemonics] = useAtom(mnemonicsAtom);
+  const mnemonicState = useAtom(mnemonicsAtom);
+  const [mnemonics, setMnemonics] = mnemonicState
 
   function createMnemonics() {
-    setMnemonics(apollo.createRandomMnemonics());
+    (setMnemonics as any)(apollo.createRandomMnemonics());
   }
 
   return (
@@ -122,7 +124,7 @@ function KeyPair({curve = SDK.Domain.Curve.SECP256K1}: { curve?: SDK.Domain.Curv
   );
 }
 
-function Signatures({keyPair}: { keyPair: Domain.KeyPair }) {
+function Signatures({keyPair}: { keyPair: SDK.Domain.KeyPair }) {
   const [signatureEncoded, setSignatureEncoded] = React.useState<string | undefined>(undefined);
   const [isSignatureValid, setIsSignatureValid] = React.useState<boolean | undefined>(undefined);
 

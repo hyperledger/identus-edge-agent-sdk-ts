@@ -1,0 +1,21 @@
+{
+  "name": "test-with-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@input-output-hk/atala-prism-wallet-sdk": "file:../..",
+    "ipfs": "^0.66.0",
+    "orbit-db": "^0.29.0",
+    "orbit-db-access-controllers": "^0.4.0"
+  },
+  "devDependencies": {
+    "sql.js": "^1.8.0"
+  }
+}

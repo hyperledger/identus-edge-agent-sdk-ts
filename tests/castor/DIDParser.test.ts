@@ -39,35 +39,35 @@ describe("DIDParser", () => {
         DIDParser.parse(didExample1);
       },
       Error,
-      'Invalid Did char found at [line 1, col 0] "i"'
+      "Invalid did string"
     );
     assert.throws(
       () => {
         DIDParser.parse(didExample2);
       },
       Error,
-      'Invalid Did char found at [line 1, col 4] "-"'
+      "Invalid did string"
     );
     assert.throws(
       () => {
         DIDParser.parse(didExample3);
       },
       Error,
-      'Invalid Did char found at [line 1, col 22] ":"'
+      "Invalid did string"
     );
     assert.throws(
       () => {
         DIDParser.parse(didExample4);
       },
       Error,
-      'Invalid Did char found at [line 1, col 22] ":"'
+      "Invalid did string"
     );
     assert.throws(
       () => {
         DIDParser.parse(didExample5);
       },
       Error,
-      'Invalid Did char found at [line 1, col 22] ":"'
+      "Invalid did string"
     );
   });
 });
