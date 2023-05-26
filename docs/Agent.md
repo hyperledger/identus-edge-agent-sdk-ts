@@ -79,7 +79,7 @@ try {
 
 Quite a lot of things are happening here, so let's break it down:
 
-- [Apollo](/apollo.md), [Castor](/castor.md), [Pluto](/pluto.md), [Mercury](), and Agent are the main building blocks of the SDK. The first three have already been covered in more detail in the previous sections, as they are user-facing modules usable independently. Other modules could be considered internal, and the intention is not to use them directly.
+- [Apollo](/wallet-sdk-ts/apollo), [Castor](/wallet-sdk-ts/castor), [Pluto](/wallet-sdk-ts/pluto), Mercury, and Agent are the main building blocks of the SDK. The first three have already been covered in more detail in the previous sections, as they are user-facing modules usable independently. Other modules could be considered internal, and the intention is not to use them directly.
 - Mercury is a module that deals with DIDComm V2 messaging and is used
   primarily by the Agent to handle DIDComm messages.
 - Domain is a set of domain-specific types, models, and utilities usable in different contexts.
