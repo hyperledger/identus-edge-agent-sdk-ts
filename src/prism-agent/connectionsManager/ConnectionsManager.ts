@@ -131,6 +131,12 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         this.events.emit(ListenerKey.MESSAGE, unreadMessages);
       }
     }, timeInterval);
+
+    this.cancellable.then().catch((err) => {
+      if (err instanceof Error) {
+        if (err.message !== "Task was cancelled") throw err;
+      } else throw err;
+    });
   }
 
   stopFetchingMessages(): void {
