@@ -1,4 +1,4 @@
-import {
+import type {
   DIDResolver,
   Base64AttachmentData,
   SecretsResolver,
@@ -6,7 +6,7 @@ import {
   LinksAttachmentData,
   Attachment,
   AttachmentData,
-} from "didcomm";
+} from "didcomm-node";
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
@@ -32,7 +32,7 @@ export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
   return DIDCommLib;
 }
 export class DIDCommWrapper implements DIDCommProtocol {
-  public static didcomm: typeof import("didcomm");
+  public static didcomm: typeof import("didcomm-node");
   private readonly didResolver: DIDResolver;
   private readonly secretsResolver: SecretsResolver;
 
