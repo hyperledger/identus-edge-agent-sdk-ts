@@ -9,9 +9,11 @@ export class CancellableTask<T> {
   constructor(task: Task<T>, repeatEvery?: number) {
     this.controller = new AbortController();
     this.cancellationToken = new Promise<T>((resolve, reject) => {
-      this.controller.signal.addEventListener("abort", () => {
+      const onAbort = () => {
+        this.controller.signal.removeEventListener("abort", onAbort);
         reject(new Error("Task was cancelled"));
-      });
+      };
+      this.controller.signal.addEventListener("abort", onAbort);
       if (repeatEvery !== undefined) {
         this.period = Math.max(repeatEvery, 10);
         this.loopOnTaskEvery(task, reject);
