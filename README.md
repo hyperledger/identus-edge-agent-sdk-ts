@@ -56,6 +56,26 @@ Install the SDK using `npm` or `yarn`:
 
 `yarn add @input-output-hk/atala-prism-wallet-sdk`
 
+### Browser setup
+
+Some additional steps are needed to use the SDK in the browser.
+
+The library expects `didcomm_js_bg` WebAssembly file to be available in the route of 
+the project, so it need to be copied to the project's `public` folder.
+
+One way to do it could be to add the following command to the `postinstall`:
+
+```shell
+cp node_modules/@input-output-hk/atala-prism-wallet-sdk/build/browser/didcomm_js_bg.wasm ./public/
+```
+
+If you use Webpack or Rollup, appropriate plugin could be used to copy the file instead.
+
+The last needed step is to provide browser polyfills for `fs` and `path` modules. 
+We plan to remove this requirement in the future, but for now it is needed due to
+`sql.js` dependency. Providing polyfills is highly dependent on the toolchain used,
+so please refer to the documentation of your build tool for more information.
+
 ### Usage
 Once `@input-output-hk/atala-prism-wallet-sdk` is installed as a dependency, 
 package could be imported using both ES modules and CommonJS syntax.
