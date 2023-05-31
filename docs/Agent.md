@@ -15,6 +15,11 @@ functionality comes from the [DIDComm V2](https://github.com/input-output-hk/ata
 | [DIDComm V2 Issue Credential](https://github.com/decentralized-identity/waci-didcomm/tree/main/issue_credential) | :white_check_mark: | -- |
 | [DIDComm V2 Present Proof](https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md) | :white_check_mark: | -- |
 
+### How to use didcomm inside your webpack application
+It is required for you to copy the wasm file "didcomm-rust/didcomm-browser/didcomm_js_bg.wasm"
+inside the public folder that your react application has, usually "./public".
+It is important also to keep the filename as it comes, without changing anything to it.
+
 ## Agent Setup
 
 Before importing modules, ensure you have the DIDComm wasm file in the public directory of your app/website. You can copy using this command `cp ./node_modules/@input-output-hk/atala-prism-wallet-sdk/build/browser/index_bg.wasm ./public/index_bg.wasm`.
