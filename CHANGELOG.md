@@ -1,3 +1,22 @@
+## [2.0.1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.0...v2.0.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* add support for Base64 in PickupRunner ([#52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/52)) ([4d81061](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/4d81061a763de1b435693955f1e5aeaaec179c65))
+* **agent:** Improve unit testing for protocols. ([#56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/56)) ([4049258](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/4049258549b49ec344ed6d69e1bcd2b876496125))
+* **apollo:** Create keyPair from privateKey, support ed25519 and x25519 keyCurves. ([#57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/57)) ([29b655e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/29b655eb29487f0143d99460e63873279de773d4))
+* **apollo:** createKeyPairFromPrivateKey update impl to not use the seed and fix mercury secretResolver impl ([#50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/50)) ([8db08b3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/8db08b33fb3202650ca9ebe8a3973722f936a985))
+* browser sqlite storage issue ([#49](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/49)) ([a535882](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a53588221f6f713c669309a948ceb114e52fab0c))
+* **didcomm:** Add didcomm packages as dependencies  ([#60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/60)) ([a0ba3b6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a0ba3b69409fbfa426526b85f23c2ce7bbf076f6))
+* **docs:** polishing documentation ([#48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/48)) ([19fa64d](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/19fa64d6f4b9fa15cae17b3339483b123a60b410))
+* improve build process and readme ([#61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/61)) ([a090f9c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a090f9cc77a2b22c8f09f7d6fb3fe2d462f9b970))
+* Index access. ([#44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/44)) ([2d47c50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/2d47c50582a7deeab456fb1ec8db3af982221783))
+* pluto module finding namespace ([#55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/55)) ([5b23f7c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/5b23f7c50e44c50f1993c250dc9c3c4ac9733255))
+* pluto sqljs loader in nodejs ([#54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/54)) ([11afc4f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/11afc4f7e474bb2a5e68c50f832becf47e18a559))
+* **sdk:** Add Proper Nodejs support + refactor into SRC ([#58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/58)) ([7f04024](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/7f040246302a4c969d05669b0aa78a6fd2aea9d5))
+* **sdk:** Adding full support for browsers and nodejs platforms. ([#59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/59)) ([2e83cba](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/2e83cbaf445f636c69f204e7342cc7e2ce0d2fea))
+
 # [2.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v1.0.0...v2.0.0) (2023-04-04)
 
 
