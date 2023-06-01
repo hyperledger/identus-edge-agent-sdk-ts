@@ -121,6 +121,34 @@ await agent.start();
 
 ### Running demos
 
+1. For Nodejs:
+First build the sdk from root folder
+```bash
+npm i
+npm run build
+```
+
+Now cd into the demo directory "demos/node"
+```bash
+cd demos/node
+npm i
+node index.js
+```
+
+2. For Browser:
+First build the sdk from root folder
+```bash
+npm i
+npm run build
+```
+
+Now cd into the demo directory "demos/browser"
+```bash
+cd demos/node
+npm i
+npm run start
+```
+
 To run browser demo app, just run `npm run dev:browser` and browser will automatically open and load the demo app.
 
 To run Node.js demo app, run `npm run dev:node` to build the demo app and then run it with `node build/node-test/index.js`.
