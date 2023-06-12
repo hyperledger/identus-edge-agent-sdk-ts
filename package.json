@@ -163,6 +163,7 @@
     "sql.js": "^1.8.0",
     "sqlite3": "^5.1.6",
     "typeorm": "^0.3.12",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "anoncreds": "../anoncreds-rs/pkg"
   }
 }

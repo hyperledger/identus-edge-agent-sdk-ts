@@ -1,27 +1,15 @@
-
+const { IgnorePlugin } = require("webpack");
 
 module.exports = {
   webpack: {
     configure: (webpackConfig) => {
-
-    //   const wasmLoader = {
-    //     test: /\.wasm$/,
-    //     type: "webassembly/async",
-    //   };
-
-    //   webpackConfig.module.rules = [
-    //     ...webpackConfig.module.rules,
-    //     wasmLoader
-    //   ]
-
-    //   webpackConfig.experiments = {
-    //     asyncWebAssembly: true,
-    //     syncWebAssembly: true,
-    //   }
+      webpackConfig.plugins.push(
+        new IgnorePlugin({ resourceRegExp: /(anoncreds_bg|didcomm_js_bg)\.wasm/ })
+      );
 
       webpackConfig.resolve.fallback = {
         fs: false,
-         crypto: false,
+        crypto: false,
         // assert: require.resolve("assert/"),
         // url: require.resolve("url/"),
         // buffer: require.resolve("buffer/"),

@@ -3,14 +3,21 @@ import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { base64url } from "multiformats/bases/base64";
-
 import { JWTCredential } from "./models/JWTCredential";
+import { AnoncredsLoader } from "./AnoncredsLoader";
 
 export default class Pollux implements PolluxInterface {
   private castor: Castor;
+  private _anoncreds: AnoncredsLoader;
 
   constructor(castor: Castor) {
     this.castor = castor;
+    this._anoncreds = AnoncredsLoader.getInstance();
+  }
+
+  // TODO - should anoncreds be exposed or hidden through abstraction?
+  get anoncreds() {
+    return this._anoncreds.wasm;
   }
 
   parseVerifiableCredential(jwtString: string): VerifiableCredential {
