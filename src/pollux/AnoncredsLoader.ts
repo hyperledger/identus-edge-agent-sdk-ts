@@ -1,5 +1,7 @@
 import * as pkg from "anoncreds";
 import pkgWasm from "anoncreds/anoncreds_bg.wasm";
+import { Anoncreds } from "./models/Anoncreds";
+import { link } from "fs";
 
 /**
  * @class AnoncredsLoader
@@ -42,6 +44,37 @@ export class AnoncredsLoader {
     console.log({ schema });
 
     return schema;
+  }
+
+  createCredentialRequest(
+    credentialOffer: Anoncreds.CredentialOffer,
+    credentialDefinition: Anoncreds.CredentialDefinition,
+    linkSecret: Anoncreds.Linksecret,
+    linkSecretId: string
+  ): [Anoncreds.CredentialRequest, Anoncreds.CredentialRequestMeta] {
+    const result = this.wasm.proverCreateCredentialRequest(credentialOffer, credentialDefinition, linkSecret, linkSecretId);
+
+    return [result[0], result[1]];
+  }
+
+  processCredential(
+    schema: Anoncreds.Schema,
+    credentialDefinition: Anoncreds.CredentialDefinition,
+    credential: Anoncreds.Credential,
+    credentialRequestMeta: Anoncreds.CredentialRequestMeta,
+    linkSecret: Anoncreds.Linksecret
+  ): Anoncreds.ProcessedCredential {
+    return this.wasm.proverProcessCredential(schema, credentialDefinition, credential, credentialRequestMeta, linkSecret);
+  }
+
+  createPresentation(
+    presentationRequest: Anoncreds.PresentationRequest,
+    schema: Anoncreds.Schema,
+    credentialDefinition: Anoncreds.CredentialDefinition,
+    credential: Anoncreds.ProcessedCredential,
+    linkSecret: Anoncreds.Linksecret
+  ): Anoncreds.Presentation {
+    return this.wasm.proverCreatePresentation(presentationRequest, schema, credentialDefinition, credential, linkSecret);
   }
 }
 
