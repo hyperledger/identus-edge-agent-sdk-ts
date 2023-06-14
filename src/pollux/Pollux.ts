@@ -17,7 +17,7 @@ export default class Pollux implements PolluxInterface {
 
   // TODO - should anoncreds be exposed or hidden through abstraction?
   get anoncreds() {
-    return this._anoncreds.wasm;
+    return this._anoncreds;
   }
 
   parseVerifiableCredential(jwtString: string): VerifiableCredential {

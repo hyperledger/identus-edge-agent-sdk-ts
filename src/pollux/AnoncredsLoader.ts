@@ -23,26 +23,19 @@ export class AnoncredsLoader {
     return AnoncredsLoader.instance;
   }
 
-  async load() {
+  private async load() {
     if (!this.loaded) {
       await pkg.default((pkgWasm as any)());
       this.loaded = true;
     }
   }
 
-  get wasm() {
+  private get wasm() {
     if (this.loaded === false) {
       throw new Error();
     }
 
     return pkg;
-  }
-
-  async getSchema() {
-    const schema = await this.wasm.issuerCreateSchema();
-    console.log({ schema });
-
-    return schema;
   }
 
   createLinksecret(): Anoncreds.Linksecret {
