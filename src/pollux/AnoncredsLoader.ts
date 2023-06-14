@@ -46,6 +46,10 @@ export class AnoncredsLoader {
     return schema;
   }
 
+  createLinksecret(): Anoncreds.Linksecret {
+    return this.wasm.proverCreateLinkSecret();
+  }
+
   createCredentialRequest(
     credentialOffer: Anoncreds.CredentialOffer,
     credentialDefinition: Anoncreds.CredentialDefinition,
@@ -77,5 +81,3 @@ export class AnoncredsLoader {
     return this.wasm.proverCreatePresentation(presentationRequest, schema, credentialDefinition, credential, linkSecret);
   }
 }
-
-(window as any).anoncreds = AnoncredsLoader.getInstance();
