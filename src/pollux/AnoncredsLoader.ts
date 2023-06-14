@@ -1,7 +1,6 @@
 import * as pkg from "anoncreds";
 import pkgWasm from "anoncreds/anoncreds_bg.wasm";
 import { Anoncreds } from "./models/Anoncreds";
-import { link } from "fs";
 
 /**
  * @class AnoncredsLoader
@@ -58,26 +57,55 @@ export class AnoncredsLoader {
   ): [Anoncreds.CredentialRequest, Anoncreds.CredentialRequestMeta] {
     const result = this.wasm.proverCreateCredentialRequest(credentialOffer, credentialDefinition, linkSecret, linkSecretId);
 
-    return [result[0], result[1]];
+    const credentialRequest = result[0];
+    credentialRequest.blinded_ms_correctness_proof.m_caps = this.mapToObj(credentialRequest.blinded_ms_correctness_proof.m_caps);
+
+    return [credentialRequest, result[1]];
   }
 
   processCredential(
     schema: Anoncreds.Schema,
     credentialDefinition: Anoncreds.CredentialDefinition,
-    credential: Anoncreds.Credential,
+    credential: Anoncreds.CredentialIssued,
     credentialRequestMeta: Anoncreds.CredentialRequestMeta,
     linkSecret: Anoncreds.Linksecret
-  ): Anoncreds.ProcessedCredential {
-    return this.wasm.proverProcessCredential(schema, credentialDefinition, credential, credentialRequestMeta, linkSecret);
+  ): Anoncreds.Credential {
+    const result = this.wasm.proverProcessCredential(schema, credentialDefinition, credential, credentialRequestMeta, linkSecret);
+
+    result.values = this.mapToObj(result.values);
+
+    return result;
   }
 
   createPresentation(
     presentationRequest: Anoncreds.PresentationRequest,
     schema: Anoncreds.Schema,
     credentialDefinition: Anoncreds.CredentialDefinition,
-    credential: Anoncreds.ProcessedCredential,
+    credential: Anoncreds.Credential,
     linkSecret: Anoncreds.Linksecret
   ): Anoncreds.Presentation {
-    return this.wasm.proverCreatePresentation(presentationRequest, schema, credentialDefinition, credential, linkSecret);
+    const result = this.wasm.proverCreatePresentation(presentationRequest, schema, credentialDefinition, credential, linkSecret);
+
+    result.proof.proofs = result.proof.proofs.map((proof: any) => {
+      proof.primary_proof.eq_proof.revealed_attrs = this.mapToObj(proof.primary_proof.eq_proof.revealed_attrs);
+      proof.primary_proof.eq_proof.m = this.mapToObj(proof.primary_proof.eq_proof.m);
+
+      proof.primary_proof.ge_proofs = proof.primary_proof.ge_proofs.map((ge: any) => {
+        ge.r = this.mapToObj(ge.r);
+        ge.t = this.mapToObj(ge.t);
+        ge.u = this.mapToObj(ge.u);
+        ge.predicate = this.mapToObj(ge.predicate);
+
+        return ge;
+      });
+
+      return proof;
+    });
+
+    return result;
+  }
+
+  private mapToObj<V>(value: Map<string, V>): Record<string, V> {
+    return Object.fromEntries(value);
   }
 }
