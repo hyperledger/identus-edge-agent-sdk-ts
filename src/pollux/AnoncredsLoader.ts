@@ -57,13 +57,12 @@ export class AnoncredsLoader {
   }
 
   processCredential(
-    schema: Anoncreds.Schema,
     credentialDefinition: Anoncreds.CredentialDefinition,
     credential: Anoncreds.CredentialIssued,
     credentialRequestMeta: Anoncreds.CredentialRequestMeta,
     linkSecret: Anoncreds.Linksecret
   ): Anoncreds.Credential {
-    const result = this.wasm.proverProcessCredential(schema, credentialDefinition, credential, credentialRequestMeta, linkSecret);
+    const result = this.wasm.proverProcessCredential(credentialDefinition, credential, credentialRequestMeta, linkSecret);
 
     result.values = this.mapToObj(result.values);
 
@@ -72,12 +71,12 @@ export class AnoncredsLoader {
 
   createPresentation(
     presentationRequest: Anoncreds.PresentationRequest,
-    schema: Anoncreds.Schema,
-    credentialDefinition: Anoncreds.CredentialDefinition,
+    schemas: Record<string, Anoncreds.Schema>,
+    credentialDefinitions: Record<string, Anoncreds.CredentialDefinition>,
     credential: Anoncreds.Credential,
     linkSecret: Anoncreds.Linksecret
   ): Anoncreds.Presentation {
-    const result = this.wasm.proverCreatePresentation(presentationRequest, schema, credentialDefinition, credential, linkSecret);
+    const result = this.wasm.proverCreatePresentation(presentationRequest, schemas, credentialDefinitions, credential, linkSecret);
 
     result.proof.proofs = result.proof.proofs.map((proof: any) => {
       proof.primary_proof.eq_proof.revealed_attrs = this.mapToObj(proof.primary_proof.eq_proof.revealed_attrs);
