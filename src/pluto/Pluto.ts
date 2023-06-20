@@ -9,7 +9,7 @@ import {
 } from "../domain";
 import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
-import { default as PlutoInterface } from "../domain/buildingBlocks/Pluto";
+import { Pluto as PlutoInterface } from "../domain/buildingBlocks/Pluto";
 import { DataSource, Like, Repository } from "typeorm";
 import * as entities from "./entities";
 import Did from "./entities/DID";
@@ -60,7 +60,6 @@ export type PlutoConnectionProps =
  * @export
  * @class Pluto
  * @typedef {Pluto}
- * @implements {PlutoInterface}
  */
 export default class Pluto implements PlutoInterface {
   dataSource: DataSource;

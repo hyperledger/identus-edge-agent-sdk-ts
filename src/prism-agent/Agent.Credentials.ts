@@ -6,9 +6,9 @@ import {
   Curve,
   Seed,
 } from "../domain";
-import Apollo from "../domain/buildingBlocks/Apollo";
-import Castor from "../domain/buildingBlocks/Castor";
-import Pluto from "../domain/buildingBlocks/Pluto";
+import { Apollo } from "../domain/buildingBlocks/Apollo";
+import { Castor } from "../domain/buildingBlocks/Castor";
+import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import {
@@ -18,7 +18,7 @@ import {
 import { AgentCredentials as AgentCredentialsClass } from "./types";
 import { base64, base64url } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
-import Pollux from "../domain/buildingBlocks/Pollux";
+import { Pollux } from "../domain/buildingBlocks/Pollux";
 import {
   createPresentationBody,
   Presentation,
@@ -30,10 +30,9 @@ import { AgentError } from "../domain/models/Errors";
  * An extension for the Edge agents that groups all the tasks and flows related to credentials
  * those incluse processing, parsing and signing credential requests that will be then send to an Agent or received from an agent
  *
- * @export
+ * @interface
  * @class AgentCredentials
  * @typedef {AgentCredentials}
- * @implements {AgentCredentialsClass}
  */
 export class AgentCredentials implements AgentCredentialsClass {
   /**

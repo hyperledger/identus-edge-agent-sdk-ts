@@ -12,7 +12,6 @@ import {
  * @export
  * @class AgentMessageEvents
  * @typedef {AgentMessageEvents}
- * @implements {AgentMessageEventsClass}
  */
 export class AgentMessageEvents implements AgentMessageEventsClass {
   private events: Map<ListenerKey, Set<EventCallback>> = new Map();

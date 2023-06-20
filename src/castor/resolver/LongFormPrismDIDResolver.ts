@@ -1,6 +1,6 @@
 import { SHA256 } from "@stablelib/sha256";
 import { CastorError } from "../../domain/models/Errors";
-import Apollo from "../../domain/buildingBlocks/Apollo";
+import { Apollo } from "../../domain/buildingBlocks/Apollo";
 import { LongFormPrismDID } from "../../castor/did/prismDID/LongFormPrismDID";
 import {
   DIDResolver,
@@ -113,12 +113,16 @@ export class LongFormPrismDIDResolver implements DIDResolver {
 
             if (endpoint === undefined) return acc;
 
-            return acc.concat(new DIDDocumentService(
-              service.id,
-              [service.type],
-              new DIDDocumentServiceEndpoint(endpoint)
-            ));
-          }, []) ?? [];
+            return acc.concat(
+              new DIDDocumentService(
+                service.id,
+                [service.type],
+                new DIDDocumentServiceEndpoint(endpoint)
+              )
+            );
+          },
+          []
+        ) ?? [];
 
       const verificationMethods = publicKeys.reduce(
         (partialResult, publicKey) => {

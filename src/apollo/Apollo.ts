@@ -1,4 +1,4 @@
-import { default as ApolloInterface } from "../domain/buildingBlocks/Apollo";
+import { Apollo as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import { base64url } from "multiformats/bases/base64";
@@ -41,7 +41,6 @@ const EC = elliptic.ec;
  * @export
  * @class Apollo
  * @typedef {Apollo}
- * @implements {ApolloInterface}
  */
 export default class Apollo implements ApolloInterface {
   /**
@@ -109,13 +108,28 @@ export default class Apollo implements ApolloInterface {
   /**
    * Creates a random set of mnemonic phrases that can be used as a seed for generating a private key.
    *
+   * @example
+   * This function creates a random mnemonic phrase whose usage is as a seed for generating a private key.
+   *
+   * ```ts
+   *  const mnemonics = apollo.createRandomMnemonics();
+   * ```
+   *
    * @returns {MnemonicWordList}
    */
   createRandomMnemonics(): MnemonicWordList {
     return bip39.generateMnemonic(wordlist, 256).split(" ") as MnemonicWordList;
   }
+
   /**
    * Takes in a set of mnemonics and a passphrase, and returns a seed object used to generate a private key.
+   *
+   * @example
+   * This function takes mnemonics and passphrases and creates a seed object to generate a private key. It may throw an error if the mnemonics are invalid.
+   *
+   * ```ts
+   *  const seed = apollo.createSeed(mnemonics, "my-secret-passphrase");
+   * ```
    *
    * @param {MnemonicWordList} mnemonics
    * @param {?string} [passphrase]
@@ -143,6 +157,13 @@ export default class Apollo implements ApolloInterface {
   /**
    * Creates a random seed and a corresponding set of mnemonic phrases.
    *
+   * @example
+   * This function creates a random mnemonic phrase and seed.
+   *
+   * ```ts
+   *  const {mnemonics, seed} = apollo.createRandomSeed();
+   * ```
+   *
    * @param {?string} [passphrase]
    * @returns {SeedWords}
    */
@@ -168,6 +189,13 @@ export default class Apollo implements ApolloInterface {
 
   /**
    * Creates a key pair (a private and public key) using a given private key, so only getting its public key
+   *
+   * @example
+   * This function creates a key pair (a private and public key) using a given privateKey.
+   *
+   * ```ts
+   *  apollo.createKeyPairFromPrivateKey(privateKey);
+   * ```
    *
    * @param {PrivateKey} privateKey
    * @returns {KeyPair}

@@ -1,5 +1,5 @@
 import { DID, Mediator, Message } from "../../domain";
-import Mercury from "../../domain/buildingBlocks/Mercury";
+import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { AgentError } from "../../domain/models/Errors";
 import { MediationGrant } from "../protocols/mediation/MediationGrant";
 import { MediationKeysUpdateList } from "../protocols/mediation/MediationKeysUpdateList";
@@ -13,10 +13,8 @@ import { MediatorHandler, MediatorStore } from "../types";
  * A basic implementation of our MediatorHandler Interface which is mainly used
  * to establish mediation and get new messages using the mediation and pickup didcomm v2 protocols
  *
- * @export
  * @class BasicMediatorHandler
  * @typedef {BasicMediatorHandler}
- * @implements {MediatorHandler}
  */
 export class BasicMediatorHandler implements MediatorHandler {
   /**

@@ -1,5 +1,5 @@
-import Castor from "../domain/buildingBlocks/Castor";
-import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
+import { Castor } from "../domain/buildingBlocks/Castor";
+import { Pollux as PolluxInterface } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { base64url } from "multiformats/bases/base64";
@@ -12,7 +12,6 @@ import { JWTCredential } from "./models/JWTCredential";
  * @export
  * @class Pollux
  * @typedef {Pollux}
- * @implements {PolluxInterface}
  */
 export default class Pollux implements PolluxInterface {
   private castor: Castor;

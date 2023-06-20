@@ -4,8 +4,8 @@ import { base64url } from "multiformats/bases/base64";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
 
-import Apollo from "../domain/buildingBlocks/Apollo";
-import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
+import { Apollo } from "../domain/buildingBlocks/Apollo";
+import { Castor as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
   DID,
   PublicKey,
@@ -49,10 +49,9 @@ import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
  * or a more traditional system requiring secure and private identity management, Castor provides the tools and features
  * you need to easily create, manage, and resolve DIDs.
  *
- * @export
+ *
  * @class Castor
  * @typedef {Castor}
- * @implements {CastorInterface}
  */
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
@@ -75,6 +74,16 @@ export default class Castor implements CastorInterface {
   /**
    * Parses a string representation of a Decentralized Identifier (DID) into a DID object.
    *
+   * @example
+   * This function takes a string representation of a DID and returns an instance of `Domain.DID`. It may throw an error if the string is not a valid
+   * DID.
+   *
+   * ```ts
+   * const parsedPrismDid = castor.parseDID(
+   *  "did:prism:b6c0c33d701ac1b9a262a14454d1bbde3d127d697a76950963c5fd930605:Cj8KPRI7CgdtYXN0ZXIwEAFKLgoJc2VmsxEiECSTjyV7sUfCr_ArpN9rvCwR9fRMAhcsr_S7ZRiJk4p5k"
+   * );
+   * ```
+   *
    * @param {string} did
    * @returns {DID}
    */
@@ -85,6 +94,21 @@ export default class Castor implements CastorInterface {
   /**
    * Creates a DID for a prism (a device or server that acts as a DID owner and controller) using a
    * given master public key and list of services.
+   *
+   * @example
+   * This function creates a new `prism` DID, using a given master public key and a list of services. It may throw an error if the master public key or services are invalid.
+   *
+   * ```ts
+   * const exampleServiceEndpoint = new Domain.Service("didcomm", ["DIDCommMessaging"], {
+   *  uri: "https://example.com/endpoint",
+   *  accept: ["didcomm/v2"],
+   *  routingKeys: ["did:example:somemediator#somekey"],
+   * });
+   * const prismDid = await castor.createPrismDID(
+   *  keyPairFromCurveSecp256K1.publicKey,
+   *  [exampleServiceEndpoint]
+   * );
+   * ```
    *
    * @async
    * @param {PublicKey} masterPublicKey
@@ -143,6 +167,16 @@ export default class Castor implements CastorInterface {
    * Creates a DID for a peer (a device or server that acts as a DID subject) using given key agreement
    * and authentication key pairs and a list of services.
    *
+   * @example
+   * This function creates new peer DID, using a given key agreement, authentication key pairs, and a list of services. It may throw an error if the key pairs or services are invalid.
+   *
+   * ```ts
+   * const peerDid = await castor.createPeerDID(
+   *     [keyPairFromCurveEd25519, keyPairFromCurveX25519],
+   *     [exampleService]
+   * );
+   * ```
+   *
    * @async
    * @param {KeyPair[]} keyPairs
    * @param {Service[]} services
@@ -157,6 +191,14 @@ export default class Castor implements CastorInterface {
   /**
    * Asynchronously resolves a DID to its corresponding DID Document. This function may throw an error if
    * the DID is invalid or the document cannot be retrieved.
+   * **Note:** only `prism` and `peer` DID methods are currently supported!
+   *
+   * @example
+   * This function asynchronously resolves a DID to its corresponding DID Document. It may throw an error if the DID is invalid or the document is unretrievable.
+   *
+   * ```ts
+   * const didDocument = await castor.resolveDID("did:prism:123456")
+   * ```
    *
    * @async
    * @param {string} did
@@ -198,6 +240,25 @@ export default class Castor implements CastorInterface {
    * Verifies the authenticity of a signature using the corresponding DID Document, challenge, and signature data.
    * This function returns a boolean value indicating whether the signature is valid or not. This function may throw
    * an error if the DID Document or signature data are invalid.
+   *
+   * @example
+   * This function verifies the authenticity of a signature using given DID, challenge, and signature data. It returns a boolean value indicating whether the signature is valid or not. It may throw an error if the DID or signature data are invalid.
+   *
+   * ```ts
+   * const message = "data to sign";
+   * const messageBytes = new TextEncoder().encode(message);
+   * const signatureSecp256K1 = apollo.signStringMessage(keyPairSecp256K1.privateKey, message);
+   *
+   * const did = castor.parseDID("did:prism:123456");
+   * const challenge = messageBytes
+   * const signature = signatureSecp256K1.value;
+   *
+   * const isValid = castor.verifySignature(
+   *     castor.parseDID("did:prism:123456"),
+   *     challenge, // Uint8Array
+   *     signature // Uint8Array
+   * );
+   * ```
    *
    * @async
    * @param {DID} did

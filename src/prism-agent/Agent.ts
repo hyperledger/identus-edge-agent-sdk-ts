@@ -1,4 +1,4 @@
-import Apollo from "../domain/buildingBlocks/Apollo";
+import { Apollo } from "../domain/buildingBlocks/Apollo";
 import {
   DID,
   Message,
@@ -6,9 +6,9 @@ import {
   Service as DIDDocumentService,
   Signature,
 } from "../domain";
-import Castor from "../domain/buildingBlocks/Castor";
-import Pluto from "../domain/buildingBlocks/Pluto";
-import Mercury from "../domain/buildingBlocks/Mercury";
+import { Castor } from "../domain/buildingBlocks/Castor";
+import { Pluto } from "../domain/buildingBlocks/Pluto";
+import { Mercury } from "../domain/buildingBlocks/Mercury";
 import { Api } from "../domain/models/Api";
 import { ApiImpl } from "./helpers/ApiImpl";
 
@@ -49,9 +49,6 @@ enum AgentState {
  * @export
  * @class Agent
  * @typedef {Agent}
- * @implements {AgentCredentialsClass}
- * @implements {AgentDIDHigherFunctionsClass}
- * @implements {AgentInvitationsClass}
  */
 export default class Agent
   implements

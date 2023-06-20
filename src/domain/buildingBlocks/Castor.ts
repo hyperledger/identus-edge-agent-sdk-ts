@@ -6,7 +6,7 @@ import {
   Service as DIDDocumentService,
 } from "../models";
 
-export default interface Castor {
+export interface Castor {
   parseDID(did: string): DID;
   createPrismDID(
     masterPublicKey: PublicKey,

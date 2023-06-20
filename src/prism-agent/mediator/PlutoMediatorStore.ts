@@ -1,5 +1,5 @@
 import { Mediator } from "../../domain";
-import Pluto from "../../domain/buildingBlocks/Pluto";
+import { Pluto } from "../../domain/buildingBlocks/Pluto";
 import { MediatorStore } from "../types";
 
 /**
@@ -9,7 +9,6 @@ import { MediatorStore } from "../types";
  * @export
  * @class PublicMediatorStore
  * @typedef {PublicMediatorStore}
- * @implements {MediatorStore}
  */
 export class PublicMediatorStore implements MediatorStore {
   /**

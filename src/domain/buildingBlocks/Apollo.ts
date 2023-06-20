@@ -10,7 +10,7 @@ import {
 } from "../models";
 import { MnemonicWordList } from "../models/WordList";
 
-export default interface Apollo {
+export interface Apollo {
   createRandomMnemonics(): MnemonicWordList;
   createSeed(mnemonics: MnemonicWordList, passphrase: string): Seed;
   createRandomSeed(passphrase?: string): SeedWords;

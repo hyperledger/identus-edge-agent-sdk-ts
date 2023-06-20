@@ -17,7 +17,7 @@ import {
 import { Api } from "../domain/models/Api";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { DIDCommConnectionRunner } from "./protocols/connection/DIDCommConnectionRunner";
-import Pluto from "../domain/buildingBlocks/Pluto";
+import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { DIDCommInvitationRunner } from "./protocols/invitation/v2/DIDCommInvitationRunner";
 
 /**
@@ -27,7 +27,6 @@ import { DIDCommInvitationRunner } from "./protocols/invitation/v2/DIDCommInvita
  * @export
  * @class AgentInvitations
  * @typedef {AgentInvitations}
- * @implements {AgentInvitationsClass}
  */
 export class AgentInvitations implements AgentInvitationsClass {
   /**

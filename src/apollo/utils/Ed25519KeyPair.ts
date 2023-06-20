@@ -5,6 +5,9 @@ import { Ed25519KeyCommon } from "./Ed25519KeyCommon";
 import { Ed25519PrivateKey } from "./Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
 
+/**
+ * @ignore
+ */
 export class Ed25519KeyPair extends Ed25519KeyCommon {
   private privateKey: Ed25519PrivateKey;
   private publicKey: Ed25519PublicKey;

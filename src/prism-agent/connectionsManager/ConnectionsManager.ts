@@ -1,7 +1,7 @@
 import { DID, Message, MessageDirection } from "../../domain";
-import Castor from "../../domain/buildingBlocks/Castor";
-import Mercury from "../../domain/buildingBlocks/Mercury";
-import Pluto from "../../domain/buildingBlocks/Pluto";
+import { Castor } from "../../domain/buildingBlocks/Castor";
+import { Mercury } from "../../domain/buildingBlocks/Mercury";
+import { Pluto } from "../../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { AgentError } from "../../domain/models/Errors";
 import { AgentMessageEvents } from "../Agent.MessageEvents";
@@ -18,10 +18,8 @@ import {
  * mediation process with other mediators through didcomm and is also
  * responsible of managing the task to periodically fetch messages from the mediator once connection is established
  *
- * @export
  * @class ConnectionsManager
  * @typedef {ConnectionsManager}
- * @implements {ConnectionsManagerClass}
  */
 export class ConnectionsManager implements ConnectionsManagerClass {
   /**
