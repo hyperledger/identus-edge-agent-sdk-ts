@@ -43,10 +43,27 @@ import {
   VerificationMethodTypeAuthentication,
 } from "../peer-did/types";
 import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
+
+/**
+ * Castor is a powerful and flexible library for working with DIDs. Whether you are building a decentralised application
+ * or a more traditional system requiring secure and private identity management, Castor provides the tools and features
+ * you need to easily create, manage, and resolve DIDs.
+ *
+ * @export
+ * @class Castor
+ * @typedef {Castor}
+ * @implements {CastorInterface}
+ */
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
   private resolvers: DIDResolver[];
 
+  /**
+   * Creates an instance of Castor as soon as a valid cryptographic interface is provided (Apollo).
+   *
+   * @constructor
+   * @param {Apollo} apollo
+   */
   constructor(apollo: Apollo) {
     this.apollo = apollo;
     this.resolvers = [
@@ -55,10 +72,25 @@ export default class Castor implements CastorInterface {
     ];
   }
 
+  /**
+   * Parses a string representation of a Decentralized Identifier (DID) into a DID object.
+   *
+   * @param {string} did
+   * @returns {DID}
+   */
   parseDID(did: string): DID {
     return DIDParser.parse(did);
   }
 
+  /**
+   * Creates a DID for a prism (a device or server that acts as a DID owner and controller) using a
+   * given master public key and list of services.
+   *
+   * @async
+   * @param {PublicKey} masterPublicKey
+   * @param {?(Service[] | undefined)} [services]
+   * @returns {Promise<DID>}
+   */
   async createPrismDID(
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
@@ -107,12 +139,29 @@ export default class Castor implements CastorInterface {
     return new DID("did", "prism", methodSpecificId.toString());
   }
 
+  /**
+   * Creates a DID for a peer (a device or server that acts as a DID subject) using given key agreement
+   * and authentication key pairs and a list of services.
+   *
+   * @async
+   * @param {KeyPair[]} keyPairs
+   * @param {Service[]} services
+   * @returns {Promise<DID>}
+   */
   async createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
     const peerDIDOperation = new PeerDIDCreate();
     const peerDID = peerDIDOperation.createPeerDID(keyPairs, services);
     return peerDID.did;
   }
 
+  /**
+   * Asynchronously resolves a DID to its corresponding DID Document. This function may throw an error if
+   * the DID is invalid or the document cannot be retrieved.
+   *
+   * @async
+   * @param {string} did
+   * @returns {Promise<DIDDocument>}
+   */
   async resolveDID(did: string): Promise<DIDDocument> {
     const parsed = DID.fromString(did);
     const resolver = this.resolvers.find(
@@ -124,6 +173,13 @@ export default class Castor implements CastorInterface {
     return resolver.resolve(did);
   }
 
+  /**
+   * Extracts the verificationMethods from an array of CoreProperties inside a DID Document
+   *
+   * @private
+   * @param {DIDDocumentCoreProperty[]} coreProperties
+   * @returns {DIDDocumentVerificationMethod[]}
+   */
   private extractVerificationMethods(
     coreProperties: DIDDocumentCoreProperty[]
   ): DIDDocumentVerificationMethod[] {
@@ -138,6 +194,17 @@ export default class Castor implements CastorInterface {
     );
   }
 
+  /**
+   * Verifies the authenticity of a signature using the corresponding DID Document, challenge, and signature data.
+   * This function returns a boolean value indicating whether the signature is valid or not. This function may throw
+   * an error if the DID Document or signature data are invalid.
+   *
+   * @async
+   * @param {DID} did
+   * @param {Uint8Array} challenge
+   * @param {Uint8Array} signature
+   * @returns {Promise<boolean>}
+   */
   async verifySignature(
     did: DID,
     challenge: Uint8Array,
@@ -230,6 +297,13 @@ export default class Castor implements CastorInterface {
     return false;
   }
 
+  /**
+   * Returns ecnumbasis from a valid DID and its related keyPair
+   *
+   * @param {DID} did
+   * @param {KeyPair} keyPair
+   * @returns {string}
+   */
   getEcnumbasis(did: DID, keyPair: KeyPair): string {
     return new PeerDIDCreate().computeEncnumbasis(did, keyPair);
   }
