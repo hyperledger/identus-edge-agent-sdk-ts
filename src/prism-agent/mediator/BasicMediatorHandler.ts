@@ -9,15 +9,49 @@ import { PickupRequest } from "../protocols/pickup/PickupRequest";
 import { PickupRunner } from "../protocols/pickup/PickupRunner";
 import { MediatorHandler, MediatorStore } from "../types";
 
+/**
+ * A basic implementation of our MediatorHandler Interface which is mainly used
+ * to establish mediation and get new messages using the mediation and pickup didcomm v2 protocols
+ *
+ * @export
+ * @class BasicMediatorHandler
+ * @typedef {BasicMediatorHandler}
+ * @implements {MediatorHandler}
+ */
 export class BasicMediatorHandler implements MediatorHandler {
+  /**
+   * Optional instance of the mediator so that if the mediation was already
+   * established and recorded we don't need to mediate again with the same mediator
+   *
+   * @public
+   * @type {?Mediator}
+   */
   public mediator?: Mediator;
 
+  /**
+   * Creates an instance of BasicMediatorHandler.
+   *
+   * @constructor
+   * @param {DID} mediatorDID
+   * @param {Mercury} mercury
+   * @param {MediatorStore} store
+   */
   constructor(
     public mediatorDID: DID,
     public mercury: Mercury,
     public store: MediatorStore
   ) {}
 
+  /**
+   * Secondary constructor for BasicMediation Handler, to instanciate if from an existing Mediator
+   * instance.
+   *
+   * @static
+   * @param {Mediator} mediator
+   * @param {Mercury} mercury
+   * @param {MediatorStore} store
+   * @returns {BasicMediatorHandler}
+   */
   static fromMediator(
     mediator: Mediator,
     mercury: Mercury,
@@ -32,6 +66,12 @@ export class BasicMediatorHandler implements MediatorHandler {
     return mediatorHandler;
   }
 
+  /**
+   * Will asyncronously fetch the first mediator stored in database and set it as default mediator.
+   *
+   * @async
+   * @returns {Promise<Mediator | undefined>}
+   */
   async bootRegisteredMediator(): Promise<Mediator | undefined> {
     if (!this.mediator) {
       const mediators = await this.store.getAllMediators();
@@ -43,6 +83,14 @@ export class BasicMediatorHandler implements MediatorHandler {
     return this.mediator;
   }
 
+  /**
+   * Asyncronously achieve mediation by specifying the HOST DID, this will
+   * exchange the mediation protocol messages between the user and the mediator until established
+   *
+   * @async
+   * @param {DID} host
+   * @returns {Promise<Mediator>}
+   */
   async achieveMediation(host: DID): Promise<Mediator> {
     const mediator = await this.bootRegisteredMediator();
     if (!mediator) {
@@ -85,6 +133,13 @@ export class BasicMediatorHandler implements MediatorHandler {
 
     return mediator;
   }
+  /**
+   * Asyncronously update the mediator with the new keyList, used during the mediation process or during DID Rotation
+   *
+   * @async
+   * @param {DID[]} dids
+   * @returns {Promise<void>}
+   */
   async updateKeyListWithDIDs(dids: DID[]): Promise<void> {
     if (!this.mediator) {
       throw new AgentError.NoMediatorAvailableError();
@@ -96,6 +151,16 @@ export class BasicMediatorHandler implements MediatorHandler {
     ).makeMessage();
     await this.mercury.sendMessage(keyListUpdateMessage);
   }
+
+  /**
+   * Asyncronously pickup unread messages from the mediator
+   * if new messages are found, because the messages from in form of attachments inside the pickup response
+   * we need to parse those and return the user a list of messages it can read and decode, this is done inside the pickup runner.
+   *
+   * @async
+   * @param {number} limit
+   * @returns {Promise<Array<{ attachmentId: string; message: Message }>>}
+   */
   async pickupUnreadMessages(
     limit: number
   ): Promise<Array<{ attachmentId: string; message: Message }>> {
@@ -114,6 +179,13 @@ export class BasicMediatorHandler implements MediatorHandler {
     }
     return new PickupRunner(message, this.mercury).run();
   }
+  /**
+   * Asyncronously notify the current mediator that one or multiple message ID's have been read (or stored)
+   *
+   * @async
+   * @param {string[]} ids
+   * @returns {Promise<void>}
+   */
   async registerMessagesAsRead(ids: string[]): Promise<void> {
     if (!this.mediator) {
       throw new AgentError.NoMediatorAvailableError();

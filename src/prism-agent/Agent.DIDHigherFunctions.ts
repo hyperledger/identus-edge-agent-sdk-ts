@@ -16,7 +16,26 @@ import {
   MediatorHandler,
 } from "./types";
 
+/**
+ * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
+ *
+ * @export
+ * @class AgentDIDHigherFunctions
+ * @typedef {AgentDIDHigherFunctions}
+ * @implements {AgentDIDHigherFunctionsClass}
+ */
 export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
+  /**
+   * Creates an instance of AgentDIDHigherFunctions.
+   *
+   * @constructor
+   * @param {Apollo} apollo
+   * @param {Castor} castor
+   * @param {Pluto} pluto
+   * @param {ConnectionsManager} manager
+   * @param {MediatorHandler} mediationHandler
+   * @param {Seed} seed
+   */
   constructor(
     protected apollo: Apollo,
     protected castor: Castor,
@@ -26,6 +45,14 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected seed: Seed
   ) {}
 
+  /**
+   * Asyncronously sign with a DID
+   *
+   * @async
+   * @param {DID} did
+   * @param {Uint8Array} message
+   * @returns {Promise<Signature>}
+   */
   async signWith(did: DID, message: Uint8Array): Promise<Signature> {
     const privateKeys = await this.pluto.getDIDPrivateKeysByDID(did);
     const privateKey = privateKeys.at(0);
@@ -37,6 +64,14 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     return this.apollo.signByteArrayMessage(privateKey, message);
   }
 
+  /**
+   * Asyncronously create and store a new peer did
+   *
+   * @async
+   * @param {Service[]} services
+   * @param {boolean} [updateMediator=false]
+   * @returns {Promise<DID>}
+   */
   async createNewPeerDID(
     services: Service[],
     updateMediator = false
@@ -90,6 +125,15 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     return did;
   }
 
+  /**
+   * Asyncronously create and store a PrismDID
+   *
+   * @async
+   * @param {string} alias
+   * @param {Service[]} services
+   * @param {?number} [keyPathIndex]
+   * @returns {Promise<DID>}
+   */
   async createNewPrismDID(
     alias: string,
     services: Service[],
