@@ -46,7 +46,7 @@ jobs:
         run: npm run build
 
       - name: Build Docs
-        run: ./.scripts/buildDocs.sh
+        run: npm run docs
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop
