@@ -23,15 +23,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2.3.0
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: github.com
-
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
