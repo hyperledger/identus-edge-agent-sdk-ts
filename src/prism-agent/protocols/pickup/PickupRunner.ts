@@ -1,5 +1,5 @@
 import { AttachmentDescriptor, Message } from "../../../domain";
-import Mercury from "../../../domain/buildingBlocks/Mercury";
+import { Mercury } from "../../../domain/buildingBlocks/Mercury";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { PickupAttachment } from "../types";

@@ -5,6 +5,9 @@ import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 import { Secp256k1PrivateKey } from "./Secp256k1PrivateKey";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 
+/**
+ * @ignore
+ */
 export class Secp256k1KeyPair extends Secp256k1KeyCommon {
   constructor(
     public privateKey: Secp256k1PrivateKey,

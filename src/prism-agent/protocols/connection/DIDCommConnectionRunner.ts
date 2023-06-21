@@ -1,5 +1,5 @@
 import { DID } from "../../../domain";
-import Pluto from "../../../domain/buildingBlocks/Pluto";
+import { Pluto } from "../../../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../../domain/models/DIDPair";
 import { ConnectionsManager } from "../../types";
 import { OutOfBandInvitation } from "../invitation/v2/OutOfBandInvitation";

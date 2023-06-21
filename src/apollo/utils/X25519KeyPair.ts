@@ -5,6 +5,9 @@ import { X25519KeyCommon } from "./X25519KeyCommon";
 import { X25519PrivateKey } from "./X25519PrivateKey";
 import { X25519PublicKey } from "./X25519PublicKey";
 
+/**
+ * @ignore
+ */
 export class X25519KeyPair extends X25519KeyCommon {
   private privateKey: X25519PrivateKey;
   private publicKey: X25519PublicKey;

@@ -1,5 +1,5 @@
 import { Message } from "../../../../domain";
-import Mercury from "../../../../domain/buildingBlocks/Mercury";
+import { Mercury } from "../../../../domain/buildingBlocks/Mercury";
 import { OutOfBandParser } from "./OutOfBandParser";
 
 export class InvitationRunner {

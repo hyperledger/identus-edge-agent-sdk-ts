@@ -1,16 +1,21 @@
-import {DID, PrivateKey} from "../models";
-import {DIDPair} from "../models/DIDPair";
-import {Mediator} from "../models/Mediator";
-import {Message} from "../models/Message";
-import {PeerDID} from "../models/PeerDID";
-import {PrismDIDInfo} from "../models/PrismDIDInfo";
-import {VerifiableCredential} from "../models/VerifiableCredential";
+import { DID, PrivateKey } from "../models";
+import { DIDPair } from "../models/DIDPair";
+import { Mediator } from "../models/Mediator";
+import { Message } from "../models/Message";
+import { PeerDID } from "../models/PeerDID";
+import { PrismDIDInfo } from "../models/PrismDIDInfo";
+import { VerifiableCredential } from "../models/VerifiableCredential";
 
-
-export default interface Pluto {
+export interface Pluto {
   start(): Promise<void>;
 
-  storePrismDID(did: DID, keyPathIndex: number, privateKey: PrivateKey, privateKeyMetaId: string | null, alias?: string): Promise<void>;
+  storePrismDID(
+    did: DID,
+    keyPathIndex: number,
+    privateKey: PrivateKey,
+    privateKeyMetaId: string | null,
+    alias?: string
+  ): Promise<void>;
 
   storePeerDID(did: DID, privateKeys: Array<PrivateKey>): Promise<void>;
 
@@ -21,10 +26,10 @@ export default interface Pluto {
   storeMessages(messages: Array<Message>): Promise<void>;
 
   storePrivateKeys(
-      privateKey: PrivateKey,
-      did: DID,
-      keyPathIndex: number,
-      metaId: string | null
+    privateKey: PrivateKey,
+    did: DID,
+    keyPathIndex: number,
+    metaId: string | null
   ): Promise<void>;
 
   storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
@@ -65,7 +70,10 @@ export default interface Pluto {
 
   getAllMessagesReceivedFrom(did: DID): Promise<Array<Message>>;
 
-  getAllMessagesOfType(type: string, relatedWithDID?: DID): Promise<Array<Message>>;
+  getAllMessagesOfType(
+    type: string,
+    relatedWithDID?: DID
+  ): Promise<Array<Message>>;
 
   getAllMessagesByFromToDID(from: DID, to: DID): Promise<Array<Message>>;
 

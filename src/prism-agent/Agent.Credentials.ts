@@ -6,9 +6,9 @@ import {
   Curve,
   Seed,
 } from "../domain";
-import Apollo from "../domain/buildingBlocks/Apollo";
-import Castor from "../domain/buildingBlocks/Castor";
-import Pluto from "../domain/buildingBlocks/Pluto";
+import { Apollo } from "../domain/buildingBlocks/Apollo";
+import { Castor } from "../domain/buildingBlocks/Castor";
+import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import {
@@ -18,14 +18,33 @@ import {
 import { AgentCredentials as AgentCredentialsClass } from "./types";
 import { base64, base64url } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
-import Pollux from "../domain/buildingBlocks/Pollux";
+import { Pollux } from "../domain/buildingBlocks/Pollux";
 import {
   createPresentationBody,
   Presentation,
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
+
+/**
+ * An extension for the Edge agents that groups all the tasks and flows related to credentials
+ * those incluse processing, parsing and signing credential requests that will be then send to an Agent or received from an agent
+ *
+ * @interface
+ * @class AgentCredentials
+ * @typedef {AgentCredentials}
+ */
 export class AgentCredentials implements AgentCredentialsClass {
+  /**
+   * Creates an instance of AgentCredentials.
+   *
+   * @constructor
+   * @param {Apollo} apollo
+   * @param {Castor} castor
+   * @param {Pluto} pluto
+   * @param {Pollux} pollux
+   * @param {Seed} seed
+   */
   constructor(
     protected apollo: Apollo,
     protected castor: Castor,
@@ -34,10 +53,23 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected seed: Seed
   ) {}
 
+  /**
+   * Asyncronously get all the stored verifiableCredentials
+   *
+   * @async
+   * @returns {Promise<VerifiableCredential[]>}
+   */
   async verifiableCredentials(): Promise<VerifiableCredential[]> {
     return await this.pluto.getAllCredentials();
   }
 
+  /**
+   * Extract the verifiableCredential object from the Issue credential message asyncronously
+   *
+   * @async
+   * @param {IssueCredential} message
+   * @returns {Promise<VerifiableCredential>}
+   */
   async processIssuedCredentialMessage(
     message: IssueCredential
   ): Promise<VerifiableCredential> {
@@ -72,6 +104,13 @@ export class AgentCredentials implements AgentCredentialsClass {
       }
     );
   }
+  /**
+   * Asyncronously prepare a request credential message from a valid offerCredential for now supporting w3c verifiable credentials offers.
+   *
+   * @async
+   * @param {OfferCredential} offer
+   * @returns {Promise<RequestCredential>}
+   */
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
@@ -138,6 +177,16 @@ export class AgentCredentials implements AgentCredentialsClass {
     return requestCredential;
   }
 
+  /**
+   * Asyncronously create a verifiablePresentation from a valid stored verifiableCredential
+   * This is used when the verified requests a specific verifiable credential, this will create the actual
+   * instance of the presentation which we can share with the verifier.
+   *
+   * @async
+   * @param {RequestPresentation} request
+   * @param {VerifiableCredential} credential
+   * @returns {Promise<Presentation>}
+   */
   async createPresentationForRequestProof(
     request: RequestPresentation,
     credential: VerifiableCredential

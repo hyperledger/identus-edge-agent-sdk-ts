@@ -5,10 +5,16 @@ import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { ApolloError } from "../../domain/models/Errors";
 
+/**
+ * @ignore
+ */
 abstract class Secp256k1PrivateKeyCommon {
   public abstract getPublicKey(): Secp256k1PublicKey;
 }
 
+/**
+ * @ignore
+ */
 export class Secp256k1PrivateKey
   extends Secp256k1KeyCommon
   implements Secp256k1PrivateKeyCommon
