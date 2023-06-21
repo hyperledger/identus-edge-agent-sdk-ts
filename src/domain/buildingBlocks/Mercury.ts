@@ -1,6 +1,6 @@
 import { Message } from "../models/Message";
 
-export default interface Mercury {
+export interface Mercury {
   packMessage(message: Message): Promise<string>;
   unpackMessage(message: string): Promise<Message>;
   sendMessage(message: Message): Promise<Uint8Array>;

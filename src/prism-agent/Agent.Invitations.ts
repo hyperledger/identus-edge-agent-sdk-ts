@@ -17,10 +17,27 @@ import {
 import { Api } from "../domain/models/Api";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
 import { DIDCommConnectionRunner } from "./protocols/connection/DIDCommConnectionRunner";
-import Pluto from "../domain/buildingBlocks/Pluto";
+import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { DIDCommInvitationRunner } from "./protocols/invitation/v2/DIDCommInvitationRunner";
 
+/**
+ * An extension for the Edge agent that groups the functionality to parse, manage and
+ *  respond to prism agent onboarding and didcomm v2 invitations
+ *
+ * @export
+ * @class AgentInvitations
+ * @typedef {AgentInvitations}
+ */
 export class AgentInvitations implements AgentInvitationsClass {
+  /**
+   * Creates an instance of AgentInvitations.
+   *
+   * @constructor
+   * @param {Pluto} pluto
+   * @param {Api} api
+   * @param {AgentDIDHigherFunctions} agentDIDHigherFunctions
+   * @param {ConnectionsManager} connection
+   */
   constructor(
     private pluto: Pluto,
     private api: Api,
@@ -28,6 +45,13 @@ export class AgentInvitations implements AgentInvitationsClass {
     private connection: ConnectionsManager
   ) {}
 
+  /**
+   * Asyncronously parse an invitation from a valid json string
+   *
+   * @async
+   * @param {string} str
+   * @returns {Promise<InvitationType>}
+   */
   async parseInvitation(str: string): Promise<InvitationType> {
     const json = JSON.parse(str);
     const typeString = findProtocolTypeByValue(json.type);
@@ -42,6 +66,14 @@ export class AgentInvitations implements AgentInvitationsClass {
     throw new AgentError.UnknownInvitationTypeError();
   }
 
+  /**
+   * Asyncronously accept a didcomm v2 invitation, will create a pair between the Agent
+   *  its connecting with and the current owner's did
+   *
+   * @async
+   * @param {OutOfBandInvitation} invitation
+   * @returns {*}
+   */
   async acceptDIDCommInvitation(invitation: OutOfBandInvitation) {
     if (!this.connection.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
@@ -62,6 +94,13 @@ export class AgentInvitations implements AgentInvitationsClass {
     await this.connection.addConnection(pair);
   }
 
+  /**
+   * Asyncronously accept a prism onboarding invitation, used to onboard the current did in a prism agent.
+   *
+   * @async
+   * @param {PrismOnboardingInvitation} invitation
+   * @returns {Promise<void>}
+   */
   async acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void> {
     if (!invitation.from) {
       throw new AgentError.UnknownInvitationTypeError();
@@ -84,6 +123,13 @@ export class AgentInvitations implements AgentInvitationsClass {
     }
   }
 
+  /**
+   * Asyncronously parse a prismOnboarding invitation from a string
+   *
+   * @async
+   * @param {string} str
+   * @returns {Promise<PrismOnboardingInvitation>}
+   */
   async parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation> {
     try {
       const prismOnboarding =
@@ -112,6 +158,13 @@ export class AgentInvitations implements AgentInvitationsClass {
     }
   }
 
+  /**
+   * Asyncronously parse an out of band invitation from a URI as the oob come in format of valid URL
+   *
+   * @async
+   * @param {URL} str
+   * @returns {Promise<OutOfBandInvitation>}
+   */
   async parseOOBInvitation(str: URL): Promise<OutOfBandInvitation> {
     return new DIDCommInvitationRunner(str).run();
   }

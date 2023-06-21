@@ -23,7 +23,21 @@ import {
 
 import { base58btc } from "multiformats/bases/base58";
 
+/**
+ * PeerDID Creation wrapper class
+ *
+ * @export
+ * @class PeerDIDCreate
+ * @typedef {PeerDIDCreate}
+ */
 export class PeerDIDCreate {
+  /**
+   * Creates an instance of a PeerDID by providing a valid set of KeyPairs and DIDDocumentServices[]
+   *
+   * @param {KeyPair[]} keyPairs
+   * @param {DIDDocumentService[]} services
+   * @returns {PeerDID}
+   */
   createPeerDID(keyPairs: KeyPair[], services: DIDDocumentService[]): PeerDID {
     const signingKeys = keyPairs
       .filter((keyPair) => keyPair.keyCurve.curve === Curve.ED25519)
@@ -49,6 +63,13 @@ export class PeerDIDCreate {
     );
   }
 
+  /**
+   * Computes Encnumbasis from a valid did and its keyPair
+   *
+   * @param {DID} did
+   * @param {KeyPair} keyPair
+   * @returns {string}
+   */
   computeEncnumbasis(did: DID, keyPair: KeyPair): string {
     let material:
       | VerificationMaterialAgreement

@@ -1,5 +1,5 @@
 import { Secp256k1PublicKey } from "../../../apollo/utils/Secp256k1PublicKey";
-import Apollo from "../../../domain/buildingBlocks/Apollo";
+import { Apollo } from "../../../domain/buildingBlocks/Apollo";
 import { Curve, PublicKey } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 
