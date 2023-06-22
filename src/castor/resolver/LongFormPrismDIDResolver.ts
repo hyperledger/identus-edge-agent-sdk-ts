@@ -12,7 +12,6 @@ import {
   ServiceEndpoint as DIDDocumentServiceEndpoint,
   Authentication as DIDDocumentAuthentication,
   DID,
-  Curve,
   DIDUrl,
   DIDDocumentCoreProperty,
 } from "../../domain/models";
@@ -26,6 +25,8 @@ import {
 } from "../../castor/did/prismDID/PrismDIDPublicKey";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
+import { Secp256k1PublicKey } from "../../apollo/utils/Secp256k1PublicKey";
+import { KeyProperties } from "../../domain/models/KeyProperties";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
@@ -84,16 +85,10 @@ export class LongFormPrismDIDResolver implements DIDResolver {
         operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
             const publicKey = key.has_compressed_ec_key_data
-              ? {
-                  keyCurve: {
-                    curve: Curve.SECP256K1,
-                  },
-                  value: key.compressed_ec_key_data.data,
-                }
-              : this.apollo.publicKeyFromPoints(
-                  {
-                    curve: Curve.SECP256K1,
-                  },
+              ? Secp256k1PublicKey.secp256k1FromBytes(
+                  key.compressed_ec_key_data.data
+                )
+              : Secp256k1PublicKey.secp256k1FromByteCoordinates(
                   key.ec_key_data.x,
                   key.ec_key_data.y
                 );
@@ -113,12 +108,16 @@ export class LongFormPrismDIDResolver implements DIDResolver {
 
             if (endpoint === undefined) return acc;
 
-            return acc.concat(new DIDDocumentService(
-              service.id,
-              [service.type],
-              new DIDDocumentServiceEndpoint(endpoint)
-            ));
-          }, []) ?? [];
+            return acc.concat(
+              new DIDDocumentService(
+                service.id,
+                [service.type],
+                new DIDDocumentServiceEndpoint(endpoint)
+              )
+            );
+          },
+          []
+        ) ?? [];
 
       const verificationMethods = publicKeys.reduce(
         (partialResult, publicKey) => {
@@ -126,12 +125,16 @@ export class LongFormPrismDIDResolver implements DIDResolver {
            * TODO: Support keys in multiple formats, right now its multibase
            */
           const didUrl = new DIDUrl(did, [], new Map(), publicKey.id);
+          const curve = publicKey.keyData.getProperty(KeyProperties.curve);
+          if (!curve) {
+            throw new CastorError.InvalidKeyError();
+          }
           const method = new DIDDocumentVerificationMethod(
             didUrl.string(),
             did.toString(),
-            publicKey.keyData.keyCurve.curve,
+            curve,
             undefined,
-            base58.base58btc.encode(publicKey.keyData.value)
+            base58.base58btc.encode(publicKey.keyData.raw)
           );
           partialResult.set(didUrl.string(), method);
           return partialResult;

@@ -4,7 +4,7 @@ import { expect, assert } from "chai";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../src/apollo/Apollo";
-import { ECConfig } from "../../src/config/ECConfig";
+import * as ECConfig from "../../src/config/ECConfig";
 import { Curve } from "../../src/domain/models";
 import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
@@ -92,13 +92,14 @@ describe("Apollo Tests", () => {
   });
 
   it("Should test secp256k1KeyPair generation", () => {
-    const keyPair = Secp256k1KeyPair.generateSecp256k1KeyPair();
+    const keyPair = Secp256k1KeyPair.generateKeyPair();
     expect(keyPair.privateKey.getEncoded().length).to.equal(
       ECConfig.PRIVATE_KEY_BYTE_SIZE
     );
     expect(
       Buffer.from(keyPair.privateKey.getEncoded()).toString("hex").length
     ).to.equal(ECConfig.PRIVATE_KEY_BYTE_SIZE * 2);
+
     expect(keyPair.publicKey.getEncoded().length).to.equal(
       ECConfig.PUBLIC_KEY_BYTE_SIZE
     );
@@ -108,20 +109,10 @@ describe("Apollo Tests", () => {
   });
 
   it("Should create a private key from encoded", () => {
-    const keyPair = Secp256k1KeyPair.generateSecp256k1KeyPair();
+    const keyPair = Secp256k1KeyPair.generateKeyPair();
     const encodedPrivateKey = keyPair.privateKey.getEncoded();
-    const d = new BN(encodedPrivateKey);
-
-    const newFromBytes =
-      Secp256k1PrivateKey.secp256k1FromBytes(encodedPrivateKey);
-    const newFromBigInteger = Secp256k1PrivateKey.secp256k1FromBigInteger(d);
-
-    expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
-      newFromBytes.nativeValue.toArray()
-    );
-    expect(keyPair.privateKey.nativeValue.toArray()).to.deep.equal(
-      newFromBigInteger.nativeValue.toArray()
-    );
+    const newFromBytes = new Secp256k1PrivateKey(encodedPrivateKey);
+    expect(keyPair.privateKey.raw).to.deep.equal(newFromBytes.raw);
   });
 
   it("Should create and Sign and verify a message using Secp256k1 KeyPair", async () => {
@@ -157,8 +148,8 @@ describe("Apollo Tests", () => {
       keyPair.privateKey
     );
 
-    expect(Buffer.from(keyPair.publicKey.value).toString("hex")).to.equal(
-      Buffer.from(keyPairFromPrivate.publicKey.value).toString("hex")
+    expect(Buffer.from(keyPair.publicKey.raw).toString("hex")).to.equal(
+      Buffer.from(keyPairFromPrivate.publicKey.raw).toString("hex")
     );
   });
 
@@ -172,11 +163,10 @@ describe("Apollo Tests", () => {
       keyPair.privateKey
     );
 
-    expect(Buffer.from(keyPair.publicKey.value).toString("hex")).to.equal(
-      Buffer.from(keyPairFromPrivate.publicKey.value).toString("hex")
+    expect(Buffer.from(keyPair.publicKey.raw).toString("hex")).to.equal(
+      Buffer.from(keyPairFromPrivate.publicKey.raw).toString("hex")
     );
   });
-
   it("Should create a x25519 publicKey from a privateKey", async () => {
     const apollo = new Apollo();
     const keyPair = apollo.createKeyPairFromKeyCurve({
@@ -187,8 +177,8 @@ describe("Apollo Tests", () => {
       keyPair.privateKey
     );
 
-    expect(Buffer.from(keyPair.publicKey.value).toString("hex")).to.equal(
-      Buffer.from(keyPairFromPrivate.publicKey.value).toString("hex")
+    expect(Buffer.from(keyPair.publicKey.raw).toString("hex")).to.equal(
+      Buffer.from(keyPairFromPrivate.publicKey.raw).toString("hex")
     );
   });
 

@@ -22,21 +22,47 @@ import {
 } from "./types";
 
 import { base58btc } from "multiformats/bases/base58";
+import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
+import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
+import { KeyProperties } from "../domain/models/KeyProperties";
+import { PublicKey } from "../domain/models/KeyManagement";
 
 export class PeerDIDCreate {
   createPeerDID(keyPairs: KeyPair[], services: DIDDocumentService[]): PeerDID {
-    const signingKeys = keyPairs
-      .filter((keyPair) => keyPair.keyCurve.curve === Curve.ED25519)
-      .map(this.authenticationFromKeyPair.bind(this));
-    const encryptionKeys = keyPairs
-      .filter((keyPair) => keyPair.keyCurve.curve === Curve.X25519)
-      .map(this.keyAgreementFromKeyPair.bind(this));
+    const { signingKeys, encryptionKeys } = keyPairs.reduce(
+      ({ signingKeys, encryptionKeys }, keyPair) => {
+        if (keyPair.publicKey.isCurve<Ed25519PublicKey>(Curve.ED25519)) {
+          return {
+            signingKeys: [...signingKeys, keyPair.publicKey],
+            encryptionKeys,
+          };
+        }
+
+        if (keyPair.publicKey.isCurve<X25519PublicKey>(Curve.X25519)) {
+          return {
+            signingKeys,
+            encryptionKeys: [...encryptionKeys, keyPair.publicKey],
+          };
+        }
+
+        return {
+          signingKeys,
+          encryptionKeys,
+        };
+      },
+      { signingKeys: [], encryptionKeys: [] } as {
+        signingKeys: Ed25519PublicKey[];
+        encryptionKeys: X25519PublicKey[];
+      }
+    );
 
     const encodedEncryptionKeysStr = encryptionKeys
+      .map(this.keyAgreementFromKeyPair.bind(this))
       .map(this.createMultibaseEncnumbasis.bind(this))
       .map((value) => `.${Numalgo2Prefix.keyAgreement}${value}`);
 
     const encodedSigningKeysStr = signingKeys
+      .map(this.authenticationFromKeyPair.bind(this))
       .map(this.createMultibaseEncnumbasis.bind(this))
       .map((value) => `.${Numalgo2Prefix.authentication}${value}`);
 
@@ -54,13 +80,14 @@ export class PeerDIDCreate {
       | VerificationMaterialAgreement
       | VerificationMaterialAuthentication;
     let multibaseEcnumbasis: string;
-    switch (keyPair.keyCurve.curve) {
+
+    switch (keyPair.publicKey.getProperty(KeyProperties.curve)) {
       case Curve.X25519:
-        material = this.keyAgreementFromKeyPair(keyPair);
+        material = this.keyAgreementFromKeyPair(keyPair.publicKey);
         multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
         return multibaseEcnumbasis.slice(1);
       case Curve.ED25519:
-        material = this.authenticationFromKeyPair(keyPair);
+        material = this.authenticationFromKeyPair(keyPair.publicKey);
         multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
         return multibaseEcnumbasis.slice(1);
       default:
@@ -131,10 +158,11 @@ export class PeerDIDCreate {
   }
 
   private keyAgreementFromKeyPair(
-    keyPair: KeyPair
+    publicKey: PublicKey
   ): VerificationMaterialAgreement {
-    const octet = this.octetPublicKey(keyPair);
-    if (keyPair.keyCurve.curve !== Curve.X25519) {
+    const octet = this.octetPublicKey(publicKey);
+    const curve = publicKey.getProperty(KeyProperties.curve);
+    if (curve !== Curve.X25519) {
       throw new CastorError.InvalidPublicKeyEncoding();
     }
     return new VerificationMaterialAgreement(
@@ -145,10 +173,11 @@ export class PeerDIDCreate {
   }
 
   private authenticationFromKeyPair(
-    keyPair: KeyPair
+    publicKey: PublicKey
   ): VerificationMaterialAuthentication {
-    const octet = this.octetPublicKey(keyPair);
-    if (keyPair.keyCurve.curve !== Curve.ED25519) {
+    const octet = this.octetPublicKey(publicKey);
+    const curve = publicKey.getProperty(KeyProperties.curve);
+    if (curve !== Curve.ED25519) {
       throw new CastorError.InvalidPublicKeyEncoding();
     }
     return new VerificationMaterialAuthentication(
@@ -158,11 +187,15 @@ export class PeerDIDCreate {
     );
   }
 
-  private octetPublicKey(keyPair: KeyPair): OctetPublicKey {
+  private octetPublicKey(publicKey: PublicKey): OctetPublicKey {
+    const curve = publicKey.getProperty(KeyProperties.curve);
+    if (!curve) {
+      throw new CastorError.InvalidKeyError();
+    }
     return {
-      crv: keyPair.keyCurve.curve,
+      crv: curve,
       kty: "OKP",
-      x: keyPair.publicKey.value,
+      x: publicKey.raw,
     };
   }
 }

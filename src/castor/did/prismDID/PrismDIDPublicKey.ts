@@ -1,6 +1,7 @@
 import { Secp256k1PublicKey } from "../../../apollo/utils/Secp256k1PublicKey";
+import * as ECConfig from "../../../config/ECConfig";
 import Apollo from "../../../domain/buildingBlocks/Apollo";
-import { Curve, PublicKey } from "../../../domain/models";
+import { Curve } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 
 import * as Protos from "../../protos/node_models";
@@ -102,9 +103,9 @@ export function getUsage(
 export class PrismDIDPublicKey {
   id: string;
   usage: Usage;
-  keyData: PublicKey;
+  keyData: Secp256k1PublicKey;
 
-  constructor(id: string, usage: Usage, keyData: PublicKey) {
+  constructor(id: string, usage: Usage, keyData: Secp256k1PublicKey) {
     this.id = id;
     this.usage = usage;
     this.keyData = keyData;
@@ -116,17 +117,16 @@ export class PrismDIDPublicKey {
   ): PrismDIDPublicKey {
     const id = proto.id;
     const usage = proto.usage;
-    let keyData: PublicKey;
+    let keyData: Secp256k1PublicKey;
 
     switch (proto.key_data) {
       case "compressed_ec_key_data":
-        keyData = apollo.compressedPublicKeyFromCompressedData(
+        keyData = Secp256k1PublicKey.secp256k1FromCompressed(
           proto.compressed_ec_key_data.data
-        ).uncompressed;
+        );
         break;
       case "ec_key_data":
-        keyData = apollo.publicKeyFromPoints(
-          { curve: Curve.SECP256K1 },
+        keyData = Secp256k1PublicKey.secp256k1FromByteCoordinates(
           proto.ec_key_data.x,
           proto.ec_key_data.y
         );
@@ -139,12 +139,16 @@ export class PrismDIDPublicKey {
   }
 
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
-    const key = Secp256k1PublicKey.secp256k1FromBytes(this.keyData.value);
-    const points = key.getCurvePoint();
+    const encoded = this.keyData.getEncoded();
+    const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
+    const yBytes = encoded.slice(
+      1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
+      encoded.length
+    );
     const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
       curve: Curve.SECP256K1.toLocaleLowerCase(),
-      x: points.x.bytes(),
-      y: points.y.bytes(),
+      x: xBytes,
+      y: yBytes,
     });
     const usage = getProtosUsage(this.usage);
     const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({

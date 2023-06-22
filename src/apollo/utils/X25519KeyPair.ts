@@ -1,34 +1,32 @@
 import { base64url } from "multiformats/bases/base64";
 
-import { X25519KeyCommon } from "./X25519KeyCommon";
+import * as x25519 from "@stablelib/x25519";
 
 import { X25519PrivateKey } from "./X25519PrivateKey";
 import { X25519PublicKey } from "./X25519PublicKey";
+import { KeyPair } from "../../domain";
 
-export class X25519KeyPair extends X25519KeyCommon {
-  private privateKey: X25519PrivateKey;
-  private publicKey: X25519PublicKey;
+export class X25519KeyPair extends KeyPair {
+  public static ec = x25519;
 
-  constructor() {
+  constructor(
+    public privateKey: X25519PrivateKey,
+    public publicKey: X25519PublicKey
+  ) {
     super();
+  }
 
-    const keyPair = this.ec.generateKeyPair();
-
+  static generateKeyPair() {
+    const keyPair = X25519KeyPair.ec.generateKeyPair();
     const pub = keyPair.publicKey;
 
-    this.privateKey = new X25519PrivateKey(
+    const privateKey = new X25519PrivateKey(
       Buffer.from(base64url.baseEncode(Buffer.from(keyPair.secretKey)))
     );
-    this.publicKey = new X25519PublicKey(
+    const publicKey = new X25519PublicKey(
       Buffer.from(base64url.baseEncode(Uint8Array.from(pub)))
     );
-  }
 
-  public getPrivate(): Buffer {
-    return this.privateKey.getEncoded();
-  }
-
-  public getPublic(): Buffer {
-    return this.publicKey.getEncoded();
+    return new X25519KeyPair(privateKey, publicKey);
   }
 }

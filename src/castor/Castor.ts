@@ -8,7 +8,6 @@ import Apollo from "../domain/buildingBlocks/Apollo";
 import { default as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
   DID,
-  PublicKey,
   Service,
   KeyPair,
   DIDDocument,
@@ -43,6 +42,9 @@ import {
   VerificationMethodTypeAuthentication,
 } from "../peer-did/types";
 import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
+import { PublicKey } from "../domain/models/KeyManagement";
+import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
+import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 export default class Castor implements CastorInterface {
   private apollo: Apollo;
   private resolvers: DIDResolver[];
@@ -63,6 +65,10 @@ export default class Castor implements CastorInterface {
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
   ): Promise<DID> {
+    if (!masterPublicKey.isCurve<Secp256k1PublicKey>(Curve.SECP256K1)) {
+      throw new CastorError.InvalidKeyError();
+    }
+
     const publicKey = new PrismDIDPublicKey(
       getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
@@ -73,6 +79,7 @@ export default class Castor implements CastorInterface {
       Usage.AUTHENTICATION_KEY,
       masterPublicKey
     );
+
     const didCreationData =
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
         public_keys: [authenticateKey.toProto(), publicKey.toProto()],
@@ -167,12 +174,7 @@ export default class Castor implements CastorInterface {
           Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
         ).getEncoded();
 
-        publicKey = {
-          keyCurve: {
-            curve: Curve.SECP256K1,
-          },
-          value: publicKeyEncoded,
-        };
+        publicKey = new Secp256k1PublicKey(publicKeyEncoded);
         if (this.apollo.verifySignature(publicKey, challenge, signature)) {
           return true;
         }
@@ -213,18 +215,22 @@ export default class Castor implements CastorInterface {
                 material as VerificationMaterialAuthentication
               );
 
-        publicKey = {
-          keyCurve: {
-            curve: method.publicKeyJwk.crv as Curve,
-          },
-          value: Buffer.from(base64url.baseEncode(decodedKey)),
-        };
-        if (this.apollo.verifySignature(publicKey, challenge, signature)) {
+        publicKey =
+          method.publicKeyJwk.crv === Curve.X25519
+            ? new X25519PublicKey(Buffer.from(base64url.baseEncode(decodedKey)))
+            : new Ed25519PublicKey(
+                Buffer.from(base64url.baseEncode(decodedKey))
+              );
+
+        if (
+          publicKey.canVerify() &&
+          this.apollo.verifySignature(publicKey, challenge, signature)
+        ) {
           return true;
         }
       }
     } else {
-      throw new Error("Did not supported");
+      throw new Error("Did method not supported");
     }
 
     return false;

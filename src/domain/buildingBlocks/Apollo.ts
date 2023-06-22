@@ -1,13 +1,5 @@
-import {
-  CompressedPublicKey,
-  KeyCurve,
-  KeyPair,
-  PrivateKey,
-  PublicKey,
-  Seed,
-  SeedWords,
-  Signature,
-} from "../models";
+import { KeyCurve, KeyPair, Seed, SeedWords, Signature } from "../models";
+import { PrivateKey, PublicKey } from "../models/KeyManagement";
 import { MnemonicWordList } from "../models/WordList";
 
 export default interface Apollo {
@@ -16,12 +8,6 @@ export default interface Apollo {
   createRandomSeed(passphrase?: string): SeedWords;
   createKeyPairFromKeyCurve(curve: KeyCurve, seed?: Seed): KeyPair;
   createKeyPairFromPrivateKey(privateKey: PrivateKey): KeyPair;
-  compressedPublicKeyFromPublicKey(publicKey: PublicKey): CompressedPublicKey;
-  compressedPublicKeyFromCompressedData(
-    compressedData: Uint8Array
-  ): CompressedPublicKey;
-  publicKeyFromPoints(curve: KeyCurve, x: Uint8Array, y: Uint8Array): PublicKey;
-  publicKeyFromPoint(curve: KeyCurve, x: Uint8Array): PublicKey;
   signByteArrayMessage(privateKey: PrivateKey, message: Uint8Array): Signature;
   signStringMessage(privateKey: PrivateKey, message: string): Signature;
   verifySignature(

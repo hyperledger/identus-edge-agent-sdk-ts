@@ -1,9 +1,6 @@
-import { KeyCurve } from "./KeyCurve";
-import { PrivateKey } from "./PrivateKey";
-import { PublicKey } from "./PublicKey";
+import { PrivateKey, PublicKey } from "./KeyManagement";
 
-export interface KeyPair {
-  keyCurve: KeyCurve;
-  privateKey: PrivateKey;
-  publicKey: PublicKey;
+export abstract class KeyPair {
+  abstract publicKey: PublicKey;
+  abstract privateKey: PrivateKey;
 }
