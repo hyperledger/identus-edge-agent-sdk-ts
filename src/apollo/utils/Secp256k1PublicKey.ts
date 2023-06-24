@@ -11,7 +11,9 @@ import { VerifiableKey } from "../../domain/models/VerifiableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { ApolloError } from "../../domain/models/Errors";
 import { Curve } from "../../domain";
-
+/**
+ * @ignore
+ */
 export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
   public static ec: elliptic.ec = new elliptic.ec("secp256k1");
   public type: KeyTypes = "EC";

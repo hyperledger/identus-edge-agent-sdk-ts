@@ -6,7 +6,7 @@ import {
 } from "../models";
 import { PublicKey } from "../models/KeyManagement";
 
-export default interface Castor {
+export interface Castor {
   parseDID(did: string): DID;
   createPrismDID(
     masterPublicKey: PublicKey,

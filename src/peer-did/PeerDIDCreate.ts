@@ -27,7 +27,21 @@ import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { KeyProperties } from "../domain/models/KeyProperties";
 import { PublicKey } from "../domain/models/KeyManagement";
 
+/**
+ * PeerDID Creation wrapper class
+ *
+ * @export
+ * @class PeerDIDCreate
+ * @typedef {PeerDIDCreate}
+ */
 export class PeerDIDCreate {
+  /**
+   * Creates an instance of a PeerDID by providing a valid set of KeyPairs and DIDDocumentServices[]
+   *
+   * @param {KeyPair[]} keyPairs
+   * @param {DIDDocumentService[]} services
+   * @returns {PeerDID}
+   */
   createPeerDID(keyPairs: KeyPair[], services: DIDDocumentService[]): PeerDID {
     const { signingKeys, encryptionKeys } = keyPairs.reduce(
       ({ signingKeys, encryptionKeys }, keyPair) => {
@@ -75,6 +89,13 @@ export class PeerDIDCreate {
     );
   }
 
+  /**
+   * Computes Encnumbasis from a valid did and its keyPair
+   *
+   * @param {DID} did
+   * @param {KeyPair} keyPair
+   * @returns {string}
+   */
   computeEncnumbasis(did: DID, keyPair: KeyPair): string {
     let material:
       | VerificationMaterialAgreement

@@ -2,7 +2,7 @@ import { KeyCurve, KeyPair, Seed, SeedWords, Signature } from "../models";
 import { PrivateKey, PublicKey } from "../models/KeyManagement";
 import { MnemonicWordList } from "../models/WordList";
 
-export default interface Apollo {
+export interface Apollo {
   createRandomMnemonics(): MnemonicWordList;
   createSeed(mnemonics: MnemonicWordList, passphrase: string): Seed;
   createRandomSeed(passphrase?: string): SeedWords;

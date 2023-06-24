@@ -1,6 +1,6 @@
 import { SHA256 } from "@stablelib/sha256";
 import { CastorError } from "../../domain/models/Errors";
-import Apollo from "../../domain/buildingBlocks/Apollo";
+import { Apollo } from "../../domain/buildingBlocks/Apollo";
 import { LongFormPrismDID } from "../../castor/did/prismDID/LongFormPrismDID";
 import {
   DIDResolver,

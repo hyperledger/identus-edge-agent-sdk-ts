@@ -5,7 +5,9 @@ import * as x25519 from "@stablelib/x25519";
 import { X25519PrivateKey } from "./X25519PrivateKey";
 import { X25519PublicKey } from "./X25519PublicKey";
 import { KeyPair } from "../../domain";
-
+/**
+ * @ignore
+ */
 export class X25519KeyPair extends KeyPair {
   public static ec = x25519;
 

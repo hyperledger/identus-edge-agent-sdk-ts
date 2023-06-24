@@ -5,6 +5,9 @@ import { KeyPair } from "../../domain";
 import { Ed25519PrivateKey } from "./Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
 
+/**
+ * @ignore
+ */
 export class Ed25519KeyPair extends KeyPair {
   public static eddsa = new elliptic.eddsa("ed25519");
 

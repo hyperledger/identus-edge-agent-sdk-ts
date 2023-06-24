@@ -6,6 +6,9 @@ import { PrivateKey } from "../../domain/models/KeyManagement";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { X25519PublicKey } from "./X25519PublicKey";
 
+/**
+ * @ignore
+ */
 export class X25519PrivateKey extends PrivateKey {
   public static ec = x25519;
   public type: KeyTypes = "EC";

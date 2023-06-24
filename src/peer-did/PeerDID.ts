@@ -8,6 +8,9 @@ export interface PeerDIDEncoded {
   a: string[];
 }
 
+/**
+ * Provides functionality to transfrom peerDIDServices from our interfaces into DIDComm module ones
+ */
 export class PeerDIDService {
   readonly type: string;
   readonly serviceEndpoint: string;

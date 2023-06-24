@@ -5,7 +5,9 @@ import { KeyTypes } from "../../domain/models/Key";
 import { PublicKey } from "../../domain/models/KeyManagement";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { VerifiableKey } from "../../domain/models/VerifiableKey";
-
+/**
+ * @ignore
+ */
 export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
   public static eddsa = new elliptic.eddsa("ed25519");
 

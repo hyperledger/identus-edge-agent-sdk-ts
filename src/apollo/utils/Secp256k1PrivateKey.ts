@@ -10,6 +10,9 @@ import { SignableKey } from "../../domain/models/SignableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { Curve } from "../../domain";
 
+/**
+ * @ignore
+ */
 export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
   public static ec: elliptic.ec = new elliptic.ec("secp256k1");
 

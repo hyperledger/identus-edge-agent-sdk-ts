@@ -1,19 +1,44 @@
 import * as Domain from "../domain";
 import { MercuryError } from "../domain/models/Errors";
-import { default as MercuryInterface } from "../domain/buildingBlocks/Mercury";
+import { Mercury as MercuryInterface } from "../domain/buildingBlocks/Mercury";
 import { DIDCommProtocol } from "./DIDCommProtocol";
 import { Api, DID } from "../domain";
 import { MediaType } from "./helpers/MediaType";
-import Castor from "../domain/buildingBlocks/Castor";
+import { Castor } from "../domain/buildingBlocks/Castor";
 import { ForwardMessage } from "./forward/ForwardMessage";
 
+/**
+ * Mercury is a powerful and flexible library for working with decentralized identifiers and secure communications
+ * protocols. Whether you are a developer looking to build a secure and private messaging app or a more complex
+ * decentralized system requiring trusted peer-to-peer connections, Mercury provides the tools and features you need to
+ * establish, manage, and secure your communications easily.
+ *
+ * @export
+ * @class Mercury
+ * @typedef {Mercury}
+ */
 export default class Mercury implements MercuryInterface {
+  /**
+   * Creates an instance of Mercury.
+   *
+   * @constructor
+   * @param {Castor} castor
+   * @param {DIDCommProtocol} protocol
+   * @param {Api} api
+   */
   constructor(
     public castor: Castor,
     public protocol: DIDCommProtocol,
     public api: Api
   ) {}
 
+  /**
+   * Asynchronously packs a given message object into a string representation. This function may throw an error if the
+   * message object is invalid.
+   *
+   * @param {Domain.Message} message
+   * @returns {Promise<string>}
+   */
   packMessage(message: Domain.Message): Promise<string> {
     const toDid = message.to;
     const fromDid = message.from;
@@ -23,10 +48,25 @@ export default class Mercury implements MercuryInterface {
     return this.protocol.packEncrypted(message, toDid, fromDid);
   }
 
+  /**
+   * Asynchronously unpacks a given string representation of a message into a message object. This
+   * function may throw an error if the string is not a valid message representation.
+   *
+   * @param {string} message
+   * @returns {Promise<Domain.Message>}
+   */
   unpackMessage(message: string): Promise<Domain.Message> {
     return this.protocol.unpack(message);
   }
 
+  /**
+   * Asynchronously sends a given message and returns the response data.
+   *
+   * @async
+   * @template T
+   * @param {Domain.Message} message
+   * @returns {Promise<T>}
+   */
   async sendMessage<T>(message: Domain.Message): Promise<T> {
     const toDid = message.to;
 
@@ -80,6 +120,13 @@ export default class Mercury implements MercuryInterface {
     return response.body;
   }
 
+  /**
+   * Asynchronously sends a given message and returns the response message object.
+   *
+   * @async
+   * @param {Domain.Message} message
+   * @returns {Promise<Domain.Message>}
+   */
   async sendMessageParseMessage(
     message: Domain.Message
   ): Promise<Domain.Message> {

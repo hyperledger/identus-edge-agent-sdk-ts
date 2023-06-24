@@ -7,6 +7,9 @@ import { KeyProperties } from "../../domain/models/KeyProperties";
 import { SignableKey } from "../../domain/models/SignableKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
 
+/**
+ * @ignore
+ */
 export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
   public static eddsa = new elliptic.eddsa("ed25519");
 
