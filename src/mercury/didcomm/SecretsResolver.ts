@@ -5,6 +5,7 @@ import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import Pluto from "../../pluto/Pluto";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
+import { X25519PrivateKey } from "../../apollo/utils/X25519PrivateKey";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
@@ -66,14 +67,15 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     if (!privateKey) {
       throw new Error(`Invalid PrivateKey Curve ${Curve.X25519}`);
     }
-    const keyPair = this.apollo.createKeyPairFromPrivateKey(privateKey);
+    const x25519PrivateKey = new X25519PrivateKey(privateKey.value);
+    const keyPair = this.apollo.createKeyPairFromPrivateKey(x25519PrivateKey);
     const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
     const secret: Secret = {
       id,
       type: "JsonWebKey2020",
       privateKeyJwk: {
-        crv: privateKey.keyCurve.curve,
+        crv: Curve.X25519,
         kty: "OKP",
         d: privateKey.value.toString(),
         x: (publicKeyJWK.x as any).data,

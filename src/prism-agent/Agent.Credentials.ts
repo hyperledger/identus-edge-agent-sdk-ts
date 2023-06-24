@@ -127,10 +127,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     await this.pluto.storePrismDID(
       did,
       keyIndex,
-      {
-        keyCurve: keyPair.privateKey.keyCurve,
-        value: Buffer.from(base64url.baseEncode(keyPair.privateKey.value)),
-      },
+      keyPair.privateKey,
       null,
       did.toString()
     );

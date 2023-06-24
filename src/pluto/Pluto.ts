@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import {
+  Curve,
   DID,
   getKeyCurveByNameAndIndex,
   Mediator,
   Message,
   PeerDID,
-  PrivateKey,
 } from "../domain";
 import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
 import { VerifiableCredential } from "../domain/models/VerifiableCredential";
@@ -31,6 +31,10 @@ import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions
 import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
 import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
 import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
+import { PrivateKey } from "../domain/models/KeyManagement";
+import { KeyProperties } from "../domain/models/KeyProperties";
+import { Ed25519PrivateKey } from "../apollo/utils/Ed25519PrivateKey";
+import { X25519PrivateKey } from "../apollo/utils/X25519PrivateKey";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
@@ -186,7 +190,10 @@ export default class Pluto implements PlutoInterface {
         this.storePrivateKeys(
           privateKey,
           did,
-          privateKey.keyCurve?.index ?? 0,
+          privateKey.getProperty(KeyProperties.index)
+            ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              parseInt(privateKey.getProperty(KeyProperties.index)!)
+            : 0,
           null
         )
       )
@@ -260,7 +267,7 @@ export default class Pluto implements PlutoInterface {
   ) {
     const privateKeysEntity = new entities.PrivateKey();
     metaId && (privateKeysEntity.id = metaId); // question: Where should I store metaId
-    privateKeysEntity.curve = privateKey.keyCurve.curve;
+    privateKeysEntity.curve = privateKey.curve;
     privateKeysEntity.privateKey = Buffer.from(privateKey.value).toString();
     privateKeysEntity.keyPathIndex = keyPathIndex ?? 0;
     privateKeysEntity.didId = did.toString();
@@ -501,10 +508,15 @@ export default class Pluto implements PlutoInterface {
       const data = await repository.findBy({
         didId: Like(`${didString}%`),
       });
-      return data.map((item) => ({
-        keyCurve: getKeyCurveByNameAndIndex(item.curve),
-        value: Buffer.from(item.privateKey),
-      })) as PrivateKey[];
+      return data.map((item) => {
+        const keyCurve = getKeyCurveByNameAndIndex(item.curve);
+
+        if (keyCurve.curve === Curve.ED25519) {
+          return new Ed25519PrivateKey(Buffer.from(item.privateKey));
+        }
+
+        return new X25519PrivateKey(Buffer.from(item.privateKey));
+      }) as PrivateKey[];
     } catch (error) {
       throw new Error((error as Error).message);
     }
@@ -529,10 +541,13 @@ export default class Pluto implements PlutoInterface {
       if (!data) {
         return null;
       }
-      return {
-        keyCurve: getKeyCurveByNameAndIndex(data.curve),
-        value: Buffer.from(data.privateKey),
-      } as PrivateKey;
+      const keyCurve = getKeyCurveByNameAndIndex(data.curve);
+
+      if (keyCurve.curve === Curve.ED25519) {
+        return new Ed25519PrivateKey(Buffer.from(data.privateKey));
+      }
+
+      return new X25519PrivateKey(Buffer.from(data.privateKey));
     } catch (error) {
       throw new Error((error as Error).message);
     }

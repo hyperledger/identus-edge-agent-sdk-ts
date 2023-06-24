@@ -11,6 +11,7 @@ export enum KeyProperties {
   rawKey = "rawKey",
   /// The 'derivationPath'  refers to the path used to derive a key in a hierarchical deterministic (HD) key generation scheme.,
   derivationPath = "derivationPath",
+  index = "index",
   /// The 'type'  denotes the type of the key.,
   type = "type",
   /// The 'curvePointX'  represents the x-coordinate of a curve point for an elliptic-curve key.,

@@ -10,7 +10,6 @@ import {
   KeyPair,
   Signature,
   Curve,
-  CompressedPublicKey,
 } from "../domain/models";
 import { MnemonicWordList } from "../domain/models/WordList";
 import {
@@ -31,6 +30,7 @@ import { Secp256k1KeyPair } from "./utils/Secp256k1KeyPair";
 import { PrivateKey, PublicKey } from "../domain/models/KeyManagement";
 import { KeyProperties } from "../domain/models/KeyProperties";
 import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
+import { CompressedPublicKey } from "../domain/models/PublicKey";
 
 const EC = elliptic.ec;
 

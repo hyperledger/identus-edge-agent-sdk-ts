@@ -26,7 +26,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
       "createKeyPairFromPrivateKey" | "getPrivateJWKJson"
     > = {
       createKeyPairFromPrivateKey: (privateKey) => ({
-        keyCurve: privateKey.keyCurve,
+        keyCurve: privateKey.curve,
         privateKey,
         publicKey: privateKey,
       }),

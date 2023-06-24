@@ -1,5 +1,4 @@
 import "./globals";
-
 export { default as Apollo } from "./apollo/Apollo";
 export { default as Castor } from "./castor/Castor";
 export * as Domain from "./domain";
@@ -16,8 +15,8 @@ export * from "./prism-agent/mediator/BasicMediatorHandler";
 export * from "./prism-agent/mediator/PlutoMediatorStore";
 export * from "./mercury/didcomm/Wrapper";
 export * from "./prism-agent/helpers/ApiImpl";
+export { ListenerKey } from "./prism-agent/types";
 export type {
-  ListenerKey,
   MediatorHandler,
   ConnectionsManager as ConnectionsManagerInterface,
   MediatorStore,
