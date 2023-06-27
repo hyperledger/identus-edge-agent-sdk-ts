@@ -1,3 +1,4 @@
+import { VerifiableCredential } from "../../pluto/entities";
 import { CredentialType } from "./VerifiableCredential";
 
 interface Claim {
@@ -21,8 +22,17 @@ interface StorableCredential {
   credentialUpdated?: Date;
   credentialSchema?: string;
   validUntil?: Date;
-  revoqued?: boolean;
+  revoked?: boolean;
   availableClaims?: string[];
+}
+
+export class JWTVerifiablePayload implements Credential {
+  constructor(
+    public issuer: string,
+    public subject: string,
+    public claims: Claim[],
+    public properties: Map<string, any>
+  ) {}
 }
 
 /*
