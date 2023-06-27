@@ -31,6 +31,7 @@ import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions
 import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
 import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
 import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
+import { StorableCredential } from "../domain/models/Credential";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
@@ -618,17 +619,28 @@ export default class Pluto implements PlutoInterface {
     }) as VerifiableCredential[];
   }
 
-  async storeCredential(credential: VerifiableCredential) {
-    const verifiableCredentialEntity = new entities.VerifiableCredential();
-    verifiableCredentialEntity.credentialType = credential.credentialType;
-    verifiableCredentialEntity.expirationDate = credential.expirationDate;
-    verifiableCredentialEntity.issuanceDate = credential.issuanceDate;
-    verifiableCredentialEntity.verifiableCredentialJson = JSON.stringify({
-      ...credential,
-      subject: credential.subject?.toString(),
-    });
-    verifiableCredentialEntity.issuerDIDId = credential.issuer.toString();
+  async storeCredential(credential: StorableCredential) {
+    const credentialEntity = new entities.Credential();
 
-    await this.dataSource.manager.save(verifiableCredentialEntity);
+    credentialEntity.recoveryId = credential.recoveryId;
+    credentialEntity.issuer = credential.issuer;
+    credentialEntity.subject = credential.subject;
+    credentialEntity.credentialCreated = credential.credentialCreated;
+    credentialEntity.credentialUpdated = credential.credentialUpdated;
+    credentialEntity.credentialSchema = credential.credentialSchema;
+    credentialEntity.validUntil = credential.validUntil;
+    credentialEntity.revoked = credential.revoked ? 1 : 0;
+
+    const storedCredential = await this.dataSource.manager.save(
+      credentialEntity
+    );
+
+    for (const claim in credential.availableClaims) {
+      const claimEntity = new entities.AvailableClaims();
+      claimEntity.claim = claim;
+      claimEntity.credentialId = storedCredential.id;
+
+      await this.dataSource.manager.save(claimEntity);
+    }
   }
 }

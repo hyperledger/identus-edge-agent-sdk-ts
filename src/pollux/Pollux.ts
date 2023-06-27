@@ -1,17 +1,30 @@
 import Castor from "../domain/buildingBlocks/Castor";
 import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
-import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { base64url } from "multiformats/bases/base64";
 import { JWTCredential } from "./models/JWTCredential";
 import { AnoncredsLoader } from "./AnoncredsLoader";
+import {
+  Credential,
+  StorableCredential,
+  VerifiableCredential,
+  VerifiableCredentialProperties,
+} from "../domain/models/Credential";
+import { AttachmentDescriptor, Curve, JsonString } from "../domain";
+import { OfferCredential } from "../prism-agent/protocols/issueCredential/OfferCredential";
+import { RequestCredential } from "../prism-agent/protocols/issueCredential/RequestCredential";
+import Pluto from "../domain/buildingBlocks/Pluto";
+import Apollo from "../domain/buildingBlocks/Apollo";
+import { JWT } from "../apollo/utils/jwt/JWT";
 
 export default class Pollux implements PolluxInterface {
-  private castor: Castor;
   private _anoncreds: AnoncredsLoader;
 
-  constructor(castor: Castor) {
-    this.castor = castor;
+  constructor(
+    private castor: Castor,
+    private pluto: Pluto,
+    private apollo: Apollo
+  ) {
     this._anoncreds = AnoncredsLoader.getInstance();
   }
 
@@ -20,18 +33,76 @@ export default class Pollux implements PolluxInterface {
     return this._anoncreds;
   }
 
-  parseVerifiableCredential(jwtString: string): VerifiableCredential {
-    const parts = jwtString.split(".");
-    const credentialString = parts.at(1);
+  parseCredential(
+    jsonEncoded: JsonString,
+    options: { [name: string]: string } = {}
+  ) {
+    const jsonParsed = JSON.parse(jsonEncoded);
 
-    if (parts.length != 3 || credentialString === undefined)
-      throw new InvalidJWTString();
+    const isVerifiableCredential = jsonParsed.vc !== undefined;
+    if (isVerifiableCredential) {
+      const id = options.id;
+      if (!id) {
+        throw new Error("The original JWTString needs to be sent as props");
+      }
 
-    const base64Data = base64url.baseDecode(credentialString);
-    const jsonString = Buffer.from(base64Data).toString();
-    const dataValue = JSON.parse(jsonString);
-    const jwtCredential = new JWTCredential(jwtString, dataValue);
+      const { iss, sub } = jsonParsed;
+      if (!iss || !sub) {
+        throw new Error("Wrong credential");
+      }
 
-    return jwtCredential.makeVerifiableCredential();
+      if (!id) {
+        throw new Error("Wrong credential id");
+      }
+
+      const credential = new VerifiableCredential(iss, sub);
+
+      credential.properties.set(VerifiableCredentialProperties.iss, iss);
+      credential.properties.set(VerifiableCredentialProperties.sub, sub);
+      credential.properties.set(VerifiableCredentialProperties.jti, id);
+
+      credential.properties.set(
+        VerifiableCredentialProperties.vc,
+        jsonParsed.vc
+      );
+
+      if (jsonParsed.nbf) {
+        credential.properties.set(
+          VerifiableCredentialProperties.nbf,
+          jsonParsed.nbf
+        );
+      }
+
+      if (jsonParsed.exp) {
+        credential.properties.set(
+          VerifiableCredentialProperties.exp,
+          jsonParsed.exp
+        );
+      }
+
+      if (jsonParsed.aud) {
+        credential.properties.set(
+          VerifiableCredentialProperties.aud,
+          jsonParsed.aud
+        );
+      }
+
+      return credential;
+    } else {
+      throw new Error("Not implemented");
+    }
+  }
+
+  private extractDomainChallenge(attachments: AttachmentDescriptor[]) {
+    return attachments.reduce(
+      (_, attachment: any) => ({
+        challenge: attachment?.data?.data?.options?.challenge,
+        domain: attachment?.data?.data?.options?.domain,
+      }),
+      { challenge: undefined, domain: undefined } as {
+        challenge?: string;
+        domain?: string;
+      }
+    );
   }
 }

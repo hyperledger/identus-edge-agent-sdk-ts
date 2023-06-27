@@ -1,38 +1,82 @@
-import { VerifiableCredential } from "../../pluto/entities";
-import { CredentialType } from "./VerifiableCredential";
+import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
+import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
 
 interface Claim {
   [name: string]: any;
 }
 
-abstract class Credential {
+export abstract class Credential {
   abstract issuer: string;
   abstract subject: string;
   abstract claims: Claim[];
   abstract properties: Map<string, any>;
+
+  abstract toStorable(): StorableCredential;
+
+  abstract prepareRequestCredentialFromOffer(
+    offer: OfferCredential
+  ): Promise<RequestCredential>;
+
+  getProperty(name: string) {
+    return this.properties.get(name);
+  }
 }
 
-interface StorableCredential {
+export interface StorableCredential {
   id: string;
   recoveryId: string;
-  credentialData: Uint8Array;
+  credentialData: string;
   issuer?: string;
   subject?: string;
-  credentialCreated?: Date;
-  credentialUpdated?: Date;
+  credentialCreated?: string;
+  credentialUpdated?: string;
   credentialSchema?: string;
-  validUntil?: Date;
+  validUntil?: string;
   revoked?: boolean;
   availableClaims?: string[];
 }
 
-export class JWTVerifiablePayload implements Credential {
+export enum VerifiableCredentialProperties {
+  iss = "iss",
+  vc = "vc",
+  jti = "jti",
+  nbf = "nbf",
+  sub = "sub",
+  exp = "exp",
+  aud = "aud",
+}
+
+export class VerifiableCredential extends Credential {
+  public static recoveryId = "";
+
   constructor(
     public issuer: string,
     public subject: string,
-    public claims: Claim[],
-    public properties: Map<string, any>
-  ) {}
+    public claims: Claim[] = [],
+    public properties: Map<VerifiableCredentialProperties, any> = new Map()
+  ) {
+    super();
+  }
+
+  toStorable(): StorableCredential {
+    const claims = [this.getProperty(VerifiableCredentialProperties.sub)].map(
+      (claim) => claim.toString()
+    );
+
+    const credentialData = Buffer.from(
+      JSON.stringify(this.properties)
+    ).toString("hex");
+
+    return {
+      id: this.getProperty(VerifiableCredentialProperties.jti),
+      recoveryId: VerifiableCredential.recoveryId,
+      credentialData: credentialData,
+      issuer: this.getProperty(VerifiableCredentialProperties.iss),
+      subject: this.getProperty(VerifiableCredentialProperties.sub),
+      validUntil: this.getProperty(VerifiableCredentialProperties.exp),
+      availableClaims: claims,
+    };
+  }
 }
 
 /*
