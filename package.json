@@ -1,6 +1,6 @@
 {
   "name": "@input-output-hk/atala-prism-wallet-sdk",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "PRISM typescript SDK",
   "main": "build/node/index.js",
   "browser": "build/browser/index.js",
