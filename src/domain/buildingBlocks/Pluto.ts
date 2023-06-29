@@ -82,5 +82,5 @@ export default interface Pluto {
 
   getAllMediators(): Promise<Array<Mediator>>;
 
-  getAllCredentials(): Promise<Array<VerifiableCredential>>;
+  getAllCredentials(): Promise<Array<Credential>>;
 }

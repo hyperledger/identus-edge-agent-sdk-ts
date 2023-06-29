@@ -1,5 +1,5 @@
-import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
-import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
+import { DID } from "./DID";
+import { KeyPair } from "./KeyPair";
 
 interface Claim {
   [name: string]: any;
@@ -12,10 +12,6 @@ export abstract class Credential {
   abstract properties: Map<string, any>;
 
   abstract toStorable(): StorableCredential;
-
-  abstract prepareRequestCredentialFromOffer(
-    offer: OfferCredential
-  ): Promise<RequestCredential>;
 
   getProperty(name: string) {
     return this.properties.get(name);
@@ -44,6 +40,12 @@ export enum VerifiableCredentialProperties {
   sub = "sub",
   exp = "exp",
   aud = "aud",
+  type = "type",
+}
+export interface CredentialRequestOptions {
+  keyPair?: KeyPair;
+  did?: DID;
+  [name: string]: any;
 }
 
 export class VerifiableCredential extends Credential {

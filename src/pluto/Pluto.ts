@@ -607,6 +607,7 @@ export default class Pluto implements PlutoInterface {
   async getAllCredentials() {
     const repository: Repository<entities.VerifiableCredential> =
       this.dataSource.manager.getRepository("verifiable_credential");
+
     const data = await repository.find();
     return data.map((credential) => {
       const json = JSON.parse(credential.verifiableCredentialJson);

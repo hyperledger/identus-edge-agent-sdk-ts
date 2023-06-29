@@ -6,11 +6,20 @@ import { JWTCredential } from "./models/JWTCredential";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import {
   Credential,
+  CredentialRequestOptions,
   StorableCredential,
   VerifiableCredential,
   VerifiableCredentialProperties,
 } from "../domain/models/Credential";
-import { AttachmentDescriptor, Curve, JsonString } from "../domain";
+import {
+  AttachmentDescriptor,
+  CredentialType,
+  Curve,
+  DID,
+  JsonString,
+  KeyPair,
+  Message,
+} from "../domain";
 import { OfferCredential } from "../prism-agent/protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../prism-agent/protocols/issueCredential/RequestCredential";
 import Pluto from "../domain/buildingBlocks/Pluto";
@@ -33,15 +42,94 @@ export default class Pollux implements PolluxInterface {
     return this._anoncreds;
   }
 
-  parseCredential(
-    jsonEncoded: JsonString,
-    options: { [name: string]: string } = {}
-  ) {
-    const jsonParsed = JSON.parse(jsonEncoded);
+  //TODO: Match the correct format with whatever backend is sending us
+  private extractCredentialFormatFromMessage(message: Message) {
+    const body = JSON.parse(message.body);
+    const formats = body.formats;
+    if (!formats || !Array.isArray(formats) || formats.length <= 0) {
+      return CredentialType.Unknown;
+    }
+    const [format] = formats;
+    if (!format) {
+      return CredentialType.Unknown;
+    }
+    if (format === CredentialType.JWT) {
+      return CredentialType.JWT;
+    }
+    if (format === CredentialType.AnonCreds) {
+      return CredentialType.AnonCreds;
+    }
 
-    const isVerifiableCredential = jsonParsed.vc !== undefined;
-    if (isVerifiableCredential) {
-      const id = options.id;
+    return CredentialType.Unknown;
+  }
+
+  private async processJWTCredential(
+    offer: Message,
+    options: CredentialRequestOptions = {}
+  ) {
+    const { did, keyPair } = options;
+    if (!did) {
+      throw new Error("Required did ");
+    }
+
+    if (!keyPair) {
+      throw new Error("Required keyPair ");
+    }
+
+    const domainChallenge = this.extractDomainChallenge(offer.attachments);
+    const jwt = new JWT(this.castor);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const challenge = domainChallenge.challenge!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const domain = domainChallenge.domain!;
+
+    const signedJWT = await jwt.sign(did, keyPair.privateKey.value, {
+      aud: domain,
+      nonce: challenge,
+      vp: {
+        "@context": ["https://www.w3.org/2018/presentations/v1"],
+        type: ["VerifiablePresentation"],
+      },
+    });
+
+    return signedJWT;
+  }
+
+  async processCredentialRequest(
+    offer: Message,
+    options: CredentialRequestOptions = {}
+  ): Promise<string> {
+    const format = this.extractCredentialFormatFromMessage(offer);
+    if (format === CredentialType.JWT) {
+      return this.processJWTCredential(offer, options);
+    } else if (format === CredentialType.AnonCreds) {
+      throw new Error("Not implemented");
+    }
+
+    throw new Error("wrong credential format");
+  }
+
+  parseCredential(
+    base64UrlBuffer: Uint8Array,
+    options?: { message: Message; [name: string]: any }
+  ) {
+    if (!options?.message) {
+      throw new InvalidJWTString();
+    }
+    const format = this.extractCredentialFormatFromMessage(options?.message);
+    if (format === CredentialType.JWT) {
+      const jwtString = Buffer.from(base64UrlBuffer).toString();
+      const parts = jwtString.split(".");
+      const credentialString = parts.at(1);
+
+      if (parts.length != 3 || credentialString === undefined)
+        throw new InvalidJWTString();
+
+      const base64Data = base64url.baseDecode(credentialString);
+      const jsonString = Buffer.from(base64Data).toString();
+      const jsonParsed = JSON.parse(jsonString);
+
+      const id = jwtString;
       if (!id) {
         throw new Error("The original JWTString needs to be sent as props");
       }

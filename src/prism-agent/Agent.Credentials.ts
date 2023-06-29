@@ -5,6 +5,7 @@ import {
   AttachmentJsonData,
   Curve,
   Seed,
+  Credential,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
@@ -25,7 +26,7 @@ import {
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
-import { InvalidJWTString } from "../domain/models/errors/Pollux";
+
 export class AgentCredentials implements AgentCredentialsClass {
   constructor(
     protected apollo: Apollo,
@@ -35,7 +36,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected seed: Seed
   ) {}
 
-  async verifiableCredentials(): Promise<VerifiableCredential[]> {
+  async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
   }
 
@@ -52,19 +53,8 @@ export class AgentCredentials implements AgentCredentialsClass {
       (attachment as AttachmentBase64).base64
     );
 
-    const jwtString = Buffer.from(jwtData).toString();
-    const parts = jwtString.split(".");
-    const credentialString = parts.at(1);
-
-    if (parts.length != 3 || credentialString === undefined)
-      throw new InvalidJWTString();
-
-    const base64Data = base64url.baseDecode(credentialString);
-    const jsonString = Buffer.from(base64Data).toString();
-    const dataValue = JSON.parse(jsonString);
-
-    const credential = this.pollux.parseCredential(dataValue, {
-      id: jwtString,
+    const credential = this.pollux.parseCredential(jwtData, {
+      message: message.makeMessage(),
     });
 
     await this.pluto.storeCredential(credential.toStorable());
@@ -107,60 +97,39 @@ export class AgentCredentials implements AgentCredentialsClass {
       null,
       did.toString()
     );
-    const domainChallenge = this.extractDomainChallenge(offer.attachments);
-    const isVerifiableCredential =
-      domainChallenge.challenge && domainChallenge.domain;
 
-    const isAnonCreds = false;
+    const message = offer.makeMessage();
+    const credBuffer = await this.pollux.processCredentialRequest(message, {
+      did: did,
+      keyPair: keyPair,
+    });
 
-    if (isVerifiableCredential) {
-      const jwt = new JWT(this.castor);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const challenge = domainChallenge.challenge!;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const domain = domainChallenge.domain!;
-      const signedJWT = await jwt.sign(did, keyPair.privateKey.value, {
-        aud: domain,
-        nonce: challenge,
-        vp: {
-          "@context": ["https://www.w3.org/2018/presentations/v1"],
-          type: ["VerifiablePresentation"],
-        },
-      });
-      const requestCredentialBody = createRequestCredentialBody(
-        offer.body.formats,
-        offer.body.goalCode,
-        offer.body.comment
-      );
+    const requestCredentialBody = createRequestCredentialBody(
+      offer.body.formats,
+      offer.body.goalCode,
+      offer.body.comment
+    );
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const from = offer.to!;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const to = offer.from!;
-      const thid = offer.thid;
-      const requestCredential = new RequestCredential(
-        requestCredentialBody,
-        [
-          new AttachmentDescriptor(
-            {
-              base64: base64.baseEncode(Buffer.from(signedJWT)),
-            },
-            "prism/jwt"
-          ),
-        ],
-        from,
-        to,
-        thid
-      );
-      return requestCredential;
-    } else if (isAnonCreds) {
-      const [attachment] = offer.attachments;
-      if (!attachment) {
-        throw new Error("no attachment");
-      }
-    } else {
-      throw new Error("Not implemented");
-    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const from = offer.to!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const to = offer.from!;
+    const thid = offer.thid;
+    const requestCredential = new RequestCredential(
+      requestCredentialBody,
+      [
+        new AttachmentDescriptor(
+          {
+            base64: base64.baseEncode(Buffer.from(credBuffer)),
+          },
+          "prism/jwt"
+        ),
+      ],
+      from,
+      to,
+      thid
+    );
+    return requestCredential;
   }
 
   async createPresentationForRequestProof(

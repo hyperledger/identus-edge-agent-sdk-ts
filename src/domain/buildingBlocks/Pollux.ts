@@ -1,23 +1,14 @@
-import { OfferCredential } from "../../prism-agent/protocols/issueCredential/OfferCredential";
-import { RequestCredential } from "../../prism-agent/protocols/issueCredential/RequestCredential";
-import { JsonString } from "../models";
-import { Credential, StorableCredential } from "../models/Credential";
+import { JsonString, Message } from "../models";
+import { Credential, CredentialRequestOptions } from "../models/Credential";
 export default interface Pollux {
   parseCredential: (
-    jsonEncoded: JsonString,
-    options?: { [name: string]: string }
+    base64UrlBuffer: Uint8Array,
+    options?: { message: Message; [name: string]: any }
   ) => Credential;
-  prepareRequestCredentialWithIssuer(
-    offer: OfferCredential,
-    options?: { [name: string]: string }
-  ): Promise<RequestCredential>;
-  restoreCredential: (
-    restorationIdentifier: string,
-    credentialData: Uint8Array
-  ) => Credential;
-  restoreFromStorableCredential: (
-    storableCredential: StorableCredential
-  ) => Credential;
+  processCredentialRequest(
+    offer: Message,
+    options: CredentialRequestOptions
+  ): Promise<string>;
 }
 /*
 public protocol Pollux {
