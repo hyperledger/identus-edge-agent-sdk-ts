@@ -8,7 +8,7 @@ import {
   PrivateKey,
 } from "../domain";
 import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
-import { default as PlutoInterface } from "../domain/buildingBlocks/Pluto";
+import { Pluto as PlutoInterface } from "../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../domain/models/DIDPair";
 import {
   Credential,
@@ -57,6 +57,15 @@ export type PlutoConnectionProps =
   | Omit<CapacitorConnectionOptions, IgnoreProps>
   | Omit<SpannerConnectionOptions, IgnoreProps>;
 
+/**
+ * Our example implementation of storage interface PlutoInterface used
+ * as storage layer to store anything required by this edge agent,
+ * keyPairs, credentials, connections, and data it needs
+ *
+ * @export
+ * @class Pluto
+ * @typedef {Pluto}
+ */
 export default class Pluto implements PlutoInterface {
   dataSource: DataSource;
   wasmUrl: string =
@@ -64,6 +73,12 @@ export default class Pluto implements PlutoInterface {
       ? `https://sql.js.org`
       : `node_modules/sql.js`;
 
+  /**
+   * Creates an instance of Pluto.
+   *
+   * @constructor
+   * @param {PlutoConnectionProps} connection
+   */
   constructor(connection: PlutoConnectionProps) {
     const presetSqlJSConfig =
       connection.type === "sqljs"
@@ -105,6 +120,12 @@ export default class Pluto implements PlutoInterface {
     };
   }
 
+  /**
+   * Asyncronously Starts an instance of the Database connection
+   *
+   * @async
+   * @returns {*}
+   */
   async start() {
     if (this.dataSource.isInitialized) {
       throw new Error("Database is already initialised");
@@ -116,6 +137,17 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously Store a PrismDID by providing the DID, the privateKey, its keyPath index and an optional alias
+   *
+   * @async
+   * @param {DID} did
+   * @param {number} keyPathIndex
+   * @param {PrivateKey} privateKey
+   * @param {(string | null)} privateKeyMetaId
+   * @param {?string} [alias]
+   * @returns {*}
+   */
   async storePrismDID(
     did: DID,
     keyPathIndex: number,
@@ -138,6 +170,14 @@ export default class Pluto implements PlutoInterface {
     );
   }
 
+  /**
+   * Asyncronously Store a peerDID just by providing the DID and an array of its privateKeys
+   *
+   * @async
+   * @param {DID} did
+   * @param {PrivateKey[]} privateKeys
+   * @returns {*}
+   */
   async storePeerDID(did: DID, privateKeys: PrivateKey[]) {
     const didEntity = new entities.DID();
     didEntity.did = did.toString();
@@ -158,15 +198,16 @@ export default class Pluto implements PlutoInterface {
     );
   }
 
+  /**
+   * Asyncronously Store a DIDPair, a didcomm connection basically between 2 dids
+   *
+   * @async
+   * @param {DID} host
+   * @param {DID} receiver
+   * @param {string} name
+   * @returns {*}
+   */
   async storeDIDPair(host: DID, receiver: DID, name: string) {
-    // const hostInfo = await this.getDIDInfoByDID(host);
-    // const receiverInfo = await this.getDIDInfoByDID(receiver);
-    // if (!hostInfo) {
-    //   throw new Error("Your host DID is not stored, therefore can't store didPair");
-    // }
-    // if (!receiverInfo) {
-    //   throw new Error("Your receiver DID is not stored, therefore can't store didPair");
-    // }
     const didPairEntity = new entities.DIDPair();
     didPairEntity.id = `${host.toString()}${receiver.toString()}`;
     didPairEntity.name = name;
@@ -176,6 +217,13 @@ export default class Pluto implements PlutoInterface {
     await this.dataSource.manager.save(didPairEntity);
   }
 
+  /**
+   * Asyncronously Store a didcomm Message
+   *
+   * @async
+   * @param {Message} message
+   * @returns {*}
+   */
   async storeMessage(message: Message) {
     const messageEntity = new entities.Message();
     messageEntity.createdTime = message.createdTime;
@@ -188,10 +236,27 @@ export default class Pluto implements PlutoInterface {
     await this.dataSource.manager.save(messageEntity);
   }
 
+  /**
+   * Asyncronously Store an array of messages
+   *
+   * @async
+   * @param {Message[]} messages
+   * @returns {*}
+   */
   async storeMessages(messages: Message[]) {
     await Promise.all(messages.map(this.storeMessage.bind(this)));
   }
 
+  /**
+   * Asyncronously store a did's privateKeys by prividing the privateKey and its keyPath index and the actual did
+   *
+   * @async
+   * @param {PrivateKey} privateKey
+   * @param {DID} did
+   * @param {number} keyPathIndex
+   * @param {(string | null)} metaId
+   * @returns {*}
+   */
   async storePrivateKeys(
     privateKey: PrivateKey,
     did: DID,
@@ -207,20 +272,16 @@ export default class Pluto implements PlutoInterface {
     await this.dataSource.manager.save(privateKeysEntity);
   }
 
+  /**
+   * Asyncronously Store the mediator
+   *
+   * @async
+   * @param {DID} mediator
+   * @param {DID} host
+   * @param {DID} routing
+   * @returns {*}
+   */
   async storeMediator(mediator: DID, host: DID, routing: DID) {
-    // const mediatorInfo = await this.getDIDInfoByDID(mediator);
-    // const hostInfo = await this.getDIDInfoByDID(host);
-    // const routingInfo = await this.getDIDInfoByDID(routing);
-    //
-    // if (!hostInfo) {
-    //   throw new Error("Your host DID is not stored, therefore can't store didPair");
-    // }
-    // if (!mediatorInfo) {
-    //   throw new Error("Your mediator DID is not stored, therefore can't store didPair");
-    // }
-    // if (!routingInfo) {
-    //   throw new Error("Your routing DID is not stored, therefore can't store didPair");
-    // }
     const mediatorEntity = new entities.Mediator();
     mediatorEntity.mediatorDidId = mediator.toString();
     mediatorEntity.hostDidId = host.toString();
@@ -228,6 +289,12 @@ export default class Pluto implements PlutoInterface {
     await this.dataSource.manager.save(mediatorEntity);
   }
 
+  /**
+   * Asyncronously fetch all prismDIDS
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllPrismDIDs() {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
@@ -247,6 +314,13 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously get DID information by providing a DID instance
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
   async getDIDInfoByDID(did: DID) {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
@@ -281,6 +355,13 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously get the DID information by providing an Alias
+   *
+   * @async
+   * @param {string} alias
+   * @returns {unknown}
+   */
   async getDIDInfoByAlias(alias: string) {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
@@ -311,6 +392,13 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously Get a PrismDID key path index by providing a did instance
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
   async getPrismDIDKeyPathIndex(did: DID) {
     const repository = this.dataSource.manager.getRepository("private_key");
     try {
@@ -328,6 +416,12 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Get the last Prism keyPath index
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getPrismLastKeyPathIndex() {
     const repository = this.dataSource.manager.getRepository("private_key");
     try {
@@ -352,6 +446,12 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously fetch all peerDIDs
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllPeerDIDs() {
     const didRepository: Repository<entities.DID> =
       this.dataSource.manager.getRepository("did");
@@ -392,7 +492,14 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
-  async getDIDPrivateKeysByDID(did: DID) {
+  /**
+   * Asyncronously get a dids privateKey by providing its instance
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
+  async getDIDPrivateKeysByDID(did: DID): Promise<PrivateKey[]> {
     const repository = this.dataSource.manager.getRepository("private_key");
     try {
       const didString = did.toString();
@@ -408,6 +515,13 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously get a dids private key by providing its ID
+   *
+   * @async
+   * @param {string} id
+   * @returns {unknown}
+   */
   async getDIDPrivateKeyByID(id: string) {
     const repository = this.dataSource.manager.getRepository("private_key");
 
@@ -429,6 +543,12 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously get did pairs, also known as didcomm connections
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllDidPairs() {
     const repository = this.dataSource.manager.getRepository("did_pair");
     try {
@@ -445,6 +565,13 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously get a didPair by providing one of the connected dids
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
   async getPairByDID(did: DID) {
     const repository = this.dataSource.manager.getRepository("did_pair");
     try {
@@ -467,6 +594,13 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously fetch a did pair by its name
+   *
+   * @async
+   * @param {string} name
+   * @returns {unknown}
+   */
   async getPairByName(name: string) {
     const repository = this.dataSource.manager.getRepository("did_pair");
     try {
@@ -489,6 +623,12 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  /**
+   * Asyncronously fetch all the messages
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllMessages() {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -497,6 +637,13 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously fetch all the messages from this DID
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
   async getAllMessagesByDID(did: DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -509,6 +656,12 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously fetch all sent messages
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllMessagesSent() {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -520,6 +673,12 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously fetch all received messages
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllMessagesReceived() {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -531,6 +690,13 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously fetch all the messages that have been sent to a specific DID
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
   async getAllMessagesSentTo(did: DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -542,6 +708,13 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * GEt all the Messages received on a specific DID
+   *
+   * @async
+   * @param {DID} did
+   * @returns {unknown}
+   */
   async getAllMessagesReceivedFrom(did: DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -553,6 +726,14 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously fetch all the messages by specifying the message type, and optionally if they are related to a DID
+   *
+   * @async
+   * @param {string} type
+   * @param {?DID} [relatedWithDID]
+   * @returns {unknown}
+   */
   async getAllMessagesOfType(type: string, relatedWithDID?: DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -568,6 +749,14 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously fetch all the messages by from or to
+   *
+   * @async
+   * @param {DID} from
+   * @param {DID} to
+   * @returns {unknown}
+   */
   async getAllMessagesByFromToDID(from: DID, to: DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -580,6 +769,13 @@ export default class Pluto implements PlutoInterface {
     return data.map(Pluto.transformMessageDBToInterface);
   }
 
+  /**
+   * Asyncronously get a message by ID
+   *
+   * @async
+   * @param {string} id
+   * @returns {unknown}
+   */
   async getMessage(id: string) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
@@ -594,6 +790,12 @@ export default class Pluto implements PlutoInterface {
     return Pluto.transformMessageDBToInterface(data);
   }
 
+  /**
+   * Asyncronously fetch all the mediators
+   *
+   * @async
+   * @returns {unknown}
+   */
   async getAllMediators() {
     const repository: Repository<entities.Mediator> =
       this.dataSource.manager.getRepository("mediator");

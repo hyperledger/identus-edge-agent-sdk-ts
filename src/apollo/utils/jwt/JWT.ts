@@ -1,7 +1,7 @@
 import * as didJWT from "did-jwt";
 import didResolver from "did-resolver";
 
-import Castor from "../../../domain/buildingBlocks/Castor";
+import { Castor } from "../../../domain/buildingBlocks/Castor";
 import {
   AlsoKnownAs,
   Controller,
@@ -64,17 +64,18 @@ export class JWT {
                 throw new Error("Invalid KeyType");
               })
             : [],
-        service: service?.values?.reduce<didResolver.Service[]>((acc, service) => {
-          const type = service.type.at(0);
+        service:
+          service?.values?.reduce<didResolver.Service[]>((acc, service) => {
+            const type = service.type.at(0);
 
-          if (type === undefined) return acc;
+            if (type === undefined) return acc;
 
-          return acc.concat({
-            id: service.id,
-            type: type,
-            serviceEndpoint: service.serviceEndpoint,
-          });
-        }, []) ?? [],
+            return acc.concat({
+              id: service.id,
+              type: type,
+              serviceEndpoint: service.serviceEndpoint,
+            });
+          }, []) ?? [],
       },
     };
   }

@@ -8,9 +8,9 @@ import {
   Credential,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
-import Castor from "../../domain/buildingBlocks/Castor";
-import Mercury from "../../domain/buildingBlocks/Mercury";
-import Pluto from "../../domain/buildingBlocks/Pluto";
+import { Castor } from "../../domain/buildingBlocks/Castor";
+import { Mercury } from "../../domain/buildingBlocks/Mercury";
+import { Pluto } from "../../domain/buildingBlocks/Pluto";
 import { CancellableTask } from "../helpers/Task";
 import { OfferCredential } from "../protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../protocols/issueCredential/RequestCredential";

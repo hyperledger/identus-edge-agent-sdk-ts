@@ -9,9 +9,9 @@ import {
   DID,
   CredentialType,
 } from "../domain";
-import Apollo from "../domain/buildingBlocks/Apollo";
-import Castor from "../domain/buildingBlocks/Castor";
-import Pluto from "../domain/buildingBlocks/Pluto";
+import { Apollo } from "../domain/buildingBlocks/Apollo";
+import { Castor } from "../domain/buildingBlocks/Castor";
+import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import {
   createRequestCredentialBody,
@@ -20,7 +20,7 @@ import {
 import { AgentCredentials as AgentCredentialsClass } from "./types";
 import { base64, base64url } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
-import Pollux from "../domain/buildingBlocks/Pollux";
+import { Pollux } from "../domain/buildingBlocks/Pollux";
 import {
   createPresentationBody,
   Presentation,
@@ -29,6 +29,16 @@ import { RequestPresentation } from "./protocols/proofPresentation/RequestPresen
 import { AgentError } from "../domain/models/Errors";
 
 export class AgentCredentials implements AgentCredentialsClass {
+  /**
+   * Creates an instance of AgentCredentials.
+   *
+   * @constructor
+   * @param {Apollo} apollo
+   * @param {Castor} castor
+   * @param {Pluto} pluto
+   * @param {Pollux} pollux
+   * @param {Seed} seed
+   */
   constructor(
     protected apollo: Apollo,
     protected castor: Castor,
@@ -41,6 +51,13 @@ export class AgentCredentials implements AgentCredentialsClass {
     return await this.pluto.getAllCredentials();
   }
 
+  /**
+   * Extract the verifiableCredential object from the Issue credential message asyncronously
+   *
+   * @async
+   * @param {IssueCredential} message
+   * @returns {Promise<VerifiableCredential>}
+   */
   async processIssuedCredentialMessage(
     message: IssueCredential
   ): Promise<Credential> {
@@ -62,20 +79,13 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     return credential;
   }
-
-  private extractDomainChallenge(attachments: AttachmentDescriptor[]) {
-    return attachments.reduce(
-      (_, attachment: any) => ({
-        challenge: attachment?.data?.data?.options?.challenge,
-        domain: attachment?.data?.data?.options?.domain,
-      }),
-      { challenge: undefined, domain: undefined } as {
-        challenge?: string;
-        domain?: string;
-      }
-    );
-  }
-
+  /**
+   * Asyncronously prepare a request credential message from a valid offerCredential for now supporting w3c verifiable credentials offers.
+   *
+   * @async
+   * @param {OfferCredential} offer
+   * @returns {Promise<RequestCredential>}
+   */
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
@@ -134,6 +144,16 @@ export class AgentCredentials implements AgentCredentialsClass {
     return requestCredential;
   }
 
+  /**
+   * Asyncronously create a verifiablePresentation from a valid stored verifiableCredential
+   * This is used when the verified requests a specific verifiable credential, this will create the actual
+   * instance of the presentation which we can share with the verifier.
+   *
+   * @async
+   * @param {RequestPresentation} request
+   * @param {VerifiableCredential} credential
+   * @returns {Promise<Presentation>}
+   */
   async createPresentationForRequestProof(
     request: RequestPresentation,
     credential: Credential

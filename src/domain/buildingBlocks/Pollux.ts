@@ -1,6 +1,6 @@
 import { CredentialType, Message } from "../models";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
-export default interface Pollux {
+export interface Pollux {
   parseCredential: (
     credentialBuffer: Uint8Array,
     options?: { type: CredentialType; [name: string]: any }

@@ -8,11 +8,17 @@ import { ECPoint } from "./ec/ECPoint";
 import { ApolloError } from "../../domain/models/Errors";
 import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
 
+/**
+ * @ignore
+ */
 abstract class Secp256k1PublicKeyCommon {
   abstract getEncodedCompressed(): Uint8Array;
   abstract getCurvePoint(): ECPoint;
 }
 
+/**
+ * @ignore
+ */
 export class Secp256k1PublicKey
   extends Secp256k1KeyCommon
   implements Secp256k1PublicKeyCommon

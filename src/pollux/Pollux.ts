@@ -1,5 +1,5 @@
-import Castor from "../domain/buildingBlocks/Castor";
-import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
+import { Castor } from "../domain/buildingBlocks/Castor";
+import { Pollux as PolluxInterface } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
 import { base64url } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
@@ -12,6 +12,13 @@ import {
 } from "../domain";
 import { JWT } from "../apollo/utils/jwt/JWT";
 
+/**
+ * Implementation of PolluxInterface and responsible of handling credential related tasks
+ *
+ * @export
+ * @class Pollux
+ * @typedef {Pollux}
+ */
 export default class Pollux implements PolluxInterface {
   private _anoncreds: AnoncredsLoader;
 

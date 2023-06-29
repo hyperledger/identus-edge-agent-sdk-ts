@@ -1,5 +1,4 @@
 import { DID, PrivateKey } from "../models";
-import { StorableCredential } from "../models/Credential";
 import { DIDPair } from "../models/DIDPair";
 import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
@@ -7,7 +6,7 @@ import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
 
-export default interface Pluto {
+export interface Pluto {
   start(): Promise<void>;
 
   storePrismDID(

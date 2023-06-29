@@ -18,6 +18,10 @@ import { MercuryError } from "../../domain/models/Errors";
 
 import type * as DIDCommLibTypes from "../../../didcomm-rust/didcomm-browser/didcomm_js";
 
+/**
+ * @ignore
+ * @returns
+ */
 export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
   const DIDCommLib = await import(
     "../../../didcomm-rust/didcomm-browser/didcomm_js.js"

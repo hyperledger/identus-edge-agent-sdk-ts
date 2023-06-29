@@ -1,7 +1,7 @@
 import { DID, Message, MessageDirection } from "../../domain";
-import Castor from "../../domain/buildingBlocks/Castor";
-import Mercury from "../../domain/buildingBlocks/Mercury";
-import Pluto from "../../domain/buildingBlocks/Pluto";
+import { Castor } from "../../domain/buildingBlocks/Castor";
+import { Mercury } from "../../domain/buildingBlocks/Mercury";
+import { Pluto } from "../../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { AgentError } from "../../domain/models/Errors";
 import { AgentMessageEvents } from "../Agent.MessageEvents";
@@ -13,13 +13,53 @@ import {
   MediatorHandler,
 } from "../types";
 
+/**
+ * ConnectionsManager is responsible of establishing didcomm connection and
+ * mediation process with other mediators through didcomm and is also
+ * responsible of managing the task to periodically fetch messages from the mediator once connection is established
+ *
+ * @class ConnectionsManager
+ * @typedef {ConnectionsManager}
+ */
 export class ConnectionsManager implements ConnectionsManagerClass {
+  /**
+   * An array with cancellable tasks, mainly used to store one or multiple didcomm
+   * connections in storage implementation at the same time. All of them can be cancelled
+   * despite they run asyncronously when the Edge agent stops
+   *
+   * @public
+   * @type {CancellableTask<any>[]}
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public cancellables: CancellableTask<any>[] = [];
+  /**
+   * Cancellable task used to listen for new messages, stopping the Agent should also stop this
+   *  from running and destroy the instance of the task until agent is started again
+   *
+   * @public
+   * @type {?CancellableTask<void>}
+   */
   public cancellable?: CancellableTask<void>;
 
+  /**
+   * A list of public facing events which will notify the user interface when specific things happen,
+   * for now when new messages arrive or didcomm connections are established in order to make UI more reactive
+   *
+   * @public
+   * @type {AgentMessageEventsClass}
+   */
   public events: AgentMessageEventsClass;
 
+  /**
+   * Creates an instance of ConnectionsManager.
+   *
+   * @constructor
+   * @param {Castor} castor
+   * @param {Mercury} mercury
+   * @param {Pluto} pluto
+   * @param {MediatorHandler} mediationHandler
+   * @param {DIDPair[]} [pairings=[]]
+   */
   constructor(
     public castor: Castor,
     public mercury: Mercury,
@@ -30,6 +70,13 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     this.events = new AgentMessageEvents();
   }
 
+  /**
+   * Asyncronously Start the mediator, just checking if we had one stored in Database and
+   * setting that one as default during the Agent start
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   async startMediator(): Promise<void> {
     const mediationHandler =
       await this.mediationHandler.bootRegisteredMediator();
@@ -39,6 +86,9 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
   }
 
+  /**
+   * Stops all the running events
+   */
   stopAllEvents(): void {
     while (this.cancellables.length > 0) {
       const [task] = this.cancellables.splice(0, 1);
@@ -48,6 +98,14 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
   }
 
+  /**
+   * Asyncronously fetch unread messages from the mediator, if messages are found they will be stored
+   * and the mediator will be notified that they have been read. Mediator shouldn't return a read message again
+   * in next iteration.
+   *
+   * @async
+   * @returns {Promise<Message[]>}
+   */
   async awaitMessages(): Promise<Message[]> {
     if (!this.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
@@ -74,11 +132,25 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     return messages;
   }
 
+  /**
+   * Asyncronously wait for a message response just by waiting for new messages that match the specified ID
+   *
+   * @async
+   * @param {string} id
+   * @returns {Promise<Message | undefined>}
+   */
   async awaitMessageResponse(id: string): Promise<Message | undefined> {
     const messages = await this.awaitMessages();
     return messages.find((message) => message.thid === id);
   }
 
+  /**
+   * Asyncronously add a didPair (didcomm connection) into pluto
+   *
+   * @async
+   * @param {DIDPair} paired
+   * @returns {Promise<void>}
+   */
   async addConnection(paired: DIDPair): Promise<void> {
     if (this.findIndex(paired) !== -1) {
       return;
@@ -95,6 +167,12 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     storeDIDPairTask.callback((pair: DIDPair) => this.pairings.push(pair));
   }
 
+  /**
+   * Find the specified did pair connection index
+   *
+   * @param {DIDPair} pair
+   * @returns {*}
+   */
   findIndex(pair: DIDPair) {
     return this.pairings.findIndex(
       (pairing) =>
@@ -104,6 +182,14 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     );
   }
 
+  /**
+   * Remove a didPair or a didcomm connection, this does not mean the mediator will do
+   * this but just means the connection will be removed from the current storage
+   *
+   * @async
+   * @param {DIDPair} pair
+   * @returns {Promise<void>}
+   */
   async removeConnection(pair: DIDPair): Promise<void> {
     const pairIndex = this.findIndex(pair);
     if (pairIndex !== -1) {
@@ -111,15 +197,34 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
   }
 
+  /**
+   * Asyncronously establish mediator with a mediator by providing the Host DID
+   *
+   * @async
+   * @param {DID} hostDID
+   * @returns {Promise<void>}
+   */
   async registerMediator(hostDID: DID): Promise<void> {
     await this.mediationHandler.achieveMediation(hostDID);
   }
 
+  /**
+   * Asyncronously store a message and send it as didcomm message through the mercury implementation
+   *
+   * @async
+   * @param {Message} message
+   * @returns {Promise<Message | undefined>}
+   */
   async sendMessage(message: Message): Promise<Message | undefined> {
     await this.pluto.storeMessage(message);
     return this.mercury.sendMessageParseMessage(message);
   }
 
+  /**
+   * Asyncronously start fetching new messages
+   *
+   * @param {number} iterationPeriod
+   */
   startFetchingMessages(iterationPeriod: number): void {
     if (this.cancellable) {
       return;
@@ -139,6 +244,9 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     });
   }
 
+  /**
+   * Asyncronously stop fetching messages
+   */
   stopFetchingMessages(): void {
     this.cancellable?.cancel();
     this.cancellable = undefined;
