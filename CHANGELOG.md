@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.2...v2.0.3) (2023-06-27)
+
+
+### Bug Fixes
+
+* Listener Key must be exported not as a type. ([#68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/68)) ([61d898b](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/61d898b23459e9d47550de997d927ab1513070c6))
+
 ## [2.0.2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.1...v2.0.2) (2023-06-22)
 
 
