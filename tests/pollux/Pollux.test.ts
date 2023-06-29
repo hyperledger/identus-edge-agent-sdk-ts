@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { CredentialType, DID, JWTVerifiablePayload } from "../../src/domain";
 import Castor from "../../src/castor/Castor";
-import Apollo from "../../src/domain/buildingBlocks/Apollo";
+import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
 
