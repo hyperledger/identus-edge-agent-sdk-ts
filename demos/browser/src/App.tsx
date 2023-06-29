@@ -101,7 +101,7 @@ function KeyPair({curve = SDK.Domain.Curve.SECP256K1}: { curve?: SDK.Domain.Curv
           {keyPair ? (
               <div>
                 <p>
-                  <b>Curve:</b> {keyPair.keyCurve.curve}
+                  <b>Curve:</b> {keyPair.curve}
                 </p>
                 <p>
                   <b>Public key:</b>{" "}
@@ -156,7 +156,7 @@ function Signatures({keyPair}: { keyPair: SDK.Domain.KeyPair }) {
     setIsSignatureValid(isValid);
   }
 
-  if (keyPair.keyCurve.curve === SDK.Domain.Curve.X25519) {
+  if (keyPair.curve === SDK.Domain.Curve.X25519) {
     return <b>Signatures not supported for X25519 keys!</b>;
   }
 
