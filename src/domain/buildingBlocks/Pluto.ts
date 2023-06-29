@@ -5,7 +5,7 @@ import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
-import { VerifiableCredential } from "../models/VerifiableCredential";
+import { Credential } from "../models/Credential";
 
 export default interface Pluto {
   start(): Promise<void>;
@@ -35,7 +35,7 @@ export default interface Pluto {
 
   storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
 
-  storeCredential(credential: StorableCredential): Promise<void>;
+  storeCredential(credential: Credential): Promise<void>;
 
   getAllPrismDIDs(): Promise<PrismDIDInfo[]>;
 

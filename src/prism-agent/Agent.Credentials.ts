@@ -6,11 +6,11 @@ import {
   Curve,
   Seed,
   Credential,
+  DID,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
 import Pluto from "../domain/buildingBlocks/Pluto";
-import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import {
   createRequestCredentialBody,
@@ -34,7 +34,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected pluto: Pluto,
     protected pollux: Pollux,
     protected seed: Seed
-  ) {}
+  ) { }
 
   async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
@@ -57,7 +57,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       message: message.makeMessage(),
     });
 
-    await this.pluto.storeCredential(credential.toStorable());
+    await this.pluto.storeCredential(credential);
 
     return credential;
   }
@@ -74,6 +74,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       }
     );
   }
+
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
@@ -134,7 +135,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
   async createPresentationForRequestProof(
     request: RequestPresentation,
-    credential: VerifiableCredential
+    credential: Credential
   ): Promise<Presentation> {
     const requestData = request.attachments.find(
       (attachment) =>
@@ -153,7 +154,8 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const challenge = options.challenge;
     const domain = options.domain;
-    const subjectDID = credential.subject;
+    const subjectDID = DID.fromString(credential.subject);
+
     if (!subjectDID) {
       throw new Error("Credential subject not found");
     }

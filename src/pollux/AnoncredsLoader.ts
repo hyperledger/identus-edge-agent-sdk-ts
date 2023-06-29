@@ -1,4 +1,4 @@
-import * as pkg from "anoncreds";
+import * as pkg from "anoncreds/anoncreds";
 import pkgWasm from "anoncreds/anoncreds_bg.wasm";
 import { Anoncreds } from "./models/Anoncreds";
 

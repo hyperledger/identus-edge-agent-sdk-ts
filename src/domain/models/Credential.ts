@@ -1,9 +1,7 @@
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
 
-interface Claim {
-  [name: string]: any;
-}
+type Claim = Record<string, any>;
 
 export abstract class Credential {
   abstract issuer: string;
@@ -61,12 +59,14 @@ export class VerifiableCredential extends Credential {
   }
 
   toStorable(): StorableCredential {
-    const claims = [this.getProperty(VerifiableCredentialProperties.sub)].map(
+    // TODO - doesn't this conflict with `claims` in the constructor?
+    const sub = this.getProperty(VerifiableCredentialProperties.sub);
+    const claims = sub === undefined ? [] : [sub].map(
       (claim) => claim.toString()
     );
 
     const credentialData = Buffer.from(
-      JSON.stringify(this.properties)
+      JSON.stringify(Object.fromEntries(this.properties))
     ).toString("hex");
 
     return {
@@ -78,6 +78,29 @@ export class VerifiableCredential extends Credential {
       validUntil: this.getProperty(VerifiableCredentialProperties.exp),
       availableClaims: claims,
     };
+  }
+
+  static fromStorable(storable: StorableCredential): VerifiableCredential {
+    // TODO - should issuer and subject be required on Storable?
+    const credential = new VerifiableCredential(storable.issuer!, storable.subject!);
+    const propertyObj = Buffer.from(storable.credentialData, "hex").toJSON();
+
+    for (let key in Object.keys(VerifiableCredentialProperties)) {
+      const value = propertyObj[key];
+      if (value !== undefined) {
+        credential.properties.set(key as VerifiableCredentialProperties, value)
+      }
+    }
+
+    credential.properties.set(VerifiableCredentialProperties.jti, storable.id);
+    credential.properties.set(VerifiableCredentialProperties.iss, storable.issuer);
+    credential.properties.set(VerifiableCredentialProperties.sub, storable.subject);
+    // credential.properties.set(VerifiableCredentialProperties.vc, storable.);
+    // credential.properties.set(VerifiableCredentialProperties.nbf, storable.);
+    credential.properties.set(VerifiableCredentialProperties.exp, storable.validUntil);
+    // credential.properties.set(VerifiableCredentialProperties.aud, storable.);
+
+    return credential;
   }
 }
 

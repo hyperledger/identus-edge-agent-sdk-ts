@@ -4,6 +4,7 @@ import {
   DID,
   getKeyCurveByNameAndIndex,
   PrivateKey,
+  VerifiableCredential,
 } from "../../src/domain";
 import { expect } from "chai";
 import { randomUUID } from "crypto";
@@ -107,46 +108,9 @@ describe("Pluto tests", () => {
   });
 
   it("should store credential", async function () {
-    await instance.storeCredential({
-      id: "",
-      credentialType: CredentialType.JWT,
-      context: ["test0", "test1"],
-      type: ["auth"],
-      credentialSchema: {
-        id: randomUUID(),
-        type: "decode_jwt",
-      },
-      credentialSubject: { name: "" },
-      credentialStatus: {
-        id: randomUUID(),
-        type: "test",
-      },
-      refreshService: {
-        id: randomUUID(),
-        type: "test",
-      },
-      evidence: {
-        id: randomUUID(),
-        type: "test",
-      },
-      termsOfUse: {
-        id: randomUUID(),
-        type: "test",
-      },
-      issuer: DID.fromString("did:prism:123"),
-      issuanceDate: new Date().toISOString(),
-      expirationDate: new Date().toISOString(),
-      validFrom: {
-        id: randomUUID(),
-        type: "test",
-      },
-      validUntil: {
-        id: randomUUID(),
-        type: "test",
-      },
-      proof: "",
-      aud: ["test0", "test1"],
-    });
+    const cred = new VerifiableCredential("issuer", "subject");
+
+    await instance.storeCredential(cred);
   });
 
   it("should get all prism DIDs", async function () {
@@ -595,49 +559,9 @@ describe("Pluto tests", () => {
   });
 
   it("should get all credentials", async function () {
-    await instance.storeCredential({
-      id: "",
-      credentialType: CredentialType.JWT,
-      context: ["test0", "test1"],
-      type: ["auth"],
-      credentialSchema: {
-        id: randomUUID(),
-        type: "decode_jwt",
-      }, // Question: Naming looks odd, I guess credentialSchema? .
-      credentialSubject: {
-        test: "yes",
-      },
-      credentialStatus: {
-        id: randomUUID(),
-        type: "test",
-      },
-      refreshService: {
-        id: randomUUID(),
-        type: "test",
-      },
-      evidence: {
-        id: randomUUID(),
-        type: "test",
-      },
-      termsOfUse: {
-        id: randomUUID(),
-        type: "test",
-      },
-      issuer: DID.fromString("did:prism:123"),
-      subject: DID.fromString("did:prism:123"),
-      issuanceDate: "2023-04-04T13:40:08.435Z",
-      expirationDate: "2023-04-04T13:40:08.435Z",
-      validFrom: {
-        id: randomUUID(),
-        type: "test",
-      },
-      validUntil: {
-        id: randomUUID(),
-        type: "test",
-      },
-      proof: "",
-      aud: ["test0", "test1"],
-    });
+    const cred = new VerifiableCredential("issuer", "subject");
+
+    await instance.storeCredential(cred);
 
     const data = await instance.getAllCredentials();
     expect(data).not.empty;
