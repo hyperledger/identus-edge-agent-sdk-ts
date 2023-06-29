@@ -2,38 +2,20 @@ import Castor from "../domain/buildingBlocks/Castor";
 import { default as PolluxInterface } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
 import { base64url } from "multiformats/bases/base64";
-import { JWTCredential } from "./models/JWTCredential";
 import { AnoncredsLoader } from "./AnoncredsLoader";
-import {
-  Credential,
-  CredentialRequestOptions,
-  StorableCredential,
-  VerifiableCredential,
-  VerifiableCredentialProperties,
-} from "../domain/models/Credential";
+import { CredentialRequestOptions } from "../domain/models/Credential";
 import {
   AttachmentDescriptor,
   CredentialType,
-  Curve,
-  DID,
-  JsonString,
-  KeyPair,
+  JWTVerifiablePayload,
   Message,
 } from "../domain";
-import { OfferCredential } from "../prism-agent/protocols/issueCredential/OfferCredential";
-import { RequestCredential } from "../prism-agent/protocols/issueCredential/RequestCredential";
-import Pluto from "../domain/buildingBlocks/Pluto";
-import Apollo from "../domain/buildingBlocks/Apollo";
 import { JWT } from "../apollo/utils/jwt/JWT";
 
 export default class Pollux implements PolluxInterface {
   private _anoncreds: AnoncredsLoader;
 
-  constructor(
-    private castor: Castor,
-    private pluto: Pluto,
-    private apollo: Apollo
-  ) {
+  constructor(private castor: Castor) {
     this._anoncreds = AnoncredsLoader.getInstance();
   }
 
@@ -110,15 +92,14 @@ export default class Pollux implements PolluxInterface {
   }
 
   parseCredential(
-    base64UrlBuffer: Uint8Array,
-    options?: { message: Message; [name: string]: any }
+    credentialBuffer: Uint8Array,
+    options?: { type: CredentialType; [name: string]: any }
   ) {
-    if (!options?.message) {
+    if (!options?.type) {
       throw new InvalidJWTString();
     }
-    const format = this.extractCredentialFormatFromMessage(options?.message);
-    if (format === CredentialType.JWT) {
-      const jwtString = Buffer.from(base64UrlBuffer).toString();
+    if (options?.type === CredentialType.JWT) {
+      const jwtString = Buffer.from(credentialBuffer).toString();
       const parts = jwtString.split(".");
       const credentialString = parts.at(1);
 
@@ -129,53 +110,16 @@ export default class Pollux implements PolluxInterface {
       const jsonString = Buffer.from(base64Data).toString();
       const jsonParsed = JSON.parse(jsonString);
 
-      const id = jwtString;
-      if (!id) {
-        throw new Error("The original JWTString needs to be sent as props");
-      }
-
-      const { iss, sub } = jsonParsed;
-      if (!iss || !sub) {
-        throw new Error("Wrong credential");
-      }
-
-      if (!id) {
-        throw new Error("Wrong credential id");
-      }
-
-      const credential = new VerifiableCredential(iss, sub);
-
-      credential.properties.set(VerifiableCredentialProperties.iss, iss);
-      credential.properties.set(VerifiableCredentialProperties.sub, sub);
-      credential.properties.set(VerifiableCredentialProperties.jti, id);
-
-      credential.properties.set(
-        VerifiableCredentialProperties.vc,
-        jsonParsed.vc
+      return new JWTVerifiablePayload(
+        jsonParsed.iss,
+        jsonParsed.vc,
+        jwtString,
+        jsonParsed.nbf,
+        jsonParsed.sub,
+        jsonParsed.exp,
+        jsonParsed.aud,
+        jwtString
       );
-
-      if (jsonParsed.nbf) {
-        credential.properties.set(
-          VerifiableCredentialProperties.nbf,
-          jsonParsed.nbf
-        );
-      }
-
-      if (jsonParsed.exp) {
-        credential.properties.set(
-          VerifiableCredentialProperties.exp,
-          jsonParsed.exp
-        );
-      }
-
-      if (jsonParsed.aud) {
-        credential.properties.set(
-          VerifiableCredentialProperties.aud,
-          jsonParsed.aud
-        );
-      }
-
-      return credential;
     } else {
       throw new Error("Not implemented");
     }

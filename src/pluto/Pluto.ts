@@ -12,7 +12,8 @@ import { default as PlutoInterface } from "../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../domain/models/DIDPair";
 import {
   Credential,
-  VerifiableCredential
+  JWTVerifiableCredentialRecoveryId,
+  JWTVerifiablePayload,
 } from "../domain/models";
 import * as entities from "./entities";
 import Did from "./entities/DID";
@@ -35,7 +36,6 @@ import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions
 import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
 import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
 import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
-import { StorableCredential } from "../domain/models/Credential";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
@@ -68,12 +68,12 @@ export default class Pluto implements PlutoInterface {
     const presetSqlJSConfig =
       connection.type === "sqljs"
         ? {
-          location: "pluto",
-          useLocalForage: typeof window !== "undefined",
-          sqlJsConfig: {
-            locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
-          },
-        }
+            location: "pluto",
+            useLocalForage: typeof window !== "undefined",
+            sqlJsConfig: {
+              locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
+            },
+          }
         : {};
     this.dataSource = new DataSource({
       ...presetSqlJSConfig,
@@ -300,11 +300,11 @@ export default class Pluto implements PlutoInterface {
       }
       return didResponse.map(
         (item) =>
-        ({
-          did: DID.fromString(item.did),
-          alias: item.alias,
-          keyPathIndex: item.private_key_keyPathIndex,
-        } as PrismDIDInfo)
+          ({
+            did: DID.fromString(item.did),
+            alias: item.alias,
+            keyPathIndex: item.private_key_keyPathIndex,
+          } as PrismDIDInfo)
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -609,20 +609,22 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getAllCredentials(): Promise<Credential[]> {
-    const credentialRepo = this.dataSource.manager.getRepository<entities.Credential>("credential");
+    const credentialRepo =
+      this.dataSource.manager.getRepository<entities.Credential>("credential");
     const credentials = await credentialRepo.find();
-    const claimRepo = this.dataSource.manager.getRepository<entities.AvailableClaims>("availableclaims");
+    const claimRepo =
+      this.dataSource.manager.getRepository<entities.AvailableClaims>(
+        "availableclaims"
+      );
     const allClaims = await claimRepo.find();
 
-    return credentials.map<Credential>(credentialEntity => {
+    return credentials.map<Credential>((credentialEntity) => {
       switch (credentialEntity.recoveryId) {
-        case VerifiableCredential.recoveryId:
-          const claims = allClaims.filter(x => x.id === credentialEntity.id).map(x => JSON.parse(x.claim));
-          const storable: StorableCredential = {
+        case JWTVerifiableCredentialRecoveryId:
+          return JWTVerifiablePayload.fromStorable({
             // TODO - id comes from properties.jti, but is not used in storeCredential() where it becomes the db uuid
             id: credentialEntity.id,
             credentialData: credentialEntity.credentailData,
-
             recoveryId: credentialEntity.recoveryId,
             issuer: credentialEntity.issuer,
             subject: credentialEntity.subject,
@@ -631,10 +633,10 @@ export default class Pluto implements PlutoInterface {
             credentialSchema: credentialEntity.credentialSchema,
             validUntil: credentialEntity.validUntil,
             revoked: credentialEntity.revoked == 1,
-            availableClaims: claims
-          };
-
-          return VerifiableCredential.fromStorable(storable);
+            availableClaims: allClaims
+              .filter((x) => x.id === credentialEntity.id)
+              .map((x) => JSON.parse(x.claim)),
+          });
 
         default:
           throw new Error("not implemented");

@@ -1,8 +1,7 @@
-import { DID } from "./DID";
+import { Credential, StorableCredential } from "./Credential";
 import {
   CredentialSubject,
   CredentialType,
-  VerifiableCredential,
   VerifiableCredentialTypeContainer,
 } from "./VerifiableCredential";
 
@@ -20,55 +19,139 @@ export class JWTVerifiableCredential {
   ) {}
 }
 
-export class JWTVerifiablePayload implements VerifiableCredential {
-  credentialType: CredentialType = CredentialType.JWT;
+export enum JWTVerifiableCredentialProperties {
+  iss = "iss",
+  vc = "vc",
+  jti = "jti",
+  nbf = "nbf",
+  sub = "sub",
+  exp = "exp",
+  aud = "aud",
+  type = "type",
+}
+export const JWTVerifiableCredentialRecoveryId = "prism/jwt";
+export class JWTVerifiablePayload extends Credential {
+  public recoveryId = JWTVerifiableCredentialRecoveryId;
+  public properties: Map<JWTVerifiableCredentialProperties | string, any> =
+    new Map();
 
-  id?: string | undefined;
-  context: string[];
-  type: string[];
-  credentialSchema?: VerifiableCredentialTypeContainer | undefined;
-  credentialSubject: CredentialSubject;
-  credentialStatus?: VerifiableCredentialTypeContainer | undefined;
-  refreshService: VerifiableCredentialTypeContainer;
-  evidence: VerifiableCredentialTypeContainer;
-  termsOfUse: VerifiableCredentialTypeContainer;
-  issuer: DID;
-  subject?: DID;
-  issuanceDate: string;
-  expirationDate?: string;
-  validFrom?: VerifiableCredentialTypeContainer;
-  validUntil?: VerifiableCredentialTypeContainer;
-  proof?: string | undefined;
+  public credentialType: CredentialType = CredentialType.JWT;
+  public id: string;
+  public issuanceDate: string;
+  public expirationDate?: string;
+  public validFrom?: VerifiableCredentialTypeContainer;
+  public validUntil?: VerifiableCredentialTypeContainer;
+  public proof?: string | undefined;
+
+  get vc() {
+    return this.properties.get(JWTVerifiableCredentialProperties.vc);
+  }
+
+  get issuer() {
+    return this.properties.get(JWTVerifiableCredentialProperties.iss);
+  }
+
+  get subject() {
+    return this.properties.get(JWTVerifiableCredentialProperties.sub);
+  }
+
+  get claims() {
+    return [this.credentialSubject];
+  }
+
+  get context() {
+    return this.vc.context;
+  }
+
+  get type() {
+    return this.vc.type;
+  }
+
+  get credentialSchema() {
+    return this.vc.credentialSchema;
+  }
+
+  get credentialSubject() {
+    return this.vc.credentialSubject;
+  }
+
+  get credentialStatus() {
+    return this.vc.credentialStatus;
+  }
+
+  get refreshService() {
+    return this.vc.refreshService;
+  }
+  get evidence() {
+    return this.vc.evidence;
+  }
+
+  get termsOfUse() {
+    return this.vc.termsOfUse;
+  }
 
   constructor(
     public iss: string,
     public verifiableCredential: JWTVerifiableCredential,
     public jti: string,
     public nbf: number,
-    public sub?: string,
+    public sub: string,
     public exp?: number,
     public aud: Array<string> = [],
     public originalJWTString?: string
   ) {
-    this.context = verifiableCredential.context;
-    this.type = verifiableCredential.type;
-    this.id = jti;
+    super();
 
-    this.issuer = DID.fromString(iss);
-    if (sub) {
-      this.subject = DID.fromString(sub);
+    this.id = jti;
+    this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
+    this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
+    this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
+    if (exp) {
+      this.properties.set(JWTVerifiableCredentialProperties.exp, exp);
     }
+    this.properties.set(JWTVerifiableCredentialProperties.aud, aud);
+    this.properties.set(
+      JWTVerifiableCredentialProperties.vc,
+      verifiableCredential
+    );
     this.issuanceDate = new Date(nbf).toISOString();
     if (exp) {
       this.expirationDate = new Date(exp).toISOString();
     }
-    if (verifiableCredential.credentialSchema) {
-      this.credentialSchema = verifiableCredential.credentialSchema;
-    }
-    this.credentialSubject = verifiableCredential.credentialSubject;
-    this.credentialStatus = verifiableCredential.credentialStatus;
-    this.refreshService = verifiableCredential.refreshService;
-    this.evidence = verifiableCredential.evidence;
-    this.termsOfUse = verifiableCredential.termsOfUse;
+  }
+
+  toStorable(): StorableCredential {
+    const credentialData = Buffer.from(
+      JSON.stringify(Object.fromEntries(this.properties))
+    ).toString("hex");
+
+    return {
+      id: this.getProperty(JWTVerifiableCredentialProperties.jti),
+      recoveryId: this.recoveryId,
+      credentialData: credentialData,
+      issuer: this.getProperty(JWTVerifiableCredentialProperties.iss),
+      subject: this.getProperty(JWTVerifiableCredentialProperties.sub),
+      validUntil: this.getProperty(JWTVerifiableCredentialProperties.exp),
+      availableClaims: this.claims,
+    };
+  }
+
+  static fromStorable(storable: StorableCredential): JWTVerifiablePayload {
+    // TODO - should issuer and subject be required on Storable?
+    const propertyObj = JSON.parse(
+      Buffer.from(storable.credentialData, "hex").toString()
+    );
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const iss = storable.issuer!;
+    return new JWTVerifiablePayload(
+      iss,
+      propertyObj.vc,
+      propertyObj.jti,
+      propertyObj.nbf,
+      propertyObj.sub,
+      propertyObj.exp,
+      propertyObj.aud,
+      propertyObj.jti
+    );
   }
 }

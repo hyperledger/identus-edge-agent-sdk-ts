@@ -7,6 +7,7 @@ import {
   Seed,
   Credential,
   DID,
+  CredentialType,
 } from "../domain";
 import Apollo from "../domain/buildingBlocks/Apollo";
 import Castor from "../domain/buildingBlocks/Castor";
@@ -34,7 +35,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected pluto: Pluto,
     protected pollux: Pollux,
     protected seed: Seed
-  ) { }
+  ) {}
 
   async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
@@ -54,7 +55,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     );
 
     const credential = this.pollux.parseCredential(jwtData, {
-      message: message.makeMessage(),
+      type: CredentialType.JWT,
     });
 
     await this.pluto.storeCredential(credential);

@@ -3,8 +3,8 @@ import {
   Curve,
   DID,
   getKeyCurveByNameAndIndex,
+  JWTVerifiablePayload,
   PrivateKey,
-  VerifiableCredential,
 } from "../../src/domain";
 import { expect } from "chai";
 import { randomUUID } from "crypto";
@@ -108,9 +108,79 @@ describe("Pluto tests", () => {
   });
 
   it("should store credential", async function () {
-    const cred = new VerifiableCredential("issuer", "subject");
+    const jwtParts = [
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+      "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
+      "18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM",
+    ];
+    const jwtString = jwtParts.join(".");
+    const vc: any = {
+      id: jwtString,
+      credentialType: CredentialType.JWT,
+      type: [CredentialType.JWT],
+      aud: ["aud"],
+      context: ["context"],
+      credentialSubject: { whatever: "credSubject" },
+      evidence: {
+        id: "evidenceId",
+        type: "evidenceType",
+      },
+      expirationDate: new Date().toISOString(),
+      issuanceDate: new Date().toISOString(),
+      issuer: new DID(
+        "did",
+        "peer",
+        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      ),
+      refreshService: {
+        id: "refreshServiceId",
+        type: "refreshServiceType",
+      },
+      termsOfUse: {
+        id: "termsOfUseId",
+        type: "termsOfUseType",
+      },
+      validFrom: {
+        id: "validFromId",
+        type: "validFromType",
+      },
+      validUntil: {
+        id: "validUntilId",
+        type: "validUntilType",
+      },
+      credentialSchema: {
+        id: "credentialSchemaId",
+        type: "credentialSchemaType",
+      },
+      credentialStatus: {
+        id: "credentialStatusId",
+        type: "credentialStatusType",
+      },
+      proof: "proof",
+    };
 
-    await instance.storeCredential(cred);
+    const jwtPayload: any = {
+      id: "123",
+      iss: "did:peer:2.issuer",
+      nbf: 1680615608435,
+      sub: "did:peer:2.sub",
+      exp: 1680615608435,
+      aud: ["aud-json"],
+      vc: vc,
+    };
+
+    const credential = new JWTVerifiablePayload(
+      jwtPayload.iss,
+      vc,
+      jwtString,
+      jwtPayload.nbf,
+      jwtPayload.sub,
+      jwtPayload.exp,
+      jwtPayload.aud,
+      jwtString
+    );
+
+    await instance.storeCredential(credential);
   });
 
   it("should get all prism DIDs", async function () {
@@ -559,9 +629,79 @@ describe("Pluto tests", () => {
   });
 
   it("should get all credentials", async function () {
-    const cred = new VerifiableCredential("issuer", "subject");
+    const jwtParts = [
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+      "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
+      "18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM",
+    ];
+    const jwtString = jwtParts.join(".");
+    const vc: any = {
+      id: jwtString,
+      credentialType: CredentialType.JWT,
+      type: [CredentialType.JWT],
+      aud: ["aud"],
+      context: ["context"],
+      credentialSubject: { whatever: "credSubject" },
+      evidence: {
+        id: "evidenceId",
+        type: "evidenceType",
+      },
+      expirationDate: new Date().toISOString(),
+      issuanceDate: new Date().toISOString(),
+      issuer: new DID(
+        "did",
+        "peer",
+        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      ),
+      refreshService: {
+        id: "refreshServiceId",
+        type: "refreshServiceType",
+      },
+      termsOfUse: {
+        id: "termsOfUseId",
+        type: "termsOfUseType",
+      },
+      validFrom: {
+        id: "validFromId",
+        type: "validFromType",
+      },
+      validUntil: {
+        id: "validUntilId",
+        type: "validUntilType",
+      },
+      credentialSchema: {
+        id: "credentialSchemaId",
+        type: "credentialSchemaType",
+      },
+      credentialStatus: {
+        id: "credentialStatusId",
+        type: "credentialStatusType",
+      },
+      proof: "proof",
+    };
 
-    await instance.storeCredential(cred);
+    const jwtPayload: any = {
+      id: "123",
+      iss: "did:peer:2.issuer",
+      nbf: 1680615608435,
+      sub: "did:peer:2.sub",
+      exp: 1680615608435,
+      aud: ["aud-json"],
+      vc: vc,
+    };
+
+    const credential = new JWTVerifiablePayload(
+      jwtPayload.iss,
+      vc,
+      jwtString,
+      jwtPayload.nbf,
+      jwtPayload.sub,
+      jwtPayload.exp,
+      jwtPayload.aud,
+      jwtString
+    );
+
+    await instance.storeCredential(credential);
 
     const data = await instance.getAllCredentials();
     expect(data).not.empty;
