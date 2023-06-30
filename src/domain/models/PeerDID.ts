@@ -1,4 +1,4 @@
-import { DID, KeyCurve } from ".";
+import type { DID, KeyCurve } from ".";
 
 export class PeerDID {
   constructor(

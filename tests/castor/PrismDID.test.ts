@@ -1,10 +1,11 @@
 import { expect } from "chai";
 import { base58btc } from "multiformats/bases/base58";
-import { Curve, VerificationMethods } from "../../src/domain";
+import { VerificationMethods } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 import Castor from "../../src/castor/Castor";
 import * as ECConfig from "../../src/config/ECConfig";
 import { Secp256k1PublicKey } from "../../src/apollo/utils/Secp256k1PublicKey";
+import { Curve, KeyTypes } from "../../src/domain/models/Key";
 
 describe("PRISMDID CreateTest", () => {
   it("Should correctly create a prismDID from an existing HexKey", async () => {
@@ -42,21 +43,28 @@ describe("PRISMDID CreateTest", () => {
   it("Create a PrismDID and verify a signature", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-      },
-      apollo.createRandomSeed().seed
-    );
-    const did = await castor.createPrismDID(keyPair.publicKey, []);
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(apollo.createRandomSeed().seed.value).toString("hex"),
+    });
+    const publicKey = privateKey.publicKey();
+
+    const did = await castor.createPrismDID(publicKey, []);
     const text = "The quick brown fox jumps over the lazy dog";
-    const signature = apollo.signStringMessage(keyPair.privateKey, text);
-    const result = await castor.verifySignature(
-      did,
-      Buffer.from(text),
-      Buffer.from(signature.value)
-    );
-    expect(result).to.be.equal(true);
+    const signature =
+      privateKey.isSignable() && privateKey.sign(Buffer.from(text));
+
+    expect(signature).to.not.be.equal(false);
+
+    if (signature) {
+      const result = await castor.verifySignature(
+        did,
+        Buffer.from(text),
+        Buffer.from(signature)
+      );
+      expect(result).to.be.equal(true);
+    }
   });
   it("Should resolve prismDID key correctly", async () => {
     const apollo = new Apollo();

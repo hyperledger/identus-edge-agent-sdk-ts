@@ -16,7 +16,7 @@ import { Curve } from "../../domain";
 export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
   public static ec: elliptic.ec = new elliptic.ec("secp256k1");
 
-  public type: KeyTypes = "EC";
+  public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
   public raw: Uint8Array;
   public size: number;

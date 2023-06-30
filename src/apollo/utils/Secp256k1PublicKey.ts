@@ -16,7 +16,7 @@ import { Curve } from "../../domain";
  */
 export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
   public static ec: elliptic.ec = new elliptic.ec("secp256k1");
-  public type: KeyTypes = "EC";
+  public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<KeyProperties | string, string> = new Map();
   public size;
   public raw: Uint8Array;
@@ -30,8 +30,6 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
   constructor(nativeValue: Uint8Array) {
     super();
 
-    this.keySpecification.set(KeyProperties.curve, Curve.SECP256K1);
-
     const isCompressed =
       nativeValue.length === ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE;
 
@@ -42,8 +40,33 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
     if (!isCompressed && !isUnCompressed) {
       throw new ApolloError.ECPublicKeyInitialization();
     }
-
+    this.keySpecification.set(KeyProperties.curve, Curve.SECP256K1);
     this.keySpecification.set("compressed", isCompressed ? "true" : "false");
+
+    if (!isCompressed) {
+      const xBytes = nativeValue.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
+      const yBytes = nativeValue.slice(
+        1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
+        nativeValue.length
+      );
+
+      this.keySpecification.set(
+        KeyProperties.curvePointX,
+        Buffer.from(xBytes).toString("hex")
+      );
+      this.keySpecification.set(
+        KeyProperties.curvePointY,
+        Buffer.from(yBytes).toString("hex")
+      );
+    } else {
+      const xBytes = nativeValue.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
+
+      this.keySpecification.set(
+        KeyProperties.curvePointX,
+        Buffer.from(xBytes).toString("hex")
+      );
+    }
+
     this.raw = nativeValue;
     this.size = this.raw.length;
   }

@@ -1,11 +1,40 @@
 import { DerivableKey } from "./DerivableKey";
-import { Curve } from "./KeyCurve";
+import { ApolloError } from "./Errors";
 import { KeyProperties } from "./KeyProperties";
 import { SignableKey } from "./SignableKey";
 import { StorableKey } from "./StorableKey";
 import { VerifiableKey } from "./VerifiableKey";
+export interface KeyCurve {
+  curve: Curve;
+  index?: number;
+}
 
-export type KeyTypes = "EC" | "eddsa";
+export enum Curve {
+  X25519 = "X25519",
+  ED25519 = "Ed25519",
+  SECP256K1 = "Secp256k1",
+}
+
+export function getKeyCurveByNameAndIndex(
+  name: string,
+  index?: number
+): KeyCurve {
+  switch (name) {
+    case Curve.X25519:
+      return { curve: Curve.X25519 };
+    case Curve.ED25519:
+      return { curve: Curve.ED25519 };
+    case Curve.SECP256K1:
+      return { curve: Curve.SECP256K1, index };
+    default:
+      throw new ApolloError.InvalidKeyCurve(name, Object.keys(Curve));
+  }
+}
+
+export enum KeyTypes {
+  "EC" = "EC",
+  "Curve25519" = "Curve25519",
+}
 
 export abstract class Key {
   abstract type: KeyTypes;

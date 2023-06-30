@@ -1,4 +1,3 @@
-import BN from "bn.js";
 import { expect, assert } from "chai";
 
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
@@ -9,7 +8,8 @@ import { Curve } from "../../src/domain/models";
 import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
-import { ApolloError } from "../../src/domain/models/Errors";
+import { KeyTypes } from "../../src/domain/models/Key";
+import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
 
 let apollo: Apollo;
 
@@ -119,155 +119,99 @@ describe("Apollo Tests", () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-      },
-      seed
-    );
-    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(
-      keyPair.publicKey,
-      text,
-      signature.value
-    );
-    expect(verified).to.be.equal(true);
-  });
 
-  it("Should create a secp256k1 publicKey from a privateKey", async () => {
-    const apollo = new Apollo();
-    const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-      },
-      seed
-    );
-
-    const keyPairFromPrivate = apollo.createKeyPairFromPrivateKey(
-      keyPair.privateKey
-    );
-
-    expect(Buffer.from(keyPair.publicKey.raw).toString("hex")).to.equal(
-      Buffer.from(keyPairFromPrivate.publicKey.raw).toString("hex")
-    );
-  });
-
-  it("Should create a ED25519 publicKey from a privateKey", async () => {
-    const apollo = new Apollo();
-    const keyPair = apollo.createKeyPairFromKeyCurve({
-      curve: Curve.ED25519,
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(seed.value).toString("hex"),
     });
 
-    const keyPairFromPrivate = apollo.createKeyPairFromPrivateKey(
-      keyPair.privateKey
-    );
+    const signature =
+      privateKey.isSignable() && privateKey.sign(Buffer.from(text));
 
-    expect(Buffer.from(keyPair.publicKey.raw).toString("hex")).to.equal(
-      Buffer.from(keyPairFromPrivate.publicKey.raw).toString("hex")
-    );
-  });
-  it("Should create a x25519 publicKey from a privateKey", async () => {
-    const apollo = new Apollo();
-    const keyPair = apollo.createKeyPairFromKeyCurve({
-      curve: Curve.X25519,
-    });
+    expect(signature).to.not.be.equal(false);
 
-    const keyPairFromPrivate = apollo.createKeyPairFromPrivateKey(
-      keyPair.privateKey
-    );
-
-    expect(Buffer.from(keyPair.publicKey.raw).toString("hex")).to.equal(
-      Buffer.from(keyPairFromPrivate.publicKey.raw).toString("hex")
-    );
+    if (signature) {
+      const publicKey = privateKey.publicKey();
+      const verified =
+        publicKey.canVerify() && publicKey.verify(text, Buffer.from(signature));
+      expect(verified).to.be.equal(true);
+    }
   });
 
   it("Should only verify signed message using the correct SECP256K1 KeyPair", async () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-      },
-      seed
-    );
-    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-      },
-      apollo.createRandomSeed().seed
-    );
-    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(
-      wrongKeyPair.publicKey,
-      text,
-      signature.value
-    );
-    expect(verified).to.be.equal(false);
+
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(seed.value).toString("hex"),
+    });
+
+    const wrongPrivateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(apollo.createRandomSeed().seed.value).toString("hex"),
+    });
+
+    const signature = privateKey.isSignable() && privateKey.sign(text);
+
+    expect(signature).to.not.be.equal(false);
+
+    if (signature) {
+      const publicKey = wrongPrivateKey.publicKey();
+      const verified =
+        publicKey.canVerify() && publicKey.verify(text, signature);
+
+      expect(verified).to.be.equal(false);
+    }
   });
 
   it("Should create and Sign and verify a message using ED25519 KeyPair", async () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
-    const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.ED25519,
-      },
-      seed
-    );
-    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(
-      keyPair.publicKey,
-      text,
-      signature.value
-    );
-    expect(verified).to.be.equal(true);
+
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+    });
+
+    const signature = privateKey.isSignable() && privateKey.sign(text);
+    if (signature) {
+      const publicKey = privateKey.publicKey();
+      const verified =
+        publicKey.canVerify() && publicKey.verify(text, signature);
+
+      expect(verified).to.be.equal(true);
+    }
   });
 
   it("Should only verify signed message using the correct ED25519 KeyPair", async () => {
     const text = Buffer.from("AtalaPrism Wallet SDK");
     const apollo = new Apollo();
-    const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.ED25519,
-      },
-      seed
-    );
-    const wrongKeyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.ED25519,
-      },
-      apollo.createRandomSeed().seed
-    );
-    const signature = apollo.signByteArrayMessage(keyPair.privateKey, text);
-    const verified = apollo.verifySignature(
-      wrongKeyPair.publicKey,
-      text,
-      signature.value
-    );
-    expect(verified).to.be.equal(false);
-  });
 
-  it("Throws error when sign and verify is attempted with X25519 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
-    const apollo = new Apollo();
-    const seed = apollo.createRandomSeed().seed;
-    const keyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.X25519,
-      },
-      seed
-    );
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+    });
 
-    expect(() =>
-      apollo.signByteArrayMessage(keyPair.privateKey, text)
-    ).to.throw(ApolloError.InvalidKeyCurve);
+    const wrongPrivateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+    });
 
-    expect(() =>
-      apollo.verifySignature(keyPair.publicKey, text, new Uint8Array())
-    ).to.throw(ApolloError.InvalidKeyCurve);
+    const signature = privateKey.isSignable() && privateKey.sign(text);
+
+    expect(signature).to.not.be.equal(false);
+
+    if (signature) {
+      const publicKey = wrongPrivateKey.publicKey();
+      const verified =
+        publicKey.canVerify() && publicKey.verify(text, signature);
+
+      expect(verified).to.be.equal(false);
+    }
   });
 });

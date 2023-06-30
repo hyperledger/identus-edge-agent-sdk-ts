@@ -11,7 +11,7 @@ import { X25519PublicKey } from "./X25519PublicKey";
  */
 export class X25519PrivateKey extends PrivateKey {
   public static ec = x25519;
-  public type: KeyTypes = "EC";
+  public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
   public size: number;
   public raw: Uint8Array;

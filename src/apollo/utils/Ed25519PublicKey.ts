@@ -11,7 +11,7 @@ import { VerifiableKey } from "../../domain/models/VerifiableKey";
 export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
   public static eddsa = new elliptic.eddsa("ed25519");
 
-  public type: KeyTypes = "eddsa";
+  public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
   public size;
   public raw: Uint8Array;

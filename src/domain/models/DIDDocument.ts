@@ -1,6 +1,6 @@
 import { DID } from "./DID";
 import { CastorError } from "./Errors";
-import { Curve } from "./KeyCurve";
+import { Curve } from "./Key";
 
 export class ServiceEndpoint {
   constructor(

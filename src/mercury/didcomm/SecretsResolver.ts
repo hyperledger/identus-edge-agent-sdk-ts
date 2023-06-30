@@ -1,11 +1,15 @@
 import type { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
-import { Curve, VerificationMethod, VerificationMethods } from "../../domain";
+import {
+  Curve,
+  KeyTypes,
+  VerificationMethod,
+  VerificationMethods,
+} from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import Pluto from "../../pluto/Pluto";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
-import { X25519PrivateKey } from "../../apollo/utils/X25519PrivateKey";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
@@ -61,15 +65,22 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     peerDid: Domain.PeerDID,
     publicKeyJWK: Domain.PublicKeyJWK
   ): Secret {
-    const privateKey = peerDid.privateKeys.find(
+    const privateKeyBuffer = peerDid.privateKeys.find(
       (key) => key.keyCurve.curve === Curve.X25519
     );
-    if (!privateKey) {
+    if (!privateKeyBuffer) {
       throw new Error(`Invalid PrivateKey Curve ${Curve.X25519}`);
     }
-    const x25519PrivateKey = new X25519PrivateKey(privateKey.value);
-    const keyPair = this.apollo.createKeyPairFromPrivateKey(x25519PrivateKey);
-    const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
+    const privateKey = this.apollo.createPrivateKey({
+      type: KeyTypes.Curve25519,
+      curve: Curve.X25519,
+      raw: privateKeyBuffer.value,
+    });
+
+    const ecnumbasis = this.castor.getEcnumbasis(
+      peerDid.did,
+      privateKey.publicKey()
+    );
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
     const secret: Secret = {
       id,

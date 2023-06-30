@@ -6,7 +6,6 @@ export * from "./DIDResolver";
 export * from "./DIDUrl";
 export * from "./Errors";
 export * from "./JWTVerifiableCredential";
-export * from "./KeyCurve";
 export * from "./KeyPair";
 export * from "./Mediator";
 export * from "./Message";
@@ -20,4 +19,6 @@ export * from "./SeedWords";
 export * from "./Signature";
 export * from "./WordList";
 export * from "./VerifiableCredential";
+export * from "./Key";
+
 export type JsonString = string;

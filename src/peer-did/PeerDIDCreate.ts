@@ -38,24 +38,27 @@ export class PeerDIDCreate {
   /**
    * Creates an instance of a PeerDID by providing a valid set of KeyPairs and DIDDocumentServices[]
    *
-   * @param {KeyPair[]} keyPairs
+   * @param {PublicKey[]} publicKeys
    * @param {DIDDocumentService[]} services
    * @returns {PeerDID}
    */
-  createPeerDID(keyPairs: KeyPair[], services: DIDDocumentService[]): PeerDID {
-    const { signingKeys, encryptionKeys } = keyPairs.reduce(
-      ({ signingKeys, encryptionKeys }, keyPair) => {
-        if (keyPair.publicKey.isCurve<Ed25519PublicKey>(Curve.ED25519)) {
+  createPeerDID(
+    publicKeys: PublicKey[],
+    services: DIDDocumentService[]
+  ): PeerDID {
+    const { signingKeys, encryptionKeys } = publicKeys.reduce(
+      ({ signingKeys, encryptionKeys }, publicKey) => {
+        if (publicKey.isCurve<Ed25519PublicKey>(Curve.ED25519)) {
           return {
-            signingKeys: [...signingKeys, keyPair.publicKey],
+            signingKeys: [...signingKeys, publicKey],
             encryptionKeys,
           };
         }
 
-        if (keyPair.publicKey.isCurve<X25519PublicKey>(Curve.X25519)) {
+        if (publicKey.isCurve<X25519PublicKey>(Curve.X25519)) {
           return {
             signingKeys,
-            encryptionKeys: [...encryptionKeys, keyPair.publicKey],
+            encryptionKeys: [...encryptionKeys, publicKey],
           };
         }
 
@@ -71,12 +74,12 @@ export class PeerDIDCreate {
     );
 
     const encodedEncryptionKeysStr = encryptionKeys
-      .map(this.keyAgreementFromKeyPair.bind(this))
+      .map(this.keyAgreementFromPublicKey.bind(this))
       .map(this.createMultibaseEncnumbasis.bind(this))
       .map((value) => `.${Numalgo2Prefix.keyAgreement}${value}`);
 
     const encodedSigningKeysStr = signingKeys
-      .map(this.authenticationFromKeyPair.bind(this))
+      .map(this.authenticationFromPublicKey.bind(this))
       .map(this.createMultibaseEncnumbasis.bind(this))
       .map((value) => `.${Numalgo2Prefix.authentication}${value}`);
 
@@ -93,22 +96,22 @@ export class PeerDIDCreate {
    * Computes Encnumbasis from a valid did and its keyPair
    *
    * @param {DID} did
-   * @param {KeyPair} keyPair
+   * @param {PublicKey} publicKey
    * @returns {string}
    */
-  computeEncnumbasis(did: DID, keyPair: KeyPair): string {
+  computeEncnumbasis(did: DID, publicKey: PublicKey): string {
     let material:
       | VerificationMaterialAgreement
       | VerificationMaterialAuthentication;
     let multibaseEcnumbasis: string;
 
-    switch (keyPair.publicKey.getProperty(KeyProperties.curve)) {
+    switch (publicKey.getProperty(KeyProperties.curve)) {
       case Curve.X25519:
-        material = this.keyAgreementFromKeyPair(keyPair.publicKey);
+        material = this.keyAgreementFromPublicKey(publicKey);
         multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
         return multibaseEcnumbasis.slice(1);
       case Curve.ED25519:
-        material = this.authenticationFromKeyPair(keyPair.publicKey);
+        material = this.authenticationFromPublicKey(publicKey);
         multibaseEcnumbasis = this.createMultibaseEncnumbasis(material);
         return multibaseEcnumbasis.slice(1);
       default:
@@ -178,7 +181,7 @@ export class PeerDIDCreate {
     }
   }
 
-  private keyAgreementFromKeyPair(
+  private keyAgreementFromPublicKey(
     publicKey: PublicKey
   ): VerificationMaterialAgreement {
     const octet = this.octetPublicKey(publicKey);
@@ -193,7 +196,7 @@ export class PeerDIDCreate {
     );
   }
 
-  private authenticationFromKeyPair(
+  private authenticationFromPublicKey(
     publicKey: PublicKey
   ): VerificationMaterialAuthentication {
     const octet = this.octetPublicKey(publicKey);

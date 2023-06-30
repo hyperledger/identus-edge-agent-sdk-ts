@@ -25,6 +25,7 @@ import {
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
+import { KeyTypes } from "../domain/models/Key";
 
 /**
  * An extension for the Edge agents that groups all the tasks and flows related to credentials
@@ -115,19 +116,21 @@ export class AgentCredentials implements AgentCredentialsClass {
     offer: OfferCredential
   ): Promise<RequestCredential> {
     const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
-    const keyPair = await this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-        index: keyIndex,
-      },
-      this.seed
-    );
-    const did = await this.castor.createPrismDID(keyPair.publicKey);
+
+    const privateKey = this.apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(this.seed.value).toString("hex"),
+    });
+
+    const publicKey = privateKey.publicKey();
+
+    const did = await this.castor.createPrismDID(publicKey);
 
     await this.pluto.storePrismDID(
       did,
       keyIndex,
-      keyPair.privateKey,
+      privateKey,
       null,
       did.toString()
     );
@@ -138,7 +141,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     const challenge = attachment.challenge!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const domain = attachment.domain!;
-    const signedJWT = await jwt.sign(did, keyPair.privateKey.value, {
+    const signedJWT = await jwt.sign(did, privateKey.value, {
       aud: domain,
       nonce: challenge,
       vp: {

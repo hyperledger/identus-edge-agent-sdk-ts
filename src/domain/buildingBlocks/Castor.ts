@@ -1,9 +1,4 @@
-import {
-  DID,
-  DIDDocument,
-  KeyPair,
-  Service as DIDDocumentService,
-} from "../models";
+import { DID, DIDDocument, Service as DIDDocumentService } from "../models";
 import { PublicKey } from "../models/KeyManagement";
 
 export interface Castor {
@@ -13,7 +8,7 @@ export interface Castor {
     services?: DIDDocumentService[]
   ): Promise<DID>;
   createPeerDID(
-    keyPairs: KeyPair[],
+    publicKeys: PublicKey[],
     services: DIDDocumentService[]
   ): Promise<DID>;
   resolveDID(did: string): Promise<DIDDocument>;
@@ -22,5 +17,5 @@ export interface Castor {
     challenge: Uint8Array,
     signature: Uint8Array
   ): Promise<boolean>;
-  getEcnumbasis(did: DID, keyPair: KeyPair): string;
+  getEcnumbasis(did: DID, publicKey: PublicKey): string;
 }

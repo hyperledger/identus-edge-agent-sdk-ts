@@ -3,12 +3,13 @@ import { Curve } from "../../domain";
 import { KeyTypes } from "../../domain/models/Key";
 import { PublicKey } from "../../domain/models/KeyManagement";
 import { KeyProperties } from "../../domain/models/KeyProperties";
+
 /**
  * @ignore
  */
 export class X25519PublicKey extends PublicKey {
   public static ec = x25519;
-  public type: KeyTypes = "EC";
+  public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
   public size: number;
   public raw: Uint8Array;

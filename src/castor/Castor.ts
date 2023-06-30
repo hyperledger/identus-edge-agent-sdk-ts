@@ -9,12 +9,10 @@ import { Castor as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
   DID,
   Service,
-  KeyPair,
   DIDDocument,
   PrismDIDMethodId,
   DIDDocumentCoreProperty,
   DIDResolver,
-  Curve,
 } from "../domain/models";
 import {
   getUsageId,
@@ -45,6 +43,7 @@ import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
 import { PublicKey } from "../domain/models/KeyManagement";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
+import { Curve } from "../domain/models/Key";
 
 /**
  * Castor is a powerful and flexible library for working with DIDs. Whether you are building a decentralised application
@@ -185,13 +184,16 @@ export default class Castor implements CastorInterface {
    * ```
    *
    * @async
-   * @param {KeyPair[]} keyPairs
+   * @param {PublicKey[]} publicKeys
    * @param {Service[]} services
    * @returns {Promise<DID>}
    */
-  async createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
+  async createPeerDID(
+    publicKeys: PublicKey[],
+    services: Service[]
+  ): Promise<DID> {
     const peerDIDOperation = new PeerDIDCreate();
-    const peerDID = peerDIDOperation.createPeerDID(keyPairs, services);
+    const peerDID = peerDIDOperation.createPeerDID(publicKeys, services);
     return peerDID.did;
   }
 
@@ -303,7 +305,10 @@ export default class Castor implements CastorInterface {
         ).getEncoded();
 
         publicKey = new Secp256k1PublicKey(publicKeyEncoded);
-        if (this.apollo.verifySignature(publicKey, challenge, signature)) {
+        if (
+          publicKey.canVerify() &&
+          publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
+        ) {
           return true;
         }
       }
@@ -352,7 +357,7 @@ export default class Castor implements CastorInterface {
 
         if (
           publicKey.canVerify() &&
-          this.apollo.verifySignature(publicKey, challenge, signature)
+          publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
         ) {
           return true;
         }
@@ -365,13 +370,13 @@ export default class Castor implements CastorInterface {
   }
 
   /**
-   * Returns ecnumbasis from a valid DID and its related keyPair
+   * Returns ecnumbasis from a valid DID and its related publicKey
    *
    * @param {DID} did
-   * @param {KeyPair} keyPair
+   * @param {PublicKey} publicKey
    * @returns {string}
    */
-  getEcnumbasis(did: DID, keyPair: KeyPair): string {
-    return new PeerDIDCreate().computeEncnumbasis(did, keyPair);
+  getEcnumbasis(did: DID, publicKey: PublicKey): string {
+    return new PeerDIDCreate().computeEncnumbasis(did, publicKey);
   }
 }

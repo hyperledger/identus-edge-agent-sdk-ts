@@ -1,6 +1,7 @@
 import {
   Curve,
   DID,
+  PublicKey,
   Seed,
   Service,
   ServiceEndpoint,
@@ -10,6 +11,7 @@ import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { AgentError } from "../domain/models/Errors";
+import { KeyTypes } from "../domain/models/Key";
 import {
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
   ConnectionsManager,
@@ -54,13 +56,16 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
    */
   async signWith(did: DID, message: Uint8Array): Promise<Signature> {
     const privateKeys = await this.pluto.getDIDPrivateKeysByDID(did);
-    const privateKey = privateKeys.at(0);
 
-    if (privateKey === undefined) {
-      throw new AgentError.CannotFindDIDPrivateKey();
+    for (const privateKey of privateKeys) {
+      if (privateKey.isSignable()) {
+        return {
+          value: privateKey.sign(Buffer.from(message)),
+        };
+      }
     }
 
-    return this.apollo.signByteArrayMessage(privateKey, message);
+    throw new AgentError.CannotFindDIDPrivateKey();
   }
 
   /**
@@ -75,23 +80,21 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     updateMediator = false
   ): Promise<DID> {
-    const index = await this.pluto.getPrismLastKeyPathIndex();
-    const keyAgreementKeyPair = this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.X25519,
-        index: index,
-      },
-      this.seed
-    );
-    const authenticationKeyPair = this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.ED25519,
-        index: index,
-      },
-      this.seed
-    );
+    const publicKeys: PublicKey[] = [];
+    const keyAgreementPrivateKey = this.apollo.createPrivateKey({
+      type: KeyTypes.Curve25519,
+      curve: Curve.X25519,
+    });
+
+    const authenticationPrivateKey = this.apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+    });
+
+    publicKeys.push(keyAgreementPrivateKey.publicKey());
+    publicKeys.push(authenticationPrivateKey.publicKey());
+
     const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
-    const keyPairs = [keyAgreementKeyPair, authenticationKeyPair];
 
     if (
       updateMediator &&
@@ -110,15 +113,15 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       );
     }
 
-    const did = await this.castor.createPeerDID(keyPairs, services);
+    const did = await this.castor.createPeerDID(publicKeys, services);
 
     if (updateMediator) {
       await this.mediationHandler.updateKeyListWithDIDs([did]);
     }
 
     this.pluto.storePeerDID(did, [
-      keyAgreementKeyPair.privateKey,
-      authenticationKeyPair.privateKey,
+      keyAgreementPrivateKey,
+      authenticationPrivateKey,
     ]);
 
     return did;
@@ -141,15 +144,16 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     const index = keyPathIndex
       ? keyPathIndex
       : await this.pluto.getPrismLastKeyPathIndex();
-    const keyPair = this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-        index: index,
-      },
-      this.seed
-    );
-    const did = await this.castor.createPrismDID(keyPair.publicKey, services);
-    await this.pluto.storePrismDID(did, index, keyPair.privateKey, null, alias);
+
+    const privateKey = this.apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(this.seed.value).toString("hex"),
+    });
+
+    const publicKey = privateKey.publicKey();
+    const did = await this.castor.createPrismDID(publicKey, services);
+    await this.pluto.storePrismDID(did, index, privateKey, null, alias);
     return did;
   }
 }

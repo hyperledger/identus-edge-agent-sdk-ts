@@ -13,7 +13,7 @@ import { Ed25519PublicKey } from "./Ed25519PublicKey";
 export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
   public static eddsa = new elliptic.eddsa("ed25519");
 
-  public type: KeyTypes = "eddsa";
+  public type: KeyTypes = KeyTypes.EC;
   public size;
   public raw: Uint8Array;
   public keySpecification: Map<string, string> = new Map();
