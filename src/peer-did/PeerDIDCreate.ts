@@ -25,7 +25,7 @@ import { base58btc } from "multiformats/bases/base58";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { KeyProperties } from "../domain/models/KeyProperties";
-import { PublicKey } from "../domain/models/KeyManagement";
+import { PublicKey } from "../domain/models";
 
 /**
  * PeerDID Creation wrapper class

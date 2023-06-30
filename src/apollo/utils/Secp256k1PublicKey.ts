@@ -5,12 +5,10 @@ import BigInteger from "bn.js";
 import * as ECConfig from "../../config/ECConfig";
 import { ECCoordinate } from "./ec/ECCoordinate";
 import { ECPoint } from "./ec/ECPoint";
-import { KeyTypes } from "../../domain/models/Key";
-import { PublicKey } from "../../domain/models/KeyManagement";
-import { VerifiableKey } from "../../domain/models/VerifiableKey";
+import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { ApolloError } from "../../domain/models/Errors";
-import { Curve } from "../../domain";
+import { Curve, KeyTypes, PublicKey } from "../../domain";
 /**
  * @ignore
  */

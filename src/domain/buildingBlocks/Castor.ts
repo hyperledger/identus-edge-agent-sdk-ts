@@ -1,5 +1,5 @@
 import { DID, DIDDocument, Service as DIDDocumentService } from "../models";
-import { PublicKey } from "../models/KeyManagement";
+import { PublicKey } from "../models";
 
 export interface Castor {
   parseDID(did: string): DID;

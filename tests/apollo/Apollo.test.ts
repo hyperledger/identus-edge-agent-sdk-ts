@@ -4,11 +4,10 @@ import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 
 import Apollo from "../../src/apollo/Apollo";
 import * as ECConfig from "../../src/config/ECConfig";
-import { Curve } from "../../src/domain/models";
+import { Curve, KeyTypes } from "../../src/domain/models";
 import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
-import { KeyTypes } from "../../src/domain/models/Key";
 import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
 
 let apollo: Apollo;

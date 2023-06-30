@@ -74,10 +74,18 @@ function KeyPair({curve = SDK.Domain.Curve.SECP256K1}: { curve?: SDK.Domain.Curv
     if (!mnemonics) return;
 
     const seed = apollo.createSeed(mnemonics, "my-secret");
-    const keyPair = apollo.createKeyPairFromKeyCurve({
-      curve,
-    }, seed);
-    setKeyPair(keyPair);
+
+    const privateKey = apollo.createPrivateKey({
+      type: SDK.Domain.KeyTypes.EC,
+      curve:curve,
+      seed: Buffer.from(seed.value).toString("hex"),
+    });
+
+    setKeyPair({
+      curve: curve,
+      privateKey: privateKey,
+      publicKey: privateKey.publicKey()
+    });
   }
 
   return (
@@ -129,12 +137,10 @@ function Signatures({keyPair}: { keyPair: SDK.Domain.KeyPair }) {
   const [isSignatureValid, setIsSignatureValid] = React.useState<boolean | undefined>(undefined);
 
   function signData() {
-    const helloWorldSig = apollo.signStringMessage(
-        keyPair.privateKey,
-        "hello world"
-    );
-
-    setSignatureEncoded(jose.base64url.encode(helloWorldSig.value));
+    if (keyPair.privateKey.isSignable() ) {
+      const helloWorldSig = keyPair.privateKey.sign(Buffer.from( "hello world"))
+      setSignatureEncoded(jose.base64url.encode(helloWorldSig));
+    }
   }
 
   function verifySignature() {
@@ -143,11 +149,10 @@ function Signatures({keyPair}: { keyPair: SDK.Domain.KeyPair }) {
     let isValid;
 
     try {
-      isValid = apollo.verifySignature(
-          keyPair.publicKey,
-          new TextEncoder().encode("hello world"),
-          jose.base64url.decode(signatureEncoded)
-      );
+      if (keyPair.publicKey.canVerify()) {
+        isValid = keyPair.publicKey.verify(Buffer.from("hello world"), Buffer.from(jose.base64url.decode(signatureEncoded)))
+      }
+     
     } catch (e) {
       console.warn("Failed to validate signature", e);
       isValid = false;
@@ -194,10 +199,15 @@ function Dids() {
     if (!mnemonics) return;
 
     const seed = apollo.createSeed(mnemonics, "my-secret");
-    const keyPair = apollo.createKeyPairFromKeyCurve({
-      curve: SDK.Domain.Curve.SECP256K1,
-    }, seed);
-    const prismDID = await castor.createPrismDID(keyPair.publicKey, [
+
+    const privateKey = apollo.createPrivateKey({
+      type: SDK.Domain.KeyTypes.EC,
+      curve:SDK.Domain.Curve.SECP256K1,
+      seed: Buffer.from(seed.value).toString("hex"),
+    });
+
+    
+    const prismDID = await castor.createPrismDID(privateKey.publicKey(), [
       exampleService,
     ]);
 
@@ -215,15 +225,18 @@ function Dids() {
   async function createPeerDid() {
     if (!mnemonics) return;
 
-    const seed = apollo.createSeed(mnemonics, "my-secret");
-    const authKeyPair = apollo.createKeyPairFromKeyCurve({
-      curve: Domain.Curve.ED25519,
-    }, seed);
-    const keyAgreementKeyPair = apollo.createKeyPairFromKeyCurve({
-      curve: Domain.Curve.X25519,
-    }, seed);
+    const authPrivateKey = apollo.createPrivateKey({
+      type: SDK.Domain.KeyTypes.EC,
+      curve:SDK.Domain.Curve.ED25519,
+    });
+
+    const keyAgreementPrivateKey = apollo.createPrivateKey({
+      type: SDK.Domain.KeyTypes.EC,
+      curve:SDK.Domain.Curve.ED25519,
+    });
+
     const peerDID = await castor.createPeerDID(
-        [authKeyPair, keyAgreementKeyPair],
+        [authPrivateKey.publicKey(), keyAgreementPrivateKey.publicKey()],
         [exampleService]
     );
 

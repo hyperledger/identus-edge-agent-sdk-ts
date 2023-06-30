@@ -13,12 +13,11 @@ export * from "./MessageAttachment";
 export * from "./PeerDID";
 export * from "./PrismDIDInfo";
 export * from "./PrismDIDMethodId";
-export * from "./KeyManagement";
+export * from "./keyManagement";
 export * from "./Seed";
 export * from "./SeedWords";
 export * from "./Signature";
 export * from "./WordList";
 export * from "./VerifiableCredential";
-export * from "./Key";
 
 export type JsonString = string;

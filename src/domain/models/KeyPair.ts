@@ -1,4 +1,4 @@
-import { PrivateKey, PublicKey } from "./KeyManagement";
+import { PrivateKey, PublicKey } from "./keyManagement";
 import { KeyProperties } from "./KeyProperties";
 
 export abstract class KeyPair {

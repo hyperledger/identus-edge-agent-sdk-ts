@@ -40,10 +40,9 @@ import {
   VerificationMethodTypeAuthentication,
 } from "../peer-did/types";
 import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
-import { PublicKey } from "../domain/models/KeyManagement";
+import { PublicKey, Curve } from "../domain/models";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
-import { Curve } from "../domain/models/Key";
 
 /**
  * Castor is a powerful and flexible library for working with DIDs. Whether you are building a decentralised application

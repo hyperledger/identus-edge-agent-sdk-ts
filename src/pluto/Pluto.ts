@@ -31,7 +31,7 @@ import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions
 import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
 import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
 import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
-import { PrivateKey } from "../domain/models/KeyManagement";
+import { PrivateKey } from "../domain/models";
 import { KeyProperties } from "../domain/models/KeyProperties";
 import { Ed25519PrivateKey } from "../apollo/utils/Ed25519PrivateKey";
 import { X25519PrivateKey } from "../apollo/utils/X25519PrivateKey";

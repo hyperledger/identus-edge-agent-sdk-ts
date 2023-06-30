@@ -1,6 +1,5 @@
-import { Seed, SeedWords } from "../models";
+import { PrivateKey, Seed, SeedWords } from "../models";
 
-import { PrivateKey } from "../models/KeyManagement";
 import { KeyProperties } from "../models/KeyProperties";
 import { MnemonicWordList } from "../models/WordList";
 

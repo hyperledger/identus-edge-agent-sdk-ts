@@ -1,6 +1,6 @@
 import { DID } from "../models";
 import { DIDPair } from "../models/DIDPair";
-import { PrivateKey } from "../models/KeyManagement";
+import { PrivateKey } from "../models";
 import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";

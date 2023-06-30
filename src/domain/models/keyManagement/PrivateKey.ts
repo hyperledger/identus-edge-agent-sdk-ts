@@ -1,5 +1,6 @@
 import { Key } from "./Key";
-import { KeyProperties } from "./KeyProperties";
+import { KeyProperties } from "../KeyProperties";
+import { PublicKey } from "./PublicKey";
 
 export abstract class PrivateKey extends Key {
   get curve() {
@@ -14,14 +15,4 @@ export abstract class PrivateKey extends Key {
     return this.raw;
   }
   abstract publicKey(): PublicKey;
-}
-
-export abstract class PublicKey extends Key {
-  get curve() {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.getProperty(KeyProperties.curve)!;
-  }
-  get value() {
-    return this.raw;
-  }
 }

@@ -4,11 +4,9 @@ import elliptic from "elliptic";
 import * as ECConfig from "../../config/ECConfig";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { ApolloError } from "../../domain/models/Errors";
-import { PrivateKey } from "../../domain/models/KeyManagement";
-import { KeyTypes } from "../../domain/models/Key";
-import { SignableKey } from "../../domain/models/SignableKey";
+import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
-import { Curve } from "../../domain";
+import { Curve, KeyTypes, PrivateKey } from "../../domain";
 
 /**
  * @ignore

@@ -11,7 +11,7 @@ import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { AgentError } from "../domain/models/Errors";
-import { KeyTypes } from "../domain/models/Key";
+import { KeyTypes } from "../domain/models";
 import {
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
   ConnectionsManager,

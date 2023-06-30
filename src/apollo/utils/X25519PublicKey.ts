@@ -1,7 +1,5 @@
 import * as x25519 from "@stablelib/x25519";
-import { Curve } from "../../domain";
-import { KeyTypes } from "../../domain/models/Key";
-import { PublicKey } from "../../domain/models/KeyManagement";
+import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 
 /**

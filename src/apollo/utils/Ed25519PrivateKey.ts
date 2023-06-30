@@ -1,10 +1,8 @@
 import elliptic from "elliptic";
 import { base64url } from "multiformats/bases/base64";
-import { Curve } from "../../domain";
-import { KeyTypes } from "../../domain/models/Key";
-import { PrivateKey } from "../../domain/models/KeyManagement";
+import { Curve, KeyTypes, PrivateKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
-import { SignableKey } from "../../domain/models/SignableKey";
+import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
 
 /**

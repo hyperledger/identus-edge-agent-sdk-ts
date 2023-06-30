@@ -1,8 +1,6 @@
 import * as x25519 from "@stablelib/x25519";
 import { base64url } from "multiformats/bases/base64";
-import { Curve } from "../../domain";
-import { KeyTypes } from "../../domain/models/Key";
-import { PrivateKey } from "../../domain/models/KeyManagement";
+import { Curve, KeyTypes, PrivateKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { X25519PublicKey } from "./X25519PublicKey";
 

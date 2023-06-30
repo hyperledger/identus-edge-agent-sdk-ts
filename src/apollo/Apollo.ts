@@ -2,7 +2,7 @@ import { Apollo as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 
-import { Seed, SeedWords } from "../domain/models";
+import { Curve, KeyTypes, PrivateKey, Seed, SeedWords } from "../domain/models";
 import { MnemonicWordList } from "../domain/models/WordList";
 import {
   MnemonicLengthException,
@@ -13,13 +13,8 @@ import { KeyDerivation } from "./utils/derivation/KeyDerivation";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
 import { ApolloError } from "../domain/models/Errors";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
-import { PrivateKey } from "../domain/models/KeyManagement";
 import { KeyProperties } from "../domain/models/KeyProperties";
-import {
-  Curve,
-  getKeyCurveByNameAndIndex,
-  KeyTypes,
-} from "../domain/models/Key";
+import { getKeyCurveByNameAndIndex } from "../domain/models";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";

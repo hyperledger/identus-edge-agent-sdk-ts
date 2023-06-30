@@ -25,7 +25,7 @@ import {
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
-import { KeyTypes } from "../domain/models/Key";
+import { KeyTypes } from "../domain/models";
 
 /**
  * An extension for the Edge agents that groups all the tasks and flows related to credentials

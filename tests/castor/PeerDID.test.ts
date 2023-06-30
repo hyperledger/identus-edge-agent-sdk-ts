@@ -6,6 +6,8 @@ import {
   DID,
   ServiceEndpoint,
   PublicKey,
+  KeyTypes,
+  Curve,
 } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 
@@ -17,14 +19,6 @@ import {
 } from "../../src/peer-did/types";
 import { MultiCodec } from "../../src/peer-did/helpers/Multicodec";
 import { PeerDIDResolver } from "../../src/castor/resolver/PeerDIDResolver";
-import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
-import { X25519PublicKey } from "../../src/apollo/utils/X25519PublicKey";
-import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
-import { Ed25519PublicKey } from "../../src/apollo/utils/Ed25519PublicKey";
-import { X25519KeyPair } from "../../src/apollo/utils/X25519KeyPair";
-import { Ed25519KeyPair } from "../../src/apollo/utils/Ed25519KeyPair";
-import { Curve, KeyTypes } from "../../src/domain/models/Key";
-
 describe("PEERDID CreateTest", () => {
   it("Should test milticodec coding", () => {
     const testData = Uint8Array.from(Buffer.from("test1"));

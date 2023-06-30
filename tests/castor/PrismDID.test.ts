@@ -5,7 +5,7 @@ import Apollo from "../../src/apollo/Apollo";
 import Castor from "../../src/castor/Castor";
 import * as ECConfig from "../../src/config/ECConfig";
 import { Secp256k1PublicKey } from "../../src/apollo/utils/Secp256k1PublicKey";
-import { Curve, KeyTypes } from "../../src/domain/models/Key";
+import { Curve, KeyTypes } from "../../src/domain/models";
 
 describe("PRISMDID CreateTest", () => {
   it("Should correctly create a prismDID from an existing HexKey", async () => {

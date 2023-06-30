@@ -1,10 +1,8 @@
 import elliptic from "elliptic";
 import { base64url } from "multiformats/bases/base64";
-import { Curve } from "../../domain";
-import { KeyTypes } from "../../domain/models/Key";
-import { PublicKey } from "../../domain/models/KeyManagement";
+import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
-import { VerifiableKey } from "../../domain/models/VerifiableKey";
+import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
 /**
  * @ignore
  */
