@@ -7,7 +7,7 @@ import { CredentialRequestOptions } from "../domain/models/Credential";
 import {
   AttachmentDescriptor,
   CredentialType,
-  JWTVerifiablePayload,
+  JWTCredential,
   Message,
 } from "../domain";
 import { JWT } from "../apollo/utils/jwt/JWT";
@@ -100,11 +100,12 @@ export default class Pollux implements PolluxInterface {
 
   parseCredential(
     credentialBuffer: Uint8Array,
-    options?: { type: CredentialType; [name: string]: any }
+    options?: { type: CredentialType;[name: string]: any }
   ) {
     if (!options?.type) {
       throw new InvalidJWTString();
     }
+
     if (options?.type === CredentialType.JWT) {
       const jwtString = Buffer.from(credentialBuffer).toString();
       const parts = jwtString.split(".");
@@ -117,7 +118,7 @@ export default class Pollux implements PolluxInterface {
       const jsonString = Buffer.from(base64Data).toString();
       const jsonParsed = JSON.parse(jsonString);
 
-      return new JWTVerifiablePayload(
+      return new JWTCredential(
         jsonParsed.iss,
         jsonParsed.vc,
         jwtString,

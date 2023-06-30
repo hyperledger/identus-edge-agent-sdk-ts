@@ -1,23 +1,9 @@
-import { Credential, StorableCredential } from "./Credential";
+import { Credential, ProvableCredential, StorableCredential } from "./Credential";
 import {
-  CredentialSubject,
   CredentialType,
   VerifiableCredentialTypeContainer,
 } from "./VerifiableCredential";
 
-export class JWTVerifiableCredential {
-  constructor(
-    public subject: CredentialSubject,
-    public context: Array<string> = [],
-    public type: Array<string> = [],
-    public credentialSchema: VerifiableCredentialTypeContainer,
-    public credentialSubject: CredentialSubject,
-    public credentialStatus: VerifiableCredentialTypeContainer,
-    public refreshService: VerifiableCredentialTypeContainer,
-    public evidence: VerifiableCredentialTypeContainer,
-    public termsOfUse: VerifiableCredentialTypeContainer
-  ) {}
-}
 
 export enum JWTVerifiableCredentialProperties {
   iss = "iss",
@@ -29,8 +15,10 @@ export enum JWTVerifiableCredentialProperties {
   aud = "aud",
   type = "type",
 }
-export const JWTVerifiableCredentialRecoveryId = "prism/jwt";
-export class JWTVerifiablePayload extends Credential {
+
+export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
+
+export class JWTCredential extends Credential implements ProvableCredential {
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties: Map<JWTVerifiableCredentialProperties | string, any> =
     new Map();
@@ -92,7 +80,7 @@ export class JWTVerifiablePayload extends Credential {
 
   constructor(
     public iss: string,
-    public verifiableCredential: JWTVerifiableCredential,
+    public verifiableCredential: Record<string, any>,
     public jti: string,
     public nbf: number,
     public sub: string,
@@ -136,14 +124,14 @@ export class JWTVerifiablePayload extends Credential {
     };
   }
 
-  static fromStorable(storable: StorableCredential): JWTVerifiablePayload {
+  static fromStorable(storable: StorableCredential): JWTCredential {
     // TODO - should issuer and subject be required on Storable?
     const propertyObj = JSON.parse(
       Buffer.from(storable.credentialData, "hex").toString()
     );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const iss = storable.issuer!;
-    return new JWTVerifiablePayload(
+    return new JWTCredential(
       iss,
       propertyObj.vc,
       propertyObj.jti,
@@ -153,5 +141,14 @@ export class JWTVerifiablePayload extends Credential {
       propertyObj.aud,
       propertyObj.jti
     );
+  }
+
+  presentation() {
+    // TODO - Type information
+    return {
+      "@context": ["https://www.w3.org/2018/presentations/v1"],
+      type: ["VerifiablePresentation"],
+      verifiableCredential: [this.jti],
+    };
   }
 }

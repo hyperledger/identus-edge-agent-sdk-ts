@@ -3,7 +3,7 @@ import {
   Curve,
   DID,
   getKeyCurveByNameAndIndex,
-  JWTVerifiablePayload,
+  JWTCredential,
   PrivateKey,
 } from "../../src/domain";
 import { expect } from "chai";
@@ -169,7 +169,7 @@ describe("Pluto tests", () => {
       vc: vc,
     };
 
-    const credential = new JWTVerifiablePayload(
+    const credential = new JWTCredential(
       jwtPayload.iss,
       vc,
       jwtString,
@@ -690,7 +690,7 @@ describe("Pluto tests", () => {
       vc: vc,
     };
 
-    const credential = new JWTVerifiablePayload(
+    const credential = new JWTCredential(
       jwtPayload.iss,
       vc,
       jwtString,

@@ -13,7 +13,7 @@ import { DIDPair } from "../domain/models/DIDPair";
 import {
   Credential,
   JWTVerifiableCredentialRecoveryId,
-  JWTVerifiablePayload,
+  JWTCredential,
 } from "../domain/models";
 import * as entities from "./entities";
 import Did from "./entities/DID";
@@ -83,12 +83,12 @@ export default class Pluto implements PlutoInterface {
     const presetSqlJSConfig =
       connection.type === "sqljs"
         ? {
-            location: "pluto",
-            useLocalForage: typeof window !== "undefined",
-            sqlJsConfig: {
-              locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
-            },
-          }
+          location: "pluto",
+          useLocalForage: typeof window !== "undefined",
+          sqlJsConfig: {
+            locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
+          },
+        }
         : {};
     this.dataSource = new DataSource({
       ...presetSqlJSConfig,
@@ -381,11 +381,11 @@ export default class Pluto implements PlutoInterface {
       }
       return didResponse.map(
         (item) =>
-          ({
-            did: DID.fromString(item.did),
-            alias: item.alias,
-            keyPathIndex: item.private_key_keyPathIndex,
-          } as PrismDIDInfo)
+        ({
+          did: DID.fromString(item.did),
+          alias: item.alias,
+          keyPathIndex: item.private_key_keyPathIndex,
+        } as PrismDIDInfo)
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -823,7 +823,7 @@ export default class Pluto implements PlutoInterface {
     return credentials.map<Credential>((credentialEntity) => {
       switch (credentialEntity.recoveryId) {
         case JWTVerifiableCredentialRecoveryId:
-          return JWTVerifiablePayload.fromStorable({
+          return JWTCredential.fromStorable({
             // TODO - id comes from properties.jti, but is not used in storeCredential() where it becomes the db uuid
             id: credentialEntity.id,
             credentialData: credentialEntity.credentailData,

@@ -5,6 +5,10 @@ type Claim = Record<string, any>;
 
 export abstract class Credential {
   abstract recoveryId: string;
+
+  // in Swift
+  abstract id: string;
+
   abstract issuer: string;
   abstract subject: string;
   abstract claims: Claim[];
@@ -14,6 +18,10 @@ export abstract class Credential {
 
   getProperty(name: string) {
     return this.properties.get(name);
+  }
+
+  presentation(): unknown {
+    throw new Error("Credential is not Provable");
   }
 }
 
@@ -37,27 +45,6 @@ export interface CredentialRequestOptions {
   [name: string]: any;
 }
 
-/*
-CREATE TABLE Credential (
-    id TEXT NOT NULL UNIQUE ,
-    recoveryId TEXT NOT NULL,
-    credentialSchema TEXT NOT NULL,
-    credentialData BLOB NOT NULL,
-    issuerId TEXT,
-    subjectId TEXT,
-    credentialCreated TEXT,
-    credentialUpdated TEXT,
-    validUntil TEXT,
-    revoked INTEGER AS Int DEFAULT 0,
-    PRIMARY KEY (id)
-);
-CREATE TABLE AvailableClaims (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    credentialId TEXT NOT NULL,
-    claim TEXT NOT NULL,
-    FOREIGN KEY (credentialId) REFERENCES Credential(id)
-);
-CREATE TABLE LinkSecret (
-    id TEXT NOT NULL UNIQUE
-);
-*/
+export interface ProvableCredential {
+  presentation(): unknown;
+}

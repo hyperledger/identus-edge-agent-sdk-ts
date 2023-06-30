@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { CredentialType, DID, JWTVerifiablePayload } from "../../src/domain";
+import { CredentialType, DID, JWTCredential } from "../../src/domain";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
@@ -25,15 +25,14 @@ describe("Pollux", () => {
     describe("Invalid JWT string", () => {
       ["", `${jwtParts[0]}`, `${jwtParts[0]}.${jwtParts[1]}`].forEach(
         (value) => {
-          it(`should error when too few parts [${
-            value.split(".").length
-          }]`, () => {
-            expect(() =>
-              pollux.parseCredential(Buffer.from(value), {
-                type: CredentialType.JWT,
-              })
-            ).throws(InvalidJWTString);
-          });
+          it(`should error when too few parts [${value.split(".").length
+            }]`, () => {
+              expect(() =>
+                pollux.parseCredential(Buffer.from(value), {
+                  type: CredentialType.JWT,
+                })
+              ).throws(InvalidJWTString);
+            });
         }
       );
 
@@ -41,15 +40,14 @@ describe("Pollux", () => {
         `${jwtString}.${jwtParts[0]}`,
         `${jwtString}.${jwtParts[0]}.${jwtParts[1]}`,
       ].forEach((value) => {
-        it(`should error when too many parts [${
-          value.split(".").length
-        }]`, () => {
-          expect(() =>
-            pollux.parseCredential(Buffer.from(value), {
-              type: CredentialType.JWT,
-            })
-          ).throws(InvalidJWTString);
-        });
+        it(`should error when too many parts [${value.split(".").length
+          }]`, () => {
+            expect(() =>
+              pollux.parseCredential(Buffer.from(value), {
+                type: CredentialType.JWT,
+              })
+            ).throws(InvalidJWTString);
+          });
       });
 
       it("should error when not encoded JSON", () => {
@@ -80,9 +78,9 @@ describe("Pollux", () => {
           type: CredentialType.JWT,
         });
 
-        expect(result).to.be.instanceOf(JWTVerifiablePayload);
+        expect(result).to.be.instanceOf(JWTCredential);
 
-        if (result instanceof JWTVerifiablePayload) {
+        if (result instanceof JWTCredential) {
           expect(result).to.not.be.undefined;
           expect(result.id).to.equal(encoded);
 

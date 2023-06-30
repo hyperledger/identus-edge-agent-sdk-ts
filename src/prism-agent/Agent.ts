@@ -5,6 +5,7 @@ import {
   Seed,
   Service as DIDDocumentService,
   Signature,
+  Credential,
 } from "../domain";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pluto } from "../domain/buildingBlocks/Pluto";
@@ -24,7 +25,6 @@ import {
   PrismOnboardingInvitation,
 } from "./types";
 import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
-import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
@@ -52,10 +52,9 @@ enum AgentState {
  */
 export default class Agent
   implements
-    AgentCredentialsClass,
-    AgentDIDHigherFunctionsClass,
-    AgentInvitationsClass
-{
+  AgentCredentialsClass,
+  AgentDIDHigherFunctionsClass,
+  AgentInvitationsClass {
   /**
    * Agent state
    *
@@ -365,7 +364,7 @@ export default class Agent
    *
    * @returns {Promise<VerifiableCredential[]>}
    */
-  verifiableCredentials(): Promise<VerifiableCredential[]> {
+  verifiableCredentials(): Promise<Credential[]> {
     return this.agentCredentials.verifiableCredentials();
   }
 
@@ -412,7 +411,7 @@ export default class Agent
    */
   async processIssuedCredentialMessage(
     message: IssueCredential
-  ): Promise<VerifiableCredential> {
+  ): Promise<Credential> {
     return this.agentCredentials.processIssuedCredentialMessage(message);
   }
 
@@ -428,7 +427,7 @@ export default class Agent
    */
   async createPresentationForRequestProof(
     request: RequestPresentation,
-    credential: VerifiableCredential
+    credential: Credential
   ): Promise<Presentation> {
     return this.agentCredentials.createPresentationForRequestProof(
       request,

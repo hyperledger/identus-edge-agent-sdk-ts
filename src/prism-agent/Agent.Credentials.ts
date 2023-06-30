@@ -45,7 +45,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected pluto: Pluto,
     protected pollux: Pollux,
     protected seed: Seed
-  ) {}
+  ) { }
 
   async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
@@ -190,14 +190,14 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("DID PrivateKeys not found");
     }
 
-    const jwt = new JWT(this.castor);
-    //TODO: type safe this
-    const originalJWTString = (credential as any).originalJWTString;
-
     const didInfo = await this.pluto.getDIDInfoByDID(subjectDID);
     if (!didInfo) {
       throw new Error("DID not found");
     }
+
+    const credentialPresentation = credential.presentation();
+
+    const jwt = new JWT(this.castor);
 
     const signedJWT = await jwt.sign(
       didInfo.did,
@@ -206,11 +206,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         iss: didInfo.did.toString(),
         aud: domain,
         nonce: challenge,
-        vp: {
-          "@context": ["https://www.w3.org/2018/presentations/v1"],
-          type: ["VerifiablePresentation"],
-          verifiableCredential: [originalJWTString],
-        },
+        vp: credentialPresentation,
       }
     );
 
