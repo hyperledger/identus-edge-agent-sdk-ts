@@ -9,7 +9,7 @@ export default class Credential {
   recoveryId!: string;
 
   @Column({ type: "text" })
-  credentailData!: string;
+  credentialData!: string;
 
   @Column({ type: "text", nullable: true })
   issuer?: string;

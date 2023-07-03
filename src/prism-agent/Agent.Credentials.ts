@@ -195,6 +195,10 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("DID not found");
     }
 
+    if (!credential.isProvable()) {
+      throw new Error("Credential is not Provable");
+    }
+
     const credentialPresentation = credential.presentation();
 
     const jwt = new JWT(this.castor);

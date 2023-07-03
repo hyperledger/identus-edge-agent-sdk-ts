@@ -14,6 +14,7 @@ import {
   Credential,
   JWTVerifiableCredentialRecoveryId,
   JWTCredential,
+  StorableCredential,
 } from "../domain/models";
 import * as entities from "./entities";
 import Did from "./entities/DID";
@@ -814,32 +815,15 @@ export default class Pluto implements PlutoInterface {
     const credentialRepo =
       this.dataSource.manager.getRepository<entities.Credential>("credential");
     const credentials = await credentialRepo.find();
-    const claimRepo =
-      this.dataSource.manager.getRepository<entities.AvailableClaims>(
-        "availableclaims"
-      );
-    const allClaims = await claimRepo.find();
 
     return credentials.map<Credential>((credentialEntity) => {
       switch (credentialEntity.recoveryId) {
         case JWTVerifiableCredentialRecoveryId:
-          return JWTCredential.fromStorable({
-            // TODO - id comes from properties.jti, but is not used in storeCredential() where it becomes the db uuid
-            id: credentialEntity.id,
-            credentialData: credentialEntity.credentailData,
-            recoveryId: credentialEntity.recoveryId,
-            issuer: credentialEntity.issuer,
-            subject: credentialEntity.subject,
-            credentialCreated: credentialEntity.credentialCreated,
-            credentialUpdated: credentialEntity.credentialUpdated,
-            credentialSchema: credentialEntity.credentialSchema,
-            validUntil: credentialEntity.validUntil,
-            revoked: credentialEntity.revoked == 1,
-            availableClaims: allClaims
-              .filter((x) => x.id === credentialEntity.id)
-              .map((x) => JSON.parse(x.claim)),
-          });
+          const jwtString = Buffer.from(credentialEntity.credentialData, "hex").toString();
+          const jwtObj = JSON.parse(jwtString);
 
+          // TODO - remember credentialEntity.id (db id)
+          return JWTCredential.fromJWT(jwtObj, jwtString);
         default:
           throw new Error("not implemented");
       }
@@ -847,10 +831,14 @@ export default class Pluto implements PlutoInterface {
   }
 
   async storeCredential(credential: Credential) {
+    if (!credential.isStorable()) {
+      throw new Error("Credential is not Storable");
+    }
+
     const storable = credential.toStorable();
     const credentialEntity = new entities.Credential();
 
-    credentialEntity.credentailData = storable.credentialData;
+    credentialEntity.credentialData = storable.credentialData;
     credentialEntity.recoveryId = storable.recoveryId;
     credentialEntity.issuer = storable.issuer;
     credentialEntity.subject = storable.subject;
