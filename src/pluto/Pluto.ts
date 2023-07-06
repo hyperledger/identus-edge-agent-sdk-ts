@@ -14,7 +14,6 @@ import {
   Credential,
   JWTVerifiableCredentialRecoveryId,
   JWTCredential,
-  StorableCredential,
 } from "../domain/models";
 import * as entities from "./entities";
 import Did from "./entities/DID";
@@ -838,7 +837,7 @@ export default class Pluto implements PlutoInterface {
     const storable = credential.toStorable();
     const credentialEntity = new entities.Credential();
 
-    credentialEntity.credentialData = storable.credentialData;
+    credentialEntity.credentialData = Buffer.from(storable.credentialData).toString("hex");
     credentialEntity.recoveryId = storable.recoveryId;
     credentialEntity.issuer = storable.issuer;
     credentialEntity.subject = storable.subject;

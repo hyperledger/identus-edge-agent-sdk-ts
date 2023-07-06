@@ -137,9 +137,7 @@ export class JWTCredential extends Credential implements ProvableCredential, Sto
   }
 
   toStorable() {
-    const credentialData = Buffer.from(
-      JSON.stringify(Object.fromEntries(this.properties))
-    ).toString("hex");
+    const credentialData = JSON.stringify(Object.fromEntries(this.properties));
 
     return {
       id: this.getProperty(JWTVerifiableCredentialProperties.jti),

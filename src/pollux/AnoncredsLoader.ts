@@ -94,10 +94,15 @@ export class AnoncredsLoader {
       return proof;
     });
 
+    result.requested_proof.revealed_attrs = this.mapToObj(result.requested_proof.revealed_attrs);
+    result.requested_proof.self_attested_attrs = this.mapToObj(result.requested_proof.self_attested_attrs);
+    result.requested_proof.unrevealed_attrs = this.mapToObj(result.requested_proof.unrevealed_attrs);
+    result.requested_proof.predicates = this.mapToObj(result.requested_proof.predicates);
+
     return result;
   }
 
   private mapToObj<V>(value: Map<string, V>): Record<string, V> {
-    return Object.fromEntries(value);
+    return value instanceof Map ? Object.fromEntries(value) : value;
   }
 }

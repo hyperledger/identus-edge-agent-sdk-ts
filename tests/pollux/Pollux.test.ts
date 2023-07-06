@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import { CredentialType, DID, JWTCredential } from "../../src/domain";
+import { CredentialType, JWTCredential } from "../../src/domain";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
+import * as Fixtures from "./fixtures";
 
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -15,7 +16,7 @@ const jwtString = jwtParts.join(".");
 describe("Pollux", () => {
   let pollux: Pollux;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const apollo = {} as Apollo;
     const castor = new Castor(apollo);
     pollux = new Pollux(castor);
@@ -70,8 +71,7 @@ describe("Pollux", () => {
 
     describe("Valid Credential", () => {
       it(`should return JWTVerifiableCredential`, () => {
-        const jwtPayload = createPayload("jwtid", "proof", CredentialType.JWT);
-
+        const jwtPayload = Fixtures.createJWTPayload("jwtid", "proof", CredentialType.JWT);
         const credential = jwtPayload.vc;
         const encoded = encodeCredential(jwtPayload);
         const result = pollux.parseCredential(Buffer.from(encoded), {
@@ -118,66 +118,123 @@ describe("Pollux", () => {
     });
   });
 
-  function createPayload(
-    id: string,
-    proof: string,
-    credentialType: CredentialType
-  ) {
-    const vc = {
-      id,
-      credentialType: credentialType,
-      type: [credentialType],
-      aud: ["aud"],
-      context: ["context"],
-      credentialSubject: { whatever: "credSubject" },
-      evidence: {
-        id: "evidenceId",
-        type: "evidenceType",
-      },
-      expirationDate: new Date().toISOString(),
-      issuanceDate: new Date().toISOString(),
-      issuer: new DID(
-        "did",
-        "peer",
-        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
-      ),
-      refreshService: {
-        id: "refreshServiceId",
-        type: "refreshServiceType",
-      },
-      termsOfUse: {
-        id: "termsOfUseId",
-        type: "termsOfUseType",
-      },
-      validFrom: {
-        id: "validFromId",
-        type: "validFromType",
-      },
-      validUntil: {
-        id: "validUntilId",
-        type: "validUntilType",
-      },
-      credentialSchema: {
-        id: "credentialSchemaId",
-        type: "credentialSchemaType",
-      },
-      credentialStatus: {
-        id: "credentialStatusId",
-        type: "credentialStatusType",
-      },
-      proof: proof,
-    };
+  describe("anoncreds", () => {
+    beforeEach(async () => {
+      await (pollux.anoncreds as any).load();
+    });
 
-    const jwtPayload: any = {
-      id: "123",
-      iss: "did:peer:2.issuer",
-      nbf: 1680615608435,
-      sub: "did:peer:2.sub",
-      exp: 1680615608435,
-      aud: ["aud-json"],
-      vc: vc,
-    };
+    test("createLinkSecret", async () => {
+      const result = pollux.anoncreds.createLinksecret();
+      expect(result).to.be.a("string");
+    });
 
-    return jwtPayload;
-  }
+    test("createCredentialRequest", () => {
+      const result = pollux.anoncreds.createCredentialRequest(
+        Fixtures.credOffer,
+        Fixtures.credDef,
+        Fixtures.linkSecret,
+        "link-secret-id"
+      );
+
+      expect(result).to.be.an("array").to.have.length(2);
+      // CredentialRequest
+      const credReq = result[0];
+      expect(credReq).to.have.property("cred_def_id").to.be.a("string");
+      expect(credReq).to.have.property("entropy").to.be.a("string");
+      expect(credReq).to.have.property("nonce").to.be.a("string");
+      expect(credReq).to.have.property("blinded_ms");
+      expect(credReq.blinded_ms).to.have.property("u");
+      expect(credReq.blinded_ms).to.have.property("hidden_attributes");
+      expect(credReq.blinded_ms).to.have.property("committed_attributes");
+      expect(credReq).to.have.property("blinded_ms_correctness_proof");
+      expect(credReq.blinded_ms_correctness_proof).to.have.property("c");
+      expect(credReq.blinded_ms_correctness_proof).to.have.property("v_dash_cap");
+      expect(credReq.blinded_ms_correctness_proof).to.have.property("m_caps");
+      expect(credReq.blinded_ms_correctness_proof).to.have.property("r_caps");
+
+      // CredentialRequestMeta
+      const credReqMeta = result[1];
+      expect(credReqMeta).to.have.property("link_secret_blinding_data");
+      expect(credReqMeta.link_secret_blinding_data).to.have.property("v_prime").to.be.a("string");
+      expect(credReqMeta).to.have.property("link_secret_name").to.be.a("string");
+      expect(credReqMeta).to.have.property("nonce").to.be.a("string");
+    });
+
+    test("createPresentation", () => {
+      const result = pollux.anoncreds.createPresentation(
+        Fixtures.presRequest,
+        Fixtures.schemas,
+        Fixtures.credDefs,
+        Fixtures.credential,
+        Fixtures.linkSecret
+      );
+
+      expect(result).to.be.an("object");
+      expect(result).to.have.property("proof");
+      expect(result.proof).to.have.property("proofs").to.be.an("array").to.have.length(1);
+
+      result.proof.proofs.forEach(proof => {
+        expect(proof).to.have.property("primary_proof");
+        expect(proof.primary_proof).to.have.property("eq_proof");
+        expect(proof.primary_proof.eq_proof).to.have.property("revealed_attrs");
+        expect(proof.primary_proof.eq_proof.revealed_attrs).to.have.property("name").to.be.a("string");
+        expect(proof.primary_proof.eq_proof).to.have.property("a_prime").to.be.a("string");
+        expect(proof.primary_proof.eq_proof).to.have.property("e").to.be.a("string");
+        expect(proof.primary_proof.eq_proof).to.have.property("m").to.be.an("object");
+        expect(proof.primary_proof.eq_proof.m).to.have.property("age").to.be.an("string");
+        expect(proof.primary_proof.eq_proof.m).to.have.property("master_secret").to.be.an("string");
+        expect(proof.primary_proof.eq_proof).to.have.property("m2").to.be.a("string");
+        expect(proof.primary_proof.eq_proof).to.have.property("v").to.be.a("string");
+
+        expect(proof.primary_proof).to.have.property("ge_proofs").to.be.an("array").to.have.length(1);
+
+        proof.primary_proof.ge_proofs.forEach(geProof => {
+          expect(geProof).to.have.property("mj").to.be.a("string");
+          expect(geProof).to.have.property("alpha").to.be.a("string");
+          expect(geProof).to.have.property("r").to.be.an("object");
+          expect(geProof).to.have.property("t").to.be.an("object");
+          expect(geProof).to.have.property("u").to.be.an("object");
+          expect(geProof).to.have.property("predicate").to.be.an("object");
+          expect(geProof.predicate).to.have.property("attr_name", Fixtures.presRequest.requested_predicates.predicate1_referent.name);
+          expect(geProof.predicate).to.have.property("p_type", "GE");
+          expect(geProof.predicate).to.have.property("value", Fixtures.presRequest.requested_predicates.predicate1_referent.p_value);
+        });
+      });
+
+      expect(result.proof).to.have.property("aggregated_proof");
+      expect(result.proof.aggregated_proof).to.have.property("c_hash").to.be.a("string");
+      expect(result.proof.aggregated_proof).to.have.property("c_list").to.be.an("array");
+
+      expect(result).to.have.property("requested_proof");
+      expect(result.requested_proof).to.have.property("predicates");
+      expect(result.requested_proof).to.have.property("revealed_attrs");
+      expect(result.requested_proof).to.have.property("self_attested_attrs");
+      expect(result.requested_proof).to.have.property("unrevealed_attrs");
+
+      expect(result).to.have.property("identifiers").to.be.an("array").to.have.length(1);
+
+      result.identifiers.forEach(identifier => {
+        expect(identifier).to.have.property("schema_id", Fixtures.schemaId);
+        expect(identifier).to.have.property("cred_def_id", Fixtures.credDefId);
+      })
+    });
+
+    test("processCredential", () => {
+      const result = pollux.anoncreds.processCredential(
+        Fixtures.credDef,
+        Fixtures.credentialIssued,
+        Fixtures.credRequestMeta,
+        Fixtures.linkSecret
+      );
+
+      expect(result).to.have.property("schema_id", Fixtures.schemaId);
+      expect(result).to.have.property("cred_def_id", Fixtures.credDefId);
+      expect(result).to.have.property("signature");
+      expect(result).to.have.property("signature_correctness_proof");
+
+      Fixtures.credentialIssued.values.forEach(value => {
+        expect(result.values).to.have.property(value[0]).to.deep.equal(value[1]);
+      });
+    })
+  })
 });

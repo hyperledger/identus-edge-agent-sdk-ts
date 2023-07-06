@@ -10,6 +10,8 @@ import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
 import { ApolloError } from "../../src/domain/models/Errors";
+import { X25519KeyPair } from "../../src/apollo/utils/X25519KeyPair";
+import { base64url } from "multiformats/bases/base64";
 
 let apollo: Apollo;
 
@@ -17,6 +19,31 @@ describe("Apollo Tests", () => {
   beforeEach(() => {
     apollo = new Apollo();
   });
+
+  test.only("buffers", () => {
+    const xkp = new X25519KeyPair();
+
+    // const keyPair = xkp.ec.generateKeyPair();
+    // const secretKey = keyPair.secretKey;
+    const secretKey = Uint8Array.from([
+      112, 247, 59, 89, 247, 5, 105, 190,
+      63, 83, 136, 157, 153, 129, 109, 240,
+      127, 117, 63, 181, 35, 234, 31, 92,
+      33, 67, 156, 223, 200, 166, 12, 118
+    ]);
+
+    console.log({
+      secret: secretKey,
+      secretBuf: Buffer.from(secretKey),
+      secretBufStr: Buffer.from(secretKey).toString(),
+      secretBuf2: secretKey.buffer,
+      base64: base64url.baseEncode(Buffer.from(secretKey)),
+      base64Buf: Buffer.from(base64url.baseEncode(Buffer.from(secretKey))),
+      b64Str: Buffer.from(base64url.baseEncode(Buffer.from(secretKey))).toString()
+    })
+
+    expect(true).to.be.true;
+  })
 
   it("It should test random mnemonic generation length always matches 24", () => {
     for (let i = 1; i <= 10; i++) {
