@@ -4,6 +4,10 @@ import Castor from "../../src/castor/Castor";
 import Apollo from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
+import {
+  cloudAgentCredentialJwt,
+  cloudAgentCredentialPayload,
+} from "./test-vectors";
 
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -90,6 +94,19 @@ describe("Pollux", () => {
     });
   });
 
+  it("should parse JWT dates (NumericDate) correctly", () => {
+    // NumericDate in JWT represents number of SECONDS from 1970-01-01T00:00:00Z UTC
+    // NOT milliseconds as in JS!
+    const result = pollux.parseVerifiableCredential(cloudAgentCredentialJwt);
+
+    expect(result.issuanceDate).to.equal(
+      new Date(cloudAgentCredentialPayload.nbf * 1000).toISOString()
+    );
+    expect(result.expirationDate).to.equal(
+      new Date(cloudAgentCredentialPayload.exp * 1000).toISOString()
+    );
+  });
+
   function createPayload(
     id: string,
     proof: string,
@@ -143,9 +160,9 @@ describe("Pollux", () => {
     const jwtPayload: any = {
       id: "123",
       iss: "did:peer:2.issuer",
-      nbf: 1680615608435,
+      nbf: 1680615608,
       sub: "did:peer:2.sub",
-      exp: 1680615608435,
+      exp: 1680615608,
       aud: ["aud-json"],
       vc: cred,
     };
@@ -162,10 +179,10 @@ describe("Pollux", () => {
     expect(result.credentialType).to.be.equal(credential.credentialType);
 
     expect(result.expirationDate).to.be.equal(
-      new Date(jwtPayload.exp).toISOString()
+      new Date(jwtPayload.exp * 1000).toISOString()
     );
     expect(result.issuanceDate).to.be.equal(
-      new Date(jwtPayload.nbf).toISOString()
+      new Date(jwtPayload.nbf * 1000).toISOString()
     );
 
     expect(result.type).to.be.deep.equal(credential.type);
