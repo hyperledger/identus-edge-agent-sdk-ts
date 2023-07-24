@@ -13,6 +13,7 @@ import {
   PrismDIDMethodId,
   DIDDocumentCoreProperty,
   DIDResolver,
+  KeyPair,
 } from "../domain/models";
 import {
   getUsageId,
@@ -96,7 +97,9 @@ export default class Castor implements CastorInterface {
    * given master public key and list of services.
    *
    * @example
-   * This function creates a new `prism` DID, using a given master public key and a list of services. It may throw an error if the master public key or services are invalid.
+   * This function creates a new `prism` DID, using a given master Public Key and a list of Services.
+   * The Public Key may be an individual Key or a KeyPair
+   * It may throw an error if the master Public Key or Services are invalid.
    *
    * ```ts
    * const exampleServiceEndpoint = new Domain.Service("didcomm", ["DIDCommMessaging"], {
@@ -111,14 +114,16 @@ export default class Castor implements CastorInterface {
    * ```
    *
    * @async
-   * @param {PublicKey} masterPublicKey
+   * @param {PublicKey | KeyPair} masterPublicKey
    * @param {?(Service[] | undefined)} [services]
    * @returns {Promise<DID>}
    */
   async createPrismDID(
-    masterPublicKey: PublicKey,
+    key: PublicKey | KeyPair,
     services?: Service[] | undefined
   ): Promise<DID> {
+    const masterPublicKey = "publicKey" in key ? key.publicKey : key;
+
     if (!masterPublicKey.isCurve<Secp256k1PublicKey>(Curve.SECP256K1)) {
       throw new CastorError.InvalidKeyError();
     }
@@ -328,31 +333,31 @@ export default class Castor implements CastorInterface {
         const material =
           method.publicKeyJwk.crv === Curve.X25519
             ? new VerificationMaterialAgreement(
-                JSON.stringify(method.publicKeyJwk),
-                VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
-                VerificationMaterialFormatPeerDID.JWK
-              )
+              JSON.stringify(method.publicKeyJwk),
+              VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
+              VerificationMaterialFormatPeerDID.JWK
+            )
             : new VerificationMaterialAuthentication(
-                JSON.stringify(method.publicKeyJwk),
-                VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
-                VerificationMaterialFormatPeerDID.JWK
-              );
+              JSON.stringify(method.publicKeyJwk),
+              VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
+              VerificationMaterialFormatPeerDID.JWK
+            );
 
         const decodedKey =
           method.publicKeyJwk.crv === Curve.X25519
             ? JWKHelper.fromJWKAgreement(
-                material as VerificationMaterialAgreement
-              )
+              material as VerificationMaterialAgreement
+            )
             : JWKHelper.fromJWKAuthentication(
-                material as VerificationMaterialAuthentication
-              );
+              material as VerificationMaterialAuthentication
+            );
 
         publicKey =
           method.publicKeyJwk.crv === Curve.X25519
             ? new X25519PublicKey(Buffer.from(base64url.baseEncode(decodedKey)))
             : new Ed25519PublicKey(
-                Buffer.from(base64url.baseEncode(decodedKey))
-              );
+              Buffer.from(base64url.baseEncode(decodedKey))
+            );
 
         if (
           publicKey.canVerify() &&
