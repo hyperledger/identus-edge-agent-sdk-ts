@@ -1,5 +1,3 @@
-import * as pkg from "anoncreds/anoncreds";
-import pkgWasm from "anoncreds/anoncreds_bg.wasm";
 import { Anoncreds } from "./models/Anoncreds";
 
 /**
@@ -10,6 +8,7 @@ import { Anoncreds } from "./models/Anoncreds";
 export class AnoncredsLoader {
   private static instance: AnoncredsLoader;
   private loaded = false;
+  private pkg: typeof import("anoncreds/anoncreds") | undefined;
 
   private constructor() {
     this.load();
@@ -24,18 +23,22 @@ export class AnoncredsLoader {
   }
 
   private async load() {
+    //#if _ANONCREDS
     if (!this.loaded) {
-      await pkg.default((pkgWasm as any)());
+      this.pkg = await import("anoncreds/anoncreds");
+      const pkgWasm = await import("anoncreds/anoncreds_bg.wasm");
+      await this.pkg.default((pkgWasm as any)());
       this.loaded = true;
     }
+    //#endif
   }
 
   private get wasm() {
-    if (this.loaded === false) {
+    if (this.loaded === false || this.pkg === undefined) {
       throw new Error();
     }
 
-    return pkg;
+    return this.pkg;
   }
 
   createLinksecret(): Anoncreds.Linksecret {
