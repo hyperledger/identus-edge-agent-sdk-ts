@@ -40,7 +40,7 @@ From the repository, cd into `{path}/prism-wallet-sdk-ts`:
 
 ```bash
 npm i
-npm build
+npm run build
 ```
 
 #### For NodeJS
