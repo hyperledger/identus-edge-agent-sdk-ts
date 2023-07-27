@@ -36,7 +36,7 @@ This repository includes a browser and a nodejs demo application, and also a ste
 
 To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
 
-From the repository root folder:
+From the repository, cd into `{path}/prism-wallet-sdk-ts`:
 
 ```bash
 npm i
@@ -45,13 +45,16 @@ npm run build
 
 #### For NodeJS
 
-After building `prism-wallet-sdk-ts`, cd into the demo directory "demos/node":
+After building `prism-wallet-sdk-ts`, cd into `{path}/prism-wallet-sdk-ts/demos/node`:
 
 ```bash
-cd demos/node
 npm i
 node index.js
 ```
+
+:::note
+The installation in the `demos/node` directory requires the `build` folder from the wallet-sdk to be available.
+:::
 
 #### For browser
 
