@@ -382,8 +382,7 @@ export default class Pluto implements PlutoInterface {
         return [];
       }
       return didResponse.map(
-        (item) =>
-        ({
+        (item) => ({
           did: DID.fromString(item.did),
           alias: item.alias,
           keyPathIndex: item.private_key_keyPathIndex,

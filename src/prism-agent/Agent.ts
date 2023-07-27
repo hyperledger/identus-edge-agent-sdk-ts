@@ -187,8 +187,6 @@ export default class Agent
    * @returns {Promise<AgentState>}
    */
   async start(): Promise<AgentState> {
-    console.log("START");
-
     if (this.state !== AgentState.STOPPED) {
       return this.state;
     }
@@ -216,7 +214,6 @@ export default class Agent
 
     if (storedLinkSecret == null) {
       const linkSecret = this.pollux.anoncreds.createLinksecret();
-      console.log({ linkSecret })
       await this.pluto.storeLinkSecret(linkSecret);
     }
     //#endif
