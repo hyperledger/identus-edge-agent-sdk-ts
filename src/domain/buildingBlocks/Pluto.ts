@@ -5,6 +5,7 @@ import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
+import { Anoncreds } from "../../pollux/models/Anoncreds";
 
 export interface Pluto {
   start(): Promise<void>;
@@ -82,4 +83,8 @@ export interface Pluto {
   getAllMediators(): Promise<Array<Mediator>>;
 
   getAllCredentials(): Promise<Array<Credential>>;
+
+  getLinkSecret(): Promise<Anoncreds.LinkSecret | null>;
+
+  storeLinkSecret(linkSecret: Anoncreds.LinkSecret): Promise<void>;
 }

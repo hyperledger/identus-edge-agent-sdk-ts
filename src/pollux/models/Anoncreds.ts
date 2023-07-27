@@ -1,8 +1,7 @@
 export namespace Anoncreds {
-  export type Linksecret = string;
+  export type LinkSecret = string;
 
   type Tuple<T1 = string, T2 = string> = [T1, T2];
-
 
   export interface CredentialRequest {
     cred_def_id: string;

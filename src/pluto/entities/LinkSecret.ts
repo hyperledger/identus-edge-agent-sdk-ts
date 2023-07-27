@@ -1,7 +1,7 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "linksecret" })
 export default class LinkSecret {
-  @Column({ type: "text", unique: true })
+  @PrimaryColumn({ type: "text", unique: true })
   id!: string;
 }

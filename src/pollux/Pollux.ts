@@ -20,14 +20,20 @@ import { JWT } from "../apollo/utils/jwt/JWT";
  * @typedef {Pollux}
  */
 export default class Pollux implements PolluxInterface {
-  private _anoncreds: AnoncredsLoader;
+  private _anoncreds: AnoncredsLoader | undefined;
 
-  constructor(private castor: Castor) {
-    this._anoncreds = AnoncredsLoader.getInstance();
+  constructor(private castor: Castor) { }
+
+  async start() {
+    this._anoncreds = await AnoncredsLoader.getInstance();
   }
 
   // TODO - should anoncreds be exposed or hidden through abstraction?
   get anoncreds() {
+    if (this._anoncreds === undefined) {
+      throw new Error("Pollux - Anoncreds not loaded");
+    }
+
     return this._anoncreds;
   }
 

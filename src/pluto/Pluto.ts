@@ -36,6 +36,8 @@ import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions
 import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
 import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
 import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
+import LinkSecret from "./entities/LinkSecret";
+import { Anoncreds } from "../pollux/models/Anoncreds";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
@@ -858,5 +860,19 @@ export default class Pluto implements PlutoInterface {
 
       await this.dataSource.manager.save(claimEntity);
     }
+  }
+
+  async getLinkSecret(): Promise<Anoncreds.LinkSecret | null> {
+    const repo = this.dataSource.manager.getRepository<LinkSecret>("linksecret");
+    const result = await repo.find();
+
+    return result.at(0)?.id ?? null;
+  }
+
+  async storeLinkSecret(linkSecret: Anoncreds.LinkSecret): Promise<void> {
+    const entity = new entities.LinkSecret();
+    entity.id = linkSecret;
+
+    await this.dataSource.manager.save(entity);
   }
 }

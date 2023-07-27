@@ -69,6 +69,7 @@ export default class Agent
   private apollo: Apollo;
   private castor: Castor;
   private pluto: Pluto;
+  private pollux: Pollux;
   private mercury: Mercury;
   private mediationHandler: MediatorHandler;
   private connectionManager;
@@ -105,17 +106,17 @@ export default class Agent
     this.mediationHandler = mediationHandler;
     this.seed = seed;
     this.api = api;
+    this.pollux = new Pollux(castor);
 
     this.connectionManager =
       connectionManager ||
       new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
 
-    const pollux = new Pollux(castor);
     this.agentCredentials = new AgentCredentials(
       apollo,
       castor,
       pluto,
-      pollux,
+      this.pollux,
       seed
     );
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
@@ -186,12 +187,15 @@ export default class Agent
    * @returns {Promise<AgentState>}
    */
   async start(): Promise<AgentState> {
+    console.log("START");
+
     if (this.state !== AgentState.STOPPED) {
       return this.state;
     }
     this.state = AgentState.STARTING;
     try {
       await this.pluto.start();
+      await this.pollux.start();
       await this.connectionManager.startMediator();
     } catch (e) {
       if (e instanceof AgentError.NoMediatorAvailableError) {
@@ -199,12 +203,24 @@ export default class Agent
         await this.connectionManager.registerMediator(hostDID);
       } else throw e;
     }
+
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
       this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");
     }
+
+    //#if _ANONCREDS
+    const storedLinkSecret = await this.pluto.getLinkSecret();
+
+    if (storedLinkSecret == null) {
+      const linkSecret = this.pollux.anoncreds.createLinksecret();
+      console.log({ linkSecret })
+      await this.pluto.storeLinkSecret(linkSecret);
+    }
+    //#endif
+
     return this.state;
   }
 

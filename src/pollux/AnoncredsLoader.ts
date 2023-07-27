@@ -1,4 +1,5 @@
 import { Anoncreds } from "./models/Anoncreds";
+import type * as anoncredsTypes from "anoncreds";
 
 /**
  * @class AnoncredsLoader
@@ -8,15 +9,12 @@ import { Anoncreds } from "./models/Anoncreds";
 export class AnoncredsLoader {
   private static instance: AnoncredsLoader;
   private loaded = false;
-  private pkg: typeof import("anoncreds/anoncreds") | undefined;
+  private pkg: typeof anoncredsTypes | undefined;
 
-  private constructor() {
-    this.load();
-  }
-
-  static getInstance() {
+  static async getInstance() {
     if (AnoncredsLoader.instance === undefined) {
       AnoncredsLoader.instance = new AnoncredsLoader();
+      await this.instance.load();
     }
 
     return AnoncredsLoader.instance;
@@ -27,7 +25,8 @@ export class AnoncredsLoader {
     if (!this.loaded) {
       this.pkg = await import("anoncreds/anoncreds");
       const pkgWasm = await import("anoncreds/anoncreds_bg.wasm");
-      await this.pkg.default((pkgWasm as any)());
+
+      await this.pkg.default((pkgWasm as any).default());
       this.loaded = true;
     }
     //#endif
@@ -41,14 +40,14 @@ export class AnoncredsLoader {
     return this.pkg;
   }
 
-  createLinksecret(): Anoncreds.Linksecret {
+  createLinksecret(): Anoncreds.LinkSecret {
     return this.wasm.proverCreateLinkSecret();
   }
 
   createCredentialRequest(
     credentialOffer: Anoncreds.CredentialOffer,
     credentialDefinition: Anoncreds.CredentialDefinition,
-    linkSecret: Anoncreds.Linksecret,
+    linkSecret: Anoncreds.LinkSecret,
     linkSecretId: string
   ): [Anoncreds.CredentialRequest, Anoncreds.CredentialRequestMeta] {
     const result = this.wasm.proverCreateCredentialRequest(credentialOffer, credentialDefinition, linkSecret, linkSecretId);
@@ -63,7 +62,7 @@ export class AnoncredsLoader {
     credentialDefinition: Anoncreds.CredentialDefinition,
     credential: Anoncreds.CredentialIssued,
     credentialRequestMeta: Anoncreds.CredentialRequestMeta,
-    linkSecret: Anoncreds.Linksecret
+    linkSecret: Anoncreds.LinkSecret
   ): Anoncreds.Credential {
     const result = this.wasm.proverProcessCredential(credentialDefinition, credential, credentialRequestMeta, linkSecret);
 
@@ -77,7 +76,7 @@ export class AnoncredsLoader {
     schemas: Record<string, Anoncreds.Schema>,
     credentialDefinitions: Record<string, Anoncreds.CredentialDefinition>,
     credential: Anoncreds.Credential,
-    linkSecret: Anoncreds.Linksecret
+    linkSecret: Anoncreds.LinkSecret
   ): Anoncreds.Presentation {
     const result = this.wasm.proverCreatePresentation(presentationRequest, schemas, credentialDefinitions, credential, linkSecret);
 
