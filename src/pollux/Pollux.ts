@@ -23,7 +23,11 @@ import { Anoncreds } from "./models/Anoncreds";
 export default class Pollux implements PolluxInterface {
   private _anoncreds: AnoncredsLoader | undefined;
 
-  constructor(private castor: Castor) { }
+  constructor(private castor: Castor) {}
+
+  async start() {
+    this._anoncreds = await AnoncredsLoader.getInstance();
+  }
 
   // TODO - should anoncreds be exposed or hidden through abstraction?
   get anoncreds() {
