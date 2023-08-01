@@ -45,7 +45,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected pluto: Pluto,
     protected pollux: Pollux,
     protected seed: Seed
-  ) { }
+  ) {}
 
   async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
@@ -79,6 +79,23 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     return credential;
   }
+
+  private getCredentialTypeFromOffer(offer: OfferCredential): CredentialType {
+    const {
+      body: { formats },
+    } = offer;
+
+    if (formats.find(({ format }) => format === CredentialType.JWT)) {
+      return CredentialType.JWT;
+    } else if (
+      formats.find(({ format }) => format === CredentialType.AnonCreds)
+    ) {
+      return CredentialType.AnonCreds;
+    }
+
+    throw new Error("Unsupported Credential Type");
+  }
+
   /**
    * Asyncronously prepare a request credential message from a valid offerCredential for now supporting w3c verifiable credentials offers.
    *
@@ -89,32 +106,44 @@ export class AgentCredentials implements AgentCredentialsClass {
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
-    const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
-    const keyPair = await this.apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.SECP256K1,
-        index: keyIndex,
-      },
-      this.seed
-    );
-    const did = await this.castor.createPrismDID(keyPair.publicKey);
-
-    await this.pluto.storePrismDID(
-      did,
-      keyIndex,
-      {
-        keyCurve: keyPair.privateKey.keyCurve,
-        value: Buffer.from(base64url.baseEncode(keyPair.privateKey.value)),
-      },
-      null,
-      did.toString()
-    );
-
+    const credentialType = this.getCredentialTypeFromOffer(offer);
     const message = offer.makeMessage();
-    const credBuffer = await this.pollux.processCredentialRequest(message, {
-      did: did,
-      keyPair: keyPair,
-    });
+
+    let credBuffer: string;
+
+    if (credentialType === CredentialType.AnonCreds) {
+      const linkSecret = await this.pluto.getLinkSecret();
+      if (!linkSecret) {
+        throw new Error("No linkSecret available.");
+      }
+      credBuffer = await this.pollux.processCredentialRequest(message, {
+        linkSecret: linkSecret,
+      });
+    } else {
+      const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
+      const keyPair = await this.apollo.createKeyPairFromKeyCurve(
+        {
+          curve: Curve.SECP256K1,
+          index: keyIndex,
+        },
+        this.seed
+      );
+      const did = await this.castor.createPrismDID(keyPair.publicKey);
+      await this.pluto.storePrismDID(
+        did,
+        keyIndex,
+        {
+          keyCurve: keyPair.privateKey.keyCurve,
+          value: Buffer.from(base64url.baseEncode(keyPair.privateKey.value)),
+        },
+        null,
+        did.toString()
+      );
+      credBuffer = await this.pollux.processCredentialRequest(message, {
+        did: did,
+        keyPair: keyPair,
+      });
+    }
 
     const requestCredentialBody = createRequestCredentialBody(
       offer.body.formats,
@@ -134,7 +163,7 @@ export class AgentCredentials implements AgentCredentialsClass {
           {
             base64: base64.baseEncode(Buffer.from(credBuffer)),
           },
-          "prism/jwt"
+          `prism/${credentialType}`
         ),
       ],
       from,

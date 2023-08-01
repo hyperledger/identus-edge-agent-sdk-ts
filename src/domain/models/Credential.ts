@@ -50,5 +50,6 @@ export interface StorableCredential {
 export interface CredentialRequestOptions {
   keyPair?: KeyPair;
   did?: DID;
+  linkSecret?: string;
   [name: string]: any;
 }
