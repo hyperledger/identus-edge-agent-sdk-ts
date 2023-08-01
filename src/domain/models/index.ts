@@ -22,5 +22,6 @@ export * from "./Signature";
 export * from "./WordList";
 export * from "./VerifiableCredential";
 export * from "./JWTVerifiableCredential";
+export * from "./AnonCredsVerifiableCredential";
 export * from "./Credential";
 export type JsonString = string;

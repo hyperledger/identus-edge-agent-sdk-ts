@@ -1,9 +1,9 @@
-import { Credential, ProvableCredential, StorableCredential } from "./Credential";
 import {
-  CredentialType,
-  VerifiableCredentialTypeContainer,
-} from "./VerifiableCredential";
-
+  Credential,
+  ProvableCredential,
+  StorableCredential,
+} from "./Credential";
+import { CredentialType } from "./VerifiableCredential";
 
 export enum JWTVerifiableCredentialProperties {
   iss = "iss",
@@ -18,7 +18,10 @@ export enum JWTVerifiableCredentialProperties {
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
-export class JWTCredential extends Credential implements ProvableCredential, StorableCredential {
+export class JWTCredential
+  extends Credential
+  implements ProvableCredential, StorableCredential
+{
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();
@@ -100,7 +103,7 @@ export class JWTCredential extends Credential implements ProvableCredential, Sto
   }
 
   get expirationDate() {
-    return !!this.exp ? new Date(this.exp).toISOString() : undefined;
+    return this.exp ? new Date(this.exp).toISOString() : undefined;
   }
 
   get issuanceDate() {

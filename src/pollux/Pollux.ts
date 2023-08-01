@@ -5,6 +5,7 @@ import { base64url } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import { CredentialRequestOptions } from "../domain/models/Credential";
 import {
+  AnonCredsCredential,
   AttachmentDescriptor,
   CredentialType,
   JWTCredential,
@@ -39,7 +40,7 @@ export default class Pollux implements PolluxInterface {
   }
 
   //TODO: Match the correct format with whatever backend is sending us
-  private extractCredentialFormatFromMessage(message: Message) {
+  public extractCredentialFormatFromMessage(message: Message) {
     const body = JSON.parse(message.body);
     const formats = body.formats;
     if (!formats || !Array.isArray(formats) || formats.length <= 0) {
@@ -185,28 +186,54 @@ export default class Pollux implements PolluxInterface {
 
   parseCredential(
     credentialBuffer: Uint8Array,
-    options?: { type: CredentialType; [name: string]: any }
-  ) {
-    if (!options?.type) {
-      throw new InvalidJWTString();
+    options?: {
+      type: CredentialType;
+      linkSecret?: string;
+      [name: string]: any;
     }
+  ) {
+    const credentialType = options?.type || CredentialType.Unknown;
+    const credentialString = Buffer.from(credentialBuffer).toString();
 
-    if (options?.type === CredentialType.JWT) {
-      const jwtString = Buffer.from(credentialBuffer).toString();
-      const parts = jwtString.split(".");
-      const credentialString = parts.at(1);
+    if (credentialType === CredentialType.JWT) {
+      const parts = credentialString.split(".");
+      const jwtCredentialString = parts.at(1);
 
-      if (parts.length != 3 || credentialString === undefined)
+      if (parts.length != 3 || jwtCredentialString === undefined)
         throw new InvalidJWTString();
 
-      const base64Data = base64url.baseDecode(credentialString);
+      const base64Data = base64url.baseDecode(jwtCredentialString);
       const jsonString = Buffer.from(base64Data).toString();
       const jsonParsed = JSON.parse(jsonString);
 
-      return JWTCredential.fromJWT(jsonParsed, jwtString);
-    } else {
-      throw new Error("Not implemented");
+      return JWTCredential.fromJWT(jsonParsed, credentialString);
     }
+
+    if (credentialType === CredentialType.AnonCreds) {
+      if (options?.linkSecret === undefined) {
+        throw new Error("LinkSecret is required");
+      }
+      const parts = credentialString.split(".");
+      if (parts.length != 2) throw new Error("Invalid AnonCreds String");
+
+      const credentialIssued = JSON.parse(
+        Buffer.from(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          base64url.baseDecode(parts.at(0)!)
+        ).toString()
+      );
+
+      const credentialMetadata = JSON.parse(
+        Buffer.from(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          base64url.baseDecode(parts.at(1)!)
+        ).toString()
+      );
+
+      return new AnonCredsCredential(credentialIssued, credentialMetadata);
+    }
+
+    throw new Error("Not implemented");
   }
 
   private extractDomainChallenge(attachments: AttachmentDescriptor[]) {

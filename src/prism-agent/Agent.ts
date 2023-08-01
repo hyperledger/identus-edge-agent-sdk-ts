@@ -52,9 +52,10 @@ enum AgentState {
  */
 export default class Agent
   implements
-  AgentCredentialsClass,
-  AgentDIDHigherFunctionsClass,
-  AgentInvitationsClass {
+    AgentCredentialsClass,
+    AgentDIDHigherFunctionsClass,
+    AgentInvitationsClass
+{
   /**
    * Agent state
    *

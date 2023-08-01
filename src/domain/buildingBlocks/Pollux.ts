@@ -9,4 +9,5 @@ export interface Pollux {
     offer: Message,
     options: CredentialRequestOptions
   ): Promise<string>;
+  extractCredentialFormatFromMessage(message: Message): CredentialType;
 }

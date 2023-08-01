@@ -1,3 +1,4 @@
+import { CredentialType } from ".";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
 
@@ -44,12 +45,18 @@ export interface StorableCredential {
     validUntil?: string;
     revoked?: boolean;
     availableClaims?: string[];
-  }
+  };
 }
 
 export interface CredentialRequestOptions {
   keyPair?: KeyPair;
   did?: DID;
+  linkSecret?: string;
+  [name: string]: any;
+}
+
+export interface CredentialIssueOptions {
+  type: CredentialType;
   linkSecret?: string;
   [name: string]: any;
 }

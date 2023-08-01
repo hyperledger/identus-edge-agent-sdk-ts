@@ -8,6 +8,7 @@ import {
   Credential,
   DID,
   CredentialType,
+  CredentialIssueOptions,
 } from "../domain";
 import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor } from "../domain/buildingBlocks/Castor";
@@ -59,41 +60,34 @@ export class AgentCredentials implements AgentCredentialsClass {
    * @returns {Promise<VerifiableCredential>}
    */
   async processIssuedCredentialMessage(
-    message: IssueCredential
+    issueCredential: IssueCredential
   ): Promise<Credential> {
-    const attachment = message.attachments.at(0)?.data;
+    const credentialType = this.pollux.extractCredentialFormatFromMessage(
+      issueCredential.makeMessage()
+    );
+    const attachment = issueCredential.attachments.at(0)?.data;
 
     if (!attachment) {
       throw new Error("No attachment");
     }
 
-    const jwtData = base64url.baseDecode(
+    const credData = base64url.baseDecode(
       (attachment as AttachmentBase64).base64
     );
 
-    const credential = this.pollux.parseCredential(jwtData, {
-      type: CredentialType.JWT,
-    });
+    const options: CredentialIssueOptions = {
+      type: credentialType,
+    };
+
+    if (credentialType === CredentialType.AnonCreds) {
+      options.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
+    }
+
+    const credential = this.pollux.parseCredential(credData, options);
 
     await this.pluto.storeCredential(credential);
 
     return credential;
-  }
-
-  private getCredentialTypeFromOffer(offer: OfferCredential): CredentialType {
-    const {
-      body: { formats },
-    } = offer;
-
-    if (formats.find(({ format }) => format === CredentialType.JWT)) {
-      return CredentialType.JWT;
-    } else if (
-      formats.find(({ format }) => format === CredentialType.AnonCreds)
-    ) {
-      return CredentialType.AnonCreds;
-    }
-
-    throw new Error("Unsupported Credential Type");
   }
 
   /**
@@ -106,7 +100,9 @@ export class AgentCredentials implements AgentCredentialsClass {
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
-    const credentialType = this.getCredentialTypeFromOffer(offer);
+    const credentialType = this.pollux.extractCredentialFormatFromMessage(
+      offer.makeMessage()
+    );
     const message = offer.makeMessage();
 
     let credBuffer: string;
@@ -170,6 +166,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       to,
       thid
     );
+
     return requestCredential;
   }
 
