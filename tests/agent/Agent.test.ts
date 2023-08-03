@@ -9,6 +9,7 @@ import * as UUIDLib from "@stablelib/uuid";
 import Apollo from "../../src/apollo/Apollo";
 import { CastorMock } from "./mocks/CastorMock";
 import { ConnectionsManagerMock } from "./mocks/ConnectionManagerMock";
+import * as Fixtures from "../pollux/fixtures";
 
 import {
   Api,
@@ -22,6 +23,9 @@ import { DIDCommProtocol } from "../../src/mercury/DIDCommProtocol";
 import { Castor } from "../../src/domain/buildingBlocks/Castor";
 import { AgentError } from "../../src/domain/models/Errors";
 import { HandshakeRequest } from "../../src/prism-agent/protocols/connection/HandshakeRequest";
+import { OfferCredential } from "../../src/prism-agent/protocols/issueCredential/OfferCredential";
+import { ProtocolType } from "../../src/prism-agent/protocols/ProtocolTypes";
+import { CredentialPreview } from "../../src/prism-agent/protocols/issueCredential/CredentialPreview";
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -129,8 +133,14 @@ describe("Agent Tests", () => {
       const validOOB =
         "https://my.domain.com/path?_oob=eyJpZCI6Ijg5NWYzMWZhLTIyNWUtNDRlNi1hNzkyLWFhN2E0OGY1MjgzYiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNlenlrY0JqTUtnR1BFRGg0NHBDOFFmdTdjQ3pKb3NWdVY0anA2eDVZNUJITC5WejZNa3dSSnQxU21acDNhRERoTFVuNGZLMzNtOExMWlhXOTJYVDh2clVIdTR1cEE2LlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19";
 
-      const createPeerDID = sandbox.stub(didHigherFunctions, "createNewPeerDID");
-      const sendMessage = sandbox.stub(agentInvitationsConnection, "sendMessage");
+      const createPeerDID = sandbox.stub(
+        didHigherFunctions,
+        "createNewPeerDID"
+      );
+      const sendMessage = sandbox.stub(
+        agentInvitationsConnection,
+        "sendMessage"
+      );
       const addConnection = sandbox.stub(
         agentInvitationsConnection,
         "addConnection"
@@ -161,7 +171,9 @@ describe("Agent Tests", () => {
 
   describe("LinkSecret generation", () => {
     it("getLinkSecret returns null - storeLinkSecret is called", async () => {
-      const stubGetLinkSecret = sandbox.stub(pluto, "getLinkSecret").returns(Promise.resolve(null));
+      const stubGetLinkSecret = sandbox
+        .stub(pluto, "getLinkSecret")
+        .returns(Promise.resolve(null));
       const spyStoreLinkSecret = sandbox.spy(pluto, "storeLinkSecret");
 
       await agent.start();
@@ -171,7 +183,9 @@ describe("Agent Tests", () => {
     });
 
     it("getLinkSecret returns null - storeLinkSecret not called", async () => {
-      const stubGetLinkSecret = sandbox.stub(pluto, "getLinkSecret").returns(Promise.resolve({} as any));
+      const stubGetLinkSecret = sandbox
+        .stub(pluto, "getLinkSecret")
+        .returns(Promise.resolve({} as any));
       const spyStoreLinkSecret = sandbox.spy(pluto, "storeLinkSecret");
 
       await agent.start();
@@ -180,4 +194,50 @@ describe("Agent Tests", () => {
       expect(spyStoreLinkSecret).not.to.have.been.called;
     });
   });
-})
+
+  describe("AnonCreds", () => {
+    it("Should create a credential request from a valid didcomm CredentialOffer Message", async () => {
+      const offerBody = Fixtures.credOffer;
+
+      const credentialPreview: CredentialPreview = {
+        type: ProtocolType.DidcommCredentialPreview,
+        attributes: [
+          {
+            name: "name",
+            value: "atala",
+            mimeType: "text",
+          },
+        ],
+      };
+      const mypeerDID = new DID(
+        "did",
+        "peer",
+        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      );
+      const validPeerDID = DID.fromString(
+        `did:peer:2.Ez6LSoHkfN1Y4nK9RCjx7vopWsLrMGNFNgTNZgoCNQrTzmb1n.Vz6MknRZmapV7uYZQuZez9n9N3tQotjRN18UGS68Vcfo6gR4h.SeyJyIjpbImRpZDpleGFtcGxlOnNvbWVtZWRpYXRvciNzb21la2V5Il0sInMiOiJodHRwczovL2V4YW1wbGUuY29tL2VuZHBvaW50IiwiYSI6W10sInQiOiJkbSJ9`
+      );
+
+      const credentialMap = new Map();
+
+      credentialMap.set("atala", offerBody);
+
+      const offer = OfferCredential.build(
+        credentialPreview,
+        mypeerDID,
+        validPeerDID,
+        undefined,
+        credentialMap
+      );
+
+      const requestCredential = await agent.prepareRequestCredentialWithIssuer(
+        offer
+      );
+
+      console.log(requestCredential);
+      debugger;
+    });
+
+    it("Should be able to parse a credential and convert it into a storable object from a valid didcomm CredentialIssue Message", async () => {});
+  });
+});
