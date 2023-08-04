@@ -13,6 +13,7 @@ import * as Fixtures from "../pollux/fixtures";
 
 import {
   Api,
+  CredentialType,
   DID,
   HttpResponse,
   Message,
@@ -26,6 +27,7 @@ import { HandshakeRequest } from "../../src/prism-agent/protocols/connection/Han
 import { OfferCredential } from "../../src/prism-agent/protocols/issueCredential/OfferCredential";
 import { ProtocolType } from "../../src/prism-agent/protocols/ProtocolTypes";
 import { CredentialPreview } from "../../src/prism-agent/protocols/issueCredential/CredentialPreview";
+import { RequestCredential } from "../../src/prism-agent/protocols/issueCredential/RequestCredential";
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -196,6 +198,9 @@ describe("Agent Tests", () => {
   });
 
   describe("AnonCreds", () => {
+    beforeEach(async () => {
+      await agent.start();
+    });
     it("Should create a credential request from a valid didcomm CredentialOffer Message", async () => {
       const offerBody = Fixtures.credOffer;
 
@@ -204,7 +209,7 @@ describe("Agent Tests", () => {
         attributes: [
           {
             name: "name",
-            value: "atala",
+            value: "javi",
             mimeType: "text",
           },
         ],
@@ -220,7 +225,7 @@ describe("Agent Tests", () => {
 
       const credentialMap = new Map();
 
-      credentialMap.set("atala", offerBody);
+      credentialMap.set(CredentialType.AnonCreds, offerBody);
 
       const offer = OfferCredential.build(
         credentialPreview,
@@ -234,8 +239,22 @@ describe("Agent Tests", () => {
         offer
       );
 
-      console.log(requestCredential);
-      debugger;
+      expect(requestCredential instanceof RequestCredential).to.equal(true);
+      expect(requestCredential.to?.toString()).to.equal(offer.from?.toString());
+      expect(requestCredential.from.toString()).to.equal(offer.to?.toString());
+
+      expect(Array.isArray(requestCredential.body.formats)).to.equal(true);
+      expect(requestCredential.body.formats.length === 1).to.equal(true);
+      expect(
+        requestCredential.body.formats[0].format === CredentialType.AnonCreds
+      ).to.equal(true);
+
+      const foundAttachment = requestCredential.attachments.find(
+        ({ id }) => id === requestCredential.body.formats[0].attach_id
+      );
+
+      expect(foundAttachment).to.not.be.undefined;
+      expect(foundAttachment?.format).to.equal(CredentialType.AnonCreds);
     });
 
     it("Should be able to parse a credential and convert it into a storable object from a valid didcomm CredentialIssue Message", async () => {});

@@ -152,16 +152,26 @@ export class AgentCredentials implements AgentCredentialsClass {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const to = offer.from!;
     const thid = offer.thid;
+    const attachments = [
+      new AttachmentDescriptor(
+        {
+          base64: base64.baseEncode(Buffer.from(credBuffer)),
+        },
+        `prism/${credentialType}`,
+        undefined,
+        undefined,
+        //TODO confirm what is the format that backend expects us to send AnonCreds VS JWT
+        credentialType
+      ),
+    ];
+    attachments.forEach((attachment, index) => {
+      if (offer.body.formats[index].attach_id) {
+        offer.body.formats[index].attach_id = attachment.id;
+      }
+    });
     const requestCredential = new RequestCredential(
       requestCredentialBody,
-      [
-        new AttachmentDescriptor(
-          {
-            base64: base64.baseEncode(Buffer.from(credBuffer)),
-          },
-          `prism/${credentialType}`
-        ),
-      ],
+      attachments,
       from,
       to,
       thid

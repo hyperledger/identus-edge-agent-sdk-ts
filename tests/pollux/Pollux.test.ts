@@ -5,6 +5,10 @@ import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
 import * as Fixtures from "./fixtures";
+import {
+  cloudAgentCredentialJwt,
+  cloudAgentCredentialPayload,
+} from "./test-vectors";
 
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -20,28 +24,15 @@ describe("Pollux", () => {
     const apollo = {} as Apollo;
     const castor = new Castor(apollo);
     pollux = new Pollux(castor);
+    await pollux.start();
   });
 
   describe("parseVerifiableCredential", () => {
     describe("Invalid JWT string", () => {
       ["", `${jwtParts[0]}`, `${jwtParts[0]}.${jwtParts[1]}`].forEach(
         (value) => {
-          it(`should error when too few parts [${value.split(".").length
-            }]`, () => {
-              expect(() =>
-                pollux.parseCredential(Buffer.from(value), {
-                  type: CredentialType.JWT,
-                })
-              ).throws(InvalidJWTString);
-            });
-        }
-      );
-
-      [
-        `${jwtString}.${jwtParts[0]}`,
-        `${jwtString}.${jwtParts[0]}.${jwtParts[1]}`,
-      ].forEach((value) => {
-        it(`should error when too many parts [${value.split(".").length
+          it(`should error when too few parts [${
+            value.split(".").length
           }]`, () => {
             expect(() =>
               pollux.parseCredential(Buffer.from(value), {
@@ -49,6 +40,22 @@ describe("Pollux", () => {
               })
             ).throws(InvalidJWTString);
           });
+        }
+      );
+
+      [
+        `${jwtString}.${jwtParts[0]}`,
+        `${jwtString}.${jwtParts[0]}.${jwtParts[1]}`,
+      ].forEach((value) => {
+        it(`should error when too many parts [${
+          value.split(".").length
+        }]`, () => {
+          expect(() =>
+            pollux.parseCredential(Buffer.from(value), {
+              type: CredentialType.JWT,
+            })
+          ).throws(InvalidJWTString);
+        });
       });
 
       it("should error when not encoded JSON", () => {
@@ -71,7 +78,11 @@ describe("Pollux", () => {
 
     describe("Valid Credential", () => {
       it(`should return JWTVerifiableCredential`, () => {
-        const jwtPayload = Fixtures.createJWTPayload("jwtid", "proof", CredentialType.JWT);
+        const jwtPayload = Fixtures.createJWTPayload(
+          "jwtid",
+          "proof",
+          CredentialType.JWT
+        );
         const credential = jwtPayload.vc;
         const encoded = encodeCredential(jwtPayload);
         const result = pollux.parseCredential(Buffer.from(encoded), {
@@ -148,15 +159,21 @@ describe("Pollux", () => {
       expect(credReq.blinded_ms).to.have.property("committed_attributes");
       expect(credReq).to.have.property("blinded_ms_correctness_proof");
       expect(credReq.blinded_ms_correctness_proof).to.have.property("c");
-      expect(credReq.blinded_ms_correctness_proof).to.have.property("v_dash_cap");
+      expect(credReq.blinded_ms_correctness_proof).to.have.property(
+        "v_dash_cap"
+      );
       expect(credReq.blinded_ms_correctness_proof).to.have.property("m_caps");
       expect(credReq.blinded_ms_correctness_proof).to.have.property("r_caps");
 
       // CredentialRequestMeta
       const credReqMeta = result[1];
       expect(credReqMeta).to.have.property("link_secret_blinding_data");
-      expect(credReqMeta.link_secret_blinding_data).to.have.property("v_prime").to.be.a("string");
-      expect(credReqMeta).to.have.property("link_secret_name").to.be.a("string");
+      expect(credReqMeta.link_secret_blinding_data)
+        .to.have.property("v_prime")
+        .to.be.a("string");
+      expect(credReqMeta)
+        .to.have.property("link_secret_name")
+        .to.be.a("string");
       expect(credReqMeta).to.have.property("nonce").to.be.a("string");
     });
 
@@ -171,39 +188,72 @@ describe("Pollux", () => {
 
       expect(result).to.be.an("object");
       expect(result).to.have.property("proof");
-      expect(result.proof).to.have.property("proofs").to.be.an("array").to.have.length(1);
+      expect(result.proof)
+        .to.have.property("proofs")
+        .to.be.an("array")
+        .to.have.length(1);
 
-      result.proof.proofs.forEach(proof => {
+      result.proof.proofs.forEach((proof) => {
         expect(proof).to.have.property("primary_proof");
         expect(proof.primary_proof).to.have.property("eq_proof");
         expect(proof.primary_proof.eq_proof).to.have.property("revealed_attrs");
-        expect(proof.primary_proof.eq_proof.revealed_attrs).to.have.property("name").to.be.a("string");
-        expect(proof.primary_proof.eq_proof).to.have.property("a_prime").to.be.a("string");
-        expect(proof.primary_proof.eq_proof).to.have.property("e").to.be.a("string");
-        expect(proof.primary_proof.eq_proof).to.have.property("m").to.be.an("object");
-        expect(proof.primary_proof.eq_proof.m).to.have.property("age").to.be.an("string");
-        expect(proof.primary_proof.eq_proof.m).to.have.property("master_secret").to.be.an("string");
-        expect(proof.primary_proof.eq_proof).to.have.property("m2").to.be.a("string");
-        expect(proof.primary_proof.eq_proof).to.have.property("v").to.be.a("string");
+        expect(proof.primary_proof.eq_proof.revealed_attrs)
+          .to.have.property("name")
+          .to.be.a("string");
+        expect(proof.primary_proof.eq_proof)
+          .to.have.property("a_prime")
+          .to.be.a("string");
+        expect(proof.primary_proof.eq_proof)
+          .to.have.property("e")
+          .to.be.a("string");
+        expect(proof.primary_proof.eq_proof)
+          .to.have.property("m")
+          .to.be.an("object");
+        expect(proof.primary_proof.eq_proof.m)
+          .to.have.property("age")
+          .to.be.an("string");
+        expect(proof.primary_proof.eq_proof.m)
+          .to.have.property("master_secret")
+          .to.be.an("string");
+        expect(proof.primary_proof.eq_proof)
+          .to.have.property("m2")
+          .to.be.a("string");
+        expect(proof.primary_proof.eq_proof)
+          .to.have.property("v")
+          .to.be.a("string");
 
-        expect(proof.primary_proof).to.have.property("ge_proofs").to.be.an("array").to.have.length(1);
+        expect(proof.primary_proof)
+          .to.have.property("ge_proofs")
+          .to.be.an("array")
+          .to.have.length(1);
 
-        proof.primary_proof.ge_proofs.forEach(geProof => {
+        proof.primary_proof.ge_proofs.forEach((geProof) => {
           expect(geProof).to.have.property("mj").to.be.a("string");
           expect(geProof).to.have.property("alpha").to.be.a("string");
           expect(geProof).to.have.property("r").to.be.an("object");
           expect(geProof).to.have.property("t").to.be.an("object");
           expect(geProof).to.have.property("u").to.be.an("object");
           expect(geProof).to.have.property("predicate").to.be.an("object");
-          expect(geProof.predicate).to.have.property("attr_name", Fixtures.presRequest.requested_predicates.predicate1_referent.name);
+          expect(geProof.predicate).to.have.property(
+            "attr_name",
+            Fixtures.presRequest.requested_predicates.predicate1_referent.name
+          );
           expect(geProof.predicate).to.have.property("p_type", "GE");
-          expect(geProof.predicate).to.have.property("value", Fixtures.presRequest.requested_predicates.predicate1_referent.p_value);
+          expect(geProof.predicate).to.have.property(
+            "value",
+            Fixtures.presRequest.requested_predicates.predicate1_referent
+              .p_value
+          );
         });
       });
 
       expect(result.proof).to.have.property("aggregated_proof");
-      expect(result.proof.aggregated_proof).to.have.property("c_hash").to.be.a("string");
-      expect(result.proof.aggregated_proof).to.have.property("c_list").to.be.an("array");
+      expect(result.proof.aggregated_proof)
+        .to.have.property("c_hash")
+        .to.be.a("string");
+      expect(result.proof.aggregated_proof)
+        .to.have.property("c_list")
+        .to.be.an("array");
 
       expect(result).to.have.property("requested_proof");
       expect(result.requested_proof).to.have.property("predicates");
@@ -211,12 +261,15 @@ describe("Pollux", () => {
       expect(result.requested_proof).to.have.property("self_attested_attrs");
       expect(result.requested_proof).to.have.property("unrevealed_attrs");
 
-      expect(result).to.have.property("identifiers").to.be.an("array").to.have.length(1);
+      expect(result)
+        .to.have.property("identifiers")
+        .to.be.an("array")
+        .to.have.length(1);
 
-      result.identifiers.forEach(identifier => {
+      result.identifiers.forEach((identifier) => {
         expect(identifier).to.have.property("schema_id", Fixtures.schemaId);
         expect(identifier).to.have.property("cred_def_id", Fixtures.credDefId);
-      })
+      });
     });
 
     test("processCredential", () => {
@@ -232,9 +285,27 @@ describe("Pollux", () => {
       expect(result).to.have.property("signature");
       expect(result).to.have.property("signature_correctness_proof");
 
-      Fixtures.credentialIssued.values.forEach(value => {
-        expect(result.values).to.have.property(value[0]).to.deep.equal(value[1]);
+      Fixtures.credentialIssued.values.forEach((value) => {
+        expect(result.values)
+          .to.have.property(value[0])
+          .to.deep.equal(value[1]);
       });
-    })
-  })
+    });
+  });
+  it("should parse JWT dates (NumericDate) correctly", () => {
+    const nbf = cloudAgentCredentialPayload.nbf;
+    const exp = cloudAgentCredentialPayload.exp;
+    const result = pollux.parseCredential(
+      Buffer.from(cloudAgentCredentialJwt),
+      {
+        type: CredentialType.JWT,
+      }
+    ) as JWTCredential;
+
+    const issuanceDate = new Date(nbf).toISOString();
+    const expirationDate = new Date(exp).toISOString();
+
+    expect(result.issuanceDate).to.equal(issuanceDate);
+    expect(result.expirationDate).to.equal(expirationDate);
+  });
 });

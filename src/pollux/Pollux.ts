@@ -1,7 +1,7 @@
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pollux as PolluxInterface } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
-import { base64url } from "multiformats/bases/base64";
+import { base64url, base64 } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import { CredentialRequestOptions } from "../domain/models/Credential";
 import {
@@ -10,9 +10,11 @@ import {
   CredentialType,
   JWTCredential,
   Message,
+  AttachmentBase64,
 } from "../domain";
 import { JWT } from "../apollo/utils/jwt/JWT";
 import { Anoncreds } from "./models/Anoncreds";
+import * as Fixtures from "../../tests/pollux/fixtures";
 
 /**
  * Implementation of PolluxInterface and responsible of handling credential related tasks
@@ -46,7 +48,7 @@ export default class Pollux implements PolluxInterface {
     if (!formats || !Array.isArray(formats) || formats.length <= 0) {
       return CredentialType.Unknown;
     }
-    const [format] = formats;
+    const [{ format }] = formats;
     if (!format) {
       return CredentialType.Unknown;
     }
@@ -95,13 +97,23 @@ export default class Pollux implements PolluxInterface {
   private async fetchCredentialDefinition(
     credentialDefinitionId: string
   ): Promise<Anoncreds.CredentialDefinition> {
-    return {
-      schemaId: "123",
-      type: "CL",
-      tag: "¿?",
-      value: {},
-      issuerId: "1234",
-    };
+    return Fixtures.credDef;
+  }
+
+  private extractAttachment(body: any, attachments: AttachmentDescriptor[]) {
+    if (!body.formats || body.formats.length <= 0) {
+      throw new Error("Invalid credential format");
+    }
+    const [{ attach_id }] = body.formats;
+    const attachment = attachments.find(({ id }) => id === attach_id);
+    if (!attachment) {
+      throw new Error("Attachment not found");
+    }
+    return JSON.parse(
+      Buffer.from(
+        base64.baseDecode((attachment.data as AttachmentBase64).base64)
+      ).toString()
+    );
   }
 
   private isAnonCredsBody(body: any): body is Anoncreds.CredentialOffer {
@@ -128,9 +140,11 @@ export default class Pollux implements PolluxInterface {
     )
       return false;
     if (
-      xr_cap.length !== 2 ||
-      typeof xr_cap[0] !== "string" ||
-      typeof xr_cap[1] !== "string"
+      xr_cap.length <= 0 ||
+      xr_cap.find(
+        ([first, second]) =>
+          typeof first !== "string" || typeof second !== "string"
+      )
     )
       return false;
 
@@ -144,12 +158,15 @@ export default class Pollux implements PolluxInterface {
     options: CredentialRequestOptions
   ) {
     const body = JSON.parse(offer.body);
-    const isAnonCredsBody = this.isAnonCredsBody(body);
+
+    const credentialOfferBody = this.extractAttachment(body, offer.attachments);
+
+    const isAnonCredsBody = this.isAnonCredsBody(credentialOfferBody);
     if (!isAnonCredsBody) {
       throw new Error("Invalid AnonCreds offer body");
     }
 
-    const { cred_def_id } = body;
+    const { cred_def_id } = credentialOfferBody;
     const credentialDefinition = await this.fetchCredentialDefinition(
       cred_def_id
     );
@@ -160,7 +177,7 @@ export default class Pollux implements PolluxInterface {
     }
 
     const [credentialRequest] = await this.anoncreds.createCredentialRequest(
-      body,
+      credentialOfferBody,
       credentialDefinition,
       linkSecret,
       linkSecret
