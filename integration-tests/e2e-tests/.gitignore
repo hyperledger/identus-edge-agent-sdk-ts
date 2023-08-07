@@ -1,0 +1,7 @@
+node_modules
+target
+pluto.db
+.DS_Store
+.idea
+.env*
+notes

@@ -1,0 +1,82 @@
+name: SDK-TS E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      mediatorOobUrl:
+        required: true
+        description: Mediator out-of-band url
+        default: https://mediator.rootsid.cloud/oob_url
+      prismAgentUrl:
+        required: true
+        description: Prism-agent server url
+        default: https://k8s-dev.atalaprism.io/prism-agent
+      publishedDid:
+        required: false
+        description: Published DID
+      schemaId:
+        required: false
+        description: Schema ID
+      apiKey:
+        required: false
+        description: Authorization key
+  push:
+    tags: "v*"
+  pull_request:
+    branches:
+      - main
+
+env:
+  GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
+  GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
+  MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || secrets.MEDIATOR_OOB_URL }}
+  PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || secrets.PRISM_AGENT_URL }}
+  PUBLISHED_DID: ${{ inputs.publishedDid || secrets.PUBLISHED_DID }}
+  SCHEMA_ID: ${{ inputs.schemaId || secrets.SCHEMA_ID }}
+  APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
+
+jobs:
+  run-local-e2e:
+    name: "Run e2e tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Mask apikey
+        run: echo "::add-mask::${{env.APIKEY}}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+
+      - uses: crazy-max/ghaction-import-gpg@v5
+        id: import_gpg
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Update atala-prism-wallet-sdk-ts version
+        working-directory: integration-tests/e2e-tests
+        run: |
+          yarn
+          yarn add @input-output-hk/atala-prism-wallet-sdk-ts@latest
+          git add .
+          git diff-index --quiet HEAD || git commit -m chore: update atala-prism-wallet-sdk-ts version for e2e test && git push
+
+      - name: Run tests
+        working-directory: integration-tests/e2e-tests
+        run: |
+          yarn test:sdk
+          yarn test:sdk:report
+
+      - name: Add notes to summary
+        working-directory: integrations-tests/e2e-tests
+        run: cat notes >> $GITHUB_STEP_SUMMARY
+
+      - name: Publish Serenity report
+        uses: actions/upload-artifact@v3
+        with:
+          name: atala-prism-sdk-ts.zip
+          path: integration_tests/target/wallet-sdk-ts
+          if-no-files-found: error
