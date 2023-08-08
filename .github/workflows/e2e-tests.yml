@@ -1,5 +1,9 @@
 name: SDK-TS E2E
 
+concurrency:
+  group: ${{ github.head_ref }}${{ github.ref }}-e2e
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
     inputs:
@@ -65,13 +69,12 @@ jobs:
           git_user_signingkey: true
           git_commit_gpgsign: true
 
-      - name: Update atala-prism-wallet-sdk-ts version
+      - name: Update atala-prism-wallet-sdk version
         working-directory: integration-tests/e2e-tests
         run: |
           yarn
           yarn add @input-output-hk/atala-prism-wallet-sdk@latest
-          git add .
-          git diff-index --quiet HEAD || git commit -m chore: update atala-prism-wallet-sdk-ts version for e2e test && git push
+          git diff-index --quiet HEAD || git add . && git commit -m "chore: update atala-prism-wallet-sdk-ts version for e2e test" && git push
 
       - name: Run tests
         working-directory: integration-tests/e2e-tests
