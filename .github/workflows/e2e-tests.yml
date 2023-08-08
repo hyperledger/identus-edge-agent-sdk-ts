@@ -78,7 +78,7 @@ jobs:
           yarn test:sdk:report
 
       - name: Add notes to summary
-        working-directory: integrations-tests/e2e-tests
+        working-directory: integration-tests/e2e-tests
         run: cat notes >> $GITHUB_STEP_SUMMARY
 
       - name: Publish Serenity report
