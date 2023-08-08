@@ -24,7 +24,7 @@ on:
     tags: "v*"
   pull_request:
     branches:
-      - main
+      - master
 
 env:
   GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
