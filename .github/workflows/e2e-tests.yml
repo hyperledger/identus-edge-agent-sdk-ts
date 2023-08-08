@@ -79,7 +79,7 @@ jobs:
 
       - name: Add notes to summary
         working-directory: integrations-tests/e2e-tests
-        run: cat notes >> $GITHUB_STEP_SUMMARY
+        run: cat notes >> $GITHUB_STEP_SUMMARY 2> /dev/null
 
       - name: Publish Serenity report
         uses: actions/upload-artifact@v3
