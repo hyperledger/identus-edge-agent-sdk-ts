@@ -73,6 +73,7 @@ jobs:
       - name: Run tests
         working-directory: integration-tests/e2e-tests
         run: |
+          yarn
           yarn test:sdk
           yarn test:sdk:report
 
