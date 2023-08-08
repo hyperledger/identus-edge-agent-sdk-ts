@@ -55,6 +55,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+          registry-url: "https://npm.pkg.github.com"
 
       - uses: crazy-max/ghaction-import-gpg@v5
         id: import_gpg
