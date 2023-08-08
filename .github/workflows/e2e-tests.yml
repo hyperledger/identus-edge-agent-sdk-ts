@@ -85,5 +85,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: atala-prism-sdk-ts.zip
-          path: integration-tests/e2e-tests/target/wallet-sdk-ts
+          path: integration-tests/e2e-tests/target/site/wallet-sdk-ts
           if-no-files-found: error
