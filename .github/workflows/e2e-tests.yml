@@ -68,8 +68,8 @@ jobs:
       - name: Update atala-prism-wallet-sdk-ts version
         working-directory: integration-tests/e2e-tests
         run: |
-          yarn
-          yarn add @input-output-hk/atala-prism-wallet-sdk-ts@latest
+          npm i
+          npm i @input-output-hk/atala-prism-wallet-sdk-ts@latest
           git add .
           git diff-index --quiet HEAD || git commit -m chore: update atala-prism-wallet-sdk-ts version for e2e test && git push
 
