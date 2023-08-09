@@ -48,3 +48,4 @@ jobs:
         with:
           coverage-file: ./coverage/coverage-final.json
           base-coverage-file: ./coverage/coverage-final.json
+          skip-step: all
