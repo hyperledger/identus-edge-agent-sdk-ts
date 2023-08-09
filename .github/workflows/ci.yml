@@ -34,23 +34,22 @@ jobs:
       - name: Install
         run: npm install
 
-#      - name: Eslint
-#        run: npx eslint .
-#
-#      - name: Build
-#        run: npm run build
-#
-#      - name: Tests with Code Coverage
-#        run: npm run coverage
-#
-#      - name: Publish coverage
-#        uses: ArtiomTr/jest-coverage-report-action@v2
+      - name: Eslint
+        run: npx eslint .
+
+      - name: Build
+        run: npm run build
+
+      - name: Tests with Code Coverage
+        run: npm run coverage
+
+      - name: Publish coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
 
       - name: Pack
-        id: pack
         run: |
           npm pack
-          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "GITHUB_ENV"
+          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
 
       - name: Run E2E test in SIT environment
         working-directory: integration-tests/e2e-tests
@@ -62,6 +61,5 @@ jobs:
           APIKEY: ${{ secrets.APIKEY }}
         run: |
           yarn
-          echo ${{ env.PACKAGE_NAME }}
           yarn add "../../${{ env.PACKAGE_NAME }}"
           yarn test:sdk
