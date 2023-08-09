@@ -1,4 +1,4 @@
-name: SDK-TS E2E
+name: End-to-end tests
 
 concurrency:
   group: ${{ github.head_ref }}${{ github.ref }}-e2e
@@ -42,7 +42,7 @@ env:
 
 jobs:
   run-e2e-tests:
-    name: "Run e2e tests"
+    name: "Run"
     runs-on: ubuntu-latest
 
     steps:
