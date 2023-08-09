@@ -62,5 +62,5 @@ jobs:
           APIKEY: ${{ secrets.APIKEY }}
         run: |
           yarn
-          yarn add ${{ env.PACKAGE_NAME }}
+          yarn add "../../${{ env.PACKAGE_NAME }}"
           yarn test:sdk
