@@ -66,6 +66,7 @@ jobs:
       - name: Pack atala-prism-wallet-sdk
         if: github.event_name == 'pull_request'
         run: |
+          npm install
           npm pack
           echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
 
