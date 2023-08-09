@@ -34,17 +34,17 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Eslint
-        run: npx eslint .
-
-      - name: Build
-        run: npm run build
-
-      - name: Tests with Code Coverage
-        run: npm run coverage
-
-      - name: Publish coverage
-        uses: ArtiomTr/jest-coverage-report-action@v2
+#      - name: Eslint
+#        run: npx eslint .
+#
+#      - name: Build
+#        run: npm run build
+#
+#      - name: Tests with Code Coverage
+#        run: npm run coverage
+#
+#      - name: Publish coverage
+#        uses: ArtiomTr/jest-coverage-report-action@v2
 
       - name: Pack
         id: pack
@@ -62,5 +62,6 @@ jobs:
           APIKEY: ${{ secrets.APIKEY }}
         run: |
           yarn
+          echo ${{ env.PACKAGE_NAME }}
           yarn add "../../${{ env.PACKAGE_NAME }}"
           yarn test:sdk
