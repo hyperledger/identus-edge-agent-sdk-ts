@@ -44,8 +44,6 @@ jobs:
         run: npm run coverage
 
       - name: Publish coverage
-        uses: ArtiomTr/jest-coverage-report-action@v2
+        uses: VeryGoodOpenSource/very_good_coverage@v2.1.0
         with:
-          coverage-file: ./coverage/coverage-final.json
-          base-coverage-file: ./coverage/coverage-final.json
-          skip-step: all
+          min_coverage: 30
