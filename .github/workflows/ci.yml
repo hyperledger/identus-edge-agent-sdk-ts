@@ -42,8 +42,3 @@ jobs:
 
       - name: Tests with Code Coverage
         run: npm run coverage
-
-      - name: Publish coverage
-        uses: zgosalvez/github-actions-report-lcov@v3.1.8
-        with:
-          coverage-files: coverage/lcov.info
