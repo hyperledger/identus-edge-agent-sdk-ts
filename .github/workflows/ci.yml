@@ -42,3 +42,25 @@ jobs:
 
       - name: Tests with Code Coverage
         run: npm run coverage
+
+      - name: Publish coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+
+      - name: Pack
+        id: pack
+        run: |
+          npm pack
+          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "GITHUB_ENV"
+
+      - name: Run E2E test in SIT environment
+        working-directory: integration-tests/e2e-tests
+        env:
+          MEDIATOR_OOB_URL: ${{ secrets.MEDIATOR_OOB_URL }}
+          PRISM_AGENT_URL: ${{ secrets.PRISM_AGENT_URL }}
+          PUBLISHED_DID: ${{ secrets.PUBLISHED_DID }}
+          SCHEMA_ID: ${{ secrets.SCHEMA_ID }}
+          APIKEY: ${{ secrets.APIKEY }}
+        run: |
+          yarn
+          yarn add ${{ env.PACKAGE_NAME }}
+          yarn test:sdk
