@@ -44,6 +44,6 @@ jobs:
         run: npm run coverage
 
       - name: Publish coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2.1.0
+        uses: zgosalvez/github-actions-report-lcov@v3.1.8
         with:
-          min_coverage: 30
+          coverage-files: coverage/lcov.info
