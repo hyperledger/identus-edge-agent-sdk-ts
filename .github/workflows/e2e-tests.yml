@@ -64,13 +64,13 @@ jobs:
           scope: "@input-output-hk"
 
       - name: Pack atala-prism-wallet-sdk
-        if: github.event_name == "pull_request"
+        if: github.event_name == 'pull_request'
         run: |
           npm pack
           echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
 
       - name: Install local dependency
-        if: github.event_name = "pull_request"
+        if: github.event_name == 'pull_request'
         working-directory: integration-tests/e2e-tests
         run: |
           yarn
