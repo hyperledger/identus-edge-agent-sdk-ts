@@ -26,6 +26,9 @@ on:
       apiKey:
         required: false
         description: Authorization key
+    pull_request:
+      branches:
+        - master
 
 env:
   GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
@@ -38,7 +41,7 @@ env:
   NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
 
 jobs:
-  run-local-e2e:
+  run-e2e-tests:
     name: "Run e2e tests"
     runs-on: ubuntu-latest
 
