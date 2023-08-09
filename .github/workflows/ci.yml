@@ -42,3 +42,5 @@ jobs:
 
       - name: Publish coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          threshold: 30
