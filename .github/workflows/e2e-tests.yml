@@ -67,6 +67,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           npm install
+          npm run build
           npm pack
           echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
 
