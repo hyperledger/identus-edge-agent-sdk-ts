@@ -40,5 +40,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Tests with Code Coverage
-        run: npm run coverage
+      - name: Publish coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          threshold: 30
