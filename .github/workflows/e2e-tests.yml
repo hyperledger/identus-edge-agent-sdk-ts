@@ -1,0 +1,97 @@
+name: End-to-end tests
+
+concurrency:
+  group: ${{ github.head_ref }}${{ github.ref }}-e2e
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      mediatorOobUrl:
+        required: true
+        description: Mediator out-of-band url
+        default: https://mediator.rootsid.cloud/oob_url
+      prismAgentUrl:
+        required: true
+        description: Prism-agent server url
+        default: https://k8s-dev.atalaprism.io/prism-agent
+      publishedDid:
+        required: false
+        description: Published DID
+      schemaId:
+        required: false
+        description: Schema ID
+      apiKey:
+        required: false
+        description: Authorization key
+  pull_request:
+    branches:
+      - master
+
+env:
+  GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
+  GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
+  MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || secrets.MEDIATOR_OOB_URL }}
+  PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || secrets.PRISM_AGENT_URL }}
+  PUBLISHED_DID: ${{ inputs.publishedDid || secrets.PUBLISHED_DID }}
+  SCHEMA_ID: ${{ inputs.schemaId || secrets.SCHEMA_ID }}
+  APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
+  NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
+
+jobs:
+  run-e2e-tests:
+    name: "Run"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Mask apikey
+        run: echo "::add-mask::${{env.APIKEY}}"
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ATALA_GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+          registry-url: https://npm.pkg.github.com/
+          scope: "@input-output-hk"
+
+      - name: Pack atala-prism-wallet-sdk
+        if: github.event_name == 'pull_request'
+        run: |
+          npm install
+          npm run build
+          npm pack
+          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
+
+      - name: Install local dependency
+        if: github.event_name == 'pull_request'
+        working-directory: integration-tests/e2e-tests
+        run: |
+          yarn
+          yarn add "../../${{ env.PACKAGE_NAME }}"
+
+      - name: Run tests
+        working-directory: integration-tests/e2e-tests
+        run: |
+          yarn
+          yarn test:sdk
+          yarn test:sdk:report
+
+      - name: Add notes to summary
+        working-directory: integration-tests/e2e-tests
+        run: cat notes >> $GITHUB_STEP_SUMMARY
+
+      - name: Publish Serenity report
+        uses: actions/upload-artifact@v3
+        with:
+          name: atala-prism-sdk-ts.zip
+          path: integration-tests/e2e-tests/target/site/wallet-sdk-ts
+          if-no-files-found: error
