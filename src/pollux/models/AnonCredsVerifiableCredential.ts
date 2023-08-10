@@ -1,12 +1,15 @@
-import { Credential, StorableCredential } from "./Credential";
-import { CredentialType } from "./VerifiableCredential";
+import { Anoncreds } from "../../domain/models/Anoncreds";
+import { Credential, StorableCredential } from "../../domain/models/Credential";
+import { CredentialType } from "../../domain/models/VerifiableCredential";
 
 export enum AnonCredsCredentialProperties {
   iss = "iss",
   jti = "jti",
-  sub = "sub",
-  vc = "vc",
-  meta = "metadata",
+  schemaId = "schemaId",
+  credentialDefinitionId = "credentialDefinitionId",
+  values = "values",
+  signasture = "signature",
+  signatureCorrectnessProof = "signatureCorrectnessProof",
   exp = "exp",
 }
 
@@ -20,14 +23,29 @@ export class AnonCredsCredential
   public recoveryId = AnonCredsRecoveryId;
   public properties = new Map<AnonCredsCredentialProperties, any>();
 
-  constructor(
-    verifiableCredential: Record<string, any>,
-    metadata: Record<string, any>
-  ) {
+  constructor(credential: Anoncreds.Credential) {
     super();
 
-    this.properties.set(AnonCredsCredentialProperties.vc, verifiableCredential);
-    this.properties.set(AnonCredsCredentialProperties.meta, metadata);
+    const {
+      schema_id,
+      cred_def_id,
+      values,
+      signature,
+      signature_correctness_proof,
+    } = credential;
+
+    this.properties.set(AnonCredsCredentialProperties.schemaId, schema_id);
+    this.properties.set(
+      AnonCredsCredentialProperties.credentialDefinitionId,
+      cred_def_id
+    );
+    this.properties.set(AnonCredsCredentialProperties.values, values);
+
+    this.properties.set(AnonCredsCredentialProperties.signasture, signature);
+    this.properties.set(
+      AnonCredsCredentialProperties.signatureCorrectnessProof,
+      signature_correctness_proof
+    );
   }
 
   get id() {

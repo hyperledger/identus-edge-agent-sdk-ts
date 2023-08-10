@@ -5,15 +5,16 @@ import { base64url, base64 } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import { CredentialRequestOptions } from "../domain/models/Credential";
 import {
-  AnonCredsCredential,
   AttachmentDescriptor,
   CredentialType,
-  JWTCredential,
   Message,
   AttachmentBase64,
 } from "../domain";
+import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
+
+import { JWTCredential } from "./models/JWTVerifiableCredential";
 import { JWT } from "../apollo/utils/jwt/JWT";
-import { Anoncreds } from "./models/Anoncreds";
+import { Anoncreds } from "../domain/models/Anoncreds";
 import * as Fixtures from "../../tests/pollux/fixtures";
 
 /**
@@ -26,7 +27,7 @@ import * as Fixtures from "../../tests/pollux/fixtures";
 export default class Pollux implements PolluxInterface {
   private _anoncreds: AnoncredsLoader | undefined;
 
-  constructor(private castor: Castor) {}
+  constructor(private castor: Castor, private endpointUrl: string = "") {}
 
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
@@ -62,7 +63,7 @@ export default class Pollux implements PolluxInterface {
     return CredentialType.Unknown;
   }
 
-  private async processJWTCredential(
+  async processJWTCredential(
     offer: Message,
     options: CredentialRequestOptions = {}
   ) {
@@ -95,6 +96,15 @@ export default class Pollux implements PolluxInterface {
   }
 
   private async fetchCredentialDefinition(
+    credentialDefinitionId: string
+  ): Promise<Anoncreds.CredentialDefinition> {
+    //  https:// -> cred + schemas
+
+    // http:// -> crash
+    return Fixtures.credDef;
+  }
+
+  private async fetchCredentialSchema(
     credentialDefinitionId: string
   ): Promise<Anoncreds.CredentialDefinition> {
     return Fixtures.credDef;
@@ -153,10 +163,18 @@ export default class Pollux implements PolluxInterface {
     return true;
   }
 
-  private async processAnonCredsCredential(
+  async processAnonCredsCredential(
     offer: Message,
     options: CredentialRequestOptions
   ) {
+    const { linkSecret, linkSecretName } = options;
+    if (!linkSecret) {
+      throw new Error("Link Secret is not available.");
+    }
+    if (!linkSecretName) {
+      throw new Error("Link Secret is not available.");
+    }
+
     const body = JSON.parse(offer.body);
 
     const credentialOfferBody = this.extractAttachment(body, offer.attachments);
@@ -170,55 +188,35 @@ export default class Pollux implements PolluxInterface {
     const credentialDefinition = await this.fetchCredentialDefinition(
       cred_def_id
     );
-    const { linkSecret } = options;
 
-    if (!linkSecret) {
-      throw new Error("Link Secret is not available.");
-    }
-
-    const [credentialRequest] = await this.anoncreds.createCredentialRequest(
+    return this.anoncreds.createCredentialRequest(
       credentialOfferBody,
       credentialDefinition,
       linkSecret,
-      linkSecret
+      linkSecretName
     );
-
-    return JSON.stringify(credentialRequest);
   }
 
-  async processCredentialRequest(
-    offer: Message,
-    options: CredentialRequestOptions = {}
-  ): Promise<string> {
-    const format = this.extractCredentialFormatFromMessage(offer);
-
-    if (format === CredentialType.JWT) {
-      return this.processJWTCredential(offer, options);
-    } else if (format === CredentialType.AnonCreds) {
-      return this.processAnonCredsCredential(offer, options);
-    }
-
-    throw new Error("wrong credential format");
-  }
-
-  parseCredential(
+  async parseCredential(
     credentialBuffer: Uint8Array,
     options?: {
       type: CredentialType;
       linkSecret?: string;
+      credentialMetadata?: Anoncreds.CredentialRequestMeta;
       [name: string]: any;
     }
   ) {
     const credentialType = options?.type || CredentialType.Unknown;
     const credentialString = Buffer.from(credentialBuffer).toString();
+    const parts = credentialString.split(".");
 
     if (credentialType === CredentialType.JWT) {
-      const parts = credentialString.split(".");
-      const jwtCredentialString = parts.at(1);
-
-      if (parts.length != 3 || jwtCredentialString === undefined)
+      if (parts.length != 3 || parts.at(1) === undefined) {
         throw new InvalidJWTString();
+      }
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const jwtCredentialString = parts.at(1)!;
       const base64Data = base64url.baseDecode(jwtCredentialString);
       const jsonString = Buffer.from(base64Data).toString();
       const jsonParsed = JSON.parse(jsonString);
@@ -227,27 +225,38 @@ export default class Pollux implements PolluxInterface {
     }
 
     if (credentialType === CredentialType.AnonCreds) {
+      if (parts.length != 2) {
+        throw new Error("Invalid AnonCreds String");
+      }
       if (options?.linkSecret === undefined) {
         throw new Error("LinkSecret is required");
       }
-      const parts = credentialString.split(".");
-      if (parts.length != 2) throw new Error("Invalid AnonCreds String");
+      if (options?.credentialMetadata === undefined) {
+        throw new Error("Invalid credential metadata");
+      }
+
+      const linkSecret = options.linkSecret;
+      const credentialMetadata = options.credentialMetadata;
 
       const credentialIssued = JSON.parse(
         Buffer.from(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           base64url.baseDecode(parts.at(0)!)
         ).toString()
+      ) as Anoncreds.CredentialIssued;
+
+      const credentialDefinition = await this.fetchCredentialDefinition(
+        credentialIssued.cred_def_id
       );
 
-      const credentialMetadata = JSON.parse(
-        Buffer.from(
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          base64url.baseDecode(parts.at(1)!)
-        ).toString()
+      const credential = this.anoncreds.processCredential(
+        credentialDefinition,
+        credentialIssued,
+        credentialMetadata,
+        linkSecret
       );
 
-      return new AnonCredsCredential(credentialIssued, credentialMetadata);
+      return new AnonCredsCredential(credential);
     }
 
     throw new Error("Not implemented");

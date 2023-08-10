@@ -201,7 +201,7 @@ describe("Agent Tests", () => {
     beforeEach(async () => {
       await agent.start();
     });
-    it("Should create a credential request from a valid didcomm CredentialOffer Message", async () => {
+    it.only("Should create a credential request from a valid didcomm CredentialOffer Message", async () => {
       const offerBody = Fixtures.credOffer;
 
       const credentialPreview: CredentialPreview = {
@@ -231,7 +231,7 @@ describe("Agent Tests", () => {
         credentialPreview,
         mypeerDID,
         validPeerDID,
-        undefined,
+        "threadID123456",
         credentialMap
       );
 

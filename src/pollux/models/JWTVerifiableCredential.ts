@@ -2,8 +2,8 @@ import {
   Credential,
   ProvableCredential,
   StorableCredential,
-} from "./Credential";
-import { CredentialType } from "./VerifiableCredential";
+} from "../../domain/models/Credential";
+import { CredentialType } from "../../domain/models/VerifiableCredential";
 
 export enum JWTVerifiableCredentialProperties {
   iss = "iss",

@@ -43,6 +43,9 @@ enum AgentState {
   STOPPING = "stopping",
 }
 
+interface AgentConfig {
+  endpointUrl: string;
+}
 /**
  * Edge agent implementation
  *
@@ -98,7 +101,8 @@ export default class Agent
     mediationHandler: MediatorHandler,
     connectionManager: ConnectionsManager,
     seed: Seed = apollo.createRandomSeed().seed,
-    api: Api = new ApiImpl()
+    api: Api = new ApiImpl(),
+    options?: AgentConfig
   ) {
     this.apollo = apollo;
     this.castor = castor;
@@ -107,7 +111,7 @@ export default class Agent
     this.mediationHandler = mediationHandler;
     this.seed = seed;
     this.api = api;
-    this.pollux = new Pollux(castor);
+    this.pollux = new Pollux(castor, options?.endpointUrl);
 
     this.connectionManager =
       connectionManager ||

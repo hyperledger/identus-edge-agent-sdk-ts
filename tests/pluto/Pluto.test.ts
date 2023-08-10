@@ -3,9 +3,10 @@ import {
   Curve,
   DID,
   getKeyCurveByNameAndIndex,
-  JWTCredential,
   PrivateKey,
 } from "../../src/domain";
+import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
+
 import { expect } from "chai";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";

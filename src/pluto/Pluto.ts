@@ -10,11 +10,7 @@ import {
 import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
 import { Pluto as PlutoInterface } from "../domain/buildingBlocks/Pluto";
 import { DIDPair } from "../domain/models/DIDPair";
-import {
-  Credential,
-  JWTVerifiableCredentialRecoveryId,
-  JWTCredential,
-} from "../domain/models";
+import { Credential } from "../domain/models";
 import * as entities from "./entities";
 import Did from "./entities/DID";
 
@@ -37,7 +33,11 @@ import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/Be
 import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
 import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
 import LinkSecret from "./entities/LinkSecret";
-import { Anoncreds } from "../pollux/models/Anoncreds";
+import { Anoncreds } from "../domain/models/Anoncreds";
+import {
+  JWTCredential,
+  JWTVerifiableCredentialRecoveryId,
+} from "../pollux/models/JWTVerifiableCredential";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
@@ -85,12 +85,12 @@ export default class Pluto implements PlutoInterface {
     const presetSqlJSConfig =
       connection.type === "sqljs"
         ? {
-          location: "pluto",
-          useLocalForage: typeof window !== "undefined",
-          sqlJsConfig: {
-            locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
-          },
-        }
+            location: "pluto",
+            useLocalForage: typeof window !== "undefined",
+            sqlJsConfig: {
+              locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
+            },
+          }
         : {};
     this.dataSource = new DataSource({
       ...presetSqlJSConfig,
@@ -382,11 +382,12 @@ export default class Pluto implements PlutoInterface {
         return [];
       }
       return didResponse.map(
-        (item) => ({
-          did: DID.fromString(item.did),
-          alias: item.alias,
-          keyPathIndex: item.private_key_keyPathIndex,
-        } as PrismDIDInfo)
+        (item) =>
+          ({
+            did: DID.fromString(item.did),
+            alias: item.alias,
+            keyPathIndex: item.private_key_keyPathIndex,
+          } as PrismDIDInfo)
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -819,9 +820,13 @@ export default class Pluto implements PlutoInterface {
     return credentials.map<Credential>((credentialEntity) => {
       switch (credentialEntity.recoveryId) {
         case JWTVerifiableCredentialRecoveryId:
-          const jwtString = Buffer.from(credentialEntity.credentialData, "hex").toString();
+          // eslint-disable-next-line no-case-declarations
+          const jwtString = Buffer.from(
+            credentialEntity.credentialData,
+            "hex"
+          ).toString();
+          // eslint-disable-next-line no-case-declarations
           const jwtObj = JSON.parse(jwtString);
-
           // TODO - remember credentialEntity.id (db id)
           return JWTCredential.fromJWT(jwtObj, jwtString);
         default:
@@ -838,7 +843,9 @@ export default class Pluto implements PlutoInterface {
     const storable = credential.toStorable();
     const credentialEntity = new entities.Credential();
 
-    credentialEntity.credentialData = Buffer.from(storable.credentialData).toString("hex");
+    credentialEntity.credentialData = Buffer.from(
+      storable.credentialData
+    ).toString("hex");
     credentialEntity.recoveryId = storable.recoveryId;
     credentialEntity.issuer = storable.issuer;
     credentialEntity.subject = storable.subject;
@@ -862,7 +869,8 @@ export default class Pluto implements PlutoInterface {
   }
 
   async getLinkSecret(): Promise<Anoncreds.LinkSecret | null> {
-    const repo = this.dataSource.manager.getRepository<LinkSecret>("linksecret");
+    const repo =
+      this.dataSource.manager.getRepository<LinkSecret>("linksecret");
     const result = await repo.find();
 
     return result.at(0)?.id ?? null;
@@ -873,5 +881,42 @@ export default class Pluto implements PlutoInterface {
     entity.id = linkSecret;
 
     await this.dataSource.manager.save(entity);
+  }
+
+  async storeCredentialMetadata(
+    metadata: Anoncreds.CredentialRequestMeta
+  ): Promise<void> {
+    const entity = new entities.CredentialMetadata();
+
+    entity.link_secret_blinding_data = JSON.stringify(
+      metadata.link_secret_blinding_data
+    );
+    entity.link_secret_name = metadata.link_secret_name;
+    entity.nonce = metadata.nonce;
+
+    await this.dataSource.manager.save(entity);
+  }
+
+  async fetchCredentialMetadata(
+    linkSecretName: string | undefined
+  ): Promise<Anoncreds.CredentialRequestMeta | null> {
+    const repository: Repository<entities.CredentialMetadata> =
+      this.dataSource.manager.getRepository("credentialmetadata");
+
+    const data = await repository.findOne({
+      where: {
+        link_secret_name: linkSecretName,
+      },
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    return {
+      link_secret_blinding_data: JSON.parse(data.link_secret_blinding_data),
+      link_secret_name: data.link_secret_name,
+      nonce: data.nonce,
+    };
   }
 }

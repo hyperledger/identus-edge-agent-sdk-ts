@@ -5,9 +5,17 @@ import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
-import { Anoncreds } from "../../pollux/models/Anoncreds";
+import { Anoncreds } from "../models/Anoncreds";
 
 export interface Pluto {
+  storeCredentialMetadata(
+    metadata: Anoncreds.CredentialRequestMeta
+  ): Promise<void>;
+
+  fetchCredentialMetadata(
+    linkSecretName: string | undefined
+  ): Promise<Anoncreds.CredentialRequestMeta | null>;
+
   start(): Promise<void>;
 
   storePrismDID(

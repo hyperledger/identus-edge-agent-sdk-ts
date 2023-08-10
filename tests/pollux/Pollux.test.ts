@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import { CredentialType, JWTCredential } from "../../src/domain";
+import { CredentialType } from "../../src/domain";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
+import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import * as Fixtures from "./fixtures";
 import {
   cloudAgentCredentialJwt,
@@ -34,10 +35,11 @@ describe("Pollux", () => {
           it(`should error when too few parts [${
             value.split(".").length
           }]`, () => {
-            expect(() =>
-              pollux.parseCredential(Buffer.from(value), {
-                type: CredentialType.JWT,
-              })
+            expect(
+              async () =>
+                await pollux.parseCredential(Buffer.from(value), {
+                  type: CredentialType.JWT,
+                })
             ).throws(InvalidJWTString);
           });
         }

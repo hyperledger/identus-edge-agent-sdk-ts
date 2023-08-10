@@ -75,15 +75,22 @@ export class AgentCredentials implements AgentCredentialsClass {
       (attachment as AttachmentBase64).base64
     );
 
-    const options: CredentialIssueOptions = {
+    const parseOpts: CredentialIssueOptions = {
       type: credentialType,
     };
 
     if (credentialType === CredentialType.AnonCreds) {
-      options.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
+      parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
+      const credentialMetadata = await this.pluto.fetchCredentialMetadata(
+        issueCredential.thid
+      );
+      if (!credentialMetadata) {
+        throw new Error("Invalid credential Metadata");
+      }
+      parseOpts.credentialMetadata = credentialMetadata;
     }
 
-    const credential = this.pollux.parseCredential(credData, options);
+    const credential = await this.pollux.parseCredential(credData, parseOpts);
 
     await this.pluto.storeCredential(credential);
 
@@ -112,9 +119,15 @@ export class AgentCredentials implements AgentCredentialsClass {
       if (!linkSecret) {
         throw new Error("No linkSecret available.");
       }
-      credBuffer = await this.pollux.processCredentialRequest(message, {
-        linkSecret: linkSecret,
-      });
+      const [credential, credentialMetadata] =
+        await this.pollux.processAnonCredsCredential(message, {
+          linkSecret: linkSecret,
+          linkSecretName: offer.thid,
+        });
+      credBuffer = JSON.stringify(credential);
+
+      await this.pluto.storeCredentialMetadata(credentialMetadata);
+      console.log(1);
     } else {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
       const keyPair = await this.apollo.createKeyPairFromKeyCurve(
@@ -135,7 +148,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         null,
         did.toString()
       );
-      credBuffer = await this.pollux.processCredentialRequest(message, {
+      credBuffer = await this.pollux.processJWTCredential(message, {
         did: did,
         keyPair: keyPair,
       });

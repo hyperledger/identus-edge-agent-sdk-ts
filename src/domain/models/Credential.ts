@@ -1,4 +1,5 @@
 import { CredentialType } from ".";
+import { Anoncreds } from "./Anoncreds";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
 
@@ -52,11 +53,13 @@ export interface CredentialRequestOptions {
   keyPair?: KeyPair;
   did?: DID;
   linkSecret?: string;
+  linkSecretName?: string;
   [name: string]: any;
 }
 
 export interface CredentialIssueOptions {
   type: CredentialType;
   linkSecret?: string;
+  credentialMetadata?: Anoncreds.CredentialRequestMeta;
   [name: string]: any;
 }

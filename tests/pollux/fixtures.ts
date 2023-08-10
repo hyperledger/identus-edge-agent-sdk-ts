@@ -1,5 +1,5 @@
 import { CredentialType, DID } from "../../src/domain";
-import { Anoncreds } from "../../src/pollux/models/Anoncreds";
+import { Anoncreds } from "../../src/domain/models/Anoncreds";
 
 export const linkSecret: Anoncreds.Linksecret =
   "11713282333014162675185775227133916651856831195832037281552411830422122210216";
