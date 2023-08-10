@@ -19,7 +19,7 @@ import {
   ServiceEndpoint,
 } from "../../src/domain/models";
 import { DIDCommProtocol } from "../../src/mercury/DIDCommProtocol";
-import Castor from "../../src/domain/buildingBlocks/Castor";
+import { Castor } from "../../src/domain/buildingBlocks/Castor";
 import { AgentError } from "../../src/domain/models/Errors";
 import { HandshakeRequest } from "../../src/prism-agent/protocols/connection/HandshakeRequest";
 chai.use(SinonChai);

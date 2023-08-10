@@ -1,11 +1,13 @@
 import { expect } from "chai";
 
 import {
-  Curve,
   KeyPair,
   Service,
   DID,
   ServiceEndpoint,
+  PublicKey,
+  KeyTypes,
+  Curve,
 } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 
@@ -17,7 +19,6 @@ import {
 } from "../../src/peer-did/types";
 import { MultiCodec } from "../../src/peer-did/helpers/Multicodec";
 import { PeerDIDResolver } from "../../src/castor/resolver/PeerDIDResolver";
-
 describe("PEERDID CreateTest", () => {
   it("Should test milticodec coding", () => {
     const testData = Uint8Array.from(Buffer.from("test1"));
@@ -55,41 +56,23 @@ describe("PEERDID CreateTest", () => {
     const validPeerDID = `did:peer:2.Ez6LSoHkfN1Y4nK9RCjx7vopWsLrMGNFNgTNZgoCNQrTzmb1n.Vz6MknRZmapV7uYZQuZez9n9N3tQotjRN18UGS68Vcfo6gR4h.SeyJyIjpbImRpZDpleGFtcGxlOnNvbWVtZWRpYXRvciNzb21la2V5Il0sInMiOiJodHRwczovL2V4YW1wbGUuY29tL2VuZHBvaW50IiwiYSI6W10sInQiOiJkbSJ9`;
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-    const agreementKeyCurve = {
-      keyCurve: {
-        curve: Curve.X25519,
-      },
-    };
-    const authenticationKeyCurve = {
-      keyCurve: {
-        curve: Curve.ED25519,
-      },
-    };
-    const KeyAgreementKeyPair: KeyPair = {
-      ...agreementKeyCurve,
-      privateKey: {
-        ...agreementKeyCurve,
-        value: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
-      },
-      publicKey: {
-        ...agreementKeyCurve,
-        value: Buffer.from("rI3CjEk-yaFi5bQTavOmV25EJHQnDQJeIi4OV6p_f2U"),
-      },
-    };
 
-    const authenticationKeyPair: KeyPair = {
-      ...authenticationKeyCurve,
-      privateKey: {
-        ...authenticationKeyCurve,
-        value: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
-      },
-      publicKey: {
-        ...authenticationKeyCurve,
-        value: Buffer.from("dm5f2GdR5BaHpRxB8bTElvE_0gIC2p404Msx9swJ914"),
-      },
-    };
+    const publicKeys: PublicKey[] = [];
+    const keyAgreementPrivateKey = apollo.createPrivateKey({
+      type: KeyTypes.Curve25519,
+      curve: Curve.X25519,
+      raw: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
+    });
 
-    const keyPairs = [KeyAgreementKeyPair, authenticationKeyPair];
+    const authenticationPrivateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+      raw: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
+    });
+
+    publicKeys.push(authenticationPrivateKey.publicKey());
+    publicKeys.push(keyAgreementPrivateKey.publicKey());
+
     const services: Service[] = [
       new Service(
         "didcomm",
@@ -101,7 +84,7 @@ describe("PEERDID CreateTest", () => {
         )
       ),
     ];
-    const did = await castor.createPeerDID(keyPairs, services);
+    const did = await castor.createPeerDID(publicKeys, services);
     expect(did.toString()).to.equal(validPeerDID);
   });
 
@@ -120,41 +103,23 @@ describe("PEERDID CreateTest", () => {
   it("Create a PeerDID and verify a signature", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-    const agreementKeyCurve = {
-      keyCurve: {
-        curve: Curve.X25519,
-      },
-    };
-    const authenticationKeyCurve = {
-      keyCurve: {
-        curve: Curve.ED25519,
-      },
-    };
-    const KeyAgreementKeyPair: KeyPair = {
-      ...agreementKeyCurve,
-      privateKey: {
-        ...agreementKeyCurve,
-        value: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
-      },
-      publicKey: {
-        ...agreementKeyCurve,
-        value: Buffer.from("rI3CjEk-yaFi5bQTavOmV25EJHQnDQJeIi4OV6p_f2U"),
-      },
-    };
 
-    const authenticationKeyPair: KeyPair = {
-      ...authenticationKeyCurve,
-      privateKey: {
-        ...authenticationKeyCurve,
-        value: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
-      },
-      publicKey: {
-        ...authenticationKeyCurve,
-        value: Buffer.from("dm5f2GdR5BaHpRxB8bTElvE_0gIC2p404Msx9swJ914"),
-      },
-    };
+    const publicKeys: PublicKey[] = [];
+    const keyAgreementPrivateKey = apollo.createPrivateKey({
+      type: KeyTypes.Curve25519,
+      curve: Curve.X25519,
+      raw: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
+    });
 
-    const keyPairs = [KeyAgreementKeyPair, authenticationKeyPair];
+    const authenticationPrivateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+      raw: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
+    });
+
+    publicKeys.push(keyAgreementPrivateKey.publicKey());
+    publicKeys.push(authenticationPrivateKey.publicKey());
+
     const services: Service[] = [
       new Service(
         "didcomm",
@@ -166,39 +131,45 @@ describe("PEERDID CreateTest", () => {
         )
       ),
     ];
-    const did = await castor.createPeerDID(keyPairs, services);
-    const keyPair = authenticationKeyPair;
-    const text = "The quick brown fox jumps over the lazy dog";
-    const signature = apollo.signStringMessage(keyPair.privateKey, text);
-    const result = await castor.verifySignature(
-      did,
-      Buffer.from(text),
-      signature.value
-    );
 
-    expect(result).to.be.equal(true);
+    const did = await castor.createPeerDID(publicKeys, services);
+    const text = "The quick brown fox jumps over the lazy dog";
+    const signature =
+      authenticationPrivateKey.isSignable() &&
+      authenticationPrivateKey.sign(Buffer.from(text));
+
+    expect(signature).to.not.be.equal(false);
+
+    if (signature) {
+      const result = await castor.verifySignature(
+        did,
+        Buffer.from(text),
+        signature
+      );
+
+      expect(result).to.be.equal(true);
+    }
   });
 
   it("Create a PeerDID and verify a signature from new keys", async () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
-    const seed = apollo.createRandomSeed().seed;
 
-    const authenticationKeyPair: KeyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.ED25519,
-      },
-      seed
-    );
+    const publicKeys: PublicKey[] = [];
 
-    const KeyAgreementKeyPair: KeyPair = apollo.createKeyPairFromKeyCurve(
-      {
-        curve: Curve.X25519,
-      },
-      seed
-    );
+    const authenticationPrivate = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.ED25519,
+    });
 
-    const keyPairs = [KeyAgreementKeyPair, authenticationKeyPair];
+    const keyAgreementPrivate = apollo.createPrivateKey({
+      type: KeyTypes.Curve25519,
+      curve: Curve.X25519,
+    });
+
+    publicKeys.push(authenticationPrivate.publicKey());
+    publicKeys.push(keyAgreementPrivate.publicKey());
+
     const services: Service[] = [
       new Service(
         "didcomm",
@@ -210,19 +181,23 @@ describe("PEERDID CreateTest", () => {
         )
       ),
     ];
-    const did = await castor.createPeerDID(keyPairs, services);
+    const did = await castor.createPeerDID(publicKeys, services);
     const text = "The quick brown fox jumps over the lazy dog";
 
-    const signature = apollo.signStringMessage(
-      authenticationKeyPair.privateKey,
-      text
-    );
-    const result = await castor.verifySignature(
-      did,
-      Buffer.from(text),
-      signature.value
-    );
+    const signature =
+      authenticationPrivate.isSignable() &&
+      authenticationPrivate.sign(Buffer.from(text));
 
-    expect(result).to.be.equal(true);
+    expect(signature).to.not.be.equal(false);
+
+    if (signature) {
+      const result = await castor.verifySignature(
+        did,
+        Buffer.from(text),
+        signature
+      );
+
+      expect(result).to.be.equal(true);
+    }
   });
 });

@@ -12,7 +12,7 @@ export class ExtendedKey {
    * Public key for this extended key
    */
   public publicKey(): Secp256k1PublicKey {
-    return this.privateKey().getPublicKey();
+    return this.privateKey().publicKey();
   }
 
   /**
