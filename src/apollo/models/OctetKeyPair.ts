@@ -24,7 +24,7 @@ export class OctetKeyPair {
 
   constructor(id: string, from: KeyPair) {
     this.kid = id;
-    this.crv = from.keyCurve.curve;
+    this.crv = from.curve;
     this.privateKey = Buffer.from(from.privateKey.value).toString();
     this.publicKey = Buffer.from(from.publicKey.value).toString();
   }

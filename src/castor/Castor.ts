@@ -8,14 +8,11 @@ import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
   DID,
-  PublicKey,
   Service,
-  KeyPair,
   DIDDocument,
   PrismDIDMethodId,
   DIDDocumentCoreProperty,
   DIDResolver,
-  Curve,
 } from "../domain/models";
 import {
   getUsageId,
@@ -43,6 +40,9 @@ import {
   VerificationMethodTypeAuthentication,
 } from "../peer-did/types";
 import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
+import { PublicKey, Curve } from "../domain/models";
+import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
+import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 
 /**
  * Castor is a powerful and flexible library for working with DIDs. Whether you are building a decentralised application
@@ -119,6 +119,10 @@ export default class Castor implements CastorInterface {
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
   ): Promise<DID> {
+    if (!masterPublicKey.isCurve<Secp256k1PublicKey>(Curve.SECP256K1)) {
+      throw new CastorError.InvalidKeyError();
+    }
+
     const publicKey = new PrismDIDPublicKey(
       getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
@@ -129,6 +133,7 @@ export default class Castor implements CastorInterface {
       Usage.AUTHENTICATION_KEY,
       masterPublicKey
     );
+
     const didCreationData =
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
         public_keys: [authenticateKey.toProto(), publicKey.toProto()],
@@ -178,13 +183,16 @@ export default class Castor implements CastorInterface {
    * ```
    *
    * @async
-   * @param {KeyPair[]} keyPairs
+   * @param {PublicKey[]} publicKeys
    * @param {Service[]} services
    * @returns {Promise<DID>}
    */
-  async createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
+  async createPeerDID(
+    publicKeys: PublicKey[],
+    services: Service[]
+  ): Promise<DID> {
     const peerDIDOperation = new PeerDIDCreate();
-    const peerDID = peerDIDOperation.createPeerDID(keyPairs, services);
+    const peerDID = peerDIDOperation.createPeerDID(publicKeys, services);
     return peerDID.did;
   }
 
@@ -295,13 +303,11 @@ export default class Castor implements CastorInterface {
           Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
         ).getEncoded();
 
-        publicKey = {
-          keyCurve: {
-            curve: Curve.SECP256K1,
-          },
-          value: publicKeyEncoded,
-        };
-        if (this.apollo.verifySignature(publicKey, challenge, signature)) {
+        publicKey = new Secp256k1PublicKey(publicKeyEncoded);
+        if (
+          publicKey.canVerify() &&
+          publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
+        ) {
           return true;
         }
       }
@@ -341,31 +347,35 @@ export default class Castor implements CastorInterface {
                 material as VerificationMaterialAuthentication
               );
 
-        publicKey = {
-          keyCurve: {
-            curve: method.publicKeyJwk.crv as Curve,
-          },
-          value: Buffer.from(base64url.baseEncode(decodedKey)),
-        };
-        if (this.apollo.verifySignature(publicKey, challenge, signature)) {
+        publicKey =
+          method.publicKeyJwk.crv === Curve.X25519
+            ? new X25519PublicKey(Buffer.from(base64url.baseEncode(decodedKey)))
+            : new Ed25519PublicKey(
+                Buffer.from(base64url.baseEncode(decodedKey))
+              );
+
+        if (
+          publicKey.canVerify() &&
+          publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
+        ) {
           return true;
         }
       }
     } else {
-      throw new Error("Did not supported");
+      throw new Error("Did method not supported");
     }
 
     return false;
   }
 
   /**
-   * Returns ecnumbasis from a valid DID and its related keyPair
+   * Returns ecnumbasis from a valid DID and its related publicKey
    *
    * @param {DID} did
-   * @param {KeyPair} keyPair
+   * @param {PublicKey} publicKey
    * @returns {string}
    */
-  getEcnumbasis(did: DID, keyPair: KeyPair): string {
-    return new PeerDIDCreate().computeEncnumbasis(did, keyPair);
+  getEcnumbasis(did: DID, publicKey: PublicKey): string {
+    return new PeerDIDCreate().computeEncnumbasis(did, publicKey);
   }
 }

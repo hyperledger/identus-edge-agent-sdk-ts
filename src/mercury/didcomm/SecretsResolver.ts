@@ -1,6 +1,11 @@
 import type { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
-import { Curve, VerificationMethod, VerificationMethods } from "../../domain";
+import {
+  Curve,
+  KeyTypes,
+  VerificationMethod,
+  VerificationMethods,
+} from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import Pluto from "../../pluto/Pluto";
@@ -60,20 +65,28 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     peerDid: Domain.PeerDID,
     publicKeyJWK: Domain.PublicKeyJWK
   ): Secret {
-    const privateKey = peerDid.privateKeys.find(
+    const privateKeyBuffer = peerDid.privateKeys.find(
       (key) => key.keyCurve.curve === Curve.X25519
     );
-    if (!privateKey) {
+    if (!privateKeyBuffer) {
       throw new Error(`Invalid PrivateKey Curve ${Curve.X25519}`);
     }
-    const keyPair = this.apollo.createKeyPairFromPrivateKey(privateKey);
-    const ecnumbasis = this.castor.getEcnumbasis(peerDid.did, keyPair);
+    const privateKey = this.apollo.createPrivateKey({
+      type: KeyTypes.Curve25519,
+      curve: Curve.X25519,
+      raw: privateKeyBuffer.value,
+    });
+
+    const ecnumbasis = this.castor.getEcnumbasis(
+      peerDid.did,
+      privateKey.publicKey()
+    );
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
     const secret: Secret = {
       id,
       type: "JsonWebKey2020",
       privateKeyJwk: {
-        crv: privateKey.keyCurve.curve,
+        crv: Curve.X25519,
         kty: "OKP",
         d: privateKey.value.toString(),
         x: (publicKeyJWK.x as any).data,

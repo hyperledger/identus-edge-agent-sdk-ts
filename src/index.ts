@@ -1,5 +1,4 @@
 import "./globals";
-
 export { default as Apollo } from "./apollo/Apollo";
 export { default as Castor } from "./castor/Castor";
 export * as Domain from "./domain";
@@ -37,3 +36,4 @@ export * from "./apollo/utils/Ed25519KeyPair";
 export * from "./apollo/utils/X25519PrivateKey";
 export * from "./apollo/utils/X25519PublicKey";
 export * from "./apollo/utils/X25519KeyPair";
+export { KeyProperties } from "./domain/models/KeyProperties";
