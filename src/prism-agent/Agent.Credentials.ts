@@ -231,6 +231,10 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("DID not found");
     }
 
+    console.info("Prism Private Key:", prismPrivateKey);
+    console.info("Prism Private Key Value:", prismPrivateKey.value);
+    console.info("Buffered:", Buffer.from(prismPrivateKey.value).toString());
+
     const signedJWT = await jwt.sign(
       didInfo.did,
       prismPrivateKey,

@@ -32,7 +32,9 @@ plugins:
         'CHANGELOG.md',
         'integration-tests/e2e-tests/**/*'
       ],
-      message: 'chore(release): release ${nextRelease.version}\n\n${nextRelease.notes}'
+      message: 'chore(release): release ${nextRelease.version}
+      
+      ${nextRelease.notes}'
     }
   ]
   - [ "semantic-release-slack-bot",
