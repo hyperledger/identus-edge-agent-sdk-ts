@@ -107,10 +107,8 @@ export class AgentCredentials implements AgentCredentialsClass {
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
-    const credentialType = this.pollux.extractCredentialFormatFromMessage(
-      offer.makeMessage()
-    );
     const message = offer.makeMessage();
+    const credentialType = this.pollux.extractCredentialFormatFromMessage(message);
 
     let credBuffer: string;
 
@@ -127,7 +125,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       credBuffer = JSON.stringify(credential);
 
       await this.pluto.storeCredentialMetadata(credentialMetadata);
-      console.log(1);
     } else {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
       const keyPair = await this.apollo.createKeyPairFromKeyCurve(
@@ -137,7 +134,9 @@ export class AgentCredentials implements AgentCredentialsClass {
         },
         this.seed
       );
+
       const did = await this.castor.createPrismDID(keyPair.publicKey);
+
       await this.pluto.storePrismDID(
         did,
         keyIndex,
@@ -148,6 +147,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         null,
         did.toString()
       );
+
       credBuffer = await this.pollux.processJWTCredential(message, {
         did: did,
         keyPair: keyPair,
@@ -177,11 +177,13 @@ export class AgentCredentials implements AgentCredentialsClass {
         credentialType
       ),
     ];
+
     attachments.forEach((attachment, index) => {
       if (offer.body.formats[index].attach_id) {
         offer.body.formats[index].attach_id = attachment.id;
       }
     });
+
     const requestCredential = new RequestCredential(
       requestCredentialBody,
       attachments,

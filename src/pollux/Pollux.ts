@@ -42,7 +42,8 @@ export default class Pollux implements PolluxInterface {
     return this._anoncreds;
   }
 
-  //TODO: Match the correct format with whatever backend is sending us
+  // TODO: Match the correct format with whatever backend is sending us
+  // TODO: does this function belong in Pollux, can we move to Message?
   public extractCredentialFormatFromMessage(message: Message) {
     const body = JSON.parse(message.body);
     const formats = body.formats;
@@ -149,6 +150,7 @@ export default class Pollux implements PolluxInterface {
       typeof xz_cap !== "string"
     )
       return false;
+
     if (
       xr_cap.length <= 0 ||
       xr_cap.find(

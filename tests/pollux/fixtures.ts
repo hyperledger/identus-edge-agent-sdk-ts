@@ -1,7 +1,7 @@
 import { CredentialType, DID } from "../../src/domain";
 import { Anoncreds } from "../../src/domain/models/Anoncreds";
 
-export const linkSecret: Anoncreds.Linksecret =
+export const linkSecret: Anoncreds.LinkSecret =
   "11713282333014162675185775227133916651856831195832037281552411830422122210216";
 
 export const schema: Anoncreds.Schema = {
@@ -243,4 +243,14 @@ export const createJWTPayload = (
   };
 
   return jwtPayload;
+};
+
+export const createAnonCredsPayload = () => {
+  return credentialIssued;
+};
+
+export const encodeAnonCredsCredential = (cred: object): string => {
+  const json = JSON.stringify(cred);
+  const encoded = Buffer.from(json).toString("base64");
+  return `${encoded}.ACPart1`;
 };

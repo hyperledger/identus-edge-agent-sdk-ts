@@ -1,15 +1,30 @@
+import chai from "chai";
+import chaiAsPromised from "chai-as-promised";
+import * as sinon from "sinon";
+import SinonChai from "sinon-chai";
 import { expect } from "chai";
-import { CredentialType } from "../../src/domain";
+
+import { CredentialRequestOptions, CredentialType, Curve, DID, Message } from "../../src/domain";
+import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
-import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import * as Fixtures from "./fixtures";
 import {
   cloudAgentCredentialJwt,
   cloudAgentCredentialPayload,
 } from "./test-vectors";
+import { base64 } from "multiformats/bases/base64";
+import { AnonCredsCredential, AnonCredsRecoveryId } from "../../src/pollux/models/AnonCredsVerifiableCredential";
+
+chai.use(SinonChai);
+chai.use(chaiAsPromised);
+let sandbox: sinon.SinonSandbox;
+
+jest.mock("../../src/apollo/utils/jwt/JWT", () => ({
+  JWT: jest.fn(() => ({ sign: jest.fn(() => "JWT.sign.result") }))
+}));
 
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -22,111 +37,678 @@ describe("Pollux", () => {
   let pollux: Pollux;
 
   beforeEach(async () => {
+    sandbox = sinon.createSandbox();
     const apollo = {} as Apollo;
     const castor = new Castor(apollo);
     pollux = new Pollux(castor);
     await pollux.start();
   });
 
-  describe("parseVerifiableCredential", () => {
-    describe("Invalid JWT string", () => {
-      ["", `${jwtParts[0]}`, `${jwtParts[0]}.${jwtParts[1]}`].forEach(
-        (value) => {
-          it(`should error when too few parts [${
-            value.split(".").length
-          }]`, () => {
-            expect(
-              async () =>
-                await pollux.parseCredential(Buffer.from(value), {
-                  type: CredentialType.JWT,
-                })
-            ).throws(InvalidJWTString);
-          });
-        }
-      );
+  afterEach(async () => {
+    sandbox.restore();
+  });
 
-      [
-        `${jwtString}.${jwtParts[0]}`,
-        `${jwtString}.${jwtParts[0]}.${jwtParts[1]}`,
-      ].forEach((value) => {
-        it(`should error when too many parts [${
-          value.split(".").length
-        }]`, () => {
-          expect(() =>
-            pollux.parseCredential(Buffer.from(value), {
-              type: CredentialType.JWT,
-            })
-          ).throws(InvalidJWTString);
-        });
+  describe("extractCredentialFormatFromMessage", () => {
+    it("body.formats[0].format is JWT - returns CredentialType.JWT", () => {
+      const body = { formats: [{ format: CredentialType.JWT }] };
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.JWT);
+    });
+
+    it("body.formats[0].format is AnonCreds - returns CredentialType.AnonCreds", () => {
+      const body = { formats: [{ format: CredentialType.AnonCreds }] };
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.AnonCreds);
+    });
+
+    it("body.formats[0].format is W3C - returns CredentialType.Unknown", () => {
+      const body = { formats: [{ format: CredentialType.W3C }] };
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.Unknown);
+    });
+
+
+    it("undefined formats - returns CredentialType.Unknown", () => {
+      const body = {};
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.Unknown);
+    });
+
+    it("not array formats - returns CredentialType.Unknown", () => {
+      const body = { formats: "notanarray" };
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.Unknown);
+    });
+
+    it("empty array formats - returns CredentialType.Unknown", () => {
+      const body = { formats: [] };
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.Unknown);
+    });
+
+    it("body.formats[0].format is not valid - returns CredentialType.Unknown", () => {
+      const body = { formats: [{ format: "qwerty" }] };
+      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      const result = pollux.extractCredentialFormatFromMessage(msg);
+
+      expect(result).to.eql(CredentialType.Unknown);
+    });
+
+    describe("Multiple Formats", () => {
+      it("matches first item - Anoncreds", () => {
+        const body = { formats: [{ format: CredentialType.AnonCreds }, { format: CredentialType.JWT }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+        const result = pollux.extractCredentialFormatFromMessage(msg);
+
+        expect(result).to.eql(CredentialType.AnonCreds);
       });
 
-      it("should error when not encoded JSON", () => {
-        const encoded = Buffer.from("a").toString("base64");
-        const value = `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
+      it("matches first item - JWT", () => {
+        const body = { formats: [{ format: CredentialType.JWT }, { format: CredentialType.AnonCreds }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
 
-        expect(() =>
-          pollux.parseCredential(Buffer.from(value), {
-            type: CredentialType.JWT,
-          })
-        ).throws();
+        const result = pollux.extractCredentialFormatFromMessage(msg);
+
+        expect(result).to.eql(CredentialType.JWT);
+      });
+
+      it("matches first item - Unknown", () => {
+        const body = { formats: [{ format: "qwerty" }, { format: CredentialType.AnonCreds }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+        const result = pollux.extractCredentialFormatFromMessage(msg);
+
+        expect(result).to.eql(CredentialType.Unknown);
+      });
+    });
+  });
+
+  describe("parseCredential", () => {
+    describe("AnonCreds", () => {
+      describe("Invalid encoded string", () => {
+        [
+          "",
+          `tooFew`,
+          `too.many.parts`
+        ].forEach(
+          (value) => {
+            it(`should error when too few parts [${value.split(".").length}]`, () => {
+              expect(
+                pollux.parseCredential(Buffer.from(value), { type: CredentialType.AnonCreds })
+              ).to.eventually.be.rejected;
+            });
+          }
+        );
+      });
+
+      describe("Options", () => {
+        it(`missing linkSecret - throws`, async () => {
+          sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves({});
+          sandbox.stub(pollux, "anoncreds").get(() => ({
+            processCredential: sandbox.stub().returns({})
+          }));
+
+          const payload = Fixtures.createAnonCredsPayload();
+          const encoded = Fixtures.encodeAnonCredsCredential(payload);
+
+          expect(
+            pollux.parseCredential(Buffer.from(encoded), {
+              type: CredentialType.AnonCreds,
+              // linkSecret: "linkSecret",
+              credentialMetadata: {} as any
+            })
+          ).to.eventually.be.rejected;
+        });
+
+        it(`missing credentialMetadata - throws`, async () => {
+          sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves({});
+          sandbox.stub(pollux, "anoncreds").get(() => ({
+            processCredential: sandbox.stub().returns({})
+          }));
+
+          const payload = Fixtures.createAnonCredsPayload();
+          const encoded = Fixtures.encodeAnonCredsCredential(payload);
+
+          expect(
+            pollux.parseCredential(Buffer.from(encoded), {
+              type: CredentialType.AnonCreds,
+              linkSecret: "linkSecret",
+              // credentialMetadata: {} as any
+            })
+          ).to.eventually.be.rejected;
+        });
+
+      });
+
+      it(`should call fetchCredentialDefinition with encoded payload cred_def_id`, async () => {
+        const stubFetchCredentialDefinition = sandbox.stub(pollux as any, "fetchCredentialDefinition")
+          .resolves({});
+
+        sandbox.stub(pollux, "anoncreds").get(() => ({
+          processCredential: sandbox.stub().returns({})
+        }));
+
+        const payload = Fixtures.createAnonCredsPayload();
+        const encoded = Fixtures.encodeAnonCredsCredential(payload);
+
+        await pollux.parseCredential(Buffer.from(encoded), {
+          type: CredentialType.AnonCreds,
+          linkSecret: "linkSecret",
+          credentialMetadata: {} as any
+        });
+
+        expect(stubFetchCredentialDefinition).to.have.been.calledOnceWith(payload.cred_def_id);
+      });
+
+      it(`should call processCredential with credentialDefinition, credentialIssued, credentialMetadata, linkSecret`, async () => {
+        const fetchCredentialDefinitionResult = { mock: "fetchCredentialDefinitionResult" };
+        sandbox.stub(pollux as any, "fetchCredentialDefinition")
+          .resolves(fetchCredentialDefinitionResult);
+
+        const stubProcessCredential = sandbox.stub().returns({});
+
+        sandbox.stub(pollux, "anoncreds").get(() => ({
+          processCredential: stubProcessCredential
+        }));
+
+        const payload = Fixtures.createAnonCredsPayload();
+        const encoded = Fixtures.encodeAnonCredsCredential(payload);
+        const credentialMetadata = { mock: "credentialMetadata" } as any;
+        const linkSecret = "linkSecret";
+
+        await pollux.parseCredential(Buffer.from(encoded), {
+          type: CredentialType.AnonCreds,
+          linkSecret,
+          credentialMetadata
+        });
+
+        expect(stubProcessCredential).to.have.been.calledOnceWith(fetchCredentialDefinitionResult, payload, credentialMetadata, linkSecret);
+      });
+
+      describe("Valid Credential", () => {
+        it(`should return AnonCredsCredential`, async () => {
+          const payload = Fixtures.createAnonCredsPayload();
+          const encoded = Fixtures.encodeAnonCredsCredential(payload);
+
+          sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves({});
+          sandbox.stub(pollux, "anoncreds").get(() => ({
+            processCredential: sandbox.stub().returns(payload)
+          }));
+
+          const result = await pollux.parseCredential(Buffer.from(encoded), {
+            type: CredentialType.AnonCreds,
+            linkSecret: "linkSecret",
+            credentialMetadata: {} as any
+          });
+
+          expect(result).to.not.be.undefined;
+          expect(result).to.be.instanceOf(AnonCredsCredential);
+          const anonCredsCredential = result as AnonCredsCredential;
+
+          // expect(anonCredsCredential.id).to.equal(encoded); // undefined
+
+          expect(anonCredsCredential.claims).to.be.an("array");
+          // expect(anonCredsCredential.claims).to.contain(...) // TODO
+
+          expect(anonCredsCredential.credentialType).to.equal(CredentialType.AnonCreds);
+          // expect(anonCredsCredential.issuer).to.equal() // TODO
+
+          expect(anonCredsCredential.recoveryId).to.equal(AnonCredsRecoveryId);
+          // expect(anonCredsCredential.subject).to.equal(...); // TODO
+
+          expect(anonCredsCredential.isProvable()).to.be.false; // TODO is this correct?
+          expect(anonCredsCredential.isStorable()).to.be.true;
+        });
       });
     });
 
-    const encodeCredential = (cred: object): string => {
-      const json = JSON.stringify(cred);
-      const encoded = Buffer.from(json).toString("base64");
-      return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
-    };
-
-    describe("Valid Credential", () => {
-      it(`should return JWTVerifiableCredential`, () => {
-        const jwtPayload = Fixtures.createJWTPayload(
-          "jwtid",
-          "proof",
-          CredentialType.JWT
+    describe("JWT", () => {
+      describe("Invalid encoded JWT string", () => {
+        [
+          "",
+          `${jwtParts[0]}`,
+          `${jwtParts[0]}.${jwtParts[1]}`
+        ].forEach(
+          (value) => {
+            it(`should error when too few parts [${value.split(".").length}]`, () => {
+              expect(
+                pollux.parseCredential(Buffer.from(value), { type: CredentialType.JWT })
+              ).to.eventually.be.rejectedWith(InvalidJWTString);
+            });
+          }
         );
-        const credential = jwtPayload.vc;
-        const encoded = encodeCredential(jwtPayload);
-        const result = pollux.parseCredential(Buffer.from(encoded), {
-          type: CredentialType.JWT,
+
+        [
+          `${jwtString}.${jwtParts[0]}`,
+          `${jwtString}.${jwtParts[0]}.${jwtParts[1]}`,
+        ].forEach((value) => {
+          it(`should error when too many parts [${value.split(".").length
+            }]`, () => {
+              expect(
+                pollux.parseCredential(Buffer.from(value), { type: CredentialType.JWT })
+              ).to.eventually.be.rejectedWith(InvalidJWTString);
+            });
         });
 
-        expect(result).to.be.instanceOf(JWTCredential);
+        it("should error when not encoded JSON", () => {
+          const encoded = Buffer.from("a").toString("base64");
+          const value = `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
 
-        if (result instanceof JWTCredential) {
+          expect(
+            pollux.parseCredential(Buffer.from(value), { type: CredentialType.JWT })
+          ).to.eventually.be.rejected;
+        });
+      });
+
+      const encodeJWTCredential = (cred: object): string => {
+        const json = JSON.stringify(cred);
+        const encoded = Buffer.from(json).toString("base64");
+        return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
+      };
+
+      describe("Valid Credential", () => {
+        it(`should return JWTVerifiableCredential`, async () => {
+          const jwtPayload = Fixtures.createJWTPayload(
+            "jwtid",
+            "proof",
+            CredentialType.JWT
+          );
+          const credential = jwtPayload.vc;
+          const encoded = encodeJWTCredential(jwtPayload);
+          const result = await pollux.parseCredential(Buffer.from(encoded), {
+            type: CredentialType.JWT,
+          });
+
           expect(result).to.not.be.undefined;
-          expect(result.id).to.equal(encoded);
+          expect(result).to.be.instanceOf(JWTCredential);
 
-          expect(result.aud).to.be.deep.equal(jwtPayload.aud);
-          expect(result.context).to.be.deep.equal(credential.context);
-          expect(result.credentialSubject).to.be.deep.equal(
+          const jwtCred = result as JWTCredential;
+
+          expect(jwtCred.id).to.equal(encoded);
+          expect(jwtCred.aud).to.be.deep.equal(jwtPayload.aud);
+          expect(jwtCred.context).to.be.deep.equal(credential.context);
+          expect(jwtCred.credentialSubject).to.be.deep.equal(
             credential.credentialSubject
           );
-          expect(result.credentialType).to.be.equal(credential.credentialType);
+          expect(jwtCred.credentialType).to.be.equal(credential.credentialType);
 
-          expect(result.expirationDate).to.be.equal(
+          expect(jwtCred.expirationDate).to.be.equal(
             new Date(jwtPayload.exp).toISOString()
           );
-          expect(result.issuanceDate).to.be.equal(
+          expect(jwtCred.issuanceDate).to.be.equal(
             new Date(jwtPayload.nbf).toISOString()
           );
 
-          expect(result.type).to.be.deep.equal(credential.type);
+          expect(jwtCred.type).to.be.deep.equal(credential.type);
 
-          expect(result.issuer.toString()).to.be.equal(jwtPayload.iss);
-          expect(result.evidence).to.be.deep.equal(credential.evidence);
-          expect(result.refreshService).to.deep.equal(
+          expect(jwtCred.issuer.toString()).to.be.equal(jwtPayload.iss);
+          expect(jwtCred.evidence).to.be.deep.equal(credential.evidence);
+          expect(jwtCred.refreshService).to.deep.equal(
             credential.refreshService
           );
-          expect(result.termsOfUse).to.deep.equal(credential.termsOfUse);
+          expect(jwtCred.termsOfUse).to.deep.equal(credential.termsOfUse);
 
-          expect(result.credentialSchema).to.be.deep.equal(
+          expect(jwtCred.credentialSchema).to.be.deep.equal(
             credential.credentialSchema
           );
-          expect(result.credentialStatus).to.be.deep.equal(
+          expect(jwtCred.credentialStatus).to.be.deep.equal(
             credential.credentialStatus
           );
-        }
+        });
+      });
+
+      it("should parse JWT dates (NumericDate) correctly", async () => {
+        const nbf = cloudAgentCredentialPayload.nbf;
+        const exp = cloudAgentCredentialPayload.exp;
+
+        const result = await pollux.parseCredential(
+          Buffer.from(cloudAgentCredentialJwt),
+          {
+            type: CredentialType.JWT,
+          }
+        ) as JWTCredential;
+
+        const issuanceDate = new Date(nbf).toISOString();
+        const expirationDate = new Date(exp).toISOString();
+
+        expect(result.issuanceDate).to.equal(issuanceDate);
+        expect(result.expirationDate).to.equal(expirationDate);
+      });
+    });
+  });
+
+  describe("processCredentialRequest", () => {
+    // it("body.formats[0].format is AnonCreds - calls processAnonCredsCredential", () => {
+    //   const resolveValue = 13;
+    //   const stubJWT = sandbox.stub(pollux as any, "processJWTCredential").resolves(null);
+    //   const stubAnonCreds = sandbox.stub(pollux as any, "processAnonCredsCredential").resolves(resolveValue);
+    //   const body = { formats: [{ format: CredentialType.AnonCreds }] };
+    //   const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+    //   const result = pollux.processCredentialRequest(msg);
+
+    //   expect(stubAnonCreds).to.have.been.calledOnceWith(msg);
+    //   expect(stubJWT).not.to.have.been.called;
+    //   expect(result).to.eventually.be.eql(resolveValue);
+    // });
+
+    // it("body.formats[0].format is JWT - calls processJWTCredential", () => {
+    //   const resolveValue = 23;
+    //   const stubJWT = sandbox.stub(pollux as any, "processJWTCredential").resolves(resolveValue);
+    //   const stubAnonCreds = sandbox.stub(pollux as any, "processAnonCredsCredential").resolves(null);
+    //   const body = { formats: [{ format: CredentialType.JWT }] };
+    //   const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+    //   const result = pollux.processCredentialRequest(msg);
+
+    //   expect(stubAnonCreds).not.to.have.been.called;
+    //   expect(stubJWT).to.have.been.calledOnceWith(msg);
+    //   expect(result).to.eventually.be.eql(resolveValue);
+    // });
+
+    // [
+    //   CredentialType.Unknown,
+    //   CredentialType.W3C,
+    //   null,
+    //   undefined,
+    //   123,
+    //   "qwerty"
+    // ].forEach(value => {
+    //   it(`body.formats[0].format is invalid [${value}] - throws`, () => {
+    //     const stubJWT = sandbox.stub(pollux as any, "processJWTCredential").resolves();
+    //     const stubAnonCreds = sandbox.stub(pollux as any, "processAnonCredsCredential").resolves();
+    //     const body = { formats: [{ format: value }] };
+    //     const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+    //     const result = pollux.processCredentialRequest(msg);
+
+    //     expect(stubAnonCreds).not.to.have.been.called;
+    //     expect(stubJWT).not.to.have.been.called;
+    //     expect(result).to.eventually.be.rejected;
+    //   });
+    // })
+
+    describe("processJWTCredential", () => {
+      it("options not provided - throws", () => {
+        const body = { formats: [{ format: CredentialType.JWT }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+        const result = pollux.processJWTCredential(msg);
+
+        expect(result).to.eventually.be.rejected;
+      });
+
+      it("options missing did - throws", () => {
+        const body = { formats: [{ format: CredentialType.JWT }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+        const options = {};
+
+        const result = pollux.processJWTCredential(msg, options);
+
+        expect(result).to.eventually.be.rejected;
+      });
+
+      it("options missing keyPair - throws", () => {
+        const body = { formats: [{ format: CredentialType.JWT }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+        const options = { did: new DID("did", "peer", "test") };
+
+        const result = pollux.processJWTCredential(msg, options);
+
+        expect(result).to.eventually.be.rejected;
+      });
+
+      it("options correct - returns JWT.sign result", () => {
+        const body = { formats: [{ format: CredentialType.JWT }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+        const options: CredentialRequestOptions = {
+          did: new DID("did", "peer", "test"),
+          keyPair: { privateKey: {} } as any
+        };
+
+        const result = pollux.processJWTCredential(msg, options);
+
+        expect(result).to.eventually.eql("JWT.sign.result");
+      });
+    });
+
+    describe("processAnonCredsCredential", () => {
+      // it("options not provided - throws", () => {
+      //   const body = { formats: [{ format: CredentialType.AnonCreds }] };
+      //   const msg = new Message(JSON.stringify(body), undefined, "piuri");
+
+      //   const result = pollux.processAnonCredsCredential(msg);
+
+      //   expect(result).to.eventually.be.rejected;
+      // });
+
+      it("options missing linkSecret - throws", () => {
+        const body = { formats: [{ format: CredentialType.AnonCreds }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+        const options = {};
+
+        const result = pollux.processAnonCredsCredential(msg, options);
+
+        expect(result).to.eventually.be.rejected;
+      });
+
+      it("options missing linkSecretName - throws", () => {
+        const body = { formats: [{ format: CredentialType.AnonCreds }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+        const options: CredentialRequestOptions = { linkSecret: "3" };
+
+        const result = pollux.processAnonCredsCredential(msg, options);
+
+        expect(result).to.eventually.be.rejected;
+      });
+
+      describe("extractAttachment", () => {
+        it("no message attachments - throws", () => {
+          const body = { formats: [{ format: CredentialType.AnonCreds }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("attach_id undefined on body.formats[0] - throws", () => {
+          const attach_id = "123";
+          const body = { formats: [{ format: CredentialType.AnonCreds }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          msg.attachments.push({
+            id: attach_id,
+            data: { base64: "" }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("attach_id on body.formats[0] doesn't match msg.attachments[].id - throws", () => {
+          const attach_id = "123";
+          const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          msg.attachments.push({
+            id: "not_attach_id",
+            data: { base64: "" }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+      });
+
+      describe("isAnonCredsBody", () => {
+        it("anonCredsBody missing cred_def_id - throws", () => {
+          const anonCredsBody = {};
+          const attach_id = "13";
+          const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          const b64Data = base64.baseEncode(Buffer.from(JSON.stringify(anonCredsBody)));
+          msg.attachments.push({
+            id: attach_id,
+            data: { base64: b64Data }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("anonCredsBody missing schema_id - throws", () => {
+          const anonCredsBody = {
+            cred_def_id: "cred_def_id"
+          };
+          const attach_id = "13";
+          const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          const b64Data = base64.baseEncode(Buffer.from(JSON.stringify(anonCredsBody)));
+          msg.attachments.push({
+            id: attach_id,
+            data: { base64: b64Data }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("anonCredsBody missing nonce - throws", () => {
+          const anonCredsBody = {
+            cred_def_id: "cred_def_id",
+            schema_id: "schema_id"
+          };
+          const attach_id = "13";
+          const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          const b64Data = base64.baseEncode(Buffer.from(JSON.stringify(anonCredsBody)));
+          msg.attachments.push({
+            id: attach_id,
+            data: { base64: b64Data }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("anonCredsBody missing key_correctness_proof - throws", () => {
+          const anonCredsBody = {
+            cred_def_id: "cred_def_id",
+            schema_id: "schema_id",
+            nonce: "nonce",
+          };
+          const attach_id = "13";
+          const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          const b64Data = base64.baseEncode(Buffer.from(JSON.stringify(anonCredsBody)));
+          msg.attachments.push({
+            id: attach_id,
+            data: { base64: b64Data }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("anonCredsBody missing method_name - throws", () => {
+          const anonCredsBody = {
+            cred_def_id: "cred_def_id",
+            schema_id: "schema_id",
+            nonce: "nonce",
+            key_correctness_proof: {
+              c: "c",
+              xr_cap: [["first", "second"]],
+              xz_cap: "xz_cap",
+            }
+          };
+          const attach_id = "13";
+          const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+          const msg = new Message(JSON.stringify(body), undefined, "piuri");
+          const b64Data = base64.baseEncode(Buffer.from(JSON.stringify(anonCredsBody)));
+          msg.attachments.push({
+            id: attach_id,
+            data: { base64: b64Data }
+          });
+          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+          const result = pollux.processAnonCredsCredential(msg, options);
+
+          expect(result).to.eventually.be.rejected;
+        });
+      });
+
+      it("returns JSON.stringify CredentialRequest", async () => {
+        const createCredentialRequestResult = { a: 1 };
+        const stubCreateCredentialRequest = sandbox.stub().returns([createCredentialRequestResult, {}]);
+
+        sandbox.stub(pollux, "anoncreds").get(() => ({
+          createCredentialRequest: stubCreateCredentialRequest
+        }));
+
+        const credDef = { b: 2 };
+        const stubFetchCredentialDefinition = sandbox.stub(pollux as any, "fetchCredentialDefinition")
+          .resolves(credDef);
+
+        const anonCredsBody = {
+          cred_def_id: "cred_def_id",
+          schema_id: "schema_id",
+          nonce: "nonce",
+          key_correctness_proof: {
+            c: "c",
+            xr_cap: [["first", "second"]],
+            xz_cap: "xz_cap",
+          },
+          method_name: "method_name"
+        };
+        const attach_id = "13";
+        const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
+        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+        const b64Data = base64.baseEncode(Buffer.from(JSON.stringify(anonCredsBody)));
+        msg.attachments.push({
+          id: attach_id,
+          data: { base64: b64Data }
+        });
+        const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+
+        const result = await pollux.processAnonCredsCredential(msg, options);
+
+        expect(result).to.be.an("array").to.have.length(2);
+        expect(result[0]).to.equal(createCredentialRequestResult);
+        expect(stubFetchCredentialDefinition).to.have.been.calledOnceWith(anonCredsBody.cred_def_id);
+        expect(stubCreateCredentialRequest).to.have.been.calledOnceWith(anonCredsBody, credDef, options.linkSecret);
       });
     });
   });
@@ -293,21 +875,5 @@ describe("Pollux", () => {
           .to.deep.equal(value[1]);
       });
     });
-  });
-  it("should parse JWT dates (NumericDate) correctly", () => {
-    const nbf = cloudAgentCredentialPayload.nbf;
-    const exp = cloudAgentCredentialPayload.exp;
-    const result = pollux.parseCredential(
-      Buffer.from(cloudAgentCredentialJwt),
-      {
-        type: CredentialType.JWT,
-      }
-    ) as JWTCredential;
-
-    const issuanceDate = new Date(nbf).toISOString();
-    const expirationDate = new Date(exp).toISOString();
-
-    expect(result.issuanceDate).to.equal(issuanceDate);
-    expect(result.expirationDate).to.equal(expirationDate);
   });
 });
