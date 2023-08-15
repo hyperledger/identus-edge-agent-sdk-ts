@@ -21,6 +21,6 @@
     "typeRoots": ["node_modules/@types"],
     "jsx": "react-jsx"
   },
-  "include": ["src", "../src/domain"],
+  "include": ["src"],
   "exclude": ["tests", "build"]
 }
