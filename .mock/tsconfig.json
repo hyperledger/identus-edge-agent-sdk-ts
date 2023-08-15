@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "baseUrl": "src",
+    "outDir": "./dist",
+    "module": "esnext",
+    "target": "es2020",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es2020", "dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types"],
+    "jsx": "react-jsx"
+  },
+  "include": ["src", "../src/domain"],
+  "exclude": ["tests", "build"]
+}
