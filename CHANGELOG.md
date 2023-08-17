@@ -1,3 +1,15 @@
+# [2.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.3...v2.1.0) (2023-08-17)
+
+
+### Bug Fixes
+
+* update dates parsing from JWT credentials ([#66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/66)) ([24562f7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/24562f77b19f84c2acd6a485368c06d836531672))
+
+
+### Features
+
+* Add Cryptography key abstraction for signable, verifiable keys, and also private and public base impls ([#67](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/67)) ([61d9dbd](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/61d9dbd2f13c4f21540500fff337c7bc4ff5b527))
+
 ## [2.0.3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.2...v2.0.3) (2023-06-27)
 
 
