@@ -150,6 +150,14 @@
       "default",
       "jest-junit"
     ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 22,
+        "functions": 33,
+        "lines": 34,
+        "statements": 34
+      }
+    },
     "coverageDirectory": "coverage"
   },
   "jest-junit": {
