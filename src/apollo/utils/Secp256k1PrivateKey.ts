@@ -49,6 +49,12 @@ export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
     return new Uint8Array([...padding, ...byteList]);
   }
 
+  sign(message: Buffer) {
+    const keyPair = Secp256k1PrivateKey.ec.keyFromPrivate(this.getEncoded());
+    const sig = keyPair.sign(message);
+    return Buffer.from(sig.toDER());
+  }
+
   static secp256k1FromBigInteger(bigInteger: BN): Secp256k1PrivateKey {
     return new Secp256k1PrivateKey(Uint8Array.from(bigInteger.toArray()));
   }
@@ -61,9 +67,14 @@ export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
     return new Secp256k1PrivateKey(Uint8Array.from(bnprv.toArray()));
   }
 
-  sign(message: Buffer) {
-    const keyPair = Secp256k1PrivateKey.ec.keyFromPrivate(this.getEncoded());
-    const sig = keyPair.sign(message);
-    return Buffer.from(sig.toDER());
-  }
+  public readonly to = {
+    Buffer: () => Buffer.from(this.getEncoded()),
+    Hex: () => this.to.Buffer().toString("hex")
+  };
+
+  static from = {
+    Buffer: (value: Buffer) => Secp256k1PrivateKey.secp256k1FromBytes(new Uint8Array(value)),
+    Hex: (value: string) => Secp256k1PrivateKey.from.Buffer(Buffer.from(value, "hex")),
+    String: (value: string) => Secp256k1PrivateKey.from.Buffer(Buffer.from(value))
+  };
 }

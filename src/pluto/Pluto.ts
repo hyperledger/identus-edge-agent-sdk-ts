@@ -35,6 +35,7 @@ import { PrivateKey } from "../domain/models";
 import { KeyProperties } from "../domain/models/KeyProperties";
 import { Ed25519PrivateKey } from "../apollo/utils/Ed25519PrivateKey";
 import { X25519PrivateKey } from "../apollo/utils/X25519PrivateKey";
+import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 
 type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
 export type PlutoConnectionProps =
@@ -82,12 +83,12 @@ export default class Pluto implements PlutoInterface {
     const presetSqlJSConfig =
       connection.type === "sqljs"
         ? {
-            location: "pluto",
-            useLocalForage: typeof window !== "undefined",
-            sqlJsConfig: {
-              locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
-            },
-          }
+          location: "pluto",
+          useLocalForage: typeof window !== "undefined",
+          sqlJsConfig: {
+            locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
+          },
+        }
         : {};
     this.dataSource = new DataSource({
       ...presetSqlJSConfig,
@@ -160,7 +161,9 @@ export default class Pluto implements PlutoInterface {
     didEntity.methodId = did.methodId;
     didEntity.schema = did.schema;
     didEntity.alias = alias ?? "";
+
     await this.dataSource.manager.save(didEntity);
+
     await this.storePrivateKeys(
       privateKey,
       did,
@@ -192,7 +195,7 @@ export default class Pluto implements PlutoInterface {
           did,
           privateKey.getProperty(KeyProperties.index)
             ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              parseInt(privateKey.getProperty(KeyProperties.index)!)
+            parseInt(privateKey.getProperty(KeyProperties.index)!)
             : 0,
           null
         )
@@ -266,11 +269,17 @@ export default class Pluto implements PlutoInterface {
     metaId: string | null
   ) {
     const privateKeysEntity = new entities.PrivateKey();
-    metaId && (privateKeysEntity.id = metaId); // question: Where should I store metaId
+
+    if (typeof metaId === "string") {
+      // question: Where should I store metaId
+      privateKeysEntity.id = metaId;
+    }
+
     privateKeysEntity.curve = privateKey.curve;
-    privateKeysEntity.privateKey = Buffer.from(privateKey.value).toString();
+    privateKeysEntity.privateKey = privateKey.to.Hex();
     privateKeysEntity.keyPathIndex = keyPathIndex ?? 0;
     privateKeysEntity.didId = did.toString();
+
     await this.dataSource.manager.save(privateKeysEntity);
   }
 
@@ -383,11 +392,11 @@ export default class Pluto implements PlutoInterface {
       }
       return didResponse.map(
         (item) =>
-          ({
-            did: DID.fromString(item.did),
-            alias: item.alias,
-            keyPathIndex: item.private_key_keyPathIndex,
-          } as PrismDIDInfo)
+        ({
+          did: DID.fromString(item.did),
+          alias: item.alias,
+          keyPathIndex: item.private_key_keyPathIndex,
+        } as PrismDIDInfo)
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -454,11 +463,11 @@ export default class Pluto implements PlutoInterface {
    * @async
    * @returns {unknown}
    */
-  async getAllPeerDIDs() {
+  async getAllPeerDIDs(): Promise<PeerDID[]> {
     const didRepository: Repository<entities.DID> =
       this.dataSource.manager.getRepository("did");
     const privateKeysRepository =
-      this.dataSource.manager.getRepository("private_key");
+      this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
     /*
      * This method is overcomplicated, dids should have relations.
      * */
@@ -482,13 +491,16 @@ export default class Pluto implements PlutoInterface {
         })
       );
 
-      return didsWithKeys.map((item) => ({
-        did: DID.fromString(item.did),
-        privateKeys: item.privateKeys.map((key) => ({
+      const peerDIDs = didsWithKeys.map(item => {
+        const privateKeys = item.privateKeys.map((key) => ({
           keyCurve: getKeyCurveByNameAndIndex(key.curve, key.keyPathIndex),
-          value: Buffer.from(key.privateKey),
-        })),
-      })) as PeerDID[];
+          value: Buffer.from(key.privateKey, "hex"),
+        }));
+
+        return new PeerDID(DID.fromString(item.did), privateKeys);
+      });
+
+      return peerDIDs;
     } catch (error) {
       throw new Error((error as Error).message);
     }
@@ -499,27 +511,26 @@ export default class Pluto implements PlutoInterface {
    *
    * @async
    * @param {DID} did
-   * @returns {unknown}
+   * @returns {PrivateKey[]}
    */
   async getDIDPrivateKeysByDID(did: DID): Promise<PrivateKey[]> {
-    const repository = this.dataSource.manager.getRepository("private_key");
-    try {
-      const didString = did.toString();
-      const data = await repository.findBy({
-        didId: Like(`${didString}%`),
-      });
-      return data.map((item) => {
-        const keyCurve = getKeyCurveByNameAndIndex(item.curve);
+    const repository = this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
+    const data = await repository.findBy({ didId: Like(`${did.toString()}%`) });
 
-        if (keyCurve.curve === Curve.ED25519) {
-          return new Ed25519PrivateKey(Buffer.from(item.privateKey));
-        }
+    return data.map(item => this.mapToPrivateKey(item));
+  }
 
-        return new X25519PrivateKey(Buffer.from(item.privateKey));
-      }) as PrivateKey[];
-    } catch (error) {
-      throw new Error((error as Error).message);
+  private mapToPrivateKey(entity: entities.PrivateKey): PrivateKey {
+    switch (entity.curve) {
+      case Curve.SECP256K1:
+        return Secp256k1PrivateKey.from.Hex(entity.privateKey);
+      case Curve.ED25519:
+        return Ed25519PrivateKey.from.Hex(entity.privateKey);
+      case Curve.X25519:
+        return X25519PrivateKey.from.Hex(entity.privateKey);
     }
+
+    throw new Error("Key Curve not recognised");
   }
 
   /**
@@ -530,24 +541,18 @@ export default class Pluto implements PlutoInterface {
    * @returns {unknown}
    */
   async getDIDPrivateKeyByID(id: string) {
-    const repository = this.dataSource.manager.getRepository("private_key");
+    const repository = this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
 
     try {
       const data = await repository.findOne({
-        where: {
-          id,
-        },
+        where: { id },
       });
+
       if (!data) {
         return null;
       }
-      const keyCurve = getKeyCurveByNameAndIndex(data.curve);
 
-      if (keyCurve.curve === Curve.ED25519) {
-        return new Ed25519PrivateKey(Buffer.from(data.privateKey));
-      }
-
-      return new X25519PrivateKey(Buffer.from(data.privateKey));
+      return this.mapToPrivateKey(data);
     } catch (error) {
       throw new Error((error as Error).message);
     }

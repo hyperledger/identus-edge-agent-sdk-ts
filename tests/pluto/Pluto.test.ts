@@ -1,11 +1,12 @@
+import { expect } from "chai";
 import Pluto from "../../src/pluto/Pluto";
 import {
   Curve,
   DID,
   getKeyCurveByNameAndIndex,
+  PeerDID,
   PrivateKey,
 } from "../../src/domain";
-import { expect } from "chai";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";
 import { CredentialType } from "../../src/domain";
@@ -13,7 +14,7 @@ import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey"
 import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
 
-describe("Pluto tests", () => {
+describe("Pluto", () => {
   let instance: Pluto;
 
   beforeEach(async () => {
@@ -25,6 +26,96 @@ describe("Pluto tests", () => {
       synchronize: true,
     });
     await instance.start();
+  });
+
+  describe("getAllPeerDIDs", () => {
+    [
+      Ed25519PrivateKey,
+      X25519PrivateKey,
+      // TODO - can secp256 be a peerDID, it's not handled in PeerDIDCreate.ts?
+      // Secp256k1PrivateKey
+    ].forEach(keyClass => {
+      test(`${keyClass.name}`, async () => {
+        const peerDid = DID.fromString("did:peer:3i21d");
+        const raw = Buffer.from("01011010011101010100011000100010");
+        const privateKey = keyClass.from.Buffer(raw);
+
+        await instance.storePeerDID(peerDid, [privateKey]);
+
+        const result = await instance.getAllPeerDIDs();
+
+        expect(result).to.be.an("array").to.have.length(1);
+
+        const resultPeerDID = result[0];
+        expect(resultPeerDID).to.be.instanceOf(PeerDID);
+        expect(resultPeerDID.did.toString()).to.equal(peerDid.toString());
+        expect(resultPeerDID.privateKeys).to.be.an("array").to.have.length(1);
+
+        const resultPrivateKey = resultPeerDID.privateKeys[0];
+        expect(resultPrivateKey).to.have.property("keyCurve")
+          .to.deep.equal({ curve: privateKey.curve });
+
+        expect(resultPrivateKey).to.have.property("value")
+          .to.deep.equal(raw);
+      });
+    });
+  });
+
+  describe("getDIDPrivateKeysByDID", () => {
+    [
+      Ed25519PrivateKey,
+      X25519PrivateKey,
+      Secp256k1PrivateKey
+    ].forEach(keyClass => {
+      test(`${keyClass.name} returned from DB`, async function () {
+        const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
+        const keyPathIndex = 11;
+        const privateKey = keyClass.from.String("01011010011101010100011000100010");
+
+        await instance.storePrismDID(prismDid, keyPathIndex, privateKey, null);
+
+        const result = await instance.getDIDPrivateKeysByDID(prismDid);
+        const resultKey = result.at(0)!;
+
+        expect(resultKey).to.be.instanceOf(keyClass);
+        expect(resultKey.raw).to.eql(privateKey.raw);
+        expect(resultKey.curve).to.equal(privateKey.curve);
+        expect(resultKey.index).to.equal(privateKey.index);
+        expect(resultKey.size).to.equal(privateKey.size);
+        expect(resultKey.type).to.equal(privateKey.type);
+      });
+    });
+  });
+
+  describe("getDIDPrivateKeyByID", () => {
+    [
+      Ed25519PrivateKey,
+      X25519PrivateKey,
+      Secp256k1PrivateKey
+    ].forEach(keyClass => {
+      test(`${keyClass.name} returned from DB`, async function () {
+        const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
+        const keyPathIndex = 11;
+        const privateKey = keyClass.from.String("01011010011101010100011000100010");
+        const privateKeyId = "001";
+
+        await instance.storePrismDID(prismDid, keyPathIndex, privateKey, privateKeyId);
+
+        const result = await instance.getDIDPrivateKeyByID(privateKeyId);
+
+        expect(result).to.be.instanceOf(keyClass);
+        expect(result?.raw).to.eql(privateKey.raw);
+        expect(result?.curve).to.equal(privateKey.curve);
+        expect(result?.index).to.equal(privateKey.index);
+        expect(result?.size).to.equal(privateKey.size);
+        expect(result?.type).to.equal(privateKey.type);
+      });
+    });
+
+  });
+
+  describe.only("storePrivateKeys", () => {
+
   });
 
   it("should store prism DID", async function () {
@@ -164,6 +255,7 @@ describe("Pluto tests", () => {
     await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
 
     const dids = await instance.getAllPrismDIDs();
+
     expect(dids).not.empty;
   });
 
