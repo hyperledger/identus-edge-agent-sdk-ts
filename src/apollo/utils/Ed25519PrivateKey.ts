@@ -16,6 +16,7 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
   public raw: Uint8Array;
   public keySpecification: Map<string, string> = new Map();
 
+  // TODO - nativeValue wants a Buffer, otherwise getInstance breaks
   constructor(nativeValue: Uint8Array) {
     super();
     this.raw = nativeValue;
@@ -44,4 +45,15 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
     const signature = this.getInstance().sign(message);
     return signature.toBytes();
   }
+
+  public readonly to = {
+    Buffer: () => this.getEncoded(),
+    Hex: () => this.to.Buffer().toString("hex")
+  };
+
+  static from = {
+    Buffer: (value: Buffer) => new Ed25519PrivateKey(value),
+    Hex: (value: string) => Ed25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
+    String: (value: string) => Ed25519PrivateKey.from.Buffer(Buffer.from(value)),
+  };
 }

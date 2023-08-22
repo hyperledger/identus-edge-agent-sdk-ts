@@ -233,7 +233,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const signedJWT = await jwt.sign(
       didInfo.did,
-      base64url.baseDecode(Buffer.from(prismPrivateKey.value).toString()),
+      prismPrivateKey,
       {
         iss: didInfo.did.toString(),
         aud: domain,

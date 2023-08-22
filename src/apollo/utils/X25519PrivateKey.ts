@@ -32,4 +32,16 @@ export class X25519PrivateKey extends PrivateKey {
     const pub = base64url.baseEncode(x25519PrivateKey.publicKey);
     return new X25519PublicKey(Buffer.from(pub));
   }
+
+  public readonly to = {
+    Buffer: () => this.getEncoded(),
+    Hex: () => this.to.Buffer().toString("hex")
+  };
+
+  static from = {
+    Buffer: (value: Buffer) => new X25519PrivateKey(new Uint8Array(value)),
+    Hex: (value: string) => X25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
+    String: (value: string) => X25519PrivateKey.from.Buffer(Buffer.from(value))
+  };
+
 }

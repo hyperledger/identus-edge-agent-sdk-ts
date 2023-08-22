@@ -15,4 +15,9 @@ export abstract class PrivateKey extends Key {
     return this.raw;
   }
   abstract publicKey(): PublicKey;
+
+  abstract to: {
+    Buffer: () => Buffer;
+    Hex: () => string;
+  };
 }
