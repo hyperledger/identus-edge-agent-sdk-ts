@@ -101,20 +101,20 @@ export class SdkAgentWorkflow {
   static async verifyNewCredential(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(30))
-          .until(
-              Questions.getArraySize('credential offer stack',this.credentialOfferStack),
-              equals(1)
-          )
+        .until(
+          Questions.getArraySize('credential offer stack',this.credentialOfferStack),
+          equals(1)
+        )
     )
   }
 
   static async waitToReceiveIssuedCredential(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(30))
-          .until(
-              Questions.getArraySize('issued credential stack',this.issuedCredentialStack),
-              equals(1)
-          )
+        .until(
+          Questions.getArraySize('issued credential stack',this.issuedCredentialStack),
+          equals(1)
+        )
     )
   }
 
@@ -137,10 +137,10 @@ export class SdkAgentWorkflow {
   static async waitForProofRequest(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(30))
-          .until(
-              Questions.getArraySize('proof of request stack', this.proofRequestStack),
-              equals(1)
-          )
+        .until(
+          Questions.getArraySize('proof of request stack', this.proofRequestStack),
+          equals(1)
+        )
     )
   }
 
@@ -159,5 +159,4 @@ export class SdkAgentWorkflow {
   static async stop() {
     await this.edgeAgent.stop()
   }
-
 }
