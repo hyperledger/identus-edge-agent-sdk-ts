@@ -1,3 +1,16 @@
+# [2.2.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.1.0...v2.2.0) (2023-08-23)
+
+
+### Bug Fixes
+
+* **Pluto:** encoding / decoding PrivateKeys ([#78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/78)) ([b9133ac](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/b9133acbcb9cbd883fffec05feb58ecbe24600fc))
+
+
+### Features
+
+* **Castor:** extending createPrismDID to accept a KeyPair or PublicKey ([#70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/70)) ([d06871c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/d06871caadaf1b1f43cedfb1390ea58558b3fce8))
+* **Demo:** Update Mediator DID for demo apps ([#73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/73)) ([7f3c98e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/7f3c98ec77d2cd8cf862d91515c139ff76270f03))
+
 # [2.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.3...v2.1.0) (2023-08-17)
 
 
