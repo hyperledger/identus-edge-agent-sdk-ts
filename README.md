@@ -74,4 +74,4 @@ To run Node.js demo app, run `npm run dev:node` to build the demo app and then r
 
 2. To see how the step by steps examples can guide you refer to each section inside docs folder, Apollo, Castor, Pollux, Mercury, Pluto, Agent
 
-3. Jump straight into the [SDK-REFERENCE](modules.html)
+3. Jump straight into the [SDK-REFERENCE](https://input-output-hk.github.io/atala-prism-wallet-sdk-ts/modules.html)
