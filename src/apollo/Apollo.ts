@@ -127,17 +127,16 @@ export default class Apollo implements ApolloInterface {
   createSeed(mnemonics: MnemonicWordList, passphrase?: string): Seed {
     const mnemonicString = mnemonics.join(" ");
 
-    if (mnemonics.length % 3 != 0) {
-      throw new MnemonicLengthException(
-        "Word list size must be multiple of three words"
-      );
-    } else if (mnemonics.length <= 0) {
-      throw new MnemonicLengthException("Word list is empty");
+    if (mnemonics.length != 12 && mnemonics.length != 24) {
+      throw new MnemonicLengthException("Word list must be 12 or 24 words in length");
     }
+
     if (!bip39.validateMnemonic(mnemonicString, wordlist)) {
       throw new MnemonicWordException(`Invalid mnemonic word/s`);
     }
+
     const seed = bip39.mnemonicToSeedSync(mnemonicString, passphrase);
+
     return {
       value: seed,
     };
@@ -263,8 +262,8 @@ export default class Apollo implements ApolloInterface {
 
         const derivationPathStr = parameters[KeyProperties.derivationPath]
           ? Buffer.from(parameters[KeyProperties.derivationPath]).toString(
-              "hex"
-            )
+            "hex"
+          )
           : Buffer.from(`m/0'/0'/0'`).toString("hex");
 
         const seedStr = parameters[KeyProperties.seed];
