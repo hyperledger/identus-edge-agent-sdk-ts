@@ -10,7 +10,6 @@ import Spacer from "./Spacer";
 import { Box } from "./Box";
 import { PlutoInMemory } from "./PlutoInMemory";
 
-const Domain = SDK.Domain;
 const BasicMessage = SDK.BasicMessage;
 const ListenerKey = SDK.ListenerKey;
 const OfferCredential = SDK.OfferCredential;

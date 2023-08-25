@@ -11,12 +11,11 @@
     "README.MD"
   ],
   "scripts": {
-    "build": "npm run clean-up && npm run build:browser && npm run build:node && npm run types",
+    "build": "npm run build:browser && npm run build:node && npm run types",
     "types": "rm -rf build/typings && tsc",
-    "clean-up": "./scripts/typeorm-cleanup.sh",
     "build:browser": "rollup -c rollup/rollup.browser.mjs",
     "build:node": "rollup -c rollup/rollup.node.mjs",
-    "dev:browser": "npm run clean-up && webpack serve --mode=development --config webpack/webpack.browser.conf.js",
+    "dev:browser": "webpack serve --mode=development --config webpack/webpack.browser.conf.js",
     "dev:node": "rm -rf build && npm run types && webpack  --watch --mode=development --config webpack/webpack.node.conf.js",
     "test": "jest",
     "coverage": "npm run test -- --coverage",
@@ -188,11 +187,7 @@
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
-    "localforage": "^1.10.0",
     "multiformats": "^9.9.0",
-    "sql.js": "^1.8.0",
-    "sqlite3": "^5.1.6",
-    "typeorm": "^0.3.12",
     "util": "^0.12.5"
   }
 }
