@@ -11,7 +11,6 @@ import {
   ListenerKey,
   Mercury,
   OfferCredential,
-  Pluto,
   PublicMediatorStore,
   RequestPresentation,
 } from '@input-output-hk/atala-prism-wallet-sdk'
@@ -20,7 +19,7 @@ import { EnvironmentVariables } from '../environment.variables'
 import { Actor, Duration, Notepad, Wait } from '@serenity-js/core'
 import { Questions } from '../../Questions'
 import { equals } from '@serenity-js/assertions'
-
+import { PlutoInMemory } from '../../../../../tests/fixtures/PlutoInMemory';
 export class SdkAgentWorkflow {
   private static edgeAgent: Agent
   private static connectionsManager: ConnectionsManager
@@ -36,9 +35,7 @@ export class SdkAgentWorkflow {
 
     let apollo = new Apollo()
     let castor = new Castor(apollo)
-    let pluto = new Pluto({
-      type: 'sqljs'
-    })
+    let pluto = new PlutoInMemory()
 
     let api = new ApiImpl()
     let didcomm = new DIDCommWrapper(apollo, castor, pluto)
