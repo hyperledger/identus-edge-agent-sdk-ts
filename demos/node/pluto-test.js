@@ -1,11 +1,10 @@
 import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
-import * as Pluto from "@input-output-hk/atala-prism-wallet-sdk/build/pluto-sqljs/Pluto.js";
 
 const plutoConfig = {
   type: "sqljs",
 };
 
-const pluto = new Pluto(plutoConfig);
+const pluto = new SDK.Pluto(plutoConfig);
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 

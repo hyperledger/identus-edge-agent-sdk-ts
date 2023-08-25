@@ -8,7 +8,7 @@ import {
 } from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
-import Pluto from "../../pluto/Pluto";
+import { Pluto } from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
 
 export class DIDCommSecretsResolver implements SecretsResolver {

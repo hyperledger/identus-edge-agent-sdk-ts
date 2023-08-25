@@ -8,6 +8,7 @@ import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
+import { PlutoInMemory } from "./PlutoInMemory";
 
 const Domain = SDK.Domain;
 const BasicMessage = SDK.BasicMessage;
@@ -151,7 +152,7 @@ function Signatures({keyPair}: { keyPair: SDK.Domain.KeyPair }) {
       if (keyPair.publicKey.canVerify()) {
         isValid = keyPair.publicKey.verify(Buffer.from("hello world"), Buffer.from(jose.base64url.decode(signatureEncoded)))
       }
-     
+
     } catch (e) {
       console.warn("Failed to validate signature", e);
       isValid = false;
@@ -205,7 +206,7 @@ function Dids() {
       seed: Buffer.from(seed.value).toString("hex"),
     });
 
-    
+
     const prismDID = await castor.createPrismDID(privateKey.publicKey(), [
       exampleService,
     ]);
@@ -310,7 +311,7 @@ function Dids() {
   );
 }
 
-const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
+const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto }> = props => {
   const CONNECTION_EVENT = ListenerKey.CONNECTION
   const [connections, setConnections] = React.useState<Array<any>>([]);
   const [oob, setOOB] = React.useState<string>("https://domain.com/path?_oob=eyJpZCI6ImM2NTdhYmFkLWFhNDktNDk2NS1iOTQyLWNmMDdmMzY0NTQ4NyIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNmallKRDdHU2N4WmJSN3I1aUtQVU05MVQ1SHR4dXRSeTNtWjFmczZBb1pBeS5WejZNa3E5Q0Jqc1B6dHlBZDhCZmRKS3BDaXNIcW5nenpGZE1VNzJtRExER0xEb0FuLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19")
@@ -345,7 +346,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Pluto }> = props => {
   </>
 }
 
-const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }> = props => {
+const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.Pluto }> = props => {
   const [state, setState] = React.useState<string>(props.agent.state);
   const [error, setError] = React.useState<any>();
 
@@ -514,17 +515,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Pluto }
 };
 
 const useSDK = () => {
-  const pluto = new SDK.Pluto({
-    type: 'sqljs',
-    synchronize: true,
-    location: "pluto",
-    dropSchema: false,
-    // sqlJsConfig: {
-    //   locateFile: (filename: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.2.1/dist/${filename}`
-    // },
-    autoSave: true,
-    useLocalForage: true,
-  });
+  const pluto = new PlutoInMemory();
   const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
   const mercury = new SDK.Mercury(castor, didcomm, api);
   const store = new SDK.PublicMediatorStore(pluto);

@@ -10,7 +10,7 @@ import type {
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
-import Pluto from "../../pluto/Pluto";
+import { Pluto } from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
 import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
