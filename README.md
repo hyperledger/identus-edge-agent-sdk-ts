@@ -30,13 +30,13 @@ The complete platform is separated in multiple repositories:
 
 ### Getting started
 
-This repository includes a browser and a nodejs demo application, and also a step by step documented process.
+This repository includes a browser and a Node.js demo application, and also a step-by-step documented process to run it.
 
 #### Running a demo project
 
 To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
 
-From the repository, cd into `{path}/prism-wallet-sdk-ts`:
+From the repository root run:
 
 ```bash
 npm i
