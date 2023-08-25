@@ -1,10 +1,10 @@
 import typescript from "rollup-plugin-typescript2";
+
 import terser from "@rollup/plugin-terser";
 import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
 import json from "@rollup/plugin-json";
 import commonjs from "@rollup/plugin-commonjs";
-
 const externals = [
   "@scure/bip39/wordlists/english",
   "elliptic",
@@ -25,18 +25,12 @@ const externals = [
   "did-jwt",
   "axios",
 ];
-
-export default ({
-  mode,
-  plugins = [],
-  entryPoint = "src/index.ts",
-  outputDir,
-}) => {
+export default (mode, plugins = []) => {
   return {
-    input: [entryPoint],
+    input: ["src/index.ts"],
     output: {
       sourcemap: true,
-      dir: outputDir || `build/${mode}`,
+      dir: `build/${mode}`,
       format: mode === "node" ? "cjs" : "esm",
       name: "prism",
     },
