@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import Pluto from "../../src/pluto/Pluto";
+import { PlutoInMemory as Pluto } from "../fixtures/PlutoInMemory";
 import {
   Curve,
   DID,
@@ -18,13 +18,7 @@ describe("Pluto", () => {
   let instance: Pluto;
 
   beforeEach(async () => {
-    instance = new Pluto({
-      type: "sqlite",
-      dropSchema: true,
-      database: "pluto.db",
-      logger: "debug",
-      synchronize: true,
-    });
+    instance = new Pluto();
     await instance.start();
   });
 
@@ -453,24 +447,46 @@ describe("Pluto", () => {
   });
 
   it("should get all messages by DID", async function () {
-    const message = {
+    const myDid = DID.fromString("did:prism:123");
+    const testDid1 = DID.fromString("did:prism:321");
+    const testDid2 = DID.fromString("did:prism:abc");
+
+    const message1 = {
       id: randomUUID(),
       thid: "",
-      to: DID.fromString("did:prism:123"),
-      from: DID.fromString("did:prism:321"),
+      to: myDid,
+      from: testDid1,
       direction: MessageDirection.RECEIVED,
       fromPrior: "",
       ack: ["test"],
-      body: "Message",
+      body: "Message received",
       createdTime: new Date().toISOString(),
       attachments: [],
       piuri: "",
       extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toISOString(),
     };
-    await instance.storeMessage(message);
-    const messages = await instance.getAllMessagesByDID(message.from);
-    expect(messages).not.empty;
+    const message2 = {
+      id: randomUUID(),
+      thid: "",
+      to: testDid2,
+      from: myDid,
+      direction: MessageDirection.SENT,
+      fromPrior: "",
+      ack: ["test"],
+      body: "Message sent",
+      createdTime: new Date().toISOString(),
+      attachments: [],
+      piuri: "",
+      extraHeaders: ["x-extra-header"],
+      expiresTimePlus: new Date().toISOString(),
+    };
+    await instance.storeMessage(message1);
+    await instance.storeMessage(message2);
+
+    const messages = await instance.getAllMessagesByDID(myDid);
+
+    expect(messages.length).to.equal(2);
   });
 
   it("should get all messages sent", async function () {
@@ -490,9 +506,12 @@ describe("Pluto", () => {
       expiresTimePlus: new Date().toISOString(),
     };
     await instance.storeMessage(message);
+
     const messages = await instance.getAllMessagesSent();
+
     expect(messages).not.empty;
   });
+
   //
   it("should get all messages received", async function () {
     const message = {
@@ -545,7 +564,7 @@ describe("Pluto", () => {
       thid: "",
       to,
       from,
-      direction: MessageDirection.SENT,
+      direction: MessageDirection.RECEIVED,
       fromPrior: "",
       ack: ["test"],
       body: "Message",
@@ -556,6 +575,7 @@ describe("Pluto", () => {
       expiresTimePlus: new Date().toISOString(),
     });
     const messages = await instance.getAllMessagesReceivedFrom(from);
+
     expect(messages).not.empty;
   });
   //

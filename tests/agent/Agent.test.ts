@@ -3,7 +3,7 @@ import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import Agent from "../../src/prism-agent/Agent";
-import Pluto from "../../src/pluto/Pluto";
+import { PlutoInMemory as Pluto } from "../fixtures/PlutoInMemory";
 import Mercury from "../../src/mercury/Mercury";
 import * as UUIDLib from "@stablelib/uuid";
 import Apollo from "../../src/apollo/Apollo";
@@ -35,7 +35,7 @@ describe("Agent Tests", () => {
     jest.useRealTimers();
 
     sandbox.restore();
-    await pluto.dataSource.destroy();
+    await pluto.destroy();
     await agent.stop();
   });
   beforeEach(async () => {
@@ -51,13 +51,7 @@ describe("Agent Tests", () => {
       packEncrypted: async () => "",
       unpack: async () => new Message("{}", undefined, "TypeofMessage"),
     };
-    pluto = new Pluto({
-      type: "sqlite",
-      dropSchema: true,
-      database: "pluto.db",
-      logger: "debug",
-      synchronize: true,
-    });
+    pluto = new Pluto();
     const mercury = new Mercury(castor, didProtocol, httpManager);
     const connectionsManager = new ConnectionsManagerMock();
     agent = Agent.instanceFromConnectionManager(
