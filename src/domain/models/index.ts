@@ -14,6 +14,7 @@ export * from "./PeerDID";
 export * from "./PrismDIDInfo";
 export * from "./PrismDIDMethodId";
 export * from "./keyManagement";
+export * from "./KeyProperties";
 export * from "./Seed";
 export * from "./SeedWords";
 export * from "./Signature";

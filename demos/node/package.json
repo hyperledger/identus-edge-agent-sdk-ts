@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node ./src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -13,9 +13,16 @@
     "@input-output-hk/atala-prism-wallet-sdk": "file:../..",
     "ipfs": "^0.66.0",
     "orbit-db": "^0.29.0",
-    "orbit-db-access-controllers": "^0.4.0"
+    "orbit-db-access-controllers": "^0.4.0",
+    "prettier": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
-    "sql.js": "^1.8.0"
+    "@types/node": "^20.5.6",
+    "sql.js": "^1.8.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }
