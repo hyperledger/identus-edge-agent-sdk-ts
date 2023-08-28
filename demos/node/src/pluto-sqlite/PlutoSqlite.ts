@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DataSource, Like, Repository } from "typeorm";
+import { DataSource, DataSourceOptions, Like, Repository } from "typeorm";
 import * as entities from "./entities";
 import { Apollo, Domain } from "@input-output-hk/atala-prism-wallet-sdk";
 import Did from "./entities/DID";
@@ -13,16 +13,19 @@ import Did from "./entities/DID";
  * @class PlutoSqlite
  * @typedef {PlutoSqlite}
  */
-export default class PlutoSqlite implements Domain.Pluto {
+export class PlutoSqlite implements Domain.Pluto {
   dataSource: DataSource;
-
-  constructor() {
+  // {dropSchema?: string, logger?: "debug" | "advanced-console" }
+  constructor(dataSourceOptions?: Partial<DataSourceOptions>) {
     this.dataSource = new DataSource({
       type: "sqlite",
       database: "pluto.db",
       synchronize: true,
       logging: true,
       entities: Object.values(entities),
+      //
+      dropSchema: dataSourceOptions?.dropSchema,
+      logger: dataSourceOptions?.logger,
     });
   }
 
@@ -65,6 +68,10 @@ export default class PlutoSqlite implements Domain.Pluto {
     } catch (error) {
       throw new Error((error as Error).message);
     }
+  }
+
+  async destroy() {
+    await this.dataSource.destroy();
   }
 
   /**
@@ -602,9 +609,14 @@ export default class PlutoSqlite implements Domain.Pluto {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
     const data = await repository.find({
-      where: {
-        from: did.toString(),
-      },
+      where: [
+        {
+          from: did.toString(),
+        },
+        {
+          to: did.toString(),
+        },
+      ],
     });
 
     return data.map(PlutoSqlite.transformMessageDBToInterface);

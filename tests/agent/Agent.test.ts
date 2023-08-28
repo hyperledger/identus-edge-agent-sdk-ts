@@ -3,7 +3,7 @@ import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import Agent from "../../src/prism-agent/Agent";
-import { PlutoInMemory as Pluto } from "../fixtures/PlutoInMemory";
+import { PlutoInMemory as Pluto } from "../../demos/browser/src/PlutoInMemory";
 import Mercury from "../../src/mercury/Mercury";
 import * as UUIDLib from "@stablelib/uuid";
 import Apollo from "../../src/apollo/Apollo";
@@ -59,7 +59,7 @@ describe("Agent Tests", () => {
       castor,
       pluto,
       mercury,
-      connectionsManager
+      connectionsManager,
     );
     await agent.start();
   });
@@ -69,7 +69,7 @@ describe("Agent Tests", () => {
     const storePeerDID = sandbox.stub(pluto, "storePeerDID").resolves();
     const updateKeyList = sandbox.stub(
       didHigherFunctions.mediationHandler,
-      "updateKeyListWithDIDs"
+      "updateKeyListWithDIDs",
     );
     const createPeerDID = sandbox.stub(castor, "createPeerDID");
 
@@ -86,7 +86,7 @@ describe("Agent Tests", () => {
     const expectedService = new Service(
       "#didcomm-1",
       ["DIDCommMessaging"],
-      new ServiceEndpoint(mediatorDID.toString())
+      new ServiceEndpoint(mediatorDID.toString()),
     );
     createPeerDID.calledWith([], [expectedService]);
     updateKeyList.calledWith([peerDID]);
@@ -100,7 +100,7 @@ describe("Agent Tests", () => {
       "https://my.domain.com/path?_oob=eyJpZCI6Ijg5NWYzMWZhLTIyNWUtNDRlNi1hNzkyLWFhN2E0OGY1MjgzYiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC93cm9uZ1R5cGUiLCJmcm9tIjoiZGlkOnBlZXI6Mi5FejZMU2V6eWtjQmpNS2dHUEVEaDQ0cEM4UWZ1N2NDekpvc1Z1VjRqcDZ4NVk1QkhMLlZ6Nk1rd1JKdDFTbVpwM2FERGhMVW40ZkszM204TExaWFc5MlhUOHZyVUh1NHVwQTYuU2V5SjBJam9pWkcwaUxDSnpJam9pYUhSMGNITTZMeTlyT0hNdFpHVjJMbUYwWVd4aGNISnBjMjB1YVc4dmNISnBjMjB0WVdkbGJuUXZaR2xrWTI5dGJTSXNJbklpT2x0ZExDSmhJanBiSW1ScFpHTnZiVzB2ZGpJaVhYMCIsImJvZHkiOnsiZ29hbF9jb2RlIjoiaW8uYXRhbGFwcmlzbS5jb25uZWN0IiwiZ29hbCI6IkVzdGFibGlzaCBhIHRydXN0IGNvbm5lY3Rpb24gYmV0d2VlbiB0d28gcGVlcnMgdXNpbmcgdGhlIHByb3RvY29sICdodHRwczovL2F0YWxhcHJpc20uaW8vbWVyY3VyeS9jb25uZWN0aW9ucy8xLjAvd3JvbmcnIiwiYWNjZXB0IjpbXX19";
 
     expect(
-      agent.parseOOBInvitation(new URL(oob))
+      agent.parseOOBInvitation(new URL(oob)),
     ).to.eventually.be.rejectedWith(AgentError.UnknownInvitationTypeError);
   });
 
@@ -110,7 +110,7 @@ describe("Agent Tests", () => {
     const didHigherFunctions = (agent as any).agentDIDHigherFunctions;
 
     const did = DID.fromString(
-      "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0",
     );
     const validOOB =
       "https://my.domain.com/path?_oob=eyJpZCI6Ijg5NWYzMWZhLTIyNWUtNDRlNi1hNzkyLWFhN2E0OGY1MjgzYiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNlenlrY0JqTUtnR1BFRGg0NHBDOFFmdTdjQ3pKb3NWdVY0anA2eDVZNUJITC5WejZNa3dSSnQxU21acDNhRERoTFVuNGZLMzNtOExMWlhXOTJYVDh2clVIdTR1cEE2LlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19";
@@ -119,7 +119,7 @@ describe("Agent Tests", () => {
     const sendMessage = sandbox.stub(agentInvitationsConnection, "sendMessage");
     const addConnection = sandbox.stub(
       agentInvitationsConnection,
-      "addConnection"
+      "addConnection",
     );
 
     sandbox.stub(UUIDLib, "uuid").returns("123456-123456-12356-123456");
@@ -132,7 +132,7 @@ describe("Agent Tests", () => {
 
     const validHanshakeMessage = HandshakeRequest.fromOutOfBand(
       oobInvitation,
-      did
+      did,
     ).makeMessage();
 
     await agent.acceptDIDCommInvitation(oobInvitation);
