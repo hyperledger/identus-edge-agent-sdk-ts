@@ -84,10 +84,9 @@ export class DIDCommWrapper implements DIDCommProtocol {
       //expires_time: Number(message.expiresTimePlus),
       thid: message.thid,
       pthid: message.pthid,
-      //TODO: Remove comment once fixed by rootsID or we are sure this works,
-      //if not message is not correctly formatted
-      //return_route: "all",
+      return_route: "all",
     });
+
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,
       fromDid ? fromDid.toString() : null,
