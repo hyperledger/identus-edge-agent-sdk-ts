@@ -219,7 +219,7 @@ export class PlutoInMemory implements Domain.Pluto {
     const keyRecords = this._keyStorage[didStr];
 
     if (!keyRecords) {
-      return null;
+      return [];
     }
 
     return keyRecords.map((keyRecord) => keyRecord.privateKey);
