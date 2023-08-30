@@ -108,6 +108,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "reflect-metadata": "^0.1.13",
     "replace": "^1.2.2",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-ignore": "^1.0.10",
@@ -128,9 +129,11 @@
     "typedoc-plugin-rename-defaults": "^0.6.5",
     "typedoc-plugin-superstruct": "^1.0.0",
     "typedoc-theme-hierarchy": "^4.0.0",
+    "typeorm": "^0.3.17",
     "typescript": "^4.9.5",
     "url": "^0.11.0",
     "url-loader": "^4.1.1",
+    "uuid": "^9.0.0",
     "webpack": "^5.76.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "4.11.1",
@@ -188,6 +191,7 @@
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
+    "sqlite3": "^5.1.6",
     "util": "^0.12.5"
   }
 }
