@@ -75,7 +75,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asynchronously Store a PrismDID by providing the DID, the privateKey, its keyPath index and an optional alias
+   * Asynchronously Store a PRISM DID by providing the DID, the privateKey, its keyPath index and an optional alias
    *
    * @async
    * @param {DID} did
