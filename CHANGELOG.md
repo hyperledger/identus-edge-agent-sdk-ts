@@ -1,3 +1,16 @@
+# [2.4.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.3.0...v2.4.0) (2023-08-30)
+
+
+### Bug Fixes
+
+* **mercury:** Add return route with value all to async messages that are initiated by the holder. ([#85](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/85)) ([5e56675](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/5e56675292ea2f824f3c685d87411540493cb85b))
+
+
+### Features
+
+* **Apollo:** MnemonicWordList must be 24 or 12 words long ([#81](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/81)) ([fbe5678](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/fbe5678e5c61486c009fa3121c6a1d7a72e5212d))
+* **Sec:** updating package dependencies ([#83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/83)) ([460e123](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/460e1238a6f2e709e7645dd4aa33d8c98acd0f33))
+
 # [2.3.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.2.0...v2.3.0) (2023-08-28)
 
 
