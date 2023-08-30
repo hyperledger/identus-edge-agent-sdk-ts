@@ -66,6 +66,13 @@ npm i
 npm run start
 ```
 
+#### Implementing storage for the SDK
+This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.
+
+We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
+
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
+
 #### Demo development mode
 
 To run browser demo app, just run `npm run dev:browser` and browser will automatically open and load the demo app.
