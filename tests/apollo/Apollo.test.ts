@@ -1,18 +1,17 @@
 import { expect, assert } from "chai";
 
-import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
-
 import Apollo from "../../src/apollo/Apollo";
+import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 import * as ECConfig from "../../src/config/ECConfig";
 import { Curve, KeyTypes } from "../../src/domain/models";
 import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
-import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
+import { MnemonicLengthException, MnemonicWordException } from "../../src/domain/models/errors/Mnemonic";
 
-let apollo: Apollo;
+describe("Apollo", () => {
+  let apollo: Apollo;
 
-describe("Apollo Tests", () => {
   beforeEach(() => {
     apollo = new Apollo();
   });
@@ -36,58 +35,71 @@ describe("Apollo Tests", () => {
     expect(2048 - seenWords.length).to.be.lessThan(512);
   });
 
-  it("Should compute the right binary seed", () => {
-    const password = "TREZOR";
-    const vectors = JSON.parse(bip39Vectors) as string[][];
-    for (const v of vectors) {
-      const [, mnemonicPhrase, binarySeedHex] = v;
-      const mnemonicCode = mnemonicPhrase.split(" ") as MnemonicWordList;
-      const binarySeed = apollo.createSeed(mnemonicCode, password);
-      expect(binarySeedHex).to.equal(
-        Buffer.from(binarySeed.value).toString("hex")
-      );
+  describe("createSeed", () => {
+    const list = ['tool', 'knock', 'nerve', 'skate', 'detail', 'early', 'limit', 'energy', 'foam', 'garage', 'resource', 'boring', 'traffic', 'violin', 'cave', 'place', 'accuse', 'can', 'bring', 'bring', 'cargo', 'clip', 'stick', 'dog'];
+
+    test("Passes with length 24 word list", () => {
+      const result = apollo.createSeed(list as any, "");
+      expect(result).not.to.be.undefined;
+    });
+
+    test("Passes with length 12 word list", () => {
+      const mnemonics = 'legal winner thank year wave sausage worth useful legal winner thank yellow'.split(" ");
+      const result = apollo.createSeed(mnemonics as any, "");
+      expect(result).not.to.be.undefined;
+    });
+
+    for (let i = 0; i < 24; i++) {
+      if (i === 12) continue;
+
+      it(`Should fail when mnemonics is wrong length [${i}]`, () => {
+        const mnemonics = list.slice(0, i);
+
+        assert.throws(() => apollo.createSeed(mnemonics as any, ""), MnemonicLengthException);
+      });
     }
-  });
 
-  it("Should test failure when checksum is incorrect", () => {
-    const mnemonicCode = Array(24).fill("abandon") as MnemonicWordList;
-    assert.throws(
-      () => {
-        apollo.createSeed(mnemonicCode, "");
-      },
-      Error,
-      "Invalid mnemonic word/s"
-    );
-  });
+    it("Should test failure when checksum is incorrect", () => {
+      const mnemonicCode = Array(24).fill("abandon") as MnemonicWordList;
+      assert.throws(
+        () => {
+          apollo.createSeed(mnemonicCode, "");
+        },
+        Error,
+        "Invalid mnemonic word/s"
+      );
+    });
 
-  it("Should test failure when invalid word is used", () => {
-    const mnemonicCode = [
-      "hocus",
-      "pocus",
-      "mnemo",
-      "codus",
-      ...Array(20).fill("abandon"),
-    ] as MnemonicWordList;
-    assert.throws(
-      () => {
-        apollo.createSeed(mnemonicCode, "");
-      },
-      Error,
-      "Invalid mnemonic word/s"
-    );
-  });
+    it("Should compute the right binary seed", () => {
+      const password = "TREZOR";
+      const vectors = JSON.parse(bip39Vectors) as string[][];
 
-  it("Should test failure when wrong mnemonic length is used", () => {
-    const mnemonicCode = [] as unknown as MnemonicWordList;
-    mnemonicCode.push("abandon");
+      for (const v of vectors) {
+        const [, mnemonicPhrase, binarySeedHex] = v;
+        const mnemonicCode = mnemonicPhrase.split(" ") as MnemonicWordList;
+        const binarySeed = apollo.createSeed(mnemonicCode, password);
 
-    assert.throws(
-      () => {
-        apollo.createSeed(mnemonicCode, "");
-      },
-      Error,
-      "Word list size must be multiple of three words"
-    );
+        expect(binarySeedHex).to.equal(
+          Buffer.from(binarySeed.value).toString("hex")
+        );
+      }
+    });
+
+    it("Should test failure when invalid word is used", () => {
+      const mnemonicCode = [
+        "hocus",
+        "pocus",
+        "mnemo",
+        "codus",
+        ...Array(20).fill("abandon"),
+      ] as MnemonicWordList;
+      assert.throws(
+        () => {
+          apollo.createSeed(mnemonicCode, "");
+        },
+        MnemonicWordException
+      );
+    });
   });
 
   it("Should test secp256k1KeyPair generation", () => {
