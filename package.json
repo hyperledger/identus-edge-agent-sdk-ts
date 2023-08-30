@@ -11,12 +11,11 @@
     "README.MD"
   ],
   "scripts": {
-    "build": "npm run clean-up && npm run build:browser && npm run build:node && npm run types",
+    "build": "npm run build:browser && npm run build:node && npm run types",
     "types": "rm -rf build/typings && tsc",
-    "clean-up": "./scripts/typeorm-cleanup.sh",
     "build:browser": "rollup -c rollup/rollup.browser.mjs",
     "build:node": "rollup -c rollup/rollup.node.mjs",
-    "dev:browser": "npm run clean-up && webpack serve --mode=development --config webpack/webpack.browser.conf.js",
+    "dev:browser": "webpack serve --mode=development --config webpack/webpack.browser.conf.js",
     "dev:node": "rm -rf build && npm run types && webpack  --watch --mode=development --config webpack/webpack.node.conf.js",
     "test": "jest",
     "coverage": "npm run test -- --coverage",
@@ -84,6 +83,8 @@
     "jest": "^29.5.0",
     "jest-junit": "^16.0.0",
     "path-browserify": "^1.0.1",
+    "prettier": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
     "replace": "^1.2.2",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-ignore": "^1.0.10",
@@ -101,7 +102,9 @@
     "typedoc-plugin-rename-defaults": "^0.6.5",
     "typedoc-plugin-superstruct": "^1.0.0",
     "typedoc-theme-hierarchy": "^4.0.0",
+    "typeorm": "^0.3.17",
     "typescript": "^4.9.5",
+    "uuid": "^9.0.0",
     "webpack": "^5.76.0",
     "webpack-node-externals": "^3.0.0"
   },
@@ -156,11 +159,8 @@
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
-    "localforage": "^1.10.0",
     "multiformats": "^9.9.0",
-    "sql.js": "^1.8.0",
     "sqlite3": "^5.1.6",
-    "typeorm": "^0.3.12",
     "util": "^0.12.5"
   }
 }

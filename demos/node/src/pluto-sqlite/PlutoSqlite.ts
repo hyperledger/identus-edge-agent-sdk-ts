@@ -1,61 +1,8 @@
 import "reflect-metadata";
-import {
-  Curve,
-  DID,
-  getKeyCurveByNameAndIndex,
-  Mediator,
-  Message,
-  PeerDID,
-} from "../domain";
-import { PrismDIDInfo } from "../domain/models/PrismDIDInfo";
-import { VerifiableCredential } from "../domain/models/VerifiableCredential";
-import { Pluto as PlutoInterface } from "../domain/buildingBlocks/Pluto";
-import { DataSource, Like, Repository } from "typeorm";
+import { DataSource, DataSourceOptions, Like, Repository } from "typeorm";
 import * as entities from "./entities";
+import { Apollo, Domain } from "@input-output-hk/atala-prism-wallet-sdk";
 import Did from "./entities/DID";
-import { DIDPair } from "../domain/models/DIDPair";
-import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
-import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
-import { CockroachConnectionOptions } from "typeorm/driver/cockroachdb/CockroachConnectionOptions";
-import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
-import { SqlServerConnectionOptions } from "typeorm/driver/sqlserver/SqlServerConnectionOptions";
-import { SapConnectionOptions } from "typeorm/driver/sap/SapConnectionOptions";
-import { OracleConnectionOptions } from "typeorm/driver/oracle/OracleConnectionOptions";
-import { CordovaConnectionOptions } from "typeorm/driver/cordova/CordovaConnectionOptions";
-import { NativescriptConnectionOptions } from "typeorm/driver/nativescript/NativescriptConnectionOptions";
-import { SqljsConnectionOptions } from "typeorm/driver/sqljs/SqljsConnectionOptions";
-import { MongoConnectionOptions } from "typeorm/driver/mongodb/MongoConnectionOptions";
-import { AuroraMysqlConnectionOptions } from "typeorm/driver/aurora-mysql/AuroraMysqlConnectionOptions";
-import { AuroraPostgresConnectionOptions } from "typeorm/driver/aurora-postgres/AuroraPostgresConnectionOptions";
-import { ExpoConnectionOptions } from "typeorm/driver/expo/ExpoConnectionOptions";
-import { BetterSqlite3ConnectionOptions } from "typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions";
-import { CapacitorConnectionOptions } from "typeorm/driver/capacitor/CapacitorConnectionOptions";
-import { SpannerConnectionOptions } from "typeorm/driver/spanner/SpannerConnectionOptions";
-import { PrivateKey } from "../domain/models";
-import { KeyProperties } from "../domain/models/KeyProperties";
-import { Ed25519PrivateKey } from "../apollo/utils/Ed25519PrivateKey";
-import { X25519PrivateKey } from "../apollo/utils/X25519PrivateKey";
-import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
-
-type IgnoreProps = "entries" | "entityPrefix" | "metadataTableName";
-export type PlutoConnectionProps =
-  | Omit<MysqlConnectionOptions, IgnoreProps>
-  | Omit<PostgresConnectionOptions, IgnoreProps>
-  | Omit<CockroachConnectionOptions, IgnoreProps>
-  | Omit<SqliteConnectionOptions, IgnoreProps>
-  | Omit<SqlServerConnectionOptions, IgnoreProps>
-  | Omit<SapConnectionOptions, IgnoreProps>
-  | Omit<OracleConnectionOptions, IgnoreProps>
-  | Omit<CordovaConnectionOptions, IgnoreProps>
-  | Omit<NativescriptConnectionOptions, IgnoreProps>
-  | Omit<SqljsConnectionOptions, IgnoreProps>
-  | Omit<MongoConnectionOptions, IgnoreProps>
-  | Omit<AuroraMysqlConnectionOptions, IgnoreProps>
-  | Omit<AuroraPostgresConnectionOptions, IgnoreProps>
-  | Omit<ExpoConnectionOptions, IgnoreProps>
-  | Omit<BetterSqlite3ConnectionOptions, IgnoreProps>
-  | Omit<CapacitorConnectionOptions, IgnoreProps>
-  | Omit<SpannerConnectionOptions, IgnoreProps>;
 
 /**
  * Our example implementation of storage interface PlutoInterface used
@@ -63,48 +10,33 @@ export type PlutoConnectionProps =
  * keyPairs, credentials, connections, and data it needs
  *
  * @export
- * @class Pluto
- * @typedef {Pluto}
+ * @class PlutoSqlite
+ * @typedef {PlutoSqlite}
  */
-export default class Pluto implements PlutoInterface {
+export class PlutoSqlite implements Domain.Pluto {
   dataSource: DataSource;
-  wasmUrl: string =
-    typeof window !== "undefined"
-      ? `https://sql.js.org`
-      : `node_modules/sql.js`;
-
-  /**
-   * Creates an instance of Pluto.
-   *
-   * @constructor
-   * @param {PlutoConnectionProps} connection
-   */
-  constructor(connection: PlutoConnectionProps) {
-    const presetSqlJSConfig =
-      connection.type === "sqljs"
-        ? {
-          location: "pluto",
-          useLocalForage: typeof window !== "undefined",
-          sqlJsConfig: {
-            locateFile: (file: string) => `${this.wasmUrl}/dist/${file}`,
-          },
-        }
-        : {};
+  // {dropSchema?: string, logger?: "debug" | "advanced-console" }
+  constructor(dataSourceOptions?: Partial<DataSourceOptions>) {
     this.dataSource = new DataSource({
-      ...presetSqlJSConfig,
-      ...connection,
-      entities: Object.values(entities),
+      type: "sqlite",
+      database: "pluto.db",
       synchronize: true,
+      logging: true,
+      entities: Object.values(entities),
+      //
+      dropSchema: dataSourceOptions?.dropSchema,
+      logger: dataSourceOptions?.logger,
     });
   }
 
   private static transformMessageDBToInterface(
-    item: entities.Message
-  ): Message {
+    item: entities.Message,
+  ): Domain.Message {
     const jsonData = JSON.parse(item.dataJson);
+
     return {
-      from: DID.fromString(item.from),
-      to: DID.fromString(item.to),
+      from: Domain.DID.fromString(item.from),
+      to: Domain.DID.fromString(item.to),
       thid: item.thid,
       direction: item.isReceived,
       piuri: jsonData.piuri,
@@ -121,7 +53,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously Starts an instance of the Database connection
+   * Asynchronously starts an instance of the Database connection
    *
    * @async
    * @returns {*}
@@ -130,6 +62,7 @@ export default class Pluto implements PlutoInterface {
     if (this.dataSource.isInitialized) {
       throw new Error("Database is already initialised");
     }
+
     try {
       await this.dataSource.initialize();
     } catch (error) {
@@ -137,8 +70,12 @@ export default class Pluto implements PlutoInterface {
     }
   }
 
+  async destroy() {
+    await this.dataSource.destroy();
+  }
+
   /**
-   * Asyncronously Store a PrismDID by providing the DID, the privateKey, its keyPath index and an optional alias
+   * Asynchronously Store a PRISM DID by providing the DID, the privateKey, its keyPath index and an optional alias
    *
    * @async
    * @param {DID} did
@@ -149,11 +86,11 @@ export default class Pluto implements PlutoInterface {
    * @returns {*}
    */
   async storePrismDID(
-    did: DID,
+    did: Domain.DID,
     keyPathIndex: number,
-    privateKey: PrivateKey,
+    privateKey: Domain.PrivateKey,
     privateKeyMetaId: string | null,
-    alias?: string
+    alias?: string,
   ) {
     const didEntity = new entities.DID();
     didEntity.did = did.toString();
@@ -168,19 +105,19 @@ export default class Pluto implements PlutoInterface {
       privateKey,
       did,
       keyPathIndex,
-      privateKeyMetaId
+      privateKeyMetaId,
     );
   }
 
   /**
-   * Asyncronously Store a peerDID just by providing the DID and an array of its privateKeys
+   * Asynchronously Store a peerDID just by providing the DID and an array of its privateKeys
    *
    * @async
    * @param {DID} did
    * @param {PrivateKey[]} privateKeys
    * @returns {*}
    */
-  async storePeerDID(did: DID, privateKeys: PrivateKey[]) {
+  async storePeerDID(did: Domain.DID, privateKeys: Domain.PrivateKey[]) {
     const didEntity = new entities.DID();
     didEntity.did = did.toString();
     didEntity.method = did.method;
@@ -193,18 +130,18 @@ export default class Pluto implements PlutoInterface {
         this.storePrivateKeys(
           privateKey,
           did,
-          privateKey.getProperty(KeyProperties.index)
+          privateKey.getProperty(Domain.KeyProperties.index)
             ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            parseInt(privateKey.getProperty(KeyProperties.index)!)
+              parseInt(privateKey.getProperty(Domain.KeyProperties.index)!)
             : 0,
-          null
-        )
-      )
+          null,
+        ),
+      ),
     );
   }
 
   /**
-   * Asyncronously Store a DIDPair, a didcomm connection basically between 2 dids
+   * Asynchronously Store a DIDPair, a DIDComm connection basically between 2 DIDs
    *
    * @async
    * @param {DID} host
@@ -212,7 +149,7 @@ export default class Pluto implements PlutoInterface {
    * @param {string} name
    * @returns {*}
    */
-  async storeDIDPair(host: DID, receiver: DID, name: string) {
+  async storeDIDPair(host: Domain.DID, receiver: Domain.DID, name: string) {
     const didPairEntity = new entities.DIDPair();
     didPairEntity.id = `${host.toString()}${receiver.toString()}`;
     didPairEntity.name = name;
@@ -223,13 +160,13 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously Store a didcomm Message
+   * Asynchronously Store a DIDComm Message
    *
    * @async
    * @param {Message} message
    * @returns {*}
    */
-  async storeMessage(message: Message) {
+  async storeMessage(message: Domain.Message) {
     const messageEntity = new entities.Message();
     messageEntity.createdTime = message.createdTime;
     messageEntity.dataJson = JSON.stringify(message);
@@ -242,18 +179,18 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously Store an array of messages
+   * Asynchronously store an array of messages
    *
    * @async
    * @param {Message[]} messages
    * @returns {*}
    */
-  async storeMessages(messages: Message[]) {
+  async storeMessages(messages: Domain.Message[]) {
     await Promise.all(messages.map(this.storeMessage.bind(this)));
   }
 
   /**
-   * Asyncronously store a did's privateKeys by prividing the privateKey and its keyPath index and the actual did
+   * Asynchronously store a DID's privateKeys by providing the privateKey and its keyPath index and the actual did
    *
    * @async
    * @param {PrivateKey} privateKey
@@ -263,10 +200,10 @@ export default class Pluto implements PlutoInterface {
    * @returns {*}
    */
   async storePrivateKeys(
-    privateKey: PrivateKey,
-    did: DID,
+    privateKey: Domain.PrivateKey,
+    did: Domain.DID,
     keyPathIndex: number,
-    metaId: string | null
+    metaId: string | null,
   ) {
     const privateKeysEntity = new entities.PrivateKey();
 
@@ -284,7 +221,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously Store the mediator
+   * Asynchronously store the mediator
    *
    * @async
    * @param {DID} mediator
@@ -292,7 +229,11 @@ export default class Pluto implements PlutoInterface {
    * @param {DID} routing
    * @returns {*}
    */
-  async storeMediator(mediator: DID, host: DID, routing: DID) {
+  async storeMediator(
+    mediator: Domain.DID,
+    host: Domain.DID,
+    routing: Domain.DID,
+  ) {
     const mediatorEntity = new entities.Mediator();
     mediatorEntity.mediatorDidId = mediator.toString();
     mediatorEntity.hostDidId = host.toString();
@@ -301,7 +242,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously fetch all prismDIDS
+   * Asynchronously fetch all PRISM DIDs
    *
    * @async
    * @returns {unknown}
@@ -316,23 +257,23 @@ export default class Pluto implements PlutoInterface {
         .where("did.method = :method", { method: "prism" })
         .getRawMany();
       return dids.map((item) => ({
-        did: DID.fromString(item.did),
+        did: Domain.DID.fromString(item.did),
         alias: item.alias,
         keyPathIndex: item.keyPathIndex,
-      })) as PrismDIDInfo[];
+      })) as Domain.PrismDIDInfo[];
     } catch (error) {
       throw new Error((error as Error).message);
     }
   }
 
   /**
-   * Asyncronously get DID information by providing a DID instance
+   * Asynchronously get DID information by providing a DID instance
    *
    * @async
    * @param {DID} did
    * @returns {unknown}
    */
-  async getDIDInfoByDID(did: DID) {
+  async getDIDInfoByDID(did: Domain.DID) {
     const didRepository = this.dataSource.manager.getRepository("did");
     try {
       const didResponse: (Did & Record<"keyPathIndex", number>) | undefined =
@@ -341,7 +282,7 @@ export default class Pluto implements PlutoInterface {
           .innerJoin(
             "private_key",
             "private_key",
-            "did.did = private_key.didId"
+            "did.did = private_key.didId",
           )
           .select("did.*, privateKey.keyPathIndex", "keyPathIndex")
           .from((subQuery) => {
@@ -357,17 +298,17 @@ export default class Pluto implements PlutoInterface {
         return null;
       }
       return {
-        did: DID.fromString(didResponse?.did ?? ""),
+        did: Domain.DID.fromString(didResponse?.did ?? ""),
         alias: didResponse.alias,
         keyPathIndex: didResponse.keyPathIndex,
-      } as PrismDIDInfo;
+      } as Domain.PrismDIDInfo;
     } catch (error) {
       throw new Error((error as Error).message);
     }
   }
 
   /**
-   * Asyncronously get the DID information by providing an Alias
+   * Asynchronously get the DID information by providing an Alias
    *
    * @async
    * @param {string} alias
@@ -382,7 +323,7 @@ export default class Pluto implements PlutoInterface {
           .innerJoin(
             "private_key",
             "private_key",
-            "did.did = private_key.didId"
+            "did.did = private_key.didId",
           )
           .select(["did.*", "private_key.keyPathIndex"])
           .where("did.alias = :alias", { alias })
@@ -392,11 +333,11 @@ export default class Pluto implements PlutoInterface {
       }
       return didResponse.map(
         (item) =>
-        ({
-          did: DID.fromString(item.did),
-          alias: item.alias,
-          keyPathIndex: item.private_key_keyPathIndex,
-        } as PrismDIDInfo)
+          ({
+            did: Domain.DID.fromString(item.did),
+            alias: item.alias,
+            keyPathIndex: item.private_key_keyPathIndex,
+          }) as Domain.PrismDIDInfo,
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -404,13 +345,13 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously Get a PrismDID key path index by providing a did instance
+   * Asynchronously get a PrismDID key path index by providing a did instance
    *
    * @async
    * @param {DID} did
    * @returns {unknown}
    */
-  async getPrismDIDKeyPathIndex(did: DID) {
+  async getPrismDIDKeyPathIndex(did: Domain.DID) {
     const repository = this.dataSource.manager.getRepository("private_key");
     try {
       const data = await repository.findOne({
@@ -458,12 +399,12 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously fetch all peerDIDs
+   * Asynchronously fetch all Peer DIDs
    *
    * @async
    * @returns {unknown}
    */
-  async getAllPeerDIDs(): Promise<PeerDID[]> {
+  async getAllPeerDIDs(): Promise<Domain.PeerDID[]> {
     const didRepository: Repository<entities.DID> =
       this.dataSource.manager.getRepository("did");
     const privateKeysRepository =
@@ -488,16 +429,19 @@ export default class Pluto implements PlutoInterface {
               },
             }),
           };
-        })
+        }),
       );
 
-      const peerDIDs = didsWithKeys.map(item => {
+      const peerDIDs = didsWithKeys.map((item) => {
         const privateKeys = item.privateKeys.map((key) => ({
-          keyCurve: getKeyCurveByNameAndIndex(key.curve, key.keyPathIndex),
+          keyCurve: Domain.getKeyCurveByNameAndIndex(
+            key.curve,
+            key.keyPathIndex,
+          ),
           value: Buffer.from(key.privateKey, "hex"),
         }));
 
-        return new PeerDID(DID.fromString(item.did), privateKeys);
+        return new Domain.PeerDID(Domain.DID.fromString(item.did), privateKeys);
       });
 
       return peerDIDs;
@@ -507,41 +451,43 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously get a dids privateKey by providing its instance
+   * Asynchronously get a DID's privateKey by providing its instance
    *
    * @async
    * @param {DID} did
    * @returns {PrivateKey[]}
    */
-  async getDIDPrivateKeysByDID(did: DID): Promise<PrivateKey[]> {
-    const repository = this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
+  async getDIDPrivateKeysByDID(did: Domain.DID): Promise<Domain.PrivateKey[]> {
+    const repository =
+      this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
     const data = await repository.findBy({ didId: Like(`${did.toString()}%`) });
 
-    return data.map(item => this.mapToPrivateKey(item));
+    return data.map((item) => this.mapToPrivateKey(item));
   }
 
-  private mapToPrivateKey(entity: entities.PrivateKey): PrivateKey {
+  private mapToPrivateKey(entity: entities.PrivateKey): Domain.PrivateKey {
     switch (entity.curve) {
-      case Curve.SECP256K1:
-        return Secp256k1PrivateKey.from.Hex(entity.privateKey);
-      case Curve.ED25519:
-        return Ed25519PrivateKey.from.Hex(entity.privateKey);
-      case Curve.X25519:
-        return X25519PrivateKey.from.Hex(entity.privateKey);
+      case Domain.Curve.SECP256K1:
+        return Apollo.Secp256k1PrivateKey.from.Hex(entity.privateKey);
+      case Domain.Curve.ED25519:
+        return Apollo.Ed25519PrivateKey.from.Hex(entity.privateKey);
+      case Domain.Curve.X25519:
+        return Apollo.X25519PrivateKey.from.Hex(entity.privateKey);
     }
 
     throw new Error("Key Curve not recognised");
   }
 
   /**
-   * Asyncronously get a dids private key by providing its ID
+   * Asynchronously get a DID's private key by providing its ID
    *
    * @async
    * @param {string} id
    * @returns {unknown}
    */
   async getDIDPrivateKeyByID(id: string) {
-    const repository = this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
+    const repository =
+      this.dataSource.manager.getRepository<entities.PrivateKey>("private_key");
 
     try {
       const data = await repository.findOne({
@@ -559,7 +505,7 @@ export default class Pluto implements PlutoInterface {
   }
 
   /**
-   * Asyncronously get did pairs, also known as didcomm connections
+   * Asynchronously get did pairs, also known as DIDComm connections
    *
    * @async
    * @returns {unknown}
@@ -571,23 +517,23 @@ export default class Pluto implements PlutoInterface {
         relationLoadStrategy: "join",
       });
       return data.map((didPair) => ({
-        host: DID.fromString(didPair.hostDID),
+        host: Domain.DID.fromString(didPair.hostDID),
         name: didPair.name,
-        receiver: DID.fromString(didPair.receiverDID),
-      })) as DIDPair[];
+        receiver: Domain.DID.fromString(didPair.receiverDID),
+      })) as Domain.DIDPair[];
     } catch (error) {
       throw new Error((error as Error).message);
     }
   }
 
   /**
-   * Asyncronously get a didPair by providing one of the connected dids
+   * Asynchronously get a didPair by providing one of the connected DIDs
    *
    * @async
    * @param {DID} did
    * @returns {unknown}
    */
-  async getPairByDID(did: DID) {
+  async getPairByDID(did: Domain.DID) {
     const repository = this.dataSource.manager.getRepository("did_pair");
     try {
       const data = await repository.findOne({
@@ -600,17 +546,17 @@ export default class Pluto implements PlutoInterface {
         return null;
       }
       return {
-        host: DID.fromString(data.hostDID),
+        host: Domain.DID.fromString(data.hostDID),
         name: data.name,
-        receiver: DID.fromString(data.receiverDID),
-      } as DIDPair;
+        receiver: Domain.DID.fromString(data.receiverDID),
+      } as Domain.DIDPair;
     } catch (error) {
       throw new Error((error as Error).message);
     }
   }
 
   /**
-   * Asyncronously fetch a did pair by its name
+   * Asynchronously fetch a did pair by its name
    *
    * @async
    * @param {string} name
@@ -629,17 +575,17 @@ export default class Pluto implements PlutoInterface {
         return null;
       }
       return {
-        host: DID.fromString(data.hostDID),
+        host: Domain.DID.fromString(data.hostDID),
         name: data.name,
-        receiver: DID.fromString(data.receiverDID),
-      } as DIDPair;
+        receiver: Domain.DID.fromString(data.receiverDID),
+      } as Domain.DIDPair;
     } catch (error) {
       throw new Error((error as Error).message);
     }
   }
 
   /**
-   * Asyncronously fetch all the messages
+   * Asynchronously fetch all the messages
    *
    * @async
    * @returns {unknown}
@@ -649,30 +595,35 @@ export default class Pluto implements PlutoInterface {
       this.dataSource.manager.getRepository("message");
     const data = await repository.find();
 
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously fetch all the messages from this DID
+   * Asynchronously fetch all messages received from or sent to a given DID
    *
    * @async
    * @param {DID} did
    * @returns {unknown}
    */
-  async getAllMessagesByDID(did: DID) {
+  async getAllMessagesByDID(did: Domain.DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
     const data = await repository.find({
-      where: {
-        from: did.toString(),
-      },
+      where: [
+        {
+          from: did.toString(),
+        },
+        {
+          to: did.toString(),
+        },
+      ],
     });
 
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously fetch all sent messages
+   * Asynchronously fetch all sent messages
    *
    * @async
    * @returns {unknown}
@@ -685,11 +636,11 @@ export default class Pluto implements PlutoInterface {
         isReceived: 0,
       },
     });
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously fetch all received messages
+   * Asynchronously fetch all received messages
    *
    * @async
    * @returns {unknown}
@@ -702,17 +653,17 @@ export default class Pluto implements PlutoInterface {
         isReceived: 1,
       },
     });
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously fetch all the messages that have been sent to a specific DID
+   * Asynchronously fetch all the messages that have been sent to a specific DID
    *
    * @async
    * @param {DID} did
    * @returns {unknown}
    */
-  async getAllMessagesSentTo(did: DID) {
+  async getAllMessagesSentTo(did: Domain.DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
     const data = await repository.find({
@@ -720,17 +671,17 @@ export default class Pluto implements PlutoInterface {
         to: did.toString(),
       },
     });
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * GEt all the Messages received on a specific DID
+   * Get all messages received from a specific DID
    *
    * @async
    * @param {DID} did
    * @returns {unknown}
    */
-  async getAllMessagesReceivedFrom(did: DID) {
+  async getAllMessagesReceivedFrom(did: Domain.DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
     const data = await repository.find({
@@ -738,18 +689,18 @@ export default class Pluto implements PlutoInterface {
         from: did.toString(),
       },
     });
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously fetch all the messages by specifying the message type, and optionally if they are related to a DID
+   * Asynchronously fetch all messages by specifying the message type, and optionally if they are related to a DID
    *
    * @async
    * @param {string} type
    * @param {?DID} [relatedWithDID]
    * @returns {unknown}
    */
-  async getAllMessagesOfType(type: string, relatedWithDID?: DID) {
+  async getAllMessagesOfType(type: string, relatedWithDID?: Domain.DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
     const data = await repository
@@ -757,22 +708,22 @@ export default class Pluto implements PlutoInterface {
       .where("message.type = :type", { type })
       .andWhere(
         ":relatedWithDID IS NULL OR :relatedWithDID IN (message.from, message.to)",
-        { relatedWithDID: relatedWithDID?.toString() ?? null }
+        { relatedWithDID: relatedWithDID?.toString() ?? null },
       )
       .getMany();
 
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously fetch all the messages by from or to
+   * Asynchronously fetch all the messages containing given from AND to DIDs
    *
    * @async
    * @param {DID} from
    * @param {DID} to
    * @returns {unknown}
    */
-  async getAllMessagesByFromToDID(from: DID, to: DID) {
+  async getAllMessagesByFromToDID(from: Domain.DID, to: Domain.DID) {
     const repository: Repository<entities.Message> =
       this.dataSource.manager.getRepository("message");
     const data = await repository.find({
@@ -781,11 +732,11 @@ export default class Pluto implements PlutoInterface {
         to: to.toString(),
       },
     });
-    return data.map(Pluto.transformMessageDBToInterface);
+    return data.map(PlutoSqlite.transformMessageDBToInterface);
   }
 
   /**
-   * Asyncronously get a message by ID
+   * Asynchronously get a message by ID
    *
    * @async
    * @param {string} id
@@ -802,11 +753,11 @@ export default class Pluto implements PlutoInterface {
     if (!data) {
       return null;
     }
-    return Pluto.transformMessageDBToInterface(data);
+    return PlutoSqlite.transformMessageDBToInterface(data);
   }
 
   /**
-   * Asyncronously fetch all the mediators
+   * Asynchronously fetch all stored mediators
    *
    * @async
    * @returns {unknown}
@@ -819,14 +770,14 @@ export default class Pluto implements PlutoInterface {
     });
     return data.map((item) => ({
       id: item.id,
-      mediatorDID: DID.fromString(item.mediatorDidId),
-      hostDID: DID.fromString(item.hostDidId),
-      routingDID: DID.fromString(item.routingDidId),
-    })) as Mediator[];
+      mediatorDID: Domain.DID.fromString(item.mediatorDidId),
+      hostDID: Domain.DID.fromString(item.hostDidId),
+      routingDID: Domain.DID.fromString(item.routingDidId),
+    })) as Domain.Mediator[];
   }
 
   /**
-   * Asyncronously get all the credentials
+   * Asynchronously get all stored credentials
    *
    * @async
    * @returns {unknown}
@@ -840,20 +791,20 @@ export default class Pluto implements PlutoInterface {
       return {
         ...json,
         id: credential.id,
-        issuer: DID.fromString(credential.issuerDIDId),
-        subject: DID.fromString(json.subject),
+        issuer: Domain.DID.fromString(credential.issuerDIDId),
+        subject: Domain.DID.fromString(json.subject),
       };
-    }) as VerifiableCredential[];
+    }) as Domain.VerifiableCredential[];
   }
 
   /**
-   * Asyncronously store a Verifiable Credential
+   * Asynchronously store a Verifiable Credential
    *
    * @async
    * @param {VerifiableCredential} credential
    * @returns {*}
    */
-  async storeCredential(credential: VerifiableCredential) {
+  async storeCredential(credential: Domain.VerifiableCredential) {
     const verifiableCredentialEntity = new entities.VerifiableCredential();
     verifiableCredentialEntity.credentialType = credential.credentialType;
     verifiableCredentialEntity.expirationDate = credential.expirationDate;

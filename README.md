@@ -30,13 +30,13 @@ The complete platform is separated in multiple repositories:
 
 ### Getting started
 
-This repository includes a browser and a nodejs demo application, and also a step by step documented process.
+This repository includes a browser and a Node.js demo application, and also a step-by-step documented process to run it.
 
 #### Running a demo project
 
 To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
 
-From the repository, cd into `{path}/prism-wallet-sdk-ts`:
+From the repository root run:
 
 ```bash
 npm i
@@ -65,6 +65,13 @@ cd demos/browser
 npm i
 npm run start
 ```
+
+#### Implementing storage for the SDK
+This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.
+
+We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
+
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
 
 #### Demo development mode
 

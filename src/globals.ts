@@ -1,7 +1,5 @@
-import SQL from "sql.js/dist/sql-wasm.js";
-import localforage from "localforage";
+import { Buffer } from "buffer";
 
 if (typeof window !== "undefined") {
-  (window as any).SQL = SQL;
-  (window as any).localforage = localforage;
+    (window as any).Buffer = Buffer
 }

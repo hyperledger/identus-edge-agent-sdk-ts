@@ -55,18 +55,18 @@ import { X25519KeyPair } from "./utils/X25519KeyPair";
  * }
  * //not outside
  * ```
- * 
+ *
  * All keys know also have a generic list of properties which can be accessed at any stage, for example:
 
  * ```ts
  * privateKey.getProperty(KeyProperties.curve)
  * ```
- * 
+ *
  * Would give your the Curve value.
- * 
+ *
  * Find below all the complete list of KeyProperties that are available.
  *
- * ```ts 
+ * ```ts
  * export enum KeyProperties {
  *   /// The 'kid'  represents a key's identifier.
  *   kid = "kid",
@@ -94,6 +94,10 @@ import { X25519KeyPair } from "./utils/X25519KeyPair";
  * @typedef {Apollo}
  */
 export default class Apollo implements ApolloInterface {
+  static Secp256k1PrivateKey = Secp256k1PrivateKey;
+  static Ed25519PrivateKey = Ed25519PrivateKey;
+  static X25519PrivateKey = X25519PrivateKey;
+
   /**
    * Creates a random set of mnemonic phrases that can be used as a seed for generating a private key.
    *
@@ -227,20 +231,20 @@ export default class Apollo implements ApolloInterface {
     if (!parameters[KeyProperties.type]) {
       throw new ApolloError.InvalidKeyType(
         parameters[KeyProperties.type],
-        Object.values(KeyTypes)
+        Object.values(KeyTypes),
       );
     }
     if (!parameters[KeyProperties.curve]) {
       throw new ApolloError.InvalidKeyCurve(
         parameters[KeyProperties.curve],
-        Object.values(Curve)
+        Object.values(Curve),
       );
     }
 
     const keyType = parameters[KeyProperties.type];
 
     const { curve } = getKeyCurveByNameAndIndex(
-      parameters[KeyProperties.curve]
+      parameters[KeyProperties.curve],
     );
     const keyData = parameters[KeyProperties.rawKey];
 
@@ -262,8 +266,8 @@ export default class Apollo implements ApolloInterface {
 
         const derivationPathStr = parameters[KeyProperties.derivationPath]
           ? Buffer.from(parameters[KeyProperties.derivationPath]).toString(
-            "hex"
-          )
+              "hex",
+            )
           : Buffer.from(`m/0'/0'/0'`).toString("hex");
 
         const seedStr = parameters[KeyProperties.seed];
@@ -280,7 +284,7 @@ export default class Apollo implements ApolloInterface {
 
         const seed = Buffer.from(seedStr, "hex");
         const derivationPath = DerivationPath.fromPath(
-          Buffer.from(derivationPathStr, "hex").toString()
+          Buffer.from(derivationPathStr, "hex").toString(),
         );
 
         const extendedKey = KeyDerivation.deriveKey(seed, derivationPath);
