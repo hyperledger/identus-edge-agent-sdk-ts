@@ -53,7 +53,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Starts an instance of the Database connection
+   * Asynchronously starts an instance of the Database connection
    *
    * @async
    * @returns {*}
@@ -75,7 +75,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Store a PrismDID by providing the DID, the privateKey, its keyPath index and an optional alias
+   * Asynchronously Store a PrismDID by providing the DID, the privateKey, its keyPath index and an optional alias
    *
    * @async
    * @param {DID} did
@@ -110,7 +110,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Store a peerDID just by providing the DID and an array of its privateKeys
+   * Asynchronously Store a peerDID just by providing the DID and an array of its privateKeys
    *
    * @async
    * @param {DID} did
@@ -141,7 +141,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Store a DIDPair, a didcomm connection basically between 2 dids
+   * Asynchronously Store a DIDPair, a DIDComm connection basically between 2 DIDs
    *
    * @async
    * @param {DID} host
@@ -160,7 +160,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Store a didcomm Message
+   * Asynchronously Store a DIDComm Message
    *
    * @async
    * @param {Message} message
@@ -179,7 +179,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Store an array of messages
+   * Asynchronously store an array of messages
    *
    * @async
    * @param {Message[]} messages
@@ -190,7 +190,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously store a did's privateKeys by prividing the privateKey and its keyPath index and the actual did
+   * Asynchronously store a DID's privateKeys by providing the privateKey and its keyPath index and the actual did
    *
    * @async
    * @param {PrivateKey} privateKey
@@ -221,7 +221,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Store the mediator
+   * Asynchronously store the mediator
    *
    * @async
    * @param {DID} mediator
@@ -242,7 +242,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all prismDIDS
+   * Asynchronously fetch all PRISM DIDs
    *
    * @async
    * @returns {unknown}
@@ -267,7 +267,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get DID information by providing a DID instance
+   * Asynchronously get DID information by providing a DID instance
    *
    * @async
    * @param {DID} did
@@ -308,7 +308,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get the DID information by providing an Alias
+   * Asynchronously get the DID information by providing an Alias
    *
    * @async
    * @param {string} alias
@@ -345,7 +345,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously Get a PrismDID key path index by providing a did instance
+   * Asynchronously get a PrismDID key path index by providing a did instance
    *
    * @async
    * @param {DID} did
@@ -399,7 +399,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all peerDIDs
+   * Asynchronously fetch all Peer DIDs
    *
    * @async
    * @returns {unknown}
@@ -451,7 +451,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get a dids privateKey by providing its instance
+   * Asynchronously get a DID's privateKey by providing its instance
    *
    * @async
    * @param {DID} did
@@ -479,7 +479,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get a dids private key by providing its ID
+   * Asynchronously get a DID's private key by providing its ID
    *
    * @async
    * @param {string} id
@@ -505,7 +505,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get did pairs, also known as didcomm connections
+   * Asynchronously get did pairs, also known as DIDComm connections
    *
    * @async
    * @returns {unknown}
@@ -527,7 +527,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get a didPair by providing one of the connected dids
+   * Asynchronously get a didPair by providing one of the connected DIDs
    *
    * @async
    * @param {DID} did
@@ -556,7 +556,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch a did pair by its name
+   * Asynchronously fetch a did pair by its name
    *
    * @async
    * @param {string} name
@@ -585,7 +585,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all the messages
+   * Asynchronously fetch all the messages
    *
    * @async
    * @returns {unknown}
@@ -599,7 +599,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all the messages from this DID
+   * Asynchronously fetch all messages received from or sent to a given DID
    *
    * @async
    * @param {DID} did
@@ -623,7 +623,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all sent messages
+   * Asynchronously fetch all sent messages
    *
    * @async
    * @returns {unknown}
@@ -640,7 +640,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all received messages
+   * Asynchronously fetch all received messages
    *
    * @async
    * @returns {unknown}
@@ -657,7 +657,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all the messages that have been sent to a specific DID
+   * Asynchronously fetch all the messages that have been sent to a specific DID
    *
    * @async
    * @param {DID} did
@@ -675,7 +675,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * GEt all the Messages received on a specific DID
+   * Get all messages received from a specific DID
    *
    * @async
    * @param {DID} did
@@ -693,7 +693,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all the messages by specifying the message type, and optionally if they are related to a DID
+   * Asynchronously fetch all messages by specifying the message type, and optionally if they are related to a DID
    *
    * @async
    * @param {string} type
@@ -716,7 +716,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all the messages by from or to
+   * Asynchronously fetch all the messages containing given from AND to DIDs
    *
    * @async
    * @param {DID} from
@@ -736,7 +736,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get a message by ID
+   * Asynchronously get a message by ID
    *
    * @async
    * @param {string} id
@@ -757,7 +757,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously fetch all the mediators
+   * Asynchronously fetch all stored mediators
    *
    * @async
    * @returns {unknown}
@@ -777,7 +777,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously get all the credentials
+   * Asynchronously get all stored credentials
    *
    * @async
    * @returns {unknown}
@@ -798,7 +798,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   /**
-   * Asyncronously store a Verifiable Credential
+   * Asynchronously store a Verifiable Credential
    *
    * @async
    * @param {VerifiableCredential} credential
