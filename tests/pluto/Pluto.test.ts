@@ -757,5 +757,36 @@ describe.each(["in-memory", "sqlite"])(
       const data = await instance.getAllCredentials();
       expect(data).not.empty;
     });
+
+    test(`Calling storePrismDID twice with the same did [reported bug]`, async function () {
+      const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
+      const keyPathIndex = 11;
+      const privateKey = Secp256k1PrivateKey.from.String(
+        "01011010011101010100011000100010",
+      );
+      const privateKeyId = "001";
+
+      await instance.storePrismDID(
+        prismDid,
+        keyPathIndex,
+        privateKey,
+        privateKeyId,
+      );
+      // second call
+      await instance.storePrismDID(
+        prismDid,
+        keyPathIndex,
+        privateKey,
+        privateKeyId,
+      );
+
+      const result = await instance.getDIDPrivateKeyByID(privateKeyId);
+
+      expect(result?.raw).to.eql(privateKey.raw);
+      expect(result?.curve).to.equal(privateKey.curve);
+      expect(result?.index).to.equal(privateKey.index);
+      expect(result?.size).to.equal(privateKey.size);
+      expect(result?.type).to.equal(privateKey.type);
+    });
   },
 );
