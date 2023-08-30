@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { PlutoInMemory } from "../../demos/browser/src/PlutoInMemory";
-import { PlutoSqlite } from "../../demos/node/src/pluto-sqlite/PlutoSqlite";
+import { PlutoInMemory } from "./PlutoInMemory";
+import { PlutoSqlite } from "./pluto-sqlite/PlutoSqlite";
 import { DID, PrivateKey } from "../../src/domain";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";
