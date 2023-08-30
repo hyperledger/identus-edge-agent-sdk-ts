@@ -17,6 +17,7 @@ import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
 import type * as DIDCommLibTypes from "../../../didcomm-rust/didcomm-browser/didcomm_js";
+import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
 
 /**
  * @ignore
@@ -58,6 +59,19 @@ export class DIDCommWrapper implements DIDCommProtocol {
     return this.didcomm;
   }
 
+  private doesRequireReturnRoute(type: string) {
+    if (type === ProtocolType.DidcommMediationRequest) {
+      return true;
+    }
+    if (type === ProtocolType.PickupReceived) {
+      return true;
+    }
+    if (type === ProtocolType.PickupRequest) {
+      return true;
+    }
+    return false;
+  }
+
   async packEncrypted(
     message: Domain.Message,
     toDid: Domain.DID,
@@ -84,7 +98,9 @@ export class DIDCommWrapper implements DIDCommProtocol {
       //expires_time: Number(message.expiresTimePlus),
       thid: message.thid,
       pthid: message.pthid,
-      return_route: "all",
+      ...(this.doesRequireReturnRoute(message.piuri)
+        ? { return_route: "all" }
+        : {}),
     });
 
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
