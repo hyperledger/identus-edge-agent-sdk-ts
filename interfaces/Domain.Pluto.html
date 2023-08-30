@@ -16,16 +16,18 @@
 <li><a href="../modules/Domain.html">Domain</a></li>
 <li><a href="Domain.Pluto.html">Pluto</a></li></ul>
 <h1>Interface Pluto</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>Pluto is a storage interface describing storage requirements of the edge agents
+which will be implemented using this SDK. Implement this interface using your
+preferred underlying storage technology, most appropriate for your use case.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li><span class="target">Pluto</span></li></ul></section>
-<section class="tsd-panel">
-<h4>Implemented by</h4>
-<ul class="tsd-hierarchy">
-<li><a href="../classes/Pluto.html" class="tsd-signature-type tsd-kind-class">Pluto</a></li></ul></section><aside class="tsd-sources">
+<li><span class="target">Pluto</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L10">src/domain/buildingBlocks/Pluto.ts:10</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L16">src/domain/buildingBlocks/Pluto.ts:16</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -72,51 +74,68 @@
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllCredentials.getAllCredentials-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Credentials</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Domain.VerifiableCredential.html" class="tsd-signature-type tsd-kind-interface">VerifiableCredential</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllCredentials.getAllCredentials-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Domain.VerifiableCredential.html" class="tsd-signature-type tsd-kind-interface">VerifiableCredential</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored verifiable credentials.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Domain.VerifiableCredential.html" class="tsd-signature-type tsd-kind-interface">VerifiableCredential</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L85">src/domain/buildingBlocks/Pluto.ts:85</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L186">src/domain/buildingBlocks/Pluto.ts:186</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllDidPairs" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Did<wbr/>Pairs</span><a href="#getAllDidPairs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllDidPairs.getAllDidPairs-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Did<wbr/>Pairs</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllDidPairs.getAllDidPairs-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored DID pairs (DIDComm connections).</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L56">src/domain/buildingBlocks/Pluto.ts:56</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L116">src/domain/buildingBlocks/Pluto.ts:116</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMediators" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Mediators</span><a href="#getAllMediators" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMediators.getAllMediators-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Mediators</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Domain.Mediator.html" class="tsd-signature-type tsd-kind-interface">Mediator</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMediators.getAllMediators-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Domain.Mediator.html" class="tsd-signature-type tsd-kind-interface">Mediator</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored mediators.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Domain.Mediator.html" class="tsd-signature-type tsd-kind-interface">Mediator</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L83">src/domain/buildingBlocks/Pluto.ts:83</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L181">src/domain/buildingBlocks/Pluto.ts:181</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessages" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages</span><a href="#getAllMessages" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessages.getAllMessages-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessages.getAllMessages-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored DIDComm messages.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L62">src/domain/buildingBlocks/Pluto.ts:62</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L131">src/domain/buildingBlocks/Pluto.ts:131</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesByDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>ByDID</span><a href="#getAllMessagesByDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesByDID.getAllMessagesByDID-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>ByDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesByDID.getAllMessagesByDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored DIDComm messages, received from or sent to a given DID</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L64">src/domain/buildingBlocks/Pluto.ts:64</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L136">src/domain/buildingBlocks/Pluto.ts:136</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesByFromToDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>By<wbr/>From<wbr/>ToDID</span><a href="#getAllMessagesByFromToDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesByFromToDID.getAllMessagesByFromToDID-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>By<wbr/>From<wbr/>ToDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">from</span>, <span class="tsd-kind-parameter">to</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesByFromToDID.getAllMessagesByFromToDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve all DIDComm messages containing given &quot;from&quot; AND &quot;to&quot; DIDs.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -124,14 +143,19 @@
 <h5><span class="tsd-kind-parameter">from</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li>
 <li>
 <h5><span class="tsd-kind-parameter">to</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L79">src/domain/buildingBlocks/Pluto.ts:79</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L171">src/domain/buildingBlocks/Pluto.ts:171</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesOfType" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>Of<wbr/>Type</span><a href="#getAllMessagesOfType" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesOfType.getAllMessagesOfType-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>Of<wbr/>Type</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">type</span>, <span class="tsd-kind-parameter">relatedWithDID</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesOfType.getAllMessagesOfType-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored DIDComm messages with given message type, and
+optionally, related to a given DID. &quot;Related&quot; means that message should
+contain a given DID in either &quot;from&quot; or &quot;to&quot; field.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -139,205 +163,259 @@
 <h5><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type">string</span></h5></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">relatedWithDID</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L74">src/domain/buildingBlocks/Pluto.ts:74</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L163">src/domain/buildingBlocks/Pluto.ts:163</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesReceived" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>Received</span><a href="#getAllMessagesReceived" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesReceived.getAllMessagesReceived-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>Received</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesReceived.getAllMessagesReceived-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored, received DIDComm messages.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L68">src/domain/buildingBlocks/Pluto.ts:68</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L146">src/domain/buildingBlocks/Pluto.ts:146</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesReceivedFrom" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>Received<wbr/>From</span><a href="#getAllMessagesReceivedFrom" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesReceivedFrom.getAllMessagesReceivedFrom-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>Received<wbr/>From</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesReceivedFrom.getAllMessagesReceivedFrom-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored DIDComm messages, received from a given DID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L72">src/domain/buildingBlocks/Pluto.ts:72</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L156">src/domain/buildingBlocks/Pluto.ts:156</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesSent" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>Sent</span><a href="#getAllMessagesSent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesSent.getAllMessagesSent-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>Sent</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesSent.getAllMessagesSent-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored, sent DIDComm messages.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L66">src/domain/buildingBlocks/Pluto.ts:66</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L141">src/domain/buildingBlocks/Pluto.ts:141</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllMessagesSentTo" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>Messages<wbr/>Sent<wbr/>To</span><a href="#getAllMessagesSentTo" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllMessagesSentTo.getAllMessagesSentTo-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>Messages<wbr/>Sent<wbr/>To</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllMessagesSentTo.getAllMessagesSentTo-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored DIDComm messages, sent to a given DID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L70">src/domain/buildingBlocks/Pluto.ts:70</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L151">src/domain/buildingBlocks/Pluto.ts:151</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllPeerDIDs" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>PeerDIDs</span><a href="#getAllPeerDIDs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllPeerDIDs.getAllPeerDIDs-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>PeerDIDs</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PeerDID.html" class="tsd-signature-type tsd-kind-class">PeerDID</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllPeerDIDs.getAllPeerDIDs-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PeerDID.html" class="tsd-signature-type tsd-kind-class">PeerDID</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored Peer DIDs.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PeerDID.html" class="tsd-signature-type tsd-kind-class">PeerDID</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L50">src/domain/buildingBlocks/Pluto.ts:50</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L101">src/domain/buildingBlocks/Pluto.ts:101</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getAllPrismDIDs" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>All<wbr/>PrismDIDs</span><a href="#getAllPrismDIDs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getAllPrismDIDs.getAllPrismDIDs-1"><span class="tsd-kind-call-signature">get<wbr/>All<wbr/>PrismDIDs</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getAllPrismDIDs.getAllPrismDIDs-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Retrieve all stored PRISM DIDs.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L40">src/domain/buildingBlocks/Pluto.ts:40</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L76">src/domain/buildingBlocks/Pluto.ts:76</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getDIDInfoByAlias" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>getDIDInfo<wbr/>By<wbr/>Alias</span><a href="#getDIDInfoByAlias" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getDIDInfoByAlias.getDIDInfoByAlias-1"><span class="tsd-kind-call-signature">getDIDInfo<wbr/>By<wbr/>Alias</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">alias</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getDIDInfoByAlias.getDIDInfoByAlias-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve DID information for a given DID alias.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">alias</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L44">src/domain/buildingBlocks/Pluto.ts:44</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L86">src/domain/buildingBlocks/Pluto.ts:86</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getDIDInfoByDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>getDIDInfo<wbr/>ByDID</span><a href="#getDIDInfoByDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getDIDInfoByDID.getDIDInfoByDID-1"><span class="tsd-kind-call-signature">getDIDInfo<wbr/>ByDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">&gt;</span><a href="#getDIDInfoByDID.getDIDInfoByDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve DID information for a given DID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.PrismDIDInfo.html" class="tsd-signature-type tsd-kind-class">PrismDIDInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L42">src/domain/buildingBlocks/Pluto.ts:42</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L81">src/domain/buildingBlocks/Pluto.ts:81</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getDIDPrivateKeyByID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>getDIDPrivate<wbr/>Key<wbr/>ByID</span><a href="#getDIDPrivateKeyByID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getDIDPrivateKeyByID.getDIDPrivateKeyByID-1"><span class="tsd-kind-call-signature">getDIDPrivate<wbr/>Key<wbr/>ByID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">&gt;</span><a href="#getDIDPrivateKeyByID.getDIDPrivateKeyByID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve private key for a given key ID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L54">src/domain/buildingBlocks/Pluto.ts:54</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L111">src/domain/buildingBlocks/Pluto.ts:111</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getDIDPrivateKeysByDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>getDIDPrivate<wbr/>Keys<wbr/>ByDID</span><a href="#getDIDPrivateKeysByDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getDIDPrivateKeysByDID.getDIDPrivateKeysByDID-1"><span class="tsd-kind-call-signature">getDIDPrivate<wbr/>Keys<wbr/>ByDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#getDIDPrivateKeysByDID.getDIDPrivateKeysByDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve available private keys for a given DID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L52">src/domain/buildingBlocks/Pluto.ts:52</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L106">src/domain/buildingBlocks/Pluto.ts:106</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getMessage" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Message</span><a href="#getMessage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getMessage.getMessage-1"><span class="tsd-kind-call-signature">get<wbr/>Message</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">&gt;</span><a href="#getMessage.getMessage-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve a DIDComm message by ID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L81">src/domain/buildingBlocks/Pluto.ts:81</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L176">src/domain/buildingBlocks/Pluto.ts:176</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getPairByDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Pair<wbr/>ByDID</span><a href="#getPairByDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getPairByDID.getPairByDID-1"><span class="tsd-kind-call-signature">get<wbr/>Pair<wbr/>ByDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">&gt;</span><a href="#getPairByDID.getPairByDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve a DID pair containing a given DID as either host or receiver.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L58">src/domain/buildingBlocks/Pluto.ts:58</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L121">src/domain/buildingBlocks/Pluto.ts:121</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getPairByName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Pair<wbr/>By<wbr/>Name</span><a href="#getPairByName" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getPairByName.getPairByName-1"><span class="tsd-kind-call-signature">get<wbr/>Pair<wbr/>By<wbr/>Name</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">name</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">&gt;</span><a href="#getPairByName.getPairByName-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve a DID pair by a given pair name.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../classes/Domain.DIDPair.html" class="tsd-signature-type tsd-kind-class">DIDPair</a><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L60">src/domain/buildingBlocks/Pluto.ts:60</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L126">src/domain/buildingBlocks/Pluto.ts:126</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getPrismDIDKeyPathIndex" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>PrismDIDKey<wbr/>Path<wbr/>Index</span><a href="#getPrismDIDKeyPathIndex" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getPrismDIDKeyPathIndex.getPrismDIDKeyPathIndex-1"><span class="tsd-kind-call-signature">get<wbr/>PrismDIDKey<wbr/>Path<wbr/>Index</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><a href="#getPrismDIDKeyPathIndex.getPrismDIDKeyPathIndex-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Retrieve a PRISM DID key path index for a given DID.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L46">src/domain/buildingBlocks/Pluto.ts:46</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L91">src/domain/buildingBlocks/Pluto.ts:91</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="getPrismLastKeyPathIndex" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Prism<wbr/>Last<wbr/>Key<wbr/>Path<wbr/>Index</span><a href="#getPrismLastKeyPathIndex" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="getPrismLastKeyPathIndex.getPrismLastKeyPathIndex-1"><span class="tsd-kind-call-signature">get<wbr/>Prism<wbr/>Last<wbr/>Key<wbr/>Path<wbr/>Index</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><a href="#getPrismLastKeyPathIndex.getPrismLastKeyPathIndex-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Get the last used PRISM key path index.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L48">src/domain/buildingBlocks/Pluto.ts:48</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L96">src/domain/buildingBlocks/Pluto.ts:96</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="start" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>start</span><a href="#start" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="start.start-1"><span class="tsd-kind-call-signature">start</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#start.start-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Do any necessary setup before storage instance can be used.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L11">src/domain/buildingBlocks/Pluto.ts:11</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L20">src/domain/buildingBlocks/Pluto.ts:20</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storeCredential" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>Credential</span><a href="#storeCredential" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storeCredential.storeCredential-1"><span class="tsd-kind-call-signature">store<wbr/>Credential</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">credential</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storeCredential.storeCredential-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a verifiable credential.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">credential</span>: <a href="Domain.VerifiableCredential.html" class="tsd-signature-type tsd-kind-interface">VerifiableCredential</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L38">src/domain/buildingBlocks/Pluto.ts:38</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L71">src/domain/buildingBlocks/Pluto.ts:71</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storeDIDPair" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>storeDIDPair</span><a href="#storeDIDPair" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storeDIDPair.storeDIDPair-1"><span class="tsd-kind-call-signature">storeDIDPair</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">host</span>, <span class="tsd-kind-parameter">receiver</span>, <span class="tsd-kind-parameter">name</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storeDIDPair.storeDIDPair-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a named pair of DIDs representing a DIDComm connection.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -347,14 +425,17 @@
 <h5><span class="tsd-kind-parameter">receiver</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li>
 <li>
 <h5><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L23">src/domain/buildingBlocks/Pluto.ts:23</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L41">src/domain/buildingBlocks/Pluto.ts:41</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storeMediator" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>Mediator</span><a href="#storeMediator" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storeMediator.storeMediator-1"><span class="tsd-kind-call-signature">store<wbr/>Mediator</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">mediator</span>, <span class="tsd-kind-parameter">host</span>, <span class="tsd-kind-parameter">routing</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storeMediator.storeMediator-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a mediator information.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -364,40 +445,49 @@
 <h5><span class="tsd-kind-parameter">host</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li>
 <li>
 <h5><span class="tsd-kind-parameter">routing</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L36">src/domain/buildingBlocks/Pluto.ts:36</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L66">src/domain/buildingBlocks/Pluto.ts:66</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storeMessage" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>Message</span><a href="#storeMessage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storeMessage.storeMessage-1"><span class="tsd-kind-call-signature">store<wbr/>Message</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storeMessage.storeMessage-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a DIDComm message.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">message</span>: <a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L25">src/domain/buildingBlocks/Pluto.ts:25</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L46">src/domain/buildingBlocks/Pluto.ts:46</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storeMessages" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>Messages</span><a href="#storeMessages" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storeMessages.storeMessages-1"><span class="tsd-kind-call-signature">store<wbr/>Messages</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">messages</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storeMessages.storeMessages-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store an array of DIDComm messages</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">messages</span>: <a href="../classes/Domain.Message.html" class="tsd-signature-type tsd-kind-class">Message</a><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L27">src/domain/buildingBlocks/Pluto.ts:27</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L51">src/domain/buildingBlocks/Pluto.ts:51</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storePeerDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>PeerDID</span><a href="#storePeerDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storePeerDID.storePeerDID-1"><span class="tsd-kind-call-signature">store<wbr/>PeerDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span>, <span class="tsd-kind-parameter">privateKeys</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storePeerDID.storePeerDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a Peer DID and an array of its privateKeys.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -405,14 +495,17 @@
 <h5><span class="tsd-kind-parameter">did</span>: <a href="../classes/Domain.DID.html" class="tsd-signature-type tsd-kind-class">DID</a></h5></li>
 <li>
 <h5><span class="tsd-kind-parameter">privateKeys</span>: <a href="../classes/Domain.PrivateKey.html" class="tsd-signature-type tsd-kind-class">PrivateKey</a><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L21">src/domain/buildingBlocks/Pluto.ts:21</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L36">src/domain/buildingBlocks/Pluto.ts:36</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storePrismDID" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>PrismDID</span><a href="#storePrismDID" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storePrismDID.storePrismDID-1"><span class="tsd-kind-call-signature">store<wbr/>PrismDID</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">did</span>, <span class="tsd-kind-parameter">keyPathIndex</span>, <span class="tsd-kind-parameter">privateKey</span>, <span class="tsd-kind-parameter">privateKeyMetaId</span>, <span class="tsd-kind-parameter">alias</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storePrismDID.storePrismDID-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a PRISM DID and its private key with given metadata.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -426,14 +519,17 @@
 <h5><span class="tsd-kind-parameter">privateKeyMetaId</span>: <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">alias</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L13">src/domain/buildingBlocks/Pluto.ts:13</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L25">src/domain/buildingBlocks/Pluto.ts:25</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="storePrivateKeys" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>store<wbr/>Private<wbr/>Keys</span><a href="#storePrivateKeys" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="storePrivateKeys.storePrivateKeys-1"><span class="tsd-kind-call-signature">store<wbr/>Private<wbr/>Keys</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">privateKey</span>, <span class="tsd-kind-parameter">did</span>, <span class="tsd-kind-parameter">keyPathIndex</span>, <span class="tsd-kind-parameter">metaId</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#storePrivateKeys.storePrivateKeys-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Store a list of private keys with its metadata and a reference to the DID it belongs to.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
@@ -445,9 +541,10 @@
 <h5><span class="tsd-kind-parameter">keyPathIndex</span>: <span class="tsd-signature-type">number</span></h5></li>
 <li>
 <h5><span class="tsd-kind-parameter">metaId</span>: <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/afcb0b4/src/domain/buildingBlocks/Pluto.ts#L29">src/domain/buildingBlocks/Pluto.ts:29</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/0336b3c/src/domain/buildingBlocks/Pluto.ts#L56">src/domain/buildingBlocks/Pluto.ts:56</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -501,6 +598,7 @@
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-namespace)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M9.33 16V7.24H10.77L13.446 14.74C13.43 14.54 13.41 14.296 13.386 14.008C13.37 13.712 13.354 13.404 13.338 13.084C13.33 12.756 13.326 12.448 13.326 12.16V7.24H14.37V16H12.93L10.266 8.5C10.282 8.692 10.298 8.936 10.314 9.232C10.33 9.52 10.342 9.828 10.35 10.156C10.366 10.476 10.374 10.784 10.374 11.08V16H9.33Z" fill="var(--color-text)"></path></g></svg><span>@input-<wbr/>output-<wbr/>hk/atala-<wbr/>prism-<wbr/>wallet-<wbr/>sdk</span></a>
 <ul class="tsd-small-nested-navigation">
+<li><a href="../modules.html#KeyProperties"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-8388608"><rect fill="var(--color-icon-background)" stroke="#FF4D82" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="12"></rect><path d="M10.354 17V8.24H13.066C13.586 8.24 14.042 8.348 14.434 8.564C14.826 8.772 15.13 9.064 15.346 9.44C15.562 9.816 15.67 10.256 15.67 10.76C15.67 11.352 15.514 11.86 15.202 12.284C14.898 12.708 14.482 13 13.954 13.16L15.79 17H14.518L12.838 13.28H11.434V17H10.354ZM11.434 12.308H13.066C13.514 12.308 13.874 12.168 14.146 11.888C14.418 11.6 14.554 11.224 14.554 10.76C14.554 10.288 14.418 9.912 14.146 9.632C13.874 9.352 13.514 9.212 13.066 9.212H11.434V12.308Z" fill="var(--color-text)"></path></g></svg><span>Key<wbr/>Properties</span></a></li>
 <li>
 <details class="tsd-index-accordion" open data-key="Domain"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="#icon-chevronDown"></use></svg><a href="../modules/Domain.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>Domain</span></a></summary>
 <div class="tsd-accordion-details">
@@ -515,6 +613,7 @@
 <li><a href="../modules/Domain.PolluxError.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4"></use></svg><span>Pollux<wbr/>Error</span></a></li>
 <li><a href="../enums/Domain.CredentialType.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-8"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-enum)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M9.45 16V7.24H14.49V8.224H10.518V10.936H14.07V11.908H10.518V15.016H14.49V16H9.45Z" fill="var(--color-text)"></path></g></svg><span>Credential<wbr/>Type</span></a></li>
 <li><a href="../enums/Domain.Curve.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Curve</span></a></li>
+<li><a href="../enums/Domain.KeyProperties.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Key<wbr/>Properties</span></a></li>
 <li><a href="../enums/Domain.KeyTypes.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Key<wbr/>Types</span></a></li>
 <li><a href="../enums/Domain.MessageDirection.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Message<wbr/>Direction</span></a></li>
 <li><a href="../enums/Domain.SecurityLevel.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Security<wbr/>Level</span></a></li>
@@ -577,7 +676,6 @@
 <li><a href="../types/Domain.JsonString.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Json<wbr/>String</span></a></li>
 <li><a href="../types/Domain.MnemonicWordList.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Mnemonic<wbr/>Word<wbr/>List</span></a></li>
 <li><a href="../functions/Domain.getKeyCurveByNameAndIndex.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-64"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-function)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M9.39 16V7.24H14.55V8.224H10.446V11.128H14.238V12.112H10.47V16H9.39Z" fill="var(--color-text)"></path></g></svg><span>get<wbr/>Key<wbr/>Curve<wbr/>By<wbr/>Name<wbr/>And<wbr/>Index</span></a></li></ul></div></details></li>
-<li><a href="../enums/KeyProperties.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Key<wbr/>Properties</span></a></li>
 <li><a href="../enums/ListenerKey.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-8"></use></svg><span>Listener<wbr/>Key</span></a></li>
 <li><a href="../classes/Agent.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Agent</span></a></li>
 <li><a href="../classes/Apollo.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Apollo</span></a></li>
@@ -590,7 +688,6 @@
 <li><a href="../classes/MediatorHandler.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Mediator<wbr/>Handler</span></a></li>
 <li><a href="../classes/Mercury.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Mercury</span></a></li>
 <li><a href="../classes/OfferCredential.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Offer<wbr/>Credential</span></a></li>
-<li><a href="../classes/Pluto.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Pluto</span></a></li>
 <li><a href="../classes/Pollux.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Pollux</span></a></li>
 <li><a href="../classes/PublicMediatorStore.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Public<wbr/>Mediator<wbr/>Store</span></a></li>
 <li><a href="../classes/RequestPresentation.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Request<wbr/>Presentation</span></a></li>
