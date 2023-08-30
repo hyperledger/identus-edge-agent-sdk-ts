@@ -19,7 +19,7 @@ import { EnvironmentVariables } from "../environment.variables";
 import { Actor, Duration, Notepad, Wait } from "@serenity-js/core";
 import { Questions } from "../../Questions";
 import { equals } from "@serenity-js/assertions";
-import { PlutoInMemory } from "../../../../../demos/browser/src/PlutoInMemory";
+import { PlutoInMemory } from "./PlutoInMemory";
 export class SdkAgentWorkflow {
   private static edgeAgent: Agent;
   private static connectionsManager: ConnectionsManager;
