@@ -2,7 +2,7 @@ import {IssueCredential, OfferCredential, RequestPresentation,} from "@input-out
 import {Actor, Duration, Notepad, Wait} from "@serenity-js/core"
 import {equals} from "@serenity-js/assertions"
 import {WalletSdk} from "../WalletSdk"
-import _ from "lodash"
+import {Utils} from "../../Utils"
 
 export class EdgeAgentWorkflow {
   static async connect(edgeAgent: Actor) {
@@ -36,7 +36,7 @@ export class EdgeAgentWorkflow {
   static async processIssuedCredential(edgeAgent: Actor, numberOfCredentials: number) {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
-        _.times(numberOfCredentials, async () => {
+        await Utils.repeat(numberOfCredentials, async () => {
           const issuedCredential = messages.issuedCredentialStack.pop()!
           const issueCredential = IssueCredential.fromMessage(issuedCredential)
           await sdk.processIssuedCredentialMessage(issueCredential)

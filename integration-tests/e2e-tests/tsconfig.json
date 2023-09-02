@@ -19,7 +19,7 @@
     "isolatedModules": true,
     "noEmit": false,
     "experimentalDecorators": true,
-    "skipLibCheck": false
+    "skipLibCheck": true
   },
   "include": ["tests/**/*.ts", "config/**/*.ts"],
   "exclude": ["node_modules"]
