@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "build",
-    "allowJs": true,
+    "allowJs": false,
     "forceConsistentCasingInFileNames": true,
     "module": "CommonJS",
     "moduleResolution": "node",
@@ -16,10 +16,10 @@
     "target": "ES6",
     "strict": true,
     "resolveJsonModule": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "noEmit": false,
     "experimentalDecorators": true,
-    "skipLibCheck": true
+    "skipLibCheck": false
   },
   "include": ["tests/**/*.ts", "config/**/*.ts"],
   "exclude": ["node_modules"]
