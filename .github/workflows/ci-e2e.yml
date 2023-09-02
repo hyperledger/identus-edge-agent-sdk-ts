@@ -1,4 +1,4 @@
-name: Continuous integration
+name: E2E CI
 
 concurrency:
   group: ${{ github.head_ref }}${{ github.ref }}-wallet-sdk-e2e
@@ -10,8 +10,8 @@ on:
       - "master"
 
 jobs:
-  build-and-test:
-    name: Build and test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     env:
       NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
