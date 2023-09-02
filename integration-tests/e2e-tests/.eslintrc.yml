@@ -1,4 +1,6 @@
 root: true
+ignorePatterns:
+  - target
 env:
   es2021: true
   node: true
@@ -27,3 +29,6 @@ rules:
   max-len:
     - error
     - 120
+  eol-last:
+    - error
+    - always

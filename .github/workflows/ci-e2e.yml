@@ -1,0 +1,36 @@
+name: Continuous integration
+
+concurrency:
+  group: ${{ github.head_ref }}${{ github.ref }}-wallet-sdk-e2e
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - "master"
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+          scope: "@input-output-hk"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Install
+        working-directory: integration-tests/e2e-tests
+        run: npm install
+
+      - name: Eslint
+        working-directory: integration-tests/e2e-tests
+        run: yarn eslint .
