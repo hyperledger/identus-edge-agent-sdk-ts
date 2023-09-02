@@ -4,7 +4,7 @@ import {EdgeAgentWorkflow} from "../src/EdgeAgentWorkflow"
 import {CloudAgentWorkflow} from "../src/CloudAgentWorkflow"
 import {Utils} from "../../Utils"
 
-Given("{actor} has {int} credentials issued from {actor}",
+Given("{actor} has {int} credentials issued by {actor}",
   async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
     await Utils.repeat(numberOfIssuedCredentials, async () => {
       await CloudAgentWorkflow.offerCredential(cloudAgent)
