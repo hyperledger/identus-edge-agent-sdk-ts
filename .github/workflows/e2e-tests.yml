@@ -33,10 +33,10 @@ on:
 env:
   GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
   GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
-  MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || secrets.MEDIATOR_OOB_URL }}
-  PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || secrets.PRISM_AGENT_URL }}
-  PUBLISHED_DID: ${{ inputs.publishedDid || secrets.PUBLISHED_DID }}
-  SCHEMA_ID: ${{ inputs.schemaId || secrets.SCHEMA_ID }}
+  MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
+  PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
+  PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
+  SCHEMA_ID: ${{ inputs.schemaId || vars.SCHEMA_ID }}
   APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
   NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
 
