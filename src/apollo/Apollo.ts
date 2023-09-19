@@ -8,8 +8,6 @@ import {
   MnemonicLengthException,
   MnemonicWordException,
 } from "../domain/models/errors/Mnemonic";
-import { DerivationPath } from "./utils/derivation/DerivationPath";
-import { KeyDerivation } from "./utils/derivation/KeyDerivation";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
 import { ApolloError } from "../domain/models/Errors";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
@@ -19,6 +17,13 @@ import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
 
+import * as ApolloPKG from "apollo/packages/ApolloBaseAsymmetricEncryption";
+
+const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
+
+const Mnemonic = ApolloSDK.utils.Mnemonic.Companion;
+const HDKey = ApolloSDK.derivation.HDKey;
+const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 /**
  * Apollo defines the set of cryptographic operations that are used in the Atala PRISM.
  *
@@ -111,7 +116,7 @@ export default class Apollo implements ApolloInterface {
    * @returns {MnemonicWordList}
    */
   createRandomMnemonics(): MnemonicWordList {
-    return bip39.generateMnemonic(wordlist, 256).split(" ") as MnemonicWordList;
+    return Mnemonic.createRandomMnemonics() as MnemonicWordList;
   }
 
   /**
@@ -132,17 +137,19 @@ export default class Apollo implements ApolloInterface {
     const mnemonicString = mnemonics.join(" ");
 
     if (mnemonics.length != 12 && mnemonics.length != 24) {
-      throw new MnemonicLengthException("Word list must be 12 or 24 words in length");
+      throw new MnemonicLengthException(
+        "Word list must be 12 or 24 words in length"
+      );
     }
 
     if (!bip39.validateMnemonic(mnemonicString, wordlist)) {
       throw new MnemonicWordException(`Invalid mnemonic word/s`);
     }
 
-    const seed = bip39.mnemonicToSeedSync(mnemonicString, passphrase);
+    const seed = Mnemonic.createSeed(mnemonicString, `mnemonic${passphrase}`);
 
     return {
-      value: seed,
+      value: Uint8Array.from(seed),
     };
   }
 
@@ -160,10 +167,12 @@ export default class Apollo implements ApolloInterface {
    * @returns {SeedWords}
    */
   createRandomSeed(passphrase?: string): SeedWords {
-    const mnemonics = this.createRandomMnemonics();
-    const seed = this.createSeed(mnemonics, passphrase);
+    const mnemonics = Mnemonic.createRandomMnemonics() as MnemonicWordList;
+    const seed = Mnemonic.createRandomSeed(passphrase);
     return {
-      seed: seed,
+      seed: {
+        value: Uint8Array.from(seed),
+      },
       mnemonics: mnemonics,
     };
   }
@@ -231,20 +240,20 @@ export default class Apollo implements ApolloInterface {
     if (!parameters[KeyProperties.type]) {
       throw new ApolloError.InvalidKeyType(
         parameters[KeyProperties.type],
-        Object.values(KeyTypes),
+        Object.values(KeyTypes)
       );
     }
     if (!parameters[KeyProperties.curve]) {
       throw new ApolloError.InvalidKeyCurve(
         parameters[KeyProperties.curve],
-        Object.values(Curve),
+        Object.values(Curve)
       );
     }
 
     const keyType = parameters[KeyProperties.type];
 
     const { curve } = getKeyCurveByNameAndIndex(
-      parameters[KeyProperties.curve],
+      parameters[KeyProperties.curve]
     );
     const keyData = parameters[KeyProperties.rawKey];
 
@@ -266,7 +275,7 @@ export default class Apollo implements ApolloInterface {
 
         const derivationPathStr = parameters[KeyProperties.derivationPath]
           ? Buffer.from(parameters[KeyProperties.derivationPath]).toString(
-              "hex",
+              "hex"
             )
           : Buffer.from(`m/0'/0'/0'`).toString("hex");
 
@@ -283,13 +292,18 @@ export default class Apollo implements ApolloInterface {
         }
 
         const seed = Buffer.from(seedStr, "hex");
-        const derivationPath = DerivationPath.fromPath(
-          Buffer.from(derivationPathStr, "hex").toString(),
+
+        const newExtendedKey = HDKey.InitFromSeed(
+          Int8Array.from(seed),
+          0,
+          BigIntegerWrapper.initFromInt(0)
+        ).derive(Buffer.from(derivationPathStr, "hex").toString());
+
+        const newExtendedPrivateKey = new Secp256k1PrivateKey(
+          Uint8Array.from(newExtendedKey.privateKey!)
         );
 
-        const extendedKey = KeyDerivation.deriveKey(seed, derivationPath);
-
-        return extendedKey.privateKey();
+        return newExtendedPrivateKey;
       }
     }
 
