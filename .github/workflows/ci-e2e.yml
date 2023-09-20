@@ -8,6 +8,8 @@ on:
   pull_request:
     branches:
       - "master"
+    paths: 
+      - "integration-tests/e2e-tests"
 
 jobs:
   lint:
