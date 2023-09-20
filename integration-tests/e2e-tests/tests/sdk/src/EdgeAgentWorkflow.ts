@@ -15,18 +15,18 @@ export class EdgeAgentWorkflow {
     )
   }
 
-  static async waitForCredentialOffer(edgeAgent: Actor) {
+  static async waitForCredentialOffer(edgeAgent: Actor, numberOfCredentialOffer: number = 1) {
     await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(30)).until(
+      Wait.upTo(Duration.ofSeconds(60)).until(
         WalletSdk.credentialOfferStackSize(),
-        equals(1)
+        equals(numberOfCredentialOffer)
       )
     )
   }
 
   static async waitToReceiveCredentialIssuance(edgeAgent: Actor, expectedNumberOfCredentials: number) {
     await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(30)).until(
+      Wait.upTo(Duration.ofSeconds(60)).until(
         WalletSdk.issuedCredentialStackSize(),
         equals(expectedNumberOfCredentials)
       )
@@ -65,7 +65,7 @@ export class EdgeAgentWorkflow {
 
   static async waitForProofRequest(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(30)).until(
+      Wait.upTo(Duration.ofSeconds(60)).until(
         WalletSdk.proofOfRequestStackSize(),
         equals(1),
       ),

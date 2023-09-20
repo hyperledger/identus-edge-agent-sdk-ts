@@ -16,3 +16,10 @@ Feature: Receive verifiable credential
     Then Cloud Agent should see all credentials were accepted
     And Edge Agent wait to receive 3 issued credentials
     And Edge Agent process 3 issued credentials
+
+  Scenario: Receive multiple verifiable credentials at once
+    Given Cloud Agent is connected to Edge Agent
+    When Edge Agent accepts 3 credentials offer at once from Cloud Agent
+    Then Cloud Agent should see all credentials were accepted
+    And Edge Agent wait to receive 3 issued credentials
+    And Edge Agent process 3 issued credentials

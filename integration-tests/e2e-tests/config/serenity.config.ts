@@ -1,7 +1,7 @@
 import { BeforeAll, defineParameterType, setDefaultTimeout } from "@cucumber/cucumber"
 import { actorCalled, actorInTheSpotlight, configure } from "@serenity-js/core"
 
-setDefaultTimeout(30 * 60 * 1000)
+setDefaultTimeout(5 * 60 * 1000)
 
 BeforeAll(async function () {
   // Configure Serenity/JS

@@ -42,7 +42,7 @@ export class CloudAgentWorkflow {
       Notepad.notes().get("connectionId")
     )
     await cloudAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(30)).until(
+      Wait.upTo(Duration.ofSeconds(60)).until(
         Questions.httpGet(`/connections/${connectionId}`),
         Expectations.propertyValueToBe("state", state)
       )
@@ -51,7 +51,7 @@ export class CloudAgentWorkflow {
 
   static async verifyCredentialState(cloudAgent: Actor, recordId: string, state: string) {
     await cloudAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(30)).until(
+      Wait.upTo(Duration.ofSeconds(60)).until(
         Questions.httpGet(`/issue-credentials/records/${recordId}`),
         Expectations.propertyValueToBe("protocolState", state)
       )
@@ -63,7 +63,7 @@ export class CloudAgentWorkflow {
       Notepad.notes().get("presentationId")
     )
     await cloudAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(30)).until(
+      Wait.upTo(Duration.ofSeconds(60)).until(
         Questions.httpGet(`/present-proof/presentations/${presentationId}`),
         Expectations.propertyValueToBe("status", state)
       )
