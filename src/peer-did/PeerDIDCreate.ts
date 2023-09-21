@@ -219,7 +219,7 @@ export class PeerDIDCreate {
     return {
       crv: curve,
       kty: "OKP",
-      x: publicKey.raw,
+      x: publicKey.getEncoded(),
     };
   }
 }

@@ -54,7 +54,7 @@ describe.each(["in-memory", "sqlite"])(
             .to.have.property("keyCurve")
             .to.deep.equal({ curve: privateKey.curve });
 
-          expect(resultPrivateKey).to.have.property("value").to.deep.equal(raw);
+          expect(resultPrivateKey).to.have.property("value").to.deep.equal(privateKey.getEncoded());
         });
       });
     });

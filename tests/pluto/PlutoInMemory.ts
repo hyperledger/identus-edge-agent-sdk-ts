@@ -206,7 +206,7 @@ export class PlutoInMemory implements Domain.Pluto {
           key.privateKey.curve,
           key.keyPathIndex,
         ),
-        value: key.privateKey.value,
+        value: key.privateKey.getEncoded(),
       }));
 
       return new Domain.PeerDID(didRecord.did, privateKeysForPeerDID);
@@ -307,7 +307,7 @@ export class PlutoInMemory implements Domain.Pluto {
           messageRecord.message.piuri === type &&
           (!relatedWithDID ||
             messageRecord.message.from?.toString() ===
-              relatedWithDID.toString() ||
+            relatedWithDID.toString() ||
             messageRecord.message.to?.toString() === relatedWithDID.toString()),
       )
       .map((messageRecord) => messageRecord.message);
