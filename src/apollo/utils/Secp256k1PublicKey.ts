@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import elliptic from "elliptic";
 import BigInteger from "bn.js";
 import * as ApolloPKG from "apollo/packages/ApolloBaseAsymmetricEncryption";
 
@@ -216,17 +215,21 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
         `Compressed byte array's expected length is ${ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE}, but got ${compressed.length}`
       );
     }
-    const point = this.ec.curve.decodePoint(compressed);
-    const uncompressedEncoding = point.encode();
-    return Secp256k1PublicKey.secp256k1FromBytes(uncompressedEncoding);
+    const point = apollo.utils.KMMECSecp256k1PublicKey.Companion.decodePoint(
+      Int8Array.from(compressed)
+    );
+    const publicKey =
+      apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
+        point.x,
+        point.y
+      );
+    return new Secp256k1PublicKey(Uint8Array.from(publicKey.raw));
   }
 
   verify(message: Buffer, signature: Buffer) {
-    const publicKeyBuffer = Buffer.from(this.getEncodedCompressed());
-    return Secp256k1PublicKey.ec.verify(
-      message,
-      signature,
-      Buffer.from(publicKeyBuffer)
+    return this.native.verify(
+      Int8Array.from(signature),
+      Int8Array.from(message)
     );
   }
 }
