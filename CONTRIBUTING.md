@@ -26,9 +26,10 @@ The following is a set of guidelines for contributing to Atala PRISM TS SDK. The
 Atala PRISM is a self-sovereign identity (SSI) platform and service suite for verifiable data and digital identity. Built on Cardano, it offers core infrastructure for issuing DIDs (Decentralized identifiers) and verifiable credentials, alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated in multiple repositories:
 
-* [atala-prism-building-blocks](https://github.com/input-output-hk/atala-prism-building-blocks) - Repo that contains the servers Building Blocks.
-* [atala-prism-wallet-sdk-swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
-* [atala-prism-wallet-sdk-kmm](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin version of the SDK.
+* [Open enterprise agent](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
+* [Prism Wallet SDK SWIFT](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
+* [Prism Wallet SDK KMM](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin version of the SDK.
+* [Prism Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the Prism Mediator.
 
 ### Atala PRISM TS SDK
 
