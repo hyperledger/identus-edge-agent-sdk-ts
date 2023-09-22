@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
@@ -19,10 +21,26 @@ const RequestPresentation = SDK.RequestPresentation;
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const api = new SDK.ApiImpl();
-const mediatorDID = SDK.Domain.DID.fromString(
-  "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9zaXQtcHJpc20tbWVkaWF0b3IuYXRhbGFwcmlzbS5pbyIsInIiOltdLCJhIjpbImRpZGNvbW0vdjIiXX0"
-);
+const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9zaXQtcHJpc20tbWVkaWF0b3IuYXRhbGFwcmlzbS5pbyIsInIiOltdLCJhIjpbImRpZGNvbW0vdjIiXX0"
+const pluto = new PlutoInMemory();
 
+const useSDK = (mediatorDID: SDK.Domain.DID) => {
+  const didcomm = useMemo(() => new SDK.DIDCommWrapper(apollo, castor, pluto), []);
+  const mercury = useMemo(() => new SDK.Mercury(castor, didcomm, api), []);
+  const store = useMemo(() => new SDK.PublicMediatorStore(pluto), []);
+  const handler = useMemo(() => new SDK.BasicMediatorHandler(mediatorDID, mercury, store), []);
+  const manager = useMemo(() => new SDK.ConnectionsManager(castor, mercury, pluto, handler), []);
+  const agent = useMemo(() => new SDK.Agent(
+    apollo,
+    castor,
+    pluto,
+    mercury,
+    handler,
+    manager,
+    apollo.createRandomSeed().seed
+  ), []);
+  return {agent, pluto};
+};
 
 function Mnemonics() {
   const mnemonicState = useAtom(mnemonicsAtom);
@@ -314,7 +332,7 @@ function Dids() {
 const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto }> = props => {
   const CONNECTION_EVENT = ListenerKey.CONNECTION
   const [connections, setConnections] = React.useState<Array<any>>([]);
-  const [oob, setOOB] = React.useState<string>("https://domain.com/path?_oob=eyJpZCI6ImM2NTdhYmFkLWFhNDktNDk2NS1iOTQyLWNmMDdmMzY0NTQ4NyIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNmallKRDdHU2N4WmJSN3I1aUtQVU05MVQ1SHR4dXRSeTNtWjFmczZBb1pBeS5WejZNa3E5Q0Jqc1B6dHlBZDhCZmRKS3BDaXNIcW5nenpGZE1VNzJtRExER0xEb0FuLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19")
+  const [oob, setOOB] = React.useState<string>()
   const handleConnections = useCallback((event: any) => {
     setConnections([...connections, event])
   }, [])
@@ -346,8 +364,14 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto }> = props => {
   </>
 }
 
-const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.Pluto }> = props => {
-  const [state, setState] = React.useState<string>(props.agent.state);
+const Agent: React.FC<{  }> = props => {
+  const [mediatorDID, setMediatorDID] = useState<string>(defaultMediatorDID)
+
+  const sdk = useSDK(SDK.Domain.DID.fromString(defaultMediatorDID))
+
+  const {pluto, agent} = sdk;
+
+  const [state, setState] = React.useState<string>(agent.state);
   const [error, setError] = React.useState<any>();
 
   const [newMessage, setNewMessage] = React.useState<any>([]);
@@ -367,14 +391,14 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
 
     if (requestPresentations.length) {
       for(const requestPresentation of requestPresentations) {
-        const lastCredentials = await props.pluto.getAllCredentials();
+        const lastCredentials = await pluto.getAllCredentials();
         const lastCredential = lastCredentials.at(-1);
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
         try {
           if (lastCredential === undefined) throw new Error("last credential not found");
 
-          const presentation = await props.agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential)
-          await props.agent.sendMessage(presentation.makeMessage())
+          const presentation = await agent.createPresentationForRequestProof(requestPresentationMessage, lastCredential)
+          await agent.sendMessage(presentation.makeMessage())
         } catch (err) {
           console.log("continue after err", err)
         }
@@ -383,9 +407,9 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
     if (credentialOffers.length) {
       for(const credentialOfferMessage of credentialOffers) {
         const credentialOffer = OfferCredential.fromMessage(credentialOfferMessage);
-        const requestCredential = await props.agent.prepareRequestCredentialWithIssuer(credentialOffer);
+        const requestCredential = await agent.prepareRequestCredentialWithIssuer(credentialOffer);
         try {
-          await props.agent.sendMessage(requestCredential.makeMessage())
+          await agent.sendMessage(requestCredential.makeMessage())
         } catch (err) {
           console.log("continue after err", err)
         }
@@ -394,16 +418,16 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
     if (issuedCredentials.length) {
       for(const issuedCredential of issuedCredentials) {
         const issueCredential = IssueCredential.fromMessage(issuedCredential);
-        await props.agent.processIssuedCredentialMessage(issueCredential);
+        await agent.processIssuedCredentialMessage(issueCredential);
       }
     }
 
   }
 
   useEffect(() => {
-    props.agent.addListener(ListenerKey.MESSAGE,handleMessages)
+    agent.addListener(ListenerKey.MESSAGE,handleMessages)
     return () => {
-      props.agent.removeListener(ListenerKey.MESSAGE,handleMessages)
+      agent.removeListener(ListenerKey.MESSAGE,handleMessages)
     }
   }, [])
 
@@ -421,12 +445,15 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
   const handleStart = async () => {
     setState("starting");
     try {
-      const status = await props.agent.start();
-      const mediator = props.agent.currentMediatorDID;
+      if (!mediatorDID) {
+        throw new Error("Set mediator did first before starting")
+      }
+      const status = await agent.start();
+      const mediator = agent.currentMediatorDID;
       if (!mediator) {
         throw new Error("Mediator not available");
       }
-      const secondaryDID = await props.agent.createNewPeerDID(
+      const secondaryDID = await agent.createNewPeerDID(
         [],
         true
       );
@@ -436,7 +463,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
           secondaryDID
       ).makeMessage();
       try {
-        await props.agent.sendMessage(testMessage);
+        await agent.sendMessage(testMessage);
       } catch (err) {
         console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.");
       }
@@ -455,7 +482,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
     // ok for demo
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const from = message?.from as SDK.Domain.DID;
-    await props.agent.sendMessage(
+    await agent.sendMessage(
       new BasicMessage(
         { content: text },
         from,
@@ -466,7 +493,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
 
   const handleStop = async () => {
     setState("stopping");
-    await props.agent.stop();
+    await agent.stop();
     setState("stopped");
   };
 
@@ -474,13 +501,26 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
     <Box>
       <h2>Agent</h2>
       <p>
-        <b>Status:</b>&nbsp; {props.agent.state}
+        <b>Status:</b>&nbsp; {state}
       </p>
       <div>
         {state === "stopped" && (
-          <button style={{ width: 120 }} onClick={handleStart}>Start</button>
+          <>
+            <p>
+              Set the mediatorDID here:
+            <input type="text" onChange={(e) =>   {
+                try {
+                  SDK.Domain.DID.fromString(e.target.value)
+                  setMediatorDID(e.target.value);
+                } catch (err) {
+                  console.log(err)
+                }
+              } } value={mediatorDID} />
+            </p>
+            <button style={{ width: 120 }} onClick={handleStart}>Start</button>
+          </>
         )}
-        {props.agent.state === "running" && (
+        {state === "running" && (
           <>
             <button style={{ width: 120 }} onClick={handleStop}>Stop</button>
             {messages.map((message, i: number) => {
@@ -500,7 +540,7 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
                 }}>Respond</button>
                 </div>
             })}
-            <OOB agent={props.agent} pluto={props.pluto} />
+            <OOB agent={agent} pluto={pluto} />
           </>
         )}
       </div>
@@ -514,41 +554,17 @@ const Agent: React.FC<{ agent: SDK.Agent, castor: SDK.Castor, pluto: SDK.Domain.
   );
 };
 
-const useSDK = () => {
-  const pluto = new PlutoInMemory();
-  const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
-  const mercury = new SDK.Mercury(castor, didcomm, api);
-  const store = new SDK.PublicMediatorStore(pluto);
-  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
-  const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
-  const seed = apollo.createRandomSeed()
-  const agent = new SDK.Agent(
-    apollo,
-    castor,
-    pluto,
-    mercury,
-    handler,
-    manager,
-    seed.seed
-  );
-
-  return {agent, pluto};
-};
 
 function App() {
-  const sdk = useSDK();
-
   return (
     <div className="App">
       <h1>Atala PRISM Wallet SDK Usage Examples</h1>
-      <Agent agent={sdk.agent} pluto={sdk.pluto} castor={castor} />
+      <Agent />
       <Mnemonics />
       <Spacer />
-
       <KeyPair curve={SDK.Domain.Curve.SECP256K1} />
       <KeyPair curve={SDK.Domain.Curve.ED25519} />
       <KeyPair curve={SDK.Domain.Curve.X25519} />
-
       <Dids />
       <Spacer />
     </div>
