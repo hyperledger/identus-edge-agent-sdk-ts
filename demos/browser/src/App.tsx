@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import "./App.css";
 import * as jose from "jose";
 import {useAtom} from "jotai";
@@ -20,8 +22,25 @@ const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const api = new SDK.ApiImpl();
 const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9zaXQtcHJpc20tbWVkaWF0b3IuYXRhbGFwcmlzbS5pbyIsInIiOltdLCJhIjpbImRpZGNvbW0vdjIiXX0"
+const pluto = new PlutoInMemory();
 
-
+const useSDK = (mediatorDID: SDK.Domain.DID) => {
+  const didcomm = useMemo(() => new SDK.DIDCommWrapper(apollo, castor, pluto), []);
+  const mercury = useMemo(() => new SDK.Mercury(castor, didcomm, api), []);
+  const store = useMemo(() => new SDK.PublicMediatorStore(pluto), []);
+  const handler = useMemo(() => new SDK.BasicMediatorHandler(mediatorDID, mercury, store), []);
+  const manager = useMemo(() => new SDK.ConnectionsManager(castor, mercury, pluto, handler), []);
+  const agent = useMemo(() => new SDK.Agent(
+    apollo,
+    castor,
+    pluto,
+    mercury,
+    handler,
+    manager,
+    apollo.createRandomSeed().seed
+  ), []);
+  return {agent, pluto};
+};
 
 function Mnemonics() {
   const mnemonicState = useAtom(mnemonicsAtom);
@@ -347,7 +366,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto }> = props => {
 const Agent: React.FC<{  }> = props => {
   const [mediatorDID, setMediatorDID] = useState<string>(defaultMediatorDID)
 
-  const sdk = useSDK(SDK.Domain.DID.fromString(mediatorDID));
+  const sdk = useSDK(SDK.Domain.DID.fromString(defaultMediatorDID))
 
   const {pluto, agent} = sdk;
 
@@ -534,26 +553,6 @@ const Agent: React.FC<{  }> = props => {
   );
 };
 
-const useSDK = (mediatorDID: SDK.Domain.DID) => {
-  const pluto = new PlutoInMemory();
-  const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
-  const mercury = new SDK.Mercury(castor, didcomm, api);
-  const store = new SDK.PublicMediatorStore(pluto);
-  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
-  const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
-  const seed = apollo.createRandomSeed()
-  const agent = new SDK.Agent(
-    apollo,
-    castor,
-    pluto,
-    mercury,
-    handler,
-    manager,
-    seed.seed
-  );
-
-  return {agent, pluto};
-};
 
 function App() {
   return (
