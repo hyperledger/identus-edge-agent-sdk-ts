@@ -74,8 +74,9 @@ function KeyPair({curve = SDK.Domain.Curve.SECP256K1}: { curve?: SDK.Domain.Curv
 
     const seed = apollo.createSeed(mnemonics, "my-secret");
 
+    const type = curve === SDK.Domain.Curve.X25519 ? SDK.Domain.KeyTypes.Curve25519 : SDK.Domain.KeyTypes.EC;
     const privateKey = apollo.createPrivateKey({
-      type: SDK.Domain.KeyTypes.EC,
+      type: type,
       curve:curve,
       seed: Buffer.from(seed.value).toString("hex"),
     });
