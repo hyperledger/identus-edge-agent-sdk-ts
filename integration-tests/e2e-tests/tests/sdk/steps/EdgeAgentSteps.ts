@@ -41,7 +41,7 @@ When("{actor} accepts {int} credentials offer at once from {actor}",
     })
     await cloudAgent.attemptsTo(Notepad.notes().set("recordIdList", recordIdList))
 
-    await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, 3)
+    await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, numberOfCredentials)
     
     await Utils.repeat(numberOfCredentials, async () => {
       await EdgeAgentWorkflow.acceptCredential(edgeAgent)

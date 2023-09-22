@@ -8,6 +8,7 @@ import {
 import {Utils} from "../../Utils"
 import {randomUUID} from "crypto"
 import {axiosInstance} from "../steps/LifecycleSteps"
+import * as fs from "fs"
 
 export class CloudAgentConfiguration {
   static publishedDid: string
@@ -24,6 +25,18 @@ export class CloudAgentConfiguration {
     await this.prepareSchema()
 
     this.isInitialized = true
+
+    Utils.appendToNotes(`Mediator: ${EnvironmentVariables.mediatorOobUrl}`)
+    Utils.appendToNotes(`Agent: ${EnvironmentVariables.agentUrl}`)
+    Utils.appendToNotes(`DID: ${this.publishedDid}`)
+    Utils.appendToNotes(`Schema: ${this.schemaId}`)
+    Utils.appendToNotes(`SDK Version: ${this.getSdkVersion()}`)
+  }
+
+  private static getSdkVersion(): string {
+    const file = "node_modules/@input-output-hk/atala-prism-wallet-sdk/package.json"
+    const json = JSON.parse(fs.readFileSync(file).toString())
+    return json.version
   }
 
   /**
@@ -37,7 +50,7 @@ export class CloudAgentConfiguration {
       this.publishedDid = EnvironmentVariables.publishedDid
       return
     } catch (err) {
-      console.warn("DID not found. Creating a new one and publishing it.")
+      Utils.appendToNotes("DID not found. Creating a new one and publishing it.")
     }
 
     const creationData = new CreateManagedDidRequest()
@@ -83,8 +96,6 @@ export class CloudAgentConfiguration {
         }
       }, 1000)
     })
-
-    Utils.appendToNotes(`Created new DID: ${this.publishedDid}`)
   }
 
   /**
@@ -98,7 +109,7 @@ export class CloudAgentConfiguration {
       this.schemaId = EnvironmentVariables.schemaId
       return
     } catch (err) {
-      console.warn("Schema not found. Creating a new one.")
+      Utils.appendToNotes("Schema not found. Creating a new one.")
     }
 
     const credentialSchemaInput = new CredentialSchemaInput()
@@ -133,7 +144,6 @@ export class CloudAgentConfiguration {
     )
 
     this.schemaId = schemaResponse.data.guid
-
-    Utils.appendToNotes(`Created new schema: ${this.schemaId}`)
   }
 }
+

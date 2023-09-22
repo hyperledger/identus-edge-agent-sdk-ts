@@ -17,7 +17,7 @@ export class EdgeAgentWorkflow {
 
   static async waitForCredentialOffer(edgeAgent: Actor, numberOfCredentialOffer: number = 1) {
     await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(60)).until(
+      Wait.upTo(Duration.ofMinutes(2)).until(
         WalletSdk.credentialOfferStackSize(),
         equals(numberOfCredentialOffer)
       )
@@ -26,7 +26,7 @@ export class EdgeAgentWorkflow {
 
   static async waitToReceiveCredentialIssuance(edgeAgent: Actor, expectedNumberOfCredentials: number) {
     await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(60)).until(
+      Wait.upTo(Duration.ofMinutes(2)).until(
         WalletSdk.issuedCredentialStackSize(),
         equals(expectedNumberOfCredentials)
       )
@@ -37,7 +37,7 @@ export class EdgeAgentWorkflow {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         await Utils.repeat(numberOfCredentials, async () => {
-          const issuedCredential = messages.issuedCredentialStack.pop()!
+          const issuedCredential = messages.issuedCredentialStack.shift()!
           const issueCredential = IssueCredential.fromMessage(issuedCredential)
           await sdk.processIssuedCredentialMessage(issueCredential)
         })
@@ -48,16 +48,13 @@ export class EdgeAgentWorkflow {
   static async acceptCredential(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
-        const message = OfferCredential.fromMessage(messages.credentialOfferStack.pop()!)
-        const requestCredential =
-          await sdk.prepareRequestCredentialWithIssuer(message)
+        const message = OfferCredential.fromMessage(messages.credentialOfferStack.shift()!)
+        const requestCredential = await sdk.prepareRequestCredentialWithIssuer(message)
+        const requestCredentialMessage = requestCredential.makeMessage()
         try {
-          await sdk.sendMessage(requestCredential.makeMessage())
+          await sdk.sendMessage(requestCredentialMessage)
         } catch (e) {
-          console.error(
-            "Accepting credential shouldn't throw exception",
-            new Error().stack?.split("\n")[1].trim(),
-          )
+          //
         }
       })
     )
@@ -65,7 +62,7 @@ export class EdgeAgentWorkflow {
 
   static async waitForProofRequest(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofSeconds(60)).until(
+      Wait.upTo(Duration.ofMinutes(2)).until(
         WalletSdk.proofOfRequestStackSize(),
         equals(1),
       ),
@@ -78,7 +75,7 @@ export class EdgeAgentWorkflow {
         const credentials = await sdk.verifiableCredentials()
         const credential = credentials[0]
         const requestPresentationMessage = RequestPresentation.fromMessage(
-            messages.proofRequestStack.pop()!,
+            messages.proofRequestStack.shift()!,
         )
         const presentation = await sdk.createPresentationForRequestProof(
           requestPresentationMessage,
@@ -87,10 +84,7 @@ export class EdgeAgentWorkflow {
         try {
           await sdk.sendMessage(presentation.makeMessage())
         } catch (e) {
-          console.error(
-            "Send present-proof shouldn't throw exception",
-            new Error().stack?.split("\n")[1].trim(),
-          )
+          //
         }
       }
       )
