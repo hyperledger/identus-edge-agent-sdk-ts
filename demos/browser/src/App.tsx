@@ -354,12 +354,12 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto }> = props => {
   }
   return <>
   <p>PRISM Agent connection</p>
-  {connections.length <= 0 && <>
+ 
     <p>
       <input type="text" value={oob}  onChange={handleOnChange} />
     </p>
     <button style={{ width: 120 }} onClick={handleParseOOB}>Create connection</button>
-  </>}
+
     {connections.length > 0 && <p>Stored OOB Connection at <b>{connections.at(0).name}</b></p>}
   </>
 }
