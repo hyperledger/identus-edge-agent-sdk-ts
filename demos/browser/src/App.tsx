@@ -395,8 +395,8 @@ const Agent: React.FC<{  }> = props => {
     setMessages(joinedMessages)
     setNewMessage(joinedMessages.map(() => ""))
 
-    const credentialOffers = newMessages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/offer-credential");
-    const issuedCredentials = newMessages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/2.0/issue-credential");
+    const credentialOffers = newMessages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/3.0/offer-credential");
+    const issuedCredentials = newMessages.filter((message) => message.piuri === "https://didcomm.org/issue-credential/3.0/issue-credential");
     const requestPresentations = newMessages.filter((message) => message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation");
 
     if (requestPresentations.length) {

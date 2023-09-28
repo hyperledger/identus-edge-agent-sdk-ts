@@ -30,7 +30,6 @@ export default class Pollux implements PolluxInterface {
 
   constructor(
     private castor: Castor,
-    private endpointUrl: string = "",
     private api: Api = new ApiImpl()
   ) {}
 
@@ -50,19 +49,16 @@ export default class Pollux implements PolluxInterface {
   // TODO: Match the correct format with whatever backend is sending us
   // TODO: does this function belong in Pollux, can we move to Message?
   public extractCredentialFormatFromMessage(message: Message) {
-    const body = JSON.parse(message.body);
-    const formats = body.formats;
-    if (!formats || !Array.isArray(formats) || formats.length <= 0) {
-      return CredentialType.Unknown;
+    const [attachment] = message.attachments;
+    if (!attachment) {
+      throw new Error("Required Attachment");
     }
-    const [{ format }] = formats;
-    if (!format) {
-      return CredentialType.Unknown;
+
+    if (attachment.format === "anoncreds/credential-offer@v1.0") {
+      return CredentialType.AnonCreds;
     }
-    if (format === CredentialType.JWT) {
-      return CredentialType.JWT;
-    }
-    if (format === CredentialType.AnonCreds) {
+
+    if (attachment.format === "prism/jwt") {
       return CredentialType.AnonCreds;
     }
 
@@ -115,14 +111,11 @@ export default class Pollux implements PolluxInterface {
   }
 
   private extractAttachment(body: any, attachments: AttachmentDescriptor[]) {
-    if (!body.formats || body.formats.length <= 0) {
-      throw new Error("Invalid credential format");
-    }
-    const [{ attach_id }] = body.formats;
-    const attachment = attachments.find(({ id }) => id === attach_id);
+    const [attachment] = attachments;
     if (!attachment) {
       throw new Error("Attachment not found");
     }
+
     return JSON.parse(
       Buffer.from(
         base64.baseDecode((attachment.data as AttachmentBase64).base64)

@@ -16,11 +16,11 @@ export default Base("browser", [
   }),
   nodePolyfills(),
   nodeResolve({
-    resolveOnly: ["anoncreds", "didcomm"]
+    resolveOnly: ["anoncreds", "didcomm"],
   }),
   wasm({
     targetEnv: "browser",
-    fileName: "[name].[hash][extname]",
+    fileName: "[name][extname]",
     publicPath: "/",
     // maxFileSize: 10000000
   }),

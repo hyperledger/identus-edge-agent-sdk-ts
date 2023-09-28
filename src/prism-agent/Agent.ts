@@ -101,8 +101,7 @@ export default class Agent
     mediationHandler: MediatorHandler,
     connectionManager: ConnectionsManager,
     seed: Seed = apollo.createRandomSeed().seed,
-    api: Api = new ApiImpl(),
-    options?: AgentConfig
+    api: Api = new ApiImpl()
   ) {
     this.apollo = apollo;
     this.castor = castor;
@@ -111,7 +110,7 @@ export default class Agent
     this.mediationHandler = mediationHandler;
     this.seed = seed;
     this.api = api;
-    this.pollux = new Pollux(castor, options?.endpointUrl);
+    this.pollux = new Pollux(castor);
 
     this.connectionManager =
       connectionManager ||
@@ -214,14 +213,11 @@ export default class Agent
       throw new AgentError.MediationRequestFailedError("Mediation failed");
     }
 
-    //#if _ANONCREDS
     const storedLinkSecret = await this.pluto.getLinkSecret();
-
     if (storedLinkSecret == null) {
       const linkSecret = this.pollux.anoncreds.createLinksecret();
       await this.pluto.storeLinkSecret(linkSecret, "default");
     }
-    //#endif
 
     return this.state;
   }

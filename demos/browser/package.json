@@ -43,7 +43,8 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@craco/craco": "^5.9.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "path-browserify": "^1.0.1",
