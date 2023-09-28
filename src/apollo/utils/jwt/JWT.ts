@@ -8,6 +8,7 @@ import {
   Services,
   VerificationMethods,
   DID,
+  PrivateKey,
 } from "../../../domain";
 
 export class JWT {
@@ -45,24 +46,24 @@ export class JWT {
         verificationMethod:
           verificationMethods && verificationMethods.values
             ? verificationMethods.values.map((vm) => {
-                if (vm.publicKeyMultibase) {
-                  return {
-                    id: vm.id,
-                    type: "EcdsaSecp256k1VerificationKey2019",
-                    controller: vm.controller,
-                    publicKeyMultibase: vm.publicKeyMultibase,
-                  };
-                }
-                if (vm.publicKeyJwk) {
-                  return {
-                    id: vm.id,
-                    type: "JsonWebKey2020",
-                    controller: vm.controller,
-                    publicKeyJwk: vm.publicKeyJwk,
-                  };
-                }
-                throw new Error("Invalid KeyType");
-              })
+              if (vm.publicKeyMultibase) {
+                return {
+                  id: vm.id,
+                  type: "EcdsaSecp256k1VerificationKey2019",
+                  controller: vm.controller,
+                  publicKeyMultibase: vm.publicKeyMultibase,
+                };
+              }
+              if (vm.publicKeyJwk) {
+                return {
+                  id: vm.id,
+                  type: "JsonWebKey2020",
+                  controller: vm.controller,
+                  publicKeyJwk: vm.publicKeyJwk,
+                };
+              }
+              throw new Error("Invalid KeyType");
+            })
             : [],
         service:
           service?.values?.reduce<didResolver.Service[]>((acc, service) => {
@@ -82,11 +83,12 @@ export class JWT {
 
   async sign(
     issuer: DID,
-    privateKey: Uint8Array,
+    privateKey: PrivateKey | Uint8Array,
     payload: Partial<didJWT.JWTPayload>
   ): Promise<string> {
+    const raw = privateKey instanceof PrivateKey ? privateKey.raw : privateKey;
     //TODO: Better check if this method is called with PrismDID and not PeerDID or other
-    const signer = didJWT.ES256KSigner(privateKey);
+    const signer = didJWT.ES256KSigner(raw);
     const jwt = await didJWT.createJWT(
       payload,
       { issuer: issuer.toString(), signer },

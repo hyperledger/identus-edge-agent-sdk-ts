@@ -1,12 +1,12 @@
 import chai from "chai";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import Apollo from "../../../apollo/Apollo";
-import Castor from "../../../castor/Castor";
-import Pluto from "../../../pluto/Pluto";
+import Apollo from "../../../src/apollo/Apollo";
+import Castor from "../../../src/castor/Castor";
+import Pluto from "../../../src/pluto/Pluto";
 import * as Domain from "../../../src/domain";
 import { DIDCommSecretsResolver } from "../../../src/mercury/didcomm/SecretsResolver";
-import { Curve } from "../../../src/domain";
+import { Curve, PrivateKey } from "../../../src/domain";
 
 chai.use(SinonChai);
 const expect = chai.expect;
@@ -21,20 +21,34 @@ describe("Mercury DIDComm SecretsResolver", () => {
   });
 
   const makeTestContext = () => {
-    const apollo: Pick<
-      Apollo,
-      "createKeyPairFromPrivateKey" | "getPrivateJWKJson"
-    > = {
-      createKeyPairFromPrivateKey: (privateKey) => ({
-        keyCurve: privateKey.keyCurve,
-        privateKey,
-        publicKey: privateKey,
-      }),
+    const apollo: Pick<Apollo, "createPrivateKey" | "getPrivateJWKJson"> = {
+      createPrivateKey: (parameters: { [name: string]: any }) => {
+        return new (class extends PrivateKey {
+          publicKey(): Domain.PublicKey {
+            return new (class extends Domain.PublicKey {
+              type: Domain.KeyTypes;
+              keySpecification: Map<string, string>;
+              size: number;
+              raw: Uint8Array = new Uint8Array();
+              getEncoded(): Uint8Array {
+                return this.raw;
+              }
+            })();
+          }
+          type: Domain.KeyTypes;
+          keySpecification: Map<string, string>;
+          size: number;
+          raw: Uint8Array = new Uint8Array();
+          getEncoded(): Uint8Array {
+            return this.raw;
+          }
+        })();
+      },
       getPrivateJWKJson: (id) => `${id}`,
     };
 
     const castor: Pick<Castor, "getEcnumbasis" | "resolveDID"> = {
-      getEcnumbasis: (did, keyPair) => `${keyPair.keyCurve.curve}`,
+      getEcnumbasis: (did, publicKey) => `${publicKey.curve}`,
       resolveDID: async () => ({} as Domain.DIDDocument),
     };
 
@@ -149,9 +163,28 @@ describe("Mercury DIDComm SecretsResolver", () => {
           ])
         );
 
-      sandbox
-        .stub(ctx.apollo, "createKeyPairFromPrivateKey")
-        .returns({} as any);
+      sandbox.stub(ctx.apollo, "createPrivateKey").returns(
+        new (class extends PrivateKey {
+          publicKey(): Domain.PublicKey {
+            return new (class extends Domain.PublicKey {
+              type: Domain.KeyTypes;
+              keySpecification: Map<string, string>;
+              size: number;
+              raw: Uint8Array = new Uint8Array();
+              getEncoded(): Uint8Array {
+                return this.raw;
+              }
+            })();
+          }
+          type: Domain.KeyTypes;
+          keySpecification: Map<string, string>;
+          size: number;
+          raw: Uint8Array = new Uint8Array();
+          getEncoded(): Uint8Array {
+            return this.raw;
+          }
+        })()
+      );
 
       sandbox.stub(ctx.castor, "getEcnumbasis").returns(ecnum);
 

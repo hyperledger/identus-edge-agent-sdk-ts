@@ -12,12 +12,13 @@ Atala PRISM is a self-sovereign identity (SSI) platform and service suite for
 verifiable data and digital identity. Built on Cardano, it offers core
 infrastructure for issuing DIDs (Decentralized identifiers) and verifiable
 credentials, alongside tools and frameworks to help expand your ecosystem.
-The complete platform is separated in multiple repositories:
+The complete platform is separated into multiple repositories:
 
 - [atala-prism-wallet-sdk-swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo that implements Atala PRISM for Apple platforms in Swift.
-- [atala-prism-wallet-sdk-kmm](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo that implements Atala PRISM for Apple platforms in kmm, jvm.
+- [atala-prism-wallet-sdk-kmm](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo that implements Atala PRISM for Apple platforms in KMM, JVM.
 - [atala-prism-wallet-sdk-ts](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo that implements Atala PRISM for Browser and NodeJS platforms in TypeScript.
-- [atala-prism-building-blocks](https://github.com/input-output-hk/atala-prism-building-blocks) - Repo that contains the platform Building Blocks.
+- [atala-prism-building-blocks](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
+- [atala-prism-mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for DIDComm V2 Mediator
 
 ### SDK Overview
 
@@ -30,13 +31,13 @@ The complete platform is separated in multiple repositories:
 
 ### Getting started
 
-This repository includes a browser and a nodejs demo application, and also a step by step documented process.
+This repository includes a browser and a Node.js demo application, and also a step-by-step documented process to run it.
 
 #### Running a demo project
 
 To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
 
-From the repository, cd into `{path}/prism-wallet-sdk-ts`:
+From the repository root run:
 
 ```bash
 npm i
@@ -66,12 +67,19 @@ npm i
 npm run start
 ```
 
+#### Implementing storage for the SDK
+This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.
+
+We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
+
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
+
 #### Demo development mode
 
-To run browser demo app, just run `npm run dev:browser` and browser will automatically open and load the demo app.
+To run the browser demo app, just run `npm run dev:browser`, and the browser will automatically open and load the demo app.
 
-To run Node.js demo app, run `npm run dev:node` to build the demo app and then run it with `node build/node-test/index.js`.
+To run the Node.js demo app, run `npm run dev:node` to build the demo app and then run it with `node build/node-test/index.js`.
 
-2. To see how the step by steps examples can guide you refer to each section inside docs folder, Apollo, Castor, Pollux, Mercury, Pluto, Agent
+2. To see how the step-by-step examples can guide you, refer to each section inside the docs folder: Apollo, Castor, Pollux, Mercury, Pluto, Agent
 
-3. Jump straight into the [SDK-REFERENCE](modules.html)
+3. Jump straight into the [SDK-REFERENCE](https://input-output-hk.github.io/atala-prism-wallet-sdk-ts/modules.html)

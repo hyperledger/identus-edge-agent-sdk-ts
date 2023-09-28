@@ -1,6 +1,6 @@
 import BN from "bn.js";
 import elliptic from "elliptic";
-import { Secp256k1KeyCommon } from "./Secp256k1KeyCommon";
+import { KeyPair } from "../../domain";
 
 import { Secp256k1PrivateKey } from "./Secp256k1PrivateKey";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
@@ -8,7 +8,9 @@ import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 /**
  * @ignore
  */
-export class Secp256k1KeyPair extends Secp256k1KeyCommon {
+export class Secp256k1KeyPair extends KeyPair {
+  public static ec: elliptic.ec = new elliptic.ec("secp256k1");
+
   constructor(
     public privateKey: Secp256k1PrivateKey,
     public publicKey: Secp256k1PublicKey
@@ -16,7 +18,7 @@ export class Secp256k1KeyPair extends Secp256k1KeyCommon {
     super();
   }
 
-  static generateSecp256k1KeyPair(): Secp256k1KeyPair {
+  static generateKeyPair() {
     const keyPair = this.ec.genKeyPair();
     const bigNumber = keyPair.getPrivate();
     const basePoint = keyPair.getPublic();
@@ -28,8 +30,10 @@ export class Secp256k1KeyPair extends Secp256k1KeyCommon {
     publicNative: elliptic.curve.base.BasePoint
   ): Secp256k1KeyPair {
     return new Secp256k1KeyPair(
-      new Secp256k1PrivateKey(privateNative),
-      new Secp256k1PublicKey(publicNative)
+      new Secp256k1PrivateKey(Uint8Array.from(privateNative.toArray())),
+      new Secp256k1PublicKey(
+        Uint8Array.from(publicNative.encodeCompressed("array"))
+      )
     );
   }
 }

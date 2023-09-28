@@ -1,3 +1,53 @@
+# [2.4.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.3.0...v2.4.0) (2023-08-30)
+
+
+### Bug Fixes
+
+* **mercury:** Add return route with value all to async messages that are initiated by the holder. ([#85](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/85)) ([5e56675](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/5e56675292ea2f824f3c685d87411540493cb85b))
+
+
+### Features
+
+* **Apollo:** MnemonicWordList must be 24 or 12 words long ([#81](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/81)) ([fbe5678](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/fbe5678e5c61486c009fa3121c6a1d7a72e5212d))
+* **Sec:** updating package dependencies ([#83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/83)) ([460e123](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/460e1238a6f2e709e7645dd4aa33d8c98acd0f33))
+
+# [2.3.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.2.0...v2.3.0) (2023-08-28)
+
+
+### Bug Fixes
+
+* **docs:** Add static reference to the docs. ([#82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/82)) ([3dda29d](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/3dda29d13efd2c44f9d87ffa1ab3c7467e5a8088))
+
+
+### Features
+
+* **Mercury:** adding return_route: all to didcomm Message ([#80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/80)) ([1972a9e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/1972a9e708bbad5a2d39fcd5763f46bba5313d1a))
+
+# [2.2.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.1.0...v2.2.0) (2023-08-23)
+
+
+### Bug Fixes
+
+* **Pluto:** encoding / decoding PrivateKeys ([#78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/78)) ([b9133ac](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/b9133acbcb9cbd883fffec05feb58ecbe24600fc))
+
+
+### Features
+
+* **Castor:** extending createPrismDID to accept a KeyPair or PublicKey ([#70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/70)) ([d06871c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/d06871caadaf1b1f43cedfb1390ea58558b3fce8))
+* **Demo:** Update Mediator DID for demo apps ([#73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/73)) ([7f3c98e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/7f3c98ec77d2cd8cf862d91515c139ff76270f03))
+
+# [2.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.3...v2.1.0) (2023-08-17)
+
+
+### Bug Fixes
+
+* update dates parsing from JWT credentials ([#66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/66)) ([24562f7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/24562f77b19f84c2acd6a485368c06d836531672))
+
+
+### Features
+
+* Add Cryptography key abstraction for signable, verifiable keys, and also private and public base impls ([#67](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/67)) ([61d9dbd](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/61d9dbd2f13c4f21540500fff337c7bc4ff5b527))
+
 ## [2.0.3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.0.2...v2.0.3) (2023-06-27)
 
 

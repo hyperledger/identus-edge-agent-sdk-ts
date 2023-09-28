@@ -10,13 +10,14 @@ import type {
 import * as Domain from "../../domain";
 import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
-import Pluto from "../../pluto/Pluto";
+import { Pluto } from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
 import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
 import type * as DIDCommLibTypes from "../../../didcomm-rust/didcomm-browser/didcomm_js";
+import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
 
 /**
  * @ignore
@@ -58,6 +59,19 @@ export class DIDCommWrapper implements DIDCommProtocol {
     return this.didcomm;
   }
 
+  private doesRequireReturnRoute(type: string) {
+    if (type === ProtocolType.DidcommMediationRequest) {
+      return true;
+    }
+    if (type === ProtocolType.PickupReceived) {
+      return true;
+    }
+    if (type === ProtocolType.PickupRequest) {
+      return true;
+    }
+    return false;
+  }
+
   async packEncrypted(
     message: Domain.Message,
     toDid: Domain.DID,
@@ -84,10 +98,11 @@ export class DIDCommWrapper implements DIDCommProtocol {
       //expires_time: Number(message.expiresTimePlus),
       thid: message.thid,
       pthid: message.pthid,
-      //TODO: Remove comment once fixed by rootsID or we are sure this works,
-      //if not message is not correctly formatted
-      //return_route: "all",
+      ...(this.doesRequireReturnRoute(message.piuri)
+        ? { return_route: "all" }
+        : {}),
     });
+
     const [encryptedMsg] = await didcommMsg.pack_encrypted(
       to,
       fromDid ? fromDid.toString() : null,

@@ -28,6 +28,7 @@ import {
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
+import { KeyProperties, KeyTypes } from "../domain/models";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -108,7 +109,8 @@ export class AgentCredentials implements AgentCredentialsClass {
     offer: OfferCredential
   ): Promise<RequestCredential> {
     const message = offer.makeMessage();
-    const credentialType = this.pollux.extractCredentialFormatFromMessage(message);
+    const credentialType =
+      this.pollux.extractCredentialFormatFromMessage(message);
 
     let credBuffer: string;
 
@@ -127,30 +129,29 @@ export class AgentCredentials implements AgentCredentialsClass {
       await this.pluto.storeCredentialMetadata(credentialMetadata);
     } else {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
-      const keyPair = await this.apollo.createKeyPairFromKeyCurve(
-        {
-          curve: Curve.SECP256K1,
-          index: keyIndex,
-        },
-        this.seed
-      );
+      const privateKey = await this.apollo.createPrivateKey({
+        [KeyProperties.curve]: Curve.SECP256K1,
+        [KeyProperties.index]: keyIndex,
+      });
+      this.seed;
 
-      const did = await this.castor.createPrismDID(keyPair.publicKey);
+      const did = await this.castor.createPrismDID(privateKey.publicKey());
 
       await this.pluto.storePrismDID(
         did,
         keyIndex,
-        {
-          keyCurve: keyPair.privateKey.keyCurve,
-          value: Buffer.from(base64url.baseEncode(keyPair.privateKey.value)),
-        },
+        privateKey,
         null,
         did.toString()
       );
 
       credBuffer = await this.pollux.processJWTCredential(message, {
         did: did,
-        keyPair: keyPair,
+        keyPair: {
+          curve: Curve.SECP256K1,
+          privateKey: privateKey,
+          publicKey: privateKey.publicKey(),
+        },
       });
     }
 
@@ -232,9 +233,8 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("Credential subject not found");
     }
 
-    const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(
-      subjectDID
-    );
+    const prismPrivateKeys =
+      await this.pluto.getDIDPrivateKeysByDID(subjectDID);
     const prismPrivateKey = prismPrivateKeys.at(0);
 
     if (prismPrivateKey === undefined) {
@@ -254,16 +254,12 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const jwt = new JWT(this.castor);
 
-    const signedJWT = await jwt.sign(
-      didInfo.did,
-      base64url.baseDecode(Buffer.from(prismPrivateKey.value).toString()),
-      {
-        iss: didInfo.did.toString(),
-        aud: domain,
-        nonce: challenge,
-        vp: credentialPresentation,
-      }
-    );
+    const signedJWT = await jwt.sign(didInfo.did, prismPrivateKey, {
+      iss: didInfo.did.toString(),
+      aud: domain,
+      nonce: challenge,
+      vp: credentialPresentation,
+    });
 
     const base64JWT = base64.baseEncode(Buffer.from(signedJWT));
     const presentationBody = createPresentationBody(
