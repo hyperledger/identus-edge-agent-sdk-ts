@@ -186,7 +186,7 @@ export interface Pluto {
 
   getAllCredentials(): Promise<Array<Credential>>;
 
-  getLinkSecret(): Promise<Anoncreds.LinkSecret | null>;
+  getLinkSecret(linkSecretName?: string): Promise<Anoncreds.LinkSecret | null>;
 
   storeLinkSecret(
     linkSecret: Anoncreds.LinkSecret,

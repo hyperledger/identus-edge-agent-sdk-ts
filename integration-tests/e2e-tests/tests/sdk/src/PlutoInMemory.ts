@@ -26,7 +26,7 @@ export class PlutoInMemory implements Domain.Pluto {
   _mediatorStorage: Array<MediatorRecord> = [];
   _credentialStorage: Array<CredentialRecord> = [];
   _linkSecrets: Record<string, string> = {};
-  _requestMetadata: Record<string, Anoncreds.CredentialRequestMeta> = {};
+  _requestMetadata: Record<string, Domain.Anoncreds.CredentialRequestMeta> = {};
 
   /**
    * no async setup for in-memory implementation
@@ -349,19 +349,21 @@ export class PlutoInMemory implements Domain.Pluto {
   }
 
   async storeCredentialMetadata(
-    metadata: Anoncreds.CredentialRequestMeta
+    metadata: Domain.Anoncreds.CredentialRequestMeta
   ): Promise<void> {
     this._requestMetadata[metadata.link_secret_name] = metadata;
   }
 
   async fetchCredentialMetadata(
     linkSecretName: string
-  ): Promise<Anoncreds.CredentialRequestMeta | null> {
+  ): Promise<Domain.Anoncreds.CredentialRequestMeta | null> {
     return this._requestMetadata[linkSecretName];
   }
 
-  async getLinkSecret(): Promise<string | null> {
-    return this._linkSecrets[0] ?? null;
+  async getLinkSecret(
+    linkSecretName: string = "default"
+  ): Promise<string | null> {
+    return this._linkSecrets[linkSecretName] ?? null;
   }
 
   async storeLinkSecret(

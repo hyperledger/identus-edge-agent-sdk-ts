@@ -360,8 +360,10 @@ export class PlutoInMemory implements Domain.Pluto {
     return this._requestMetadata[linkSecretName];
   }
 
-  async getLinkSecret(): Promise<string | null> {
-    return this._linkSecrets[0] ?? null;
+  async getLinkSecret(
+    linkSecretName: string = "default"
+  ): Promise<string | null> {
+    return this._linkSecrets[linkSecretName] ?? null;
   }
 
   async storeLinkSecret(
