@@ -28,7 +28,11 @@ import {
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
-import { KeyProperties, KeyTypes } from "../domain/models";
+import {
+  DefaultLinkSecretName,
+  KeyProperties,
+  KeyTypes,
+} from "../domain/models";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -83,7 +87,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (credentialType === CredentialType.AnonCreds) {
       parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
       const credentialMetadata = await this.pluto.fetchCredentialMetadata(
-        issueCredential.thid
+        DefaultLinkSecretName
       );
       if (!credentialMetadata) {
         throw new Error("Invalid credential Metadata");
@@ -126,14 +130,15 @@ export class AgentCredentials implements AgentCredentialsClass {
         });
       credBuffer = JSON.stringify(credential);
 
-      await this.pluto.storeCredentialMetadata(credentialMetadata);
+      await this.pluto.storeCredentialMetadata(credentialMetadata, linkSecret);
     } else {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
         [KeyProperties.index]: keyIndex,
+        [KeyProperties.type]: KeyTypes.EC,
+        [KeyProperties.seed]: this.seed.value,
       });
-      this.seed;
 
       const did = await this.castor.createPrismDID(privateKey.publicKey());
 

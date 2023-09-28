@@ -25,8 +25,7 @@ export class AnoncredsLoader {
     if (!this.loaded) {
       this.pkg = await import("anoncreds/anoncreds");
       const pkgWasm = await import("anoncreds/anoncreds_bg.wasm");
-
-      await this.pkg.default((pkgWasm as any).default());
+      await this.pkg.initSync((pkgWasm as any).default());
       this.loaded = true;
     }
     //#endif

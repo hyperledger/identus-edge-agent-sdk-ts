@@ -219,7 +219,7 @@ export default class Agent
 
     if (storedLinkSecret == null) {
       const linkSecret = this.pollux.anoncreds.createLinksecret();
-      await this.pluto.storeLinkSecret(linkSecret);
+      await this.pluto.storeLinkSecret(linkSecret, "default");
     }
     //#endif
 

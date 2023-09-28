@@ -20,4 +20,5 @@ export * from "./Signature";
 export * from "./WordList";
 export * from "./VerifiableCredential";
 export * from "./Credential";
+export * from "./DefaultLinkSecretName";
 export type JsonString = string;

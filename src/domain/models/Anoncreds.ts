@@ -24,7 +24,6 @@ export namespace Anoncreds {
     r_caps: {}; // supposed to be empty
   }
 
-
   export interface CredentialRequestMeta {
     link_secret_blinding_data: CredentialRequestMeta_LinkSecretBlindingData;
     link_secret_name: string;
@@ -45,19 +44,17 @@ export namespace Anoncreds {
 
   interface CredentialOffer_KeyCorrectnessProof {
     c: string;
-    xr_cap: Tuple[]
+    xr_cap: Tuple[];
     xz_cap: string;
   }
 
-
   export interface CredentialDefinition {
     schemaId: string;
-    type: string;// "CL"
+    type: string; // "CL"
     tag: string;
     value: {};
     issuerId: string;
   }
-
 
   export interface Credential {
     schema_id: string;
@@ -90,7 +87,6 @@ export namespace Anoncreds {
     raw: string;
   }
 
-
   export interface PresentationRequest {
     nonce: string;
     name: string;
@@ -99,16 +95,22 @@ export namespace Anoncreds {
     requested_predicates: PresentationRequest_RequestedPredicates;
   }
 
-  type PresentationRequest_RequestedAttributes = Record<string, {
-    name: string;
-    restrictions: Record<string, string>;
-  }>;
+  type PresentationRequest_RequestedAttributes = Record<
+    string,
+    {
+      name: string;
+      restrictions: Record<string, string>;
+    }
+  >;
 
-  type PresentationRequest_RequestedPredicates = Record<string, {
-    name: string;
-    p_type: string;
-    p_value: any;
-  }>;
+  type PresentationRequest_RequestedPredicates = Record<
+    string,
+    {
+      name: string;
+      p_type: string;
+      p_value: any;
+    }
+  >;
 
   export interface Presentation {
     proof: {
@@ -116,15 +118,15 @@ export namespace Anoncreds {
       aggregated_proof: {
         c_hash: string;
         c_list: number[][];
-      }
-    },
+      };
+    };
     requested_proof: {
       predicates: Presentation_RequestedProof_Value;
       revealed_attrs: Presentation_RequestedProof_RevealedAttrs;
       self_attested_attrs: Presentation_RequestedProof_Value;
       unrevealed_attrs: Presentation_RequestedProof_Value;
-      // revealed_attr_groups?: 
-    },
+      // revealed_attr_groups?:
+    };
     identifiers: Presentation_Identifier[];
   }
 
@@ -150,21 +152,27 @@ export namespace Anoncreds {
     // non_revoc_proof: None
   }
 
-  type Presentation_RequestedProof_Value = Record<string, {
-    sub_proof_index: number;
-  }>;
+  type Presentation_RequestedProof_Value = Record<
+    string,
+    {
+      sub_proof_index: number;
+    }
+  >;
 
-  type Presentation_RequestedProof_RevealedAttrs = Record<string, {
-    encoded: string;
-    raw: string;
-    sub_proof_index: number;
-  }>;
+  type Presentation_RequestedProof_RevealedAttrs = Record<
+    string,
+    {
+      encoded: string;
+      raw: string;
+      sub_proof_index: number;
+    }
+  >;
 
   interface Presentation_Identifier {
     schema_id: string;
     cred_def_id: string;
-    // rev_reg_id: None, 
-    // timestamp: None 
+    // rev_reg_id: None,
+    // timestamp: None
   }
 
   export interface Schema {

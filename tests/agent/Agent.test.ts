@@ -15,6 +15,7 @@ import {
   Api,
   Credential,
   CredentialType,
+  DefaultLinkSecretName,
   DID,
   HttpResponse,
   Message,
@@ -413,7 +414,7 @@ describe("Agent Tests", () => {
         await agent.processIssuedCredentialMessage(issueCredential);
 
         expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(
-          issueCredential.thid
+          DefaultLinkSecretName
         );
       });
 

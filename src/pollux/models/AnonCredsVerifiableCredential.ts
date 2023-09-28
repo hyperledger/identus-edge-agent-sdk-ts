@@ -6,6 +6,7 @@ export enum AnonCredsCredentialProperties {
   iss = "iss",
   jti = "jti",
   schemaId = "schemaId",
+  sub = "sub",
   credentialDefinitionId = "credentialDefinitionId",
   values = "values",
   signasture = "signature",
