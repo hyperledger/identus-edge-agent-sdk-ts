@@ -9,13 +9,14 @@ import {
   CredentialType,
   Message,
   AttachmentBase64,
+  Api,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
 import { JWTCredential } from "./models/JWTVerifiableCredential";
 import { JWT } from "../apollo/utils/jwt/JWT";
 import { Anoncreds } from "../domain/models/Anoncreds";
-import * as Fixtures from "../../tests/pollux/fixtures";
+import { ApiImpl } from "../prism-agent/helpers/ApiImpl";
 
 /**
  * Implementation of PolluxInterface and responsible of handling credential related tasks
@@ -27,7 +28,11 @@ import * as Fixtures from "../../tests/pollux/fixtures";
 export default class Pollux implements PolluxInterface {
   private _anoncreds: AnoncredsLoader | undefined;
 
-  constructor(private castor: Castor, private endpointUrl: string = "") {}
+  constructor(
+    private castor: Castor,
+    private endpointUrl: string = "",
+    private api: Api = new ApiImpl()
+  ) {}
 
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
@@ -99,16 +104,14 @@ export default class Pollux implements PolluxInterface {
   private async fetchCredentialDefinition(
     credentialDefinitionId: string
   ): Promise<Anoncreds.CredentialDefinition> {
-    //  https:// -> cred + schemas
-
-    // http:// -> crash
-    return Fixtures.credDef;
-  }
-
-  private async fetchCredentialSchema(
-    credentialDefinitionId: string
-  ): Promise<Anoncreds.CredentialDefinition> {
-    return Fixtures.credDef;
+    const response = await this.api.request<Anoncreds.CredentialDefinition>(
+      "get",
+      credentialDefinitionId,
+      new Map(),
+      new Map(),
+      null
+    );
+    return response.body;
   }
 
   private extractAttachment(body: any, attachments: AttachmentDescriptor[]) {
@@ -187,9 +190,8 @@ export default class Pollux implements PolluxInterface {
     }
 
     const { cred_def_id } = credentialOfferBody;
-    const credentialDefinition = await this.fetchCredentialDefinition(
-      cred_def_id
-    );
+    const credentialDefinition =
+      await this.fetchCredentialDefinition(cred_def_id);
 
     return this.anoncreds.createCredentialRequest(
       credentialOfferBody,

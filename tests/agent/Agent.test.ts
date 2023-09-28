@@ -34,6 +34,7 @@ import { RequestCredential } from "../../src/prism-agent/protocols/issueCredenti
 import { IssueCredential } from "../../src/prism-agent/protocols/issueCredential/IssueCredential";
 import { base64url } from "multiformats/bases/base64";
 import Pollux from "../../src/pollux/Pollux";
+import { AnoncredsLoader } from "../../src/pollux/AnoncredsLoader";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -224,7 +225,14 @@ describe("Agent Tests", () => {
 
     const createOffer = (credType: CredentialType) => {
       const credentialMap = new Map();
-      credentialMap.set(credType, Fixtures.credOffer);
+      if (credType === CredentialType.JWT) {
+        credentialMap.set(
+          credType,
+          Fixtures.createJWTPayload("jwtid", "proof", CredentialType.JWT)
+        );
+      } else if (credType === CredentialType.AnonCreds) {
+        credentialMap.set(credType, Fixtures.credOffer);
+      }
 
       return OfferCredential.build(
         credentialPreview,
@@ -247,7 +255,17 @@ describe("Agent Tests", () => {
     describe("Should create a credential request from a valid didcomm CredentialOffer Message", () => {
       for (let credType of [CredentialType.AnonCreds, CredentialType.JWT]) {
         it(`CredentialType [${credType}]`, async () => {
-          const offer = createOffer(CredentialType.JWT);
+          if (credType === CredentialType.AnonCreds) {
+            const anonCreds = await AnoncredsLoader.getInstance();
+            const linkSecret = anonCreds.createLinksecret();
+            sandbox
+              .stub(pluto, "getLinkSecret")
+              .returns(Promise.resolve(linkSecret));
+            sandbox
+              .stub(pollux as any, "fetchCredentialDefinition")
+              .resolves(Fixtures.credDef);
+          }
+          const offer = createOffer(credType);
           const requestCredential =
             await agent.prepareRequestCredentialWithIssuer(offer);
 
@@ -261,16 +279,14 @@ describe("Agent Tests", () => {
 
           expect(requestCredential.body.formats).to.be.an("array");
           expect(requestCredential.body.formats).to.have.length(1);
-          expect(requestCredential.body.formats[0].format).to.equal(
-            CredentialType.JWT
-          );
+          expect(requestCredential.body.formats[0].format).to.equal(credType);
 
           const foundAttachment = requestCredential.attachments.find(
             ({ id }) => id === requestCredential.body.formats[0].attach_id
           );
 
           expect(foundAttachment).to.not.be.undefined;
-          expect(foundAttachment?.format).to.equal(CredentialType.JWT);
+          expect(foundAttachment?.format).to.equal(credType);
         });
       }
     });

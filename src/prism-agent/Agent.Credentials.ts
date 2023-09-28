@@ -131,7 +131,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       credBuffer = JSON.stringify(credential);
 
       await this.pluto.storeCredentialMetadata(credentialMetadata, linkSecret);
-    } else {
+    } else if (credentialType === CredentialType.JWT) {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
@@ -158,6 +158,8 @@ export class AgentCredentials implements AgentCredentialsClass {
           publicKey: privateKey.publicKey(),
         },
       });
+    } else {
+      throw new AgentError.InvalidCredentialFormats();
     }
 
     const requestCredentialBody = createRequestCredentialBody(
