@@ -1,8 +1,7 @@
-import { base64url } from "multiformats/bases/base64";
+import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
-import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
 
 /**
  * @ignore
@@ -22,15 +21,13 @@ export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
   }
 
   getEncoded(): Buffer {
-    const instance = this.getInstance();
-    return Buffer.from(base64url.baseEncode(instance.raw));
+    return this.getInstance().getEncoded();
   }
 
   verify(message: Buffer, signature: Buffer) {
-    const instance = this.getInstance();
-    return instance.verify(
-      message as any,
-      signature as unknown as any
+    return this.getInstance().verify(
+      Int8Array.from(message),
+      Int8Array.from(signature)
     );
   }
 

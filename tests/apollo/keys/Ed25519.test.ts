@@ -1,14 +1,14 @@
 import { expect } from "chai";
-import { Ed25519PrivateKey } from "../../../src/apollo/utils/Ed25519PrivateKey";
 import { Curve, KeyTypes } from "../../../src/domain";
+import { Ed25519PrivateKey } from "../../../src/apollo/utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "../../../src/apollo/utils/Ed25519PublicKey";
 import { Ed25519KeyPair } from "../../../src/apollo/utils/Ed25519KeyPair";
 
 describe("Keys", () => {
   describe("Ed25519", () => {
     describe("PrivateKey", () => {
-      const raw = Buffer.from([84, 78, 220, 96, 252, 203, 132, 165, 234, 236, 224, 213, 105, 113, 109, 207, 193, 178, 122, 122, 221, 34, 147, 123, 189, 241, 143, 235, 27, 127, 70, 5]);
-      const encoded = Buffer.from([86, 69, 55, 99, 89, 80, 122, 76, 104, 75, 88, 113, 55, 79, 68, 86, 97, 88, 70, 116, 122, 56, 71, 121, 101, 110, 114, 100, 73, 112, 78, 55, 118, 102, 71, 80, 54, 120, 116, 95, 82, 103, 85]);
+      const raw = Buffer.from([234, 155, 38, 115, 124, 211, 171, 185, 149, 186, 77, 255, 240, 94, 209, 65, 63, 214, 168, 213, 146, 68, 68, 196, 167, 211, 183, 80, 14, 166, 239, 217]);
+      const encoded = Buffer.from([54, 112, 115, 109, 99, 51, 122, 84, 113, 55, 109, 86, 117, 107, 51, 95, 56, 70, 55, 82, 81, 84, 95, 87, 113, 78, 87, 83, 82, 69, 84, 69, 112, 57, 79, 51, 85, 65, 54, 109, 55, 57, 107]);
       const privateKey = new Ed25519PrivateKey(encoded);
 
       // implementations
@@ -38,7 +38,10 @@ describe("Keys", () => {
       });
 
       test("publicKey - returns Ed25519PublicKey instance", () => {
-        expect(privateKey.publicKey()).to.be.an.instanceOf(Ed25519PublicKey);
+        const pubKey = privateKey.publicKey();
+        expect(pubKey).to.be.an.instanceOf(Ed25519PublicKey);
+        expect(pubKey.raw).to.eql(Buffer.from([207, 230, 188, 131, 200, 191, 223, 38, 163, 19, 244, 3, 35, 18, 5, 238, 195, 245, 155, 246, 139, 41, 51, 159, 202, 2, 46, 72, 150, 167, 68, 8]));
+        expect(pubKey.getEncoded()).to.eql(Buffer.from([122, 45, 97, 56, 103, 56, 105, 95, 51, 121, 97, 106, 69, 95, 81, 68, 73, 120, 73, 70, 55, 115, 80, 49, 109, 95, 97, 76, 75, 84, 79, 102, 121, 103, 73, 117, 83, 74, 97, 110, 82, 65, 103]));
       });
 
       // TODO - Bug - types are wrong - ignored non-null assertion
@@ -133,7 +136,7 @@ describe("Keys", () => {
         });
       });
 
-      describe("Buffer > raw value conversion", () => {
+      describe("Signed / Unsigned int arrays > raw value conversion", () => {
         // ints [0, 01, 127, 128, 255] as hex
         const hexes = [
           '0000000000000000000000000000000000000000000000000000000000000000',
@@ -153,6 +156,9 @@ describe("Keys", () => {
 
             var keyu = new Ed25519PrivateKey(uint as any);
             var keyi = new Ed25519PrivateKey(int as any);
+
+            expect(key.raw).to.eql(keyu.raw);
+            expect(key.raw).to.eql(keyi.raw);
 
             var msg = Buffer.from([0xB, 0xE, 0xE, 0xF]);
             var sig = key.sign(msg);

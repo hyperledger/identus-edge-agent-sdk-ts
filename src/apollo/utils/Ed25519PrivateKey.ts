@@ -1,9 +1,8 @@
-import { base64url } from "multiformats/bases/base64";
+import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
 import { Curve, KeyTypes, PrivateKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
-import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
 
 /**
  * @ignore
@@ -23,18 +22,15 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
   }
 
   publicKey() {
-    const instance = this.getInstance();
-    return new Ed25519PublicKey(instance.publicKey().raw);
+    return new Ed25519PublicKey(this.getInstance().publicKey().raw);
   }
 
   getEncoded(): Buffer {
-    const instance = this.getInstance();
-    return Buffer.from(base64url.baseEncode(instance.raw));
+    return this.getInstance().getEncoded();
   }
 
   sign(message: Buffer) {
-    const instance = this.getInstance();
-    const signature = instance.sign(new Int8Array(message));
+    const signature = this.getInstance().sign(new Int8Array(message));
     return Buffer.from(signature);
   }
 
