@@ -38,7 +38,7 @@ export default (mode, plugins = []) => {
       name: "prism",
     },
     plugins: [
-      jsccPlugin({ values: { _ANONCREDS: false } }),
+      jsccPlugin({ values: { _ANONCREDS: true } }),
       ignore(externals),
       json(),
       typescript({
