@@ -116,21 +116,24 @@ export class AgentCredentials implements AgentCredentialsClass {
     const credentialType =
       this.pollux.extractCredentialFormatFromMessage(message);
 
-    let credBuffer: string;
+    let credRequestBuffer: string;
 
     if (credentialType === CredentialType.AnonCreds) {
       const linkSecret = await this.pluto.getLinkSecret();
       if (!linkSecret) {
         throw new Error("No linkSecret available.");
       }
-      const [credential, credentialMetadata] =
+      const [credentialRequest, credentialRequestMetadata] =
         await this.pollux.processAnonCredsCredential(message, {
           linkSecret: linkSecret,
           linkSecretName: offer.thid,
         });
-      credBuffer = JSON.stringify(credential);
+      credRequestBuffer = JSON.stringify(credentialRequest);
 
-      await this.pluto.storeCredentialMetadata(credentialMetadata, linkSecret);
+      await this.pluto.storeCredentialMetadata(
+        credentialRequestMetadata,
+        linkSecret
+      );
     } else if (credentialType === CredentialType.JWT) {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
       const privateKey = await this.apollo.createPrivateKey({
@@ -150,7 +153,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         did.toString()
       );
 
-      credBuffer = await this.pollux.processJWTCredential(message, {
+      credRequestBuffer = await this.pollux.processJWTCredential(message, {
         did: did,
         keyPair: {
           curve: Curve.SECP256K1,
@@ -173,24 +176,26 @@ export class AgentCredentials implements AgentCredentialsClass {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const to = offer.from!;
     const thid = offer.thid;
+
+    const credentialFormat =
+      credentialType === CredentialType.AnonCreds
+        ? "anoncreds/credential-request@v1.0"
+        : credentialType === CredentialType.JWT
+        ? "prism/jwt"
+        : CredentialType.Unknown;
+
     const attachments = [
       new AttachmentDescriptor(
         {
-          base64: base64.baseEncode(Buffer.from(credBuffer)),
+          base64: base64.baseEncode(Buffer.from(credRequestBuffer)),
         },
-        `prism/${credentialType}`,
+        credentialFormat,
         undefined,
         undefined,
         //TODO confirm what is the format that backend expects us to send AnonCreds VS JWT
-        credentialType
+        credentialFormat
       ),
     ];
-
-    attachments.forEach((attachment, index) => {
-      if (offer.body.formats[index].attach_id) {
-        offer.body.formats[index].attach_id = attachment.id;
-      }
-    });
 
     const requestCredential = new RequestCredential(
       requestCredentialBody,
@@ -199,6 +204,13 @@ export class AgentCredentials implements AgentCredentialsClass {
       to,
       thid
     );
+
+    attachments.forEach((attachment) => {
+      requestCredential.body.formats.push({
+        attach_id: attachment.id,
+        format: credentialFormat,
+      });
+    });
 
     return requestCredential;
   }
