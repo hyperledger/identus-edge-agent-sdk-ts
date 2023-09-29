@@ -76,9 +76,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("No attachment");
     }
 
-    const credData = base64url.baseDecode(
-      (attachment as AttachmentBase64).base64
-    );
+    const credData = base64.baseDecode((attachment as AttachmentBase64).base64);
 
     const parseOpts: CredentialIssueOptions = {
       type: credentialType,
@@ -87,7 +85,8 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (credentialType === CredentialType.AnonCreds) {
       parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
       const credentialMetadata = await this.pluto.fetchCredentialMetadata(
-        DefaultLinkSecretName
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        issueCredential.thid!
       );
       if (!credentialMetadata) {
         throw new Error("Invalid credential Metadata");
@@ -132,7 +131,8 @@ export class AgentCredentials implements AgentCredentialsClass {
 
       await this.pluto.storeCredentialMetadata(
         credentialRequestMetadata,
-        linkSecret
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        offer.thid!
       );
     } else if (credentialType === CredentialType.JWT) {
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;

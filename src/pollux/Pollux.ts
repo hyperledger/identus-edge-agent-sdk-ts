@@ -54,7 +54,10 @@ export default class Pollux implements PolluxInterface {
       throw new Error("Required Attachment");
     }
 
-    if (attachment.format === "anoncreds/credential-offer@v1.0") {
+    if (
+      attachment.format === "anoncreds/credential-offer@v1.0" ||
+      attachment.format === "anoncreds/credential@v1.0"
+    ) {
       return CredentialType.AnonCreds;
     }
 
@@ -205,9 +208,10 @@ export default class Pollux implements PolluxInterface {
   ) {
     const credentialType = options?.type || CredentialType.Unknown;
     const credentialString = Buffer.from(credentialBuffer).toString();
-    const parts = credentialString.split(".");
 
     if (credentialType === CredentialType.JWT) {
+      const parts = credentialString.split(".");
+
       if (parts.length != 3 || parts.at(1) === undefined) {
         throw new InvalidJWTString();
       }
@@ -222,9 +226,6 @@ export default class Pollux implements PolluxInterface {
     }
 
     if (credentialType === CredentialType.AnonCreds) {
-      if (parts.length != 2) {
-        throw new Error("Invalid AnonCreds String");
-      }
       if (options?.linkSecret === undefined) {
         throw new Error("LinkSecret is required");
       }
@@ -236,10 +237,7 @@ export default class Pollux implements PolluxInterface {
       const credentialMetadata = options.credentialMetadata;
 
       const credentialIssued = JSON.parse(
-        Buffer.from(
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          base64url.baseDecode(parts.at(0)!)
-        ).toString()
+        credentialString
       ) as Anoncreds.CredentialIssued;
 
       const credentialDefinition = await this.fetchCredentialDefinition(
