@@ -19,12 +19,13 @@ utilities for building SSI Edge Agents speaking DIDComm V2 protocols.</p>
 verifiable data and digital identity. Built on Cardano, it offers core
 infrastructure for issuing DIDs (Decentralized identifiers) and verifiable
 credentials, alongside tools and frameworks to help expand your ecosystem.
-The complete platform is separated in multiple repositories:</p>
+The complete platform is separated into multiple repositories:</p>
 <ul>
 <li><a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-swift">atala-prism-wallet-sdk-swift</a> - Repo that implements Atala PRISM for Apple platforms in Swift.</li>
-<li><a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm">atala-prism-wallet-sdk-kmm</a> - Repo that implements Atala PRISM for Apple platforms in kmm, jvm.</li>
+<li><a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm">atala-prism-wallet-sdk-kmm</a> - Repo that implements Atala PRISM for Apple platforms in KMM, JVM.</li>
 <li><a href="https://github.com/input-output-hk/atala-prism-wallet-sdk-ts">atala-prism-wallet-sdk-ts</a> - Repo that implements Atala PRISM for Browser and NodeJS platforms in TypeScript.</li>
-<li><a href="https://github.com/input-output-hk/atala-prism-building-blocks">atala-prism-building-blocks</a> - Repo that contains the platform Building Blocks.</li>
+<li><a href="https://github.com/hyperledger-labs/open-enterprise-agent">atala-prism-building-blocks</a> - Repo that contains the servers Building Blocks.</li>
+<li><a href="https://github.com/input-output-hk/atala-prism-mediator">atala-prism-mediator</a> - Repo for DIDComm V2 Mediator</li>
 </ul>
 <a id="md:sdk-overview" class="tsd-anchor"></a><h3><a href="#md:sdk-overview">SDK Overview</a></h3><ul>
 <li>Apollo: Provides a suite of necessary cryptographic operations.</li>
@@ -36,25 +37,28 @@ The complete platform is separated in multiple repositories:</p>
 </ul>
 <a id="md:getting-started" class="tsd-anchor"></a><h3><a href="#md:getting-started">Getting started</a></h3><p>This repository includes a browser and a Node.js demo application, and also a step-by-step documented process to run it.</p>
 <a id="md:running-a-demo-project" class="tsd-anchor"></a><h4><a href="#md:running-a-demo-project">Running a demo project</a></h4><p>To be able to run the demos, we have to build <code>prism-wallet-sdk-ts</code>.</p>
+<p>create an .npmrc file with the following contents:</p>
+<pre><code><span class="hl-0">@</span><span class="hl-1">input</span><span class="hl-0">-</span><span class="hl-1">output</span><span class="hl-0">-</span><span class="hl-1">hk</span><span class="hl-0">:</span><span class="hl-1">registry</span><span class="hl-0">=</span><span class="hl-1">https</span><span class="hl-0">:</span><span class="hl-2">//npm.pkg.github.com</span>
+</code><button>Copy</button></pre>
 <p>From the repository root run:</p>
-<pre><code class="language-bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span>
+<pre><code class="language-bash"><span class="hl-3">npm</span><span class="hl-0"> </span><span class="hl-4">i</span><br/><span class="hl-3">npm</span><span class="hl-0"> </span><span class="hl-4">run</span><span class="hl-0"> </span><span class="hl-4">build</span>
 </code><button>Copy</button></pre>
 <a id="md:for-nodejs" class="tsd-anchor"></a><h4><a href="#md:for-nodejs">For NodeJS</a></h4><p>After building <code>prism-wallet-sdk-ts</code>, cd into <code>{path}/prism-wallet-sdk-ts/demos/node</code>:</p>
-<pre><code class="language-bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><br/><span class="hl-0">node</span><span class="hl-1"> </span><span class="hl-2">index.js</span>
+<pre><code class="language-bash"><span class="hl-3">npm</span><span class="hl-0"> </span><span class="hl-4">i</span><br/><span class="hl-3">node</span><span class="hl-0"> </span><span class="hl-4">index.js</span>
 </code><button>Copy</button></pre>
 <p>:::note
 The installation in the <code>demos/node</code> directory requires the <code>build</code> folder from the wallet-sdk to be available.
 :::</p>
 <a id="md:for-browser" class="tsd-anchor"></a><h4><a href="#md:for-browser">For browser</a></h4><p>After building <code>prism-wallet-sdk-ts</code>, cd into the demo directory &quot;demos/browser&quot;</p>
-<pre><code class="language-bash"><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">demos/browser</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">start</span>
+<pre><code class="language-bash"><span class="hl-3">cd</span><span class="hl-0"> </span><span class="hl-4">demos/browser</span><br/><span class="hl-3">npm</span><span class="hl-0"> </span><span class="hl-4">i</span><br/><span class="hl-3">npm</span><span class="hl-0"> </span><span class="hl-4">run</span><span class="hl-0"> </span><span class="hl-4">start</span>
 </code><button>Copy</button></pre>
 <a id="md:implementing-storage-for-the-sdk" class="tsd-anchor"></a><h4><a href="#md:implementing-storage-for-the-sdk">Implementing storage for the SDK</a></h4><p>This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.</p>
 <p>We don&#39;t provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. </p>
 <p>Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. </p>
-<a id="md:demo-development-mode" class="tsd-anchor"></a><h4><a href="#md:demo-development-mode">Demo development mode</a></h4><p>To run browser demo app, just run <code>npm run dev:browser</code> and browser will automatically open and load the demo app.</p>
-<p>To run Node.js demo app, run <code>npm run dev:node</code> to build the demo app and then run it with <code>node build/node-test/index.js</code>.</p>
+<a id="md:demo-development-mode" class="tsd-anchor"></a><h4><a href="#md:demo-development-mode">Demo development mode</a></h4><p>To run the browser demo app, just run <code>npm run dev:browser</code>, and the browser will automatically open and load the demo app.</p>
+<p>To run the Node.js demo app, run <code>npm run dev:node</code> to build the demo app and then run it with <code>node build/node-test/index.js</code>.</p>
 <ol start="2">
-<li><p>To see how the step by steps examples can guide you refer to each section inside docs folder, Apollo, Castor, Pollux, Mercury, Pluto, Agent</p>
+<li><p>To see how the step-by-step examples can guide you, refer to each section inside the docs folder: Apollo, Castor, Pollux, Mercury, Pluto, Agent</p>
 </li>
 <li><p>Jump straight into the <a href="https://input-output-hk.github.io/atala-prism-wallet-sdk-ts/modules.html">SDK-REFERENCE</a></p>
 </li>
