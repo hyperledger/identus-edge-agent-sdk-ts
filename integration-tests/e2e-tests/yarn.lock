@@ -276,10 +276,10 @@
   resolved "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@input-output-hk/atala-prism-wallet-sdk@^2.4.0":
-  version "2.4.0"
-  resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/2.4.0/2401bb07d4774fa73239649099644f59f84b94c4#2401bb07d4774fa73239649099644f59f84b94c4"
-  integrity sha512-fJoALqOnomzE5928hT+UMIE+hyi5EI/sNHkMnB9Bp8QreXWN0JYOgI421BPRpLyr5Tt76aEFfeWLKeqr+Add+w==
+"@input-output-hk/atala-prism-wallet-sdk@^2.4.1":
+  version "2.4.1"
+  resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/2.4.1/f062c209abefa00973b923c85918b1c5e104f610#f062c209abefa00973b923c85918b1c5e104f610"
+  integrity sha512-dFZUICIwQyvZZeIPCYFvmjlSg0U5+gVnnXE5SMsLs62zcteJjDlxvAzpPSC02zdzkM0746CQR0G14lyi+UT9vA==
   dependencies:
     "@scure/bip32" "^1.3.0"
     "@scure/bip39" "^1.1.1"
