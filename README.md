@@ -37,7 +37,15 @@ This repository includes a browser and a Node.js demo application, and also a st
 
 To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
 
+create an .npmrc file with the following contents:
+
+```
+@input-output-hk:registry=https://npm.pkg.github.com
+```
+
+
 From the repository root run:
+
 
 ```bash
 npm i

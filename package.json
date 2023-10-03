@@ -30,8 +30,8 @@
     "url": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts.git",
     "directory": "@input-output-hk/atala-prism-wallet-sdk"
   },
-  "author": "",
-  "license": "",
+  "author": "IOHK",
+  "license": "Apache-2.0",
   "peerDependenciesMeta": {
     "react-native-sqlite-storage": {
       "optional": true
