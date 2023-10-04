@@ -1,3 +1,12 @@
+## [2.4.1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.4.0...v2.4.1) (2023-10-03)
+
+
+### Bug Fixes
+
+* add Mediator Peer did field to the sample application ([#90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/90)) ([78f6127](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/78f6127b774494f0a8a85aad1bee6559a95c0a4f))
+* Improve package json licence and specs. ([#93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/93)) ([8626003](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/8626003b36c2086e2cc593749eeac54cfb1ac64a))
+* Improve the Typescript demo and make it easier to go through the qsg ([#92](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/92)) ([6e331e8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/6e331e87b45f9c315666f3f50787c5b44609f508))
+
 # [2.4.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.3.0...v2.4.0) (2023-08-30)
 
 
