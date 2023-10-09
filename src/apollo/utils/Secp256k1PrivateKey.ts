@@ -6,7 +6,7 @@ import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { Curve, KeyTypes, PrivateKey } from "../../domain";
 
-import * as ApolloPKG from "apollo/packages/ApolloBaseAsymmetricEncryption";
+import * as ApolloPKG from "@input-output-hk/apollo";
 
 const {
   io: {

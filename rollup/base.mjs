@@ -24,6 +24,7 @@ const externals = [
   "bn.js",
   "did-jwt",
   "axios",
+  "apollo",
 ];
 export default (mode, plugins = []) => {
   return {

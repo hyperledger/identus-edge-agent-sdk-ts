@@ -17,7 +17,7 @@ import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
 
-import * as ApolloPKG from "apollo/packages/ApolloBaseAsymmetricEncryption";
+import * as ApolloPKG from "@input-output-hk/apollo";
 
 const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
 
@@ -146,7 +146,7 @@ export default class Apollo implements ApolloInterface {
       throw new MnemonicWordException(`Invalid mnemonic word/s`);
     }
 
-    const seed = Mnemonic.createSeed(mnemonicString, `mnemonic${passphrase}`);
+    const seed = Mnemonic.createSeed(mnemonics, `mnemonic${passphrase}`);
 
     return {
       value: Uint8Array.from(seed),
