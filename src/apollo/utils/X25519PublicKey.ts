@@ -24,6 +24,7 @@ export class X25519PublicKey extends PublicKey {
   }
 
   private getInstance(value?: Int8Array | Uint8Array) {
+    // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
       new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMX25519PublicKey(

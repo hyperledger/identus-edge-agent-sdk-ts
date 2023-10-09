@@ -300,6 +300,7 @@ export default class Apollo implements ApolloInterface {
         ).derive(Buffer.from(derivationPathStr, "hex").toString());
 
         const newExtendedPrivateKey = new Secp256k1PrivateKey(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           Uint8Array.from(newExtendedKey.privateKey!)
         );
 
