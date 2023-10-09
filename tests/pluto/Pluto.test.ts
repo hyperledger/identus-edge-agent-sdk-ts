@@ -54,7 +54,7 @@ describe.each(["in-memory", "sqlite"])(
             .to.have.property("keyCurve")
             .to.deep.equal({ curve: privateKey.curve });
 
-          expect(resultPrivateKey).to.have.property("value").to.deep.equal(raw);
+          expect(resultPrivateKey).to.have.property("value").to.deep.equal(privateKey.getEncoded());
         });
       });
     });
@@ -678,15 +678,19 @@ describe.each(["in-memory", "sqlite"])(
       const mediator = DID.fromString("did:prism:123");
       const host = DID.fromString("did:prism:321");
       const routing = DID.fromString("did:prism:432");
-      const mediatorPrivateKey: PrivateKey = new X25519PrivateKey(
-        Buffer.from("mediator test"),
+
+      const mediatorPrivateKey = new X25519PrivateKey(
+        Buffer.from("00000000000000000000000000000001"),
       );
-      const hostPrivateKey: PrivateKey = new X25519PrivateKey(
-        Buffer.from("host test"),
+
+      const hostPrivateKey = new X25519PrivateKey(
+        Buffer.from("00000000000000000000000000000011"),
       );
-      const routingPrivateKey: PrivateKey = new X25519PrivateKey(
-        Buffer.from("routing test"),
+
+      const routingPrivateKey = new X25519PrivateKey(
+        Buffer.from("00000000000000000000000000000111"),
       );
+
       await instance.storePrismDID(
         mediator,
         10,
