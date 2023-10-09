@@ -1,4 +1,4 @@
-import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
+import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
@@ -31,11 +31,14 @@ export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
     );
   }
 
-  private getInstance(value?: Int8Array | Uint8Array): ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey {
+  private getInstance(
+    value?: Int8Array | Uint8Array
+  ): ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey {
     const bytes = !!value ? Buffer.from(value) : this.raw;
-    const instance = new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey(
-      Int8Array.from(bytes)
-    );
+    const instance =
+      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey(
+        Int8Array.from(bytes)
+      );
 
     return instance;
   }

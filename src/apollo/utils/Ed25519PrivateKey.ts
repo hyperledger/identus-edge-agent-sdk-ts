@@ -1,4 +1,4 @@
-import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
+import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
 import { Curve, KeyTypes, PrivateKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
@@ -34,23 +34,28 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
     return Buffer.from(signature);
   }
 
-  private getInstance(value?: Int8Array | Uint8Array): ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey {
+  private getInstance(
+    value?: Int8Array | Uint8Array
+  ): ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey {
     const bytes = !!value ? Buffer.from(value) : this.raw;
-    const instance = new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey(
-      Int8Array.from(bytes)
-    );
+    const instance =
+      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey(
+        Int8Array.from(bytes)
+      );
 
     return instance;
   }
 
   public readonly to = {
     Buffer: () => this.getEncoded(),
-    Hex: () => this.to.Buffer().toString("hex")
+    Hex: () => this.to.Buffer().toString("hex"),
   };
 
   static from = {
     Buffer: (value: Buffer) => new Ed25519PrivateKey(Int8Array.from(value)),
-    Hex: (value: string) => Ed25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
-    String: (value: string) => Ed25519PrivateKey.from.Buffer(Buffer.from(value)),
+    Hex: (value: string) =>
+      Ed25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
+    String: (value: string) =>
+      Ed25519PrivateKey.from.Buffer(Buffer.from(value)),
   };
 }

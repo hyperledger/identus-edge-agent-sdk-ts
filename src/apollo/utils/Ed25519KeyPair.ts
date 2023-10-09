@@ -1,4 +1,4 @@
-import ApolloBaseAsymmetricEncryption from "apollo/packages/ApolloBaseAsymmetricEncryption";
+import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
 import { KeyPair } from "../../domain";
 import { Ed25519PrivateKey } from "./Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
@@ -15,7 +15,8 @@ export class Ed25519KeyPair extends KeyPair {
   }
 
   static generateKeyPair() {
-    const keyPair = ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdKeyPair.Companion.generateKeyPair();
+    const keyPair =
+      ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdKeyPair.Companion.generateKeyPair();
 
     return new Ed25519KeyPair(
       new Ed25519PrivateKey(keyPair.privateKey.raw),
