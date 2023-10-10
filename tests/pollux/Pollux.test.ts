@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { expect } from "chai";
 
-import { CredentialRequestOptions, CredentialType, Curve, DID, Message } from "../../src/domain";
+import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, Message } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -49,97 +49,61 @@ describe("Pollux", () => {
   });
 
   describe("extractCredentialFormatFromMessage", () => {
-    it("body.formats[0].format is JWT - returns CredentialType.JWT", () => {
-      const body = { formats: [{ format: CredentialType.JWT }] };
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
+    const jwtFormats = ["prism/jwt"];
+    const anoncredsFormats = [
+      "anoncreds/credential@v1.0",
+      "anoncreds/credential-offer@v1.0",
+    ];
+    const unknownFormats = [
+      CredentialType.W3C,
+      CredentialType.Unknown,
+      undefined,
+      "notValid"
+    ];
 
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.JWT);
-    });
-
-    it("body.formats[0].format is AnonCreds - returns CredentialType.AnonCreds", () => {
-      const body = { formats: [{ format: CredentialType.AnonCreds }] };
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.AnonCreds);
-    });
-
-    it("body.formats[0].format is W3C - returns CredentialType.Unknown", () => {
-      const body = { formats: [{ format: CredentialType.W3C }] };
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.Unknown);
-    });
-
-
-    it("undefined formats - returns CredentialType.Unknown", () => {
-      const body = {};
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.Unknown);
-    });
-
-    it("not array formats - returns CredentialType.Unknown", () => {
-      const body = { formats: "notanarray" };
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.Unknown);
-    });
-
-    it("empty array formats - returns CredentialType.Unknown", () => {
-      const body = { formats: [] };
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.Unknown);
-    });
-
-    it("body.formats[0].format is not valid - returns CredentialType.Unknown", () => {
-      const body = { formats: [{ format: "qwerty" }] };
-      const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-      const result = pollux.extractCredentialFormatFromMessage(msg);
-
-      expect(result).to.eql(CredentialType.Unknown);
-    });
-
-    describe("Multiple Formats", () => {
-      it("matches first item - Anoncreds", () => {
-        const body = { formats: [{ format: CredentialType.AnonCreds }, { format: CredentialType.JWT }] };
-        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+    const testFn = (format: any, expected: CredentialType) => {
+      it(`attachments[0].format is ${format} - returns CredentialType.${expected}`, () => {
+        const msg = new Message("", undefined, "piuri");
+        msg.attachments.push(
+          new AttachmentDescriptor({} as any, undefined, undefined, undefined, format)
+        );
 
         const result = pollux.extractCredentialFormatFromMessage(msg);
 
-        expect(result).to.eql(CredentialType.AnonCreds);
+        expect(result).to.eql(expected);
       });
+    };
 
-      it("matches first item - JWT", () => {
-        const body = { formats: [{ format: CredentialType.JWT }, { format: CredentialType.AnonCreds }] };
-        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+    describe("JWT", () => {
+      jwtFormats.forEach(x => testFn(x, CredentialType.JWT));
+    });
 
-        const result = pollux.extractCredentialFormatFromMessage(msg);
+    describe("Anoncreds", () => {
+      anoncredsFormats.forEach(x => testFn(x, CredentialType.AnonCreds));
+    });
 
-        expect(result).to.eql(CredentialType.JWT);
-      });
+    describe("Unknown", () => {
+      unknownFormats.forEach(x => testFn(x, CredentialType.Unknown));
+    });
 
-      it("matches first item - Unknown", () => {
-        const body = { formats: [{ format: "qwerty" }, { format: CredentialType.AnonCreds }] };
-        const msg = new Message(JSON.stringify(body), undefined, "piuri");
+    describe("Multiple Attachments", () => {
+      const testMultipleFn = (format: any, expected: CredentialType) => {
+        it(`matches first item: ${format} - returns CredentialType.${expected}`, () => {
+          const msg = new Message("", undefined, "piuri");
+          msg.attachments.push(
+            new AttachmentDescriptor({} as any, undefined, undefined, undefined, format),
+            new AttachmentDescriptor({} as any, undefined, undefined, undefined, "secondFormat"),
+          );
 
-        const result = pollux.extractCredentialFormatFromMessage(msg);
+          const result = pollux.extractCredentialFormatFromMessage(msg);
 
-        expect(result).to.eql(CredentialType.Unknown);
-      });
+          expect(result).to.eql(expected);
+        });
+      };
+
+      jwtFormats.forEach(x => testMultipleFn(x, CredentialType.JWT));
+      anoncredsFormats.forEach(x => testMultipleFn(x, CredentialType.AnonCreds));
+      unknownFormats.forEach(x => testMultipleFn(x, CredentialType.Unknown));
     });
   });
 
@@ -172,7 +136,7 @@ describe("Pollux", () => {
           const encoded = Fixtures.encodeAnonCredsCredential(payload);
 
           expect(
-            pollux.parseCredential(Buffer.from(encoded), {
+            pollux.parseCredential(encoded, {
               type: CredentialType.AnonCreds,
               // linkSecret: "linkSecret",
               credentialMetadata: {} as any
@@ -190,7 +154,7 @@ describe("Pollux", () => {
           const encoded = Fixtures.encodeAnonCredsCredential(payload);
 
           expect(
-            pollux.parseCredential(Buffer.from(encoded), {
+            pollux.parseCredential(encoded, {
               type: CredentialType.AnonCreds,
               linkSecret: "linkSecret",
               // credentialMetadata: {} as any
@@ -211,7 +175,7 @@ describe("Pollux", () => {
         const payload = Fixtures.createAnonCredsPayload();
         const encoded = Fixtures.encodeAnonCredsCredential(payload);
 
-        await pollux.parseCredential(Buffer.from(encoded), {
+        await pollux.parseCredential(encoded, {
           type: CredentialType.AnonCreds,
           linkSecret: "linkSecret",
           credentialMetadata: {} as any

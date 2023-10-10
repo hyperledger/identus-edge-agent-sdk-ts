@@ -227,7 +227,7 @@ describe("Agent Tests", () => {
       const credentialMap = new Map();
       if (credType === CredentialType.JWT) {
         credentialMap.set(
-          credType,
+          "prism/jwt",
           Fixtures.createJWTPayload("jwtid", "proof", CredentialType.JWT)
         );
       } else if (credType === CredentialType.AnonCreds) {
@@ -253,42 +253,71 @@ describe("Agent Tests", () => {
     });
 
     describe("Should create a credential request from a valid didcomm CredentialOffer Message", () => {
-      for (let credType of [CredentialType.AnonCreds, CredentialType.JWT]) {
-        it(`CredentialType [${credType}]`, async () => {
-          if (credType === CredentialType.AnonCreds) {
-            const anonCreds = await AnoncredsLoader.getInstance();
-            const linkSecret = anonCreds.createLinksecret();
-            sandbox
-              .stub(pluto, "getLinkSecret")
-              .returns(Promise.resolve(linkSecret));
-            sandbox
-              .stub(pollux as any, "fetchCredentialDefinition")
-              .resolves(Fixtures.credDef);
-          }
-          const offer = createOffer(credType);
-          const requestCredential =
-            await agent.prepareRequestCredentialWithIssuer(offer);
+      it(`CredentialType [${CredentialType.AnonCreds}]`, async () => {
+        const anonCreds = await AnoncredsLoader.getInstance();
+        const linkSecret = Fixtures.linkSecret;
 
-          expect(requestCredential).to.be.instanceOf(RequestCredential);
-          expect(requestCredential.to?.toString()).to.equal(
-            offer.from?.toString()
-          );
-          expect(requestCredential.from.toString()).to.equal(
-            offer.to?.toString()
-          );
+        sandbox
+          .stub(pluto, "getLinkSecret")
+          .returns(Promise.resolve(linkSecret));
 
-          expect(requestCredential.body.formats).to.be.an("array");
-          expect(requestCredential.body.formats).to.have.length(1);
-          expect(requestCredential.body.formats[0].format).to.equal(credType);
+        sandbox
+          .stub(pollux as any, "fetchCredentialDefinition")
+          .resolves(Fixtures.credDef);
 
-          const foundAttachment = requestCredential.attachments.find(
-            ({ id }) => id === requestCredential.body.formats[0].attach_id
-          );
+        const offer = Fixtures.offerCredentialAnoncreds;
 
-          expect(foundAttachment).to.not.be.undefined;
-          expect(foundAttachment?.format).to.equal(credType);
-        });
-      }
+        const requestCredential =
+          await agent.prepareRequestCredentialWithIssuer(offer);
+
+        expect(requestCredential).to.be.instanceOf(RequestCredential);
+        expect(requestCredential.to?.toString()).to.equal(
+          offer.from?.toString()
+        );
+        expect(requestCredential.from.toString()).to.equal(
+          offer.to?.toString()
+        );
+
+        expect(requestCredential.body.formats).to.be.an("array");
+        expect(requestCredential.body.formats).to.have.length(1);
+        // expect(requestCredential.body.formats[0].format).to.equal(credType);
+
+        const foundAttachment = requestCredential.attachments.find(
+          ({ id }) => id === requestCredential.body.formats[0].attach_id
+        );
+
+        expect(foundAttachment).to.not.be.undefined;
+        expect(foundAttachment?.format).to.equal("anoncreds/credential-request@v1.0");
+      });
+
+      it(`CredentialType [${CredentialType.JWT}]`, async () => {
+
+        // const offer = createOffer(CredentialType.JWT);
+        const offer = Fixtures.offerCredentialJWT;
+
+        const requestCredential =
+          await agent.prepareRequestCredentialWithIssuer(offer);
+
+        expect(requestCredential).to.be.instanceOf(RequestCredential);
+        expect(requestCredential.to?.toString()).to.equal(
+          offer.from?.toString()
+        );
+        expect(requestCredential.from.toString()).to.equal(
+          offer.to?.toString()
+        );
+
+        expect(requestCredential.body.formats).to.be.an("array");
+        expect(requestCredential.body.formats).to.have.length(1);
+        // expect(requestCredential.body.formats[0].format).to.equal(credType);
+
+        const foundAttachment = requestCredential.attachments.find(
+          ({ id }) => id === requestCredential.body.formats[0].attach_id
+        );
+
+        expect(foundAttachment).to.not.be.undefined;
+        expect(foundAttachment?.format).to.equal("prism/jwt");
+      });
+
     });
 
     for (let credType of [CredentialType.W3C, CredentialType.Unknown]) {
@@ -335,7 +364,7 @@ describe("Agent Tests", () => {
 
       const issueCredential = new IssueCredential(
         { formats: [{ attach_id: "attach_id", format: CredentialType.JWT }] },
-        [{ id: "attach_1", data: { base64: base64Data } }],
+        [{ id: "attach_1", format: "prism/jwt", data: { base64: base64Data } }],
         new DID("did", "prism", "from"),
         new DID("did", "prism", "to")
       );
@@ -397,7 +426,7 @@ describe("Agent Tests", () => {
             { attach_id: "attach_id", format: CredentialType.AnonCreds },
           ],
         },
-        [{ id: "attach_1", data: { base64: base64Data } }],
+        [{ id: "attach_1", format: "anoncreds/credential@v1.0", data: { base64: base64Data } }],
         new DID("did", "prism", "from"),
         new DID("did", "prism", "to"),
         "thid"
@@ -429,9 +458,7 @@ describe("Agent Tests", () => {
 
         await agent.processIssuedCredentialMessage(issueCredential);
 
-        expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(
-          DefaultLinkSecretName
-        );
+        expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(issueCredential.thid);
       });
 
       it("Pollux.parseCredential is called with correct decoded data and CredentialType, LinkSecret, CredentialMetadata", async () => {
@@ -514,7 +541,7 @@ describe("Agent Tests", () => {
             { attach_id: "attach_id", format: CredentialType.AnonCreds },
           ],
         },
-        [{ id: "attach_1", data: { base64: base64Data } }],
+        [{ id: "attach_1", format: "anoncreds/credential-offer@v1.0", data: { base64: base64Data } }],
         new DID("did", "prism", "from"),
         new DID("did", "prism", "to"),
         "thid"

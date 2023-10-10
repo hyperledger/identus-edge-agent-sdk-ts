@@ -62,7 +62,7 @@ export default class Pollux implements PolluxInterface {
     }
 
     if (attachment.format === "prism/jwt") {
-      return CredentialType.AnonCreds;
+      return CredentialType.JWT;
     }
 
     return CredentialType.Unknown;
