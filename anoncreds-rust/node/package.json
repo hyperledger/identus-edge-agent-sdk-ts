@@ -1,0 +1,26 @@
+{
+  "name": "anoncreds",
+  "collaborators": [
+    "Hyperledger AnonCreds Contributors <anoncreds@lists.hyperledger.org>"
+  ],
+  "description": "Verifiable credential issuance and presentation for Hyperledger AnonCreds (https://www.hyperledger.org/projects), which provides a foundation for self-sovereign identity.",
+  "version": "0.1.0-dev.16",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hyperledger/anoncreds-rs/"
+  },
+  "files": [
+    "anoncreds_bg.wasm",
+    "anoncreds.js",
+    "anoncreds.d.ts"
+  ],
+  "main": "anoncreds.js",
+  "types": "anoncreds.d.ts",
+  "keywords": [
+    "hyperledger",
+    "ssi",
+    "verifiable",
+    "credentials"
+  ]
+}

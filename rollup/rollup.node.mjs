@@ -1,11 +1,15 @@
-import modify from "rollup-plugin-modify";
 import { wasm } from "@rollup/plugin-wasm";
+import nodeResolve from "@rollup/plugin-node-resolve";
 
 import Base from "./base.mjs";
 export default Base("node", [
+  nodeResolve({
+    resolveOnly: ["anoncreds-node", "didcomm"],
+  }),
   wasm({
     targetEnv: "node",
-    fileName: "didcomm_js_bg.wasm",
+    fileName: "[name][extname]",
     publicPath: "/",
+    // maxFileSize: 10000000
   }),
 ]);
