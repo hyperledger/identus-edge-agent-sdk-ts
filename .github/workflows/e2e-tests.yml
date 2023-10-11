@@ -66,6 +66,7 @@ jobs:
       - name: Pack atala-prism-wallet-sdk
         if: github.event_name == 'pull_request'
         run: |
+          npm cache clean --force && npm cache verify
           npm install
           npm run build
           npm pack
