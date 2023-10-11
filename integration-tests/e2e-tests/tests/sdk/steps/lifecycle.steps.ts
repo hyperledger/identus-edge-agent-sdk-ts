@@ -6,6 +6,15 @@ import { SdkAgentWorkflow } from "../src/SdkAgentWorkflow"
 import { PrismAgentWorkflow } from "../src/PrismAgentWorkflow"
 import axios from "axios"
 
+import nodeCrypto from "crypto";
+
+Object.defineProperty(globalThis, "crypto", {
+  value: {
+    getRandomValues: (arr:any) => nodeCrypto.getRandomValues(arr),
+  },
+});
+
+
 export let axiosInstance = axios.create({
   baseURL: EnvironmentVariables.agentUrl,
   timeout: 10000,
