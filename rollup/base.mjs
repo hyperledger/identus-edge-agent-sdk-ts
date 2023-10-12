@@ -19,13 +19,16 @@ const externals = [
   "@stablelib/sha256",
   "Buffer",
   "castor/protos/_generated/node_models_pb.js",
-  "didcomm",
-  "didcomm-node",
   "@stablelib/x25519",
   "@stablelib/uuid",
   "bn.js",
   "did-jwt",
   "axios",
+  "didcomm",
+  "didcomm-node",
+  "didcomm-browser",
+  "anoncreds-browser",
+  "anoncreds-node",
 ];
 
 export default (mode, plugins = []) => {

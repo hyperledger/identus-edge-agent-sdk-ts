@@ -28,12 +28,10 @@ export class AnoncredsLoader {
         await this.pkg.default((pkgWasm as any).default());
         this.loaded = true;
       } else {
-        this.pkg = await import("../../anoncreds-rust/node");
-        await import("../../anoncreds-rust/node/anoncreds_bg.wasm");
+        this.pkg = await import("anoncreds-node");
 
         this.loaded = true;
       }
-
     }
   }
 

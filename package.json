@@ -164,7 +164,7 @@
     "core-js": "^3.29.1",
     "did-jwt": "^6.11.5",
     "did-resolver": "^4.1.0",
-    "didcomm": "^0.4.1",
+    "didcomm-browser": "./didcomm-rust/didcomm-browser",
     "didcomm-node": "^0.4.1",
     "elliptic": "^6.5.4",
     "google-protobuf": "^3.21.2",
