@@ -19,7 +19,7 @@ import {
   RequestCredential,
 } from "./protocols/issueCredential/RequestCredential";
 import { AgentCredentials as AgentCredentialsClass } from "./types";
-import { base64, base64url } from "multiformats/bases/base64";
+import { base64 } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import { Pollux } from "../domain/buildingBlocks/Pollux";
 import {
@@ -29,7 +29,6 @@ import {
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
 import {
-  DefaultLinkSecretName,
   KeyProperties,
   KeyTypes,
 } from "../domain/models";
@@ -181,8 +180,8 @@ export class AgentCredentials implements AgentCredentialsClass {
       credentialType === CredentialType.AnonCreds
         ? "anoncreds/credential-request@v1.0"
         : credentialType === CredentialType.JWT
-        ? "prism/jwt"
-        : CredentialType.Unknown;
+          ? "prism/jwt"
+          : CredentialType.Unknown;
 
     const attachments = [
       new AttachmentDescriptor(

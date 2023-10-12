@@ -14,14 +14,14 @@ export namespace Anoncreds {
   interface CredentialRequest_BlindedMS {
     u: string;
     hidden_attributes: string[];
-    committed_attributes: {}; // supposed to be empty
+    committed_attributes: Record<string, any>; // supposed to be empty
   }
 
   interface CredentialRequest_BlindedMSCorrectnessProof {
     c: string;
     v_dash_cap: string;
     m_caps: Record<string, string>;
-    r_caps: {}; // supposed to be empty
+    r_caps: Record<string, any>; // supposed to be empty
   }
 
   export interface CredentialRequestMeta {
@@ -52,7 +52,7 @@ export namespace Anoncreds {
     schemaId: string;
     type: string; // "CL"
     tag: string;
-    value: {};
+    value: Record<string, any>;
     issuerId: string;
   }
 
