@@ -134,10 +134,10 @@
   dependencies:
     regexp-match-indices "1.0.2"
 
-"@cucumber/cucumber@^9.3.0":
-  version "9.6.0"
-  resolved "https://registry.yarnpkg.com/@cucumber/cucumber/-/cucumber-9.6.0.tgz#7653b6bb2dc417ac21bf81711f6c8c2f376b0cd0"
-  integrity sha512-bCw2uJdGHHLg4B3RoZpLzx0RXyXURmPe+swtdK1cGoA8rs+vv+/6osifcNwvFM2sv0nQ91+gDACSrXK7AHCylg==
+"@cucumber/cucumber@10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@cucumber/cucumber/-/cucumber-10.0.0.tgz#08ed8ae6ed0d50c706aa709e5af584c9331dfe7a"
+  integrity sha512-TPPIftmegCyoIWyitYzHa8ucuFtwiFVvYAolVHc6oLP7hqa79exHiRiADcPtIJiiqe0JallDuYtKhT5tW/wOIA==
   dependencies:
     "@cucumber/ci-environment" "9.2.0"
     "@cucumber/cucumber-expressions" "16.1.2"
@@ -156,7 +156,7 @@
     debug "^4.3.4"
     error-stack-parser "^2.1.4"
     figures "^3.2.0"
-    glob "^7.1.6"
+    glob "^10.3.10"
     has-ansi "^4.0.1"
     indent-string "^4.0.0"
     is-installed-globally "^0.4.0"
@@ -168,6 +168,7 @@
     mkdirp "^2.1.5"
     mz "^2.7.0"
     progress "^2.0.3"
+    read-pkg-up "^7.0.1"
     resolve-pkg "^2.0.0"
     semver "7.5.3"
     string-argv "^0.3.1"
@@ -426,7 +427,7 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@paralleldrive/cuid2@^2.2.1", "@paralleldrive/cuid2@^2.2.2":
+"@paralleldrive/cuid2@^2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@paralleldrive/cuid2/-/cuid2-2.2.2.tgz#7f91364d53b89e2c9cb9e02e8dd0f129e834455f"
   integrity sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==
@@ -460,15 +461,7 @@
     "@noble/hashes" "~1.3.0"
     "@scure/base" "~1.1.0"
 
-"@serenity-js/assertions@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@serenity-js/assertions/-/assertions-3.8.0.tgz#874a8b75b73dd9890582a712007f4527d0ab61dd"
-  integrity sha512-uTtuwa8anPGnXXwifoMx8yct+4+HJmfeo9c0HJuw6rrCplXGV2z+YDmtxRNwYE7id9Fw76wHWrmg/ZyrLeM/Vw==
-  dependencies:
-    "@serenity-js/core" "3.8.0"
-    tiny-types "^1.20.0"
-
-"@serenity-js/assertions@^3.8.0":
+"@serenity-js/assertions@3.12.0", "@serenity-js/assertions@^3.8.0":
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/@serenity-js/assertions/-/assertions-3.12.0.tgz#b547d92b59683a9e2709fc2c050c0ad18a251185"
   integrity sha512-S4YdtCLcqXafYIfC7iDzyOQOS2f0hNcm74TldZMOxmQr+pPj9hURipWsKsqFeWR72pB23ke0x1dSBthymy/cGQ==
@@ -503,59 +496,46 @@
     upath "^2.0.1"
     validate-npm-package-name "^5.0.0"
 
-"@serenity-js/core@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@serenity-js/core/-/core-3.8.0.tgz#d0d554d234afa3683803d314348fe538f275224c"
-  integrity sha512-NK9z2iweRXwXHNxI1g73MjEjrOQj6rB6joDBcY4PBus3H6oe/hlRo64R4UuaixLQ/WrONF+Srr8mAh0qUyBUaw==
-  dependencies:
-    "@paralleldrive/cuid2" "^2.2.1"
-    chalk "^4.1.2"
-    diff "^5.1.0"
-    error-stack-parser "2.1.4"
-    fast-glob "^3.3.1"
-    filenamify "^4.3.0"
-    graceful-fs "^4.2.11"
-    moment "^2.29.4"
-    semver "^7.5.4"
-    tiny-types "^1.20.0"
-    upath "^2.0.1"
-    validate-npm-package-name "^5.0.0"
-
-"@serenity-js/cucumber@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@serenity-js/cucumber/-/cucumber-3.8.0.tgz#05086d44e9def2d6170e81d4c24bdc6204748f9a"
-  integrity sha512-gAjsRwscxlMGI5Ko8gMW/MDyo9rduBBNWAYIdYKIjbKpj9pNnkd7RVjgUSUKETqjUYREMIZrc+ajBFvMu+vQbw==
+"@serenity-js/cucumber@3.12.0":
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/@serenity-js/cucumber/-/cucumber-3.12.0.tgz#52fc8a4b5e3f38d87f56744f6d7895ed99cdb128"
+  integrity sha512-HtclIr+H4z1UKY1sfo674r1w+VOezJWFGFAboC6/yXmDb2x0IlmM8nHpyfXWMLbmcoc3d3o/4hz/S4dtKziVwA==
   dependencies:
     "@cucumber/messages" "21.0.1"
-    "@serenity-js/core" "3.8.0"
+    "@serenity-js/core" "3.12.0"
     cli-table3 "^0.6.3"
     gherkin "5.1.0"
     tiny-types "^1.20.0"
 
-"@serenity-js/rest@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@serenity-js/rest/-/rest-3.8.0.tgz#be38bb557daef85c2cb35101d8c63fcc6cdc7d44"
-  integrity sha512-ZxXWVWSmLbhXXQls5zxnQI2SjVoz6q1QHYfUVaTZy6VEM9mCz5z2qs6bonI0ayEMf3zEVuTy2tYZMBbznW/QWg==
+"@serenity-js/rest@3.12.0":
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/@serenity-js/rest/-/rest-3.12.0.tgz#0fe29065eba2ce93093594c2cdcc312ad55afc45"
+  integrity sha512-DDzk58JTDJgdgFo1AdNsLQrhrw4qHeOZcCwEq1swbfm4NehyoBzhCjwHBAQNs7r4jZsRKmnzJ1rZpQUeb3KGdw==
   dependencies:
-    "@serenity-js/core" "3.8.0"
-    axios "^1.4.0"
+    "@serenity-js/core" "3.12.0"
+    agent-base "^7.1.0"
+    axios "^1.5.1"
+    http-proxy-agent "^7.0.0"
+    https-proxy-agent "^7.0.2"
+    lru-cache "^10.0.1"
+    proxy-from-env "^1.1.0"
 
-"@serenity-js/serenity-bdd@3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@serenity-js/serenity-bdd/-/serenity-bdd-3.8.0.tgz#2efbaa6e09e6e156bad64da1e6d6b0145e13c1ea"
-  integrity sha512-gI9CZIDow8Nyox0ppVe/glF50c5GoyI9blNkGnOnzQD70uXdM9+pinGVhg1IqN6Pujim7wFULDMOrHVXoR8hpA==
+"@serenity-js/serenity-bdd@3.12.0":
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/@serenity-js/serenity-bdd/-/serenity-bdd-3.12.0.tgz#a6fd4836f85c2833c938bcbba31b00ce88e9862f"
+  integrity sha512-6JyX91vQJVTPQzGPe1u5YZhmVaUnb1fp8Evfd0WY9apVs4zUCJVi+HpiKu9zeyrC2pv8EAviULD7trjEKzBqAw==
   dependencies:
-    "@serenity-js/assertions" "3.8.0"
-    "@serenity-js/core" "3.8.0"
-    "@serenity-js/rest" "3.8.0"
+    "@serenity-js/assertions" "3.12.0"
+    "@serenity-js/core" "3.12.0"
+    "@serenity-js/rest" "3.12.0"
     ansi-regex "^5.0.1"
-    axios "^1.4.0"
+    axios "^1.5.1"
     chalk "^4.1.2"
     find-java-home "^2.0.0"
-    https-proxy-agent "^7.0.1"
+    https-proxy-agent "^7.0.2"
     progress "^2.0.3"
     tiny-types "^1.20.0"
-    which "^3.0.1"
+    which "^4.0.0"
     yargs "^17.7.2"
 
 "@sindresorhus/is@^0.14.0":
@@ -877,7 +857,7 @@ agent-base@6, agent-base@^6.0.2:
   dependencies:
     debug "4"
 
-agent-base@^7.0.2:
+agent-base@^7.0.2, agent-base@^7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.0.tgz#536802b76bc0b34aa50195eb2442276d613e3434"
   integrity sha512-o/zjMZRhJxny7OyEF+Op8X+efiELC7k7yOjMzgfzVqOzXqkBkWI79YoTdOtsuWd5BWhAGAuOY/Xa6xpiaWXiNg==
@@ -1050,7 +1030,7 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-axios@^1.3.4, axios@^1.3.5, axios@^1.4.0:
+axios@^1.3.4, axios@^1.3.5, axios@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.5.1.tgz#11fbaa11fc35f431193a9564109c88c1f27b585f"
   integrity sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==
@@ -2025,7 +2005,7 @@ glob-parent@^5.1.2:
   dependencies:
     is-glob "^4.0.1"
 
-glob@^10.3.7:
+glob@^10.3.10, glob@^10.3.7:
   version "10.3.10"
   resolved "https://registry.yarnpkg.com/glob/-/glob-10.3.10.tgz#0351ebb809fd187fe421ab96af83d3a70715df4b"
   integrity sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==
@@ -2036,7 +2016,7 @@ glob@^10.3.7:
     minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
     path-scurry "^1.10.1"
 
-glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
+glob@^7.1.3, glob@^7.1.4:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
   integrity sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==
@@ -2262,6 +2242,14 @@ http-proxy-agent@^4.0.1:
     agent-base "6"
     debug "4"
 
+http-proxy-agent@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/http-proxy-agent/-/http-proxy-agent-7.0.0.tgz#e9096c5afd071a3fce56e6252bb321583c124673"
+  integrity sha512-+ZT+iBxVUQ1asugqnD6oWoRiS25AkjNfG085dKJGtGxkdwLQrMKU5wJr2bOOFAXzKcTuqq+7fZlTMgG3SRfIYQ==
+  dependencies:
+    agent-base "^7.1.0"
+    debug "^4.3.4"
+
 https-proxy-agent@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.1.tgz#c59ef224a04fe8b754f3db0063a25ea30d0005d6"
@@ -2270,7 +2258,7 @@ https-proxy-agent@^5.0.0:
     agent-base "6"
     debug "4"
 
-https-proxy-agent@^7.0.1:
+https-proxy-agent@^7.0.2:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-7.0.2.tgz#e2645b846b90e96c6e6f347fb5b2e41f1590b09b"
   integrity sha512-NmLNjm6ucYwtcUmL7JQC1ZQ57LmHP4lT15FQ8D61nak1rO6DH+fz5qNK2Ap5UN4ZapYICE3/0KodcLYSPsPbaA==
@@ -2538,6 +2526,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+isexe@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/isexe/-/isexe-3.1.1.tgz#4a407e2bd78ddfb14bea0c27c6f7072dde775f0d"
+  integrity sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==
+
 jackspeak@^2.3.5:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/jackspeak/-/jackspeak-2.3.6.tgz#647ecc472238aee4b06ac0e461acc21a8c505ca8"
@@ -2765,17 +2758,17 @@ lowercase-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-2.0.0.tgz#2603e78b7b4b0006cbca2fbcc8a3202558ac9479"
   integrity sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==
 
+lru-cache@^10.0.1, "lru-cache@^9.1.1 || ^10.0.0":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.1.tgz#0a3be479df549cca0e5d693ac402ff19537a6b7a"
+  integrity sha512-IJ4uwUTi2qCccrioU6g9g/5rvvVl13bsdczUUcqbciD9iLr095yj8DQKdObriEvuNSx325N1rV1O0sJFszx75g==
+
 lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
-
-"lru-cache@^9.1.1 || ^10.0.0":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.1.tgz#0a3be479df549cca0e5d693ac402ff19537a6b7a"
-  integrity sha512-IJ4uwUTi2qCccrioU6g9g/5rvvVl13bsdczUUcqbciD9iLr095yj8DQKdObriEvuNSx325N1rV1O0sJFszx75g==
 
 luxon@3.2.1:
   version "3.2.1"
@@ -4367,12 +4360,12 @@ which@^2.0.1, which@^2.0.2:
   dependencies:
     isexe "^2.0.0"
 
-which@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/which/-/which-3.0.1.tgz#89f1cd0c23f629a8105ffe69b8172791c87b4be1"
-  integrity sha512-XA1b62dzQzLfaEOSQFTCOd5KFf/1VSzZo7/7TUjnya6u0vGGKzU96UQBZTAThCb2j4/xjBAyii1OhRLJEivHvg==
+which@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/which/-/which-4.0.0.tgz#cd60b5e74503a3fbcfbf6cd6b4138a8bae644c1a"
+  integrity sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==
   dependencies:
-    isexe "^2.0.0"
+    isexe "^3.1.1"
 
 which@~1.0.5:
   version "1.0.9"
