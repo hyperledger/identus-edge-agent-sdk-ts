@@ -6,9 +6,20 @@ import {
   PublicKey,
   Service,
 } from "../../../src/domain";
-import Castor from "../../../src/domain/buildingBlocks/Castor";
+import { Castor } from "../../../src/domain/buildingBlocks/Castor";
 
-export const CastorMock: Castor = {
+const castorVars = {
+  _prismDID: new DID("did", "peer", "test"),
+  _peerDID: new DID(
+    "did",
+    "peer",
+    "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+  ),
+}
+
+export const CastorMock: Castor & typeof castorVars = {
+  ...castorVars,
+
   parseDID(did: string): DID {
     throw new Error("Method not implemented.");
   },
@@ -16,17 +27,13 @@ export const CastorMock: Castor = {
     masterPublicKey: PublicKey,
     services?: Service[] | undefined
   ): Promise<DID> {
-    throw new Error("Method not implemented.");
+    return Promise.resolve(castorVars._prismDID)
   },
+
   createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
-    return Promise.resolve(
-      new DID(
-        "did",
-        "peer",
-        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
-      )
-    );
+    return Promise.resolve(castorVars._peerDID);
   },
+
   resolveDID(did: string): Promise<DIDDocument> {
     throw new Error("Method not implemented.");
   },

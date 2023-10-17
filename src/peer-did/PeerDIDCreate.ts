@@ -3,7 +3,6 @@ import * as base64 from "multiformats/bases/base64";
 import {
   Curve,
   DID,
-  KeyPair,
   Service as DIDDocumentService,
 } from "../domain/models";
 

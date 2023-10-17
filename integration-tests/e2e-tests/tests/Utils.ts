@@ -1,10 +1,13 @@
-import { appendFile } from "fs";
+import { appendFileSync, writeFileSync } from "fs";
 
 export class Utils {
     static appendToNotes(message: string) {
         console.info("Adding to notes:", message)
-        appendFile("notes", message + "\n", (err) => {
-            if(err) console.error(err)
-        })
+        appendFileSync("notes", message + "\n")
+    }
+
+    static clearNotes() {
+        console.info("Clearing notes")
+        writeFileSync("notes", "### End-to-end notes:\n\n")
     }
 }

@@ -24,13 +24,9 @@ import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
  * @returns
  */
 export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
-  const DIDCommLib = await import(
-    "../../../didcomm-rust/didcomm-browser/didcomm_js.js"
-  );
+  const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
   const wasmInit = DIDCommLib.default;
-  const { default: wasm } = await import(
-    "../../../didcomm-rust/didcomm-browser/didcomm_js_bg.wasm"
-  );
+  const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   await wasmInit(await wasm());

@@ -5,6 +5,7 @@ import { EnvironmentVariables } from "../environment.variables"
 import { SdkAgentWorkflow } from "../src/SdkAgentWorkflow"
 import { PrismAgentWorkflow } from "../src/PrismAgentWorkflow"
 import axios from "axios"
+import { Utils } from "../../Utils"
 
 export let axiosInstance = axios.create({
   baseURL: EnvironmentVariables.agentUrl,
@@ -16,6 +17,7 @@ export let axiosInstance = axios.create({
 })
 
 BeforeAll(async() => {
+  Utils.clearNotes()
   await PrismAgentWorkflow.prepare()
 })
 

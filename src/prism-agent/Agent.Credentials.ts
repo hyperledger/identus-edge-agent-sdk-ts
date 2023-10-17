@@ -5,18 +5,21 @@ import {
   AttachmentJsonData,
   Curve,
   Seed,
+  Credential,
+  DID,
+  CredentialType,
+  CredentialIssueOptions,
 } from "../domain";
 import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pluto } from "../domain/buildingBlocks/Pluto";
-import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import {
   createRequestCredentialBody,
   RequestCredential,
 } from "./protocols/issueCredential/RequestCredential";
 import { AgentCredentials as AgentCredentialsClass } from "./types";
-import { base64, base64url } from "multiformats/bases/base64";
+import { base64 } from "multiformats/bases/base64";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import { Pollux } from "../domain/buildingBlocks/Pollux";
 import {
@@ -25,16 +28,11 @@ import {
 } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 import { AgentError } from "../domain/models/Errors";
-import { KeyTypes } from "../domain/models";
+import {
+  KeyProperties,
+  KeyTypes,
+} from "../domain/models";
 
-/**
- * An extension for the Edge agents that groups all the tasks and flows related to credentials
- * those incluse processing, parsing and signing credential requests that will be then send to an Agent or received from an agent
- *
- * @interface
- * @class AgentCredentials
- * @typedef {AgentCredentials}
- */
 export class AgentCredentials implements AgentCredentialsClass {
   /**
    * Creates an instance of AgentCredentials.
@@ -54,13 +52,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected seed: Seed
   ) {}
 
-  /**
-   * Asyncronously get all the stored verifiableCredentials
-   *
-   * @async
-   * @returns {Promise<VerifiableCredential[]>}
-   */
-  async verifiableCredentials(): Promise<VerifiableCredential[]> {
+  async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
   }
 
@@ -72,39 +64,42 @@ export class AgentCredentials implements AgentCredentialsClass {
    * @returns {Promise<VerifiableCredential>}
    */
   async processIssuedCredentialMessage(
-    message: IssueCredential
-  ): Promise<VerifiableCredential> {
-    const attachment = message.attachments.at(0)?.data;
+    issueCredential: IssueCredential
+  ): Promise<Credential> {
+    const credentialType = this.pollux.extractCredentialFormatFromMessage(
+      issueCredential.makeMessage()
+    );
+    const attachment = issueCredential.attachments.at(0)?.data;
 
     if (!attachment) {
       throw new Error("No attachment");
     }
 
-    const jwtData = base64url.baseDecode(
-      (attachment as AttachmentBase64).base64
-    );
+    const credData = base64.baseDecode((attachment as AttachmentBase64).base64);
 
-    const credential = this.pollux.parseVerifiableCredential(
-      Buffer.from(jwtData).toString()
-    );
+    const parseOpts: CredentialIssueOptions = {
+      type: credentialType,
+    };
+
+    if (credentialType === CredentialType.AnonCreds) {
+      parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
+      const credentialMetadata = await this.pluto.fetchCredentialMetadata(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        issueCredential.thid!
+      );
+      if (!credentialMetadata) {
+        throw new Error("Invalid credential Metadata");
+      }
+      parseOpts.credentialMetadata = credentialMetadata;
+    }
+
+    const credential = await this.pollux.parseCredential(credData, parseOpts);
 
     await this.pluto.storeCredential(credential);
 
     return credential;
   }
 
-  private extractDomainChallenge(attachments: AttachmentDescriptor[]) {
-    return attachments.reduce(
-      (_, attachment: any) => ({
-        challenge: attachment?.data?.data?.options?.challenge,
-        domain: attachment?.data?.data?.options?.domain,
-      }),
-      { challenge: undefined, domain: undefined } as {
-        challenge?: string;
-        domain?: string;
-      }
-    );
-  }
   /**
    * Asyncronously prepare a request credential message from a valid offerCredential for now supporting w3c verifiable credentials offers.
    *
@@ -115,40 +110,60 @@ export class AgentCredentials implements AgentCredentialsClass {
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
-    const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
+    const message = offer.makeMessage();
+    const credentialType =
+      this.pollux.extractCredentialFormatFromMessage(message);
 
-    const privateKey = this.apollo.createPrivateKey({
-      type: KeyTypes.EC,
-      curve: Curve.SECP256K1,
-      seed: Buffer.from(this.seed.value).toString("hex"),
-    });
+    let credRequestBuffer: string;
 
-    const publicKey = privateKey.publicKey();
+    if (credentialType === CredentialType.AnonCreds) {
+      const linkSecret = await this.pluto.getLinkSecret();
+      if (!linkSecret) {
+        throw new Error("No linkSecret available.");
+      }
+      const [credentialRequest, credentialRequestMetadata] =
+        await this.pollux.processAnonCredsCredential(message, {
+          linkSecret: linkSecret,
+          linkSecretName: offer.thid,
+        });
+      credRequestBuffer = JSON.stringify(credentialRequest);
 
-    const did = await this.castor.createPrismDID(publicKey);
+      await this.pluto.storeCredentialMetadata(
+        credentialRequestMetadata,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        offer.thid!
+      );
+    } else if (credentialType === CredentialType.JWT) {
+      const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
+      const privateKey = await this.apollo.createPrivateKey({
+        [KeyProperties.curve]: Curve.SECP256K1,
+        [KeyProperties.index]: keyIndex,
+        [KeyProperties.type]: KeyTypes.EC,
+        [KeyProperties.seed]: this.seed.value,
+      });
 
-    await this.pluto.storePrismDID(
-      did,
-      keyIndex,
-      privateKey,
-      null,
-      did.toString()
-    );
-    const attachment = this.extractDomainChallenge(offer.attachments);
+      const did = await this.castor.createPrismDID(privateKey.publicKey());
 
-    const jwt = new JWT(this.castor);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const challenge = attachment.challenge!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const domain = attachment.domain!;
-    const signedJWT = await jwt.sign(did, privateKey.value, {
-      aud: domain,
-      nonce: challenge,
-      vp: {
-        "@context": ["https://www.w3.org/2018/presentations/v1"],
-        type: ["VerifiablePresentation"],
-      },
-    });
+      await this.pluto.storePrismDID(
+        did,
+        keyIndex,
+        privateKey,
+        null,
+        did.toString()
+      );
+
+      credRequestBuffer = await this.pollux.processJWTCredential(message, {
+        did: did,
+        keyPair: {
+          curve: Curve.SECP256K1,
+          privateKey: privateKey,
+          publicKey: privateKey.publicKey(),
+        },
+      });
+    } else {
+      throw new AgentError.InvalidCredentialFormats();
+    }
+
     const requestCredentialBody = createRequestCredentialBody(
       offer.body.formats,
       offer.body.goalCode,
@@ -160,20 +175,42 @@ export class AgentCredentials implements AgentCredentialsClass {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const to = offer.from!;
     const thid = offer.thid;
+
+    const credentialFormat =
+      credentialType === CredentialType.AnonCreds
+        ? "anoncreds/credential-request@v1.0"
+        : credentialType === CredentialType.JWT
+          ? "prism/jwt"
+          : CredentialType.Unknown;
+
+    const attachments = [
+      new AttachmentDescriptor(
+        {
+          base64: base64.baseEncode(Buffer.from(credRequestBuffer)),
+        },
+        credentialFormat,
+        undefined,
+        undefined,
+        //TODO confirm what is the format that backend expects us to send AnonCreds VS JWT
+        credentialFormat
+      ),
+    ];
+
     const requestCredential = new RequestCredential(
       requestCredentialBody,
-      [
-        new AttachmentDescriptor(
-          {
-            base64: base64.baseEncode(Buffer.from(signedJWT)),
-          },
-          "prism/jwt"
-        ),
-      ],
+      attachments,
       from,
       to,
       thid
     );
+
+    attachments.forEach((attachment) => {
+      requestCredential.body.formats.push({
+        attach_id: attachment.id,
+        format: credentialFormat,
+      });
+    });
+
     return requestCredential;
   }
 
@@ -189,7 +226,7 @@ export class AgentCredentials implements AgentCredentialsClass {
    */
   async createPresentationForRequestProof(
     request: RequestPresentation,
-    credential: VerifiableCredential
+    credential: Credential
   ): Promise<Presentation> {
     const requestData = request.attachments.find(
       (attachment) =>
@@ -208,43 +245,39 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const challenge = options.challenge;
     const domain = options.domain;
-    const subjectDID = credential.subject;
+    const subjectDID = DID.fromString(credential.subject);
+
     if (!subjectDID) {
       throw new Error("Credential subject not found");
     }
 
-    const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(
-      subjectDID
-    );
+    const prismPrivateKeys =
+      await this.pluto.getDIDPrivateKeysByDID(subjectDID);
     const prismPrivateKey = prismPrivateKeys.at(0);
 
     if (prismPrivateKey === undefined) {
       throw new Error("DID PrivateKeys not found");
     }
 
-    const jwt = new JWT(this.castor);
-    //TODO: type safe this
-    const originalJWTString = (credential as any).originalJWTString;
-
     const didInfo = await this.pluto.getDIDInfoByDID(subjectDID);
     if (!didInfo) {
       throw new Error("DID not found");
     }
 
-    const signedJWT = await jwt.sign(
-      didInfo.did,
-      prismPrivateKey,
-      {
-        iss: didInfo.did.toString(),
-        aud: domain,
-        nonce: challenge,
-        vp: {
-          "@context": ["https://www.w3.org/2018/presentations/v1"],
-          type: ["VerifiablePresentation"],
-          verifiableCredential: [originalJWTString],
-        },
-      }
-    );
+    if (!credential.isProvable()) {
+      throw new Error("Credential is not Provable");
+    }
+
+    const credentialPresentation = credential.presentation();
+
+    const jwt = new JWT(this.castor);
+
+    const signedJWT = await jwt.sign(didInfo.did, prismPrivateKey, {
+      iss: didInfo.did.toString(),
+      aud: domain,
+      nonce: challenge,
+      vp: credentialPresentation,
+    });
 
     const base64JWT = base64.baseEncode(Buffer.from(signedJWT));
     const presentationBody = createPresentationBody(
