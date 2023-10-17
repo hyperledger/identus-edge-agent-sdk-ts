@@ -5,6 +5,7 @@ import {
   Seed,
   Service as DIDDocumentService,
   Signature,
+  Credential,
 } from "../domain";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pluto } from "../domain/buildingBlocks/Pluto";
@@ -24,7 +25,6 @@ import {
   PrismOnboardingInvitation,
 } from "./types";
 import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
-import { VerifiableCredential } from "../domain/models/VerifiableCredential";
 import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
@@ -43,6 +43,9 @@ enum AgentState {
   STOPPING = "stopping",
 }
 
+interface AgentConfig {
+  endpointUrl: string;
+}
 /**
  * Edge agent implementation
  *
@@ -70,6 +73,7 @@ export default class Agent
   private apollo: Apollo;
   private castor: Castor;
   private pluto: Pluto;
+  private pollux: Pollux;
   private mercury: Mercury;
   private mediationHandler: MediatorHandler;
   private connectionManager;
@@ -106,17 +110,17 @@ export default class Agent
     this.mediationHandler = mediationHandler;
     this.seed = seed;
     this.api = api;
+    this.pollux = new Pollux(castor);
 
     this.connectionManager =
       connectionManager ||
       new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
 
-    const pollux = new Pollux(castor);
     this.agentCredentials = new AgentCredentials(
       apollo,
       castor,
       pluto,
-      pollux,
+      this.pollux,
       seed
     );
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
@@ -193,6 +197,7 @@ export default class Agent
     this.state = AgentState.STARTING;
     try {
       await this.pluto.start();
+      await this.pollux.start();
       await this.connectionManager.startMediator();
     } catch (e) {
       if (e instanceof AgentError.NoMediatorAvailableError) {
@@ -200,12 +205,20 @@ export default class Agent
         await this.connectionManager.registerMediator(hostDID);
       } else throw e;
     }
+
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
       this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
       throw new AgentError.MediationRequestFailedError("Mediation failed");
     }
+
+    const storedLinkSecret = await this.pluto.getLinkSecret();
+    if (storedLinkSecret == null) {
+      const linkSecret = this.pollux.anoncreds.createLinksecret();
+      await this.pluto.storeLinkSecret(linkSecret, "default");
+    }
+
     return this.state;
   }
 
@@ -365,7 +378,7 @@ export default class Agent
    *
    * @returns {Promise<VerifiableCredential[]>}
    */
-  verifiableCredentials(): Promise<VerifiableCredential[]> {
+  verifiableCredentials(): Promise<Credential[]> {
     return this.agentCredentials.verifiableCredentials();
   }
 
@@ -412,7 +425,7 @@ export default class Agent
    */
   async processIssuedCredentialMessage(
     message: IssueCredential
-  ): Promise<VerifiableCredential> {
+  ): Promise<Credential> {
     return this.agentCredentials.processIssuedCredentialMessage(message);
   }
 
@@ -428,7 +441,7 @@ export default class Agent
    */
   async createPresentationForRequestProof(
     request: RequestPresentation,
-    credential: VerifiableCredential
+    credential: Credential
   ): Promise<Presentation> {
     return this.agentCredentials.createPresentationForRequestProof(
       request,

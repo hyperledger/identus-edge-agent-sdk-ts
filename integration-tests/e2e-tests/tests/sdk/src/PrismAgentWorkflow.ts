@@ -1,11 +1,11 @@
-import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
-import { LastResponse, PostRequest, Send } from "@serenity-js/rest"
-import { Ensure, equals } from "@serenity-js/assertions"
-import { HttpStatusCode } from "axios"
-import { Expectations } from "../../Expectations"
-import { Questions } from "../../Questions"
-import { EnvironmentVariables } from "../environment.variables"
-import { randomUUID } from "crypto"
+import { Actor, Duration, Notepad, Wait } from "@serenity-js/core";
+import { LastResponse, PostRequest, Send } from "@serenity-js/rest";
+import { Ensure, equals } from "@serenity-js/assertions";
+import { HttpStatusCode } from "axios";
+import { Expectations } from "../../Expectations";
+import { Questions } from "../../Questions";
+import { EnvironmentVariables } from "../environment.variables";
+import { randomUUID } from "crypto";
 import {
   CreateConnectionRequest,
   CreateIssueCredentialRecordRequest,
@@ -16,24 +16,24 @@ import {
   Options,
   ProofRequestAux,
   RequestPresentationInput,
-} from "@input-output-hk/prism-typescript-client"
-import { axiosInstance } from "../steps/lifecycle.steps"
-import { Utils } from "../../Utils"
+} from "@input-output-hk/prism-typescript-client";
+import { axiosInstance } from "../steps/lifecycle.steps";
+import { Utils } from "../../Utils";
 
 export class PrismAgentWorkflow {
-  private static isInitialized: boolean = false
-  private static publishedDid: string
-  private static schemaId: string
+  private static isInitialized: boolean = false;
+  private static publishedDid: string;
+  private static schemaId: string;
 
   static async prepare() {
     if (this.isInitialized) {
-      return
+      return;
     }
 
-    await this.preparePublishedDid()
-    await this.prepareSchema()
+    await this.preparePublishedDid();
+    await this.prepareSchema();
 
-    this.isInitialized = true
+    this.isInitialized = true;
   }
 
   /**
@@ -43,58 +43,58 @@ export class PrismAgentWorkflow {
     try {
       await axiosInstance.get(
         `${EnvironmentVariables.agentUrl}/did-registrar/dids/${EnvironmentVariables.publishedDid}`
-      )
-      this.publishedDid = EnvironmentVariables.publishedDid
-      return
+      );
+      this.publishedDid = EnvironmentVariables.publishedDid;
+      return;
     } catch (err) {
-      console.warn("DID not found. Creating a new one and publishing it.")
+      console.warn("DID not found. Creating a new one and publishing it.");
     }
 
-    let creationData = new CreateManagedDidRequest()
+    let creationData = new CreateManagedDidRequest();
     creationData.documentTemplate =
-      new CreateManagedDidRequestDocumentTemplate()
+      new CreateManagedDidRequestDocumentTemplate();
 
-    let publicKey = new ManagedDIDKeyTemplate()
-    publicKey.id = "key-1"
-    publicKey.purpose = "assertionMethod"
+    let publicKey = new ManagedDIDKeyTemplate();
+    publicKey.id = "key-1";
+    publicKey.purpose = "assertionMethod";
 
-    creationData.documentTemplate.publicKeys = [publicKey]
-    creationData.documentTemplate.services = []
+    creationData.documentTemplate.publicKeys = [publicKey];
+    creationData.documentTemplate.services = [];
 
     let creationResponse = await axiosInstance.post(
       `${EnvironmentVariables.agentUrl}/did-registrar/dids`,
       creationData
-    )
-    let longFormDid = creationResponse.data.longFormDid
+    );
+    let longFormDid = creationResponse.data.longFormDid;
 
     let publicationResponse = await axiosInstance.post(
       `${EnvironmentVariables.agentUrl}/did-registrar/dids/${longFormDid}/publications`
-    )
-    let shortFormDid = publicationResponse.data.scheduledOperation.didRef
+    );
+    let shortFormDid = publicationResponse.data.scheduledOperation.didRef;
 
-    let abortController = new AbortController()
+    let abortController = new AbortController();
     setTimeout(() => {
-      abortController.abort()
-    }, 60000)
+      abortController.abort();
+    }, 60000);
 
     await new Promise<void>((resolve, reject) => {
       if (!abortController.signal.aborted) {
         abortController.signal.onabort = () =>
-          reject("Timeout waiting for the publication")
+          reject("Timeout waiting for the publication");
       }
       let interval = setInterval(async () => {
         let didResponse = await axiosInstance.get(
           `${EnvironmentVariables.agentUrl}/did-registrar/dids/${shortFormDid}`
-        )
+        );
         if (didResponse.data.status == "PUBLISHED") {
-          clearInterval(interval)
-          this.publishedDid = didResponse.data.did
-          resolve()
+          clearInterval(interval);
+          this.publishedDid = didResponse.data.did;
+          resolve();
         }
-      }, 1000)
-    })
+      }, 1000);
+    });
 
-    Utils.appendToNotes(`Created new DID: ${this.publishedDid}`)
+    Utils.appendToNotes(`Created new DID: ${this.publishedDid}`);
   }
 
   /**
@@ -104,18 +104,18 @@ export class PrismAgentWorkflow {
     try {
       await axiosInstance.get(
         `${EnvironmentVariables.agentUrl}/schema-registry/schemas/${EnvironmentVariables.schemaId}`
-      )
-      this.schemaId = EnvironmentVariables.schemaId
-      return
+      );
+      this.schemaId = EnvironmentVariables.schemaId;
+      return;
     } catch (err) {
-      console.warn("Schema not found. Creating a new one.")
+      console.warn("Schema not found. Creating a new one.");
     }
 
-    let credentialSchemaInput = new CredentialSchemaInput()
-    credentialSchemaInput.author = this.publishedDid
+    let credentialSchemaInput = new CredentialSchemaInput();
+    credentialSchemaInput.author = this.publishedDid;
     credentialSchemaInput.description =
-      "Some description to automation generated schema"
-    credentialSchemaInput.name = "automation-schema-" + randomUUID()
+      "Some description to automation generated schema";
+    credentialSchemaInput.name = "automation-schema-" + randomUUID();
     credentialSchemaInput.schema = {
       $id: `https://example.com/${credentialSchemaInput.name}`,
       $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -131,119 +131,119 @@ export class PrismAgentWorkflow {
       },
       required: ["automation-required"],
       additionalProperties: false,
-    }
-    credentialSchemaInput.tags = ["automation"]
+    };
+    credentialSchemaInput.tags = ["automation"];
     credentialSchemaInput.type =
-      "https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json"
-    credentialSchemaInput.version = "0.0.1"
+      "https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json";
+    credentialSchemaInput.version = "0.0.1";
 
     let schemaResponse = await axiosInstance.post(
       `${EnvironmentVariables.agentUrl}/schema-registry/schemas`,
       credentialSchemaInput
-    )
+    );
 
-    this.schemaId = schemaResponse.data.guid
+    this.schemaId = schemaResponse.data.guid;
 
-    Utils.appendToNotes(`Created new schema: ${this.schemaId}`)
+    Utils.appendToNotes(`Created new schema: ${this.schemaId}`);
   }
 
   static async createConnection(cloudAgent: Actor) {
-    let createConnection = new CreateConnectionRequest()
-    createConnection.label = "Alice"
+    let createConnection = new CreateConnectionRequest();
+    createConnection.label = "Alice";
     await cloudAgent.attemptsTo(
-      Send.a(PostRequest.to("/connections").with(createConnection)),
+      Send.a(PostRequest.to(`${EnvironmentVariables.agentUrl}/connections`).with(createConnection)),
       Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
       Notepad.notes().set(
         "invitation",
         LastResponse.body().invitation.invitationUrl
       ),
       Notepad.notes().set("connectionId", LastResponse.body().connectionId)
-    )
+    );
   }
 
   static async shareInvitation(cloudAgent: Actor, edgeAgent: Actor) {
     let oobInvitation = await cloudAgent.answer(
       Notepad.notes().get("invitation")
-    )
-    await edgeAgent.attemptsTo(Notepad.notes().set("invitation", oobInvitation))
+    );
+    await edgeAgent.attemptsTo(Notepad.notes().set("invitation", oobInvitation));
   }
 
   static async waitForConnectionState(cloudAgent: Actor, state: string) {
     let connectionId = await cloudAgent.answer(
       Notepad.notes().get("connectionId")
-    )
+    );
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(30)).until(
-        Questions.httpGet(`/connections/${connectionId}`),
+        Questions.httpGet(`${EnvironmentVariables.agentUrl}/connections/${connectionId}`),
         Expectations.propertyValueToBe((actual) => actual.state, state)
       )
-    )
+    );
   }
 
   static async verifyCredentialState(cloudAgent: Actor, state: string) {
-    let recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
+    let recordId = await cloudAgent.answer(Notepad.notes().get("recordId"));
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(30)).until(
-        Questions.httpGet(`/issue-credentials/records/${recordId}`),
+        Questions.httpGet(`${EnvironmentVariables.agentUrl}/issue-credentials/records/${recordId}`),
         Expectations.propertyValueToBe((actual) => actual.protocolState, state)
       )
-    )
+    );
   }
 
   static async verifyPresentProof(cloudAgent: Actor, state: string) {
     let presentationId = await cloudAgent.answer(
       Notepad.notes().get("presentationId")
-    )
+    );
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(30)).until(
-        Questions.httpGet(`/present-proof/presentations/${presentationId}`),
+        Questions.httpGet(`${EnvironmentVariables.agentUrl}/present-proof/presentations/${presentationId}`),
         Expectations.propertyValueToBe((actual) => actual.status, state)
       )
-    )
+    );
   }
 
   static async offerCredential(cloudAgent: Actor) {
-    let credential = new CreateIssueCredentialRecordRequest()
+    let credential = new CreateIssueCredentialRecordRequest();
     credential.claims = {
       "automation-required": "required value",
-    }
-    credential.schemaId = `${EnvironmentVariables.agentUrl}/schema-registry/schemas/${this.schemaId}`
-    credential.automaticIssuance = true
-    credential.issuingDID = this.publishedDid
+    };
+    credential.schemaId = `${EnvironmentVariables.agentUrl}/schema-registry/schemas/${this.schemaId}`;
+    credential.automaticIssuance = true;
+    credential.issuingDID = this.publishedDid;
     credential.connectionId = await cloudAgent.answer<string>(
       Notepad.notes().get("connectionId")
-    )
+    );
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("/issue-credentials/credential-offers").with(credential)
+        PostRequest.to(`${EnvironmentVariables.agentUrl}/issue-credentials/credential-offers`).with(credential)
       )
-    )
+    );
     await cloudAgent.attemptsTo(
       Notepad.notes().set("recordId", LastResponse.body().recordId)
-    )
+    );
   }
 
   static async askForPresentProof(cloudAgent: Actor) {
-    let presentProofRequest = new RequestPresentationInput()
+    let presentProofRequest = new RequestPresentationInput();
     presentProofRequest.connectionId = await cloudAgent.answer(
       Notepad.notes().get("connectionId")
-    )
-    presentProofRequest.options = new Options()
-    presentProofRequest.options.challenge = randomUUID()
-    presentProofRequest.options.domain = EnvironmentVariables.agentUrl
+    );
+    presentProofRequest.options = new Options();
+    presentProofRequest.options.challenge = randomUUID();
+    presentProofRequest.options.domain = EnvironmentVariables.agentUrl;
 
-    let proof = new ProofRequestAux()
-    proof.schemaId = "https://schema.org/Person"
-    proof.trustIssuers = [this.publishedDid]
+    let proof = new ProofRequestAux();
+    proof.schemaId = "https://schema.org/Person";
+    proof.trustIssuers = [this.publishedDid];
 
-    presentProofRequest.proofs = [proof]
+    presentProofRequest.proofs = [proof];
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("/present-proof/presentations").with(presentProofRequest)
+        PostRequest.to(`${EnvironmentVariables.agentUrl}/present-proof/presentations`).with(presentProofRequest)
       ),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
-    )
+    );
   }
 }

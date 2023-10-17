@@ -1,4 +1,3 @@
-import { VerifiableCredential } from "../../domain/models/VerifiableCredential";
 import { OutOfBandInvitation } from "../protocols/invitation/v2/OutOfBandInvitation";
 import {
   DID,
@@ -6,6 +5,7 @@ import {
   Message,
   Service as DIDDocumentService,
   Signature,
+  Credential,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
@@ -44,16 +44,16 @@ export class PrismOnboardingInvitation implements InvitationInterface {
 }
 
 export interface AgentCredentials {
-  verifiableCredentials(): Promise<VerifiableCredential[]>;
   prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential>;
-  processIssuedCredentialMessage(
-    message: IssueCredential
-  ): Promise<VerifiableCredential>;
+  processIssuedCredentialMessage(message: IssueCredential): Promise<Credential>;
+
+  ///Not abstracted
+  verifiableCredentials(): Promise<Credential[]>;
   createPresentationForRequestProof(
     request: RequestPresentation,
-    credential: VerifiableCredential
+    credential: Credential
   ): Promise<Presentation>;
 }
 

@@ -1,7 +1,12 @@
 import "reflect-metadata";
 import { DataSource, DataSourceOptions, Like, Repository } from "typeorm";
 import * as entities from "./entities";
-import { Apollo, Domain } from "@input-output-hk/atala-prism-wallet-sdk";
+import {
+  Apollo,
+  Domain,
+  JWTCredential,
+  JWTVerifiableCredentialRecoveryId,
+} from "@input-output-hk/atala-prism-wallet-sdk";
 import Did from "./entities/DID";
 
 /**
@@ -30,7 +35,7 @@ export class PlutoSqlite implements Domain.Pluto {
   }
 
   private static transformMessageDBToInterface(
-    item: entities.Message,
+    item: entities.Message
   ): Domain.Message {
     const jsonData = JSON.parse(item.dataJson);
 
@@ -90,7 +95,7 @@ export class PlutoSqlite implements Domain.Pluto {
     keyPathIndex: number,
     privateKey: Domain.PrivateKey,
     privateKeyMetaId: string | null,
-    alias?: string,
+    alias?: string
   ) {
     const didEntity = new entities.DID();
     didEntity.did = did.toString();
@@ -105,7 +110,7 @@ export class PlutoSqlite implements Domain.Pluto {
       privateKey,
       did,
       keyPathIndex,
-      privateKeyMetaId,
+      privateKeyMetaId
     );
   }
 
@@ -134,9 +139,9 @@ export class PlutoSqlite implements Domain.Pluto {
             ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               parseInt(privateKey.getProperty(Domain.KeyProperties.index)!)
             : 0,
-          null,
-        ),
-      ),
+          null
+        )
+      )
     );
   }
 
@@ -203,7 +208,7 @@ export class PlutoSqlite implements Domain.Pluto {
     privateKey: Domain.PrivateKey,
     did: Domain.DID,
     keyPathIndex: number,
-    metaId: string | null,
+    metaId: string | null
   ) {
     const privateKeysEntity = new entities.PrivateKey();
 
@@ -232,7 +237,7 @@ export class PlutoSqlite implements Domain.Pluto {
   async storeMediator(
     mediator: Domain.DID,
     host: Domain.DID,
-    routing: Domain.DID,
+    routing: Domain.DID
   ) {
     const mediatorEntity = new entities.Mediator();
     mediatorEntity.mediatorDidId = mediator.toString();
@@ -282,7 +287,7 @@ export class PlutoSqlite implements Domain.Pluto {
           .innerJoin(
             "private_key",
             "private_key",
-            "did.did = private_key.didId",
+            "did.did = private_key.didId"
           )
           .select("did.*, privateKey.keyPathIndex", "keyPathIndex")
           .from((subQuery) => {
@@ -323,7 +328,7 @@ export class PlutoSqlite implements Domain.Pluto {
           .innerJoin(
             "private_key",
             "private_key",
-            "did.did = private_key.didId",
+            "did.did = private_key.didId"
           )
           .select(["did.*", "private_key.keyPathIndex"])
           .where("did.alias = :alias", { alias })
@@ -337,7 +342,7 @@ export class PlutoSqlite implements Domain.Pluto {
             did: Domain.DID.fromString(item.did),
             alias: item.alias,
             keyPathIndex: item.private_key_keyPathIndex,
-          }) as Domain.PrismDIDInfo,
+          }) as Domain.PrismDIDInfo
       );
     } catch (error) {
       throw new Error((error as Error).message);
@@ -429,14 +434,14 @@ export class PlutoSqlite implements Domain.Pluto {
               },
             }),
           };
-        }),
+        })
       );
 
       const peerDIDs = didsWithKeys.map((item) => {
         const privateKeys = item.privateKeys.map((key) => ({
           keyCurve: Domain.getKeyCurveByNameAndIndex(
             key.curve,
-            key.keyPathIndex,
+            key.keyPathIndex
           ),
           value: Buffer.from(key.privateKey, "hex"),
         }));
@@ -708,7 +713,7 @@ export class PlutoSqlite implements Domain.Pluto {
       .where("message.type = :type", { type })
       .andWhere(
         ":relatedWithDID IS NULL OR :relatedWithDID IN (message.from, message.to)",
-        { relatedWithDID: relatedWithDID?.toString() ?? null },
+        { relatedWithDID: relatedWithDID?.toString() ?? null }
       )
       .getMany();
 
@@ -782,19 +787,81 @@ export class PlutoSqlite implements Domain.Pluto {
    * @async
    * @returns {unknown}
    */
-  async getAllCredentials() {
-    const repository: Repository<entities.VerifiableCredential> =
-      this.dataSource.manager.getRepository("verifiable_credential");
-    const data = await repository.find();
-    return data.map((credential) => {
-      const json = JSON.parse(credential.verifiableCredentialJson);
-      return {
-        ...json,
-        id: credential.id,
-        issuer: Domain.DID.fromString(credential.issuerDIDId),
-        subject: Domain.DID.fromString(json.subject),
-      };
-    }) as Domain.VerifiableCredential[];
+  async getAllCredentials(): Promise<Domain.Credential[]> {
+    const credentialRepo =
+      this.dataSource.manager.getRepository<entities.Credential>("credential");
+    const credentials = await credentialRepo.find();
+
+    return credentials.map<Domain.Credential>((credentialEntity) => {
+      switch (credentialEntity.recoveryId) {
+        case JWTVerifiableCredentialRecoveryId:
+          // eslint-disable-next-line no-case-declarations
+          const jwtString = Buffer.from(
+            credentialEntity.credentialData,
+            "hex"
+          ).toString();
+          // eslint-disable-next-line no-case-declarations
+          const jwtObj = JSON.parse(jwtString);
+          // TODO - remember credentialEntity.id (db id)
+          return JWTCredential.fromJWT(jwtObj, jwtString);
+        default:
+          throw new Error("not implemented");
+      }
+    });
+  }
+
+  async getLinkSecret(): Promise<Domain.Anoncreds.LinkSecret | null> {
+    const repo =
+      this.dataSource.manager.getRepository<entities.LinkSecret>("linksecret");
+    const result = await repo.find();
+
+    return result.at(0)?.id ?? null;
+  }
+
+  async storeLinkSecret(
+    linkSecret: Domain.Anoncreds.LinkSecret
+  ): Promise<void> {
+    const entity = new entities.LinkSecret();
+    entity.id = linkSecret;
+
+    await this.dataSource.manager.save(entity);
+  }
+
+  async storeCredentialMetadata(
+    metadata: Domain.Anoncreds.CredentialRequestMeta
+  ): Promise<void> {
+    const entity = new entities.CredentialMetadata();
+
+    entity.link_secret_blinding_data = JSON.stringify(
+      metadata.link_secret_blinding_data
+    );
+    entity.link_secret_name = metadata.link_secret_name;
+    entity.nonce = metadata.nonce;
+
+    await this.dataSource.manager.save(entity);
+  }
+
+  async fetchCredentialMetadata(
+    linkSecretName: string | undefined
+  ): Promise<Domain.Anoncreds.CredentialRequestMeta | null> {
+    const repository: Repository<entities.CredentialMetadata> =
+      this.dataSource.manager.getRepository("credentialmetadata");
+
+    const data = await repository.findOne({
+      where: {
+        link_secret_name: linkSecretName,
+      },
+    });
+
+    if (!data) {
+      return null;
+    }
+
+    return {
+      link_secret_blinding_data: JSON.parse(data.link_secret_blinding_data),
+      link_secret_name: data.link_secret_name,
+      nonce: data.nonce,
+    };
   }
 
   /**
@@ -804,17 +871,35 @@ export class PlutoSqlite implements Domain.Pluto {
    * @param {VerifiableCredential} credential
    * @returns {*}
    */
-  async storeCredential(credential: Domain.VerifiableCredential) {
-    const verifiableCredentialEntity = new entities.VerifiableCredential();
-    verifiableCredentialEntity.credentialType = credential.credentialType;
-    verifiableCredentialEntity.expirationDate = credential.expirationDate;
-    verifiableCredentialEntity.issuanceDate = credential.issuanceDate;
-    verifiableCredentialEntity.verifiableCredentialJson = JSON.stringify({
-      ...credential,
-      subject: credential.subject?.toString(),
-    });
-    verifiableCredentialEntity.issuerDIDId = credential.issuer.toString();
+  async storeCredential(credential: Domain.Credential) {
+    if (!credential.isStorable()) {
+      throw new Error("Credential is not Storable");
+    }
 
-    await this.dataSource.manager.save(verifiableCredentialEntity);
+    const storable = credential.toStorable();
+    const credentialEntity = new entities.Credential();
+
+    credentialEntity.credentialData = Buffer.from(
+      storable.credentialData
+    ).toString("hex");
+    credentialEntity.recoveryId = storable.recoveryId;
+    credentialEntity.issuer = storable.issuer;
+    credentialEntity.subject = storable.subject;
+    credentialEntity.credentialCreated = storable.credentialCreated;
+    credentialEntity.credentialUpdated = storable.credentialUpdated;
+    credentialEntity.credentialSchema = storable.credentialSchema;
+    credentialEntity.validUntil = storable.validUntil;
+    credentialEntity.revoked = storable.revoked ? 1 : 0;
+
+    const storedCredential =
+      await this.dataSource.manager.save(credentialEntity);
+
+    for (const claim in storable.availableClaims) {
+      const claimEntity = new entities.AvailableClaims();
+      claimEntity.claim = claim;
+      claimEntity.credentialId = storedCredential.id;
+
+      await this.dataSource.manager.save(claimEntity);
+    }
   }
 }
