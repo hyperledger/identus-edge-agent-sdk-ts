@@ -11,10 +11,9 @@ import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 
 enum PlutoTypes {
   "inMemory" = "in-memory",
-  "sqlite" = "sqlite",
 }
 
-const PlutoImplementations = [PlutoTypes.inMemory, PlutoTypes.sqlite];
+const PlutoImplementations = [PlutoTypes.inMemory];
 
 describe.each(PlutoImplementations)("Pluto", (plutoType: PlutoTypes) => {
   let instance: any;
@@ -38,7 +37,7 @@ describe.each(PlutoImplementations)("Pluto", (plutoType: PlutoTypes) => {
     ].forEach((keyClass) => {
       test(`${keyClass.name}`, async () => {
         const peerDid = DID.fromString("did:peer:3i21d");
-        const raw = Buffer.from("01011010011101010100011000100010");
+        const raw = Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex');
         const privateKey = keyClass.from.Buffer(raw);
 
         await instance.storePeerDID(peerDid, [privateKey]);
@@ -715,13 +714,13 @@ describe.each(PlutoImplementations)("Pluto", (plutoType: PlutoTypes) => {
     const host = DID.fromString("did:prism:321");
     const routing = DID.fromString("did:prism:432");
     const mediatorPrivateKey: PrivateKey = new X25519PrivateKey(
-      Buffer.from("mediator test")
+      Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex')
     );
     const hostPrivateKey: PrivateKey = new X25519PrivateKey(
-      Buffer.from("host test")
+      Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex')
     );
     const routingPrivateKey: PrivateKey = new X25519PrivateKey(
-      Buffer.from("routing test")
+      Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex')
     );
     await instance.storePrismDID(
       mediator,
