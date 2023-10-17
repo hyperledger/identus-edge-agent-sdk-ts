@@ -209,7 +209,7 @@ export class PlutoInMemory implements Domain.Pluto {
           key.privateKey.curve,
           key.keyPathIndex
         ),
-        value: key.privateKey.value,
+        value: key.privateKey.getEncoded(),
       }));
 
       return new Domain.PeerDID(didRecord.did, privateKeysForPeerDID);
