@@ -5,7 +5,8 @@ import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
 import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
-import { VerifiableCredential } from "../models/VerifiableCredential";
+import { Credential } from "../models/Credential";
+import { Anoncreds } from "../models/Anoncreds";
 
 /**
  * Pluto is a storage interface describing storage requirements of the edge agents
@@ -14,9 +15,15 @@ import { VerifiableCredential } from "../models/VerifiableCredential";
  *
  */
 export interface Pluto {
-  /**
-   * Do any necessary setup before storage instance can be used.
-   */
+  storeCredentialMetadata(
+    metadata: Anoncreds.CredentialRequestMeta,
+    linkSecret: Anoncreds.LinkSecret
+  ): Promise<void>;
+
+  fetchCredentialMetadata(
+    linkSecretName: string
+  ): Promise<Anoncreds.CredentialRequestMeta | null>;
+
   start(): Promise<void>;
 
   /**
@@ -27,7 +34,7 @@ export interface Pluto {
     keyPathIndex: number,
     privateKey: PrivateKey,
     privateKeyMetaId: string | null,
-    alias?: string,
+    alias?: string
   ): Promise<void>;
 
   /**
@@ -57,7 +64,7 @@ export interface Pluto {
     privateKey: PrivateKey,
     did: DID,
     keyPathIndex: number,
-    metaId: string | null,
+    metaId: string | null
   ): Promise<void>;
 
   /**
@@ -65,10 +72,7 @@ export interface Pluto {
    */
   storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
 
-  /**
-   * Store a verifiable credential.
-   */
-  storeCredential(credential: VerifiableCredential): Promise<void>;
+  storeCredential(credential: Credential): Promise<void>;
 
   /**
    * Retrieve all stored PRISM DIDs.
@@ -162,7 +166,7 @@ export interface Pluto {
    */
   getAllMessagesOfType(
     type: string,
-    relatedWithDID?: DID,
+    relatedWithDID?: DID
   ): Promise<Array<Message>>;
 
   /**
@@ -180,8 +184,12 @@ export interface Pluto {
    */
   getAllMediators(): Promise<Array<Mediator>>;
 
-  /**
-   * Retrieve all stored verifiable credentials.
-   */
-  getAllCredentials(): Promise<Array<VerifiableCredential>>;
+  getAllCredentials(): Promise<Array<Credential>>;
+
+  getLinkSecret(linkSecretName?: string): Promise<Anoncreds.LinkSecret | null>;
+
+  storeLinkSecret(
+    linkSecret: Anoncreds.LinkSecret,
+    linkSecretName: string
+  ): Promise<void>;
 }

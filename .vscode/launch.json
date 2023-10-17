@@ -3,10 +3,11 @@
   "configurations": [
     {
       "name": "NODE DEBUG",
-      "program": "${workspaceFolder}/build/node-test/index.js",
+      "program": "${workspaceFolder}/.mock/dist/.mock/src/index.js",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "type": "node"
+      "type": "node",
+      "cwd": "${workspaceFolder}/.mock"
     },
     {
       "type": "node",

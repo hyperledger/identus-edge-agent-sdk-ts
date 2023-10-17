@@ -5,7 +5,6 @@ export * from "./DIDPair";
 export * from "./DIDResolver";
 export * from "./DIDUrl";
 export * from "./Errors";
-export * from "./JWTVerifiableCredential";
 export * from "./KeyPair";
 export * from "./Mediator";
 export * from "./Message";
@@ -20,5 +19,7 @@ export * from "./SeedWords";
 export * from "./Signature";
 export * from "./WordList";
 export * from "./VerifiableCredential";
-
+export * from "./Credential";
+export * from "./DefaultLinkSecretName";
+export * from "./Anoncreds";
 export type JsonString = string;

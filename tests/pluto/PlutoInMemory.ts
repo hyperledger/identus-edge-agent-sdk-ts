@@ -1,4 +1,5 @@
 import * as Domain from "../../src/domain";
+import { Anoncreds } from "../../src/domain/models/Anoncreds";
 
 interface DIDRecord {
   did: Domain.DID;
@@ -16,7 +17,7 @@ interface MessageRecord {
   message: Domain.Message;
 }
 type MediatorRecord = Domain.Mediator;
-type CredentialRecord = Domain.VerifiableCredential;
+type CredentialRecord = Domain.Credential;
 
 export class PlutoInMemory implements Domain.Pluto {
   _didStorage: Record<string, DIDRecord> = {};
@@ -25,6 +26,8 @@ export class PlutoInMemory implements Domain.Pluto {
   _messageStorage: Array<MessageRecord> = [];
   _mediatorStorage: Array<MediatorRecord> = [];
   _credentialStorage: Array<CredentialRecord> = [];
+  _linkSecrets: Record<string, string> = {};
+  _requestMetadata: Record<string, Anoncreds.CredentialRequestMeta> = {};
 
   /**
    * no async setup for in-memory implementation
@@ -45,14 +48,14 @@ export class PlutoInMemory implements Domain.Pluto {
     keyPathIndex: number,
     privateKey: Domain.PrivateKey,
     privateKeyMetaId: string | null,
-    alias?: string,
+    alias?: string
   ) {
     const didStr = did.toString();
     await this.storePrivateKeys(
       privateKey,
       did,
       keyPathIndex,
-      privateKeyMetaId,
+      privateKeyMetaId
     );
     this._didStorage[didStr] = {
       did,
@@ -96,7 +99,7 @@ export class PlutoInMemory implements Domain.Pluto {
     privateKey: Domain.PrivateKey,
     did: Domain.DID,
     keyPathIndex: number,
-    metaId: string | null,
+    metaId: string | null
   ) {
     const didStr = did.toString();
 
@@ -115,7 +118,7 @@ export class PlutoInMemory implements Domain.Pluto {
   async storeMediator(
     mediator: Domain.DID,
     host: Domain.DID,
-    routing: Domain.DID,
+    routing: Domain.DID
   ) {
     this._mediatorStorage.push({
       mediatorDID: mediator,
@@ -124,7 +127,7 @@ export class PlutoInMemory implements Domain.Pluto {
     });
   }
 
-  async storeCredential(credential: Domain.VerifiableCredential) {
+  async storeCredential(credential: Domain.Credential) {
     this._credentialStorage.push(credential);
   }
 
@@ -136,7 +139,7 @@ export class PlutoInMemory implements Domain.Pluto {
         return new Domain.PrismDIDInfo(
           didRecord.did,
           keyRecord.keyPathIndex || 0,
-          didRecord.alias,
+          didRecord.alias
         );
       });
   }
@@ -152,7 +155,7 @@ export class PlutoInMemory implements Domain.Pluto {
     return new Domain.PrismDIDInfo(
       didRecord.did,
       keyRecord.keyPathIndex || 0,
-      didRecord.alias,
+      didRecord.alias
     );
   }
 
@@ -164,7 +167,7 @@ export class PlutoInMemory implements Domain.Pluto {
         return new Domain.PrismDIDInfo(
           didRecord.did,
           keyRecord.keyPathIndex || 0,
-          didRecord.alias,
+          didRecord.alias
         );
       });
   }
@@ -183,7 +186,7 @@ export class PlutoInMemory implements Domain.Pluto {
   async getPrismLastKeyPathIndex(): Promise<number> {
     const allPrismDIDs = await this.getAllPrismDIDs();
     const allKeyPathIndexes = allPrismDIDs.map(
-      (didInfo) => didInfo.keyPathIndex,
+      (didInfo) => didInfo.keyPathIndex
     );
 
     if (allKeyPathIndexes.length === 0) {
@@ -195,7 +198,7 @@ export class PlutoInMemory implements Domain.Pluto {
 
   async getAllPeerDIDs() {
     const allPeerDIDs = Object.values(this._didStorage).filter(
-      (didRecord) => didRecord.did.method === "peer",
+      (didRecord) => didRecord.did.method === "peer"
     );
 
     const allPeerDIDsWithKeys = allPeerDIDs.map((didRecord) => {
@@ -204,7 +207,7 @@ export class PlutoInMemory implements Domain.Pluto {
       const privateKeysForPeerDID = keyRecords.map((key) => ({
         keyCurve: Domain.getKeyCurveByNameAndIndex(
           key.privateKey.curve,
-          key.keyPathIndex,
+          key.keyPathIndex
         ),
         value: key.privateKey.getEncoded(),
       }));
@@ -229,7 +232,7 @@ export class PlutoInMemory implements Domain.Pluto {
     // TODO: it seems it's not used anywhere
     const allKeys = Object.values(this._keyStorage).flat();
     const keyRecord = allKeys.find(
-      (keyRecord) => keyRecord.privateKeyMetaId === id,
+      (keyRecord) => keyRecord.privateKeyMetaId === id
     );
 
     return keyRecord?.privateKey ?? null;
@@ -243,7 +246,7 @@ export class PlutoInMemory implements Domain.Pluto {
   async getPairByDID(did: Domain.DID): Promise<Domain.DIDPair | null> {
     return (
       this._didPairStorage.find(
-        (pair) => pair.host.toString() === did.toString(),
+        (pair) => pair.host.toString() === did.toString()
       ) || null
     );
   }
@@ -262,7 +265,7 @@ export class PlutoInMemory implements Domain.Pluto {
       .filter(
         (messageRecord) =>
           messageRecord.message.from?.toString() === did.toString() ||
-          messageRecord.message.to?.toString() === did.toString(),
+          messageRecord.message.to?.toString() === did.toString()
       )
       .map((messageRecord) => messageRecord.message);
   }
@@ -283,7 +286,7 @@ export class PlutoInMemory implements Domain.Pluto {
     return this._messageStorage
       .filter(
         (messageRecord) =>
-          messageRecord.message.to?.toString() === did.toString(),
+          messageRecord.message.to?.toString() === did.toString()
       )
       .map((messageRecord) => messageRecord.message);
   }
@@ -292,14 +295,14 @@ export class PlutoInMemory implements Domain.Pluto {
     return this._messageStorage
       .filter(
         (messageRecord) =>
-          messageRecord.message.from?.toString() === did.toString(),
+          messageRecord.message.from?.toString() === did.toString()
       )
       .map((messageRecord) => messageRecord.message);
   }
 
   async getAllMessagesOfType(
     type: string,
-    relatedWithDID?: Domain.DID,
+    relatedWithDID?: Domain.DID
   ): Promise<Array<Domain.Message>> {
     return this._messageStorage
       .filter(
@@ -307,28 +310,28 @@ export class PlutoInMemory implements Domain.Pluto {
           messageRecord.message.piuri === type &&
           (!relatedWithDID ||
             messageRecord.message.from?.toString() ===
-            relatedWithDID.toString() ||
-            messageRecord.message.to?.toString() === relatedWithDID.toString()),
+              relatedWithDID.toString() ||
+            messageRecord.message.to?.toString() === relatedWithDID.toString())
       )
       .map((messageRecord) => messageRecord.message);
   }
 
   async getAllMessagesByFromToDID(
     from: Domain.DID,
-    to: Domain.DID,
+    to: Domain.DID
   ): Promise<Array<Domain.Message>> {
     return this._messageStorage
       .filter(
         (messageRecord) =>
           messageRecord.message.from?.toString() === from.toString() &&
-          messageRecord.message.to?.toString() === to.toString(),
+          messageRecord.message.to?.toString() === to.toString()
       )
       .map((messageRecord) => messageRecord.message);
   }
 
   async getMessage(id: string): Promise<Domain.Message | null> {
     const messageRecord = this._messageStorage.find(
-      (messageRecord) => messageRecord.message.id === id,
+      (messageRecord) => messageRecord.message.id === id
     );
 
     if (!messageRecord) {
@@ -342,7 +345,32 @@ export class PlutoInMemory implements Domain.Pluto {
     return this._mediatorStorage;
   }
 
-  async getAllCredentials(): Promise<Array<Domain.VerifiableCredential>> {
+  async getAllCredentials(): Promise<Array<Domain.Credential>> {
     return this._credentialStorage;
+  }
+
+  async storeCredentialMetadata(
+    metadata: Anoncreds.CredentialRequestMeta
+  ): Promise<void> {
+    this._requestMetadata[metadata.link_secret_name] = metadata;
+  }
+
+  async fetchCredentialMetadata(
+    linkSecretName: string
+  ): Promise<Anoncreds.CredentialRequestMeta | null> {
+    return this._requestMetadata[linkSecretName];
+  }
+
+  async getLinkSecret(
+    linkSecretName: string = "default"
+  ): Promise<string | null> {
+    return this._linkSecrets[linkSecretName] ?? null;
+  }
+
+  async storeLinkSecret(
+    linkSecret: string,
+    linkSecretName: string
+  ): Promise<void> {
+    this._linkSecrets[linkSecretName] = linkSecret;
   }
 }

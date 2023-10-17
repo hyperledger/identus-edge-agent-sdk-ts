@@ -37,4 +37,6 @@ export * from "./apollo/utils/Ed25519KeyPair";
 export * from "./apollo/utils/X25519PrivateKey";
 export * from "./apollo/utils/X25519PublicKey";
 export * from "./apollo/utils/X25519KeyPair";
+export * from "./pollux/models/AnonCredsVerifiableCredential";
+export * from "./pollux/models/JWTVerifiableCredential";
 export { KeyProperties } from "./domain/models/KeyProperties";

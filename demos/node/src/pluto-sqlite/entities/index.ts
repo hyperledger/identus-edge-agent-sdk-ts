@@ -4,5 +4,19 @@ import Mediator from "./Mediator";
 import Message from "./Message";
 import PrivateKey from "./PrivateKey";
 import VerifiableCredential from "./VerifiableCredential";
-
-export {DID, DIDPair, Mediator, Message, PrivateKey, VerifiableCredential};
+import AvailableClaims from "./AvailableClaims";
+import Credential from "./Credential";
+import LinkSecret from "./LinkSecret";
+import CredentialMetadata from "./CredentialMetadata";
+export {
+  DID,
+  DIDPair,
+  Mediator,
+  Message,
+  PrivateKey,
+  VerifiableCredential,
+  AvailableClaims,
+  Credential,
+  CredentialMetadata,
+  LinkSecret,
+};

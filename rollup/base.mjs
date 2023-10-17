@@ -5,6 +5,8 @@ import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
 import json from "@rollup/plugin-json";
 import commonjs from "@rollup/plugin-commonjs";
+import jsccPlugin from "rollup-plugin-jscc";
+
 const externals = [
   "@scure/bip39/wordlists/english",
   "elliptic",
@@ -17,15 +19,19 @@ const externals = [
   "@stablelib/sha256",
   "Buffer",
   "castor/protos/_generated/node_models_pb.js",
-  "didcomm",
-  "didcomm-node",
   "@stablelib/x25519",
   "@stablelib/uuid",
   "bn.js",
   "did-jwt",
   "axios",
   "apollo",
+  "didcomm",
+  "didcomm-node",
+  "didcomm-browser",
+  "anoncreds-browser",
+  "anoncreds-node",
 ];
+
 export default (mode, plugins = []) => {
   return {
     input: ["src/index.ts"],
@@ -36,6 +42,7 @@ export default (mode, plugins = []) => {
       name: "prism",
     },
     plugins: [
+      jsccPlugin({ values: { _ANONCREDS: true } }),
       ignore(externals),
       json(),
       typescript({
