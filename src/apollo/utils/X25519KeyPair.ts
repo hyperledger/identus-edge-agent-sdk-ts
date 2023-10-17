@@ -1,16 +1,12 @@
-import { base64url } from "multiformats/bases/base64";
-
-import * as x25519 from "@stablelib/x25519";
-
+import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
 import { X25519PrivateKey } from "./X25519PrivateKey";
 import { X25519PublicKey } from "./X25519PublicKey";
 import { KeyPair } from "../../domain";
+
 /**
  * @ignore
  */
 export class X25519KeyPair extends KeyPair {
-  public static ec = x25519;
-
   constructor(
     public privateKey: X25519PrivateKey,
     public publicKey: X25519PublicKey
@@ -19,12 +15,12 @@ export class X25519KeyPair extends KeyPair {
   }
 
   static generateKeyPair() {
-    const keyPair = X25519KeyPair.ec.generateKeyPair();
-    const pub = keyPair.publicKey;
+    const keyPair =
+      ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMX25519KeyPair.Companion.generateKeyPair();
 
-    const privateKey = new X25519PrivateKey(Buffer.from(keyPair.secretKey));
-    const publicKey = new X25519PublicKey(Buffer.from(Uint8Array.from(pub)));
-
-    return new X25519KeyPair(privateKey, publicKey);
+    return new X25519KeyPair(
+      new X25519PrivateKey(keyPair.privateKey.raw),
+      new X25519PublicKey(keyPair.publicKey.raw)
+    );
   }
 }

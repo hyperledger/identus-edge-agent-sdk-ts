@@ -1,43 +1,46 @@
-import elliptic from "elliptic";
-import { base64url } from "multiformats/bases/base64";
+import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
+
 /**
  * @ignore
  */
 export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
-  public static eddsa = new elliptic.eddsa("ed25519");
-
-  public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
-  public size;
-  public raw: Uint8Array;
+  public raw: Buffer;
+  public size: number;
+  public type: KeyTypes = KeyTypes.EC;
 
-  constructor(nativeValue: Uint8Array) {
+  constructor(bytes: Int8Array | Uint8Array) {
     super();
-    this.raw = nativeValue;
+
+    this.raw = this.getInstance(bytes).raw;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
   }
 
-  private getInstance(): elliptic.eddsa.KeyPair {
-    return Ed25519PublicKey.eddsa.keyFromPublic(
-      Array.from(this.raw) as unknown as Buffer
-    );
-  }
-
   getEncoded(): Buffer {
-    return Buffer.from(base64url.baseEncode(this.getInstance().getPublic()));
+    return this.getInstance().getEncoded();
   }
 
   verify(message: Buffer, signature: Buffer) {
-    //TODO: Report a bug in elliptic, this method is not expecting a Buffer (bytes)
-    //Internally it expects to find an array, if not Buffer.slice.concat fails when Array.slice.concat doesn't
-    //Must keep this...
     return this.getInstance().verify(
-      message,
-      Array.from(signature) as unknown as Buffer
+      Int8Array.from(message),
+      Int8Array.from(signature)
     );
+  }
+
+  private getInstance(
+    value?: Int8Array | Uint8Array
+  ): ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey {
+    // eslint-disable-next-line no-extra-boolean-cast
+    const bytes = !!value ? Buffer.from(value) : this.raw;
+    const instance =
+      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey(
+        Int8Array.from(bytes)
+      );
+
+    return instance;
   }
 }

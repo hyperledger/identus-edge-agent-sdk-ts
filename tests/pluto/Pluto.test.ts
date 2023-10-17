@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { PlutoInMemory } from "../../demos/pluto/PlutoInMemory";
+import { PlutoInMemory } from "./PlutoInMemory";
 import { DID, PrivateKey } from "../../src/domain";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";
@@ -9,11 +9,22 @@ import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 
-describe("Pluto", () => {
+enum PlutoTypes {
+  "inMemory" = "in-memory",
+}
+
+const PlutoImplementations = [PlutoTypes.inMemory];
+
+describe.each(PlutoImplementations)("Pluto", (plutoType: PlutoTypes) => {
   let instance: any;
 
   beforeEach(async () => {
-    instance = new PlutoInMemory();
+    if (plutoType === "in-memory") {
+      instance = new PlutoInMemory();
+    } else {
+      throw new Error(`Unknown pluto type: ${plutoType}`);
+    }
+
     await instance.start();
   });
 
@@ -26,7 +37,10 @@ describe("Pluto", () => {
     ].forEach((keyClass) => {
       test(`${keyClass.name}`, async () => {
         const peerDid = DID.fromString("did:peer:3i21d");
-        const raw = Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex');
+        const raw = Buffer.from(
+          "76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273",
+          "hex"
+        );
         const privateKey = keyClass.from.Buffer(raw);
 
         await instance.storePeerDID(peerDid, [privateKey]);
@@ -703,13 +717,22 @@ describe("Pluto", () => {
     const host = DID.fromString("did:prism:321");
     const routing = DID.fromString("did:prism:432");
     const mediatorPrivateKey: PrivateKey = new X25519PrivateKey(
-      Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex')
+      Buffer.from(
+        "76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273",
+        "hex"
+      )
     );
     const hostPrivateKey: PrivateKey = new X25519PrivateKey(
-      Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex')
+      Buffer.from(
+        "76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273",
+        "hex"
+      )
     );
     const routingPrivateKey: PrivateKey = new X25519PrivateKey(
-      Buffer.from("76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273", 'hex')
+      Buffer.from(
+        "76735a33485f497970546b7978646f466272346f657447746f53496363782d614330365f474f53577a7273",
+        "hex"
+      )
     );
     await instance.storePrismDID(
       mediator,

@@ -8,6 +8,6 @@ export default Base("node", [
         const crypto = require("crypto");
         global.crypto = crypto;
       `;
-    }
+    },
   },
 ]);

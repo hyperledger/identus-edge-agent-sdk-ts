@@ -10,7 +10,6 @@ import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import { Pluto } from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
-import { base64url } from "multiformats/bases/base64";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
@@ -75,7 +74,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       curve: Curve.X25519,
       raw: privateKeyBuffer.value,
     });
-
     const ecnumbasis = this.castor.getEcnumbasis(
       peerDid.did,
       privateKey.publicKey()
@@ -92,6 +90,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
         x: publicKeyJWK.x,
       },
     };
+
     return secret;
   }
 }
