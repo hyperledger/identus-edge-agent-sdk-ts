@@ -9,6 +9,9 @@
 
 # [2.4.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.3.0...v2.4.0) (2023-08-30)
 
+### Breaking
+
+* **Pluto:** removed Pluto implementation from main bundle
 
 ### Bug Fixes
 
