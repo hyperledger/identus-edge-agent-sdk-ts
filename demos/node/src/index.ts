@@ -1,40 +1,12 @@
 import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
-import { PlutoSqlite } from "./pluto-sqlite/PlutoSqlite";
-
-const mnemonicWords = [
-  "banana",
-  "frame",
-  "pottery",
-  "comic",
-  "stuff",
-  "shuffle",
-  "erase",
-  "crash",
-  "hire",
-  "settle",
-  "make",
-  "wrap",
-  "stool",
-  "verify",
-  "champion",
-  "decade",
-  "sudden",
-  "leopard",
-  "label",
-  "art",
-  "play",
-  "half",
-  "smart",
-  "exchange",
-];
+//@ts-ignore
+import { PlutoInMemory } from "../../pluto/PlutoInMemory";
 
 function createTestScenario(mediatorDID: SDK.Domain.DID) {
   const apollo = new SDK.Apollo();
   const api = new SDK.ApiImpl();
   const castor = new SDK.Castor(apollo);
-
-  const pluto = new PlutoSqlite();
-
+  const pluto = new PlutoInMemory();
   const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
   const mercury = new SDK.Mercury(castor, didcomm, api);
   const store = new SDK.PublicMediatorStore(pluto);
@@ -73,8 +45,7 @@ function createTestScenario(mediatorDID: SDK.Domain.DID) {
 
   await agent.start();
   console.log(
-    `Welcome to PrismEdge Agent, state ${
-      agent.state
+    `Welcome to PrismEdge Agent, state ${agent.state
     } with mnemonics ${seed.mnemonics.join(", ")}`,
   );
 
