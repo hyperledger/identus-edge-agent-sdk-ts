@@ -10,14 +10,16 @@
   "ignorePatterns": [
     "src/castor/parser",
     "src/castor/protos",
-    "webpack",
     "scripts",
     "tests",
     "demos",
     "anoncreds-rust",
     "didcomm-rust"
   ],
-  "plugins": ["@typescript-eslint", "react"],
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -33,7 +35,9 @@
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-namespace": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn"]
+    "@typescript-eslint/no-unused-vars": [
+      "warn"
+    ]
   },
   "settings": {
     "react": {
