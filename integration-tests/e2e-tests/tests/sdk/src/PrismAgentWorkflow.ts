@@ -217,7 +217,8 @@ export class PrismAgentWorkflow {
     await cloudAgent.attemptsTo(
       Send.a(
         PostRequest.to(`${EnvironmentVariables.agentUrl}/issue-credentials/credential-offers`).with(credential)
-      )
+      ),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
     );
     await cloudAgent.attemptsTo(
       Notepad.notes().set("recordId", LastResponse.body().recordId)
@@ -243,6 +244,7 @@ export class PrismAgentWorkflow {
       Send.a(
         PostRequest.to(`${EnvironmentVariables.agentUrl}/present-proof/presentations`).with(presentProofRequest)
       ),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
     );
   }
