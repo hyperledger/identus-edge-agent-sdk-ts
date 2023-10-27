@@ -14,13 +14,7 @@
       "request": "launch",
       "name": "TEST",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-      "args": [
-        "--colors",
-        "--workerThreads",
-        "--maxWorkers",
-        "1",
-        "tests/apollo/Apollo.test.ts"
-      ],
+      "args": ["--colors", "--maxWorkers", "1"],
       "skipFiles": [
         "${workspaceRoot}/../../node_modules/**/*",
         "<node_internals>/**/*"

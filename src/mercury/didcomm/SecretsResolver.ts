@@ -76,6 +76,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       curve: Curve.X25519,
       raw: privateKeyBuffer.value,
     });
+
     const ecnumbasis = this.castor.getEcnumbasis(
       peerDid.did,
       privateKey.publicKey()
@@ -87,11 +88,10 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       privateKeyJwk: {
         crv: Curve.X25519,
         kty: "OKP",
-        d: privateKey.getEncoded().toString(),
+        d: privateKey.value.toString(),
         x: (publicKeyJWK.x as any).data,
       },
     };
-
     return secret;
   }
 }

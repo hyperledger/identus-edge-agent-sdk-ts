@@ -97,6 +97,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
 
     if (
+      updateMediator &&
       mediatorDID &&
       !services.find((service) => {
         return service.isDIDCommMessaging;
