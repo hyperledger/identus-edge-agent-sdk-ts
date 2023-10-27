@@ -9,7 +9,7 @@ import { X25519PublicKey } from "./X25519PublicKey";
  */
 export class X25519PrivateKey extends PrivateKey {
   public static ec = x25519;
-  public type: KeyTypes = KeyTypes.EC;
+  public type: KeyTypes = KeyTypes.Curve25519;
   public keySpecification: Map<string, string> = new Map();
   public size: number;
   public raw: Uint8Array;
@@ -22,26 +22,26 @@ export class X25519PrivateKey extends PrivateKey {
   }
 
   getEncoded(): Buffer {
-    return Buffer.from(this.nativeValue);
+    return Buffer.from(base64url.baseEncode(this.nativeValue));
   }
 
   publicKey(): X25519PublicKey {
     const x25519PrivateKey = X25519PrivateKey.ec.generateKeyPairFromSeed(
-      Buffer.from(base64url.baseDecode(Buffer.from(this.raw).toString()))
+      Buffer.from(this.raw)
     );
-    const pub = base64url.baseEncode(x25519PrivateKey.publicKey);
+    const pub = x25519PrivateKey.publicKey;
     return new X25519PublicKey(Buffer.from(pub));
   }
 
   public readonly to = {
     Buffer: () => this.getEncoded(),
-    Hex: () => this.to.Buffer().toString("hex")
+    Hex: () => this.to.Buffer().toString("hex"),
   };
 
   static from = {
     Buffer: (value: Buffer) => new X25519PrivateKey(new Uint8Array(value)),
-    Hex: (value: string) => X25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
-    String: (value: string) => X25519PrivateKey.from.Buffer(Buffer.from(value))
+    Hex: (value: string) =>
+      X25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
+    String: (value: string) => X25519PrivateKey.from.Buffer(Buffer.from(value)),
   };
-
 }

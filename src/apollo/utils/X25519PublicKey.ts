@@ -1,4 +1,5 @@
 import * as x25519 from "@stablelib/x25519";
+import { base64url } from "multiformats/bases/base64";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 
@@ -20,6 +21,6 @@ export class X25519PublicKey extends PublicKey {
   }
 
   getEncoded(): Buffer {
-    return Buffer.from(this.nativeValue);
+    return Buffer.from(base64url.baseEncode(this.nativeValue));
   }
 }

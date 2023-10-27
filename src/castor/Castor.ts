@@ -333,31 +333,29 @@ export default class Castor implements CastorInterface {
         const material =
           method.publicKeyJwk.crv === Curve.X25519
             ? new VerificationMaterialAgreement(
-              JSON.stringify(method.publicKeyJwk),
-              VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
-              VerificationMaterialFormatPeerDID.JWK
-            )
+                JSON.stringify(method.publicKeyJwk),
+                VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
+                VerificationMaterialFormatPeerDID.JWK
+              )
             : new VerificationMaterialAuthentication(
-              JSON.stringify(method.publicKeyJwk),
-              VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
-              VerificationMaterialFormatPeerDID.JWK
-            );
+                JSON.stringify(method.publicKeyJwk),
+                VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
+                VerificationMaterialFormatPeerDID.JWK
+              );
 
         const decodedKey =
           method.publicKeyJwk.crv === Curve.X25519
             ? JWKHelper.fromJWKAgreement(
-              material as VerificationMaterialAgreement
-            )
+                material as VerificationMaterialAgreement
+              )
             : JWKHelper.fromJWKAuthentication(
-              material as VerificationMaterialAuthentication
-            );
+                material as VerificationMaterialAuthentication
+              );
 
         publicKey =
           method.publicKeyJwk.crv === Curve.X25519
-            ? new X25519PublicKey(Buffer.from(base64url.baseEncode(decodedKey)))
-            : new Ed25519PublicKey(
-              Buffer.from(base64url.baseEncode(decodedKey))
-            );
+            ? new X25519PublicKey(Buffer.from(decodedKey))
+            : new Ed25519PublicKey(Buffer.from(decodedKey));
 
         if (
           publicKey.canVerify() &&

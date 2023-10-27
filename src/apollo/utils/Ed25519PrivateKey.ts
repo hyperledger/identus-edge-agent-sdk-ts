@@ -26,15 +26,11 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
 
   publicKey() {
     const prv = this.getInstance();
-    return new Ed25519PublicKey(
-      Buffer.from(base64url.baseEncode(prv.getPublic()))
-    );
+    return new Ed25519PublicKey(Buffer.from(prv.getPublic()));
   }
 
   private getInstance(): elliptic.eddsa.KeyPair {
-    return Ed25519PrivateKey.eddsa.keyFromSecret(
-      Buffer.from(base64url.baseDecode(this.raw.toString()))
-    );
+    return Ed25519PrivateKey.eddsa.keyFromSecret(Buffer.from(this.raw));
   }
 
   getEncoded(): Buffer {
@@ -43,17 +39,19 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
 
   sign(message: Buffer) {
     const signature = this.getInstance().sign(message);
-    return signature.toBytes();
+    return Buffer.from(signature.toBytes());
   }
 
   public readonly to = {
     Buffer: () => this.getEncoded(),
-    Hex: () => this.to.Buffer().toString("hex")
+    Hex: () => this.to.Buffer().toString("hex"),
   };
 
   static from = {
     Buffer: (value: Buffer) => new Ed25519PrivateKey(value),
-    Hex: (value: string) => Ed25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
-    String: (value: string) => Ed25519PrivateKey.from.Buffer(Buffer.from(value)),
+    Hex: (value: string) =>
+      Ed25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
+    String: (value: string) =>
+      Ed25519PrivateKey.from.Buffer(Buffer.from(value)),
   };
 }

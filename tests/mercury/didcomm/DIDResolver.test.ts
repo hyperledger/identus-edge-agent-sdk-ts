@@ -12,19 +12,19 @@ describe("Mercury DIDComm DIDResolver", () => {
         "vm-ED25519",
         "1",
         "type",
-        { crv: Domain.Curve.ED25519, kid: "kid", x: { data: "xData" } } as any
+        { crv: Domain.Curve.ED25519, kid: "kid", x: "xData" } as any
       );
       const vmKeyAgreements = new Domain.VerificationMethod(
         "vm-X25519",
         "2",
         "type",
-        { crv: Domain.Curve.X25519, kid: "kid", x: { data: "xData" } } as any
+        { crv: Domain.Curve.X25519, kid: "kid", x: "xData" } as any
       );
       const vmOther = new Domain.VerificationMethod(
         "vm-SECP256K1",
         "3",
         "type",
-        { crv: Domain.Curve.SECP256K1, kid: "kid", x: { data: "xData" } } as any
+        { crv: Domain.Curve.SECP256K1, kid: "kid", x: "xData" } as any
       );
       const service = new Domain.Service(
         "",
@@ -59,7 +59,7 @@ describe("Mercury DIDComm DIDResolver", () => {
             crv: vmAuthentication.publicKeyJwk?.crv,
             kid: (vmAuthentication.publicKeyJwk as any)?.kid,
             kty: "OKP",
-            x: (vmAuthentication.publicKeyJwk?.x as any).data,
+            x: vmAuthentication.publicKeyJwk?.x as any,
           },
         },
         {
@@ -70,7 +70,7 @@ describe("Mercury DIDComm DIDResolver", () => {
             crv: vmKeyAgreements.publicKeyJwk?.crv,
             kid: (vmKeyAgreements.publicKeyJwk as any)?.kid,
             kty: "OKP",
-            x: (vmKeyAgreements.publicKeyJwk?.x as any).data,
+            x: vmKeyAgreements.publicKeyJwk?.x as any,
           },
         },
         {
@@ -81,7 +81,7 @@ describe("Mercury DIDComm DIDResolver", () => {
             crv: vmOther.publicKeyJwk?.crv,
             kid: (vmOther.publicKeyJwk as any)?.kid,
             kty: "OKP",
-            x: (vmOther.publicKeyJwk?.x as any).data,
+            x: vmOther.publicKeyJwk?.x as any,
           },
         },
       ]);

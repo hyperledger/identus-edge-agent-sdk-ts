@@ -23,7 +23,7 @@ export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
 
   private getInstance(): elliptic.eddsa.KeyPair {
     return Ed25519PublicKey.eddsa.keyFromPublic(
-      Array.from(base64url.baseDecode(this.raw.toString())) as unknown as Buffer
+      Array.from(this.raw) as unknown as Buffer
     );
   }
 

@@ -22,12 +22,8 @@ export class X25519KeyPair extends KeyPair {
     const keyPair = X25519KeyPair.ec.generateKeyPair();
     const pub = keyPair.publicKey;
 
-    const privateKey = new X25519PrivateKey(
-      Buffer.from(base64url.baseEncode(Buffer.from(keyPair.secretKey)))
-    );
-    const publicKey = new X25519PublicKey(
-      Buffer.from(base64url.baseEncode(Uint8Array.from(pub)))
-    );
+    const privateKey = new X25519PrivateKey(Buffer.from(keyPair.secretKey));
+    const publicKey = new X25519PublicKey(Buffer.from(Uint8Array.from(pub)));
 
     return new X25519KeyPair(privateKey, publicKey);
   }

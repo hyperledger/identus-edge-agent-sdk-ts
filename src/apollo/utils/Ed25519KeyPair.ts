@@ -24,13 +24,9 @@ export class Ed25519KeyPair extends KeyPair {
 
     const pub = Buffer.from(keyPair.getPublic());
 
-    const privateKey = new Ed25519PrivateKey(
-      Buffer.from(base64url.baseEncode(secret))
-    );
+    const privateKey = new Ed25519PrivateKey(Buffer.from(secret));
 
-    const publicKey = new Ed25519PublicKey(
-      Buffer.from(base64url.baseEncode(pub))
-    );
+    const publicKey = new Ed25519PublicKey(Buffer.from(pub));
 
     return new Ed25519KeyPair(privateKey, publicKey);
   }
