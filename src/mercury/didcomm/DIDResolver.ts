@@ -1,4 +1,9 @@
-import type { DIDResolver, Service, VerificationMethod, DIDDoc } from "didcomm-node";
+import type {
+  DIDResolver,
+  Service,
+  VerificationMethod,
+  DIDDoc,
+} from "didcomm-node";
 
 import * as Domain from "../../domain";
 import Castor from "../../castor/Castor";
@@ -31,8 +36,7 @@ export class DIDCommDIDResolver implements DIDResolver {
               keyAgreements.push(method.id);
               break;
           }
-          //TODO FIX THIS
-          const publicKeyBase64 = (method.publicKeyJwk?.x as any).data;
+          const publicKeyBase64 = method.publicKeyJwk?.x as any;
           const publicKeyKid = (method.publicKeyJwk as any).kid;
           verificationMethods.push({
             controller: method.controller,

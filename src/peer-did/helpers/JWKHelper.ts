@@ -21,10 +21,7 @@ export class JWKHelper {
     if (crv !== "X25519") {
       throw new CastorError.InvalidJWKKeysError();
     }
-    //Assume we get base64 encoded strings, we add the u for base64url encoding
-    return Uint8Array.from(
-      base64url.baseDecode(Buffer.from(xKey.data).toString())
-    );
+    return Uint8Array.from(base64url.baseDecode(Buffer.from(xKey).toString()));
   }
 
   static fromJWKAuthentication(
@@ -36,13 +33,10 @@ export class JWKHelper {
     if (crv !== "Ed25519") {
       throw new CastorError.InvalidJWKKeysError();
     }
-    return Uint8Array.from(
-      base64url.baseDecode(Buffer.from(xKey.data).toString())
-    );
+    return Uint8Array.from(base64url.baseDecode(Buffer.from(xKey).toString()));
   }
 
   static toJWK(publicKey: Uint8Array, material: VerificationMethodTypePeerDID) {
-    const xKeyString = base64url.encode(publicKey);
     let crv: string;
     if (material instanceof VerificationMethodTypeAgreement) {
       crv = "X25519";
@@ -55,9 +49,7 @@ export class JWKHelper {
     return JSON.stringify({
       crv: crv,
       kty: "OKP",
-      x: {
-        data: xKeyString.slice(1),
-      },
+      x: base64url.baseEncode(publicKey),
     });
   }
 }

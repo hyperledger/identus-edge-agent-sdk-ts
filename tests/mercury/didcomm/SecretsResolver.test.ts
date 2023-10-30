@@ -49,7 +49,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
 
     const castor: Pick<Castor, "getEcnumbasis" | "resolveDID"> = {
       getEcnumbasis: (did, publicKey) => `${publicKey.curve}`,
-      resolveDID: async () => ({} as Domain.DIDDocument),
+      resolveDID: async () => ({}) as Domain.DIDDocument,
     };
 
     const pluto: Pick<Pluto, "getAllPeerDIDs"> = {
@@ -127,10 +127,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
         crv: Domain.Curve.X25519,
         kid: "kid",
         kty: "OKP",
-        // TODO: fix when Types are fixed
-        x: {
-          data: Buffer.from(new Uint8Array()).toString(),
-        } as any,
+        x: Buffer.from(new Uint8Array()).toString("base64url"),
       };
       const ecnum = "ecnum123";
       const peerDid = {
@@ -199,7 +196,7 @@ describe("Mercury DIDComm SecretsResolver", () => {
           crv: peerDid.curve,
           kty: "OKP",
           d: privateKey.value.toString(),
-          x: (publicKeyJwk.x as any).data.toString(),
+          x: publicKeyJwk.x as any,
         },
       });
     });

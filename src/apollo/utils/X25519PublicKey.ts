@@ -1,4 +1,5 @@
-import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
+import * as x25519 from "@stablelib/x25519";
+import { base64url } from "multiformats/bases/base64";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 
@@ -6,31 +7,20 @@ import { KeyProperties } from "../../domain/models/KeyProperties";
  * @ignore
  */
 export class X25519PublicKey extends PublicKey {
-  public keySpecification: Map<string, string> = new Map();
-  public raw: Buffer;
-  public size: number;
+  public static ec = x25519;
   public type: KeyTypes = KeyTypes.EC;
+  public keySpecification: Map<string, string> = new Map();
+  public size: number;
+  public raw: Uint8Array;
 
-  constructor(bytes: Int8Array | Uint8Array) {
+  constructor(private nativeValue: Uint8Array) {
     super();
-
-    this.raw = this.getInstance(bytes).raw;
+    this.raw = nativeValue;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.X25519);
   }
 
   getEncoded(): Buffer {
-    return this.getInstance().getEncoded();
-  }
-
-  private getInstance(value?: Int8Array | Uint8Array) {
-    // eslint-disable-next-line no-extra-boolean-cast
-    const bytes = !!value ? Buffer.from(value) : this.raw;
-    const instance =
-      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMX25519PublicKey(
-        Int8Array.from(bytes)
-      );
-
-    return instance;
+    return Buffer.from(base64url.baseEncode(this.nativeValue));
   }
 }

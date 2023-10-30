@@ -32,9 +32,7 @@ describe("PEERDID CreateTest", () => {
     const jwk = {
       crv: "Ed25519",
       kty: "OKP",
-      x: {
-        data: "owBhCbktDjkfS6PdQddT0D3yjSitaSysP3YimJ_YgmA",
-      },
+      x: "owBhCbktDjkfS6PdQddT0D3yjSitaSysP3YimJ_YgmA",
     };
     const jwkJson = JSON.stringify(jwk);
     const result = new VerificationMaterialAuthentication(
@@ -61,13 +59,19 @@ describe("PEERDID CreateTest", () => {
     const keyAgreementPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.Curve25519,
       curve: Curve.X25519,
-      raw: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
+      raw: Buffer.from(
+        "COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE",
+        "base64url"
+      ),
     });
 
     const authenticationPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.EC,
       curve: Curve.ED25519,
-      raw: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
+      raw: Buffer.from(
+        "JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs",
+        "base64url"
+      ),
     });
 
     publicKeys.push(authenticationPrivateKey.publicKey());
@@ -108,13 +112,19 @@ describe("PEERDID CreateTest", () => {
     const keyAgreementPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.Curve25519,
       curve: Curve.X25519,
-      raw: Buffer.from("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
+      raw: Buffer.from(
+        "COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE",
+        "base64url"
+      ),
     });
 
     const authenticationPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.EC,
       curve: Curve.ED25519,
-      raw: Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
+      raw: Buffer.from(
+        "JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs",
+        "base64url"
+      ),
     });
 
     publicKeys.push(keyAgreementPrivateKey.publicKey());

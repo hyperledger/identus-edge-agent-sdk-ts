@@ -249,8 +249,8 @@ function Dids() {
     });
 
     const keyAgreementPrivateKey = apollo.createPrivateKey({
-      type: SDK.Domain.KeyTypes.EC,
-      curve: SDK.Domain.Curve.ED25519,
+      type: SDK.Domain.KeyTypes.Curve25519,
+      curve: SDK.Domain.Curve.X25519,
     });
 
     const peerDID = await castor.createPeerDID(
