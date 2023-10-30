@@ -105,6 +105,9 @@
     "typescript": "^4.9.5",
     "uuid": "^9.0.0"
   },
+  "resolutions": {
+    "anoncreds-node": "link:./anoncreds-rust/node"
+  },
   "jest": {
     "automock": false,
     "moduleFileExtensions": [
