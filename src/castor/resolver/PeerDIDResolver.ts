@@ -54,7 +54,7 @@ export class PeerDIDResolver implements DIDResolver {
     composition.forEach((part) => {
       let decoded: [
         string,
-        VerificationMaterialAuthentication | VerificationMaterialAgreement
+        VerificationMaterialAuthentication | VerificationMaterialAgreement,
       ];
       const type = part.slice(0, 1);
 

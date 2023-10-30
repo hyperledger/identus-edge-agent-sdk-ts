@@ -10,6 +10,7 @@ import Apollo from "../../apollo/Apollo";
 import Castor from "../../castor/Castor";
 import { Pluto } from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
+import { base64url } from "multiformats/bases/base64";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
@@ -59,8 +60,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     return null;
   }
 
-  //TODO: Get rid of this ANY for peerDID pluto should return correct type
-  //TODO: DATA DOES NOT NEED TO EXIST THERE IN JWK
   private mapToSecret(
     peerDid: Domain.PeerDID,
     publicKeyJWK: Domain.PublicKeyJWK
@@ -76,22 +75,23 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       curve: Curve.X25519,
       raw: privateKeyBuffer.value,
     });
+
     const ecnumbasis = this.castor.getEcnumbasis(
       peerDid.did,
       privateKey.publicKey()
     );
     const id = `${peerDid.did.toString()}#${ecnumbasis}`;
+
     const secret: Secret = {
       id,
       type: "JsonWebKey2020",
       privateKeyJwk: {
         crv: Curve.X25519,
         kty: "OKP",
-        d: privateKey.getEncoded().toString(),
-        x: (publicKeyJWK.x as any).data,
+        d: Buffer.from(privateKey.getEncoded()).toString(),
+        x: publicKeyJWK.x,
       },
     };
-
     return secret;
   }
 }

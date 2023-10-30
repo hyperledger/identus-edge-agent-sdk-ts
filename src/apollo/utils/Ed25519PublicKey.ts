@@ -1,46 +1,43 @@
-import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
+import elliptic from "elliptic";
+import { base64url } from "multiformats/bases/base64";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
-
 /**
  * @ignore
  */
 export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
-  public keySpecification: Map<string, string> = new Map();
-  public raw: Buffer;
-  public size: number;
+  public static eddsa = new elliptic.eddsa("ed25519");
+
   public type: KeyTypes = KeyTypes.EC;
+  public keySpecification: Map<string, string> = new Map();
+  public size;
+  public raw: Uint8Array;
 
-  constructor(bytes: Int8Array | Uint8Array) {
+  constructor(nativeValue: Uint8Array) {
     super();
-
-    this.raw = this.getInstance(bytes).raw;
+    this.raw = nativeValue;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
   }
 
-  getEncoded(): Buffer {
-    return this.getInstance().getEncoded();
-  }
-
-  verify(message: Buffer, signature: Buffer) {
-    return this.getInstance().verify(
-      Int8Array.from(message),
-      Int8Array.from(signature)
+  private getInstance(): elliptic.eddsa.KeyPair {
+    return Ed25519PublicKey.eddsa.keyFromPublic(
+      Array.from(this.raw) as unknown as Buffer
     );
   }
 
-  private getInstance(
-    value?: Int8Array | Uint8Array
-  ): ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey {
-    // eslint-disable-next-line no-extra-boolean-cast
-    const bytes = !!value ? Buffer.from(value) : this.raw;
-    const instance =
-      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey(
-        Int8Array.from(bytes)
-      );
+  getEncoded(): Buffer {
+    return Buffer.from(base64url.baseEncode(this.getInstance().getPublic()));
+  }
 
-    return instance;
+  verify(message: Buffer, signature: Buffer) {
+    //TODO: Report a bug in elliptic, this method is not expecting a Buffer (bytes)
+    //Internally it expects to find an array, if not Buffer.slice.concat fails when Array.slice.concat doesn't
+    //Must keep this...
+    return this.getInstance().verify(
+      message,
+      Array.from(signature) as unknown as Buffer
+    );
   }
 }

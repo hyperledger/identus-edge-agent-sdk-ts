@@ -93,7 +93,6 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
     publicKeys.push(keyAgreementPrivateKey.publicKey());
     publicKeys.push(authenticationPrivateKey.publicKey());
-
     const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
 
     if (

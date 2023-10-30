@@ -1,10 +1,6 @@
 import * as base64 from "multiformats/bases/base64";
 
-import {
-  Curve,
-  DID,
-  Service as DIDDocumentService,
-} from "../domain/models";
+import { Curve, DID, Service as DIDDocumentService } from "../domain/models";
 
 import { CastorError } from "../domain/models/Errors";
 import { JWKHelper, VerificationMaterial } from "./helpers/JWKHelper";
@@ -215,10 +211,11 @@ export class PeerDIDCreate {
     if (!curve) {
       throw new CastorError.InvalidKeyError();
     }
-    return {
+    const octet: OctetPublicKey = {
       crv: curve,
       kty: "OKP",
-      x: publicKey.getEncoded(),
+      x: Buffer.from(publicKey.getEncoded()).toString(),
     };
+    return octet;
   }
 }
