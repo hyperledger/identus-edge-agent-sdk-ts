@@ -10,7 +10,7 @@ import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
-import { PlutoInMemory } from "./PlutoInMemory";
+import { PlutoInMemory } from "../../pluto/PlutoInMemory";
 
 const BasicMessage = SDK.BasicMessage;
 const ListenerKey = SDK.ListenerKey;

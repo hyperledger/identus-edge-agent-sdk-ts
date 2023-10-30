@@ -1,25 +1,24 @@
-import * as Domain from "../../src/domain";
-import { Anoncreds } from "../../src/domain/models/Anoncreds";
+import * as SDK from "../../";
 
 interface DIDRecord {
-  did: Domain.DID;
+  did: SDK.Domain.DID;
   alias?: string;
 }
 interface KeyRecord {
-  did: Domain.DID;
+  did: SDK.Domain.DID;
   keyPathIndex?: number;
-  privateKey: Domain.PrivateKey;
+  privateKey: SDK.Domain.PrivateKey;
   privateKeyMetaId?: string;
 }
-type DIDPairRecord = Domain.DIDPair;
+type DIDPairRecord = SDK.Domain.DIDPair;
 interface MessageRecord {
   sourceType: "sent" | "received";
-  message: Domain.Message;
+  message: SDK.Domain.Message;
 }
-type MediatorRecord = Domain.Mediator;
-type CredentialRecord = Domain.Credential;
+type MediatorRecord = SDK.Domain.Mediator;
+type CredentialRecord = SDK.Domain.Credential;
 
-export class PlutoInMemory implements Domain.Pluto {
+export class PlutoInMemory implements SDK.Domain.Pluto {
   _didStorage: Record<string, DIDRecord> = {};
   _keyStorage: Record<string, Array<KeyRecord>> = {};
   _didPairStorage: Array<DIDPairRecord> = [];
@@ -27,7 +26,7 @@ export class PlutoInMemory implements Domain.Pluto {
   _mediatorStorage: Array<MediatorRecord> = [];
   _credentialStorage: Array<CredentialRecord> = [];
   _linkSecrets: Record<string, string> = {};
-  _requestMetadata: Record<string, Anoncreds.CredentialRequestMeta> = {};
+  _requestMetadata: Record<string, SDK.Domain.Anoncreds.CredentialRequestMeta> = {};
 
   /**
    * no async setup for in-memory implementation
@@ -44,9 +43,9 @@ export class PlutoInMemory implements Domain.Pluto {
   }
 
   async storePrismDID(
-    did: Domain.DID,
+    did: SDK.Domain.DID,
     keyPathIndex: number,
-    privateKey: Domain.PrivateKey,
+    privateKey: SDK.Domain.PrivateKey,
     privateKeyMetaId: string | null,
     alias?: string
   ) {
@@ -63,7 +62,7 @@ export class PlutoInMemory implements Domain.Pluto {
     };
   }
 
-  async storePeerDID(did: Domain.DID, privateKeys: Array<Domain.PrivateKey>) {
+  async storePeerDID(did: SDK.Domain.DID, privateKeys: Array<SDK.Domain.PrivateKey>) {
     const didStr = did.toString();
     this._keyStorage[didStr] = privateKeys.map((privateKey) => ({
       did,
@@ -77,27 +76,27 @@ export class PlutoInMemory implements Domain.Pluto {
     };
   }
 
-  async storeDIDPair(host: Domain.DID, receiver: Domain.DID, name: string) {
+  async storeDIDPair(host: SDK.Domain.DID, receiver: SDK.Domain.DID, name: string) {
     this._didPairStorage.push({ host, receiver, name });
   }
 
-  async storeMessage(message: Domain.Message) {
+  async storeMessage(message: SDK.Domain.Message) {
     this._messageStorage.push({
       message,
       sourceType:
-        message.direction === Domain.MessageDirection.SENT
+        message.direction === SDK.Domain.MessageDirection.SENT
           ? "sent"
           : "received",
     });
   }
 
-  async storeMessages(messages: Array<Domain.Message>) {
+  async storeMessages(messages: Array<SDK.Domain.Message>) {
     messages.forEach((message) => this.storeMessage(message));
   }
 
   async storePrivateKeys(
-    privateKey: Domain.PrivateKey,
-    did: Domain.DID,
+    privateKey: SDK.Domain.PrivateKey,
+    did: SDK.Domain.DID,
     keyPathIndex: number,
     metaId: string | null
   ) {
@@ -116,9 +115,9 @@ export class PlutoInMemory implements Domain.Pluto {
   }
 
   async storeMediator(
-    mediator: Domain.DID,
-    host: Domain.DID,
-    routing: Domain.DID
+    mediator: SDK.Domain.DID,
+    host: SDK.Domain.DID,
+    routing: SDK.Domain.DID
   ) {
     this._mediatorStorage.push({
       mediatorDID: mediator,
@@ -127,16 +126,16 @@ export class PlutoInMemory implements Domain.Pluto {
     });
   }
 
-  async storeCredential(credential: Domain.Credential) {
+  async storeCredential(credential: SDK.Domain.Credential) {
     this._credentialStorage.push(credential);
   }
 
-  async getAllPrismDIDs(): Promise<Domain.PrismDIDInfo[]> {
+  async getAllPrismDIDs(): Promise<SDK.Domain.PrismDIDInfo[]> {
     return Object.values(this._didStorage)
       .filter((didRecord) => didRecord.did.method === "prism")
       .map((didRecord) => {
         const keyRecord = this._keyStorage[didRecord.did.toString()][0];
-        return new Domain.PrismDIDInfo(
+        return new SDK.Domain.PrismDIDInfo(
           didRecord.did,
           keyRecord.keyPathIndex || 0,
           didRecord.alias
@@ -144,7 +143,7 @@ export class PlutoInMemory implements Domain.Pluto {
       });
   }
 
-  async getDIDInfoByDID(did: Domain.DID): Promise<Domain.PrismDIDInfo | null> {
+  async getDIDInfoByDID(did: SDK.Domain.DID): Promise<SDK.Domain.PrismDIDInfo | null> {
     const didRecord = this._didStorage[did.toString()];
 
     if (!didRecord) {
@@ -152,19 +151,19 @@ export class PlutoInMemory implements Domain.Pluto {
     }
 
     const keyRecord = this._keyStorage[didRecord.did.toString()][0];
-    return new Domain.PrismDIDInfo(
+    return new SDK.Domain.PrismDIDInfo(
       didRecord.did,
       keyRecord.keyPathIndex || 0,
       didRecord.alias
     );
   }
 
-  async getDIDInfoByAlias(alias: string): Promise<Domain.PrismDIDInfo[]> {
+  async getDIDInfoByAlias(alias: string): Promise<SDK.Domain.PrismDIDInfo[]> {
     return Object.values(this._didStorage)
       .filter((didRecord) => didRecord.alias === alias)
       .map((didRecord) => {
         const keyRecord = this._keyStorage[didRecord.did.toString()][0];
-        return new Domain.PrismDIDInfo(
+        return new SDK.Domain.PrismDIDInfo(
           didRecord.did,
           keyRecord.keyPathIndex || 0,
           didRecord.alias
@@ -172,7 +171,7 @@ export class PlutoInMemory implements Domain.Pluto {
       });
   }
 
-  async getPrismDIDKeyPathIndex(did: Domain.DID): Promise<number | null> {
+  async getPrismDIDKeyPathIndex(did: SDK.Domain.DID): Promise<number | null> {
     const didRecord = this._didStorage[did.toString()];
 
     if (!didRecord) {
@@ -205,19 +204,19 @@ export class PlutoInMemory implements Domain.Pluto {
       const keyRecords = this._keyStorage[didRecord.did.toString()];
 
       const privateKeysForPeerDID = keyRecords.map((key) => ({
-        keyCurve: Domain.getKeyCurveByNameAndIndex(
+        keyCurve: SDK.Domain.getKeyCurveByNameAndIndex(
           key.privateKey.curve,
           key.keyPathIndex
         ),
         value: key.privateKey.value,
       }));
 
-      return new Domain.PeerDID(didRecord.did, privateKeysForPeerDID);
+      return new SDK.Domain.PeerDID(didRecord.did, privateKeysForPeerDID);
     });
 
     return allPeerDIDsWithKeys;
   }
-  async getDIDPrivateKeysByDID(did: Domain.DID) {
+  async getDIDPrivateKeysByDID(did: SDK.Domain.DID) {
     const didStr = did.toString();
     const keyRecords = this._keyStorage[didStr];
 
@@ -228,7 +227,7 @@ export class PlutoInMemory implements Domain.Pluto {
     return keyRecords.map((keyRecord) => keyRecord.privateKey);
   }
 
-  async getDIDPrivateKeyByID(id: string): Promise<Domain.PrivateKey | null> {
+  async getDIDPrivateKeyByID(id: string): Promise<SDK.Domain.PrivateKey | null> {
     // TODO: it seems it's not used anywhere
     const allKeys = Object.values(this._keyStorage).flat();
     const keyRecord = allKeys.find(
@@ -243,7 +242,7 @@ export class PlutoInMemory implements Domain.Pluto {
     return this._didPairStorage;
   }
 
-  async getPairByDID(did: Domain.DID): Promise<Domain.DIDPair | null> {
+  async getPairByDID(did: SDK.Domain.DID): Promise<SDK.Domain.DIDPair | null> {
     return (
       this._didPairStorage.find(
         (pair) => pair.host.toString() === did.toString()
@@ -259,7 +258,7 @@ export class PlutoInMemory implements Domain.Pluto {
     return this._messageStorage.map((messageRecord) => messageRecord.message);
   }
 
-  async getAllMessagesByDID(did: Domain.DID): Promise<Array<Domain.Message>> {
+  async getAllMessagesByDID(did: SDK.Domain.DID): Promise<Array<SDK.Domain.Message>> {
     // get all messages where either from or to is equal did
     return this._messageStorage
       .filter(
@@ -276,13 +275,13 @@ export class PlutoInMemory implements Domain.Pluto {
       .map((messageRecord) => messageRecord.message);
   }
 
-  async getAllMessagesReceived(): Promise<Array<Domain.Message>> {
+  async getAllMessagesReceived(): Promise<Array<SDK.Domain.Message>> {
     return this._messageStorage
       .filter((messageRecord) => messageRecord.sourceType === "received")
       .map((messageRecord) => messageRecord.message);
   }
 
-  async getAllMessagesSentTo(did: Domain.DID) {
+  async getAllMessagesSentTo(did: SDK.Domain.DID) {
     return this._messageStorage
       .filter(
         (messageRecord) =>
@@ -291,7 +290,7 @@ export class PlutoInMemory implements Domain.Pluto {
       .map((messageRecord) => messageRecord.message);
   }
 
-  async getAllMessagesReceivedFrom(did: Domain.DID) {
+  async getAllMessagesReceivedFrom(did: SDK.Domain.DID) {
     return this._messageStorage
       .filter(
         (messageRecord) =>
@@ -302,24 +301,24 @@ export class PlutoInMemory implements Domain.Pluto {
 
   async getAllMessagesOfType(
     type: string,
-    relatedWithDID?: Domain.DID
-  ): Promise<Array<Domain.Message>> {
+    relatedWithDID?: SDK.Domain.DID
+  ): Promise<Array<SDK.Domain.Message>> {
     return this._messageStorage
       .filter(
         (messageRecord) =>
           messageRecord.message.piuri === type &&
           (!relatedWithDID ||
             messageRecord.message.from?.toString() ===
-              relatedWithDID.toString() ||
+            relatedWithDID.toString() ||
             messageRecord.message.to?.toString() === relatedWithDID.toString())
       )
       .map((messageRecord) => messageRecord.message);
   }
 
   async getAllMessagesByFromToDID(
-    from: Domain.DID,
-    to: Domain.DID
-  ): Promise<Array<Domain.Message>> {
+    from: SDK.Domain.DID,
+    to: SDK.Domain.DID
+  ): Promise<Array<SDK.Domain.Message>> {
     return this._messageStorage
       .filter(
         (messageRecord) =>
@@ -329,7 +328,7 @@ export class PlutoInMemory implements Domain.Pluto {
       .map((messageRecord) => messageRecord.message);
   }
 
-  async getMessage(id: string): Promise<Domain.Message | null> {
+  async getMessage(id: string): Promise<SDK.Domain.Message | null> {
     const messageRecord = this._messageStorage.find(
       (messageRecord) => messageRecord.message.id === id
     );
@@ -341,23 +340,23 @@ export class PlutoInMemory implements Domain.Pluto {
     return messageRecord.message;
   }
 
-  async getAllMediators(): Promise<Array<Domain.Mediator>> {
+  async getAllMediators(): Promise<Array<SDK.Domain.Mediator>> {
     return this._mediatorStorage;
   }
 
-  async getAllCredentials(): Promise<Array<Domain.Credential>> {
+  async getAllCredentials(): Promise<Array<SDK.Domain.Credential>> {
     return this._credentialStorage;
   }
 
   async storeCredentialMetadata(
-    metadata: Anoncreds.CredentialRequestMeta
+    metadata: SDK.Domain.Anoncreds.CredentialRequestMeta
   ): Promise<void> {
     this._requestMetadata[metadata.link_secret_name] = metadata;
   }
 
   async fetchCredentialMetadata(
     linkSecretName: string
-  ): Promise<Anoncreds.CredentialRequestMeta | null> {
+  ): Promise<SDK.Domain.Anoncreds.CredentialRequestMeta | null> {
     return this._requestMetadata[linkSecretName];
   }
 

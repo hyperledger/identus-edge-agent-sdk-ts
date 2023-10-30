@@ -4,8 +4,17 @@ const path = require("path");
 module.exports = {
   webpack: {
     configure: (webpackConfig) => {
-      webpackConfig.resolve.extensions.push(".wasm"); // To resolve .wasm extensions
+      // Pluto - include not src file
+      const moduleScopePlugin = webpackConfig.resolve.plugins.find(({ constructor }) => constructor?.name === "ModuleScopePlugin");
+      const demosPath = path.resolve(__dirname, "../");
+      moduleScopePlugin.appSrcs = [demosPath];
+      const oneOfRule = webpackConfig.module.rules.find(x => x.oneOf);
+      const tsxRule = oneOfRule.oneOf.find(x => x.test && x.test.toString().includes("tsx"));
+      const plutoPath = `${demosPath}/pluto/`;
+      tsxRule.include = [tsxRule.include, plutoPath];
 
+      // Wasms - copy to public
+      webpackConfig.resolve.extensions.push(".wasm");
       webpackConfig.plugins = [
         new CopyPlugin({
           patterns: [
@@ -22,6 +31,7 @@ module.exports = {
         }),
         ...(webpackConfig.plugins || []),
       ];
+
       webpackConfig.resolve.fallback = {
         fs: false,
         crypto: false,
