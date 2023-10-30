@@ -10,10 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@input-output-hk/atala-prism-wallet-sdk": "file:../..",
-    "prettier": "^3.0.2",
-    "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.1.6",
-    "typeorm": "^0.3.17"
+    "prettier": "^3.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.5.6",

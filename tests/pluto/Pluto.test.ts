@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { PlutoInMemory } from "./PlutoInMemory";
+import { PlutoInMemory } from "../../demos/pluto/PlutoInMemory";
 import { DID, PrivateKey } from "../../src/domain";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";
@@ -9,22 +9,11 @@ import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 
-enum PlutoTypes {
-  "inMemory" = "in-memory",
-}
-
-const PlutoImplementations = [PlutoTypes.inMemory];
-
-describe.each(PlutoImplementations)("Pluto", (plutoType: PlutoTypes) => {
+describe("Pluto", () => {
   let instance: any;
 
   beforeEach(async () => {
-    if (plutoType === "in-memory") {
-      instance = new PlutoInMemory();
-    } else {
-      throw new Error(`Unknown pluto type: ${plutoType}`);
-    }
-
+    instance = new PlutoInMemory();
     await instance.start();
   });
 
