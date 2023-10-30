@@ -3,8 +3,9 @@ import { Actor, Cast, TakeNotes, actorCalled, engage } from "@serenity-js/core"
 import { CallAnApi } from "@serenity-js/rest"
 import { EnvironmentVariables } from "../EnvironmentVariables"
 import axios from "axios"
-<<<<<<< HEAD:integration-tests/e2e-tests/tests/sdk/steps/lifecycle.steps.ts
 import { Utils } from "../../Utils"
+import {WalletSdk} from "../WalletSdk"
+import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
 
 import nodeCrypto from "crypto";
 
@@ -13,12 +14,6 @@ Object.defineProperty(globalThis, "crypto", {
     getRandomValues: (arr:any) => nodeCrypto.getRandomValues(arr),
   },
 });
-
-=======
-import {Utils} from "../../Utils"
-import {WalletSdk} from "../WalletSdk"
-import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
->>>>>>> 0d64801a (test: refactor and add new scenarios):integration-tests/e2e-tests/tests/sdk/steps/LifecycleSteps.ts
 
 export const axiosInstance = axios.create({
   baseURL: EnvironmentVariables.agentUrl,
@@ -30,13 +25,8 @@ export const axiosInstance = axios.create({
 })
 
 BeforeAll(async() => {
-<<<<<<< HEAD:integration-tests/e2e-tests/tests/sdk/steps/lifecycle.steps.ts
-  Utils.clearNotes()
-  await PrismAgentWorkflow.prepare()
-=======
   Utils.prepareNotes()
   await CloudAgentConfiguration.prepare()
->>>>>>> 0d64801a (test: refactor and add new scenarios):integration-tests/e2e-tests/tests/sdk/steps/LifecycleSteps.ts
 })
 
 Before(async() => {
