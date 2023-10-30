@@ -326,49 +326,6 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.1.tgz#e5211452df060fa8522b55c7b3c0c4d1981cb044"
   integrity sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==
 
-"@input-output-hk/apollo@^1.0.2":
-  version "1.0.2"
-  resolved "https://npm.pkg.github.com/download/@input-output-hk/apollo/1.0.2/565875139fafe573d088c069af85485bd5ebc49f#565875139fafe573d088c069af85485bd5ebc49f"
-  integrity sha512-uqZ4aF56Yj/WS6RjIOAD+5RXw4corIFWT+G2CyNjYsfKSsx6JOLGtiU+imJ6sXnxwINTv6+4Un6krPRxV6dogg==
-  dependencies:
-    "@noble/curves" "1.2.0"
-    "@stablelib/x25519" "1.0.3"
-    "@types/elliptic" "6.4.14"
-    buffer "6.0.3"
-    elliptic "6.5.4"
-    stream-browserify "3.0.0"
-
-"@input-output-hk/atala-prism-wallet-sdk@../../input-output-hk-atala-prism-wallet-sdk-2.4.1.tgz":
-  version "2.4.1"
-  resolved "../../input-output-hk-atala-prism-wallet-sdk-2.4.1.tgz#994df4b3f556bd821821bfa6c7c2017c9822b5e5"
-  dependencies:
-    "@input-output-hk/apollo" "^1.0.2"
-    "@scure/bip32" "^1.3.0"
-    "@scure/bip39" "^1.1.1"
-    "@stablelib/base64" "^1.0.1"
-    "@stablelib/sha256" "^1.0.1"
-    "@stablelib/uuid" "^1.0.2"
-    "@stablelib/wipe" "^1.0.1"
-    "@stablelib/x25519" "^1.0.3"
-    anoncreds-node "file:../../../../../Library/Caches/Yarn/v6/.tmp/d5a1de27b29e43f5bf63cccbe6795da6/anoncreds-rust/node"
-    antlr4ts "^0.5.0-alpha.4"
-    assert "^2.0.0"
-    axios "^1.3.4"
-    bn.js "^5.2.1"
-    buffer "^6.0.3"
-    did-jwt "^6.11.5"
-    did-resolver "^4.1.0"
-    didcomm-node "^0.4.1"
-    elliptic "^6.5.4"
-    get-func-name "^3.0.0"
-    google-protobuf "^3.21.2"
-    hash.js "1.1.7"
-    jose "^4.12.2"
-    jsonwebtoken "^9.0.0"
-    multiformats "^9.9.0"
-    sqlite3 "^5.1.6"
-    util "^0.12.5"
-
 "@input-output-hk/atala-prism-wallet-sdk@^2.4.1":
   version "2.4.1"
   resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/2.4.1/f062c209abefa00973b923c85918b1c5e104f610#f062c209abefa00973b923c85918b1c5e104f610"
@@ -491,12 +448,19 @@
     tar "^6.1.11"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> d533ff20 (test: refactor and add new scenarios)
 "@noble/curves@~1.2.0":
 =======
 "@noble/curves@1.2.0", "@noble/curves@~1.2.0":
 >>>>>>> e2e6bed7 (fix: rebase issues)
+<<<<<<< HEAD
 >>>>>>> aba32e70 (fix: rebase issues)
+=======
+=======
+"@noble/curves@~1.2.0":
+>>>>>>> c688c048 (fix: changes)
+>>>>>>> 18650be9 (fix: changes)
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.2.0.tgz#92d7e12e4e49b23105a2555c6984d41733d65c35"
   integrity sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==
@@ -779,10 +743,14 @@
   integrity sha512-WfqfX/eXGiAd3RJe4VU2snh/ZPwtSjLG4ynQ/vYzvghTh7dHFcI1wl+nrkWG6lGhukOxOsUHfv8dUXr58D0ayg==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@stablelib/x25519@^1.0.2", "@stablelib/x25519@^1.0.3":
 =======
 "@stablelib/x25519@1.0.3", "@stablelib/x25519@^1.0.2", "@stablelib/x25519@^1.0.3":
 >>>>>>> aba32e70 (fix: rebase issues)
+=======
+"@stablelib/x25519@^1.0.2", "@stablelib/x25519@^1.0.3":
+>>>>>>> 18650be9 (fix: changes)
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@stablelib/x25519/-/x25519-1.0.3.tgz#13c8174f774ea9f3e5e42213cbf9fc68a3c7b7fd"
   integrity sha512-KnTbKmUhPhHavzobclVJQG5kuivH+qDLpe84iRqX3CLrKp881cF160JvXJ+hjn1aMyCwYOKeIZefIH/P5cJoRw==
@@ -847,6 +815,7 @@
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@types/node@^20.4.7":
 =======
 "@types/bn.js@*":
@@ -863,6 +832,8 @@
   dependencies:
     "@types/bn.js" "*"
 
+=======
+>>>>>>> 18650be9 (fix: changes)
 "@types/json-schema@^7.0.12":
   version "7.0.14"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.14.tgz#74a97a5573980802f32c8e47b663530ab3b6b7d1"
@@ -888,8 +859,12 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.4.tgz#81f886786411c45bba3f33e781ab48bd56bfca2e"
   integrity sha512-Kfe/D3hxHTusnPNRbycJE1N77WHDsdS4AjUYIzlDzhDrS47NrwuL3YW4VITxwR7KCVpzwgy4Rbj829KSSQmwXQ==
 
+<<<<<<< HEAD
 "@types/node@*", "@types/node@^20.4.7":
 >>>>>>> aba32e70 (fix: rebase issues)
+=======
+"@types/node@^20.4.7":
+>>>>>>> 18650be9 (fix: changes)
   version "20.8.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.8.9.tgz#646390b4fab269abce59c308fc286dcd818a2b08"
   integrity sha512-UzykFsT3FhHb1h7yD4CA4YhBHq545JC0YnEz41xkipN88eKQtL6rSgocL5tbAP6Ola9Izm/Aw4Ora8He4x0BHg==
@@ -1158,9 +1133,6 @@ ajv@^6.12.4:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
-
-"anoncreds-node@file:../../../../../Library/Caches/Yarn/v6/.tmp/d5a1de27b29e43f5bf63cccbe6795da6/anoncreds-rust/node":
-  version "0.1.0-dev.16"
 
 ansi-align@^3.0.0:
   version "3.0.1"
@@ -1464,6 +1436,7 @@ buffer-from@^1.0.0:
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 buffer@^6.0.3:
 =======
 buffer@6.0.3, buffer@^6.0.3:
@@ -1478,6 +1451,8 @@ buffer@6.0.3, buffer@^6.0.3:
 <<<<<<< HEAD
 builtins@^5.0.0:
 =======
+=======
+>>>>>>> 18650be9 (fix: changes)
 buffer@^5.5.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
@@ -1485,6 +1460,14 @@ buffer@^5.5.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
+
+buffer@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
+  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
+  dependencies:
+    base64-js "^1.3.1"
+    ieee754 "^1.2.1"
 
 builtins@^5.0.0, builtins@^5.0.1:
 >>>>>>> aba32e70 (fix: rebase issues)
@@ -2109,10 +2092,14 @@ ecdsa-sig-formatter@1.0.11:
     safe-buffer "^5.0.1"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 elliptic@^6.5.4:
 =======
 elliptic@6.5.4, elliptic@^6.5.4:
 >>>>>>> aba32e70 (fix: rebase issues)
+=======
+elliptic@^6.5.4:
+>>>>>>> 18650be9 (fix: changes)
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.4.tgz#da37cebd31e79a1367e941b592ed1fbebd58abbb"
   integrity sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==
@@ -2742,6 +2729,7 @@ get-intrinsic@^1.1.3, get-intrinsic@^1.2.1, get-intrinsic@^1.2.2:
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 get-intrinsic@^1.1.3, get-intrinsic@^1.2.1, get-intrinsic@^1.2.2:
 =======
 =======
@@ -2751,6 +2739,8 @@ get-func-name@^3.0.0:
   integrity sha512-6lB4zp64YzgT5KVoAuY0vBXQXNObRmelzfVCpx2dHkGVskX8WwjxTVd/kGUsVzxuOpSEF9BcD54ChSKMVjSsfQ==
 
 >>>>>>> e2e6bed7 (fix: rebase issues)
+=======
+>>>>>>> c688c048 (fix: changes)
 get-intrinsic@^1.0.2, get-intrinsic@^1.1.1, get-intrinsic@^1.1.3, get-intrinsic@^1.2.0, get-intrinsic@^1.2.1, get-intrinsic@^1.2.2:
 >>>>>>> d533ff20 (test: refactor and add new scenarios)
 >>>>>>> aba32e70 (fix: rebase issues)
@@ -3229,10 +3219,14 @@ inflight@^1.0.4:
     wrappy "1"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 inherits@2, inherits@^2.0.3, inherits@^2.0.4:
 =======
 inherits@2, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.4:
 >>>>>>> aba32e70 (fix: rebase issues)
+=======
+inherits@2, inherits@^2.0.3, inherits@^2.0.4:
+>>>>>>> 18650be9 (fix: changes)
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
@@ -4752,7 +4746,7 @@ read-pkg@^5.2.0:
     parse-json "^5.0.0"
     type-fest "^0.6.0"
 
-readable-stream@^3.4.0, readable-stream@^3.5.0, readable-stream@^3.6.0:
+readable-stream@^3.4.0, readable-stream@^3.6.0:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.2.tgz#56a9b36ea965c00c5a93ef31eb111a0f11056967"
   integrity sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==
@@ -5247,6 +5241,7 @@ stackframe@^1.1.1, stackframe@^1.3.4:
   integrity sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 stream-browserify@3.0.0:
   version "3.0.0"
@@ -5257,6 +5252,8 @@ stream-browserify@3.0.0:
     readable-stream "^3.5.0"
 
 >>>>>>> aba32e70 (fix: rebase issues)
+=======
+>>>>>>> 18650be9 (fix: changes)
 string-argv@^0.3.1:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/string-argv/-/string-argv-0.3.2.tgz#2b6d0ef24b656274d957d54e0a4bbf6153dc02b6"
