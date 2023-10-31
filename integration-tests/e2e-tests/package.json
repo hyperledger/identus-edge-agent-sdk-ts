@@ -21,7 +21,7 @@
   "homepage": "https://github.com/amagyar-iohk/atala-prism-wallet-sdk-ts-e2e#readme",
   "dependencies": {
     "@cucumber/cucumber": "^9.6.0",
-    "@input-output-hk/atala-prism-wallet-sdk": "^2.4.1",
+    "@input-output-hk/atala-prism-wallet-sdk": "^2.5.0",
     "@input-output-hk/prism-typescript-client": "^1.9.2",
     "@serenity-js/assertions": "^3.12.0",
     "@serenity-js/console-reporter": "^3.12.0",
