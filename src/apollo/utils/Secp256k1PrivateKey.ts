@@ -4,10 +4,15 @@ import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { ApolloError } from "../../domain/models/Errors";
 import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
-import { Curve, KeyTypes, PrivateKey } from "../../domain";
+import { Curve, DerivableKey, KeyTypes, PrivateKey } from "../../domain";
 
 import * as ApolloPKG from "@input-output-hk/apollo";
+import { DerivationPath } from "./derivation/DerivationPath";
 
+const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
+
+const HDKey = ApolloSDK.derivation.HDKey;
+const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 const {
   io: {
     iohk: {
@@ -21,7 +26,10 @@ const {
 /**
  * @ignore
  */
-export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
+export class Secp256k1PrivateKey
+  extends PrivateKey
+  implements SignableKey, DerivableKey
+{
   public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
   public raw: Uint8Array;
@@ -42,6 +50,37 @@ export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
     this.keySpecification.set(KeyProperties.curve, Curve.SECP256K1);
     this.raw = nativeValue;
     this.size = this.raw.length;
+  }
+
+  derive(derivationPath: DerivationPath): PrivateKey {
+    const seedHex = this.getProperty(KeyProperties.seed);
+
+    if (!seedHex) {
+      throw new Error("Seed not found");
+    }
+
+    const seed = Buffer.from(seedHex, "hex");
+    const derivationPathStr = derivationPath.toString();
+
+    const newExtendedKey = HDKey.InitFromSeed(
+      Int8Array.from(seed),
+      0,
+      BigIntegerWrapper.initFromInt(0)
+    ).derive(derivationPathStr);
+
+    const newExtendedPrivateKey = new Secp256k1PrivateKey(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      Uint8Array.from(newExtendedKey.privateKey!)
+    );
+
+    newExtendedPrivateKey.keySpecification.set(KeyProperties.seed, seedHex);
+    newExtendedPrivateKey.keySpecification.set(
+      KeyProperties.derivationPath,
+      Buffer.from(derivationPathStr).toString("hex")
+    );
+    newExtendedPrivateKey.keySpecification.set(KeyProperties.index, "0");
+
+    return newExtendedPrivateKey;
   }
 
   publicKey() {

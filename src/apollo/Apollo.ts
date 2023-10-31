@@ -304,6 +304,13 @@ export default class Apollo implements ApolloInterface {
           Uint8Array.from(newExtendedKey.privateKey!)
         );
 
+        newExtendedPrivateKey.keySpecification.set(KeyProperties.seed, seedStr);
+        newExtendedPrivateKey.keySpecification.set(
+          KeyProperties.derivationPath,
+          derivationPathStr
+        );
+        newExtendedPrivateKey.keySpecification.set(KeyProperties.index, "0");
+
         return newExtendedPrivateKey;
       }
     }
