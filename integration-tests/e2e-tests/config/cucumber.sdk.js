@@ -1,6 +1,5 @@
 module.exports = {
   default: [
-    "--publish-quiet",
     "--format '@serenity-js/cucumber'",
     "--require=tests/sdk/steps/**/*.ts",
     "--require=config/serenity.config.ts",
