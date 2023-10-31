@@ -20,7 +20,7 @@ export class CloudAgentWorkflow {
     const createConnection = new CreateConnectionRequest()
     createConnection.label = "Alice"
     await cloudAgent.attemptsTo(
-      Send.a(PostRequest.to("/connections").with(createConnection)),
+      Send.a(PostRequest.to("connections").with(createConnection)),
       Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
       Notepad.notes().set(
         "invitation",
@@ -43,7 +43,7 @@ export class CloudAgentWorkflow {
     )
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
-        Questions.httpGet(`/connections/${connectionId}`),
+        Questions.httpGet(`connections/${connectionId}`),
         Expectations.propertyValueToBe("state", state)
       )
     )
@@ -52,7 +52,7 @@ export class CloudAgentWorkflow {
   static async verifyCredentialState(cloudAgent: Actor, recordId: string, state: string) {
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
-        Questions.httpGet(`/issue-credentials/records/${recordId}`),
+        Questions.httpGet(`issue-credentials/records/${recordId}`),
         Expectations.propertyValueToBe("protocolState", state)
       )
     )
@@ -64,7 +64,7 @@ export class CloudAgentWorkflow {
     )
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
-        Questions.httpGet(`/present-proof/presentations/${presentationId}`),
+        Questions.httpGet(`present-proof/presentations/${presentationId}`),
         Expectations.propertyValueToBe("status", state)
       )
     )
@@ -84,7 +84,7 @@ export class CloudAgentWorkflow {
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("/issue-credentials/credential-offers").with(credential)
+        PostRequest.to("issue-credentials/credential-offers").with(credential)
       )
     )
     await cloudAgent.attemptsTo(
@@ -109,7 +109,7 @@ export class CloudAgentWorkflow {
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("/present-proof/presentations").with(presentProofRequest)
+        PostRequest.to("present-proof/presentations").with(presentProofRequest)
       ),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
     )

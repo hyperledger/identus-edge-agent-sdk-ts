@@ -45,7 +45,7 @@ export class CloudAgentConfiguration {
   static async preparePublishedDid() {
     try {
       await axiosInstance.get(
-        `${EnvironmentVariables.agentUrl}/did-registrar/dids/${EnvironmentVariables.publishedDid}`
+        `/did-registrar/dids/${EnvironmentVariables.publishedDid}`
       )
       this.publishedDid = EnvironmentVariables.publishedDid
       return
@@ -65,13 +65,13 @@ export class CloudAgentConfiguration {
     creationData.documentTemplate.services = []
 
     const creationResponse = await axiosInstance.post(
-      `${EnvironmentVariables.agentUrl}/did-registrar/dids`,
+      "/did-registrar/dids",
       creationData
     )
     const longFormDid = creationResponse.data.longFormDid
 
     const publicationResponse = await axiosInstance.post(
-      `${EnvironmentVariables.agentUrl}/did-registrar/dids/${longFormDid}/publications`
+      `/did-registrar/dids/${longFormDid}/publications`
     )
     const shortFormDid = publicationResponse.data.scheduledOperation.didRef
 
@@ -87,7 +87,7 @@ export class CloudAgentConfiguration {
       }
       const interval = setInterval(async () => {
         const didResponse = await axiosInstance.get(
-          `${EnvironmentVariables.agentUrl}/did-registrar/dids/${shortFormDid}`
+          `/did-registrar/dids/${shortFormDid}`
         )
         if (didResponse.data.status == "PUBLISHED") {
           clearInterval(interval)
@@ -104,7 +104,7 @@ export class CloudAgentConfiguration {
   static async prepareSchema() {
     try {
       await axiosInstance.get(
-        `${EnvironmentVariables.agentUrl}/schema-registry/schemas/${EnvironmentVariables.schemaId}`
+        `/schema-registry/schemas/${EnvironmentVariables.schemaId}`
       )
       this.schemaId = EnvironmentVariables.schemaId
       return
@@ -139,7 +139,7 @@ export class CloudAgentConfiguration {
     credentialSchemaInput.version = "0.0.1"
 
     const schemaResponse = await axiosInstance.post(
-      `${EnvironmentVariables.agentUrl}/schema-registry/schemas`,
+      "/schema-registry/schemas",
       credentialSchemaInput
     )
 

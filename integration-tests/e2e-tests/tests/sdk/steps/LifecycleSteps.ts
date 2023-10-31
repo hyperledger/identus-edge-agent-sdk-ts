@@ -1,19 +1,19 @@
-import { Before, BeforeAll } from "@cucumber/cucumber"
-import { Actor, Cast, TakeNotes, actorCalled, engage } from "@serenity-js/core"
-import { CallAnApi } from "@serenity-js/rest"
-import { EnvironmentVariables } from "../EnvironmentVariables"
+import {Before, BeforeAll} from "@cucumber/cucumber"
+import {Actor, actorCalled, Cast, engage, TakeNotes} from "@serenity-js/core"
+import {CallAnApi} from "@serenity-js/rest"
+import {EnvironmentVariables} from "../EnvironmentVariables"
 import axios from "axios"
-import { Utils } from "../../Utils"
+import {Utils} from "../../Utils"
 import {WalletSdk} from "../WalletSdk"
 import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
-
-import nodeCrypto from "crypto";
+import nodeCrypto from "crypto"
 
 Object.defineProperty(globalThis, "crypto", {
   value: {
-    getRandomValues: (arr:any) => nodeCrypto.getRandomValues(arr),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getRandomValues: (arr: any) => nodeCrypto.getRandomValues(arr),
   },
-});
+})
 
 export const axiosInstance = axios.create({
   baseURL: EnvironmentVariables.agentUrl,
@@ -24,28 +24,17 @@ export const axiosInstance = axios.create({
   }
 })
 
-BeforeAll(async() => {
+BeforeAll(async () => {
   Utils.prepareNotes()
   await CloudAgentConfiguration.prepare()
 })
 
-Before(async() => {
+Before(async () => {
   await Actors.createAndEngageActors()
 })
 
 class Actors implements Cast {
   actors = new Map<string, Actor>()
-
-  add(actor: Actor) {
-    this.actors.set(actor.name, actor)
-  }
-
-  prepare(actor: Actor): Actor {
-    if (!this.actors.has(actor.name)) {
-      throw new Error(`Unable to find actor ${actor.name}`)
-    }
-    return this.actors.get(actor.name)!
-  }
 
   static async createAndEngageActors() {
     const actors = new Actors()
@@ -64,5 +53,16 @@ class Actors implements Cast {
     actors.add(edgeAgent)
 
     engage(actors)
+  }
+
+  add(actor: Actor) {
+    this.actors.set(actor.name, actor)
+  }
+
+  prepare(actor: Actor): Actor {
+    if (!this.actors.has(actor.name)) {
+      throw new Error(`Unable to find actor ${actor.name}`)
+    }
+    return this.actors.get(actor.name)!
   }
 }
