@@ -34,14 +34,6 @@ on:
       - master
 
 env:
-  GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
-  GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
-  MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
-  PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
-  PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
-  SCHEMA_ID: ${{ inputs.schemaId || vars.SCHEMA_ID }}
-  APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
-  NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
 
 jobs:
   run-e2e-tests:
@@ -49,44 +41,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Mask apikey
-        run: echo "::add-mask::${{env.APIKEY}}"
-
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ATALA_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Setup Node.js
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/
           scope: "@input-output-hk"
 
-      - name: Pack atala-prism-wallet-sdk
-        if: github.event_name == 'pull_request'
-        run: |
-          npm install
-          npm run build
-          npm pack
-          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
-
-      - name: Install local dependency
-        if: github.event_name == 'pull_request'
+      - name: Install dependencies
         working-directory: integration-tests/e2e-tests
-        run: |
-          yarn
-          yarn add "../../${{ env.PACKAGE_NAME }}"
+        run: yarn
 
       - name: Run tests
+        env:
+          MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
+          PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
+          PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
+          SCHEMA_ID: ${{ inputs.schemaId || vars.SCHEMA_ID }}
+          APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
         working-directory: integration-tests/e2e-tests
-        run: |
-          yarn
-          yarn test:sdk
-          yarn test:sdk:report
+        run: yarn test:sdk
+      
+      - name: Generate end-to-end report
+        working-directory: integration-tests/e2e-tests
+        run: yarn test:sdk:report
 
       - name: Add notes to summary
         working-directory: integration-tests/e2e-tests
