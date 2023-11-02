@@ -1,3 +1,19 @@
+# [2.5.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.4.1...v2.5.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* adding resolution for yarn ([#108](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/108)) ([da60285](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/da6028520a89c83257919685c41a88071ac6a59b))
+* Integrate Apollo in Single branch. ([#94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/94)) ([bdc26e6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/bdc26e61b64419991ee34c3e07a897e707cdcb62))
+* remove unused packages and fix node demo ([#99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/99)) ([f9406d7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/f9406d7a3c43e7fef8aa1d0c6893069ce8a4fd13))
+* rollup config to handle anoncreds in node ([#109](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/109)) ([0aa7fbc](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/0aa7fbc1b2cd813d6e2259e2594bee266207e4de))
+
+
+### Features
+
+* adding anoncreds for ZKP ([#69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/69)) ([d57be19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/d57be192542c4094fcacf85cdc7869abb6153e3a))
+* Rollback Apollo integration ([#106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/106)) ([854379a](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/854379a2d4e6bb89aff8dcf2bbf65eba110682eb))
+
 ## [2.4.1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.4.0...v2.4.1) (2023-10-03)
 
 

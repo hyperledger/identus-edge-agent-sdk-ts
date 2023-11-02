@@ -32,14 +32,15 @@ const externals = [
   "anoncreds-node",
 ];
 
-export default (mode, plugins = []) => {
+export default (output, plugins = []) => {
   return {
     input: ["src/index.ts"],
     output: {
       sourcemap: true,
-      dir: `build/${mode}`,
-      format: mode === "node" ? "cjs" : "esm",
+      dir: `build/${output.mode}`,
+      format: output.format ?? "esm",
       name: "prism",
+      paths: output.paths
     },
     plugins: [
       jsccPlugin({ values: { _ANONCREDS: true } }),

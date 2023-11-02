@@ -4,7 +4,7 @@ import Base from "./base.mjs";
 import modify from "rollup-plugin-modify";
 import nodeResolve from "@rollup/plugin-node-resolve";
 
-export default Base("browser", [
+export default Base({ mode: "browser" }, [
   modify({
     find: '"didcomm-node"',
     replace: '"didcomm-browser"',
