@@ -1,18 +1,26 @@
-import {EnvironmentVariables} from "../EnvironmentVariables"
 import {
   CreateManagedDidRequest,
   CreateManagedDidRequestDocumentTemplate,
+  CredentialDefinitionInput,
   CredentialSchemaInput,
   ManagedDIDKeyTemplate
-} from "@input-output-hk/prism-typescript-client"
+} from "@hyperledger-labs/open-enterprise-agent-ts-client"
 import {Utils} from "../../Utils"
 import {randomUUID} from "crypto"
-import {axiosInstance} from "../steps/LifecycleSteps"
 import * as fs from "fs"
+import assert from "assert"
+import axios from "axios"
+import {configDotenv} from "dotenv"
+
+configDotenv()
 
 export class CloudAgentConfiguration {
-  static publishedDid: string
-  static schemaId: string
+  public static mediatorOobUrl: string = process.env.MEDIATOR_OOB_URL!
+  public static agentUrl: string = process.env.PRISM_AGENT_URL!
+  public static publishedDid: string = process.env.PUBLISHED_DID!
+  public static jwtSchemaGuid: string = process.env.JWT_SCHEMA_GUID!
+  public static anoncredDefinitionGuid: string = process.env.ANONCRED_DEFINITION_GUID!
+  public static apiKey: string | undefined  = process.env.APIKEY
 
   private static isInitialized: boolean = false
 
@@ -22,14 +30,16 @@ export class CloudAgentConfiguration {
     }
 
     await this.preparePublishedDid()
-    await this.prepareSchema()
+    await this.prepareJwtSchema()
+    await this.prepareAnoncredDefinition()
 
     this.isInitialized = true
 
-    Utils.appendToNotes(`Mediator: ${EnvironmentVariables.mediatorOobUrl}`)
-    Utils.appendToNotes(`Agent: ${EnvironmentVariables.agentUrl}`)
+    Utils.appendToNotes(`Mediator: ${this.mediatorOobUrl}`)
+    Utils.appendToNotes(`Agent: ${this.agentUrl}`)
     Utils.appendToNotes(`DID: ${this.publishedDid}`)
-    Utils.appendToNotes(`Schema: ${this.schemaId}`)
+    Utils.appendToNotes(`Jwt Schema: ${this.jwtSchemaGuid}`)
+    Utils.appendToNotes(`Anoncred Definition: ${this.anoncredDefinitionGuid}`)
     Utils.appendToNotes(`SDK Version: ${this.getSdkVersion()}`)
   }
 
@@ -44,10 +54,10 @@ export class CloudAgentConfiguration {
    */
   static async preparePublishedDid() {
     try {
+      assert(this.publishedDid != "")
       await axiosInstance.get(
-        `/did-registrar/dids/${EnvironmentVariables.publishedDid}`
+        `did-registrar/dids/${this.publishedDid}`
       )
-      this.publishedDid = EnvironmentVariables.publishedDid
       return
     } catch (err) {
       Utils.appendToNotes("DID not found. Creating a new one and publishing it.")
@@ -65,13 +75,13 @@ export class CloudAgentConfiguration {
     creationData.documentTemplate.services = []
 
     const creationResponse = await axiosInstance.post(
-      "/did-registrar/dids",
+      "did-registrar/dids",
       creationData
     )
     const longFormDid = creationResponse.data.longFormDid
 
     const publicationResponse = await axiosInstance.post(
-      `/did-registrar/dids/${longFormDid}/publications`
+      `did-registrar/dids/${longFormDid}/publications`
     )
     const shortFormDid = publicationResponse.data.scheduledOperation.didRef
 
@@ -80,19 +90,18 @@ export class CloudAgentConfiguration {
       abortController.abort()
     }, 60000)
 
-    await new Promise<void>((resolve, reject) => {
+    this.publishedDid = await new Promise<string>((resolve, reject) => {
       if (!abortController.signal.aborted) {
         abortController.signal.onabort = () =>
           reject("Timeout waiting for the publication")
       }
       const interval = setInterval(async () => {
         const didResponse = await axiosInstance.get(
-          `/did-registrar/dids/${shortFormDid}`
+          `did-registrar/dids/${shortFormDid}`
         )
         if (didResponse.data.status == "PUBLISHED") {
           clearInterval(interval)
-          this.publishedDid = didResponse.data.did
-          resolve()
+          resolve(didResponse.data.did)
         }
       }, 1000)
     })
@@ -101,12 +110,11 @@ export class CloudAgentConfiguration {
   /**
    * Checks if the environment SCHEMA_ID variable exists in prism-agent, otherwise it creates a new one.
    */
-  static async prepareSchema() {
+  static async prepareJwtSchema() {
     try {
       await axiosInstance.get(
-        `/schema-registry/schemas/${EnvironmentVariables.schemaId}`
+        `schema-registry/schemas/${this.jwtSchemaGuid}`
       )
-      this.schemaId = EnvironmentVariables.schemaId
       return
     } catch (err) {
       Utils.appendToNotes("Schema not found. Creating a new one.")
@@ -139,11 +147,72 @@ export class CloudAgentConfiguration {
     credentialSchemaInput.version = "0.0.1"
 
     const schemaResponse = await axiosInstance.post(
-      "/schema-registry/schemas",
+      "schema-registry/schemas",
       credentialSchemaInput
     )
 
-    this.schemaId = schemaResponse.data.guid
+    this.jwtSchemaGuid = schemaResponse.data.guid
+  }
+
+  static async prepareAnoncredDefinition() {
+    try {
+      await axiosInstance.get(
+        `credential-definition-registry/definitions/${this.anoncredDefinitionGuid}`
+      )
+      return
+    } catch (err) {
+      Utils.appendToNotes(`Schema definition not found for [${this.anoncredDefinitionGuid}]. Creating a new one.`)
+    }
+
+    const schema = {
+      name: "Automation Anoncred",
+      version: "1.0",
+      issuerId : this.publishedDid,
+      attrNames: ["name", "age"]
+    }
+
+    const credentialSchemaInput: CredentialSchemaInput = {
+      name: "automation-anoncred-schema-" + randomUUID(),
+      version: "2.0.0",
+      type: "AnoncredSchemaV1",
+      schema: schema,
+      author: this.publishedDid,
+      tags: ["automation"],
+      description: "Anoncred Schema for TS"
+    }
+
+    const newSchema = await axiosInstance.post(
+      "schema-registry/schemas",
+      credentialSchemaInput
+    )
+
+    const newSchemaGuid = newSchema.data.guid
+
+    const definitionInput: CredentialDefinitionInput = {
+      name: "automation-anoncred-definition-" + randomUUID(),
+      version: "1.0.0",
+      tag: "automation-test",
+      author: this.publishedDid,
+      schemaId: `${this.agentUrl}schema-registry/schemas/${newSchemaGuid}`,
+      signatureType: "CL",
+      supportRevocation: false,
+      description: "Test Automation Auto-Generated TS"
+    }
+
+    const credentialDefinition = await axiosInstance.post(
+      "/credential-definition-registry/definitions",
+      definitionInput
+    )
+
+    this.anoncredDefinitionGuid = credentialDefinition.data.guid
   }
 }
 
+export const axiosInstance = axios.create({
+  baseURL: CloudAgentConfiguration.agentUrl,
+  timeout: 10000,
+  headers: {
+    Accept: "application/json,application/xml",
+    APIKEY: CloudAgentConfiguration.apiKey
+  }
+})

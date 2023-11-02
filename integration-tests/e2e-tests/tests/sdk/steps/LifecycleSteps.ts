@@ -1,11 +1,9 @@
 import {Before, BeforeAll} from "@cucumber/cucumber"
 import {Actor, actorCalled, Cast, engage, TakeNotes} from "@serenity-js/core"
 import {CallAnApi} from "@serenity-js/rest"
-import {EnvironmentVariables} from "../EnvironmentVariables"
-import axios from "axios"
 import {Utils} from "../../Utils"
 import {WalletSdk} from "../WalletSdk"
-import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
+import {axiosInstance, CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
 import nodeCrypto from "crypto"
 
 Object.defineProperty(globalThis, "crypto", {
@@ -13,15 +11,6 @@ Object.defineProperty(globalThis, "crypto", {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getRandomValues: (arr: any) => nodeCrypto.getRandomValues(arr),
   },
-})
-
-export const axiosInstance = axios.create({
-  baseURL: EnvironmentVariables.agentUrl,
-  timeout: 10000,
-  headers: {
-    Accept: "application/json,application/xml",
-    APIKEY: EnvironmentVariables.apiKey
-  }
 })
 
 BeforeAll(async () => {

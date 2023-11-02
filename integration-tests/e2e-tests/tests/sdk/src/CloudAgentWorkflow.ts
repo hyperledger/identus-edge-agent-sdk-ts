@@ -4,7 +4,6 @@ import {Ensure, equals} from "@serenity-js/assertions"
 import {HttpStatusCode} from "axios"
 import {Expectations} from "../../Expectations"
 import {Questions} from "../../Questions"
-import {EnvironmentVariables} from "../EnvironmentVariables"
 import {randomUUID} from "crypto"
 import {
   CreateConnectionRequest,
@@ -12,7 +11,7 @@ import {
   Options,
   ProofRequestAux,
   RequestPresentationInput,
-} from "@input-output-hk/prism-typescript-client"
+} from "@hyperledger-labs/open-enterprise-agent-ts-client"
 import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
 
 export class CloudAgentWorkflow {
@@ -75,12 +74,37 @@ export class CloudAgentWorkflow {
     credential.claims = {
       "automation-required": "required value",
     }
-    credential.schemaId = `${EnvironmentVariables.agentUrl}/schema-registry/schemas/${CloudAgentConfiguration.schemaId}`
+    credential.schemaId = `${CloudAgentConfiguration.agentUrl}/schema-registry/schemas/${CloudAgentConfiguration.jwtSchemaGuid}`
     credential.automaticIssuance = true
     credential.issuingDID = CloudAgentConfiguration.publishedDid
     credential.connectionId = await cloudAgent.answer<string>(
       Notepad.notes().get("connectionId")
     )
+
+    await cloudAgent.attemptsTo(
+      Send.a(
+        PostRequest.to("issue-credentials/credential-offers").with(credential)
+      )
+    )
+    await cloudAgent.attemptsTo(
+      Notepad.notes().set("recordId", LastResponse.body().recordId)
+    )
+  }
+
+  static async offerAnonymousCredential(cloudAgent: Actor) {
+    const credential: CreateIssueCredentialRecordRequest = {
+      claims: {
+        "name": "automation",
+        "age": "99"
+      },
+      automaticIssuance: true,
+      issuingDID: CloudAgentConfiguration.publishedDid,
+      connectionId: await cloudAgent.answer<string>(
+        Notepad.notes().get("connectionId")
+      ),
+      credentialFormat: "AnonCreds",
+      credentialDefinitionId: CloudAgentConfiguration.anoncredDefinitionGuid
+    }
 
     await cloudAgent.attemptsTo(
       Send.a(
@@ -99,7 +123,7 @@ export class CloudAgentWorkflow {
     )
     presentProofRequest.options = new Options()
     presentProofRequest.options.challenge = randomUUID()
-    presentProofRequest.options.domain = EnvironmentVariables.agentUrl
+    presentProofRequest.options.domain = CloudAgentConfiguration.agentUrl
 
     const proof = new ProofRequestAux()
     proof.schemaId = "https://schema.org/Person"

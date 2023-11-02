@@ -22,7 +22,7 @@
   "dependencies": {
     "@cucumber/cucumber": "^9.6.0",
     "@input-output-hk/atala-prism-wallet-sdk": "^3.0.0",
-    "@input-output-hk/prism-typescript-client": "^1.9.2",
+    "@hyperledger-labs/open-enterprise-agent-ts-client": "^1.18.0",
     "@serenity-js/assertions": "^3.13.0",
     "@serenity-js/console-reporter": "^3.13.0",
     "@serenity-js/core": "^3.13.0",

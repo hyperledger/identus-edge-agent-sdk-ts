@@ -22,6 +22,10 @@ When("{actor} offers a credential", async function (cloudAgent: Actor) {
   await CloudAgentWorkflow.offerCredential(cloudAgent)
 })
 
+When("{actor} offers an anonymous credential", async function(cloudAgent: Actor) {
+  await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
+})
+
 When("{actor} asks for present-proof", async function (cloudAgent: Actor) {
   await CloudAgentWorkflow.askForPresentProof(cloudAgent)
 })

@@ -28,7 +28,7 @@ rules:
     - never
   max-len:
     - error
-    - 120
+    - 140
   eol-last:
     - error
     - always

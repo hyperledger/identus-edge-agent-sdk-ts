@@ -326,6 +326,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@input-output-hk/atala-prism-wallet-sdk@2.4.1":
   version "2.4.1"
   resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/2.4.1/f062c209abefa00973b923c85918b1c5e104f610#f062c209abefa00973b923c85918b1c5e104f610"
@@ -342,6 +343,17 @@
 >>>>>>> 48d65647 (partial work)
 >>>>>>> f010e7f7 (partial work)
 =======
+=======
+"@hyperledger-labs/open-enterprise-agent-ts-client@^1.18.0":
+  version "1.19.0"
+  resolved "https://npm.pkg.github.com/download/@hyperledger-labs/open-enterprise-agent-ts-client/1.19.0/5626a11fd7e4d7099aa9fce5a5cda3b2d15d55e3#5626a11fd7e4d7099aa9fce5a5cda3b2d15d55e3"
+  integrity sha512-9QU+cS/nW49lcTI2j2EWbIv5G0q58jT/5YietUW2kRta1vqO4vF/VSgsAnoTA8Vsvr/fOujnT6zIJhelD9ujnA==
+  dependencies:
+    es6-promise "^4.2.4"
+    url-parse "^1.4.3"
+    whatwg-fetch "^3.0.0"
+
+>>>>>>> fe96d3d5 (test: add anoncred flow)
 "@input-output-hk/atala-prism-wallet-sdk@^2.5.0":
   version "2.5.0"
   resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/2.5.0/2ad8fea45603571aaa9a0423493cfc8bc167913f#2ad8fea45603571aaa9a0423493cfc8bc167913f"
@@ -372,15 +384,6 @@
     multiformats "^9.9.0"
     util "^0.12.5"
     uuid "^9.0.0"
-
-"@input-output-hk/prism-typescript-client@^1.9.2":
-  version "1.15.0"
-  resolved "https://npm.pkg.github.com/download/@input-output-hk/prism-typescript-client/1.15.0/5c270b5ecf059d72fb9f53ac42531d54df71c4cb#5c270b5ecf059d72fb9f53ac42531d54df71c4cb"
-  integrity sha512-zOkx4vv+d0EcrxFfrfNYGzY125h35W0mWpMvxmvY4abXUcL7sxT5GzG+ASj0UTqYIOxb3Ef91HwHGt/pDyFkDw==
-  dependencies:
-    es6-promise "^4.2.4"
-    url-parse "^1.4.3"
-    whatwg-fetch "^3.0.0"
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"

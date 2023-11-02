@@ -13,8 +13,8 @@ import {
 } from "@input-output-hk/atala-prism-wallet-sdk"
 import {Message} from "@input-output-hk/atala-prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
-import {EnvironmentVariables} from "./EnvironmentVariables"
 import {PlutoInMemory} from "./src/PlutoInMemory"
+import {CloudAgentConfiguration} from "./configuration/CloudAgentConfiguration"
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
   sdk!: Agent
@@ -84,7 +84,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
 
 class WalletSdkBuilder {
   private static async getMediatorDidThroughOob(): Promise<string> {
-    const response = await axios.get(EnvironmentVariables.mediatorOobUrl)
+    const response = await axios.get(CloudAgentConfiguration.mediatorOobUrl)
     const encodedData = response.data.split("?_oob=")[1]
     const oobData = JSON.parse(Buffer.from(encodedData, "base64").toString())
     return oobData.from
