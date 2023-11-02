@@ -1,3 +1,5 @@
+import { StorableKey } from "../keyManagement";
+
 export class InvalidMnemonicWord extends Error {
   constructor(message?: string) {
     super(message);
@@ -19,8 +21,7 @@ export class InvalidPrivateKey extends Error {
 export class InvalidKeyCurve extends Error {
   constructor(invalidKeyCurve: string, validKeyCurves: string[]) {
     super(
-      `Invalid key curve: ${
-        invalidKeyCurve ? invalidKeyCurve : "undefined"
+      `Invalid key curve: ${invalidKeyCurve ? invalidKeyCurve : "undefined"
       }. Valid options are: ${validKeyCurves.join(",")}`
     );
   }
@@ -43,8 +44,7 @@ export class ECPublicKeyInitialization extends Error {
 export class InvalidKeyType extends Error {
   constructor(invalidKeyType: string, validKeyTypes: string[]) {
     super(
-      `Invalid key type: ${
-        invalidKeyType ? invalidKeyType : "undefined"
+      `Invalid key type: ${invalidKeyType ? invalidKeyType : "undefined"
       }. Valid options are: ${validKeyTypes.join(",")}`
     );
   }
@@ -53,5 +53,11 @@ export class InvalidKeyType extends Error {
 export class MissingKeyParameters extends Error {
   constructor(missing: string[]) {
     super(`Missing key parameters: ${missing.join(",")}`);
+  }
+}
+
+export class KeyRestoratonFailed extends Error {
+  constructor(key?: StorableKey) {
+    super(`Key Restoration Failed: [${key?.restorationIdentifier}]`);
   }
 }

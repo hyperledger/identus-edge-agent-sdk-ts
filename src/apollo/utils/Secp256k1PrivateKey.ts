@@ -3,16 +3,22 @@ import elliptic from "elliptic";
 
 import * as ECConfig from "../../config/ECConfig";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
-import { ApolloError } from "../../domain/models/Errors";
-import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
-import { KeyProperties } from "../../domain/models/KeyProperties";
-import { Curve, KeyTypes, PrivateKey } from "../../domain";
+import {
+  ApolloError,
+  Curve,
+  KeyTypes,
+  KeyProperties,
+  PrivateKey,
+  SignableKey,
+  StorableKey
+} from "../../domain";
 
 /**
  * @ignore
  */
-export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
+export class Secp256k1PrivateKey extends PrivateKey implements SignableKey, StorableKey {
   public static ec: elliptic.ec = new elliptic.ec("secp256k1");
+  public readonly restorationIdentifier = "secp256k1+priv";
 
   public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
@@ -28,6 +34,10 @@ export class Secp256k1PrivateKey extends PrivateKey implements SignableKey {
     this.keySpecification.set(KeyProperties.curve, Curve.SECP256K1);
     this.raw = nativeValue;
     this.size = this.raw.length;
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   publicKey() {

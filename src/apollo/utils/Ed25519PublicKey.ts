@@ -1,13 +1,20 @@
 import elliptic from "elliptic";
 import { base64url } from "multiformats/bases/base64";
-import { Curve, KeyTypes, PublicKey } from "../../domain";
-import { KeyProperties } from "../../domain/models/KeyProperties";
-import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
+import {
+  Curve,
+  KeyTypes,
+  KeyProperties,
+  PublicKey,
+  StorableKey,
+  VerifiableKey
+} from "../../domain";
+
 /**
  * @ignore
  */
-export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
+export class Ed25519PublicKey extends PublicKey implements StorableKey, VerifiableKey {
   public static eddsa = new elliptic.eddsa("ed25519");
+  public readonly restorationIdentifier = "ed25519+pub";
 
   public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
@@ -19,6 +26,10 @@ export class Ed25519PublicKey extends PublicKey implements VerifiableKey {
     this.raw = nativeValue;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   private getInstance(): elliptic.eddsa.KeyPair {

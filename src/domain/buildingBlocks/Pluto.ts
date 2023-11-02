@@ -15,16 +15,42 @@ import { Anoncreds } from "../models/Anoncreds";
  *
  */
 export interface Pluto {
+  start(): Promise<void>;
+
+  /*************************************
+   * Credentials
+   ************************************/
+
+  getAllCredentials(): Promise<Array<Credential>>;
+
+  storeCredential(credential: Credential): Promise<void>;
+
+  /**
+   * 
+   * @param metadata
+   * @param linkSecret 
+   */
   storeCredentialMetadata(
     metadata: Anoncreds.CredentialRequestMeta,
     linkSecret: Anoncreds.LinkSecret
   ): Promise<void>;
 
+  /**
+   * @deprecated - use getCredentialMetadata
+   * @param linkSecretName 
+   */
   fetchCredentialMetadata(
     linkSecretName: string
   ): Promise<Anoncreds.CredentialRequestMeta | null>;
 
-  start(): Promise<void>;
+  getCredentialMetadata(
+    linkSecretName: string
+  ): Promise<Anoncreds.CredentialRequestMeta | null>;
+
+
+  /*************************************
+   * DIDs
+   ************************************/
 
   /**
    * Store a PRISM DID and its private key with given metadata.
@@ -46,33 +72,6 @@ export interface Pluto {
    * Store a named pair of DIDs representing a DIDComm connection.
    */
   storeDIDPair(host: DID, receiver: DID, name: string): Promise<void>;
-
-  /**
-   * Store a DIDComm message.
-   */
-  storeMessage(message: Message): Promise<void>;
-
-  /**
-   * Store an array of DIDComm messages
-   */
-  storeMessages(messages: Array<Message>): Promise<void>;
-
-  /**
-   * Store a list of private keys with its metadata and a reference to the DID it belongs to.
-   */
-  storePrivateKeys(
-    privateKey: PrivateKey,
-    did: DID,
-    keyPathIndex: number,
-    metaId: string | null
-  ): Promise<void>;
-
-  /**
-   * Store a mediator information.
-   */
-  storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
-
-  storeCredential(credential: Credential): Promise<void>;
 
   /**
    * Retrieve all stored PRISM DIDs.
@@ -105,11 +104,6 @@ export interface Pluto {
   getAllPeerDIDs(): Promise<Array<PeerDID>>;
 
   /**
-   * Retrieve available private keys for a given DID.
-   */
-  getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey>>;
-
-  /**
    * Retrieve private key for a given key ID.
    */
   getDIDPrivateKeyByID(id: string): Promise<PrivateKey | null>;
@@ -128,6 +122,47 @@ export interface Pluto {
    * Retrieve a DID pair by a given pair name.
    */
   getPairByName(name: string): Promise<DIDPair | null>;
+
+
+  /**************************************
+   * Messages
+   *************************************/
+
+  /**
+   * Store a DIDComm message.
+   */
+  storeMessage(message: Message): Promise<void>;
+
+  /**
+   * Store an array of DIDComm messages
+   */
+  storeMessages(messages: Array<Message>): Promise<void>;
+
+
+  /*************************************
+   * Keys
+   ************************************/
+
+  /**
+   * Store a list of private keys with its metadata and a reference to the DID it belongs to.
+   */
+  storePrivateKeys(
+    privateKey: PrivateKey,
+    did: DID,
+    keyPathIndex: number,
+    metaId: string | null
+  ): Promise<void>;
+
+  /**
+   * Retrieve available private keys for a given DID.
+   */
+  getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey>>;
+
+
+
+  /*************************************
+   * Messages
+   ************************************/
 
   /**
    * Retrieve all stored DIDComm messages.
@@ -179,12 +214,26 @@ export interface Pluto {
    */
   getMessage(id: string): Promise<Message | null>;
 
+
+  /***************************************
+   * Mediators
+   **************************************/
+
   /**
    * Retrieve all stored mediators.
    */
   getAllMediators(): Promise<Array<Mediator>>;
 
-  getAllCredentials(): Promise<Array<Credential>>;
+  /**
+ * Store a mediator information.
+ */
+  storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
+
+
+
+  /*****************************************
+   * LinkSecrets
+   ****************************************/
 
   getLinkSecret(linkSecretName?: string): Promise<Anoncreds.LinkSecret | null>;
 

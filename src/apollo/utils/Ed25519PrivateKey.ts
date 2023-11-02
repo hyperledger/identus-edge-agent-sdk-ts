@@ -1,15 +1,21 @@
 import elliptic from "elliptic";
 import { base64url } from "multiformats/bases/base64";
-import { Curve, KeyTypes, PrivateKey } from "../../domain";
-import { KeyProperties } from "../../domain/models/KeyProperties";
-import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
+import {
+  Curve,
+  KeyTypes,
+  KeyProperties,
+  PrivateKey,
+  StorableKey,
+  SignableKey
+} from "../../domain";
 
 /**
  * @ignore
  */
-export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
+export class Ed25519PrivateKey extends PrivateKey implements SignableKey, StorableKey {
   public static eddsa = new elliptic.eddsa("ed25519");
+  public readonly restorationIdentifier = "ed25519+priv";
 
   public type: KeyTypes = KeyTypes.EC;
   public size;
@@ -22,6 +28,10 @@ export class Ed25519PrivateKey extends PrivateKey implements SignableKey {
     this.raw = nativeValue;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   publicKey() {
