@@ -3,6 +3,7 @@ import type { DID, KeyCurve } from ".";
 export class PeerDID {
   constructor(
     public readonly did: DID,
+
     public readonly privateKeys: Array<{
       /**
        * Instance of a KeyCurve

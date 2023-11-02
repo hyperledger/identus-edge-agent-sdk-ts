@@ -124,6 +124,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       const [credentialRequest, credentialRequestMetadata] =
         await this.pollux.processAnonCredsCredential(message, {
           linkSecret: linkSecret,
+          // TODO: why are we using `offer.thid` here? and below (line 135)
           linkSecretName: offer.thid,
         });
       credRequestBuffer = JSON.stringify(credentialRequest);

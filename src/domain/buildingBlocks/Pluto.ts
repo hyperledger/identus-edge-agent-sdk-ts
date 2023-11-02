@@ -8,6 +8,16 @@ import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
 import { Anoncreds } from "../models/Anoncreds";
 
+export namespace Pluto {
+  /**
+   * Storable
+   * define properties a Domain object must implement to be compatible with Pluto
+   */
+  export interface Storable {
+    _id?: string;
+  }
+}
+
 /**
  * Pluto is a storage interface describing storage requirements of the edge agents
  * which will be implemented using this SDK. Implement this interface using your
@@ -36,14 +46,10 @@ export interface Pluto {
   ): Promise<void>;
 
   /**
-   * @deprecated - use getCredentialMetadata
+   * deprecate this - should be getCredentialMetadata
    * @param linkSecretName 
    */
   fetchCredentialMetadata(
-    linkSecretName: string
-  ): Promise<Anoncreds.CredentialRequestMeta | null>;
-
-  getCredentialMetadata(
     linkSecretName: string
   ): Promise<Anoncreds.CredentialRequestMeta | null>;
 

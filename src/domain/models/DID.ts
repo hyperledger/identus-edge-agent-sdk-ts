@@ -1,6 +1,9 @@
+import { Pluto } from "../buildingBlocks/Pluto";
 import { InvalidDIDString } from "./errors/Castor";
 
-export class DID {
+export class DID implements Pluto.Storable {
+  public _id?: string;
+
   public readonly schema: string;
   public readonly method: string;
   public readonly methodId: string;
