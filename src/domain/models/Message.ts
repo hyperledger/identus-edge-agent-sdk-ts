@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DID } from "./DID";
 import { v4 as uuidv4 } from "uuid";
+import { DID } from "./DID";
 import {
   AttachmentBase64,
   AttachmentData,
@@ -9,13 +9,85 @@ import {
 } from "./MessageAttachment";
 import { AgentError } from "./Errors";
 import { JsonString } from ".";
+import { Pluto } from "../buildingBlocks/Pluto";
 
 export enum MessageDirection {
   SENT = 0,
   RECEIVED = 1,
 }
 
-export class Message {
+interface IMessage {
+  /**
+   * identifier unique to the sender.
+   */
+  id: string;
+  /**
+   * body
+   */
+  body: string;
+  /**
+   * attachments.
+   * arbitrary data connected to the Message
+   * @see {AttachmentDescriptor}
+   */
+  attachments: AttachmentDescriptor[];
+  /**
+   * Protocol Identifier URI.
+   * should resolve to human-friendly documentation about the protocol.
+   */
+  piuri: string;
+  /**
+   * identifier of the sender
+   */
+  from?: string;
+  /**
+   * identifier of the recipient
+   */
+  to?: string;
+  /**
+   * Thread Identifier.
+   * Uniquely identifiers the Thread the Message belongs to.
+   */
+  thid?: string;
+  /**
+   * arbitrary headers
+   * Q: how is this a string[]? shouldn't it be a [key:value]
+   */
+  extraHeaders: string[];
+  /**
+   * when the Message was created.
+   * expressed in UTC Epoch Seconds (seconds since 1970-01-01T00:00:00Z) as an integer
+   */
+  createdTime: number;
+  /**
+   * when the Sender will consider the Message expired.
+   * expressed in UTC Epoch Seconds (seconds since 1970-01-01T00:00:00Z) as an integer
+   */
+  expiresTime: number;
+  /**
+   * TODO: comments
+   */
+  ack: string[];
+  /**
+   * enum for whether the Message sent or received.
+   *   0 : Sent
+   *   1 : Received
+   */
+  direction: number;
+  /**
+   * header used to notify Recipient of DID rotation.
+   */
+  fromPrior?: string;
+  /**
+   * Parent Thread Identifier.
+   * uniquely identify which thread is the parent
+   */
+  pthid?: string;
+}
+
+export class Message implements Pluto.Storable {
+  public uuid?: string;
+
   constructor(
     public readonly body: string,
     public readonly id: string = uuidv4(),
@@ -25,11 +97,14 @@ export class Message {
     public readonly attachments: AttachmentDescriptor[] = [],
     public readonly thid?: string,
     public readonly extraHeaders: string[] = [],
+    // Q: why is this a string?
     public readonly createdTime: string = Date.now().toString(),
+    // TODO: deprecate this name, also what is this math?
     public readonly expiresTimePlus: string = (
       createdTime +
       1 * 24 * 60 * 60
     ).toString(),
+    // Q: what is this?
     public readonly ack: string[] = [],
     public readonly direction: MessageDirection = MessageDirection.RECEIVED,
     public readonly fromPrior?: string,

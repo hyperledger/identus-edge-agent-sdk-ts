@@ -14,7 +14,7 @@ import {
  * @ignore
  */
 export class X25519PrivateKey extends PrivateKey implements ExportableKey, StorableKey {
-  public readonly recoveryId = "x25519+priv";
+  public readonly recoveryId = StorableKey.recoveryId("x25519", "priv");
 
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;

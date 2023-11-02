@@ -13,7 +13,7 @@ import {
  * @ignore
  */
 export class X25519PublicKey extends PublicKey implements ExportableKey, StorableKey {
-  public readonly recoveryId = "x25519+pub";
+  public readonly recoveryId = StorableKey.recoveryId("x25519", "pub");
 
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;

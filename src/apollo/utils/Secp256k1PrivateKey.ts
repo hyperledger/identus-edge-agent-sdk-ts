@@ -7,8 +7,8 @@ import { DerivationPath } from "./derivation/DerivationPath";
 import {
   ApolloError,
   Curve,
-  DerivableKey, 
-  ExportableKey, 
+  DerivableKey,
+  ExportableKey,
   ImportableKey,
   KeyTypes,
   KeyProperties,
@@ -26,9 +26,8 @@ const BigIntegerWrapper = Apollo.derivation.BigIntegerWrapper;
  */
 export class Secp256k1PrivateKey
   extends PrivateKey
-  implements DerivableKey, ExportableKey, SignableKey, StorableKey
-{
-  public readonly recoveryId = "secp256k1+priv";
+  implements DerivableKey, ExportableKey, SignableKey, StorableKey {
+  public readonly recoveryId = StorableKey.recoveryId("secp256k1", "priv");
 
   public keySpecification: Map<string, string> = new Map();
   public raw: Uint8Array;
@@ -85,7 +84,7 @@ export class Secp256k1PrivateKey
 
     return newExtendedPrivateKey;
   }
-  
+
   get storableData() {
     return this.raw;
   }

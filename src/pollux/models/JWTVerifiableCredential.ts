@@ -1,3 +1,4 @@
+import { Pluto } from "../../domain";
 import {
   Credential,
   ProvableCredential,
@@ -20,8 +21,10 @@ export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
 export class JWTCredential
   extends Credential
-  implements ProvableCredential, StorableCredential
+  implements ProvableCredential, StorableCredential, Pluto.Storable
 {
+  public uuid?: string;
+
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();

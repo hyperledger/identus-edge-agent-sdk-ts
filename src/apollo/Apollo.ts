@@ -14,6 +14,7 @@ import {
   Seed,
   SeedWords,
   StorableKey,
+  KeyRestoration,
 } from "../domain";
 import {
   MnemonicLengthException,
@@ -111,7 +112,7 @@ const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
  * @class Apollo
  * @typedef {Apollo}
  */
-export default class Apollo implements ApolloInterface {
+export default class Apollo implements ApolloInterface, KeyRestoration {
   static Secp256k1PrivateKey = Secp256k1PrivateKey;
   static Ed25519PrivateKey = Ed25519PrivateKey;
   static X25519PrivateKey = X25519PrivateKey;
@@ -340,26 +341,16 @@ export default class Apollo implements ApolloInterface {
   }
 
 
-  isPrivateKeyData(key: StorableKey) {
-    const suffix = key.recoveryId.split("+")[1] as StorableKey.RecoveryId.suffix;
-    return suffix === "priv";
-  }
-
-  isPublicKeyData(key: StorableKey) {
-    const suffix = key.recoveryId.split("+")[1] as StorableKey.RecoveryId.suffix;
-    return suffix === "pub";
-  }
-
   restorePrivateKey(key: StorableKey): PrivateKey {
     switch (key.recoveryId) {
       case "secp256k1+priv":
-        return new Secp256k1PrivateKey(key.storableData);
+        return new Secp256k1PrivateKey(key.raw);
 
       case "ed25519+priv":
-        return new Ed25519PrivateKey(key.storableData);
+        return new Ed25519PrivateKey(key.raw);
 
       case "x25519+priv":
-        return new X25519PrivateKey(key.storableData);
+        return new X25519PrivateKey(key.raw);
     }
 
     throw new ApolloError.KeyRestoratonFailed(key);
@@ -368,13 +359,13 @@ export default class Apollo implements ApolloInterface {
   restorePublicKey(key: StorableKey): PublicKey {
     switch (key.recoveryId) {
       case "secp256k1+pub":
-        return new Secp256k1PublicKey(key.storableData);
+        return new Secp256k1PublicKey(key.raw);
 
       case "ed25519+pub":
-        return new Ed25519PublicKey(key.storableData);
+        return new Ed25519PublicKey(key.raw);
 
       case "x25519+pub":
-        return new X25519PublicKey(key.storableData);
+        return new X25519PublicKey(key.raw);
     }
 
     throw new ApolloError.KeyRestoratonFailed(key);

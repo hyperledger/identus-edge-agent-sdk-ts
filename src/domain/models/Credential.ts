@@ -1,4 +1,5 @@
 import { CredentialType } from ".";
+import { Pluto } from "../buildingBlocks/Pluto";
 import { Anoncreds } from "./Anoncreds";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
@@ -33,7 +34,7 @@ export interface ProvableCredential {
   presentation(): unknown;
 }
 
-export interface StorableCredential {
+export interface StorableCredential extends Pluto.Storable {
   toStorable(): {
     id: string;
     recoveryId: string;

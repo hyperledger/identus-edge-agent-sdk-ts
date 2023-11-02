@@ -1,15 +1,29 @@
 
 export abstract class StorableKey {
-  abstract recoveryId: StorableKey.RecoveryId;
-  abstract storableData: Uint8Array;
-  // abstract index?: number;
+  abstract recoveryId: string;
+  abstract raw: Uint8Array;
+  abstract index?: number;
 }
 
 export namespace StorableKey {
-  export type RecoveryId = `${RecoveryId.algo}+${RecoveryId.suffix}`;
+  // export type RecoveryId = `${RecoveryId.algorithm}+${RecoveryId.privacy}`;
 
-  export namespace RecoveryId {
-    export type algo = "secp256k1" | "x25519" | "ed25519";
-    export type suffix = "pub" | "priv";
+  namespace RecoveryId {
+    export type algorithm = "secp256k1" | "x25519" | "ed25519";
+    export type suffix = privacy;
+    export type privacy = "pub" | "priv";
   }
+
+  /**
+   * Factory for RecoveryId.
+   * Nomenclature:
+   *   - algorithm first
+   *   - arbitrary suffixes for customisation
+   *   - separated by "+"
+   * 
+   * @param algorithm 
+   * @param suffix 
+   * @returns {string}
+   */
+  export const recoveryId = (algorithm: RecoveryId.algorithm, ...suffix: RecoveryId.suffix[]) => `${[algorithm, ...suffix].join("+")}`;
 }

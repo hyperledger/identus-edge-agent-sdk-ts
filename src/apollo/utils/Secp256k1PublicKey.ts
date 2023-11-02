@@ -20,7 +20,8 @@ import {
  * @ignore
  */
 export class Secp256k1PublicKey extends PublicKey implements StorableKey, ExportableKey, VerifiableKey {
-  public readonly recoveryId = "secp256k1+pub";
+  public readonly recoveryId = StorableKey.recoveryId("secp256k1", "pub");
+
 
   public keySpecification: Map<KeyProperties | string, string> = new Map();
   public size: number;

@@ -14,7 +14,8 @@ import {
  * @ignore
  */
 export class Ed25519PublicKey extends PublicKey implements ExportableKey, StorableKey, VerifiableKey {
-  public readonly recoveryId = "ed25519+pub";
+  public readonly recoveryId = StorableKey.recoveryId("ed25519", "pub");
+
 
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;

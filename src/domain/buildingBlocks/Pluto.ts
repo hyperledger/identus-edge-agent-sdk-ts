@@ -8,6 +8,20 @@ import { Credential } from "../models/Credential";
 import { Anoncreds } from "../models/Anoncreds";
 import { PeerDID } from "../../peer-did/PeerDID";
 
+export namespace Pluto {
+  /**
+   * Storable
+   * define properties a Domain object must implement to be compatible with Pluto
+   */
+  export interface Storable {
+    /**
+     * Universally Unique Identifier.
+     * should be unique across all items.
+     */
+    uuid?: string;
+  }
+}
+
 /**
  * Pluto is a storage interface describing storage requirements of the edge agents
  * which will be implemented using this SDK. Implement this interface using your
@@ -25,6 +39,8 @@ export interface Pluto {
 
   /**
    * Fetch the AnonCreds Credential Metadata by its linkSecret name
+   * deprecate this - should be getCredentialMetadata
+   * @param linkSecretName 
    */
   fetchCredentialMetadata(
     linkSecretName: string
@@ -102,11 +118,6 @@ export interface Pluto {
   getDIDInfoByAlias(alias: string): Promise<PrismDIDInfo[]>;
 
   /**
-   * Retrieve a PRISM DID key path index for a given DID.
-   */
-  getPrismDIDKeyPathIndex(did: DID): Promise<number | null>;
-
-  /**
    * Get the last used PRISM key path index.
    */
   getPrismLastKeyPathIndex(): Promise<number>;
@@ -120,11 +131,6 @@ export interface Pluto {
    * Retrieve available private keys for a given DID.
    */
   getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey>>;
-
-  /**
-   * Retrieve private key for a given key ID.
-   */
-  getDIDPrivateKeyByID(id: string): Promise<PrivateKey | null>;
 
   /**
    * Retrieve all stored DID pairs (DIDComm connections).
@@ -145,46 +151,6 @@ export interface Pluto {
    * Retrieve all stored DIDComm messages.
    */
   getAllMessages(): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages, received from or sent to a given DID
-   */
-  getAllMessagesByDID(did: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored, sent DIDComm messages.
-   */
-  getAllMessagesSent(): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored, received DIDComm messages.
-   */
-  getAllMessagesReceived(): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages, sent to a given DID.
-   */
-  getAllMessagesSentTo(did: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages, received from a given DID.
-   */
-  getAllMessagesReceivedFrom(did: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages with given message type, and
-   * optionally, related to a given DID. "Related" means that message should
-   * contain a given DID in either "from" or "to" field.
-   */
-  getAllMessagesOfType(
-    type: string,
-    relatedWithDID?: DID
-  ): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all DIDComm messages containing given "from" AND "to" DIDs.
-   */
-  getAllMessagesByFromToDID(from: DID, to: DID): Promise<Array<Message>>;
 
   /**
    * Retrieve a DIDComm message by ID.
