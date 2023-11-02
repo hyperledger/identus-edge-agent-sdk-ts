@@ -45,7 +45,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Setup Node.js for @input-output-hk
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/setup-node@v3
@@ -53,6 +53,15 @@ jobs:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/
           scope: "@input-output-hk"
+
+      - name: Setup Node.js for @hyperledger-labs
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+          registry-url: https://npm.pkg.github.com/
+          scope: "@hyperledger-labs"
 
       - name: Install dependencies
         working-directory: integration-tests/e2e-tests
