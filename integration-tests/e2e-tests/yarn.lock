@@ -2497,9 +2497,9 @@ eslint-module-utils@^2.8.0:
     debug "^3.2.7"
 
 eslint-plugin-es-x@^7.1.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-es-x/-/eslint-plugin-es-x-7.2.0.tgz#5779d742ad31f8fd780b9481331481e142b72311"
-  integrity sha512-9dvv5CcvNjSJPqnS5uZkqb3xmbeqRLnvXKK7iI5+oK/yTusyc46zbBZKENGsOfojm/mKfszyZb+wNqNPAPeGXA==
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-es-x/-/eslint-plugin-es-x-7.3.0.tgz#c699280ad35cd315720c3cccf0fe503092c08788"
+  integrity sha512-W9zIs+k00I/I13+Bdkl/zG1MEO07G97XjUSQuH117w620SJ6bHtLUmoMvkGA2oYnI/gNdr+G7BONLyYnFaLLEQ==
   dependencies:
     "@eslint-community/eslint-utils" "^4.1.2"
     "@eslint-community/regexpp" "^4.6.0"
@@ -6673,6 +6673,7 @@ yaml@^1.10.0:
 
 >>>>>>> aba32e70 (fix: rebase issues)
 yaml@^2.2.2:
+<<<<<<< HEAD
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.3.3.tgz#01f6d18ef036446340007db8e016810e5d64aad9"
   integrity sha512-zw0VAJxgeZ6+++/su5AFoqBbZbrEakwu+X0M5HmcwUiBL7AzcuPKjj5we4xfQLp78LkEMpD0cOnUhmgOVy3KdQ==
@@ -6683,6 +6684,11 @@ yaml@^2.2.2:
 =======
 =======
 >>>>>>> 67fcf723 (regenerate yarn.lock)
+=======
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.3.4.tgz#53fc1d514be80aabf386dc6001eb29bf3b7523b2"
+  integrity sha512-8aAvwVUSHpfEqTQ4w/KMlf3HcRdt50E5ODIQJBw1fQ5RL34xabzxtUlzTXVqc4rkZsPbvrXKWnABCD7kWSmocA==
+>>>>>>> 3813b2bf (fix: regenerate e2e yarn.lock)
 
 yargs-parser@^20.2.2, yargs-parser@^20.2.3:
   version "20.2.9"
