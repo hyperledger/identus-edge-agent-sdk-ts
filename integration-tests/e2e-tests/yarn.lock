@@ -556,9 +556,9 @@ acorn-walk@^8.1.1:
   integrity sha512-FS7hV565M5l1R08MXqo8odwMTB02C2UqzB17RVgu9EyuYFBqJZ3/ZY97sQD5FewVu1UyDFc1yztUDrAwT0EypA==
 
 acorn@^8.4.1:
-  version "8.11.2"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.2.tgz#ca0d78b51895be5390a5903c5b3bdcdaf78ae40b"
-  integrity sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==
+  version "8.11.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.0.tgz#04306e13732231c995ac4363f331ee09db278d82"
+  integrity sha512-hNiSyky+cuYVALBrsjB7f9gMN9P4u09JyAiMNMLaVfsmkDJuH84M1T/0pfDX/OJfGWcobd2A7ecXYzygn8wibA==
 
 agent-base@^7.0.2, agent-base@^7.1.0:
   version "7.1.0"
