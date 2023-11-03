@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { PlutoInMemory } from "./PlutoInMemory";
+import { PlutoInMemory } from "../../demos/pluto/PlutoInMemory";
 import { DID, PrivateKey } from "../../src/domain";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";
