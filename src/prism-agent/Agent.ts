@@ -55,10 +55,9 @@ interface AgentConfig {
  */
 export default class Agent
   implements
-    AgentCredentialsClass,
-    AgentDIDHigherFunctionsClass,
-    AgentInvitationsClass
-{
+  AgentCredentialsClass,
+  AgentDIDHigherFunctionsClass,
+  AgentInvitationsClass {
   /**
    * Agent state
    *
@@ -289,13 +288,13 @@ export default class Agent
   }
 
   /**
-   * Asyncronously accept a prism onboarding invitation, used to onboard the current did in a prism agent.
-   *
+   * Handle an invitation to create a connection
+   * 
    * @async
-   * @param {PrismOnboardingInvitation} invitation
+   * @param {InvitationType} invitation - an OOB or PrismOnboarding invitation
    * @returns {Promise<void>}
    */
-  async acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void> {
+  async acceptInvitation(invitation: InvitationType): Promise<void> {
     return this.agentInvitations.acceptInvitation(invitation);
   }
 
@@ -337,6 +336,7 @@ export default class Agent
    * Asyncronously accept a didcomm v2 invitation, will create a pair between the Agent
    *  its connecting with and the current owner's did
    *
+   * @deprecated - use `acceptInvitation`
    * @async
    * @param {OutOfBandInvitation} invitation
    * @returns {*}

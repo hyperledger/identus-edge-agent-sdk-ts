@@ -350,7 +350,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto; }> = props => {
       return;
     }
     const parsed = await props.agent.parseOOBInvitation(new URL(oob));
-    await props.agent.acceptDIDCommInvitation(parsed);
+    await props.agent.acceptInvitation(parsed);
   }
 
   const connection = connections.at(0);
