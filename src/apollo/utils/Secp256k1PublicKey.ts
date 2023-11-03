@@ -3,7 +3,6 @@ import BigInteger from "bn.js";
 import * as ApolloPKG from "@input-output-hk/apollo";
 
 import * as ECConfig from "../../config/ECConfig";
-import { ECCoordinate } from "./ec/ECCoordinate";
 import { ECPoint } from "./ec/ECPoint";
 import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";

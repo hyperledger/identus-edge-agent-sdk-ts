@@ -21,7 +21,7 @@ import * as ApolloPKG from "@input-output-hk/apollo";
 
 const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
 
-const Mnemonic = ApolloSDK.utils.Mnemonic.Companion;
+const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 /**
