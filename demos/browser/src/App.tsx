@@ -20,25 +20,12 @@ const RequestPresentation = SDK.RequestPresentation;
 
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
-const api = new SDK.ApiImpl();
 const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9zaXQtcHJpc20tbWVkaWF0b3IuYXRhbGFwcmlzbS5pbyIsInIiOltdLCJhIjpbImRpZGNvbW0vdjIiXX0";
 const pluto = new PlutoInMemory();
 
 const useSDK = (mediatorDID: SDK.Domain.DID) => {
-  const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
-  const mercury = new SDK.Mercury(castor, didcomm, api);
-  const store = new SDK.PublicMediatorStore(pluto);
-  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
-  const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
-  const agent = new SDK.Agent(
-    apollo,
-    castor,
-    pluto,
-    mercury,
-    handler,
-    manager,
-    apollo.createRandomSeed().seed
-  );
+  const agent = SDK.Agent.initialize({ mediatorDID, pluto });
+
   return { agent, pluto };
 };
 
