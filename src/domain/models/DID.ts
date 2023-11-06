@@ -38,7 +38,7 @@ export class DID {
     const methodId = DID.getMethodIdFromString(text);
 
     if (schema === undefined) {
-      throw new InvalidDIDString("Invalid DID string, missing scheme");
+      throw new InvalidDIDString("Invalid DID string, missing schema");
     }
     if (method === undefined) {
       throw new InvalidDIDString("Invalid DID string, missing method name");
