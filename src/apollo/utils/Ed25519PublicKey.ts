@@ -6,17 +6,20 @@ import {
   KeyProperties,
   KeyTypes,
   PublicKey,
+  StorableKey,
   VerifiableKey
 } from "../../domain";
 
 /**
  * @ignore
  */
-export class Ed25519PublicKey extends PublicKey implements ExportableKey, VerifiableKey {
+export class Ed25519PublicKey extends PublicKey implements ExportableKey, StorableKey, VerifiableKey {
+  public readonly recoveryId = "ed25519+pub";
+
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;
   public size: number;
-  public type: KeyTypes = KeyTypes.EC;
+  public type = KeyTypes.EC;
 
   public readonly to = ExportableKey.factory(this, { pemLabel: "PUBLIC KEY" });
   static from = ImportableKey.factory(Ed25519PublicKey, { pemLabel: "PUBLIC KEY" });
@@ -27,6 +30,10 @@ export class Ed25519PublicKey extends PublicKey implements ExportableKey, Verifi
     this.raw = this.getInstance(bytes).raw;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   getEncoded(): Buffer {

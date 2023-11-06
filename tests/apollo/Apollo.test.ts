@@ -1,17 +1,27 @@
 import { expect, assert } from "chai";
+import * as Fixtures from "../fixtures";
 
 import Apollo from "../../src/apollo/Apollo";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 import * as ECConfig from "../../src/config/ECConfig";
-import { Curve, KeyTypes, PrivateKey } from "../../src/domain/models";
-import { MnemonicWordList } from "../../src/domain/models/WordList";
+
 import { bip39Vectors } from "./derivation/BipVectors";
-import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
-import {
-  MnemonicLengthException,
-  MnemonicWordException,
-} from "../../src/domain/models/errors/Mnemonic";
 import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
+import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
+import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
+import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
+import { Ed25519PublicKey } from "../../src/apollo/utils/Ed25519PublicKey";
+import { X25519PublicKey } from "../../src/apollo/utils/X25519PublicKey";
+import { Secp256k1PublicKey } from "../../src/apollo/utils/Secp256k1PublicKey";
+import { MnemonicLengthException, MnemonicWordException } from "../../src/domain/models/errors/Mnemonic";
+import {
+  ApolloError,
+  Curve,
+  KeyTypes,
+  PrivateKey,
+  StorableKey,
+  MnemonicWordList
+} from "../../src/domain/models";
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -322,5 +332,154 @@ describe("Apollo", () => {
 
     expect(raw1).to.equal(raw2);
     expect(raw1).to.not.equal(raw3);
+  });
+
+  describe("KeyRestoration", () => {
+    const privateIds: StorableKey.RecoveryId[] = ["ed25519+priv", "x25519+priv", "secp256k1+priv"];
+    const publicIds: StorableKey.RecoveryId[] = ["ed25519+pub", "x25519+pub", "secp256k1+pub"];
+
+    describe("isPrivateKeyData", () => {
+      privateIds.forEach(x => {
+        test(`${x} matches - returns true`, () => {
+          const key: StorableKey = {
+            recoveryId: x,
+            storableData: new Uint8Array()
+          };
+
+          const result = apollo.isPrivateKeyData(key);
+
+          expect(result).to.be.true;
+        });
+      });
+
+      publicIds.forEach(x => {
+        test(`${x} fails - returns false`, () => {
+          const key: StorableKey = {
+            recoveryId: x,
+            storableData: new Uint8Array()
+          };
+
+          const result = apollo.isPrivateKeyData(key);
+
+          expect(result).to.be.false;
+        });
+      });
+    });
+
+    describe("isPublicKeyData", () => {
+      publicIds.forEach(x => {
+        test(`${x} matches - returns true`, () => {
+          const key: StorableKey = {
+            recoveryId: x,
+            storableData: new Uint8Array()
+          };
+
+          const result = apollo.isPublicKeyData(key);
+
+          expect(result).to.be.true;
+        });
+      });
+
+      privateIds.forEach(x => {
+        test(`${x} fails - returns false`, () => {
+          const key: StorableKey = {
+            recoveryId: x,
+            storableData: new Uint8Array()
+          };
+
+          const result = apollo.isPublicKeyData(key);
+
+          expect(result).to.be.false;
+        });
+      });
+    });
+
+    describe("restorePrivateKey", () => {
+      test("recoveryId ed25519+priv - matches - returns Ed25519PrivateKey instance", () => {
+        const key: StorableKey = {
+          recoveryId: "ed25519+priv",
+          storableData: Fixtures.Keys.ed25519.privateKey.raw
+        };
+
+        const result = apollo.restorePrivateKey(key);
+
+        expect(result).to.be.an.instanceOf(Ed25519PrivateKey);
+      });
+
+      test("recoveryId x25519+priv - matches - returns X25519PrivateKey instance", () => {
+        const key: StorableKey = {
+          recoveryId: "x25519+priv",
+          storableData: Fixtures.Keys.x25519.privateKey.raw
+        };
+
+        const result = apollo.restorePrivateKey(key);
+
+        expect(result).to.be.an.instanceOf(X25519PrivateKey);
+      });
+
+      test("recoveryId secp256k1+priv - matches - returns Secp256k1PrivateKey instance", () => {
+        const key: StorableKey = {
+          recoveryId: "secp256k1+priv",
+          storableData: Fixtures.Keys.secp256K1.privateKey.raw
+        };
+
+        const result = apollo.restorePrivateKey(key);
+
+        expect(result).to.be.an.instanceOf(Secp256k1PrivateKey);
+      });
+
+      test("recoveryId - unmatched - throws", () => {
+        const key = {
+          recoveryId: "notValid",
+          storableData: Fixtures.Keys.ed25519.privateKey.raw
+        };
+
+        assert.throws(() => apollo.restorePrivateKey(key as any), ApolloError.KeyRestoratonFailed);
+      });
+    });
+
+    describe("restorePublicKey", () => {
+      test("recoveryId ed25519+pub - matches - returns Ed25519PrivateKey instance", () => {
+        const key: StorableKey = {
+          recoveryId: "ed25519+pub",
+          storableData: Fixtures.Keys.ed25519.publicKey.raw
+        };
+
+        const result = apollo.restorePublicKey(key);
+
+        expect(result).to.be.an.instanceOf(Ed25519PublicKey);
+      });
+
+      test("recoveryId x25519+pub - matches - returns X25519PublicKey instance", () => {
+        const key: StorableKey = {
+          recoveryId: "x25519+pub",
+          storableData: Fixtures.Keys.x25519.publicKey.raw
+        };
+
+        const result = apollo.restorePublicKey(key);
+
+        expect(result).to.be.an.instanceOf(X25519PublicKey);
+      });
+
+      test("recoveryId secp256k1+pub - matches - returns Secp256k1PublicKey instance", () => {
+        const key: StorableKey = {
+          recoveryId: "secp256k1+pub",
+          storableData: Fixtures.Keys.secp256K1.publicKey.raw
+        };
+
+        const result = apollo.restorePublicKey(key);
+
+        expect(result).to.be.an.instanceOf(Secp256k1PublicKey);
+      });
+
+      test("recoveryId - unmatched - throws", () => {
+        const key = {
+          recoveryId: "notValid",
+          storableData: Fixtures.Keys.ed25519.publicKey.raw
+        };
+
+        assert.throws(() => apollo.restorePublicKey(key as any), ApolloError.KeyRestoratonFailed);
+      });
+    });
   });
 });

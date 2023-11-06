@@ -5,17 +5,20 @@ import {
   ImportableKey,
   KeyProperties,
   KeyTypes,
-  PublicKey
+  PublicKey,
+  StorableKey
 } from "../../domain";
 
 /**
  * @ignore
  */
-export class X25519PublicKey extends PublicKey implements ExportableKey {
+export class X25519PublicKey extends PublicKey implements ExportableKey, StorableKey {
+  public readonly recoveryId = "x25519+pub";
+
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;
   public size: number;
-  public type: KeyTypes = KeyTypes.EC;
+  public type = KeyTypes.EC;
 
   public readonly to = ExportableKey.factory(this, { pemLabel: "PUBLIC KEY" });
   static from = ImportableKey.factory(X25519PublicKey, { pemLabel: "PUBLIC KEY" });
@@ -26,6 +29,10 @@ export class X25519PublicKey extends PublicKey implements ExportableKey {
     this.raw = this.getInstance(bytes).raw;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.X25519);
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   getEncoded(): Buffer {

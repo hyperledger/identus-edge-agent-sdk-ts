@@ -1,10 +1,15 @@
-export enum SecurityLevel {
-  high,
-  low,
-}
+
 export abstract class StorableKey {
-  abstract store(): void;
-  abstract securityLevel: SecurityLevel;
-  abstract StorableData: Uint8Array;
-  abstract restorationIdentifier: string;
+  abstract recoveryId: StorableKey.RecoveryId;
+  abstract storableData: Uint8Array;
+  // abstract index?: number;
+}
+
+export namespace StorableKey {
+  export type RecoveryId = `${RecoveryId.algo}+${RecoveryId.suffix}`;
+
+  export namespace RecoveryId {
+    export type algo = "secp256k1" | "x25519" | "ed25519";
+    export type suffix = "pub" | "priv";
+  }
 }
