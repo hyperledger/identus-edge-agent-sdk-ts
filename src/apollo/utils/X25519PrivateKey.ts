@@ -1,14 +1,15 @@
 import * as x25519 from "@stablelib/x25519";
 import { base64url } from "multiformats/bases/base64";
-import { Curve, KeyTypes, PrivateKey } from "../../domain";
-import { KeyProperties } from "../../domain/models/KeyProperties";
 import { X25519PublicKey } from "./X25519PublicKey";
+import { Curve, KeyTypes, KeyProperties, PrivateKey, StorableKey } from "../../domain";
 
 /**
  * @ignore
  */
-export class X25519PrivateKey extends PrivateKey {
+export class X25519PrivateKey extends PrivateKey implements StorableKey {
   public static ec = x25519;
+  public readonly recoveryId = "x25519+priv";
+
   public type: KeyTypes = KeyTypes.Curve25519;
   public keySpecification: Map<string, string> = new Map();
   public size: number;
@@ -19,6 +20,10 @@ export class X25519PrivateKey extends PrivateKey {
     this.raw = nativeValue;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.X25519);
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   getEncoded(): Buffer {

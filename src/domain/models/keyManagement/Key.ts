@@ -32,7 +32,11 @@ export abstract class Key {
 
   abstract getEncoded(): Uint8Array;
 
-  isExportable(): this is StorableKey {
+  isDerivable(): this is DerivableKey {
+    return "derive" in this;
+  }
+
+  isExportable(): this is unknown {
     return "export" in this;
   }
 
@@ -40,8 +44,8 @@ export abstract class Key {
     return "sign" in this;
   }
 
-  isDerivable(): this is DerivableKey {
-    return "derive" in this;
+  isStorable(): this is StorableKey {
+    return "recoveryId" in this;
   }
 
   canVerify(): this is VerifiableKey {

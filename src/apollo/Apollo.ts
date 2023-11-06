@@ -2,22 +2,34 @@ import { Apollo as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 
-import { Curve, KeyTypes, PrivateKey, Seed, SeedWords } from "../domain/models";
-import { MnemonicWordList } from "../domain/models/WordList";
+import {
+  getKeyCurveByNameAndIndex,
+  ApolloError,
+  Curve,
+  KeyTypes,
+  KeyProperties,
+  MnemonicWordList,
+  PrivateKey,
+  PublicKey,
+  Seed,
+  SeedWords,
+  StorableKey,
+} from "../domain";
 import {
   MnemonicLengthException,
   MnemonicWordException,
 } from "../domain/models/errors/Mnemonic";
+
 import { DerivationPath } from "./utils/derivation/DerivationPath";
 import { KeyDerivation } from "./utils/derivation/KeyDerivation";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
-import { ApolloError } from "../domain/models/Errors";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
-import { KeyProperties } from "../domain/models/KeyProperties";
-import { getKeyCurveByNameAndIndex } from "../domain/models";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
+import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
+import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
+import { X25519PublicKey } from "./utils/X25519PublicKey";
 
 /**
  * Apollo defines the set of cryptographic operations that are used in the Atala PRISM.
@@ -266,8 +278,8 @@ export default class Apollo implements ApolloInterface {
 
         const derivationPathStr = parameters[KeyProperties.derivationPath]
           ? Buffer.from(parameters[KeyProperties.derivationPath]).toString(
-              "hex",
-            )
+            "hex",
+          )
           : Buffer.from(`m/0'/0'/0'`).toString("hex");
 
         const seedStr = parameters[KeyProperties.seed];
@@ -304,5 +316,46 @@ export default class Apollo implements ApolloInterface {
     }
 
     throw new ApolloError.InvalidKeyType(keyType, Object.values(KeyTypes));
+  }
+
+
+  isPrivateKeyData(key: StorableKey) {
+    const suffix = key.recoveryId.split("+")[1] as StorableKey.RecoveryId.suffix;
+    return suffix === "priv";
+  }
+
+  isPublicKeyData(key: StorableKey) {
+    const suffix = key.recoveryId.split("+")[1] as StorableKey.RecoveryId.suffix;
+    return suffix === "pub";
+  }
+
+  restorePrivateKey(key: StorableKey): PrivateKey {
+    switch (key.recoveryId) {
+      case "secp256k1+priv":
+        return new Secp256k1PrivateKey(key.storableData);
+
+      case "ed25519+priv":
+        return new Ed25519PrivateKey(key.storableData);
+
+      case "x25519+priv":
+        return new X25519PrivateKey(key.storableData);
+    }
+
+    throw new ApolloError.KeyRestoratonFailed(key);
+  }
+
+  restorePublicKey(key: StorableKey): PublicKey {
+    switch (key.recoveryId) {
+      case "secp256k1+pub":
+        return new Secp256k1PublicKey(key.storableData);
+
+      case "ed25519+pub":
+        return new Ed25519PublicKey(key.storableData);
+
+      case "x25519+pub":
+        return new X25519PublicKey(key.storableData);
+    }
+
+    throw new ApolloError.KeyRestoratonFailed(key);
   }
 }

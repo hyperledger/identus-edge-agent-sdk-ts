@@ -5,15 +5,24 @@ import BigInteger from "bn.js";
 import * as ECConfig from "../../config/ECConfig";
 import { ECCoordinate } from "./ec/ECCoordinate";
 import { ECPoint } from "./ec/ECPoint";
-import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
-import { KeyProperties } from "../../domain/models/KeyProperties";
-import { ApolloError } from "../../domain/models/Errors";
-import { Curve, KeyTypes, PublicKey } from "../../domain";
+
+import {
+  ApolloError,
+  Curve,
+  KeyTypes,
+  KeyProperties,
+  PublicKey,
+  StorableKey,
+  VerifiableKey
+} from "../../domain";
+
 /**
  * @ignore
  */
-export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
+export class Secp256k1PublicKey extends PublicKey implements StorableKey, VerifiableKey {
   public static ec: elliptic.ec = new elliptic.ec("secp256k1");
+  public readonly recoveryId = "secp256k1+pub";
+
   public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<KeyProperties | string, string> = new Map();
   public size;
@@ -67,6 +76,10 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
 
     this.raw = nativeValue;
     this.size = this.raw.length;
+  }
+
+  get storableData() {
+    return this.raw;
   }
 
   getEncoded(): Uint8Array {
