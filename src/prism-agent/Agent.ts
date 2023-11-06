@@ -1,19 +1,12 @@
-import { Apollo } from "../domain/buildingBlocks/Apollo";
-import {
-  DID,
-  Message,
-  Seed,
-  Service as DIDDocumentService,
-  Signature,
-  Credential,
-} from "../domain";
-import { Castor } from "../domain/buildingBlocks/Castor";
-import { Pluto } from "../domain/buildingBlocks/Pluto";
-import { Mercury } from "../domain/buildingBlocks/Mercury";
-import { Api } from "../domain/models/Api";
+import * as Domain from "../domain";
+
+import Apollo from "../apollo";
+import Castor from "../castor";
+import Mercury from "../mercury";
+import Pollux from "../pollux";
+
 import { ApiImpl } from "./helpers/ApiImpl";
 
-import { AgentError } from "../domain/models/Errors";
 import {
   AgentCredentials as AgentCredentialsClass,
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
@@ -24,17 +17,20 @@ import {
   MediatorHandler,
   PrismOnboardingInvitation,
 } from "./types";
-import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
+
 import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
 import { ConnectionsManager } from "./connectionsManager/ConnectionsManager";
+import { OutOfBandInvitation } from "./protocols/invitation/v2/OutOfBandInvitation";
 import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "./protocols/issueCredential/RequestCredential";
-import Pollux from "../pollux/Pollux";
 import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import { Presentation } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
+import { DIDCommWrapper } from "../mercury/didcomm/Wrapper";
+import { PublicMediatorStore } from "./mediator/PlutoMediatorStore";
+import { BasicMediatorHandler } from "./mediator/BasicMediatorHandler";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -43,9 +39,6 @@ enum AgentState {
   STOPPING = "stopping",
 }
 
-interface AgentConfig {
-  endpointUrl: string;
-}
 /**
  * Edge agent implementation
  *
@@ -55,10 +48,9 @@ interface AgentConfig {
  */
 export default class Agent
   implements
-    AgentCredentialsClass,
-    AgentDIDHigherFunctionsClass,
-    AgentInvitationsClass
-{
+  AgentCredentialsClass,
+  AgentDIDHigherFunctionsClass,
+  AgentInvitationsClass {
   /**
    * Agent state
    *
@@ -70,15 +62,8 @@ export default class Agent
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
-  private apollo: Apollo;
-  private castor: Castor;
-  private pluto: Pluto;
+
   private pollux: Pollux;
-  private mercury: Mercury;
-  private mediationHandler: MediatorHandler;
-  private connectionManager;
-  private seed: Seed;
-  private api: Api;
 
   /**
    * Creates an instance of Agent.
@@ -94,22 +79,15 @@ export default class Agent
    * @param {Api} [api=new ApiImpl()]
    */
   constructor(
-    apollo: Apollo,
-    castor: Castor,
-    pluto: Pluto,
-    mercury: Mercury,
-    mediationHandler: MediatorHandler,
-    connectionManager: ConnectionsManager,
-    seed: Seed = apollo.createRandomSeed().seed,
-    api: Api = new ApiImpl()
+    public readonly apollo: Domain.Apollo,
+    public readonly castor: Domain.Castor,
+    public readonly pluto: Domain.Pluto,
+    public readonly mercury: Domain.Mercury,
+    public readonly mediationHandler: MediatorHandler,
+    public readonly connectionManager: ConnectionsManager,
+    public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
+    public readonly api: Domain.Api = new ApiImpl()
   ) {
-    this.apollo = apollo;
-    this.castor = castor;
-    this.pluto = pluto;
-    this.mercury = mercury;
-    this.mediationHandler = mediationHandler;
-    this.seed = seed;
-    this.api = api;
     this.pollux = new Pollux(castor);
 
     this.connectionManager =
@@ -123,6 +101,7 @@ export default class Agent
       this.pollux,
       seed
     );
+
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
@@ -131,12 +110,65 @@ export default class Agent
       mediationHandler,
       seed
     );
+
     this.agentInvitations = new AgentInvitations(
       this.pluto,
       this.api,
       this.agentDIDHigherFunctions,
       this.connectionManager
     );
+  }
+
+  /**
+   * Convenience initializer for Agent
+   * allowing default instantiation, omitting all but the absolute necessary parameters
+   * 
+   * @param {Object} params - dependencies object
+   * @param {DID | string} params.mediatorDID - did of the mediator to be used
+   * @param {Pluto} params.pluto - storage implementation
+   * @param {Api} [params.api]
+   * @param {Apollo} [params.apollo]
+   * @param {Castor} [params.castor]
+   * @param {Mercury} [params.mercury]
+   * @param {Seed} [params.seed]
+   * @returns {Agent}
+   */
+  static initialize(params: {
+    mediatorDID: Domain.DID | string;
+    pluto: Domain.Pluto;
+    api?: Domain.Api;
+    apollo?: Domain.Apollo;
+    castor?: Domain.Castor;
+    mercury?: Domain.Mercury;
+    seed?: Domain.Seed;
+  }): Agent {
+    const mediatorDID = Domain.DID.from(params.mediatorDID);
+    const pluto = params.pluto;
+
+    const api = params.api ?? new ApiImpl();
+    const apollo = params.apollo ?? new Apollo();
+    const castor = params.castor ?? new Castor(apollo);
+
+    const didcomm = new DIDCommWrapper(apollo, castor, pluto);
+    const mercury = params.mercury ?? new Mercury(castor, didcomm, api);
+
+    const store = new PublicMediatorStore(pluto);
+    const handler = new BasicMediatorHandler(mediatorDID, mercury, store);
+    const manager = new ConnectionsManager(castor, mercury, pluto, handler);
+    const seed = params.seed ?? apollo.createRandomSeed().seed;
+
+    const agent = new Agent(
+      apollo,
+      castor,
+      pluto,
+      mercury,
+      handler,
+      manager,
+      seed,
+      api
+    );
+
+    return agent;
   }
 
   /**
@@ -151,7 +183,7 @@ export default class Agent
   }
 
   /**
-   * Mainly for testing porposed but instanciating the Agne tfrom a ConnectionManager directly
+   * Mainly for testing purposes but instantiating the Agent from a ConnectionManager directly
    *
    * @static
    * @param {Apollo} apollo
@@ -166,11 +198,11 @@ export default class Agent
   static instanceFromConnectionManager(
     apollo: Apollo,
     castor: Castor,
-    pluto: Pluto,
+    pluto: Domain.Pluto,
     mercury: Mercury,
     connectionManager: ConnectionsManager,
-    seed?: Seed,
-    api?: Api
+    seed?: Domain.Seed,
+    api?: Domain.Api
   ) {
     return new Agent(
       apollo,
@@ -200,7 +232,7 @@ export default class Agent
       await this.pollux.start();
       await this.connectionManager.startMediator();
     } catch (e) {
-      if (e instanceof AgentError.NoMediatorAvailableError) {
+      if (e instanceof Domain.AgentError.NoMediatorAvailableError) {
         const hostDID = await this.createNewPeerDID([], false);
         await this.connectionManager.registerMediator(hostDID);
       } else throw e;
@@ -210,7 +242,7 @@ export default class Agent
       this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
-      throw new AgentError.MediationRequestFailedError("Mediation failed");
+      throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
     }
 
     const storedLinkSecret = await this.pluto.getLinkSecret();
@@ -249,9 +281,9 @@ export default class Agent
    */
   async createNewPrismDID(
     alias: string,
-    services: DIDDocumentService[] = [],
+    services: Domain.Service[] = [],
     keyPathIndex?: number
-  ): Promise<DID> {
+  ): Promise<Domain.DID> {
     return this.agentDIDHigherFunctions.createNewPrismDID(
       alias,
       services,
@@ -268,9 +300,9 @@ export default class Agent
    * @returns {Promise<DID>}
    */
   async createNewPeerDID(
-    services: DIDDocumentService[] = [],
+    services: Domain.Service[] = [],
     updateMediator = true
-  ): Promise<DID> {
+  ): Promise<Domain.DID> {
     return this.agentDIDHigherFunctions.createNewPeerDID(
       services,
       updateMediator
@@ -307,7 +339,7 @@ export default class Agent
    * @param {Uint8Array} message
    * @returns {Promise<Signature>}
    */
-  async signWith(did: DID, message: Uint8Array): Promise<Signature> {
+  async signWith(did: Domain.DID, message: Uint8Array): Promise<Domain.Signature> {
     return this.agentDIDHigherFunctions.signWith(did, message);
   }
 
@@ -369,16 +401,16 @@ export default class Agent
    * @param {Message} message
    * @returns {Promise<Message | undefined>}
    */
-  sendMessage(message: Message): Promise<Message | undefined> {
+  sendMessage(message: Domain.Message): Promise<Domain.Message | undefined> {
     return this.connectionManager.sendMessage(message);
   }
 
   /**
    * Asyncronously get all verifiable credentials
    *
-   * @returns {Promise<VerifiableCredential[]>}
+   * @returns {Promise<Credential[]>}
    */
-  verifiableCredentials(): Promise<Credential[]> {
+  verifiableCredentials(): Promise<Domain.Credential[]> {
     return this.agentCredentials.verifiableCredentials();
   }
 
@@ -425,7 +457,7 @@ export default class Agent
    */
   async processIssuedCredentialMessage(
     message: IssueCredential
-  ): Promise<Credential> {
+  ): Promise<Domain.Credential> {
     return this.agentCredentials.processIssuedCredentialMessage(message);
   }
 
@@ -441,7 +473,7 @@ export default class Agent
    */
   async createPresentationForRequestProof(
     request: RequestPresentation,
-    credential: Credential
+    credential: Domain.Credential
   ): Promise<Presentation> {
     return this.agentCredentials.createPresentationForRequestProof(
       request,
