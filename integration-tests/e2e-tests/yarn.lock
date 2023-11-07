@@ -140,10 +140,10 @@
   resolved "https://registry.yarnpkg.com/@cucumber/tag-expressions/-/tag-expressions-5.0.1.tgz#94ed2299eaa9085f113d71cb4da1186ad57b3de9"
   integrity sha512-N43uWud8ZXuVjza423T9ZCIJsaZhFekmakt7S9bvogTxqdVGbRobjR663s0+uW0Rz9e+Pa8I6jUuWtoBLQD2Mw==
 
-"@input-output-hk/atala-prism-wallet-sdk@^2.5.0":
-  version "2.5.0"
-  resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/2.5.0/2ad8fea45603571aaa9a0423493cfc8bc167913f#2ad8fea45603571aaa9a0423493cfc8bc167913f"
-  integrity sha512-3xAtnT/gqsKXzSeqmGc+IlfnpY3SBluD96rRqJ0sz2S3rA30Ehx2mjidiySaL/fYywfbj/dropvK0D5GM28bjA==
+"@input-output-hk/atala-prism-wallet-sdk@^3.0.0":
+  version "3.0.0"
+  resolved "https://npm.pkg.github.com/download/@input-output-hk/atala-prism-wallet-sdk/3.0.0/279b92614284a61c3ba102213e9fa9e202faeb9a#279b92614284a61c3ba102213e9fa9e202faeb9a"
+  integrity sha512-k/eU1ji3c4FmR8TFCuKFsKlOVdpgJyKUaGlgrWTSYxUCJvJH3xLQWsLy8SPBbJ9S8UnXUQr/5oCFKVydRfaS3w==
   dependencies:
     "@scure/bip32" "^1.3.0"
     "@scure/bip39" "^1.1.1"
