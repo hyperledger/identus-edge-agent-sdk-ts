@@ -161,7 +161,7 @@ export class CloudAgentConfiguration {
       )
       return
     } catch (err) {
-      Utils.appendToNotes(`Schema definition not found for [${this.anoncredDefinitionGuid}]. Creating a new one.`)
+      Utils.appendToNotes(`Credential definition not found. Creating a new one.`)
     }
 
     const schema = {
@@ -210,7 +210,7 @@ export class CloudAgentConfiguration {
 
 export const axiosInstance = axios.create({
   baseURL: CloudAgentConfiguration.agentUrl,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     Accept: "application/json,application/xml",
     APIKEY: CloudAgentConfiguration.apiKey
