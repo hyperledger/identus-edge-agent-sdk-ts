@@ -15,15 +15,24 @@ import { Anoncreds } from "../models/Anoncreds";
  *
  */
 export interface Pluto {
+  /**
+   * Store the AnonCreds Credential Metadata referencing its linkSecret name
+   */
   storeCredentialMetadata(
     metadata: Anoncreds.CredentialRequestMeta,
     linkSecret: Anoncreds.LinkSecret
   ): Promise<void>;
 
+  /**
+   * Fetch the AnonCreds Credential Metadata by its linkSecret name
+   */
   fetchCredentialMetadata(
     linkSecretName: string
   ): Promise<Anoncreds.CredentialRequestMeta | null>;
 
+  /**
+   * Pluto initialise function
+   */
   start(): Promise<void>;
 
   /**
@@ -72,6 +81,9 @@ export interface Pluto {
    */
   storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
 
+  /**
+   * Store a Credential into the Database
+   */
   storeCredential(credential: Credential): Promise<void>;
 
   /**
@@ -184,10 +196,19 @@ export interface Pluto {
    */
   getAllMediators(): Promise<Array<Mediator>>;
 
+  /**
+   * Retrieve all the stored credentials
+   */
   getAllCredentials(): Promise<Array<Credential>>;
 
+  /**
+   * Retrieve the anoncreds stored link secret by its name
+   */
   getLinkSecret(linkSecretName?: string): Promise<Anoncreds.LinkSecret | null>;
 
+  /**
+   * Store a new anoncreds linkSecret
+   */
   storeLinkSecret(
     linkSecret: Anoncreds.LinkSecret,
     linkSecretName: string
