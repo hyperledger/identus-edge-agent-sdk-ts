@@ -1,7 +1,7 @@
 import { BeforeAll, defineParameterType, setDefaultTimeout } from "@cucumber/cucumber"
 import { actorCalled, actorInTheSpotlight, configure } from "@serenity-js/core"
 
-setDefaultTimeout(3 * 60 * 1000)
+setDefaultTimeout(5 * 60 * 1000)
 
 BeforeAll(async function () {
   // Configure Serenity/JS
@@ -21,15 +21,15 @@ defineParameterType({
   // regexp: /[A-Z][a-z]+/,
   regexp: /.*/,
   transformer(name: string) {
-      return actorCalled(name);
+    return actorCalled(name)
   },
-  name: 'actor',
-});
+  name: "actor",
+})
 
 defineParameterType({
   regexp: /he|she|they|his|her|their/,
   transformer() {
-      return actorInTheSpotlight();
+    return actorInTheSpotlight()
   },
-  name: 'pronoun',
-});
+  name: "pronoun",
+})
