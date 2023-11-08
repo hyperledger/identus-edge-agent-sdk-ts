@@ -1,19 +1,20 @@
 import { Expectation } from "@serenity-js/core"
+import _ from "lodash"
 
 export class Expectations {
-    static propertyValueToBe = (propertyValue: (actual: any) => string, expected: string) => {
-        return Expectation.define(
-            `propertyValueEqualTo`, 'contain a specified attribute value equal to',
-            (actual: any, expected: string) => {
-                return propertyValue(actual) == expected
-            }
-        )(expected)
-    }
-    
-    static equalsTo = Expectation.define(
-        'isEqualTo', 'is equal to',
-        (actual: number, expected: number) =>
-            actual === expected,
-    )
-    
+  static propertyValueToBe = <T>(jsonPath: string, expected: string) => {
+    return Expectation.define(
+      "propertyValueEqualTo", `contain path property [${jsonPath}] value equal to`,
+      (actual: T, expected: string) => {
+        return _.get(actual, jsonPath) == expected
+      }
+    )(expected)
+  }
+
+  static equalsTo = Expectation.define(
+    "isEqualTo", "is equal to",
+    (actual: number, expected: number) =>
+      actual === expected,
+  )
+
 }
