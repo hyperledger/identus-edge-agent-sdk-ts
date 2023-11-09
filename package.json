@@ -1,5 +1,5 @@
 {
-  "name": "@input-output-hk/atala-prism-wallet-sdk",
+  "name": "@atala/prism-wallet-sdk",
   "version": "3.0.0",
   "description": "PRISM typescript SDK",
   "main": "build/node/index.js",
@@ -19,14 +19,6 @@
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
     "docs": "npx typedoc --options typedoc.json --hideGenerator"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts.git",
-    "directory": "@input-output-hk/atala-prism-wallet-sdk"
   },
   "author": "IOHK",
   "license": "Apache-2.0",

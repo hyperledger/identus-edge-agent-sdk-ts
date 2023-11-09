@@ -10,7 +10,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
       ATALA_GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.ATALA_NPM_TOKEN }}
 
     runs-on: ubuntu-latest
     steps:
@@ -23,8 +23,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-          registry-url: https://npm.pkg.github.com/
-          scope: "@input-output-hk"
+          scope: "@atala"
 
       - name: Install dependencies
         run: npm install

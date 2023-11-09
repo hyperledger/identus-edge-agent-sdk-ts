@@ -45,14 +45,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
-      - name: Setup Node.js for @input-output-hk
+      - name: Setup Node.js for @atala
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ATALA_NPM_TOKEN }}
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-          registry-url: https://npm.pkg.github.com/
-          scope: "@input-output-hk"
+          scope: "@atala"
 
       - name: Setup Node.js for @hyperledger-labs
         env:
