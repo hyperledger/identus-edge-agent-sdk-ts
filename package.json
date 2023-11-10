@@ -21,6 +21,10 @@
     "docs": "npx typedoc --options typedoc.json --hideGenerator"
   },
   "author": "IOHK",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts.git"
+  },
   "license": "Apache-2.0",
   "peerDependenciesMeta": {
     "react-native-sqlite-storage": {

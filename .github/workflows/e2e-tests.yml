@@ -40,23 +40,20 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Setup Node.js for @atala
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ATALA_NPM_TOKEN }}
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-          scope: "@atala"
 
       - name: Setup Node.js for @hyperledger-labs
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/setup-node@v3
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/

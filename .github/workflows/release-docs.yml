@@ -15,19 +15,15 @@ jobs:
   docs:
     name: build documentation and release
     runs-on: ubuntu-latest
-    env:
-      GITHUB_ACTOR: ${{ github.actor }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-          scope: "@atala"
 
       - name: Install dependencies
         run: npm install

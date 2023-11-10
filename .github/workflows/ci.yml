@@ -1,3 +1,4 @@
+
 name: Continuous integration
 
 concurrency:
@@ -18,15 +19,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ATALA_NPM_TOKEN }}
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
-          scope: "@atala"
 
       - name: Install
         run: npm install
