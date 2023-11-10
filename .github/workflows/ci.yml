@@ -46,6 +46,7 @@ jobs:
         with:
           audit_level: moderate
           create_issues: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Jest Coverage Comment
         uses: MishaKav/jest-coverage-comment@v1.0.23
