@@ -67,16 +67,6 @@ export interface Pluto {
   storeMessages(messages: Array<Message>): Promise<void>;
 
   /**
-   * Store a list of private keys with its metadata and a reference to the DID it belongs to.
-   */
-  storePrivateKeys(
-    privateKey: PrivateKey,
-    did: DID,
-    keyPathIndex: number,
-    metaId: string | null
-  ): Promise<void>;
-
-  /**
    * Store a mediator information.
    */
   storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
@@ -87,24 +77,9 @@ export interface Pluto {
   storeCredential(credential: Credential): Promise<void>;
 
   /**
-   * Retrieve all stored PRISM DIDs.
-   */
-  getAllPrismDIDs(): Promise<PrismDIDInfo[]>;
-
-  /**
    * Retrieve DID information for a given DID.
    */
   getDIDInfoByDID(did: DID): Promise<PrismDIDInfo | null>;
-
-  /**
-   * Retrieve DID information for a given DID alias.
-   */
-  getDIDInfoByAlias(alias: string): Promise<PrismDIDInfo[]>;
-
-  /**
-   * Retrieve a PRISM DID key path index for a given DID.
-   */
-  getPrismDIDKeyPathIndex(did: DID): Promise<number | null>;
 
   /**
    * Get the last used PRISM key path index.
@@ -120,76 +95,6 @@ export interface Pluto {
    * Retrieve available private keys for a given DID.
    */
   getDIDPrivateKeysByDID(did: DID): Promise<Array<PrivateKey>>;
-
-  /**
-   * Retrieve private key for a given key ID.
-   */
-  getDIDPrivateKeyByID(id: string): Promise<PrivateKey | null>;
-
-  /**
-   * Retrieve all stored DID pairs (DIDComm connections).
-   */
-  getAllDidPairs(): Promise<Array<DIDPair>>;
-
-  /**
-   * Retrieve a DID pair containing a given DID as either host or receiver.
-   */
-  getPairByDID(did: DID): Promise<DIDPair | null>;
-
-  /**
-   * Retrieve a DID pair by a given pair name.
-   */
-  getPairByName(name: string): Promise<DIDPair | null>;
-
-  /**
-   * Retrieve all stored DIDComm messages.
-   */
-  getAllMessages(): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages, received from or sent to a given DID
-   */
-  getAllMessagesByDID(did: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored, sent DIDComm messages.
-   */
-  getAllMessagesSent(): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored, received DIDComm messages.
-   */
-  getAllMessagesReceived(): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages, sent to a given DID.
-   */
-  getAllMessagesSentTo(did: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages, received from a given DID.
-   */
-  getAllMessagesReceivedFrom(did: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all stored DIDComm messages with given message type, and
-   * optionally, related to a given DID. "Related" means that message should
-   * contain a given DID in either "from" or "to" field.
-   */
-  getAllMessagesOfType(
-    type: string,
-    relatedWithDID?: DID
-  ): Promise<Array<Message>>;
-
-  /**
-   * Retrieve all DIDComm messages containing given "from" AND "to" DIDs.
-   */
-  getAllMessagesByFromToDID(from: DID, to: DID): Promise<Array<Message>>;
-
-  /**
-   * Retrieve a DIDComm message by ID.
-   */
-  getMessage(id: string): Promise<Message | null>;
 
   /**
    * Retrieve all stored mediators.
