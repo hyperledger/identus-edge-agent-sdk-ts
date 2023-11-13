@@ -1,3 +1,15 @@
+# [3.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.0.0...v3.1.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* CI pipeline issues. ([#121](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/121)) ([28b5a8f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/28b5a8f4492f4972ff4848e8a2d35f333872bfeb))
+
+
+### Features
+
+* extending Agent.acceptInvitation to handle OOB + Prism ([#111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/111)) ([ce8326b](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/ce8326b0cf9c0b9090b4e5df88f6e37601bbcc95))
+
 # [3.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.5.0...v3.0.0) (2023-11-07)
 
 
