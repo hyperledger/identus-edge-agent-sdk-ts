@@ -44,7 +44,7 @@ export class CloudAgentConfiguration {
   }
 
   private static getSdkVersion(): string {
-    const file = "node_modules/@input-output-hk/atala-prism-wallet-sdk/package.json"
+    const file = "node_modules/@atala/prism-wallet-sdk/package.json"
     const json = JSON.parse(fs.readFileSync(file).toString())
     return json.version
   }
@@ -108,7 +108,7 @@ export class CloudAgentConfiguration {
   }
 
   /**
-   * Checks if the environment SCHEMA_ID variable exists in prism-agent, otherwise it creates a new one.
+   * Checks if the environment JWT_SCHEMA_GUID variable exists in prism-agent, otherwise it creates a new one.
    */
   static async prepareJwtSchema() {
     try {
@@ -154,6 +154,9 @@ export class CloudAgentConfiguration {
     this.jwtSchemaGuid = schemaResponse.data.guid
   }
 
+  /**
+   * Checks if the environment ANONCRED_DEFINITION_GUID variable exists in prism-agent, otherwise it creates a new one.
+   */
   static async prepareAnoncredDefinition() {
     try {
       await axiosInstance.get(
@@ -161,7 +164,7 @@ export class CloudAgentConfiguration {
       )
       return
     } catch (err) {
-      Utils.appendToNotes(`Credential definition not found. Creating a new one.`)
+      Utils.appendToNotes("Credential definition not found. Creating a new one.")
     }
 
     const schema = {
