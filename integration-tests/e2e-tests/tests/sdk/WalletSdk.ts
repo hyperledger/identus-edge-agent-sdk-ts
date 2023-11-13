@@ -10,8 +10,8 @@ import {
   Domain, ListenerKey,
   Mercury,
   PublicMediatorStore
-} from "@input-output-hk/atala-prism-wallet-sdk"
-import {Message} from "@input-output-hk/atala-prism-wallet-sdk/build/typings/domain"
+} from "@atala/prism-wallet-sdk"
+import {Message} from "@atala/prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
 import {PlutoInMemory} from "./src/PlutoInMemory"
 import {CloudAgentConfiguration} from "./configuration/CloudAgentConfiguration"

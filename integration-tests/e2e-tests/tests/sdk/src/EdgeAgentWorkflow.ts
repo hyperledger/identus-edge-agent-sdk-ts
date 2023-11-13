@@ -1,4 +1,4 @@
-import {IssueCredential, OfferCredential, RequestPresentation,} from "@input-output-hk/atala-prism-wallet-sdk"
+import {IssueCredential, OfferCredential, RequestPresentation,} from "@atala/prism-wallet-sdk"
 import {Actor, Duration, Notepad, Wait} from "@serenity-js/core"
 import {equals} from "@serenity-js/assertions"
 import {WalletSdk} from "../WalletSdk"
