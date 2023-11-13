@@ -39,29 +39,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Mask apikey
+        env:
+          APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
+        run: echo "::add-mask::${{env.APIKEY}}"
+
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
       - name: Setup Node.js for @input-output-hk
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/setup-node@v3
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/
           scope: "@input-output-hk"
 
       - name: Setup Node.js for @hyperledger-labs
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/setup-node@v3
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/
           scope: "@hyperledger-labs"
+
+      - name: Pack atala-prism-wallet-sdk
+        if: github.event_name == 'pull_request'
+        run: |
+          npm install
+          npm run build
+          npm pack
+          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name atala-prism-wallet-sdk-* | tr -d '\n')" >> "$GITHUB_ENV"
+  
+      - name: Install local dependency
+        if: github.event_name == 'pull_request'
+        working-directory: integration-tests/e2e-tests
+        run: |
+          yarn
+          yarn add "../../${{ env.PACKAGE_NAME }}"
 
       - name: Install dependencies
         working-directory: integration-tests/e2e-tests
