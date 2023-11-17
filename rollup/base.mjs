@@ -53,7 +53,6 @@ export default (output, plugins = []) => {
           },
         },
       }),
-      terser(),
       ...plugins,
       commonjs(),
       cleanup(),
