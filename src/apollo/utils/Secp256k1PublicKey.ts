@@ -1,6 +1,6 @@
 import BN from "bn.js";
 import BigInteger from "bn.js";
-import * as ApolloPKG from "@input-output-hk/apollo";
+import * as ApolloPKG from "@atala/apollo";
 
 import * as ECConfig from "../../config/ECConfig";
 import { ECPoint } from "./ec/ECPoint";

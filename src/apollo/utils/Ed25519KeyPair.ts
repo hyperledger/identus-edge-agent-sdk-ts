@@ -1,4 +1,4 @@
-import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
+import ApolloBaseAsymmetricEncryption from "@atala/apollo";
 import { KeyPair } from "../../domain";
 import { Ed25519PrivateKey } from "./Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";

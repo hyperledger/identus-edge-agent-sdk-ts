@@ -1,4 +1,4 @@
-import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
+import ApolloBaseAsymmetricEncryption from "@atala/apollo";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 

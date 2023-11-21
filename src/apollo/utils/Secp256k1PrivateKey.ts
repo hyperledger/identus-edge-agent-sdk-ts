@@ -6,7 +6,7 @@ import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { Curve, DerivableKey, KeyTypes, PrivateKey } from "../../domain";
 
-import * as ApolloPKG from "@input-output-hk/apollo";
+import * as ApolloPKG from "@atala/apollo";
 import { DerivationPath } from "./derivation/DerivationPath";
 
 const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
@@ -28,8 +28,7 @@ const {
  */
 export class Secp256k1PrivateKey
   extends PrivateKey
-  implements SignableKey, DerivableKey
-{
+  implements SignableKey, DerivableKey {
   public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<string, string> = new Map();
   public raw: Uint8Array;

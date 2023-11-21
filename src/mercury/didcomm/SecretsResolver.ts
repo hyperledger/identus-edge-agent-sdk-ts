@@ -1,22 +1,13 @@
 import type { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
-import {
-  Curve,
-  KeyTypes,
-  VerificationMethod,
-  VerificationMethods,
-} from "../../domain";
-import Apollo from "../../apollo/Apollo";
-import Castor from "../../castor/Castor";
-import { Pluto } from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
-    private readonly apollo: Apollo,
-    private readonly castor: Castor,
-    private readonly pluto: Pluto
-  ) {}
+    private readonly apollo: Domain.Apollo,
+    private readonly castor: Domain.Castor,
+    private readonly pluto: Domain.Pluto
+  ) { }
 
   async find_secrets(secret_ids: string[]): Promise<string[]> {
     const peerDids = await this.pluto.getAllPeerDIDs();
@@ -38,8 +29,8 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       const did = await this.castor.resolveDID(found.did.toString());
 
       const [publicKeyJWK] = did.coreProperties.reduce((all, property) => {
-        if (property instanceof VerificationMethods) {
-          const matchingValue: VerificationMethod | undefined =
+        if (property instanceof Domain.VerificationMethods) {
+          const matchingValue: Domain.VerificationMethod | undefined =
             property.values.find(
               (verificationMethod) => verificationMethod.id === secret_id
             );
@@ -64,14 +55,14 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     publicKeyJWK: Domain.PublicKeyJWK
   ): Secret {
     const privateKeyBuffer = peerDid.privateKeys.find(
-      (key) => key.keyCurve.curve === Curve.X25519
+      (key) => key.keyCurve.curve === Domain.Curve.X25519
     );
     if (!privateKeyBuffer) {
-      throw new Error(`Invalid PrivateKey Curve ${Curve.X25519}`);
+      throw new Error(`Invalid PrivateKey Curve ${Domain.Curve.X25519}`);
     }
     const privateKey = this.apollo.createPrivateKey({
-      type: KeyTypes.Curve25519,
-      curve: Curve.X25519,
+      type: Domain.KeyTypes.Curve25519,
+      curve: Domain.Curve.X25519,
       raw: privateKeyBuffer.value,
     });
     const ecnumbasis = this.castor.getEcnumbasis(
@@ -84,7 +75,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       id,
       type: "JsonWebKey2020",
       privateKeyJwk: {
-        crv: Curve.X25519,
+        crv: Domain.Curve.X25519,
         kty: "OKP",
         d: Buffer.from(privateKey.getEncoded()).toString(),
         x: publicKeyJWK.x,

@@ -12,11 +12,11 @@ on:
       mediatorOobUrl:
         required: true
         description: Mediator out-of-band url
-        default: https://mediator.rootsid.cloud/oob_url
+        default: https://sit-prism-mediator.atalaprism.io/invitationOOB
       prismAgentUrl:
         required: true
         description: Prism-agent server url
-        default: https://k8s-dev.atalaprism.io/prism-agent
+        default: https://sit-prism-agent-issuer.atalaprism.io/prism-agent
       publishedDid:
         required: false
         description: Published DID
@@ -29,16 +29,9 @@ on:
   pull_request:
     branches:
       - master
-
-env:
-  GITHUB_ACTOR: ${{ secrets.ATALA_GITHUB_ACTOR }}
-  GITHUB_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
-  MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
-  PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
-  PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
-  SCHEMA_ID: ${{ inputs.schemaId || vars.SCHEMA_ID }}
-  APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
-  NODE_AUTH_TOKEN: ${{ secrets.ATALA_GITHUB_TOKEN }}
+  push:
+    branches:
+      - master
 
 jobs:
   run-e2e-tests:
@@ -47,21 +40,33 @@ jobs:
 
     steps:
       - name: Mask apikey
+        env:
+          APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
         run: echo "::add-mask::${{env.APIKEY}}"
 
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.ATALA_GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Setup Node.js for @input-output-hk
         uses: actions/setup-node@v3
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/
           scope: "@input-output-hk"
+
+      - name: Setup Node.js for @hyperledger-labs
+        uses: actions/setup-node@v3
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          node-version: "lts/*"
+          registry-url: https://npm.pkg.github.com/
+          scope: "@hyperledger-labs"
 
       - name: Pack atala-prism-wallet-sdk
         if: github.event_name == 'pull_request'
@@ -69,8 +74,8 @@ jobs:
           npm install
           npm run build
           npm pack
-          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')" >> "$GITHUB_ENV"
-
+          echo "PACKAGE_NAME=$(find . -maxdepth 1 -name atala-prism-wallet-sdk-* | tr -d '\n')" >> "$GITHUB_ENV"
+  
       - name: Install local dependency
         if: github.event_name == 'pull_request'
         working-directory: integration-tests/e2e-tests
@@ -78,12 +83,23 @@ jobs:
           yarn
           yarn add "../../${{ env.PACKAGE_NAME }}"
 
-      - name: Run tests
+      - name: Install dependencies
         working-directory: integration-tests/e2e-tests
-        run: |
-          yarn
-          yarn test:sdk
-          yarn test:sdk:report
+        run: yarn
+
+      - name: Run tests
+        env:
+          MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
+          PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
+          PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
+          SCHEMA_ID: ${{ inputs.schemaId || vars.SCHEMA_ID }}
+          APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
+        working-directory: integration-tests/e2e-tests
+        run: yarn test:sdk
+
+      - name: Generate end-to-end report
+        working-directory: integration-tests/e2e-tests
+        run: yarn test:sdk:report
 
       - name: Add notes to summary
         working-directory: integration-tests/e2e-tests
@@ -92,6 +108,6 @@ jobs:
       - name: Publish Serenity report
         uses: actions/upload-artifact@v3
         with:
-          name: atala-prism-sdk-ts.zip
+          name: atala-prism-sdk-ts
           path: integration-tests/e2e-tests/target/site/wallet-sdk-ts
           if-no-files-found: error

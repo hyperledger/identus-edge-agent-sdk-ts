@@ -6,11 +6,10 @@ import type {
 } from "didcomm-node";
 
 import * as Domain from "../../domain";
-import Castor from "../../castor/Castor";
 import { PeerDIDService } from "../../peer-did/PeerDID";
 
 export class DIDCommDIDResolver implements DIDResolver {
-  constructor(private readonly castor: Castor) {}
+  constructor(private readonly castor: Domain.Castor) {}
 
   async resolve(did: string): Promise<DIDDoc | null> {
     const doc = await this.castor.resolveDID(did);

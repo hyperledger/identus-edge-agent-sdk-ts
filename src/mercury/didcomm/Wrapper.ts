@@ -7,10 +7,8 @@ import type {
   Attachment,
   AttachmentData,
 } from "didcomm-node";
+
 import * as Domain from "../../domain";
-import Apollo from "../../apollo/Apollo";
-import Castor from "../../castor/Castor";
-import { Pluto } from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
 import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
@@ -38,9 +36,9 @@ export class DIDCommWrapper implements DIDCommProtocol {
   private readonly secretsResolver: SecretsResolver;
 
   constructor(
-    readonly apollo: Apollo,
-    readonly castor: Castor,
-    readonly pluto: Pluto
+    readonly apollo: Domain.Apollo,
+    readonly castor: Domain.Castor,
+    readonly pluto: Domain.Pluto
   ) {
     this.didResolver = new DIDCommDIDResolver(castor);
     this.secretsResolver = new DIDCommSecretsResolver(apollo, castor, pluto);

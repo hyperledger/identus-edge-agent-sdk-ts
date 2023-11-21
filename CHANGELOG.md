@@ -1,3 +1,32 @@
+# [3.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.0.0...v3.1.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* CI pipeline issues. ([#121](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/121)) ([28b5a8f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/28b5a8f4492f4972ff4848e8a2d35f333872bfeb))
+
+
+### Features
+
+* extending Agent.acceptInvitation to handle OOB + Prism ([#111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/111)) ([ce8326b](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/ce8326b0cf9c0b9090b4e5df88f6e37601bbcc95))
+
+# [3.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.5.0...v3.0.0) (2023-11-07)
+
+
+* docs!: Introduced breaking changes in Pluto as we are intro… (#116) ([be8c6e8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/be8c6e835debed7b867afe30a5c66e6d196fd716)), closes [#116](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/116)
+
+
+### Features
+
+* **Agent:** add initialize function ([#107](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/107)) ([14389a1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/14389a169b3580b1ff334a9130bf0776807ba0a2))
+
+
+### BREAKING CHANGES
+
+* Introduced breaking changes in Pluto as we are introducing credential abstraction and anoncred issuing functionality.
+- X25519 keys were wrongly set as EC (elliptic) key types which is wrong. EC25519 + Secp256k1 belong to EC key type, X25519 should have Curve25519 instead to be valid. If you previously had a key stored as EC (x25519) changing that keyType to KeyTypes.X25519 (Curve25519).
+- As we have introduced new credential types we have also built a credential abstraction so storing and fetching credentials becomes easier.
+
 # [2.5.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v2.4.1...v2.5.0) (2023-10-31)
 
 

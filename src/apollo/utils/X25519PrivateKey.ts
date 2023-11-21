@@ -1,4 +1,4 @@
-import ApolloBaseAsymmetricEncryption from "@input-output-hk/apollo";
+import ApolloBaseAsymmetricEncryption from "@atala/apollo";
 import { Curve, KeyTypes, PrivateKey } from "../../domain";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { X25519PublicKey } from "./X25519PublicKey";
@@ -40,7 +40,7 @@ export class X25519PrivateKey extends PrivateKey {
   }
 
   public readonly to = {
-    Buffer: () => this.getEncoded(),
+    Buffer: () => Buffer.from(this.raw),
     Hex: () => this.to.Buffer().toString("hex"),
   };
 

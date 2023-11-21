@@ -3,7 +3,7 @@ import * as ECConfig from "../../../config/ECConfig";
 import { Apollo } from "../../../domain/buildingBlocks/Apollo";
 import { Curve } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
-import * as ApolloPKG from "@input-output-hk/apollo";
+import * as ApolloPKG from "@atala/apollo";
 
 import * as Protos from "../../protos/node_models";
 import { Secp256k1PrivateKey } from "../../../apollo/utils/Secp256k1PrivateKey";

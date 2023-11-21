@@ -66,6 +66,18 @@ export class AgentInvitations implements AgentInvitationsClass {
     throw new AgentError.UnknownInvitationTypeError();
   }
 
+  async acceptInvitation(invitation: InvitationType): Promise<void> {
+    if (invitation.type === ProtocolType.Didcomminvitation) {
+      return this.acceptDIDCommInvitation(invitation);
+    }
+
+    if (invitation instanceof PrismOnboardingInvitation) {
+      return this.acceptPrismOnboardingInvitation(invitation);
+    }
+
+    throw new AgentError.InvitationIsInvalidError();
+  }
+
   /**
    * Asyncronously accept a didcomm v2 invitation, will create a pair between the Agent
    *  its connecting with and the current owner's did
@@ -101,7 +113,7 @@ export class AgentInvitations implements AgentInvitationsClass {
    * @param {PrismOnboardingInvitation} invitation
    * @returns {Promise<void>}
    */
-  async acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void> {
+  async acceptPrismOnboardingInvitation(invitation: PrismOnboardingInvitation): Promise<void> {
     if (!invitation.from) {
       throw new AgentError.UnknownInvitationTypeError();
     }

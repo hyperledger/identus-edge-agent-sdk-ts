@@ -17,7 +17,7 @@ import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
 
-import * as ApolloPKG from "@input-output-hk/apollo";
+import * as ApolloPKG from "@atala/apollo";
 
 const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
 
@@ -275,8 +275,8 @@ export default class Apollo implements ApolloInterface {
 
         const derivationPathStr = parameters[KeyProperties.derivationPath]
           ? Buffer.from(parameters[KeyProperties.derivationPath]).toString(
-              "hex"
-            )
+            "hex"
+          )
           : Buffer.from(`m/0'/0'/0'`).toString("hex");
 
         const seedStr = parameters[KeyProperties.seed];
