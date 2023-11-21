@@ -1,19 +1,28 @@
 import BN from "bn.js";
-import elliptic from "elliptic";
 import BigInteger from "bn.js";
+import * as ApolloPKG from "@atala/apollo";
 
 import * as ECConfig from "../../config/ECConfig";
-import { ECCoordinate } from "./ec/ECCoordinate";
 import { ECPoint } from "./ec/ECPoint";
 import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { ApolloError } from "../../domain/models/Errors";
 import { Curve, KeyTypes, PublicKey } from "../../domain";
+
+const {
+  io: {
+    iohk: {
+      atala: {
+        prism: { apollo },
+      },
+    },
+  },
+} = ApolloPKG;
+
 /**
  * @ignore
  */
 export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
-  public static ec: elliptic.ec = new elliptic.ec("secp256k1");
   public type: KeyTypes = KeyTypes.EC;
   public keySpecification: Map<KeyProperties | string, string> = new Map();
   public size;
@@ -25,6 +34,11 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
     );
   }
 
+  private get native() {
+    return apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+      Int8Array.from(this.raw)
+    );
+  }
   constructor(nativeValue: Uint8Array) {
     super();
 
@@ -76,25 +90,11 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
           `Compressed byte array's expected length is ${ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE}, but got ${this.raw.length}`
         );
       }
-      const point = Secp256k1PublicKey.ec.curve.decodePoint(this.raw);
-      const uncompressedEncoding = point.encode();
-      return Uint8Array.from(uncompressedEncoding);
+      return Uint8Array.from(this.native.raw);
     }
 
     return this.raw;
   }
-
-  // constructor(
-  //   private nativeValue: elliptic.curve.base.BasePoint,
-  //   private ecPoint: ECPoint = Secp256k1PublicKey.computeCurvePoint(nativeValue)
-  // ) {
-  //   if (!Secp256k1PublicKey.isPointOnSecp256k1Curve(ecPoint)) {
-  //     throw new ApolloError.ECPublicKeyInitialization();
-  //   }
-
-  //   super();
-
-  // }
 
   getEncodedCompressed(): Uint8Array {
     if (this.isCompressed) {
@@ -139,31 +139,14 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
       .eq(new BN(0));
   }
 
-  static computeCurvePoint(basePoint: elliptic.curve.base.BasePoint): ECPoint {
-    const xBigInt = new ECCoordinate(basePoint.getX());
-    const yBigInt = new ECCoordinate(basePoint.getY());
-    return new ECPoint(xBigInt, yBigInt);
-  }
-
   static secp256k1FromBytes(encoded: Uint8Array): Secp256k1PublicKey {
-    const expectedLength = 1 + 2 * ECConfig.PRIVATE_KEY_BYTE_SIZE;
-    if (encoded.length !== expectedLength) {
-      throw new Error(
-        `Encoded byte array's expected length is ${expectedLength}, but got ${encoded.length} bytes`
-      );
-    }
-    if (encoded.at(0) !== 0x04) {
-      throw new Error(
-        `First byte was expected to be 0x04, but got ${encoded.at(0)}`
-      );
-    }
-
-    const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
-    const yBytes = encoded.slice(
-      1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
-      encoded.length
+    return new Secp256k1PublicKey(
+      Uint8Array.from(
+        ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+          Int8Array.from(encoded)
+        ).raw
+      )
     );
-    return this.secp256k1FromByteCoordinates(xBytes, yBytes);
   }
 
   static secp256k1FromByteCoordinates(
@@ -193,31 +176,18 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
   ): Secp256k1PublicKey {
     const xCoord = Buffer.from(x.toArray());
     const yCoord = Buffer.from(y.toArray());
-    const keyPair = this.ec.keyFromPublic({
-      x: xCoord.toString("hex"),
-      y: yCoord.toString("hex"),
-    });
-    const publicKey = keyPair.getPublic().encode("array", false);
-    return new Secp256k1PublicKey(Uint8Array.from(publicKey));
-  }
-
-  static secp256k1FromCompressed(compressed: Uint8Array): Secp256k1PublicKey {
-    if (compressed.length !== ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE) {
-      throw new Error(
-        `Compressed byte array's expected length is ${ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE}, but got ${compressed.length}`
+    const publicKey =
+      apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
+        Int8Array.from(xCoord),
+        Int8Array.from(yCoord)
       );
-    }
-    const point = this.ec.curve.decodePoint(compressed);
-    const uncompressedEncoding = point.encode();
-    return Secp256k1PublicKey.secp256k1FromBytes(uncompressedEncoding);
+    return new Secp256k1PublicKey(Uint8Array.from(publicKey.raw));
   }
 
   verify(message: Buffer, signature: Buffer) {
-    const publicKeyBuffer = Buffer.from(this.getEncodedCompressed());
-    return Secp256k1PublicKey.ec.verify(
-      message,
-      signature,
-      Buffer.from(publicKeyBuffer)
+    return this.native.verify(
+      Int8Array.from(signature),
+      Int8Array.from(message)
     );
   }
 }

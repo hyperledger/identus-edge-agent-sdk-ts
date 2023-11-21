@@ -24,6 +24,7 @@ const externals = [
   "bn.js",
   "did-jwt",
   "axios",
+  "apollo",
   "didcomm",
   "didcomm-node",
   "didcomm-browser",

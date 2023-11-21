@@ -208,7 +208,7 @@ export class PlutoInMemory implements SDK.Domain.Pluto {
           key.privateKey.curve,
           key.keyPathIndex
         ),
-        value: key.privateKey.value,
+        value: key.privateKey.getEncoded(),
       }));
 
       return new SDK.Domain.PeerDID(didRecord.did, privateKeysForPeerDID);
