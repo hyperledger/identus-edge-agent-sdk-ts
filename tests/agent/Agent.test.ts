@@ -287,11 +287,12 @@ describe("Agent Tests", () => {
         );
 
         expect(foundAttachment).to.not.be.undefined;
-        expect(foundAttachment?.format).to.equal("anoncreds/credential-request@v1.0");
+        expect(foundAttachment?.format).to.equal(
+          "anoncreds/credential-request@v1.0"
+        );
       });
 
       it(`CredentialType [${CredentialType.JWT}]`, async () => {
-
         // const offer = createOffer(CredentialType.JWT);
         const offer = Fixtures.offerCredentialJWT;
 
@@ -317,7 +318,6 @@ describe("Agent Tests", () => {
         expect(foundAttachment).to.not.be.undefined;
         expect(foundAttachment?.format).to.equal("prism/jwt");
       });
-
     });
 
     for (let credType of [CredentialType.W3C, CredentialType.Unknown]) {
@@ -426,7 +426,13 @@ describe("Agent Tests", () => {
             { attach_id: "attach_id", format: CredentialType.AnonCreds },
           ],
         },
-        [{ id: "attach_1", format: "anoncreds/credential@v1.0", data: { base64: base64Data } }],
+        [
+          {
+            id: "attach_1",
+            format: "anoncreds/credential@v1.0",
+            data: { base64: base64Data },
+          },
+        ],
         new DID("did", "prism", "from"),
         new DID("did", "prism", "to"),
         "thid"
@@ -458,7 +464,9 @@ describe("Agent Tests", () => {
 
         await agent.processIssuedCredentialMessage(issueCredential);
 
-        expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(issueCredential.thid);
+        expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(
+          issueCredential.thid
+        );
       });
 
       it("Pollux.parseCredential is called with correct decoded data and CredentialType, LinkSecret, CredentialMetadata", async () => {
@@ -541,7 +549,13 @@ describe("Agent Tests", () => {
             { attach_id: "attach_id", format: CredentialType.AnonCreds },
           ],
         },
-        [{ id: "attach_1", format: "anoncreds/credential-offer@v1.0", data: { base64: base64Data } }],
+        [
+          {
+            id: "attach_1",
+            format: "anoncreds/credential-offer@v1.0",
+            data: { base64: base64Data },
+          },
+        ],
         new DID("did", "prism", "from"),
         new DID("did", "prism", "to"),
         "thid"

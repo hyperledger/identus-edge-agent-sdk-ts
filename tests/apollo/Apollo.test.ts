@@ -3,11 +3,15 @@ import { expect, assert } from "chai";
 import Apollo from "../../src/apollo/Apollo";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 import * as ECConfig from "../../src/config/ECConfig";
-import { Curve, KeyTypes } from "../../src/domain/models";
+import { Curve, KeyTypes, PrivateKey } from "../../src/domain/models";
 import { MnemonicWordList } from "../../src/domain/models/WordList";
 import { bip39Vectors } from "./derivation/BipVectors";
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
-import { MnemonicLengthException, MnemonicWordException } from "../../src/domain/models/errors/Mnemonic";
+import {
+  MnemonicLengthException,
+  MnemonicWordException,
+} from "../../src/domain/models/errors/Mnemonic";
+import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -36,7 +40,32 @@ describe("Apollo", () => {
   });
 
   describe("createSeed", () => {
-    const list = ['tool', 'knock', 'nerve', 'skate', 'detail', 'early', 'limit', 'energy', 'foam', 'garage', 'resource', 'boring', 'traffic', 'violin', 'cave', 'place', 'accuse', 'can', 'bring', 'bring', 'cargo', 'clip', 'stick', 'dog'];
+    const list = [
+      "tool",
+      "knock",
+      "nerve",
+      "skate",
+      "detail",
+      "early",
+      "limit",
+      "energy",
+      "foam",
+      "garage",
+      "resource",
+      "boring",
+      "traffic",
+      "violin",
+      "cave",
+      "place",
+      "accuse",
+      "can",
+      "bring",
+      "bring",
+      "cargo",
+      "clip",
+      "stick",
+      "dog",
+    ];
 
     test("Passes with length 24 word list", () => {
       const result = apollo.createSeed(list as any, "");
@@ -44,7 +73,10 @@ describe("Apollo", () => {
     });
 
     test("Passes with length 12 word list", () => {
-      const mnemonics = 'legal winner thank year wave sausage worth useful legal winner thank yellow'.split(" ");
+      const mnemonics =
+        "legal winner thank year wave sausage worth useful legal winner thank yellow".split(
+          " "
+        );
       const result = apollo.createSeed(mnemonics as any, "");
       expect(result).not.to.be.undefined;
     });
@@ -55,7 +87,10 @@ describe("Apollo", () => {
       it(`Should fail when mnemonics is wrong length [${i}]`, () => {
         const mnemonics = list.slice(0, i);
 
-        assert.throws(() => apollo.createSeed(mnemonics as any, ""), MnemonicLengthException);
+        assert.throws(
+          () => apollo.createSeed(mnemonics as any, ""),
+          MnemonicLengthException
+        );
       });
     }
 
@@ -93,12 +128,9 @@ describe("Apollo", () => {
         "codus",
         ...Array(20).fill("abandon"),
       ] as MnemonicWordList;
-      assert.throws(
-        () => {
-          apollo.createSeed(mnemonicCode, "");
-        },
-        MnemonicWordException
-      );
+      assert.throws(() => {
+        apollo.createSeed(mnemonicCode, "");
+      }, MnemonicWordException);
     });
   });
 
@@ -224,5 +256,71 @@ describe("Apollo", () => {
 
       expect(verified).to.be.equal(false);
     }
+  });
+
+  it("Should only be derivable if secp256k1 keys is used, others are not derivable.", async () => {
+    const apollo = new Apollo();
+
+    expect(
+      apollo
+        .createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+        })
+        .isDerivable()
+    ).to.be.equal(false);
+
+    expect(
+      apollo
+        .createPrivateKey({
+          type: KeyTypes.Curve25519,
+          curve: Curve.X25519,
+        })
+        .isDerivable()
+    ).to.be.equal(false);
+
+    const seed = apollo.createRandomSeed().seed;
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(seed.value).toString("hex"),
+    });
+
+    expect(privateKey.isDerivable()).to.be.equal(true);
+  });
+
+  it("Should derive secp256k1 privateKey the same way as if we create a new key in Apollo.", async () => {
+    const seed = apollo.createRandomSeed().seed;
+    const privateKey = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(seed.value).toString("hex"),
+    });
+
+    const derivationPathStr = `m/0'/0'/1'`;
+    const path = DerivationPath.fromPath(derivationPathStr);
+
+    const derivedFromPrivate =
+      privateKey.isDerivable() && privateKey.derive(path);
+
+    expect(derivedFromPrivate).to.not.equal(false);
+
+    const privateKey2 = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(seed.value).toString("hex"),
+      derivationPath: derivationPathStr,
+    });
+
+    const raw1 = Buffer.from(
+      (derivedFromPrivate as PrivateKey).getEncoded()
+    ).toString("base64url");
+
+    const raw2 = Buffer.from(privateKey2.getEncoded()).toString("base64url");
+
+    const raw3 = Buffer.from(privateKey.getEncoded()).toString("base64url");
+
+    expect(raw1).to.equal(raw2);
+    expect(raw1).to.not.equal(raw3);
   });
 });

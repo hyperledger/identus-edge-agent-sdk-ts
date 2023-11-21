@@ -1,14 +1,13 @@
 import type { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
-import { base64url } from "multiformats/bases/base64";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
     private readonly apollo: Domain.Apollo,
     private readonly castor: Domain.Castor,
     private readonly pluto: Domain.Pluto
-  ) {}
+  ) { }
 
   async find_secrets(secret_ids: string[]): Promise<string[]> {
     const peerDids = await this.pluto.getAllPeerDIDs();
@@ -66,7 +65,6 @@ export class DIDCommSecretsResolver implements SecretsResolver {
       curve: Domain.Curve.X25519,
       raw: privateKeyBuffer.value,
     });
-
     const ecnumbasis = this.castor.getEcnumbasis(
       peerDid.did,
       privateKey.publicKey()
@@ -83,6 +81,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
         x: publicKeyJWK.x,
       },
     };
+
     return secret;
   }
 }
