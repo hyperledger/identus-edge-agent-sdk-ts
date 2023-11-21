@@ -30,7 +30,7 @@ on:
       apiKey:
         required: false
         description: Authorization key
-  pull_request_target:
+  pull_request:
     branches:
       - master
   push:
