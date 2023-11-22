@@ -20,9 +20,13 @@ on:
       publishedDid:
         required: false
         description: Published DID
-      schemaId:
+      jwtSchemaGuid:
         required: false
-        description: Schema ID
+        description: JWT schema GUID
+        default: 
+      anoncredDefinitionGuid:
+        required: false
+        description: Anoncred definition GUID
       apiKey:
         required: false
         description: Authorization key
@@ -92,7 +96,8 @@ jobs:
           MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
           PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
           PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
-          SCHEMA_ID: ${{ inputs.schemaId || vars.SCHEMA_ID }}
+          JWT_SCHEMA_GUID: ${{ inputs.jwtSchemaGuid || vars.JWT_SCHEMA_GUID }}
+          ANONCRED_DEFINITION_GUID: ${{ inputs.anoncredDefinitionGuid || vars.ANONCRED_DEFINITION_GUID }}
           APIKEY: ${{ inputs.apiKey || secrets.APIKEY }}
         working-directory: integration-tests/e2e-tests
         run: yarn test:sdk
