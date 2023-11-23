@@ -37,13 +37,6 @@ This repository includes a browser and a Node.js demo application, and also a st
 
 To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
 
-In order to install the package you must have created a github token with access to github repository packages and create a .npmrc file with the follwing content (assumming):
-
-```
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-@input-output-hk:registry=https://npm.pkg.github.com
-```
-
 From the repository root run:
 
 
@@ -82,12 +75,15 @@ We don't provide a default implementation out of the box at the moment, but we d
 
 Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
 
-#### Demo development mode
+#### Use in your project
+In order to use this SDK in your project you now just need to install the package as follows
 
-To run the browser demo app, just run `npm run dev:browser`, and the browser will automatically open and load the demo app.
+```bash
+npm @atala/prism-wallet-sdk --save
+```
 
-To run the Node.js demo app, run `npm run dev:node` to build the demo app and then run it with `node build/node-test/index.js`.
+or with yarn
 
-2. To see how the step-by-step examples can guide you, refer to each section inside the docs folder: Apollo, Castor, Pollux, Mercury, Pluto, Agent
-
-3. Jump straight into the [SDK-REFERENCE](https://input-output-hk.github.io/atala-prism-wallet-sdk-ts/modules.html)
+```bash
+yarn add @atala/prism-wallet-sdk
+```
