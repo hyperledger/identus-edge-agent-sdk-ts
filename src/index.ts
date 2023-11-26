@@ -17,6 +17,7 @@ export * from "./mercury/didcomm/Wrapper";
 export * from "./prism-agent/helpers/ApiImpl";
 export { ListenerKey } from "./prism-agent/types";
 
+export * from './peer-did/PeerDIDCreate';
 export type {
   MediatorHandler,
   ConnectionsManager as ConnectionsManagerInterface,
