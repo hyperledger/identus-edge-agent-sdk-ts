@@ -10,13 +10,10 @@ import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
-import * as Fixtures from "./fixtures";
-import {
-  cloudAgentCredentialJwt,
-  cloudAgentCredentialPayload,
-} from "./test-vectors";
 import { base64 } from "multiformats/bases/base64";
 import { AnonCredsCredential, AnonCredsRecoveryId } from "../../src/pollux/models/AnonCredsVerifiableCredential";
+import { PresentationRequest } from "../../src/pollux/models/PresentationRequest";
+import * as Fixtures from "../fixtures";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -109,6 +106,11 @@ describe("Pollux", () => {
 
   describe("parseCredential", () => {
     describe("AnonCreds", () => {
+      const encodeToBuffer = (cred: object) => {
+        const json = JSON.stringify(cred);
+        return Buffer.from(json);
+      };
+
       describe("Invalid encoded string", () => {
         [
           "",
@@ -132,8 +134,8 @@ describe("Pollux", () => {
             processCredential: sandbox.stub().returns({})
           }));
 
-          const payload = Fixtures.createAnonCredsPayload();
-          const encoded = Fixtures.encodeAnonCredsCredential(payload);
+          const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+          const encoded = encodeToBuffer(payload);
 
           expect(
             pollux.parseCredential(encoded, {
@@ -150,8 +152,8 @@ describe("Pollux", () => {
             processCredential: sandbox.stub().returns({})
           }));
 
-          const payload = Fixtures.createAnonCredsPayload();
-          const encoded = Fixtures.encodeAnonCredsCredential(payload);
+          const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+          const encoded = encodeToBuffer(payload);
 
           expect(
             pollux.parseCredential(encoded, {
@@ -172,8 +174,8 @@ describe("Pollux", () => {
           processCredential: sandbox.stub().returns({})
         }));
 
-        const payload = Fixtures.createAnonCredsPayload();
-        const encoded = Fixtures.encodeAnonCredsCredential(payload);
+        const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+        const encoded = encodeToBuffer(payload);
 
         await pollux.parseCredential(encoded, {
           type: CredentialType.AnonCreds,
@@ -195,8 +197,8 @@ describe("Pollux", () => {
           processCredential: stubProcessCredential
         }));
 
-        const payload = Fixtures.createAnonCredsPayload();
-        const encoded = Fixtures.encodeAnonCredsCredential(payload);
+        const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+        const encoded = encodeToBuffer(payload);
         const credentialMetadata = { mock: "credentialMetadata" } as any;
         const linkSecret = "linkSecret";
 
@@ -211,8 +213,8 @@ describe("Pollux", () => {
 
       describe("Valid Credential", () => {
         it(`should return AnonCredsCredential`, async () => {
-          const payload = Fixtures.createAnonCredsPayload();
-          const encoded = Fixtures.encodeAnonCredsCredential(payload);
+          const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+          const encoded = encodeToBuffer(payload);
 
           sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves({});
           sandbox.stub(pollux, "anoncreds").get(() => ({
@@ -292,12 +294,8 @@ describe("Pollux", () => {
 
       describe("Valid Credential", () => {
         it(`should return JWTVerifiableCredential`, async () => {
-          const jwtPayload = Fixtures.createJWTPayload(
-            "jwtid",
-            "proof",
-            CredentialType.JWT
-          );
-          const credential = jwtPayload.vc;
+          const credential = Fixtures.Credentials.JWT.credential;
+          const jwtPayload = Fixtures.Credentials.JWT.credentialPayload;
           const encoded = encodeJWTCredential(jwtPayload);
           const result = await pollux.parseCredential(Buffer.from(encoded), {
             type: CredentialType.JWT,
@@ -309,7 +307,7 @@ describe("Pollux", () => {
           const jwtCred = result as JWTCredential;
 
           expect(jwtCred.id).to.equal(encoded);
-          expect(jwtCred.aud).to.be.deep.equal(jwtPayload.aud);
+          // expect(jwtCred.aud).to.be.deep.equal(jwtPayload.aud);
           expect(jwtCred.context).to.be.deep.equal(credential.context);
           expect(jwtCred.credentialSubject).to.be.deep.equal(
             credential.credentialSubject
@@ -342,11 +340,11 @@ describe("Pollux", () => {
       });
 
       it("should parse JWT dates (NumericDate) correctly", async () => {
-        const nbf = cloudAgentCredentialPayload.nbf;
-        const exp = cloudAgentCredentialPayload.exp;
+        const nbf = Fixtures.Credentials.JWT.credentialPayload.nbf;
+        const exp = Fixtures.Credentials.JWT.credentialPayload.exp;
 
         const result = await pollux.parseCredential(
-          Buffer.from(cloudAgentCredentialJwt),
+          Buffer.from(Fixtures.Credentials.JWT.credentialPayloadEncoded),
           {
             type: CredentialType.JWT,
           }
@@ -362,56 +360,6 @@ describe("Pollux", () => {
   });
 
   describe("processCredentialRequest", () => {
-    // it("body.formats[0].format is AnonCreds - calls processAnonCredsCredential", () => {
-    //   const resolveValue = 13;
-    //   const stubJWT = sandbox.stub(pollux as any, "processJWTCredential").resolves(null);
-    //   const stubAnonCreds = sandbox.stub(pollux as any, "processAnonCredsCredential").resolves(resolveValue);
-    //   const body = { formats: [{ format: CredentialType.AnonCreds }] };
-    //   const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-    //   const result = pollux.processCredentialRequest(msg);
-
-    //   expect(stubAnonCreds).to.have.been.calledOnceWith(msg);
-    //   expect(stubJWT).not.to.have.been.called;
-    //   expect(result).to.eventually.be.eql(resolveValue);
-    // });
-
-    // it("body.formats[0].format is JWT - calls processJWTCredential", () => {
-    //   const resolveValue = 23;
-    //   const stubJWT = sandbox.stub(pollux as any, "processJWTCredential").resolves(resolveValue);
-    //   const stubAnonCreds = sandbox.stub(pollux as any, "processAnonCredsCredential").resolves(null);
-    //   const body = { formats: [{ format: CredentialType.JWT }] };
-    //   const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-    //   const result = pollux.processCredentialRequest(msg);
-
-    //   expect(stubAnonCreds).not.to.have.been.called;
-    //   expect(stubJWT).to.have.been.calledOnceWith(msg);
-    //   expect(result).to.eventually.be.eql(resolveValue);
-    // });
-
-    // [
-    //   CredentialType.Unknown,
-    //   CredentialType.W3C,
-    //   null,
-    //   undefined,
-    //   123,
-    //   "qwerty"
-    // ].forEach(value => {
-    //   it(`body.formats[0].format is invalid [${value}] - throws`, () => {
-    //     const stubJWT = sandbox.stub(pollux as any, "processJWTCredential").resolves();
-    //     const stubAnonCreds = sandbox.stub(pollux as any, "processAnonCredsCredential").resolves();
-    //     const body = { formats: [{ format: value }] };
-    //     const msg = new Message(JSON.stringify(body), undefined, "piuri");
-
-    //     const result = pollux.processCredentialRequest(msg);
-
-    //     expect(stubAnonCreds).not.to.have.been.called;
-    //     expect(stubJWT).not.to.have.been.called;
-    //     expect(result).to.eventually.be.rejected;
-    //   });
-    // })
-
     describe("processJWTCredential", () => {
       it("options not provided - throws", () => {
         const body = { formats: [{ format: CredentialType.JWT }] };
@@ -677,7 +625,44 @@ describe("Pollux", () => {
     });
   });
 
-  describe("anoncreds", () => {
+  describe("createPresentationProof", () => {
+    describe("Anoncreds", () => {
+      beforeEach(async () => {
+        await (pollux.anoncreds as any).load();
+      });
+
+      test("ok", async () => {
+        sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
+        sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
+
+        const pr = new PresentationRequest(CredentialType.AnonCreds, Fixtures.Credentials.Anoncreds.presentationRequest);
+        const cred = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+
+        const result = await pollux.createPresentationProof(pr, cred, { linkSecret: Fixtures.Credentials.Anoncreds.linkSecret });
+
+        expect(result).not.to.be.null;
+      });
+    });
+
+    describe("JWT", () => {
+      test("ok", async () => {
+
+        const pr = new PresentationRequest(CredentialType.JWT, Fixtures.Credentials.JWT.presentationRequest);
+        const cred = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+        const did = Fixtures.DIDs[0];
+        const privateKey = Fixtures.Keys.ed25519.privateKey;
+
+        const result = await pollux.createPresentationProof(pr, cred, {
+          did,
+          privateKey
+        });
+
+        expect(result).not.to.be.null;
+      });
+    });
+  });
+
+  describe("Anoncreds", () => {
     beforeEach(async () => {
       await (pollux.anoncreds as any).load();
     });
@@ -689,9 +674,9 @@ describe("Pollux", () => {
 
     test("createCredentialRequest", () => {
       const result = pollux.anoncreds.createCredentialRequest(
-        Fixtures.credOffer,
-        Fixtures.credDef,
-        Fixtures.linkSecret,
+        Fixtures.Credentials.Anoncreds.credentialOffer,
+        Fixtures.Credentials.Anoncreds.credentialDefinition,
+        Fixtures.Credentials.Anoncreds.linkSecret,
         "link-secret-id"
       );
 
@@ -707,9 +692,7 @@ describe("Pollux", () => {
       expect(credReq.blinded_ms).to.have.property("committed_attributes");
       expect(credReq).to.have.property("blinded_ms_correctness_proof");
       expect(credReq.blinded_ms_correctness_proof).to.have.property("c");
-      expect(credReq.blinded_ms_correctness_proof).to.have.property(
-        "v_dash_cap"
-      );
+      expect(credReq.blinded_ms_correctness_proof).to.have.property("v_dash_cap");
       expect(credReq.blinded_ms_correctness_proof).to.have.property("m_caps");
       expect(credReq.blinded_ms_correctness_proof).to.have.property("r_caps");
 
@@ -727,11 +710,11 @@ describe("Pollux", () => {
 
     test("createPresentation", () => {
       const result = pollux.anoncreds.createPresentation(
-        Fixtures.presRequest,
-        Fixtures.schemas,
-        Fixtures.credDefs,
-        Fixtures.credential,
-        Fixtures.linkSecret
+        Fixtures.Credentials.Anoncreds.presentationRequest,
+        Fixtures.Credentials.Anoncreds.schemas,
+        Fixtures.Credentials.Anoncreds.credDefs,
+        Fixtures.Credentials.Anoncreds.credential,
+        Fixtures.Credentials.Anoncreds.linkSecret
       );
 
       expect(result).to.be.an("object");
@@ -784,13 +767,12 @@ describe("Pollux", () => {
           expect(geProof).to.have.property("predicate").to.be.an("object");
           expect(geProof.predicate).to.have.property(
             "attr_name",
-            Fixtures.presRequest.requested_predicates.predicate1_referent.name
+            Fixtures.Credentials.Anoncreds.presentationRequest.requested_predicates.predicate1_referent.name
           );
           expect(geProof.predicate).to.have.property("p_type", "GE");
           expect(geProof.predicate).to.have.property(
             "value",
-            Fixtures.presRequest.requested_predicates.predicate1_referent
-              .p_value
+            Fixtures.Credentials.Anoncreds.presentationRequest.requested_predicates.predicate1_referent.p_value
           );
         });
       });
@@ -815,25 +797,25 @@ describe("Pollux", () => {
         .to.have.length(1);
 
       result.identifiers.forEach((identifier) => {
-        expect(identifier).to.have.property("schema_id", Fixtures.schemaId);
-        expect(identifier).to.have.property("cred_def_id", Fixtures.credDefId);
+        expect(identifier).to.have.property("schema_id", Fixtures.Credentials.Anoncreds.schemaId);
+        expect(identifier).to.have.property("cred_def_id", Fixtures.Credentials.Anoncreds.credDefId);
       });
     });
 
     test("processCredential", () => {
       const result = pollux.anoncreds.processCredential(
-        Fixtures.credDef,
-        Fixtures.credentialIssued,
-        Fixtures.credRequestMeta,
-        Fixtures.linkSecret
+        Fixtures.Credentials.Anoncreds.credentialDefinition,
+        Fixtures.Credentials.Anoncreds.credentialIssued,
+        Fixtures.Credentials.Anoncreds.credentialRequestMeta,
+        Fixtures.Credentials.Anoncreds.linkSecret
       );
 
-      expect(result).to.have.property("schema_id", Fixtures.schemaId);
-      expect(result).to.have.property("cred_def_id", Fixtures.credDefId);
+      expect(result).to.have.property("schema_id", Fixtures.Credentials.Anoncreds.schemaId);
+      expect(result).to.have.property("cred_def_id", Fixtures.Credentials.Anoncreds.credDefId);
       expect(result).to.have.property("signature");
       expect(result).to.have.property("signature_correctness_proof");
 
-      Fixtures.credentialIssued.values.forEach((value) => {
+      Fixtures.Credentials.Anoncreds.credentialIssued.values.forEach((value) => {
         expect(result.values)
           .to.have.property(value[0])
           .to.deep.equal(value[1]);

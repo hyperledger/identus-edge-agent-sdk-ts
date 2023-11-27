@@ -12,7 +12,7 @@ import * as UUIDLib from "@stablelib/uuid";
 import Apollo from "../../src/apollo/Apollo";
 import { CastorMock } from "./mocks/CastorMock";
 import { ConnectionsManagerMock } from "./mocks/ConnectionManagerMock";
-import * as Fixtures from "../pollux/fixtures";
+import * as Fixtures from "../fixtures";
 
 import {
   Api,
@@ -37,6 +37,11 @@ import { IssueCredential } from "../../src/prism-agent/protocols/issueCredential
 import { base64url } from "multiformats/bases/base64";
 import Pollux from "../../src/pollux/Pollux";
 import { AnoncredsLoader } from "../../src/pollux/AnoncredsLoader";
+import { RequestPresentation } from "../../src/prism-agent/protocols/proofPresentation/RequestPresentation";
+import { Presentation } from "../../src/prism-agent/protocols/proofPresentation/Presentation";
+import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
+import { AnonCredsCredential } from "../../src/pollux/models/AnonCredsVerifiableCredential";
+
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -47,6 +52,11 @@ let pluto: Pluto;
 let pollux: Pollux;
 let castor: Castor;
 let sandbox: sinon.SinonSandbox;
+
+// jest.mock("../apollo/utils/jwt/JWT", () => () => ({
+//   sign: jest.fn(() => "")
+// }));
+
 
 describe("Agent Tests", () => {
   afterEach(async () => {
@@ -81,12 +91,15 @@ describe("Agent Tests", () => {
     );
 
     pollux = (agent as any).pollux as Pollux;
+
+    await pollux.start();
   });
 
   describe("Integration Tests", () => {
     beforeEach(async () => {
       await agent.start();
     });
+
 
     it("As a developer when a peerDID is created and we have specified to updateKeyList the services are correctly added and updateKeyList is called correctly.", async () => {
       const didHigherFunctions = (agent as any).agentDIDHigherFunctions;
@@ -175,6 +188,7 @@ describe("Agent Tests", () => {
     });
   });
 
+  // Requires Agent not to be started in before hook
   describe("LinkSecret generation", () => {
     it("getLinkSecret returns null - storeLinkSecret is called", async () => {
       const stubGetLinkSecret = sandbox
@@ -201,376 +215,513 @@ describe("Agent Tests", () => {
     });
   });
 
-  describe("prepareRequestCredentialWithIssuer", () => {
+  describe("functions", () => {
     beforeEach(async () => {
       await agent.start();
     });
 
-    const credentialPreview: CredentialPreview = {
-      type: ProtocolType.DidcommCredentialPreview,
-      attributes: [
-        {
-          name: "name",
-          value: "javi",
-          mimeType: "text",
-        },
-      ],
-    };
-    const mypeerDID = new DID(
-      "did",
-      "peer",
-      "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
-    );
-    const validPeerDID = DID.fromString(
-      `did:peer:2.Ez6LSoHkfN1Y4nK9RCjx7vopWsLrMGNFNgTNZgoCNQrTzmb1n.Vz6MknRZmapV7uYZQuZez9n9N3tQotjRN18UGS68Vcfo6gR4h.SeyJyIjpbImRpZDpleGFtcGxlOnNvbWVtZWRpYXRvciNzb21la2V5Il0sInMiOiJodHRwczovL2V4YW1wbGUuY29tL2VuZHBvaW50IiwiYSI6W10sInQiOiJkbSJ9`
-    );
-
-    const createOffer = (credType: CredentialType) => {
-      const credentialMap = new Map();
-      if (credType === CredentialType.JWT) {
-        credentialMap.set(
-          "prism/jwt",
-          Fixtures.createJWTPayload("jwtid", "proof", CredentialType.JWT)
-        );
-      } else if (credType === CredentialType.AnonCreds) {
-        credentialMap.set(credType, Fixtures.credOffer);
-      }
-
-      return OfferCredential.build(
-        credentialPreview,
-        mypeerDID,
-        validPeerDID,
-        "threadID123456",
-        credentialMap
+    describe("prepareRequestCredentialWithIssuer", () => {
+      const credentialPreview: CredentialPreview = {
+        type: ProtocolType.DidcommCredentialPreview,
+        attributes: [
+          {
+            name: "name",
+            value: "javi",
+            mimeType: "text",
+          },
+        ],
+      };
+      const mypeerDID = new DID(
+        "did",
+        "peer",
+        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
       );
-    };
+      const validPeerDID = DID.fromString(
+        `did:peer:2.Ez6LSoHkfN1Y4nK9RCjx7vopWsLrMGNFNgTNZgoCNQrTzmb1n.Vz6MknRZmapV7uYZQuZez9n9N3tQotjRN18UGS68Vcfo6gR4h.SeyJyIjpbImRpZDpleGFtcGxlOnNvbWVtZWRpYXRvciNzb21la2V5Il0sInMiOiJodHRwczovL2V4YW1wbGUuY29tL2VuZHBvaW50IiwiYSI6W10sInQiOiJkbSJ9`
+      );
 
-    it("Should throw when linkSecret is not found - Anoncreds", () => {
-      const offer = createOffer(CredentialType.AnonCreds);
+      const createOffer = (credType: CredentialType) => {
+        const credentialMap = new Map();
+        if (credType === CredentialType.JWT) {
+          credentialMap.set(
+            "prism/jwt",
+            Fixtures.Credentials.JWT.credentialPayload
+          );
+        } else if (credType === CredentialType.AnonCreds) {
+          credentialMap.set(credType, Fixtures.Credentials.Anoncreds.credentialOffer);
+        }
 
-      sandbox.stub(pluto, "getLinkSecret").returns(Promise.resolve(null));
-
-      expect(agent.prepareRequestCredentialWithIssuer(offer)).to.eventually.be
-        .rejected;
-    });
-
-    describe("Should create a credential request from a valid didcomm CredentialOffer Message", () => {
-      it(`CredentialType [${CredentialType.AnonCreds}]`, async () => {
-        const anonCreds = await AnoncredsLoader.getInstance();
-        const linkSecret = Fixtures.linkSecret;
-
-        sandbox
-          .stub(pluto, "getLinkSecret")
-          .returns(Promise.resolve(linkSecret));
-
-        sandbox
-          .stub(pollux as any, "fetchCredentialDefinition")
-          .resolves(Fixtures.credDef);
-
-        const offer = Fixtures.offerCredentialAnoncreds;
-
-        const requestCredential =
-          await agent.prepareRequestCredentialWithIssuer(offer);
-
-        expect(requestCredential).to.be.instanceOf(RequestCredential);
-        expect(requestCredential.to?.toString()).to.equal(
-          offer.from?.toString()
+        return OfferCredential.build(
+          credentialPreview,
+          mypeerDID,
+          validPeerDID,
+          "threadID123456",
+          credentialMap
         );
-        expect(requestCredential.from.toString()).to.equal(
-          offer.to?.toString()
-        );
+      };
 
-        expect(requestCredential.body.formats).to.be.an("array");
-        expect(requestCredential.body.formats).to.have.length(1);
-        // expect(requestCredential.body.formats[0].format).to.equal(credType);
+      it("Should throw when linkSecret is not found - Anoncreds", () => {
+        const offer = createOffer(CredentialType.AnonCreds);
 
-        const foundAttachment = requestCredential.attachments.find(
-          ({ id }) => id === requestCredential.body.formats[0].attach_id
-        );
-
-        expect(foundAttachment).to.not.be.undefined;
-        expect(foundAttachment?.format).to.equal(
-          "anoncreds/credential-request@v1.0"
-        );
-      });
-
-      it(`CredentialType [${CredentialType.JWT}]`, async () => {
-        // const offer = createOffer(CredentialType.JWT);
-        const offer = Fixtures.offerCredentialJWT;
-
-        const requestCredential =
-          await agent.prepareRequestCredentialWithIssuer(offer);
-
-        expect(requestCredential).to.be.instanceOf(RequestCredential);
-        expect(requestCredential.to?.toString()).to.equal(
-          offer.from?.toString()
-        );
-        expect(requestCredential.from.toString()).to.equal(
-          offer.to?.toString()
-        );
-
-        expect(requestCredential.body.formats).to.be.an("array");
-        expect(requestCredential.body.formats).to.have.length(1);
-        // expect(requestCredential.body.formats[0].format).to.equal(credType);
-
-        const foundAttachment = requestCredential.attachments.find(
-          ({ id }) => id === requestCredential.body.formats[0].attach_id
-        );
-
-        expect(foundAttachment).to.not.be.undefined;
-        expect(foundAttachment?.format).to.equal("prism/jwt");
-      });
-    });
-
-    for (let credType of [CredentialType.W3C, CredentialType.Unknown]) {
-      it(`CredentialType [${credType}] - not implemented - should throw`, async () => {
-        const offer = createOffer(credType);
+        // const offer = createOffer(credType);
+        sandbox.stub(pluto, "getLinkSecret").returns(Promise.resolve(null));
 
         expect(agent.prepareRequestCredentialWithIssuer(offer)).to.eventually.be
           .rejected;
       });
-    }
-  });
 
-  describe("processIssuedCredentialMessage", () => {
-    beforeEach(async () => {
-      await pollux.start();
-      await agent.start();
-    });
 
-    it("no attachment - throws", () => {
-      const issueCredential = new IssueCredential(
-        { formats: [] },
-        [],
-        new DID("did", "prism", "from"),
-        new DID("did", "prism", "to")
-      );
+      describe("Should create a credential request from a valid didcomm CredentialOffer Message", () => {
+        it(`CredentialType [${CredentialType.AnonCreds}]`, async () => {
+          const anonCreds = await AnoncredsLoader.getInstance();
+          const linkSecret = Fixtures.Credentials.Anoncreds.linkSecret;
 
-      const result = agent.processIssuedCredentialMessage(issueCredential);
+          sandbox
+            .stub(pluto, "getLinkSecret")
+            .returns(Promise.resolve(linkSecret));
 
-      expect(result).to.eventually.be.rejected;
-    });
+          sandbox
+            .stub(pollux as any, "fetchCredentialDefinition")
+            .resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
 
-    describe("JWTCredential", () => {
-      const parseCredentialResult = { mock: "JWTCredential" };
-      const jwtPayload = Fixtures.createJWTPayload(
-        "jwtid",
-        "proof",
-        CredentialType.JWT
-      );
-      const json = JSON.stringify(jwtPayload);
-      const encoded = Buffer.from(json).toString("base64");
-      const base64Data = base64url.baseEncode(
-        Buffer.from(`jwtPart0.${encoded}.jwtPart2`)
-      );
+          const offer = Fixtures.Credentials.Anoncreds.credentialOfferMessage;
 
-      const issueCredential = new IssueCredential(
-        { formats: [{ attach_id: "attach_id", format: CredentialType.JWT }] },
-        [{ id: "attach_1", format: "prism/jwt", data: { base64: base64Data } }],
-        new DID("did", "prism", "from"),
-        new DID("did", "prism", "to")
-      );
+          const requestCredential =
+            await agent.prepareRequestCredentialWithIssuer(offer);
 
-      it("Pollux.parseCredential is called with correct decoded data and CredentialType", async () => {
-        sandbox.stub(pluto, "storeCredential").resolves();
+          expect(requestCredential).to.be.instanceOf(RequestCredential);
+          expect(requestCredential.to?.toString()).to.equal(
+            offer.from?.toString()
+          );
+          expect(requestCredential.from.toString()).to.equal(
+            offer.to?.toString()
+          );
 
-        const stubParseCredential = sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
+          expect(requestCredential.body.formats).to.be.an("array");
+          expect(requestCredential.body.formats).to.have.length(1);
+          // expect(requestCredential.body.formats[0].format).to.equal(credType);
 
-        await agent.processIssuedCredentialMessage(issueCredential);
+          const foundAttachment = requestCredential.attachments.find(
+            ({ id }) => id === requestCredential.body.formats[0].attach_id
+          );
 
-        const credData = base64url.baseDecode(base64Data);
-        expect(stubParseCredential).to.have.been.calledOnceWith(credData, {
-          type: CredentialType.JWT,
+          expect(foundAttachment).to.not.be.undefined;
+          expect(foundAttachment?.format).to.equal("anoncreds/credential-request@v1.0");
         });
+
+        it(`CredentialType [${CredentialType.JWT}]`, async () => {
+
+          // const offer = createOffer(CredentialType.JWT);
+          const offer = Fixtures.Credentials.JWT.credentialOfferMessage;
+
+          const requestCredential = await agent.prepareRequestCredentialWithIssuer(offer);
+
+          expect(requestCredential).to.be.instanceOf(RequestCredential);
+          expect(requestCredential.to?.toString()).to.equal(
+            offer.from?.toString()
+          );
+          expect(requestCredential.from.toString()).to.equal(
+            offer.to?.toString()
+          );
+
+          expect(requestCredential.body.formats).to.be.an("array");
+          expect(requestCredential.body.formats).to.have.length(1);
+          // expect(requestCredential.body.formats[0].format).to.equal(credType);
+
+          const foundAttachment = requestCredential.attachments.find(
+            ({ id }) => id === requestCredential.body.formats[0].attach_id
+          );
+
+          expect(foundAttachment).to.not.be.undefined;
+          expect(foundAttachment?.format).to.equal("prism/jwt");
+        });
+
       });
 
-      it("Pluto.storeCredential is called with result of parseCredential", async () => {
-        sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
+      for (let credType of [CredentialType.W3C, CredentialType.Unknown]) {
+        it(`CredentialType [${credType}] - not implemented - should throw`, async () => {
+          const offer = createOffer(credType);
 
-        const stubStoreCredential = sandbox
-          .stub(pluto, "storeCredential")
-          .resolves();
-
-        await agent.processIssuedCredentialMessage(issueCredential);
-
-        expect(stubStoreCredential).to.have.been.calledOnceWith(
-          parseCredentialResult
-        );
-      });
-
-      it("result of Pollux.parseCredential is returned", async () => {
-        sandbox.stub(pluto, "storeCredential").resolves();
-        sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
-
-        const result =
-          await agent.processIssuedCredentialMessage(issueCredential);
-
-        expect(result).to.equal(parseCredentialResult);
-      });
+          expect(agent.prepareRequestCredentialWithIssuer(offer)).to.eventually.be
+            .rejected;
+        });
+      }
     });
 
-    describe("AnonCreds", () => {
-      const parseCredentialResult = { mock: "AnonCredsCredential" };
-      const encoded = Buffer.from("testing").toString("base64");
-      const base64Data = base64url.baseEncode(
-        Buffer.from(`jwtPart0.${encoded}.jwtPart2`)
-      );
-
-      const issueCredential = new IssueCredential(
-        {
-          formats: [
-            { attach_id: "attach_id", format: CredentialType.AnonCreds },
-          ],
-        },
-        [
-          {
-            id: "attach_1",
-            format: "anoncreds/credential@v1.0",
-            data: { base64: base64Data },
-          },
-        ],
-        new DID("did", "prism", "from"),
-        new DID("did", "prism", "to"),
-        "thid"
-      );
-
-      it("Pluto.fetchCredentialMetadata returns nullish - throws", async () => {
-        sandbox.stub(pluto, "storeCredential").resolves();
-        sandbox.stub(pluto, "getLinkSecret").resolves();
-        sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
-        sandbox.stub(pluto, "fetchCredentialMetadata").resolves(undefined);
+    describe("processIssuedCredentialMessage", () => {
+      it("no attachment - throws", () => {
+        const issueCredential = new IssueCredential(
+          { formats: [] },
+          [],
+          new DID("did", "prism", "from"),
+          new DID("did", "prism", "to")
+        );
 
         const result = agent.processIssuedCredentialMessage(issueCredential);
 
         expect(result).to.eventually.be.rejected;
       });
 
-      it("Pluto.fetchCredentialMetadata gets called with issueCredential.thid", async () => {
-        sandbox.stub(pluto, "storeCredential").resolves();
-        sandbox.stub(pluto, "getLinkSecret").resolves();
-        sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
-
-        const stubFetchCredentialMetadata = sandbox
-          .stub(pluto, "fetchCredentialMetadata")
-          .resolves({ mock: "CredentialMetadata" } as any);
-
-        await agent.processIssuedCredentialMessage(issueCredential);
-
-        expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(
-          issueCredential.thid
+      describe("JWTCredential", () => {
+        const parseCredentialResult = { mock: "JWTCredential" };
+        const jwtPayload = Fixtures.Credentials.JWT.credentialPayload;
+        const json = JSON.stringify(jwtPayload);
+        const encoded = Buffer.from(json).toString("base64");
+        const base64Data = base64url.baseEncode(
+          Buffer.from(`jwtPart0.${encoded}.jwtPart2`)
         );
-      });
 
-      it("Pollux.parseCredential is called with correct decoded data and CredentialType, LinkSecret, CredentialMetadata", async () => {
-        const getLinkSecretResult = "linkSecret123";
-        const fetchCredentialMetadataResult = { mock: "CredentialMetadata" };
-        sandbox.stub(pluto, "storeCredential").resolves();
-        sandbox.stub(pluto, "getLinkSecret").resolves(getLinkSecretResult);
-        sandbox
-          .stub(pluto, "fetchCredentialMetadata")
-          .resolves(fetchCredentialMetadataResult as any);
+        const issueCredential = new IssueCredential(
+          { formats: [{ attach_id: "attach_id", format: CredentialType.JWT }] },
+          [{ id: "attach_1", format: "prism/jwt", data: { base64: base64Data } }],
+          new DID("did", "prism", "from"),
+          new DID("did", "prism", "to")
+        );
 
-        const stubParseCredential = sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
+        it("Pollux.parseCredential is called with correct decoded data and CredentialType", async () => {
+          sandbox.stub(pluto, "storeCredential").resolves();
 
-        await agent.processIssuedCredentialMessage(issueCredential);
+          const stubParseCredential = sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
 
-        const credData = base64url.baseDecode(base64Data);
-        expect(stubParseCredential).to.have.been.calledOnceWith(credData, {
-          type: CredentialType.AnonCreds,
-          linkSecret: getLinkSecretResult,
-          credentialMetadata: fetchCredentialMetadataResult,
+          await agent.processIssuedCredentialMessage(issueCredential);
+
+          const credData = base64url.baseDecode(base64Data);
+          expect(stubParseCredential).to.have.been.calledOnceWith(credData, {
+            type: CredentialType.JWT,
+          });
+        });
+
+        it("Pluto.storeCredential is called with result of parseCredential", async () => {
+          sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+
+          const stubStoreCredential = sandbox
+            .stub(pluto, "storeCredential")
+            .resolves();
+
+          await agent.processIssuedCredentialMessage(issueCredential);
+
+          expect(stubStoreCredential).to.have.been.calledOnceWith(
+            parseCredentialResult
+          );
+        });
+
+        it("result of Pollux.parseCredential is returned", async () => {
+          sandbox.stub(pluto, "storeCredential").resolves();
+          sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+
+          const result =
+            await agent.processIssuedCredentialMessage(issueCredential);
+
+          expect(result).to.equal(parseCredentialResult);
         });
       });
 
-      it("Pluto.storeCredential is called with result of parseCredential", async () => {
-        sandbox.stub(pluto, "getLinkSecret").resolves("linkSecret123");
-        sandbox
-          .stub(pluto, "fetchCredentialMetadata")
-          .resolves({ mock: "CredentialMetadata" } as any);
-        sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
-
-        const stubStoreCredential = sandbox
-          .stub(pluto, "storeCredential")
-          .resolves();
-
-        await agent.processIssuedCredentialMessage(issueCredential);
-
-        expect(stubStoreCredential).to.have.been.calledOnceWith(
-          parseCredentialResult
+      describe("AnonCreds", () => {
+        const parseCredentialResult = { mock: "AnonCredsCredential" };
+        const encoded = Buffer.from("testing").toString("base64");
+        const base64Data = base64url.baseEncode(
+          Buffer.from(`jwtPart0.${encoded}.jwtPart2`)
         );
+
+        const issueCredential = new IssueCredential(
+          {
+            formats: [
+              { attach_id: "attach_id", format: CredentialType.AnonCreds },
+            ],
+          },
+          [{ id: "attach_1", format: "anoncreds/credential@v1.0", data: { base64: base64Data } }],
+          new DID("did", "prism", "from"),
+          new DID("did", "prism", "to"),
+          "thid"
+        );
+
+        it("Pluto.fetchCredentialMetadata returns nullish - throws", async () => {
+          sandbox.stub(pluto, "storeCredential").resolves();
+          sandbox.stub(pluto, "getLinkSecret").resolves();
+          sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+          sandbox.stub(pluto, "fetchCredentialMetadata").resolves(undefined);
+
+          const result = agent.processIssuedCredentialMessage(issueCredential);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        it("Pluto.fetchCredentialMetadata gets called with issueCredential.thid", async () => {
+          sandbox.stub(pluto, "storeCredential").resolves();
+          sandbox.stub(pluto, "getLinkSecret").resolves();
+          sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+
+          const stubFetchCredentialMetadata = sandbox
+            .stub(pluto, "fetchCredentialMetadata")
+            .resolves({ mock: "CredentialMetadata" } as any);
+
+          await agent.processIssuedCredentialMessage(issueCredential);
+
+          expect(stubFetchCredentialMetadata).to.have.been.calledOnceWith(issueCredential.thid);
+        });
+
+        it("Pollux.parseCredential is called with correct decoded data and CredentialType, LinkSecret, CredentialMetadata", async () => {
+          const getLinkSecretResult = "linkSecret123";
+          const fetchCredentialMetadataResult = { mock: "CredentialMetadata" };
+          sandbox.stub(pluto, "storeCredential").resolves();
+          sandbox.stub(pluto, "getLinkSecret").resolves(getLinkSecretResult);
+          sandbox
+            .stub(pluto, "fetchCredentialMetadata")
+            .resolves(fetchCredentialMetadataResult as any);
+
+          const stubParseCredential = sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+
+          await agent.processIssuedCredentialMessage(issueCredential);
+
+          const credData = base64url.baseDecode(base64Data);
+          expect(stubParseCredential).to.have.been.calledOnceWith(credData, {
+            type: CredentialType.AnonCreds,
+            linkSecret: getLinkSecretResult,
+            credentialMetadata: fetchCredentialMetadataResult,
+          });
+        });
+
+        it("Pluto.storeCredential is called with result of parseCredential", async () => {
+          sandbox.stub(pluto, "getLinkSecret").resolves("linkSecret123");
+          sandbox
+            .stub(pluto, "fetchCredentialMetadata")
+            .resolves({ mock: "CredentialMetadata" } as any);
+          sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+
+          const stubStoreCredential = sandbox
+            .stub(pluto, "storeCredential")
+            .resolves();
+
+          await agent.processIssuedCredentialMessage(issueCredential);
+
+          expect(stubStoreCredential).to.have.been.calledOnceWith(
+            parseCredentialResult
+          );
+        });
+
+        it("result of Pollux.parseCredential is returned", async () => {
+          sandbox.stub(pluto, "storeCredential").resolves();
+          sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
+          sandbox
+            .stub(pluto, "fetchCredentialMetadata")
+            .resolves(Fixtures.Credentials.Anoncreds.credentialRequestMeta);
+          sandbox
+            .stub(pollux, "parseCredential")
+            .resolves(parseCredentialResult as any);
+
+          const result =
+            await agent.processIssuedCredentialMessage(issueCredential);
+
+          expect(result).to.equal(parseCredentialResult);
+        });
       });
 
-      it("result of Pollux.parseCredential is returned", async () => {
+      it("Should be able to parse a credential and convert it into a storable object from a valid didcomm CredentialIssue Message", async () => {
         sandbox.stub(pluto, "storeCredential").resolves();
-        sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.linkSecret);
+        sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
         sandbox
           .stub(pluto, "fetchCredentialMetadata")
-          .resolves(Fixtures.credRequestMeta);
+          .resolves(Fixtures.Credentials.Anoncreds.credentialRequestMeta);
         sandbox
-          .stub(pollux, "parseCredential")
-          .resolves(parseCredentialResult as any);
+          .stub(pollux as any, "fetchCredentialDefinition")
+          .resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
+
+        const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+        const encoded = Buffer.from(JSON.stringify(payload));
+        const base64Data = base64url.baseEncode(encoded);
+
+        const issueCredential = new IssueCredential(
+          {
+            formats: [
+              { attach_id: "attach_id", format: CredentialType.AnonCreds },
+            ],
+          },
+          [{ id: "attach_1", format: "anoncreds/credential-offer@v1.0", data: { base64: base64Data } }],
+          new DID("did", "prism", "from"),
+          new DID("did", "prism", "to"),
+          "thid"
+        );
 
         const result =
           await agent.processIssuedCredentialMessage(issueCredential);
 
-        expect(result).to.equal(parseCredentialResult);
+        expect(result).to.be.an.instanceOf(Credential);
+        expect(result.isStorable()).to.be.true;
+
+        const storable = (result as any as StorableCredential).toStorable();
+        expect(storable).not.to.be.undefined;
       });
     });
 
-    it("Should be able to parse a credential and convert it into a storable object from a valid didcomm CredentialIssue Message", async () => {
-      sandbox.stub(pluto, "storeCredential").resolves();
-      sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.linkSecret);
-      sandbox
-        .stub(pluto, "fetchCredentialMetadata")
-        .resolves(Fixtures.credRequestMeta);
-      sandbox
-        .stub(pollux as any, "fetchCredentialDefinition")
-        .resolves(Fixtures.credDef);
+    describe("createPresentationForRequestProof", () => {
+      const didFrom = DID.from("did:peer:2.Ez6LSfhufN8b8EufbxPNRh88YYvjpf7uuVfa3tMG4nKeFK2wX.Vz6Mkf2USnehnAgu263PfyTDsB7KhjuR64wMa3Y4XLHi3KuQS.SeyJ0IjoiZG0iLCJzIjoiaHR0cDovLzE5Mi4xNjguMS4xNjU6ODAwMC9kaWRjb21tIiwiciI6W10sImEiOlsiZGlkY29tbS92MiJdfQ");
+      const didTo = DID.from("did:peer:2.Ez6LSjNzhLeoBEL67PHWSq6X7A7YFuQpcqs13g3cYJTRFyhpu.Vz6MkemtLC5RN1bwBopgZVgXpRRXoigbZjKQt8NHEiJR1eAQ1.SeyJyIjpbXSwicyI6ImRpZDpwZWVyOjIuRXo2TFNnaHdTRTQzN3duREUxcHQzWDZoVkRVUXpTanNIemlucFgzWEZ2TWpSQW03eS5WejZNa2hoMWU1Q0VZWXE2SkJVY1RaNkNwMnJhbkNXUnJ2N1lheDNMZTRONTlSNmRkLlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5emFYUXRjSEpwYzIwdGJXVmthV0YwYjNJdVlYUmhiR0Z3Y21semJTNXBieUlzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJhIjpbXSwidCI6ImRtIn0");
 
-      const payload = Fixtures.createAnonCredsPayload();
-      const encoded = Fixtures.encodeAnonCredsCredential(payload);
-      const base64Data = base64url.baseEncode(Buffer.from(encoded));
+      describe("Anoncreds", () => {
+        test("AnoncredsCredential + AnoncredsPresentationRequest - returns Presentation", async () => {
+          sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
 
-      const issueCredential = new IssueCredential(
-        {
-          formats: [
-            { attach_id: "attach_id", format: CredentialType.AnonCreds },
-          ],
-        },
-        [
-          {
-            id: "attach_1",
-            format: "anoncreds/credential-offer@v1.0",
-            data: { base64: base64Data },
-          },
-        ],
-        new DID("did", "prism", "from"),
-        new DID("did", "prism", "to"),
-        "thid"
-      );
+          sandbox.stub(pollux as any, "fetchSchema")
+            .resolves(Fixtures.Credentials.Anoncreds.schema);
 
-      const result =
-        await agent.processIssuedCredentialMessage(issueCredential);
+          sandbox.stub(pollux as any, "fetchCredentialDefinition")
+            .resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
 
-      expect(result).to.be.an.instanceOf(Credential);
-      expect(result.isStorable()).to.be.true;
+          const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [Fixtures.PresentationRequests.AnoncredsAttachment],
+            didFrom,
+            didTo
+          );
 
-      const storable = (result as any as StorableCredential).toStorable();
-      expect(storable).not.to.be.undefined;
+          const result = await agent.createPresentationForRequestProof(request, credential);
+
+          expect(result).to.be.instanceOf(Presentation);
+          expect(result).to.have.property("attachments")
+            .to.be.an("array")
+            .to.have.length(1);
+          const attached = result.attachments[0];
+          // TODO: what should this be?
+          // expect(attached).to.have.property("mediaType", "prism/jwt");
+          expect(attached).to.have.property("data");
+          expect(attached.data).to.have.property("base64").to.be.a("string");
+
+          // expect(result).to.have.property("body");
+          // expect(result.body).to.have.property("comment", request.body.comment);
+          // expect(result.body).to.have.property("goalCode", request.body.goalCode);
+
+          expect(result).to.have.property("from", request.to);
+          expect(result).to.have.property("to", request.from);
+          // expect(result).to.have.property("thid", request.thid);
+        });
+      });
+
+      describe("JWT", () => {
+        let stubGetDIDPrivateKeysByDID;
+
+        beforeEach(() => {
+          stubGetDIDPrivateKeysByDID = sandbox
+            .stub(pluto, "getDIDPrivateKeysByDID")
+            .resolves([Fixtures.Keys.ed25519.privateKey as any]);
+        });
+
+        test("JWTCredential + JWTPresentationRequest - returns Presentation", async () => {
+          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [Fixtures.PresentationRequests.JWTAttachment],
+            didFrom,
+            didTo
+          );
+
+          const result = await agent.createPresentationForRequestProof(request, credential);
+
+          expect(result).to.be.instanceOf(Presentation);
+          expect(result).to.have.property("attachments")
+            .to.be.an("array")
+            .to.have.length(1);
+          const attached = result.attachments[0];
+          // expect(attached).to.have.property("mediaType", "prism/jwt");
+          expect(attached).to.have.property("data");
+          expect(attached.data).to.have.property("base64").to.be.a("string");
+
+          expect(result).to.have.property("body");
+          expect(result.body).to.have.property("comment", request.body.comment);
+          expect(result.body).to.have.property("goalCode", request.body.goalCode);
+
+          expect(result).to.have.property("from", request.to);
+          expect(result).to.have.property("to", request.from);
+          expect(result).to.have.property("thid", request.thid);
+        });
+
+        test("Attachment format - not JWT - throws", () => {
+          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [{ ...Fixtures.PresentationRequests.JWTAttachment, format: "wrong" }],
+            didFrom,
+            didTo
+          );
+
+          const result = agent.createPresentationForRequestProof(request, credential);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        test("Credential.subjectDID - invalid - throws", () => {
+          const credential = JWTCredential.fromJWT({}, "");
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [Fixtures.PresentationRequests.JWTAttachment],
+            didFrom,
+            didTo
+          );
+
+          const result = agent.createPresentationForRequestProof(request, credential);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        test("Credential.subjectDID - doesn't match PrivateKey - throws", () => {
+          stubGetDIDPrivateKeysByDID.resolves([]);
+
+          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [Fixtures.PresentationRequests.JWTAttachment],
+            didFrom,
+            didTo
+          );
+
+          const result = agent.createPresentationForRequestProof(request, credential);
+
+          expect(result).to.eventually.be.rejected;
+        });
+      });
+
+      describe("Fail cases", () => {
+        test("RequestPresentation.attachments - empty - throws", () => {
+          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [],
+            didFrom,
+            didTo
+          );
+
+          const result = agent.createPresentationForRequestProof(request, credential);
+
+          expect(result).to.eventually.be.rejected;
+        });
+
+        test("Credential - not matched - throws", () => {
+          const request = new RequestPresentation(
+            { proofTypes: [] },
+            [Fixtures.PresentationRequests.JWTAttachment],
+            didFrom,
+            didTo
+          );
+
+          const result = agent.createPresentationForRequestProof(request, {} as any);
+
+          expect(result).to.eventually.be.rejected;
+        });
+      });
     });
   });
 });
