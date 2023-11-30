@@ -72,7 +72,7 @@ jobs:
           scope: "@hyperledger-labs"
 
       - name: Pack atala-prism-wallet-sdk
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'schedule'
         run: |
           npm install
           npm run build
@@ -80,7 +80,7 @@ jobs:
           echo "PACKAGE_NAME=$(find . -maxdepth 1 -name atala-prism-wallet-sdk-* | tr -d '\n')" >> "$GITHUB_ENV"
   
       - name: Install local dependency
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'schedule'
         working-directory: integration-tests/e2e-tests
         run: |
           yarn
