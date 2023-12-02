@@ -1,0 +1,6 @@
+[submodule "externals/anoncreds"]
+	path = externals/anoncreds
+	url = git@github.com:berendsliedrecht/anoncreds-rs.git
+[submodule "externals/didcomm"]
+	path = externals/didcomm
+	url = git@github.com:sicpa-dlab/didcomm-rust.git
