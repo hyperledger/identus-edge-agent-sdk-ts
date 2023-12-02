@@ -16,15 +16,12 @@ export class AnoncredsLoader {
       AnoncredsLoader.instance = new AnoncredsLoader();
       await this.instance.load();
     }
-
     return AnoncredsLoader.instance;
   }
 
   private async load() {
     if (typeof window !== "undefined") {
       this.pkg = await import("anoncreds-browser/anoncreds");
-      const pkgWasm = await import("anoncreds-browser/anoncreds_bg.wasm");
-      await this.pkg.default(pkgWasm.default);
       this.loaded = true;
     } else {
       this.pkg = await import("anoncreds-node");

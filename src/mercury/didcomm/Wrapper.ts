@@ -58,7 +58,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
     fromDid?: Domain.DID
   ): Promise<string> {
     const didcomm = await DIDCommWrapper.getDIDComm();
-
     const to = toDid.toString();
     const body =
       message.body && Object.keys(JSON.parse(message.body)).length

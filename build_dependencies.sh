@@ -5,7 +5,7 @@ AnonCredsFolder="./externals/anoncreds"
 
 buildDIDComm() {
     cd $DIDCommFolder/wasm
-    wasm-pack build --out-dir=../../../generated/didcomm-wasm
+    wasm-pack build --target=web --out-dir=../../../generated/didcomm-wasm
     cd ../../../
     rm ./didcomm.commit
     git submodule | grep didcomm | awk '{print $1}' >> ./didcomm.commit
@@ -13,7 +13,7 @@ buildDIDComm() {
 
 buildAnoncreds() {
     cd $AnonCredsFolder
-    wasm-pack build --target=web --no-default-features --features=wasm 
+    wasm-pack build --no-default-features --features=wasm 
     rm -rf ../../generated/anoncreds-wasm-browser
     mv pkg ../../generated/anoncreds-wasm-browser
     wasm-pack build --target=nodejs --no-default-features --features=wasm 
