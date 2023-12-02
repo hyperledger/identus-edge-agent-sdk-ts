@@ -14,7 +14,7 @@ import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
-import type * as DIDCommLibTypes from "../../../didcomm-rust/didcomm-browser/didcomm_js";
+import type * as DIDCommLibTypes from "../../../generated/didcomm-wasm/didcomm_js";
 import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
 
 /**
@@ -22,14 +22,15 @@ import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
  * @returns
  */
 export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
-  const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
+  const DIDCommLib = await import("../../../generated/didcomm-wasm/didcomm_js");
   const wasmInit = DIDCommLib.default;
-  const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
+  const { default: wasm } = await import("../../../generated/didcomm-wasm/didcomm_js_bg.wasm");
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   await wasmInit(await wasm());
   return DIDCommLib;
 }
+
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm-node");
   private readonly didResolver: DIDResolver;

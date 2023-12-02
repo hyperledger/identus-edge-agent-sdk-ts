@@ -7,11 +7,15 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 export default Base({ mode: "browser" }, [
   modify({
     find: '"didcomm-node"',
-    replace: '"didcomm-browser"',
+    replace: '"didcomm"',
+  }),
+  modify({
+    find: "'didcomm-node'",
+    replace: "'didcomm'",
   }),
   nodePolyfills(),
   nodeResolve({
-    resolveOnly: ["anoncreds-browser", "didcomm-browser"],
+    resolveOnly: ["didcomm", "anoncreds-wasm"],
   }),
   wasm({
     targetEnv: "browser",

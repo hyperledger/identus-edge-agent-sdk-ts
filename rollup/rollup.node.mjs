@@ -1,5 +1,6 @@
-import copy from "rollup-plugin-copy";
 import Base from "./base.mjs";
+import nodeResolve from "@rollup/plugin-node-resolve";
+import { wasm } from "@rollup/plugin-wasm";
 
 export default Base(
   {
@@ -12,18 +13,17 @@ export default Base(
     },
     mode: "node",
     format: "cjs",
-    // overwrite anoncreds import to target copied file (below)
-    paths: {
-      "anoncreds-node": "./anoncreds.js",
-    },
   },
   [
-    // copy anoncreds as is, so rollup doesn't break it
-    copy({
-      targets: [
-        { src: "./anoncreds-rust/node/anoncreds.js", dest: "build/node" },
-        { src: "./anoncreds-rust/node/anoncreds_bg.wasm", dest: "build/node" },
-      ],
+    nodeResolve({
+      exportConditions: ["node"],
+      preferBuiltins: true,
+      resolveOnly: ['anoncreds-wasm'],
+    }),
+    wasm({
+      targetEnv: "node",
+      fileName: "[name][extname]",
+      publicPath: "/",
     }),
   ]
 );

@@ -31,7 +31,28 @@ The complete platform is separated into multiple repositories:
 
 ### Getting started
 
-This repository includes a browser and a Node.js demo application, and also a step-by-step documented process to run it.
+This repository includes a browser and a Node.js demo application, and also a step-by-step documented process on [how to run it](#running-a-demo-project).
+
+#### Building from source
+This repository contains compiles typescript code and some rust dependencies for DIDComm and AnonCreds, so in order to build the code from source you will need the following:
+
+* Bash
+* Have Rust (cargo) and wasm-pack installed.
+* Node JS Version (20/LTS Recommended)
+
+Clone the repository
+```
+git clone git@github.com:input-output-hk/atala-prism-wallet-sdk-ts.git
+```
+
+> **Note:**
+> 
+> This repository uses git submodules but this process is already automated and all the dependencies will be fetched and compiled before building.
+
+```
+npm run build
+```
+
 
 #### Running a demo project
 

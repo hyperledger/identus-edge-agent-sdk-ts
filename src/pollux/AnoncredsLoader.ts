@@ -1,5 +1,5 @@
 import { Anoncreds } from "../domain/models/Anoncreds";
-import type * as anoncredsTypes from "anoncreds-browser";
+import type * as anoncredsTypes from "anoncreds-wasm";
 
 /**
  * @class AnoncredsLoader
@@ -22,16 +22,9 @@ export class AnoncredsLoader {
 
   private async load() {
     if (!this.loaded) {
-      if (typeof window !== "undefined") {
-        this.pkg = await import("anoncreds-browser/anoncreds");
-        const pkgWasm = await import("anoncreds-browser/anoncreds_bg.wasm");
-        await this.pkg.default((pkgWasm as any).default());
-        this.loaded = true;
-      } else {
-        this.pkg = await import("anoncreds-node");
-
-        this.loaded = true;
-      }
+      const pkg = await import("anoncreds-wasm");
+      this.pkg = pkg;
+      this.loaded = true;
     }
   }
 
