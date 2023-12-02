@@ -18,7 +18,7 @@ export default Base(
     nodeResolve({
       exportConditions: ["node"],
       preferBuiltins: true,
-      resolveOnly: ['anoncreds-wasm'],
+      resolveOnly: ['anoncreds-node'],
     }),
     wasm({
       targetEnv: "node",
