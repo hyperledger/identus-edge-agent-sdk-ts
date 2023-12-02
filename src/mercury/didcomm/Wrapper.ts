@@ -14,17 +14,7 @@ import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
-import type * as DIDCommLibTypes from "../../../generated/didcomm-wasm/didcomm_js";
 import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
-
-/**
- * @ignore
- * @returns
- */
-export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
-  const DIDCommLib = await import("../../../generated/didcomm-wasm/didcomm_js");
-  return DIDCommLib;
-}
 
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm-node");
@@ -43,7 +33,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
   public static async getDIDComm() {
     if (!this.didcomm) {
       if (typeof window !== "undefined")
-        this.didcomm = await getDidcommLibInstance();
+        this.didcomm = await import("../../../generated/didcomm-wasm");
       else this.didcomm = await import("didcomm-node");
     }
     return this.didcomm;
