@@ -40,3 +40,4 @@ export * from "./apollo/utils/X25519KeyPair";
 export * from "./pollux/models/AnonCredsVerifiableCredential";
 export * from "./pollux/models/JWTVerifiableCredential";
 export { KeyProperties } from "./domain/models/KeyProperties";
+export * from './pollux/AnoncredsLoader';

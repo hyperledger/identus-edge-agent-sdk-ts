@@ -11,6 +11,7 @@ if [ ! -d "$DIDCommFolder" ] || [ ! -d "$AnonCredsFolder" ]; then
     git submodule update --init --recursive --remote
 fi
 
+rm -rf ./generated
 mkdir -p ./generated
 
 
@@ -19,6 +20,10 @@ wasm-pack build --target=web --out-dir=../../../generated/didcomm-wasm
 
 cd ../../anoncreds
 pwd
-wasm-pack build --no-default-features --features=wasm 
-rm -rf ../../generated/anoncreds-wasm
-mv pkg ../../generated/anoncreds-wasm
+wasm-pack build --target=web --no-default-features --features=wasm 
+rm -rf ../../generated/anoncreds-wasm-browser
+mv pkg ../../generated/anoncreds-wasm-browser
+
+wasm-pack build --target=nodejs --no-default-features --features=wasm 
+rm -rf ../../generated/anoncreds-wasm-node
+mv pkg ../../generated/anoncreds-wasm-node
