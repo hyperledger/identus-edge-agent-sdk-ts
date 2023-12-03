@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
@@ -332,8 +335,8 @@ describe("Agent Tests", () => {
 
   describe("processIssuedCredentialMessage", () => {
     beforeEach(async () => {
-      await agent.start();
       await pollux.start();
+      await agent.start();
     });
 
     it("no attachment - throws", () => {

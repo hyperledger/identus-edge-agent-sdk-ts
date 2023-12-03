@@ -34,14 +34,6 @@ if [ ! -d "$ExternalsFolder" ]; then
     git submodule update --init --recursive --remote
 fi
 
-if [ ! -d "./anoncreds.commit" ]; then
-    echo "1" >> "./anoncreds.commit"
-fi
-
-if [ ! -d "./didcomm.commit" ]; then
-    echo "1" >> "./didcomm.commit"
-fi
-
 if [ ! -d "$GeneratedFolder" ]; then
     rm -rf ./generated
     mkdir -p ./generated

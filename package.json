@@ -125,7 +125,8 @@
       "ts"
     ],
     "moduleNameMapper": {
-      "^core-js/modules/(.*)$": "<rootDir>/node_modules/core-js/modules/$1"
+      "^core-js/modules/(.*)$": "<rootDir>/node_modules/core-js/modules/$1",
+      "^sinon$": "<rootDir>/node_modules/sinon/pkg/sinon.js"
     },
     "coverageReporters": [
       "json-summary",
@@ -137,9 +138,11 @@
       "jest-junit"
     ],
     "coveragePathIgnorePatterns": [
-      "tests",
-      "anoncreds-rust",
-      "didcomm-rust"
+      "tests"
+    ],
+    "testPathIgnorePatterns": [
+      "externals",
+      "generated"
     ],
     "coverageThreshold": {
       "global": {
