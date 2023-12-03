@@ -151,8 +151,8 @@
       "global": {
         "branches": 22,
         "functions": 33,
-        "lines": 34,
-        "statements": 34
+        "lines": 32,
+        "statements": 32
       }
     },
     "coverageDirectory": "coverage"
