@@ -33,7 +33,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
   public static async getDIDComm() {
     if (!this.didcomm) {
       /*START.BROWSER_ONLY*/
-      debugger;
       const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
       const wasmInit = DIDCommLib.default;
       const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
@@ -41,7 +40,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
       // @ts-ignore
       await wasmInit(await wasm());
       this.didcomm = DIDCommLib;
-      debugger;
       /*END.BROWSER_ONLY*/
       /*START.NODE_ONLY*/
       this.didcomm = await import("didcomm-node");
