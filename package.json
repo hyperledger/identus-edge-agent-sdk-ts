@@ -138,7 +138,10 @@
       "jest-junit"
     ],
     "coveragePathIgnorePatterns": [
-      "tests"
+      "tests",
+      "externals",
+      "generated",
+      "src/castor/protos"
     ],
     "testPathIgnorePatterns": [
       "externals",
