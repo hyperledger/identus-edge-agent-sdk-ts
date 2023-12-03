@@ -47,10 +47,8 @@ yarn add @atala/prism-wallet-sdk
 
 ### Running a demo project
 
-To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
-
+To be able to run the demos, we have to build `prism-wallet-sdk`.
 From the repository root run:
-
 
 ```bash
 npm i
@@ -59,7 +57,7 @@ npm run build
 
 ### For NodeJS
 
-After building `prism-wallet-sdk-ts`, cd into `{path}/prism-wallet-sdk-ts/demos/node`:
+After building `prism-wallet-sdk`, cd into `{path}/demos/node`:
 
 ```bash
 npm i
@@ -68,12 +66,12 @@ node index.js
 
 > **Note:**
 > 
-> The installation in the `demos/node` directory requires the `build` folder from the wallet-sdk to be available.
+> The installation in the `{path}/demos/node` directory requires the `build` folder from the wallet-sdk to be available.
 
 
 ### For browser
 
-After building `prism-wallet-sdk-ts`, cd into the demo directory "demos/browser"
+After building `prism-wallet-sdk`, cd into the demo directory `{path}/demos/browser`
 
 ```bash
 cd demos/browser
