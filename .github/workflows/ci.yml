@@ -28,6 +28,16 @@ jobs:
         with:
           node-version: "lts/*"
 
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          
       - name: Install
         run: npm install
 
