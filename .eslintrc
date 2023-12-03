@@ -8,7 +8,6 @@
     }
   },
   "ignorePatterns": [
-    "externals",
     "src/castor/parser",
     "src/castor/protos",
     "scripts",
