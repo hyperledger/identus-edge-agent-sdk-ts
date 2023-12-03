@@ -29,7 +29,7 @@ This repository includes a browser and a Node.js demo application, and also a st
 You can install and use this library in browsers and nodejs.
 
 ```bash
-npm @atala/prism-wallet-sdk --save
+npm i @atala/prism-wallet-sdk --save
 ```
 
 or with yarn
