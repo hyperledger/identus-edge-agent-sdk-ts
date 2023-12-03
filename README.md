@@ -60,8 +60,9 @@ npm run build
 After building `prism-wallet-sdk`, cd into `{path}/demos/node`:
 
 ```bash
+cd demos/node
 npm i
-node index.js
+npm run start
 ```
 
 > **Note:**
