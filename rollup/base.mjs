@@ -25,11 +25,6 @@ const externals = [
   "did-jwt",
   "axios",
   "apollo",
-  "didcomm",
-  "didcomm-node",
-  "didcomm-browser",
-  "anoncreds-browser",
-  "anoncreds-node",
 ];
 
 export default (output, plugins = []) => {
@@ -43,6 +38,7 @@ export default (output, plugins = []) => {
       paths: output.paths
     },
     plugins: [
+      ...plugins,
       jsccPlugin({ values: { _ANONCREDS: true } }),
       ignore(externals),
       json(),
@@ -54,8 +50,6 @@ export default (output, plugins = []) => {
           },
         },
       }),
-      ...plugins,
-      commonjs(),
       cleanup(),
     ],
     external: externals,

@@ -7,7 +7,6 @@
   "types": "build/typings/index.d.ts",
   "files": [
     "build/**/*",
-    ".bin/**",
     "README.MD"
   ],
   "browserslist": [
@@ -18,7 +17,7 @@
   ],
   "scripts": {
     "dependencies": "sh build_dependencies.sh",
-    "build": "npm run dependencies && npm run build:browser && npm run build:node && npm run types",
+    "build": "npm run dependencies && rm -rf build && npm run build:browser && npm run build:node && npm run types",
     "types": "rm -rf build/typings && tsc",
     "build:browser": "rollup -c rollup/rollup.browser.mjs",
     "build:node": "rollup -c rollup/rollup.node.mjs",
@@ -70,9 +69,6 @@
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.55.0",
-    "didcomm": "^0.4.1",
-    "didcomm-node": "^0.4.1",
-    "didcomm-wasm": "file:./generated/didcomm-wasm",
     "anoncreds-browser": "file:./generated/anoncreds-wasm-browser",
     "anoncreds-node": "file:./generated/anoncreds-wasm-node",
     "babel-plugin-transform-import-meta": "^2.2.0",
@@ -82,6 +78,8 @@
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "core-js": "^3.32.2",
+    "didcomm-node": "file:./generated/didcomm-wasm-node",
+    "didcomm-browser": "file:./generated/didcomm-wasm-browser",
     "eslint": "^8.36.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard-with-typescript": "^34.0.1",
@@ -99,6 +97,7 @@
     "rollup-plugin-jscc": "^2.0.0",
     "rollup-plugin-modify": "^3.0.0",
     "rollup-plugin-polyfill-node": "^0.12.0",
+    "rollup-plugin-strip-code": "^0.2.7",
     "rollup-plugin-typescript2": "^0.34.1",
     "semantic-release": "^21.1.1",
     "semantic-release-slack-bot": "^4.0.2",

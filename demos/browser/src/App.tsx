@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import * as jose from "jose";
 import { useAtom } from "jotai";
-import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
+import * as SDK from "@atala/prism-wallet-sdk";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";

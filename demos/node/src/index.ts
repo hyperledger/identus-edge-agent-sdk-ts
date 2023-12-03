@@ -1,4 +1,4 @@
-import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
+import * as SDK from "@atala/prism-wallet-sdk";
 //@ts-ignore
 import { PlutoInMemory } from "../../pluto/PlutoInMemory";
 

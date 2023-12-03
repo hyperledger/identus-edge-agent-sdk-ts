@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@input-output-hk/atala-prism-wallet-sdk": "file:../../",
+    "@atala/prism-wallet-sdk": "file:../../",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -21,7 +21,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "npm run build && craco start",
+    "postinstall": "npm run copy-wasm",
+    "copy-wasm": "cp node_modules/@atala/prism-wallet-sdk/build/browser/*.wasm public",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test"
   },
@@ -45,7 +47,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@craco/craco": "^5.9.0",
+    "@craco/craco": "^7.1.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "copy-webpack-plugin": "^11.0.0",

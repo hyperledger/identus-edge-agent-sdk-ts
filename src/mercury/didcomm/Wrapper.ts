@@ -32,9 +32,20 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
   public static async getDIDComm() {
     if (!this.didcomm) {
-      if (typeof window !== "undefined")
-        this.didcomm = await import("../../../generated/didcomm-wasm");
-      else this.didcomm = await import("didcomm-node");
+      /*START.BROWSER_ONLY*/
+      debugger;
+      const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
+      const wasmInit = DIDCommLib.default;
+      const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await wasmInit(await wasm());
+      this.didcomm = DIDCommLib;
+      debugger;
+      /*END.BROWSER_ONLY*/
+      /*START.NODE_ONLY*/
+      this.didcomm = await import("didcomm-node");
+      /*END.NODE_ONLY*/
     }
     return this.didcomm;
   }
