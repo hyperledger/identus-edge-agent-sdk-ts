@@ -2,7 +2,7 @@
 ExternalsFolder="./externals"
 DIDCommFolder="./externals/didcomm"
 AnonCredsFolder="./externals/anoncreds"
-
+GeneratedFolder="./generated"
 buildDIDComm() {
     cd $DIDCommFolder/wasm
     wasm-pack build --target=web --out-dir=../../../generated/didcomm-wasm-browser
@@ -30,13 +30,17 @@ if [ ! -d "$ExternalsFolder" ]; then
     echo "Automatically initializing submodules"
     mkdir -p ./externals
     git submodule update --init --recursive --remote
+fi
+
+if [ ! -d "$GeneratedFolder" ]; then
     rm -rf ./generated
     mkdir -p ./generated
     echo "Storing submodule reference"
-   
+
     buildDIDComm
     buildAnoncreds
 fi
+
 
 didcommOldCommit=$(cat didcomm.commit)
 didcommNewCommit=$(git submodule | grep didcomm | awk '{print $1}')
