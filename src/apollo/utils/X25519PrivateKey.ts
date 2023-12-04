@@ -1,16 +1,25 @@
-import ApolloBaseAsymmetricEncryption from "@atala/apollo";
-import { Curve, KeyTypes, PrivateKey } from "../../domain";
-import { KeyProperties } from "../../domain/models/KeyProperties";
+import ApolloPkg from "@atala/apollo";
 import { X25519PublicKey } from "./X25519PublicKey";
+import {
+  Curve,
+  ExportableKey,
+  ImportableKey,
+  KeyProperties,
+  KeyTypes,
+  PrivateKey
+} from "../../domain";
 
 /**
  * @ignore
  */
-export class X25519PrivateKey extends PrivateKey {
+export class X25519PrivateKey extends PrivateKey implements ExportableKey {
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;
   public size: number;
   public type: KeyTypes = KeyTypes.EC;
+
+  public readonly to = ExportableKey.factory(this, { pemLabel: "PRIVATE KEY" });
+  static from = ImportableKey.factory(X25519PrivateKey, { pemLabel: "PRIVATE KEY" });
 
   constructor(bytes: Int8Array | Uint8Array) {
     super();
@@ -32,22 +41,10 @@ export class X25519PrivateKey extends PrivateKey {
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
-      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMX25519PrivateKey(
+      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMX25519PrivateKey(
         Int8Array.from(bytes)
       );
 
     return instance;
   }
-
-  public readonly to = {
-    Buffer: () => Buffer.from(this.raw),
-    Hex: () => this.to.Buffer().toString("hex"),
-  };
-
-  static from = {
-    Buffer: (value: Buffer) => new X25519PrivateKey(new Uint8Array(value)),
-    Hex: (value: string) =>
-      X25519PrivateKey.from.Buffer(Buffer.from(value, "hex")),
-    String: (value: string) => X25519PrivateKey.from.Buffer(Buffer.from(value)),
-  };
 }
