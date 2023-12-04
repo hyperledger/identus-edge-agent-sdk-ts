@@ -1,15 +1,24 @@
-import ApolloBaseAsymmetricEncryption from "@atala/apollo";
-import { Curve, KeyTypes, PublicKey } from "../../domain";
-import { KeyProperties } from "../../domain/models/KeyProperties";
+import ApolloPkg from "@atala/apollo";
+import {
+  Curve,
+  ExportableKey,
+  ImportableKey,
+  KeyProperties,
+  KeyTypes,
+  PublicKey
+} from "../../domain";
 
 /**
  * @ignore
  */
-export class X25519PublicKey extends PublicKey {
+export class X25519PublicKey extends PublicKey implements ExportableKey {
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;
   public size: number;
   public type: KeyTypes = KeyTypes.EC;
+
+  public readonly to = ExportableKey.factory(this, { pemLabel: "PUBLIC KEY" });
+  static from = ImportableKey.factory(X25519PublicKey, { pemLabel: "PUBLIC KEY" });
 
   constructor(bytes: Int8Array | Uint8Array) {
     super();
@@ -27,7 +36,7 @@ export class X25519PublicKey extends PublicKey {
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
-      new ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMX25519PublicKey(
+      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMX25519PublicKey(
         Int8Array.from(bytes)
       );
 
