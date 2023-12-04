@@ -1,32 +1,32 @@
+import ApolloPkg from "@atala/apollo";
 import BN from "bn.js";
 import BigInteger from "bn.js";
-import * as ApolloPKG from "@atala/apollo";
 
 import * as ECConfig from "../../config/ECConfig";
 import { ECPoint } from "./ec/ECPoint";
-import { VerifiableKey } from "../../domain/models/keyManagement/VerifiableKey";
-import { KeyProperties } from "../../domain/models/KeyProperties";
 import { ApolloError } from "../../domain/models/Errors";
-import { Curve, KeyTypes, PublicKey } from "../../domain";
-
-const {
-  io: {
-    iohk: {
-      atala: {
-        prism: { apollo },
-      },
-    },
-  },
-} = ApolloPKG;
+import {
+  Curve,
+  ExportableKey,
+  ImportableKey,
+  KeyProperties,
+  KeyTypes,
+  PublicKey,
+  VerifiableKey
+} from "../../domain";
 
 /**
  * @ignore
  */
-export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
-  public type: KeyTypes = KeyTypes.EC;
+export class Secp256k1PublicKey extends PublicKey implements ExportableKey, VerifiableKey {
   public keySpecification: Map<KeyProperties | string, string> = new Map();
-  public size;
+  public size: number;
   public raw: Uint8Array;
+  public type: KeyTypes = KeyTypes.EC;
+
+  public readonly to = ExportableKey.factory(this, { pemLabel: "EC PUBLIC KEY" });
+  static from = ImportableKey.factory(Secp256k1PublicKey, { pemLabel: "EC PUBLIC KEY" });
+
   public get isCompressed() {
     return (
       this.keySpecification.has("compressed") &&
@@ -35,10 +35,11 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
   }
 
   private get native() {
-    return apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+    return ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
       Int8Array.from(this.raw)
     );
   }
+
   constructor(nativeValue: Uint8Array) {
     super();
 
@@ -142,7 +143,7 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
   static secp256k1FromBytes(encoded: Uint8Array): Secp256k1PublicKey {
     return new Secp256k1PublicKey(
       Uint8Array.from(
-        ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+        ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
           Int8Array.from(encoded)
         ).raw
       )
@@ -177,7 +178,7 @@ export class Secp256k1PublicKey extends PublicKey implements VerifiableKey {
     const xCoord = Buffer.from(x.toArray());
     const yCoord = Buffer.from(y.toArray());
     const publicKey =
-      apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
+      ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
         Int8Array.from(xCoord),
         Int8Array.from(yCoord)
       );

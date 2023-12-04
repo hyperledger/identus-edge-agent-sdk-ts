@@ -1,41 +1,35 @@
+import ApolloPkg from "@atala/apollo";
 import BN from "bn.js";
+
 import * as ECConfig from "../../config/ECConfig";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { ApolloError } from "../../domain/models/Errors";
 import { SignableKey } from "../../domain/models/keyManagement/SignableKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
-import { Curve, DerivableKey, KeyTypes, PrivateKey } from "../../domain";
-
-import * as ApolloPKG from "@atala/apollo";
+import { Curve, DerivableKey, ExportableKey, ImportableKey, KeyTypes, PrivateKey } from "../../domain";
 import { DerivationPath } from "./derivation/DerivationPath";
 
-const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
-
-const HDKey = ApolloSDK.derivation.HDKey;
-const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
-const {
-  io: {
-    iohk: {
-      atala: {
-        prism: { apollo },
-      },
-    },
-  },
-} = ApolloPKG;
+const Apollo = ApolloPkg.io.iohk.atala.prism.apollo;
+const HDKey = Apollo.derivation.HDKey;
+const BigIntegerWrapper = Apollo.derivation.BigIntegerWrapper;
 
 /**
  * @ignore
  */
 export class Secp256k1PrivateKey
   extends PrivateKey
-  implements SignableKey, DerivableKey {
-  public type: KeyTypes = KeyTypes.EC;
+  implements DerivableKey, ExportableKey, SignableKey
+{
   public keySpecification: Map<string, string> = new Map();
   public raw: Uint8Array;
   public size: number;
+  public type: KeyTypes = KeyTypes.EC;
+
+  public readonly to = ExportableKey.factory(this, { pemLabel: "EC PRIVATE KEY" });
+  static from = ImportableKey.factory(Secp256k1PrivateKey, { pemLabel: "EC PRIVATE KEY" });
 
   private get native() {
-    return apollo.utils.KMMECSecp256k1PrivateKey.Companion.secp256k1FromByteArray(
+    return Apollo.utils.KMMECSecp256k1PrivateKey.Companion.secp256k1FromByteArray(
       Int8Array.from(this.raw)
     );
   }
@@ -112,18 +106,4 @@ export class Secp256k1PrivateKey
     const bnprv = new BN(encoded);
     return new Secp256k1PrivateKey(Uint8Array.from(bnprv.toArray()));
   }
-
-  public readonly to = {
-    Buffer: () => Buffer.from(this.getEncoded()),
-    Hex: () => this.to.Buffer().toString("hex"),
-  };
-
-  static from = {
-    Buffer: (value: Buffer) =>
-      Secp256k1PrivateKey.secp256k1FromBytes(new Uint8Array(value)),
-    Hex: (value: string) =>
-      Secp256k1PrivateKey.from.Buffer(Buffer.from(value, "hex")),
-    String: (value: string) =>
-      Secp256k1PrivateKey.from.Buffer(Buffer.from(value)),
-  };
 }

@@ -7,6 +7,7 @@ import { VerifiableKey } from "./VerifiableKey";
 import { KeyCurve } from "../KeyCurve";
 import { Curve } from "./Curve";
 import { KeyTypes } from "./KeyTypes";
+import { ExportableKey } from "./exportable";
 
 export function getKeyCurveByNameAndIndex(
   name: string,
@@ -29,8 +30,14 @@ export abstract class Key {
   abstract keySpecification: Map<KeyProperties | string, string>;
   abstract size: number;
   abstract raw: Uint8Array;
+  abstract to: ExportableKey.Common["to"];
 
   abstract getEncoded(): Uint8Array;
+
+  get curve() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.getProperty(KeyProperties.curve)!;
+  }
 
   isExportable(): this is StorableKey {
     return "export" in this;

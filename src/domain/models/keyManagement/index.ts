@@ -1,4 +1,5 @@
 export * from "./DerivableKey";
+export * from "./exportable";
 export * from "./Key";
 export * from "./PrivateKey";
 export * from "./PublicKey";
