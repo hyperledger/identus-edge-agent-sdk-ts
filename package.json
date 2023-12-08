@@ -2,9 +2,16 @@
   "name": "@atala/prism-wallet-sdk",
   "version": "3.1.0",
   "description": "PRISM typescript SDK",
-  "main": "build/node/index.js",
-  "browser": "build/browser/index.js",
-  "types": "build/typings/index.d.ts",
+  "main": "./build/node-cjs/index.cjs",
+  "module": "./build/node-esm/index.mjs",
+  "browser": "./build/browser/index.js",
+  "exports": {
+    ".": {
+      "import": "./build/node-esm/index.mjs",
+      "require": "./build/node-cjs/index.cjs"
+    }
+  },
+  "types": "./build/typings/index.d.ts",
   "files": [
     "build/**/*",
     "README.MD"
@@ -78,8 +85,8 @@
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "core-js": "^3.32.2",
-    "didcomm-node": "file:./generated/didcomm-wasm-node",
     "didcomm-browser": "file:./generated/didcomm-wasm-browser",
+    "didcomm-node": "file:./generated/didcomm-wasm-node",
     "eslint": "^8.36.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard-with-typescript": "^34.0.1",
@@ -183,6 +190,7 @@
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
+    "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"
   }

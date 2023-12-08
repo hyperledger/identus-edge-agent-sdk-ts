@@ -1,4 +1,8 @@
-import * as SDK from "../../";
+/**
+ * WARNING: Do not  use this pluto implementation, its inMemory and totally unprotected.
+ * Look for other community inspired projects like "@pluto-encrypted/database"
+ */
+import * as SDK from "@atala/prism-wallet-sdk";
 
 interface DIDRecord {
   did: SDK.Domain.DID;
@@ -31,7 +35,7 @@ export class PlutoInMemory implements SDK.Domain.Pluto {
   /**
    * no async setup for in-memory implementation
    */
-  async start() {}
+  async start() { }
 
   async destroy() {
     this._didStorage = {};

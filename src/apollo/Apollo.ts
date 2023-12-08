@@ -17,10 +17,9 @@ import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
 
-import * as ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@atala/apollo";
 
 const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
-
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;

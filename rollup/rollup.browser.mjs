@@ -1,12 +1,13 @@
-import nodePolyfills from "rollup-plugin-polyfill-node";
 import { wasm } from "@rollup/plugin-wasm";
 import Base from "./base.mjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import stripCode from "rollup-plugin-strip-code"
 import copy from 'rollup-plugin-copy'
-import commonjs from "@rollup/plugin-commonjs";
-export default Base({ mode: "browser" }, [
+export default Base("browser", [
+
   nodeResolve({
+    browser: true,
+    preferBuiltins: false,
     resolveOnly: ["didcomm-browser", "anoncreds-browser"],
   }),
   copy({
@@ -21,7 +22,7 @@ export default Base({ mode: "browser" }, [
     publicPath: "/",
     // maxFileSize: 10000000
   }),
-  commonjs(),
+
   stripCode({
     start_comment: 'START.NODE_ONLY',
     end_comment: 'END.NODE_ONLY'

@@ -12,6 +12,14 @@ module.exports = {
       const plutoPath = `${demosPath}/pluto/`;
       tsxRule.include = [tsxRule.include, plutoPath];
 
+      // Force browser entry
+      webpackConfig.resolve.alias = {
+        ...webpackConfig.resolve.alias,
+        '@atala/prism-wallet-sdk': path.resolve(
+          __dirname,
+          'node_modules/@atala/prism-wallet-sdk/build/browser/index.js'
+        ),
+      }
       // Wasms - copy to public
       webpackConfig.resolve.extensions.push(".wasm");
       webpackConfig.plugins = [
@@ -39,7 +47,6 @@ module.exports = {
         // buffer: require.resolve("buffer/"),
         stream: require.resolve("stream-browserify"),
         path: require.resolve("path-browserify"),
-        util: false,
       };
 
       return webpackConfig;
