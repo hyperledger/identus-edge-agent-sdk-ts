@@ -25,13 +25,12 @@ buildAnoncreds() {
     git submodule | grep anoncreds | awk '{print $1}' >> ./anoncreds.commit
 }
 
-
-
-if [ ! -d "$ExternalsFolder" ]; then
+if [ -z "$(find "$DIDCommFolder" -maxdepth 1 -type f)" ] || [ -z "$(find "$AnonCredsFolder" -maxdepth 1 -type f)" ]; then
     # The folder does not exist
     echo "Automatically initializing submodules"
     mkdir -p ./externals
     git submodule update --init --recursive --remote
+
 fi
 
 if [ ! -d "$GeneratedFolder" ]; then
