@@ -27,34 +27,6 @@ const externals = [
 export default (output, plugins = []) => {
   if (output === "browser") {
     return [
-      // {
-      //   input: "src/index.ts",
-      //   output: {
-      //     sourcemap: false,
-      //     file: `build/browser/index.js`,
-      //     format: "iife",
-      //     //This line makes umd work, as it uses dynamic imports which support esm and commonjs
-      //     inlineDynamicImports: true,
-      //     name: "prism"
-      //   },
-      //   plugins: [
-      //     nodePolyfills(),
-      //     ...plugins,
-      //     ignore(externals),
-      //     json(),
-      //     typescript({
-      //       useTsconfigDeclarationDir: false,
-      //       tsconfigOverride: {
-      //         compilerOptions: {
-      //           emitDeclarationOnly: false,
-      //         },
-      //       },
-      //     }),
-      //     cleanup(),
-      //     commonjs(),
-      //   ],
-      //   external: externals,
-      // },
       {
         input: "src/index.ts",
         output: {
@@ -79,31 +51,6 @@ export default (output, plugins = []) => {
         ],
         external: externals,
       },
-      // {
-      //   input: "src/index.ts",
-      //   output: {
-      //     sourcemap: true,
-      //     dir: `build/browser-cjs`,
-      //     format: "cjs",
-      //     entryFileNames: "[name].cjs"
-      //   },
-      //   plugins: [
-      //     ...plugins,
-      //     ignore(externals),
-      //     json(),
-      //     typescript({
-      //       useTsconfigDeclarationDir: false,
-      //       tsconfigOverride: {
-      //         compilerOptions: {
-      //           emitDeclarationOnly: false,
-      //         },
-      //       },
-      //     }),
-      //     cleanup(),
-      //   ],
-      //   external: externals,
-      // }
-
     ]
   } else {
     return [
