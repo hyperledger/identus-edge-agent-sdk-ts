@@ -196,10 +196,10 @@ export default class Agent
    * @returns {Agent}
    */
   static instanceFromConnectionManager(
-    apollo: Apollo,
-    castor: Castor,
+    apollo: Domain.Apollo,
+    castor: Domain.Castor,
     pluto: Domain.Pluto,
-    mercury: Mercury,
+    mercury: Domain.Mercury,
     connectionManager: ConnectionsManager,
     seed?: Domain.Seed,
     api?: Domain.Api

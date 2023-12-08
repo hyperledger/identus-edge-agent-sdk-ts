@@ -2,7 +2,6 @@
 import {
   DID,
   DIDDocument,
-  KeyPair,
   PublicKey,
   Service,
 } from "../../../src/domain";
@@ -30,7 +29,7 @@ export const CastorMock: Castor & typeof castorVars = {
     return Promise.resolve(castorVars._prismDID)
   },
 
-  createPeerDID(keyPairs: KeyPair[], services: Service[]): Promise<DID> {
+  createPeerDID(publicKeys: PublicKey[], services: Service[]): Promise<DID> {
     return Promise.resolve(castorVars._peerDID);
   },
 
@@ -44,7 +43,7 @@ export const CastorMock: Castor & typeof castorVars = {
   ): Promise<boolean> {
     throw new Error("Method not implemented.");
   },
-  getEcnumbasis(did: DID, keyPair: KeyPair): string {
+  getEcnumbasis(did: DID, publicKey: PublicKey): string {
     throw new Error("Method not implemented.");
   },
 };

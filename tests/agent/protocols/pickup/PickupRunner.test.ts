@@ -4,7 +4,7 @@ import chaiAsPromised from "chai-as-promised";
 
 import { expect } from "chai";
 
-import Mercury from "../../../../src/domain/buildingBlocks/Mercury";
+import { Mercury } from "../../../../src/domain/buildingBlocks/Mercury";
 import { MercuryStub } from "../../mocks/MercuryMock";
 import {
   AttachmentData,

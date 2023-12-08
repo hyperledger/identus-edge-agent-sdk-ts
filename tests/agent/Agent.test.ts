@@ -18,7 +18,6 @@ import {
   Api,
   Credential,
   CredentialType,
-  DefaultLinkSecretName,
   DID,
   HttpResponse,
   Message,
