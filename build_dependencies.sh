@@ -8,8 +8,7 @@ buildDIDComm() {
     wasm-pack build --target=web --out-dir=../../../generated/didcomm-wasm-browser
     wasm-pack build --target=nodejs --out-dir=../../../generated/didcomm-wasm-node
     cd ../../../
-    rm ./didcomm.commit
-    git submodule | grep didcomm | awk '{print $1}' >> ./didcomm.commit
+    git submodule | grep didcomm | awk '{print $1}' > ./didcomm.commit
 }
 
 buildAnoncreds() {
