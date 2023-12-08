@@ -40,12 +40,24 @@ yarn add @atala/prism-wallet-sdk
 
 > **Note for Webpack:**
 > 
-> The application builds code with wasm files for DIDComm and Anoncreds for both browsers and nodejs. When webpack builds public website the wasm files need to be copied manually into the public folder.
+> The application builds code with wasm files for DIDComm and Anoncreds for both browsers and nodejs. When webpack builds public website the wasm files need to be copied manually into the public folder. See examples
 
 
 
 
 ### Running a demo project
+
+#### Building from source
+This repository contains compiles typescript code and some rust dependencies for DIDComm and AnonCreds, so in order to build the code from source you will need the following:
+
+* Bash
+* Have Rust (cargo) and wasm-pack installed.
+* Node JS Version (20/LTS Recommended)
+
+Clone the repository
+```
+git clone git@github.com:input-output-hk/atala-prism-wallet-sdk-ts.git
+```
 
 To be able to run the demos, we have to build `prism-wallet-sdk`.
 From the repository root run:
@@ -55,19 +67,33 @@ npm i
 npm run build
 ```
 
-### For NodeJS
+### For NodeJS CJS
 
-After building `prism-wallet-sdk`, cd into `{path}/demos/node`:
+After building `prism-wallet-sdk`, cd into `{path}/demos/node-cjs` or use visual studio debugger "CJS DEMO":
 
 ```bash
-cd demos/node
+cd demos/node-cjs
 npm i
 npm run start
 ```
 
 > **Note:**
 > 
-> The installation in the `{path}/demos/node` directory requires the `build` folder from the wallet-sdk to be available.
+> The installation in the `{path}/demos/node-cjs` directory requires the `build` folder from the wallet-sdk to be available.
+
+### For NodeJS ESM
+
+After building `prism-wallet-sdk`, cd into `{path}/demos/node-esm` or use visual studio debugger "ESM DEMO":
+
+```bash
+cd demos/node-esm
+npm i
+npm run start
+```
+
+> **Note:**
+> 
+> The installation in the `{path}/demos/node-esm` directory requires the `build` folder from the wallet-sdk to be available.
 
 
 ### For browser
@@ -80,25 +106,7 @@ npm i
 npm run start
 ```
 
-### Building from source
-This repository contains compiles typescript code and some rust dependencies for DIDComm and AnonCreds, so in order to build the code from source you will need the following:
 
-* Bash
-* Have Rust (cargo) and wasm-pack installed.
-* Node JS Version (20/LTS Recommended)
-
-Clone the repository
-```
-git clone git@github.com:input-output-hk/atala-prism-wallet-sdk-ts.git
-```
-
-> **Note:**
-> 
-> This repository uses git submodules but this process is already automated and all the dependencies will be fetched and compiled before building.
-
-```
-npm run build
-```
 
 
 ### Implementing storage for the SDK
