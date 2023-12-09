@@ -44,7 +44,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected manager: ConnectionsManager,
     protected mediationHandler: MediatorHandler,
     protected seed: Seed
-  ) {}
+  ) { }
 
   /**
    * Asyncronously sign with a DID
@@ -117,7 +117,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       await this.mediationHandler.updateKeyListWithDIDs([did]);
     }
 
-    this.pluto.storePeerDID(did, [
+    await this.pluto.storePeerDID(did, [
       keyAgreementPrivateKey,
       authenticationPrivateKey,
     ]);
