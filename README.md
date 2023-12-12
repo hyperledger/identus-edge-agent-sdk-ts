@@ -1,12 +1,4 @@
-# Welcome to Atala PRISM TypeScript SDK
-
-Atala PRISM TypeScript SDK provides a library and documentation for developers to build
-TypeScript-based SSI applications with Atala PRISM. It provides a set of
-utilities for building SSI Edge Agents speaking DIDComm V2 protocols.
-
-## Basic considerations
-
-### Atala PRISM
+# Atala PRISM TypeScript SDK
 
 Atala PRISM is a self-sovereign identity (SSI) platform and service suite for
 verifiable data and digital identity. Built on Cardano, it offers core
@@ -20,7 +12,7 @@ The complete platform is separated into multiple repositories:
 - [atala-prism-building-blocks](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
 - [atala-prism-mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for DIDComm V2 Mediator
 
-### SDK Overview
+## SDK Overview
 
 - Apollo: Provides a suite of necessary cryptographic operations.
 - Castor: Provides a suite of operations to create, manage and resolve decentralized identifiers.
@@ -29,57 +21,15 @@ The complete platform is separated into multiple repositories:
 - Pluto: Provides an interface for storage operations in a portable, storage-agnostic manner.
 - PrismAgent: PrismAgent, a component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
 
-### Getting started
+## Getting started
 
-This repository includes a browser and a Node.js demo application, and also a step-by-step documented process to run it.
+This repository includes a browser and a Node.js demo application, and also a step-by-step documented process on [how to run it](#running-a-demo-project).
 
-#### Running a demo project
-
-To be able to run the demos, we have to build `prism-wallet-sdk-ts`.
-
-From the repository root run:
-
+### Use in your project
+You can install and use this library in browsers and nodejs.
 
 ```bash
-npm i
-npm run build
-```
-
-#### For NodeJS
-
-After building `prism-wallet-sdk-ts`, cd into `{path}/prism-wallet-sdk-ts/demos/node`:
-
-```bash
-npm i
-node index.js
-```
-
-:::note
-The installation in the `demos/node` directory requires the `build` folder from the wallet-sdk to be available.
-:::
-
-#### For browser
-
-After building `prism-wallet-sdk-ts`, cd into the demo directory "demos/browser"
-
-```bash
-cd demos/browser
-npm i
-npm run start
-```
-
-#### Implementing storage for the SDK
-This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.
-
-We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
-
-Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
-
-#### Use in your project
-In order to use this SDK in your project you now just need to install the package as follows
-
-```bash
-npm @atala/prism-wallet-sdk --save
+npm i @atala/prism-wallet-sdk --save
 ```
 
 or with yarn
@@ -87,3 +37,82 @@ or with yarn
 ```bash
 yarn add @atala/prism-wallet-sdk
 ```
+
+> **Note for Webpack:**
+> 
+> The application builds code with wasm files for DIDComm and Anoncreds for both browsers and nodejs. When webpack builds public website the wasm files need to be copied manually into the public folder. See examples
+
+
+
+
+### Running a demo project
+
+#### Building from source
+This repository contains compiles typescript code and some rust dependencies for DIDComm and AnonCreds, so in order to build the code from source you will need the following:
+
+* Bash
+* Have Rust (cargo) and wasm-pack installed.
+* Node JS Version (20/LTS Recommended)
+
+Clone the repository
+```
+git clone git@github.com:input-output-hk/atala-prism-wallet-sdk-ts.git
+```
+
+To be able to run the demos, we have to build `prism-wallet-sdk`.
+From the repository root run:
+
+```bash
+npm i
+npm run build
+```
+
+### For NodeJS CJS
+
+After building `prism-wallet-sdk`, cd into `{path}/demos/node-cjs` or use visual studio debugger "CJS DEMO":
+
+```bash
+cd demos/node-cjs
+npm i
+npm run start
+```
+
+> **Note:**
+> 
+> The installation in the `{path}/demos/node-cjs` directory requires the `build` folder from the wallet-sdk to be available.
+
+### For NodeJS ESM
+
+After building `prism-wallet-sdk`, cd into `{path}/demos/node-esm` or use visual studio debugger "ESM DEMO":
+
+```bash
+cd demos/node-esm
+npm i
+npm run start
+```
+
+> **Note:**
+> 
+> The installation in the `{path}/demos/node-esm` directory requires the `build` folder from the wallet-sdk to be available.
+
+
+### For browser
+
+After building `prism-wallet-sdk`, cd into the demo directory `{path}/demos/browser`
+
+```bash
+cd demos/browser
+npm i
+npm run start
+```
+
+
+
+
+### Implementing storage for the SDK
+This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.
+
+We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
+
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
+

@@ -53,6 +53,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
+          submodules: 'true' 
 
       - name: Setup Node.js for @input-output-hk
         uses: actions/setup-node@v3
@@ -62,6 +63,16 @@ jobs:
           node-version: "lts/*"
           registry-url: https://npm.pkg.github.com/
           scope: "@input-output-hk"
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Setup Node.js for @hyperledger-labs
         uses: actions/setup-node@v3

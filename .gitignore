@@ -4,7 +4,7 @@
 node_modules
 /.pnp
 .pnp.js
-
+generated
 # testing
 /coverage
 .nyc_output
@@ -24,3 +24,4 @@ yarn-error.log*
 *.db
 didcomm-pkg
 generated-docs
+*.commit

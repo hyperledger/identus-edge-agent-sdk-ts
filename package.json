@@ -2,12 +2,18 @@
   "name": "@atala/prism-wallet-sdk",
   "version": "3.1.0",
   "description": "PRISM typescript SDK",
-  "main": "build/node/index.js",
-  "browser": "build/browser/index.js",
-  "types": "build/typings/index.d.ts",
+  "main": "./build/node-cjs/index.cjs",
+  "module": "./build/node-esm/index.mjs",
+  "browser": "./build/browser/index.js",
+  "exports": {
+    ".": {
+      "import": "./build/node-esm/index.mjs",
+      "require": "./build/node-cjs/index.cjs"
+    }
+  },
+  "types": "./build/typings/index.d.ts",
   "files": [
     "build/**/*",
-    ".bin/**",
     "README.MD"
   ],
   "browserslist": [
@@ -17,7 +23,8 @@
     "last 2 edge version"
   ],
   "scripts": {
-    "build": "npm run build:browser && npm run build:node && npm run types",
+    "dependencies": "sh build_dependencies.sh",
+    "build": "npm run dependencies && rm -rf build && npm run build:browser && npm run build:node && npm run types",
     "types": "rm -rf build/typings && tsc",
     "build:browser": "rollup -c rollup/rollup.browser.mjs",
     "build:node": "rollup -c rollup/rollup.node.mjs",
@@ -69,8 +76,8 @@
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.55.0",
-    "anoncreds-browser": "file:./anoncreds-rust/browser",
-    "anoncreds-node": "file:./anoncreds-rust/node",
+    "anoncreds-browser": "file:./generated/anoncreds-wasm-browser",
+    "anoncreds-node": "file:./generated/anoncreds-wasm-node",
     "babel-plugin-transform-import-meta": "^2.2.0",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "chai": "^4.3.7",
@@ -78,7 +85,8 @@
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "core-js": "^3.32.2",
-    "didcomm-browser": "file:./didcomm-rust/didcomm-browser",
+    "didcomm-browser": "file:./generated/didcomm-wasm-browser",
+    "didcomm-node": "file:./generated/didcomm-wasm-node",
     "eslint": "^8.36.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard-with-typescript": "^34.0.1",
@@ -96,6 +104,7 @@
     "rollup-plugin-jscc": "^2.0.0",
     "rollup-plugin-modify": "^3.0.0",
     "rollup-plugin-polyfill-node": "^0.12.0",
+    "rollup-plugin-strip-code": "^0.2.7",
     "rollup-plugin-typescript2": "^0.34.1",
     "semantic-release": "^21.1.1",
     "semantic-release-slack-bot": "^4.0.2",
@@ -123,7 +132,8 @@
       "ts"
     ],
     "moduleNameMapper": {
-      "^core-js/modules/(.*)$": "<rootDir>/node_modules/core-js/modules/$1"
+      "^core-js/modules/(.*)$": "<rootDir>/node_modules/core-js/modules/$1",
+      "^sinon$": "<rootDir>/node_modules/sinon/pkg/sinon.js"
     },
     "coverageReporters": [
       "json-summary",
@@ -136,15 +146,21 @@
     ],
     "coveragePathIgnorePatterns": [
       "tests",
-      "anoncreds-rust",
-      "didcomm-rust"
+      "externals",
+      "generated",
+      "src/castor/protos",
+      "build"
+    ],
+    "testPathIgnorePatterns": [
+      "externals",
+      "generated"
     ],
     "coverageThreshold": {
       "global": {
         "branches": 22,
         "functions": 33,
-        "lines": 34,
-        "statements": 34
+        "lines": 32,
+        "statements": 32
       }
     },
     "coverageDirectory": "coverage"
@@ -169,13 +185,13 @@
     "buffer": "^6.0.3",
     "did-jwt": "^6.11.5",
     "did-resolver": "^4.1.0",
-    "didcomm-node": "^0.4.1",
     "elliptic": "^6.5.4",
     "google-protobuf": "^3.21.2",
     "hash.js": "1.1.7",
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
+    "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"
   }

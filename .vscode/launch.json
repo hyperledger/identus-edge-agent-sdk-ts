@@ -2,21 +2,34 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "NODE DEMO",
-      "type": "node",
+      "name": "CJS DEMO",
+      "program": "${workspaceRoot}/demos/node-cjs/src/index.js",
       "request": "launch",
-      "runtimeExecutable": "${workspaceRoot}/demos/node/node_modules/.bin/ts-node",
-      "runtimeArgs": ["--transpile-only"],
-      "program": "${workspaceRoot}/demos/node/src/index.ts",
-      "skipFiles": ["<node_internals>/**"],
-      "cwd": "${workspaceRoot}"
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "ESM DEMO",
+      "program": "${workspaceRoot}/demos/node-esm/src/index.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
     },
     {
       "name": "TESTS",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-      "args": ["--colors", "--workerThreads", "--maxWorkers", "1"],
+      "args": [
+        "--colors",
+        "--workerThreads",
+        "--maxWorkers",
+        "1"
+      ],
       "skipFiles": [
         "${workspaceRoot}/../../node_modules/**/*",
         "<node_internals>/**/*"

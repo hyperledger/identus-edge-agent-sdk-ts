@@ -10,17 +10,29 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowJs": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "emitDeclarationOnly": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["es2020", "dom", "dom.iterable", "esnext"],
+    "lib": [
+      "es2020",
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "moduleResolution": "node",
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "exclude": ["tests", "build"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "tests",
+    "build"
+  ]
 }
