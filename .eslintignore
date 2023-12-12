@@ -1,4 +1,5 @@
 build/*
+build/**/*
 /**/*.d.ts
 integration-tests
 externals

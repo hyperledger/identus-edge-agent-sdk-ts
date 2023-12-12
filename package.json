@@ -148,7 +148,8 @@
       "tests",
       "externals",
       "generated",
-      "src/castor/protos"
+      "src/castor/protos",
+      "build"
     ],
     "testPathIgnorePatterns": [
       "externals",
