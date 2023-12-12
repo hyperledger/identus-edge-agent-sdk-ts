@@ -1,0 +1,25 @@
+{
+  "name": "test-with-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@atala/prism-wallet-sdk": "file:../../",
+    "@pluto-encrypted/database": "^0.0.17",
+    "@pluto-encrypted/inmemory": "^0.0.16",
+    "prettier": "^3.0.2"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.3.100",
+    "@types/node": "^20.5.6",
+    "ts-node": "^10.9.1",
+    "tsx": "^4.6.2",
+    "typescript": "^5.2.2"
+  }
+}

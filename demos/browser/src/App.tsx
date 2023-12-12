@@ -1,16 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+/**
+ * WARNING: Do not  use this pluto implementation, its inMemory and totally unprotected.
+ * Look for other community inspired projects like "@pluto-encrypted/database"
+ */
+import { PlutoInMemory } from "./PlutoInMemory";
+
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import * as jose from "jose";
 import { useAtom } from "jotai";
-import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
+import * as SDK from "@atala/prism-wallet-sdk";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
-import { PlutoInMemory } from "../../pluto/PlutoInMemory";
 
 const BasicMessage = SDK.BasicMessage;
 const ListenerKey = SDK.ListenerKey;

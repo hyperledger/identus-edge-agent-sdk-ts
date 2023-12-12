@@ -16,23 +16,24 @@ export class AnoncredsLoader {
       AnoncredsLoader.instance = new AnoncredsLoader();
       await this.instance.load();
     }
-
     return AnoncredsLoader.instance;
   }
 
   private async load() {
-    if (!this.loaded) {
-      if (typeof window !== "undefined") {
-        this.pkg = await import("anoncreds-browser/anoncreds");
-        const pkgWasm = await import("anoncreds-browser/anoncreds_bg.wasm");
-        await this.pkg.default((pkgWasm as any).default());
-        this.loaded = true;
-      } else {
-        this.pkg = await import("anoncreds-node");
-
-        this.loaded = true;
-      }
+    /*START.BROWSER_ONLY*/
+    if (typeof window !== "undefined" && !this.loaded) {
+      this.pkg = await import("anoncreds-browser");
+      const pkgWasm = await import("anoncreds-browser/anoncreds_bg.wasm");
+      await (this.pkg as any).default(await (pkgWasm as any).default());
+      this.loaded = true;
     }
+    /*END.BROWSER_ONLY*/
+    /*START.NODE_ONLY*/
+    if (!this.loaded) {
+      this.pkg = await import("anoncreds-node");
+      this.loaded = true;
+    }
+    /*END.NODE_ONLY*/
   }
 
   private get wasm() {

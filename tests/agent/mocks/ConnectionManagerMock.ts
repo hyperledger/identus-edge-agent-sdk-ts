@@ -2,9 +2,9 @@ import {
   ConnectionsManager as ConnectionsManagerClass,
   MediatorHandler,
 } from "../../../src/prism-agent/types";
-import Castor from "../../../src/domain/buildingBlocks/Castor";
-import Mercury from "../../../src/domain/buildingBlocks/Mercury";
-import Pluto from "../../../src/domain/buildingBlocks/Pluto";
+import { Castor } from "../../../src/domain/buildingBlocks/Castor";
+import { Mercury } from "../../../src/domain/buildingBlocks/Mercury";
+import { Pluto } from "../../../src/domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../../src/domain/models/DIDPair";
 import { CancellableTask } from "../../../src/prism-agent/helpers/Task";
 import { DID, Message } from "../../../src/domain";
@@ -16,7 +16,7 @@ export class ConnectionsManagerMock implements ConnectionsManagerClass {
   mercury: Mercury;
   pluto: Pluto;
   mediationHandler: MediatorHandler = {
-    updateKeyListWithDIDs: () => {},
+    updateKeyListWithDIDs: () => { },
     mediator: {
       mediatorDID: new DID(
         "did",

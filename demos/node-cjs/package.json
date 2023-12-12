@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@input-output-hk/atala-prism-wallet-sdk": "file:../..",
+    "@atala/prism-wallet-sdk": "file:../../",
+    "@pluto-encrypted/database": "^0.0.17",
+    "@pluto-encrypted/inmemory": "^0.0.16",
     "prettier": "^3.0.2"
   },
   "devDependencies": {

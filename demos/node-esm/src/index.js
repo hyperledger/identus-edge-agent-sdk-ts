@@ -1,8 +1,14 @@
-import * as SDK from "@input-output-hk/atala-prism-wallet-sdk";
-//@ts-ignore
-import { PlutoInMemory } from "../../pluto/PlutoInMemory";
+/**
+ * WARNING: Do not  use this pluto implementation, its inMemory and totally unprotected.
+ * Look for other community inspired projects like "@pluto-encrypted/database"
+ */
+import PlutoInMemory from './pluto.js';
 
-function createTestScenario(mediatorDID: SDK.Domain.DID) {
+async function createTestScenario() {
+  const SDK = await import("@atala/prism-wallet-sdk");
+  const mediatorDID = SDK.Domain.DID.fromString(
+    "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19"
+  );
   const apollo = new SDK.Apollo();
   const api = new SDK.ApiImpl();
   const castor = new SDK.Castor(apollo);
@@ -23,6 +29,7 @@ function createTestScenario(mediatorDID: SDK.Domain.DID) {
     seed.seed,
   );
   return {
+    SDK,
     apollo,
     seed,
     agent,
@@ -33,11 +40,9 @@ function createTestScenario(mediatorDID: SDK.Domain.DID) {
 }
 
 (async () => {
-  const mediatorDID = SDK.Domain.DID.fromString(
-    "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19"
-  );
 
-  const { seed, agent } = createTestScenario(mediatorDID);
+
+  const { seed, agent, SDK } = await createTestScenario();
 
   agent.addListener(SDK.ListenerKey.MESSAGE, (message) => {
     console.log("Got new message", message);

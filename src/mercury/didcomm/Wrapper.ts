@@ -14,22 +14,8 @@ import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
-import type * as DIDCommLibTypes from "../../../didcomm-rust/didcomm-browser/didcomm_js";
 import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
 
-/**
- * @ignore
- * @returns
- */
-export async function getDidcommLibInstance(): Promise<typeof DIDCommLibTypes> {
-  const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
-  const wasmInit = DIDCommLib.default;
-  const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  await wasmInit(await wasm());
-  return DIDCommLib;
-}
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm-node");
   private readonly didResolver: DIDResolver;
@@ -45,11 +31,24 @@ export class DIDCommWrapper implements DIDCommProtocol {
   }
 
   public static async getDIDComm() {
-    if (!this.didcomm) {
-      if (typeof window !== "undefined")
-        this.didcomm = await getDidcommLibInstance();
-      else this.didcomm = await import("didcomm-node");
+
+    /*START.BROWSER_ONLY*/
+    if (typeof window !== "undefined" && !this.didcomm) {
+      const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
+      const wasmInit = DIDCommLib.default;
+      const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await wasmInit(await wasm());
+      this.didcomm = DIDCommLib;
     }
+    /*END.BROWSER_ONLY*/
+    /*START.NODE_ONLY*/
+    if (!this.didcomm) {
+      this.didcomm = await import("didcomm-node");
+    }
+    /*END.NODE_ONLY*/
+
     return this.didcomm;
   }
 
@@ -72,7 +71,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
     fromDid?: Domain.DID
   ): Promise<string> {
     const didcomm = await DIDCommWrapper.getDIDComm();
-
     const to = toDid.toString();
     const body =
       message.body && Object.keys(JSON.parse(message.body)).length

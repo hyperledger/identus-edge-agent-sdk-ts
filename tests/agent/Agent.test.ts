@@ -1,9 +1,12 @@
+/**
+ * @jest-environment node
+ */
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import Agent from "../../src/prism-agent/Agent";
-import { PlutoInMemory as Pluto } from "../../demos/pluto/PlutoInMemory";
+import { PlutoInMemory as Pluto } from "./PlutoInMemory";
 import Mercury from "../../src/mercury/Mercury";
 import * as UUIDLib from "@stablelib/uuid";
 import Apollo from "../../src/apollo/Apollo";
@@ -15,7 +18,6 @@ import {
   Api,
   Credential,
   CredentialType,
-  DefaultLinkSecretName,
   DID,
   HttpResponse,
   Message,
@@ -332,8 +334,8 @@ describe("Agent Tests", () => {
 
   describe("processIssuedCredentialMessage", () => {
     beforeEach(async () => {
-      await agent.start();
       await pollux.start();
+      await agent.start();
     });
 
     it("no attachment - throws", () => {
