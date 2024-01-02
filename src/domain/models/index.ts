@@ -9,7 +9,6 @@ export * from "./KeyPair";
 export * from "./Mediator";
 export * from "./Message";
 export * from "./MessageAttachment";
-export * from "./PeerDID";
 export * from "./PrismDIDInfo";
 export * from "./PrismDIDMethodId";
 export * from "./keyManagement";

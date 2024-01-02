@@ -1,6 +1,7 @@
 import type { Secret, SecretsResolver } from "didcomm-node";
 import * as Domain from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
+import { PeerDID } from "../../peer-did/PeerDID";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
@@ -51,7 +52,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
   }
 
   private mapToSecret(
-    peerDid: Domain.PeerDID,
+    peerDid: PeerDID,
     publicKeyJWK: Domain.PublicKeyJWK
   ): Secret {
     const privateKeyBuffer = peerDid.privateKeys.find(
