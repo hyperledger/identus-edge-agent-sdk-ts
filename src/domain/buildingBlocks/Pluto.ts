@@ -3,10 +3,10 @@ import { DIDPair } from "../models/DIDPair";
 import { PrivateKey } from "../models";
 import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
-import { PeerDID } from "../models/PeerDID";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
 import { Anoncreds } from "../models/Anoncreds";
+import { PeerDID } from "../../peer-did/PeerDID";
 
 /**
  * Pluto is a storage interface describing storage requirements of the edge agents
