@@ -44,7 +44,6 @@ describe("Keys", () => {
         expect(pubKey.getEncoded()).to.eql(Buffer.from([122, 45, 97, 56, 103, 56, 105, 95, 51, 121, 97, 106, 69, 95, 81, 68, 73, 120, 73, 70, 55, 115, 80, 49, 109, 95, 97, 76, 75, 84, 79, 102, 121, 103, 73, 117, 83, 74, 97, 110, 82, 65, 103]));
       });
 
-      // TODO - Bug - types are wrong - ignored non-null assertion
       test("index", () => {
         expect(privateKey.index).to.be.undefined;
       });
