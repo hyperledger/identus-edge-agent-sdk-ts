@@ -7,6 +7,10 @@ buildDIDComm() {
     cd $DIDCommFolder/wasm
     wasm-pack build --target=web --out-dir=../../../generated/didcomm-wasm-browser
     wasm-pack build --target=nodejs --out-dir=../../../generated/didcomm-wasm-node
+    #TODO: find better way to approach this
+    #This code fails on browser when wasm is first loaded, it can just be ignored
+    #The code will fully work
+    sed "/if (typeof input === 'undefined') {/,/}/d" ../../../generated/didcomm-wasm-browser/didcomm_js.js > temp_file && mv temp_file ../../../generated/didcomm-wasm-browser/didcomm_js.js
     cd ../../../
     git submodule | grep didcomm | awk '{print $1}' > ./didcomm.commit
 }
@@ -14,6 +18,10 @@ buildDIDComm() {
 buildAnoncreds() {
     cd $AnonCredsFolder
     wasm-pack build --target=web --no-default-features --features=wasm 
+    #TODO: find better way to approach this
+    #This code fails on browser when wasm is first loaded, it can just be ignored
+    #The code will fully work
+    sed '/if (typeof input === '\''undefined'\'') {/,/}/d' pkg/anoncreds.js > temp_file && mv temp_file pkg/anoncreds.js
     rm -rf ../../generated/anoncreds-wasm-browser
     mv pkg ../../generated/anoncreds-wasm-browser
     wasm-pack build --target=nodejs --no-default-features --features=wasm 

@@ -4,6 +4,8 @@ import cleanup from "rollup-plugin-cleanup";
 import ignore from "rollup-plugin-ignore";
 import json from "@rollup/plugin-json";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const externals = [
   "@scure/bip39/wordlists/english",
   "elliptic",
@@ -24,85 +26,30 @@ const externals = [
   "apollo",
 ];
 
-export default (output, plugins = []) => {
-  if (output === "browser") {
-    return [
-      {
-        input: "src/index.ts",
-        output: {
-          sourcemap: true,
-          dir: `build/browser`,
-          format: "es",
-          entryFileNames: "[name].js"
+export default (outputs, plugins = []) => {
+  const commonPlugins = [
+    ...plugins,
+    ignore(externals),
+    json(),
+    typescript({
+      useTsconfigDeclarationDir: false,
+      tsconfigOverride: {
+        compilerOptions: {
+          emitDeclarationOnly: false,
         },
-        plugins: [
-          ...plugins,
-          ignore(externals),
-          json(),
-          typescript({
-            useTsconfigDeclarationDir: false,
-            tsconfigOverride: {
-              compilerOptions: {
-                emitDeclarationOnly: false,
-              },
-            },
-          }),
-          cleanup(),
-        ],
-        external: externals,
       },
-    ]
-  } else {
-    return [
-      {
-        input: "src/index.ts",
-        output: {
-          sourcemap: false,
-          dir: `build/node-esm`,
-          format: "es",
-          entryFileNames: "[name].mjs"
-        },
-        plugins: [
-          ...plugins,
-          ignore(externals),
-          json(),
-          typescript({
-            useTsconfigDeclarationDir: false,
-            tsconfigOverride: {
-              compilerOptions: {
-                emitDeclarationOnly: false,
-              },
-            },
-          }),
-          cleanup(),
-        ],
-        external: externals,
+    }),
+    cleanup(),
+  ]
+  return outputs.map((output) => {
+    return {
+      input: "src/index.ts",
+      output: {
+        sourcemap: isDev,
+        ...output
       },
-      {
-        input: "src/index.ts",
-        output: {
-          sourcemap: false,
-          dir: `build/node-cjs`,
-          format: "cjs",
-          entryFileNames: "[name].cjs"
-        },
-        plugins: [
-
-          ...plugins,
-          ignore(externals),
-          json(),
-          typescript({
-            useTsconfigDeclarationDir: false,
-            tsconfigOverride: {
-              compilerOptions: {
-                emitDeclarationOnly: false,
-              },
-            },
-          }),
-          cleanup(),
-        ],
-        external: externals,
-      }
-    ]
-  }
+      plugins: commonPlugins,
+      external: externals,
+    }
+  })
 };

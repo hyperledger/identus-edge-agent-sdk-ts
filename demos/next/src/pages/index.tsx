@@ -1,22 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import './global'
-/**
- * WARNING: This is an example using an encrypted inMemory storage.
- * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
- */
+import Image from 'next/image'
 import InMemory from "@pluto-encrypted/inmemory";
 import { Database } from "@pluto-encrypted/database";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import "./App.css";
 import * as jose from "jose";
 import { useAtom } from "jotai";
 import SDK from "@atala/prism-wallet-sdk";
-import { mnemonicsAtom } from "./state";
-import { trimString } from "./utils";
-import Spacer from "./Spacer";
-import { Box } from "./Box";
+import { mnemonicsAtom } from "../app/state";
+import { trimString } from "../app/utils";
+import Spacer from "../app/Spacer";
+import { Box } from "../app/Box";
+import "../app/App.css";
+
 
 const BasicMessage = SDK.BasicMessage;
 const ListenerKey = SDK.ListenerKey;
@@ -27,6 +21,7 @@ const RequestPresentation = SDK.RequestPresentation;
 const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19";
+
 
 const useSDK = (mediatorDID: SDK.Domain.DID, pluto: SDK.Domain.Pluto) => {
   const agent = SDK.Agent.initialize({ mediatorDID, pluto });
@@ -625,8 +620,8 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto }> = props => {
   );
 };
 
-
-function App() {
+export default
+  function App() {
   const [pluto, setPluto] = useState<SDK.Domain.Pluto>()
 
   useEffect(() => {
@@ -654,5 +649,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
