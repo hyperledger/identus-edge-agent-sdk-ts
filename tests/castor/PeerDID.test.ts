@@ -1,7 +1,6 @@
 import { expect } from "chai";
 
 import {
-  KeyPair,
   Service,
   DID,
   ServiceEndpoint,
