@@ -28,6 +28,7 @@ plugins:
             "CHANGELOG.md",
             "integration-tests/e2e-tests/package.json",
             "integration-tests/e2e-tests/yarn.lock",
+            "docs/**/*"
           ],
         message: "chore(release): release ${nextRelease.version}
 

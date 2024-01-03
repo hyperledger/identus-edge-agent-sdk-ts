@@ -30,7 +30,8 @@
     "build:node": "rollup -c rollup/rollup.node.mjs",
     "test": "jest",
     "coverage": "npm run test -- --coverage",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "docs": "npx typedoc --options typedoc.js --hideGenerator"
   },
   "author": "IOHK",
   "repository": {

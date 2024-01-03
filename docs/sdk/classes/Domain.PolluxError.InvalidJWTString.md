@@ -1,0 +1,213 @@
+[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidJWTString
+
+# Class: InvalidJWTString
+
+[Domain](../modules/Domain.md).[PolluxError](../modules/Domain.PolluxError.md).InvalidJWTString
+
+## Hierarchy
+
+- `Error`
+
+  ↳ **`InvalidJWTString`**
+
+## Table of contents
+
+### Constructors
+
+- [constructor](Domain.PolluxError.InvalidJWTString.md#constructor)
+
+### Properties
+
+- [cause](Domain.PolluxError.InvalidJWTString.md#cause)
+- [message](Domain.PolluxError.InvalidJWTString.md#message)
+- [name](Domain.PolluxError.InvalidJWTString.md#name)
+- [stack](Domain.PolluxError.InvalidJWTString.md#stack)
+- [prepareStackTrace](Domain.PolluxError.InvalidJWTString.md#preparestacktrace)
+- [stackTraceLimit](Domain.PolluxError.InvalidJWTString.md#stacktracelimit)
+
+### Methods
+
+- [captureStackTrace](Domain.PolluxError.InvalidJWTString.md#capturestacktrace)
+
+## Constructors
+
+### constructor
+
+• **new InvalidJWTString**(`message?`): [`InvalidJWTString`](Domain.PolluxError.InvalidJWTString.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+
+#### Returns
+
+[`InvalidJWTString`](Domain.PolluxError.InvalidJWTString.md)
+
+#### Inherited from
+
+Error.constructor
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1059
+
+• **new InvalidJWTString**(`message?`, `options?`): [`InvalidJWTString`](Domain.PolluxError.InvalidJWTString.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`InvalidJWTString`](Domain.PolluxError.InvalidJWTString.md)
+
+#### Inherited from
+
+Error.constructor
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1059
+
+## Properties
+
+### cause
+
+• `Optional` **cause**: `unknown`
+
+#### Inherited from
+
+Error.cause
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es2022.error.d.ts:26
+
+___
+
+### message
+
+• **message**: `string`
+
+#### Inherited from
+
+Error.message
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1054
+
+___
+
+### name
+
+• **name**: `string`
+
+#### Inherited from
+
+Error.name
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1053
+
+___
+
+### stack
+
+• `Optional` **stack**: `string`
+
+#### Inherited from
+
+Error.stack
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1055
+
+___
+
+### prepareStackTrace
+
+▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
+
+Optional override for formatting stack traces
+
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+#### Type declaration
+
+▸ (`err`, `stackTraces`): `any`
+
+Optional override for formatting stack traces
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
+
+##### Returns
+
+`any`
+
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+#### Inherited from
+
+Error.prepareStackTrace
+
+#### Defined in
+
+node_modules/@types/node/globals.d.ts:11
+
+___
+
+### stackTraceLimit
+
+▪ `Static` **stackTraceLimit**: `number`
+
+#### Inherited from
+
+Error.stackTraceLimit
+
+#### Defined in
+
+node_modules/@types/node/globals.d.ts:13
+
+## Methods
+
+### captureStackTrace
+
+▸ **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+
+Create .stack property on a target object
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Error.captureStackTrace
+
+#### Defined in
+
+node_modules/@types/node/globals.d.ts:4

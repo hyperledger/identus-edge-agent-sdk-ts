@@ -1,0 +1,132 @@
+[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [JWK](../modules/Domain.JWK.md) / Base
+
+# Interface: Base
+
+[Domain](../modules/Domain.md).[JWK](../modules/Domain.JWK.md).Base
+
+## Hierarchy
+
+- **`Base`**
+
+  ↳ [`EC`](Domain.JWK.EC.md)
+
+  ↳ [`OCT`](Domain.JWK.OCT.md)
+
+  ↳ [`OKP`](Domain.JWK.OKP.md)
+
+  ↳ [`RSA`](Domain.JWK.RSA.md)
+
+## Table of contents
+
+### Properties
+
+- [alg](Domain.JWK.Base.md#alg)
+- [ext](Domain.JWK.Base.md#ext)
+- [key\_ops](Domain.JWK.Base.md#key_ops)
+- [kid](Domain.JWK.Base.md#kid)
+- [kty](Domain.JWK.Base.md#kty)
+- [use](Domain.JWK.Base.md#use)
+- [x5c](Domain.JWK.Base.md#x5c)
+- [x5t](Domain.JWK.Base.md#x5t)
+- [x5t#S256](Domain.JWK.Base.md#x5t#s256)
+- [x5u](Domain.JWK.Base.md#x5u)
+
+## Properties
+
+### alg
+
+• `Optional` **alg**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L27)
+
+___
+
+### ext
+
+• `Optional` **ext**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L29)
+
+___
+
+### key\_ops
+
+• `Optional` **key\_ops**: [`key_ops`](../modules/Domain.JWK.md#key_ops)[]
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L31)
+
+___
+
+### kid
+
+• `Optional` **kid**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L33)
+
+___
+
+### kty
+
+• `Optional` **kty**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L35)
+
+___
+
+### use
+
+• `Optional` **use**: ``"sig"`` \| ``"enc"``
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:37](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L37)
+
+___
+
+### x5c
+
+• `Optional` **x5c**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L39)
+
+___
+
+### x5t
+
+• `Optional` **x5t**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L41)
+
+___
+
+### x5t#S256
+
+• `Optional` **x5t#S256**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L43)
+
+___
+
+### x5u
+
+• `Optional` **x5u**: `string`
+
+#### Defined in
+
+[src/domain/models/keyManagement/exportable/JWK.ts:45](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L45)
