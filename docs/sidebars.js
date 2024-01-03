@@ -1,93 +1,94 @@
+const path = require('path');
+const fs = require('fs')
+
 // @ts-check
 const sidebars = {
     tutorialsSidebar: [
-        'index',
-        'connections/connection',
+        {
+            label: 'Introduction',
+            type: "doc",
+            id: "README"
+        },
         {
             type: 'category',
-            label: 'Credentials',
+            label: 'Modules',
             link: {
-                type: 'generated-index',
-                title: 'Credentials',
-                description: 'Credentials tutorials'
+                type: 'doc',
+                id: 'modules',
             },
             items: [
-                'credentials/issue',
-                'credentials/present-proof'
-            ]
-        },
-        {
-            type: 'category',
-            label: 'DIDs',
-            link: {
-                type: 'generated-index',
-                title: 'DIDs',
-                description: 'DIDs tutorials'
-            },
-            items: [
-                'dids/create',
-                'dids/update',
-                'dids/publish',
-                'dids/deactivate'
-            ]
-        },
-        {
-            type: 'category',
-            label: 'Schemas',
-            link: {
-                type: 'generated-index',
-                title: 'Schemas',
-                description: 'Schema tutorials'
-            },
-            items: [
-                'schemas/credential-schema',
-                'schemas/create',
-                'schemas/update',
-                'schemas/delete'
-            ]
-        },
-        {
-            type: 'category',
-            label: 'Credential Definition',
-            link: {
-                type: 'generated-index',
-                title: 'Credential Definition',
-                description: 'Credential Definition Tutorials'
-            },
-            items: [
-                'credentialdefinition/credential-definition',
-                'credentialdefinition/create',
-                'credentialdefinition/delete'
-            ]
-        },
-        {
-            type: 'category',
-            label: 'Secret Management',
-            link: {
-                type: 'generated-index',
-                title: 'Secret Management',
-                description: 'Secret Management'
-            },
-            items: [
-                'secrets/operation',
-                'secrets/seed-generation'
-            ]
-        },
-        {
-            type: 'category',
-            label: 'Webhooks',
-            items: [
-                'webhooks/webhook'
-            ]
-        },
-        {
-            type: 'category',
-            label: 'Multi-Tenancy',
-            items: [
-                'multitenancy/tenant-onboarding',
-                'multitenancy/tenant-onboarding-ext-iam',
-                'multitenancy/tenant-onboarding-self-service',
-                'multitenancy/tenant-migration',
+                'classes/Apollo',
+                'classes/Castor',
+                'classes/Agent',
+                'classes/Mercury',
+                'classes/Pollux',
+                {
+                    type: 'category',
+                    label: 'Domain',
+                    link: {
+                        type: 'doc',
+                        id: 'modules/Domain',
+                    },
+                    items: fs.readdirSync(path.resolve(__dirname, "./sdk"))
+                        .reduce((menu, file) => {
+                            const fileExtension = file.split(".")
+                            if (fileExtension[fileExtension.length - 1] === "md") {
+                                return menu
+                            } else if (fs.lstatSync(path.resolve(__dirname, "./sdk", file)).isDirectory()) {
+                                const currentFolder = file;
+                                const files = fs.readdirSync(path.resolve(__dirname, "./sdk", currentFolder)).filter((file) => file !== "Domain.md" && file.includes("Domain."));
+
+                                return [
+                                    ...menu,
+                                    ...files.map((filename) => {
+
+                                        const fixFile = `${currentFolder}/${filename.replace(".md", "")}`
+                                        console.log(fixFile)
+                                        return {
+                                            label: fixFile.replace(`${currentFolder}/Domain.`, ""),
+                                            type: "doc",
+                                            id: fixFile
+                                        }
+
+                                    })
+                                ]
+                            }
+                            return menu;
+                        }, [])
+                },
+                {
+                    type: 'category',
+                    label: 'Reference',
+                    link: {
+                        type: 'generated-index',
+                        title: 'SDK Reference',
+                        description: 'All other exported classes, types, interfaces and references.'
+                    },
+                    items: fs.readdirSync(path.resolve(__dirname, "./sdk"))
+                        .filter((file) => !file.includes("Domain."))
+                        .reduce((menu, file) => {
+                            const fileExtension = file.split(".")
+                            if (fileExtension[fileExtension.length - 1] === "md") {
+                                return menu
+                            } else if (fs.lstatSync(path.resolve(__dirname, "./sdk", file)).isDirectory()) {
+                                const currentFolder = file;
+                                const files = fs.readdirSync(path.resolve(__dirname, "./sdk", currentFolder)).filter((file) => !file.includes("Domain."))
+                                return [
+                                    ...menu,
+                                    ...files.map((filename) => {
+                                        const fixFile = `${currentFolder}/${filename.replace(".md", "")}`
+                                        return {
+                                            label: fixFile.replace(`${currentFolder}/`, ""),
+                                            type: "doc",
+                                            id: fixFile
+                                        }
+
+                                    })
+                                ]
+                            }
+                            return menu;
+                        }, [])
+                }
             ]
         }
     ]
