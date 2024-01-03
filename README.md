@@ -38,13 +38,6 @@ or with yarn
 yarn add @atala/prism-wallet-sdk
 ```
 
-> **Note for Webpack:**
-> 
-> The application builds code with wasm files for DIDComm and Anoncreds for both browsers and nodejs. When webpack builds public website the wasm files need to be copied manually into the public folder. See examples
-
-
-
-
 ### Running a demo project
 
 #### Building from source
@@ -67,47 +60,37 @@ npm i
 npm run build
 ```
 
-### For NodeJS CJS
+### Running the sample applications
+We have enabled sample implementations for browser (react or nextjs) and nodejs.
+In order to run each demo, make sure the whole SDK is built from source, then cd into the demo.
 
-After building `prism-wallet-sdk`, cd into `{path}/demos/node-cjs` or use visual studio debugger "CJS DEMO":
-
+Nodejs CommonJS
 ```bash
 cd demos/node-cjs
 npm i
 npm run start
 ```
 
-> **Note:**
-> 
-> The installation in the `{path}/demos/node-cjs` directory requires the `build` folder from the wallet-sdk to be available.
-
-### For NodeJS ESM
-
-After building `prism-wallet-sdk`, cd into `{path}/demos/node-esm` or use visual studio debugger "ESM DEMO":
-
+Nodejs Module
 ```bash
 cd demos/node-esm
 npm i
 npm run start
 ```
 
-> **Note:**
-> 
-> The installation in the `{path}/demos/node-esm` directory requires the `build` folder from the wallet-sdk to be available.
-
-
-### For browser
-
-After building `prism-wallet-sdk`, cd into the demo directory `{path}/demos/browser`
-
+Browser React
 ```bash
 cd demos/browser
 npm i
 npm run start
 ```
 
-
-
+Browser NextJS
+```bash
+cd demos/next
+npm i
+npm run start
+```
 
 ### Implementing storage for the SDK
 This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.

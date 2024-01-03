@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@atala/prism-wallet-sdk": "file:../../",
-    "@pluto-encrypted/database": "^0.0.17",
-    "@pluto-encrypted/inmemory": "^0.0.16",
+    "@atala/prism-wallet-sdk": "../..",
+    "@pluto-encrypted/database": "^1.2.14",
+    "@pluto-encrypted/inmemory": "^1.3.11",
     "prettier": "^3.0.2"
   },
   "devDependencies": {

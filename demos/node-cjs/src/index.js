@@ -1,18 +1,26 @@
 /**
- * WARNING: Do not  use this pluto implementation, its inMemory and totally unprotected.
- * Look for other community inspired projects like "@pluto-encrypted/database"
+ * WARNING: This is an example using an encrypted inMemory storage.
+ * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
  */
-const PlutoInMemory = require('./pluto.js');
+const InMemory = require("@pluto-encrypted/inmemory");
+const { Database } = require("@pluto-encrypted/database");
+const SDK = require("@atala/prism-wallet-sdk");
 
 async function createTestScenario() {
-  const SDK = await import("@atala/prism-wallet-sdk");
   const mediatorDID = SDK.Domain.DID.fromString(
     "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19"
   );
   const apollo = new SDK.Apollo();
   const api = new SDK.ApiImpl();
   const castor = new SDK.Castor(apollo);
-  const pluto = new PlutoInMemory();
+  const defaultPassword = new Uint8Array(32).fill(1);
+  const pluto = await Database.createEncrypted(
+    {
+      name: `my-db`,
+      encryptionKey: defaultPassword,
+      storage: InMemory,
+    }
+  );
   const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
   const mercury = new SDK.Mercury(castor, didcomm, api);
   const store = new SDK.PublicMediatorStore(pluto);

@@ -5,7 +5,7 @@ module.exports = {
     ],
     "out": "./docs/sdk",
     "tsconfig": "./tsconfig.json",
-    "name": "@input-output-hk/atala-prism-wallet-sdk",
+    "name": "@atala/prism-wallet-sdk",
     "useTsLinkResolution": true,
     "hideGenerator": true,
     "entryPointStrategy": "resolve",

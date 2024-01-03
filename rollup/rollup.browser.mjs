@@ -2,29 +2,35 @@ import { wasm } from "@rollup/plugin-wasm";
 import Base from "./base.mjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import stripCode from "rollup-plugin-strip-code"
-import copy from 'rollup-plugin-copy'
-export default Base("browser", [
 
+const browserPlugins = [
   nodeResolve({
     browser: true,
     preferBuiltins: false,
     resolveOnly: ["didcomm-browser", "anoncreds-browser"],
   }),
-  copy({
-    targets: [
-      { src: "./generated/anoncreds-wasm-browser/anoncreds_bg.wasm", dest: "build/browser" },
-      { src: "./generated/didcomm-wasm-browser/didcomm_js_bg.wasm", dest: "build/browser" },
-    ],
-  }),
   wasm({
     targetEnv: "browser",
     fileName: "[name][extname]",
-    publicPath: "/",
-    // maxFileSize: 10000000
+    maxFileSize: 10000000
   }),
-
   stripCode({
     start_comment: 'START.NODE_ONLY',
     end_comment: 'END.NODE_ONLY'
   }),
-]);
+]
+
+const outputs = [
+  {
+    dir: `build/browser`,
+    format: "cjs",
+    entryFileNames: "[name].cjs"
+  },
+  {
+    dir: `build/browser`,
+    format: "es",
+    entryFileNames: "[name].mjs"
+  }
+]
+
+export default Base(outputs, browserPlugins);
