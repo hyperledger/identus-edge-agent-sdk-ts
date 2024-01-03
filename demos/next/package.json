@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@atala/prism-wallet-sdk": "../..",
-    "@pluto-encrypted/database": "^1.2.7",
-    "@pluto-encrypted/inmemory": "^1.3.4",
+    "@pluto-encrypted/database": "^1.2.14",
+    "@pluto-encrypted/inmemory": "^1.3.11",
     "fs": "^0.0.1-security",
     "jose": "^5.2.0",
     "jotai": "^2.6.1",

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import './global'
 /**
  * WARNING: This is an example using an encrypted inMemory storage.
  * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
