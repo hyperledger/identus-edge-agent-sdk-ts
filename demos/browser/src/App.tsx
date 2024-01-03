@@ -630,15 +630,17 @@ function App() {
   const [pluto, setPluto] = useState<SDK.Domain.Pluto>()
 
   useEffect(() => {
-    const defaultPassword = new Uint8Array(32).fill(1);
-    Database.createEncrypted(
-      {
-        name: `my-db`,
-        encryptionKey: defaultPassword,
-        storage: InMemory,
-      }
-    ).then((db) => setPluto(db as any))
-  })
+    if (!pluto) {
+      const defaultPassword = new Uint8Array(32).fill(1);
+      Database.createEncrypted(
+        {
+          name: `my-db`,
+          encryptionKey: defaultPassword,
+          storage: InMemory,
+        }
+      ).then((db) => setPluto(db as any))
+    }
+  }, [pluto, setPluto])
 
   return (
     <div className="App">
