@@ -16,6 +16,8 @@ module.exports = {
     "excludeNotDocumented": false,
     "theme": "default",
     "plugin": [
+        "typedoc-plugin-rename-defaults",
+        "typedoc-plugin-external-module-map",
         "typedoc-plugin-markdown"
     ]
 }
