@@ -54,15 +54,7 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          npm run docs
           npx semantic-release
-
-      - name: Trigger docs submodule update
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: input-output-hk/atala-prism-docs
-          event-type: trigger-docs-update-submodules
 
       - name: Trigger docs submodule update
         uses: peter-evans/repository-dispatch@v2
