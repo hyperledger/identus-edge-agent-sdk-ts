@@ -1,4 +1,4 @@
-const shouldReleaseRC = process.env.RELEASE_CANDIDATE !== 'undefined' ? true : false;
+const shouldReleaseRC = process.env.RELEASE_CANDIDATE !== 'undefined' && process.env.RELEASE_CANDIDATE === true ? true : false;
 
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
             }
             return false;
         },
-    },],
+    }],
     plugins: [
         '@semantic-release/commit-analyzer',
         '@semantic-release/release-notes-generator',
