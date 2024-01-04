@@ -4,10 +4,14 @@ const shouldReleaseRC = process.env.RELEASE_CANDIDATE !== 'undefined' ? true : f
 module.exports = {
     branches: [{
         name: 'release/*',
+        channel: "release/*",
         prerelease: (branchName) => {
-            return shouldReleaseRC
+            if (shouldReleaseRC) {
+                return 'rc'
+            }
+            return false;
         },
-    }],
+    },],
     plugins: [
         '@semantic-release/commit-analyzer',
         '@semantic-release/release-notes-generator',
