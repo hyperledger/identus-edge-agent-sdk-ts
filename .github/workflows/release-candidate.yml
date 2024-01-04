@@ -45,4 +45,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          npx semantic-release --branches "[{name: 'release/*', prerelease: 'rc'}]"
+          RELEASE_CANDIDATE=true npx semantic-release
