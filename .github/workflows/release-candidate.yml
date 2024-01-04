@@ -1,9 +1,6 @@
 name: SDK Release RC
 
 on:
-  push:
-    branches:
-      - rc
   workflow_dispatch:
 
 jobs:
@@ -49,18 +46,3 @@ jobs:
         run: |
           npm install
           npx semantic-release
-
-      - name: Trigger docs submodule update
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: input-output-hk/atala-prism-docs
-          event-type: trigger-docs-update-submodules
-
-      - name: Trigger deployment of docs to Staging
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: input-output-hk/atala-prism-docs
-          event-type: trigger-docs-deployment
-          client-payload: '{"version": "${{ github.ref_name }}", "env": "staging"}'

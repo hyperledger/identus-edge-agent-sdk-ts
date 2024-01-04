@@ -1,8 +1,8 @@
 branches:
   - name: '+([0-9])?(.{+([0-9]),x}).x'
   - name: 'master'
-  - name: 'rc'
-    prerelease: true
+  - name: 'release/v[0-9]+.[0-9]+.[0-9]+'
+    prerelease: "rc"
 
 plugins:
   - "@semantic-release/commit-analyzer"
