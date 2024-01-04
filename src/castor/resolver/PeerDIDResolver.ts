@@ -51,7 +51,7 @@ export class PeerDIDResolver implements DIDResolver {
     const keyAgreementMethods: VerificationMethod[] = [];
     const services: DIDDocumentService[] = [];
 
-    composition.forEach((part) => {
+    composition.forEach((part, index) => {
       let decoded: [
         string,
         VerificationMaterialAuthentication | VerificationMaterialAgreement,
@@ -61,14 +61,14 @@ export class PeerDIDResolver implements DIDResolver {
       switch (type) {
         case Numalgo2Prefix.authentication:
           decoded = this.decodeMultibaseEncnumbasisAuth(part.slice(1), format);
-          authenticationMethods.push(this.getVerificationMethod(did, decoded));
+          authenticationMethods.push(this.getVerificationMethod(did, decoded, index));
           break;
         case Numalgo2Prefix.keyAgreement:
           decoded = this.decodeMultibaseEcnumbasisAgreement(
             part.slice(1),
             format
           );
-          keyAgreementMethods.push(this.getVerificationMethod(did, decoded));
+          keyAgreementMethods.push(this.getVerificationMethod(did, decoded, index));
           break;
         case Numalgo2Prefix.service:
           services.push(...this.decodeService(did, part.slice(1)));
@@ -193,14 +193,17 @@ export class PeerDIDResolver implements DIDResolver {
 
   public getVerificationMethod(
     did: DID,
-    decodedEncnumbasis: [string, VerificationMaterialPeerDID]
+    decodedEncnumbasis: [string, VerificationMaterialPeerDID],
+    index: number
   ): VerificationMethod {
     const jsonObject = JSON.parse(decodedEncnumbasis[1].value);
+    const keyId = "key-" + (index + 1)
 
-    jsonObject["kid"] = did.toString() + "#" + decodedEncnumbasis[0];
+    // jsonObject["kid"] = did.toString() + "#" + decodedEncnumbasis[0]; //Before https://github.com/decentralized-identity/peer-did-method-spec/pull/62
+    jsonObject["kid"] = did.toString() + "#" + keyId;
 
     return {
-      id: new DIDUrl(did, [], new Map(), decodedEncnumbasis[0]).string(),
+      id: new DIDUrl(did, [], new Map(), keyId).string(),
       controller: did.toString(),
       type: decodedEncnumbasis[1].keyType.value,
       publicKeyJwk: jsonObject,

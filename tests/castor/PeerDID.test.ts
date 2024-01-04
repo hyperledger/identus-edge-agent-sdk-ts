@@ -7,6 +7,7 @@ import {
   PublicKey,
   KeyTypes,
   Curve,
+  VerificationMethods,
 } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 
@@ -100,6 +101,29 @@ describe("PEERDID CreateTest", () => {
     const apollo = new Apollo();
     const castor = new Castor(apollo);
     const document = await castor.resolveDID(mypeerDID.toString());
+    expect(document.id.toString()).to.equal(mypeerDID.toString());
+  });
+
+  it("Should resolver peerdid's kid of the keys correctly according to https://github.com/decentralized-identity/peer-did-method-spec/pull/62", async () => {
+    const mypeerDID = new DID(
+      "did",
+      "peer",
+      "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+    );
+    const apollo = new Apollo();
+    const castor = new Castor(apollo);
+    const document = await castor.resolveDID(mypeerDID.toString());
+    document.coreProperties.forEach((element) => {
+      if (element instanceof VerificationMethods) {
+        expect(element.values.length).to.equal(2);
+        expect(element.values[0].id)
+          .to.equal(element.values[0].publicKeyJwk?.kid)
+          .to.equal("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0#key-2");
+        expect(element.values[1].id)
+          .to.equal(element.values[1].publicKeyJwk?.kid)
+          .to.equal("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0#key-1");
+      }
+    });
     expect(document.id.toString()).to.equal(mypeerDID.toString());
   });
 
