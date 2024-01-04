@@ -9,7 +9,12 @@ on:
         required: true
         type: boolean
   workflow_dispatch:
-
+    inputs:
+      release_candidate:
+        description: 'Release candidate'
+        default: true
+        required: true
+        type: boolean
 jobs:
   release:
     runs-on: ubuntu-latest
