@@ -8,11 +8,11 @@ on:
   pull_request:
     branches:
       - name: master
-      - name: release/*
+      - name: 'release/*'
   push:
     branches:
       - name: master
-      - name: release/*
+      - name: 'release/*'
 
 jobs:
   build-and-test:
