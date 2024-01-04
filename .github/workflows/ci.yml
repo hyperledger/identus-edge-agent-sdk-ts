@@ -7,12 +7,10 @@ concurrency:
 on:
   pull_request:
     branches:
-      - name: '+([0-9])?(.{+([0-9]),x}).x'
       - name: 'master'
       - name: 'release/*'
   push:
     branches:
-      - name: '+([0-9])?(.{+([0-9]),x}).x'
       - name: 'master'
       - name: 'release/*'
 
