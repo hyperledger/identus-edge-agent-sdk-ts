@@ -123,7 +123,7 @@ export class ProtocolHelpers {
 
     if (this.isBasicMessageBody(type, parsed)) {
       if (parsed.content && typeof parsed.content !== "string") {
-        throw new AgentError.InvalidBasicMEssageBodyError("Invalid content");
+        throw new AgentError.InvalidBasicMessageBodyError("Invalid content");
       }
       return {
         content: parsed.content,
