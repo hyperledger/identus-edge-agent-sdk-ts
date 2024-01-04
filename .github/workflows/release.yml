@@ -58,7 +58,7 @@ jobs:
         run: |
           npm install
           if [[ "${{ inputs.release_candidate }}" == "true" ]]; then
-            npx semantic-release -e release-rc.config.js 
+            npx semantic-release -e ./release-rc.config.js 
           else
-            npx semantic-release -e release.config.js
+            npx semantic-release -e ./release.config.js
           fi
