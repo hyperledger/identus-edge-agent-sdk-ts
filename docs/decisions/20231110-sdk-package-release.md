@@ -1,7 +1,7 @@
 # SDK Package Release
 
-- Status: draft
-- Deciders: [list everyone involved in the decision]
+- Status: Approved
+- Deciders: Javier Ribó + Gonçalo
 - Date: 2023-11-10
 
 Technical Story: https://input-output.atlassian.net/browse/ATL-6147
@@ -38,21 +38,13 @@ Chosen option: "[option 2]", because we don't want to make anyone go back to usi
 
 We will have master and an RC branch and will follow normal expected [semantic-release-process](https://semantic-release.gitbook.io/semantic-release/recipes/release-workflow/distribution-channels)
 
-1. Updating old versions of npm package
-Imagine we have v1.0.0 and v2.0.0, but we want to add an improvement to 1.0.1, without affecting v2.0.0.
+Releasing packages:
 
-We will do so by adding a branch from the v1.0.0 git tag as follows:
+Master branch is our development branch and we will / can always merge changes in master.
+In order to release a package, a new branch must be created, it does not matter if its a maintenance-release in a previous package, a release candidate or a production release.
 
-```bash
-git checkout -b 1.x v1.0.0
-```
+For maintenance release, the engineer is going to create a branch representing the Maintenance (also RC) by creating "release/v2.0.0". The changes will then be either cherry-picked or implemented in a PR that will merge directly into "release/v2.0.0".
 
-We'd just need to add semantic release commit and the release process will handle npm package publishing for the user without trouble.
+For release candidates, in normal development flow all the changes will be available in Master and each time we want to release a new RC package, we will create a branch called "release/v3.0.0" and cherry-pick those changes ready to release.
 
-2. Releasing RC versions
-We now will have an RC branch where we can merge chances as usual, everything that is approved and merged into that branch is automatically released as vX.X.X-RC in npm.
-
-When changes are moved to master branch, semantic-release will commit the corresponding version without RC.
-
-3. Production releases
-Work as they work now literally.
+Production, can just be deployed from the release/* candidate branch by running the task "Release" which will set the version to be released without the RC.

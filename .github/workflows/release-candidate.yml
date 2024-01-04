@@ -1,4 +1,4 @@
-name: Release wallet-sdk-ts
+name: SDK Release RC
 
 on:
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
           git_user_signingkey: true
           git_commit_gpgsign: true
 
-      - name: Release
+      - name: Release Candidate
         env:
           NODE_AUTH_TOKEN: ${{ secrets.ATALA_NPM_TOKEN }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -45,4 +45,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          npx semantic-release
+          npx semantic-release --branches "[{name: 'release/*', prerelease: 'rc'}]"

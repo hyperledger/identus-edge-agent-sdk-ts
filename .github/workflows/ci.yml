@@ -7,10 +7,13 @@ concurrency:
 on:
   pull_request:
     branches:
-      - master
+      - 'master'
+      - 'release/*'
   push:
     branches:
-      - master
+      - 'master'
+      - 'release/*'
+
 
 jobs:
   build-and-test:
