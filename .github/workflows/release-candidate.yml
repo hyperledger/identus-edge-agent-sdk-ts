@@ -1,0 +1,80 @@
+name: SDK Release RC
+
+on:
+  push:
+    branches:
+      - rc
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true' 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+          registry-url: 'https://registry.npmjs.org/'
+          
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - uses: crazy-max/ghaction-import-gpg@v5
+        id: import_gpg
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.ATALA_NPM_TOKEN }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          GIT_AUTHOR_EMAIL: ${{ steps.import_gpg.outputs.email }}
+          GIT_COMMITTER_EMAIL: ${{ steps.import_gpg.outputs.email }}
+          GIT_AUTHOR_NAME: ${{ steps.import_gpg.outputs.name }}
+          GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
+        run: |
+          npm install
+          npm run docs
+          npx semantic-release
+
+      - name: Trigger docs submodule update
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: input-output-hk/atala-prism-docs
+          event-type: trigger-docs-update-submodules
+
+      - name: Trigger docs submodule update
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: input-output-hk/atala-prism-docs
+          event-type: trigger-docs-update-submodules
+
+      - name: Trigger deployment of docs to Staging
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: input-output-hk/atala-prism-docs
+          event-type: trigger-docs-deployment
+          client-payload: '{"version": "${{ github.ref_name }}", "env": "staging"}'
