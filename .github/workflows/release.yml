@@ -1,6 +1,13 @@
 name: Release wallet-sdk-ts
 
 on:
+  workflow_call:
+    inputs:
+      release_candidate:
+        description: 'Release candidate'
+        default: true
+        required: true
+        type: boolean
   workflow_dispatch:
 
 jobs:
@@ -27,6 +34,12 @@ jobs:
       - name: Install wasm-pack
         run: |
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
 
       - uses: crazy-max/ghaction-import-gpg@v5
         id: import_gpg
@@ -45,4 +58,5 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          npx semantic-release
+          npm run docs
+          RELEASE_CANDIDATE=${{ inputs.release_candidate}} npx semantic-release
