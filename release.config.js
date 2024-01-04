@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const shouldReleaseRC = process.env.RELEASE_CANDIDATE !== 'undefined' && process.env.RELEASE_CANDIDATE === true ? true : false;
+=======
+const shouldReleaseRC = process.env.RELEASE_CANDIDATE !== 'undefined' ? true : false;
+>>>>>>> 1f37aff (fix: try to set the prerelease property through env vars the current --branch command is invalid.)
 
 
 module.exports = {
@@ -10,7 +14,11 @@ module.exports = {
             }
             return false;
         },
+<<<<<<< HEAD
     }],
+=======
+    },],
+>>>>>>> 1f37aff (fix: try to set the prerelease property through env vars the current --branch command is invalid.)
     plugins: [
         '@semantic-release/commit-analyzer',
         '@semantic-release/release-notes-generator',
