@@ -1,7 +1,7 @@
 # SDK Package Release
 
-- Status: draft
-- Deciders: [list everyone involved in the decision]
+- Status: Approved
+- Deciders: Javier Ribó + Gonçalo
 - Date: 2023-11-10
 
 Technical Story: https://input-output.atlassian.net/browse/ATL-6147
