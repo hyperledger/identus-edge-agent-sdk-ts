@@ -9,7 +9,7 @@ export enum AnonCredsCredentialProperties {
   sub = "sub",
   credentialDefinitionId = "credentialDefinitionId",
   values = "values",
-  signasture = "signature",
+  signature = "signature",
   signatureCorrectnessProof = "signatureCorrectnessProof",
   exp = "exp",
 }
@@ -42,7 +42,7 @@ export class AnonCredsCredential
     );
     this.properties.set(AnonCredsCredentialProperties.values, values);
 
-    this.properties.set(AnonCredsCredentialProperties.signasture, signature);
+    this.properties.set(AnonCredsCredentialProperties.signature, signature);
     this.properties.set(
       AnonCredsCredentialProperties.signatureCorrectnessProof,
       signature_correctness_proof

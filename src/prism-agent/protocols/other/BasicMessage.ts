@@ -24,7 +24,7 @@ export class BasicMessage {
       !fromMessage.from ||
       !fromMessage.to
     ) {
-      throw new AgentError.InvalidBasicMEssageBodyError(
+      throw new AgentError.InvalidBasicMessageBodyError(
         "Invalid BasicMessage body error."
       );
     }
