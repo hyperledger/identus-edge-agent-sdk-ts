@@ -1,5 +1,5 @@
 branches:
-  - "master"
+  - name: 'release/*'
 
 plugins:
   - "@semantic-release/commit-analyzer"
@@ -12,6 +12,12 @@ plugins:
       },
     ]
   - ["@semantic-release/exec", { prepareCmd: "npm publish --access public" }]
+  - [
+      "@semantic-release/exec",
+      {
+        prepareCmd: "npm run build && npm run docs",
+      },
+    ]
   - [
       "@semantic-release/exec",
       {
