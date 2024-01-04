@@ -27,12 +27,6 @@ jobs:
       - name: Install wasm-pack
         run: |
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-          
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
 
       - uses: crazy-max/ghaction-import-gpg@v5
         id: import_gpg
@@ -51,5 +45,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          npm run docs
           npx semantic-release

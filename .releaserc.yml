@@ -18,7 +18,7 @@ plugins:
   - [
       "@semantic-release/exec",
       {
-        prepareCmd: "npm run build",
+        prepareCmd: "npm run build && npm run docs",
       },
     ]
   - [
