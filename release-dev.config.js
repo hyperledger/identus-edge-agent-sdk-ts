@@ -4,7 +4,7 @@ module.exports = baseConfig({
         'master',
         {
             name: 'release/*',
-            prerelease: '${name.replace(/release\\/v/, "") + "-rc"}'
+            prerelease: 'rc'
         }
     ],
 });
