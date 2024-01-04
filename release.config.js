@@ -4,7 +4,6 @@ const shouldReleaseRC = process.env.RELEASE_CANDIDATE !== 'undefined' && process
 module.exports = {
     branches: [{
         name: 'release/*',
-        channel: "release/*",
         prerelease: (branchName) => {
             if (shouldReleaseRC) {
                 return 'rc'
