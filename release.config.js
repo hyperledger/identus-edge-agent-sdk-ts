@@ -5,12 +5,9 @@ module.exports = {
     branches: [{
         name: 'release/*',
         prerelease: (branchName) => {
-            if (shouldReleaseRC) {
-                return 'rc'
-            }
-            return false;
+            return shouldReleaseRC
         },
-    },],
+    }],
     plugins: [
         '@semantic-release/commit-analyzer',
         '@semantic-release/release-notes-generator',
