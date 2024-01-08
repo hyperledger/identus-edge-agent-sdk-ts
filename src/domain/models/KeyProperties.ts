@@ -15,6 +15,16 @@ export enum KeyProperties {
   seed = "seed",
 
   /**
+   * The 'chainCode' used for key derivation.
+   * hex encoded value.
+   * 
+   * ```ts
+   * const chainCode = Buffer.from(props[KeyProperties.chainCode], "hex");
+   * ```
+   */
+  chainCode = "chainCode",
+
+  /**
    * The 'rawKey' refers to the raw binary form of the key.
    */
   rawKey = "raw",
