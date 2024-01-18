@@ -3,6 +3,7 @@ export class InvalidMessageError extends Error {}
 
 export class CannotFindDIDKeyPairIndex extends Error {}
 export class CannotFindDIDPrivateKey extends Error {}
+export class CannotFindLinkSecret extends Error {}
 export class InvitationHasNoFromDIDError extends Error {}
 export class NoValidServiceEndpointError extends Error {}
 export class InvitationIsInvalidError extends Error {}
@@ -106,3 +107,7 @@ export class MediationRequestFailedError extends Error {
 }
 export class InvalidStepError extends Error {}
 export class UnsupportedAttachmentType extends Error {}
+
+export class UnhandledCredential extends Error {}
+
+export class UnhandledPresentationRequest extends Error {}

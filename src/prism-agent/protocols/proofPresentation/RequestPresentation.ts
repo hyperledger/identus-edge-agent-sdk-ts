@@ -48,7 +48,7 @@ export class RequestPresentation {
     ) {
       throw new AgentError.InvalidRequestPresentationMessageError();
     }
-    const type = fromMessage.piuri as ProtocolType;
+    const type = fromMessage.piuri;
     const requestPresentationBody =
       ProtocolHelpers.safeParseBody<RequestPresentationBody>(
         fromMessage.body,

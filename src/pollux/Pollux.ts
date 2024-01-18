@@ -1,15 +1,17 @@
 import { Castor } from "../domain/buildingBlocks/Castor";
-import { Pollux as PolluxInterface } from "../domain/buildingBlocks/Pollux";
+import { Pollux as IPollux } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
 import { base64url, base64 } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
-import { CredentialRequestOptions } from "../domain/models/Credential";
 import {
   AttachmentDescriptor,
+  CredentialRequestOptions,
   CredentialType,
   Message,
   AttachmentBase64,
   Api,
+  PolluxError,
+  Credential,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
@@ -17,15 +19,16 @@ import { JWTCredential } from "./models/JWTVerifiableCredential";
 import { JWT } from "../apollo/utils/jwt/JWT";
 import { Anoncreds } from "../domain/models/Anoncreds";
 import { ApiImpl } from "../prism-agent/helpers/ApiImpl";
+import { PresentationRequest } from "./models/PresentationRequest";
 
 /**
- * Implementation of PolluxInterface and responsible of handling credential related tasks
+ * Implementation of Pollux
  *
  * @export
  * @class Pollux
  * @typedef {Pollux}
  */
-export default class Pollux implements PolluxInterface {
+export default class Pollux implements IPollux {
   private _anoncreds: AnoncredsLoader | undefined;
 
   constructor(
@@ -37,7 +40,7 @@ export default class Pollux implements PolluxInterface {
     this._anoncreds = await AnoncredsLoader.getInstance();
   }
 
-  // TODO - should anoncreds be exposed or hidden through abstraction?
+  // TODO: should anoncreds hidden through abstraction
   get anoncreds() {
     if (this._anoncreds === undefined) {
       throw new Error("Pollux - Anoncreds not loaded");
@@ -46,7 +49,6 @@ export default class Pollux implements PolluxInterface {
     return this._anoncreds;
   }
 
-  // TODO: Match the correct format with whatever backend is sending us
   // TODO: does this function belong in Pollux, can we move to Message?
   public extractCredentialFormatFromMessage(message: Message) {
     const [attachment] = message.attachments;
@@ -55,6 +57,7 @@ export default class Pollux implements PolluxInterface {
     }
 
     if (
+      attachment.format === "anoncreds/proof-request@v1.0" ||
       attachment.format === "anoncreds/credential-offer@v1.0" ||
       attachment.format === "anoncreds/credential@v1.0"
     ) {
@@ -100,6 +103,12 @@ export default class Pollux implements PolluxInterface {
     return signedJWT;
   }
 
+  /**
+   * handle the retrieval of a Credential Definition
+   * 
+   * @param credentialDefinitionId 
+   * @returns 
+   */
   private async fetchCredentialDefinition(
     credentialDefinitionId: string
   ): Promise<Anoncreds.CredentialDefinition> {
@@ -110,6 +119,25 @@ export default class Pollux implements PolluxInterface {
       new Map(),
       null
     );
+
+    return response.body;
+  }
+
+  /**
+   * handle the retrieval of a Schema definition
+   * 
+   * @param {string} schemaURI - URI used to retrieve the Schema definition
+   * @returns 
+   */
+  private async fetchSchema(schemaURI: string): Promise<any> {
+    const response = await this.api.request<Anoncreds.Schema>(
+      "get",
+      schemaURI,
+      new Map(),
+      new Map(),
+      null
+    );
+
     return response.body;
   }
 
@@ -268,5 +296,54 @@ export default class Pollux implements PolluxInterface {
         domain?: string;
       }
     );
+  }
+
+  createPresentationProof(presentationRequest: PresentationRequest, credential: AnonCredsCredential, options: IPollux.createPresentationProof.options.Anoncreds): Promise<Anoncreds.Presentation>;
+  createPresentationProof(presentationRequest: PresentationRequest, credential: JWTCredential, options: IPollux.createPresentationProof.options.JWT): Promise<string>;
+  async createPresentationProof(
+    presentationRequest: PresentationRequest,
+    credential: Credential,
+    options: IPollux.createPresentationProof.options
+  ) {
+    if (
+      credential instanceof AnonCredsCredential
+      && presentationRequest.isType(CredentialType.AnonCreds)
+      && "linkSecret" in options
+    ) {
+      const schema = await this.fetchSchema(credential.schemaId);
+      const schemas = { [credential.schemaId]: schema };
+      const credentialDefinition = await this.fetchCredentialDefinition(credential.credentialDefinitionId);
+      const credDefs = { [credential.credentialDefinitionId]: credentialDefinition };
+
+      const result = this.anoncreds.createPresentation(
+        presentationRequest.toJSON(),
+        schemas,
+        credDefs,
+        credential.toJSON(),
+        options.linkSecret
+      );
+
+      return result;
+    }
+
+    if (
+      credential instanceof JWTCredential
+      && presentationRequest.isType(CredentialType.JWT)
+      && "did" in options
+      && "privateKey" in options
+    ) {
+      const jwt = new JWT(this.castor);
+      const presReqJson = presentationRequest.toJSON();
+      const signedJWT = await jwt.sign(options.did, options.privateKey, {
+        iss: options.did.toString(),
+        aud: presReqJson.options.domain,
+        nonce: presReqJson.options.challenge,
+        vp: credential.presentation()
+      });
+
+      return signedJWT;
+    }
+
+    throw new PolluxError.InvalidPresentationProofArgs();
   }
 }

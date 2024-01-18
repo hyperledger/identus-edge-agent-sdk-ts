@@ -1,37 +1,35 @@
-import { JWT } from "../apollo/utils/jwt/JWT";
+import { base64 } from "multiformats/bases/base64";
+
 import {
+  AgentError,
+  Apollo,
   AttachmentBase64,
   AttachmentDescriptor,
-  AttachmentJsonData,
-  Curve,
-  Seed,
+  Castor,
   Credential,
-  DID,
   CredentialType,
   CredentialIssueOptions,
-} from "../domain";
-import { Apollo } from "../domain/buildingBlocks/Apollo";
-import { Castor } from "../domain/buildingBlocks/Castor";
-import { Pluto } from "../domain/buildingBlocks/Pluto";
-import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
-import {
-  createRequestCredentialBody,
-  RequestCredential,
-} from "./protocols/issueCredential/RequestCredential";
-import { AgentCredentials as AgentCredentialsClass } from "./types";
-import { base64 } from "multiformats/bases/base64";
-import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
-import { Pollux } from "../domain/buildingBlocks/Pollux";
-import {
-  createPresentationBody,
-  Presentation,
-} from "./protocols/proofPresentation/Presentation";
-import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
-import { AgentError } from "../domain/models/Errors";
-import {
+  Curve,
+  DID,
   KeyProperties,
   KeyTypes,
-} from "../domain/models";
+  Seed,
+  Message,
+  Pluto,
+  Pollux
+} from "../domain";
+
+import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
+import { JWTCredential } from "../pollux/models/JWTVerifiableCredential";
+import { PresentationRequest } from "../pollux/models/PresentationRequest";
+
+import { OfferCredential } from "./protocols/issueCredential/OfferCredential";
+import { createRequestCredentialBody, RequestCredential } from "./protocols/issueCredential/RequestCredential";
+import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
+import { Presentation } from "./protocols/proofPresentation/Presentation";
+import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
+
+import { AgentCredentials as AgentCredentialsClass } from "./types";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -170,6 +168,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       offer.body.comment
     );
 
+    // TODO: remove assertions
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const from = offer.to!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -191,7 +190,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         credentialFormat,
         undefined,
         undefined,
-        //TODO confirm what is the format that backend expects us to send AnonCreds VS JWT
+        // TODO: confirm what is the format that backend expects us to send AnonCreds VS JWT
         credentialFormat
       ),
     ];
@@ -220,86 +219,102 @@ export class AgentCredentials implements AgentCredentialsClass {
    * instance of the presentation which we can share with the verifier.
    *
    * @async
-   * @param {RequestPresentation} request
+   * @param {RequestPresentation} message
    * @param {VerifiableCredential} credential
    * @returns {Promise<Presentation>}
    */
   async createPresentationForRequestProof(
-    request: RequestPresentation,
+    message: RequestPresentation,
     credential: Credential
   ): Promise<Presentation> {
-    const requestData = request.attachments.find(
-      (attachment) =>
-        attachment &&
-        attachment.data &&
-        (attachment.data as AttachmentJsonData).data
-    );
-    if (!requestData) {
+
+    // ?? is this technically correct?, could there be multiple attachments requiring proof?
+    // if so could need multiple Credentials...
+    // validation: there needs to be at least one...
+    const attachment = message.attachments.at(0);
+
+    if (!attachment) {
       throw new AgentError.OfferDoesntProvideEnoughInformation();
     }
-    //TODO: Improve attributes in Request & AttachmentData
-    const data = requestData.data as any;
-    const jsonObject = data.data;
 
-    const options = jsonObject.options;
-
-    const challenge = options.challenge;
-    const domain = options.domain;
-    const subjectDID = DID.fromString(credential.subject);
-
-    if (!subjectDID) {
-      throw new Error("Credential subject not found");
-    }
-
-    const prismPrivateKeys =
-      await this.pluto.getDIDPrivateKeysByDID(subjectDID);
-    const prismPrivateKey = prismPrivateKeys.at(0);
-
-    if (prismPrivateKey === undefined) {
-      throw new Error("DID PrivateKeys not found");
-    }
-
-    const didInfo = await this.pluto.getDIDInfoByDID(subjectDID);
-    if (!didInfo) {
-      throw new Error("DID not found");
-    }
-
-    if (!credential.isProvable()) {
-      throw new Error("Credential is not Provable");
-    }
-
-    const credentialPresentation = credential.presentation();
-
-    const jwt = new JWT(this.castor);
-
-    const signedJWT = await jwt.sign(didInfo.did, prismPrivateKey, {
-      iss: didInfo.did.toString(),
-      aud: domain,
-      nonce: challenge,
-      vp: credentialPresentation,
-    });
-
-    const base64JWT = base64.baseEncode(Buffer.from(signedJWT));
-    const presentationBody = createPresentationBody(
-      request.body.goalCode,
-      request.body.comment
-    );
+    const presentationRequest = this.parseProofRequest(attachment);
+    const proof = await this.handlePresentationRequest(presentationRequest, credential);
+    const base64Encoded = base64.baseEncode(Buffer.from(proof));
 
     const presentation = new Presentation(
-      presentationBody,
+      {
+        comment: message.body.comment,
+        goalCode: message.body.goalCode
+      },
       [
-        new AttachmentDescriptor(
-          {
-            base64: base64JWT,
-          },
-          "prism/jwt"
-        ),
+        new AttachmentDescriptor({ base64: base64Encoded }),
       ],
-      request.to,
-      request.from,
-      request.thid
+      message.to,
+      message.from,
+      message.thid
     );
 
     return presentation;
+  }
+
+  /**
+   * match the Proof request to return relevant PresentationRequest.
+   * Proof Request comes from a Message Attachment.
+   * 
+   * @param {AttachmentDescriptor} data - presentation proof request
+   * @returns {PresentationRequest}
+   * @throws
+   */
+  private parseProofRequest(attachment: AttachmentDescriptor): PresentationRequest {
+    const data = Message.Attachment.extractJSON(attachment);
+
+    if (attachment.format === "anoncreds/proof-request@v1.0") {
+      return new PresentationRequest(CredentialType.AnonCreds, data);
+    }
+
+    if (attachment.format === "prism/jwt") {
+      return new PresentationRequest(CredentialType.JWT, data);
+    }
+
+    throw new Error("Unsupported Proof Request");
+  }
+
+  private async handlePresentationRequest(
+    request: PresentationRequest,
+    credential: Credential
+  ): Promise<string> {
+    if (credential instanceof AnonCredsCredential && request.isType(CredentialType.AnonCreds)) {
+      const linkSecret = await this.pluto.getLinkSecret();
+      if (!linkSecret) {
+        throw new AgentError.CannotFindLinkSecret();
+      }
+
+      const presentation = await this.pollux.createPresentationProof(request, credential, { linkSecret });
+
+      return JSON.stringify(presentation);
+    }
+
+    if (credential instanceof JWTCredential && request.isType(CredentialType.JWT)) {
+      if (!credential.isProvable()) {
+        throw new Error("Credential is not Provable");
+      }
+
+      const subjectDID = DID.from(credential.subject);
+      const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+      const prismPrivateKey = prismPrivateKeys.at(0);
+
+      if (prismPrivateKey === undefined) {
+        throw new AgentError.CannotFindDIDPrivateKey();
+      }
+
+      const signedJWT = await this.pollux.createPresentationProof(request, credential, {
+        did: subjectDID,
+        privateKey: prismPrivateKey
+      });
+
+      return signedJWT;
+    }
+
+    throw new AgentError.UnhandledPresentationRequest();
   }
 }
