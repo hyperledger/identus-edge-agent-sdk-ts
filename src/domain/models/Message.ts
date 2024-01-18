@@ -3,6 +3,7 @@ import { DID } from "./DID";
 import { v4 as uuidv4 } from "uuid";
 import {
   AttachmentBase64,
+  AttachmentData,
   AttachmentDescriptor,
   AttachmentJsonData,
 } from "./MessageAttachment";
@@ -132,5 +133,43 @@ export class Message {
 
   static isJsonAttachment(data: any): data is AttachmentJsonData {
     return data.data !== undefined;
+  }
+}
+
+export namespace Message {
+  export namespace Attachment {
+    /**
+     * Get the presumed JSON from the attachment
+     * 
+     * @param {AttachmentDescriptor} attachment 
+     * @returns 
+     */
+    export const extractJSON = (attachment: AttachmentDescriptor) => {
+      if (isBase64(attachment.data)) {
+        const decoded = Buffer.from(attachment.data.base64, "base64").toString();
+        const json = JSON.parse(decoded);
+
+        return json;
+      }
+
+      if (isJson(attachment.data)) {
+        // TODO wrong Types - attachment has already been parsed from string to json (by didcomm lib?)
+        return typeof attachment.data.data === "object"
+          ? attachment.data.data
+          : JSON.parse(attachment.data.data);
+      }
+
+      // TODO better error
+      throw new Error("Unhandled attachment");
+    };
+
+    const isBase64 = (data: AttachmentData): data is AttachmentBase64 => {
+      return "base64" in data;
+    };
+
+    const isJson = (data: AttachmentData): data is AttachmentJsonData => {
+      // ?? why do we mutate json -> data in didcomm Wrapper
+      return "data" in data;
+    };
   }
 }
