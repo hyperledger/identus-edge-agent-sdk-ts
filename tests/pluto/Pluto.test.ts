@@ -1,5 +1,4 @@
 import { expect } from "chai";
-// import { PlutoInMemory } from "./PlutoInMemory";
 import * as Domain from "../../src/domain";
 import { randomUUID } from "crypto";
 import { MessageDirection } from "../../src/domain";
@@ -9,179 +8,53 @@ import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 
-
-import { Pluto } from "../../src/pluto/Pluto";
 import { Apollo } from "../../src";
+import { Pluto } from "../../src/pluto/Pluto";
+// import { PlutoInMemory } from "./PlutoInMemory";
 
-class TestDriver implements Pluto.StorageDriver {
+class TestStore implements Pluto.Store {
   private store = new Map<string, any[]>();
 
-  private get(key: string) {
-    return this.store.get(key) ?? [];
-  }
-
-  private filter(key: string, query?: Pluto.Query<any>) {
-    const items = this.get(key);
+  async query<T>(table: string, selector: Partial<T>[]): Promise<T[]> {
+    const items = this.get(table);
 
     const filtered = items.filter(item => {
-      if (typeof query !== "undefined") {
-        if (Array.isArray(query)) {
-          const match = query.some(query => this.match(query, item));
-          return match;
-        }
+      if (selector.length === 0) return true;
 
-        return this.match(query, item);
-      }
-
-      return true;
+      const match = selector.some(query => this.match(query, item));
+      return match;
     });
 
     return filtered;
   }
 
-  private match(query: Pluto.Query<any>, item: any) {
+  async insert(table: string, model: any): Promise<string | { uuid: string; }> {
+    const items = this.get(table);
+    const uuid = (items.length + 1).toString();
+    items.push({ ...model, uuid });
+
+    return uuid;
+  }
+
+  private get(key: string) {
+    const current = this.store.get(key);
+
+    if (!current) {
+      this.store.set(key, []);
+    }
+
+    return this.store.get(key)!;
+  }
+
+  private match(query: Record<string, any>, item: any) {
     const keys = Object.keys(query);
     const match = keys.every(key => item[key] == query[key]);
     return match;
   }
-
-  async getCredentials(query?: Pluto.Query<Pluto.Credential> | undefined): Promise<Pluto.Stored<Pluto.Credential>[]> {
-    return this.filter("credentials", query);
-  }
-
-  async getCredentialMetadata(query?: Pluto.Query<Pluto.CredentialMetadata> | undefined): Promise<Pluto.CredentialMetadata[]> {
-    return this.filter("credentialMetadata", query);
-  }
-
-  async getDIDs(query?: Pluto.Query<Pluto.DID> | undefined): Promise<Pluto.Stored<Pluto.DID>[]> {
-    return this.filter("dids", query);
-  }
-
-  async getKeys(query?: Pluto.Query<Pluto.StorableKey> | undefined): Promise<Pluto.Stored<Pluto.StorableKey>[]> {
-    return this.filter("keys", query);
-  }
-
-  async getLinkedDIDKey(query?: Pluto.Query<Pluto.linkDIDKey> | undefined): Promise<Pluto.linkedDIDKey[]> {
-    const items: Pluto.linkDIDKey[] = this.filter("linkDidKey", query);
-
-    const mapped = await Promise.all(
-      items.map(async item => {
-
-        const dids = await this.getDIDs({ uuid: item.didId });
-        const keys = await this.getKeys({ uuid: item.keyId });
-
-        const linked: Pluto.linkedDIDKey = {
-          did: dids.at(0)!,
-          key: keys.at(0)!,
-          linkId: item.uuid!
-        };
-
-        return linked;
-      })
-    );
-
-    return mapped;
-  }
-
-  async getLinkedDIDs(query?: Pluto.Query<Pluto.linkDIDPair> | undefined): Promise<Pluto.linkedDIDPair[]> {
-    const items: Pluto.linkDIDPair[] = this.filter("linkDids", query);
-
-    const mapped = Promise.all(
-      items.map(async item => {
-        const dids = await this.getDIDs([{ uuid: item.hostId }, { uuid: item.targetId }]);
-
-        const linked: Pluto.linkedDIDPair = {
-          linkId: item.uuid!,
-          hostDID: dids.at(0)!,
-          targetDID: dids.at(1)!,
-          alias: item.alias
-        };
-
-        return linked;
-      })
-    );
-
-    return mapped;
-  }
-
-  async getLinkedMediatorDIDs(query?: Pluto.Query<Pluto.linkMediatorDIDs> | undefined): Promise<Pluto.linkedMediatorDIDs[]> {
-    const items: Pluto.linkMediatorDIDs[] = this.filter("linkMediatorDids", query);
-
-    const mapped = Promise.all(
-      items.map(async item => {
-        const dids = await this.getDIDs([{ uuid: item.hostId }, { uuid: item.mediatorId }, { uuid: item.routingId }]);
-
-        const linked: Pluto.linkedMediatorDIDs = {
-          linkId: item.uuid!,
-          hostDID: dids.at(0)!,
-          mediatorDID: dids.at(1)!,
-          routingDID: dids.at(2)!,
-        };
-
-        return linked;
-      })
-    );
-
-    return mapped;
-  }
-
-  async getMessages(query?: Pluto.Query<Pluto.Message> | undefined): Promise<Pluto.Stored<Pluto.Message>[]> {
-    return this.filter("messages", query);
-  }
-
-
-  private save(key: string, items: any[]) {
-    const current = this.get(key);
-
-    const withId = items.map(x => ({
-      ...x,
-      uuid: x.uuid ?? randomUUID()
-    }));
-
-    const filtered = current.filter(x => withId.every(y => y.uuid !== x.uuid));
-
-    const merged = filtered.concat(withId);
-    this.store.set(key, merged);
-
-    return withId;
-  }
-
-  async storeCredentials(credentials: Pluto.Credential[]): Promise<Pluto.Stored<Pluto.Credential>[]> {
-    return this.save("credentials", credentials);
-  }
-
-  async storeCredentialMetadata(meta: Pluto.CredentialMetadata): Promise<Pluto.Stored<Pluto.CredentialMetadata>> {
-    return this.save("credentialMetadata", [meta])[0];
-  }
-
-  async storeDIDs(dids: Pluto.DID[]): Promise<Pluto.Stored<Pluto.DID>[]> {
-    return this.save("dids", dids);
-  }
-
-  async storeKeys(keys: Pluto.StorableKey[]): Promise<Pluto.Stored<Pluto.StorableKey>[]> {
-    return this.save("keys", keys);
-  }
-
-  async storeMessages(messages: Pluto.Message[]): Promise<Pluto.Stored<Pluto.Message>[]> {
-    const saved = this.save("messages", messages);
-    return saved;
-  }
-
-  async linkDIDKey(link: Pluto.linkDIDKey): Promise<Pluto.Stored<Pluto.linkDIDKey>> {
-    return this.save("linkDidKey", [link])[0];
-  }
-
-  async linkDIDs(link: Pluto.linkDIDPair): Promise<Pluto.Stored<Pluto.linkDIDPair>> {
-    return this.save("linkDids", [link])[0];
-  }
-
-  async linkMediatorDIDs(link: Pluto.linkMediatorDIDs): Promise<Pluto.Stored<Pluto.linkMediatorDIDs>> {
-    return this.save("linkMediatorDids", [link])[0];
-  }
 }
 
-const storageDriverCtor = () => {
-  const driver = new TestDriver();
+const testCtor = () => {
+  const driver = new TestStore();
   const apollo = new Apollo();
   const pluto = new Pluto(driver, apollo);
 
@@ -192,7 +65,7 @@ const storageDriverCtor = () => {
 
 const PlutoCtors: (() => Domain.Pluto)[] = [
   // inMemCtor,
-  storageDriverCtor
+  testCtor
 ];
 
 describe.each(PlutoCtors)("Pluto", (ctor) => {
@@ -309,7 +182,7 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
     });
   //*/
 
-  describe.only("storePrivateKeys", () => {});
+  // describe.only("storePrivateKeys", () => {});
 
   it("should store prism DID", async function () {
     const did = Domain.DID.fromString(

@@ -6,16 +6,15 @@ import { KeyPair } from "./KeyPair";
 
 type Claim = Record<string, any>;
 
-export abstract class Credential {
+export abstract class Credential implements Pluto.Storable {
   abstract recoveryId: string;
-
-  // in Swift
   abstract id: string;
-
   abstract issuer: string;
   abstract subject: string;
   abstract claims: Claim[];
   abstract properties: Map<string, any>;
+
+  uuid?: string;
 
   getProperty(name: string) {
     return this.properties.get(name);
@@ -34,7 +33,7 @@ export interface ProvableCredential {
   presentation(): unknown;
 }
 
-export interface StorableCredential extends Pluto.Storable {
+export interface StorableCredential {
   toStorable(): {
     id: string;
     recoveryId: string;

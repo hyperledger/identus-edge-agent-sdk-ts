@@ -19,6 +19,7 @@ export * from "./Signature";
 export * from "./WordList";
 export * from "./VerifiableCredential";
 export * from "./Credential";
+export * from "./CredentialMetadata";
 export * from "./DefaultLinkSecretName";
 export * from "./Anoncreds";
 export type JsonString = string;

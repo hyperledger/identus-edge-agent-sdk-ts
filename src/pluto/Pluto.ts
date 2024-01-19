@@ -1,314 +1,149 @@
 import * as Domain from "../domain";
+import * as Models from "./models";
 import { PeerDID } from "../peer-did/PeerDID";
-import { AnonCredsCredential, AnonCredsRecoveryId } from "../pollux/models/AnonCredsVerifiableCredential";
-import { JWTCredential, JWTVerifiableCredentialRecoveryId } from "../pollux/models/JWTVerifiableCredential";
+import { repositoryFactory } from "./repositories";
 
+/**
+ * Pluto implementation
+ * 
+ * Structure:
+ * - Pluto class is an orchestration layer
+ * - Repositories handle mapping Domain <-> Storable Models
+ * - Models suggest db structure
+ * - Store abstracts db implementation
+ * 
+ * Pluto:
+ * - always handles Domain classes
+ * - manage relationships
+ * - handle logic and concepts
+ * - throw known Errors
+ * - naming convention
+ *   - (get/store) (Domain name Pluralized) ie getCredentials
+ * 
+ * Models:
+ * - naming convention
+ *   - alias for optional names
+ *   - name for required identifiers
+ *   - dataJson for JSON.stringified objects
+ * 
+ * Store:
+ * - simplified interface
+ * - crud interactions
+ * - only use Models
+ * 
+ * 
+ * Future:
+ *  - versioning
+ *  - migrations
+ */
 export namespace Pluto {
-  // Stored - must have an id coming out of storage
-  export type Stored<T extends Domain.Pluto.Storable> = Omit<T, "uuid"> & Required<Domain.Pluto.Storable>;
+  export interface Store {
+    /**
+     * Run a query to fetch data from the Store
+     * 
+     * @param name Model name
+     * @param selector either an object or array of objects with matchable properties
+     * 
+     * properties within an object will be AND'ed
+     * different objects will be OR'd
+     * 
+     * @example
+     * search for a model in TableOne with uuid and name
+     * ```ts
+     *   store.query("TableOne", { uuid: "1", name: "eg" })
+     * ```
+     * @example
+     * search for models in TableOne with uuid of 1 or 2
+     * ```ts
+     *   store.query("TableOne", [{ uuid: "1" }, { uuid: "2" }])
+     * ```
+     * @example
+     * search for all models in TableOne
+     * ```ts
+     *   store.query("TableOne", [])
+     * ```
+     * 
+     * @returns relevant Models
+     */
+    query<T>(name: string, selector: Partial<T>[]): Promise<T[]>;
 
+    /**
+     * Persist new data in the Store.
+     * 
+     * Should return UUID of newly saved data as either:
+     *   - standalone string
+     *   - inside an object
+     * 
+     * @param name Model name
+     * @param model object to save
+     * @return {string | { uuid: string }} UUID value
+     */
+    insert(name: string, model: any): Promise<string | { uuid: string; }>;
 
-  // Query object - use properties from the stored Type
-  // AND object properties
-  // OR different objects
-  export type Query<T extends Domain.Pluto.Storable> = Partial<Stored<T>> | Partial<Stored<T>>[];
-
-
-  /** Storables **/
-
-  export interface Credential extends Domain.Pluto.Storable {
-    recoveryId: string;
-    dataJson: string;
-
-    issuer?: string;
-    subject?: string;
-    credentialCreated?: string;
-    credentialUpdated?: string;
-    credentialSchema?: string;
-    validUntil?: string;
-    revoked?: boolean;
-    // availableClaims?: string[];
-  }
-
-  // Q: is this Anoncreds only or could this be extended in future?
-  export interface CredentialMetadata extends Domain.Pluto.Storable {
-    name: string;
-    // if Anoncreds only we shouldn't need to query any other data than `name` - so just stringify for ease
-    dataJson: string;
-  }
-
-  export interface DID extends Domain.Pluto.Storable {
-    schema: string;
-    method: string;
-    methodId: string;
-    alias?: string;
-  }
-
-  // uses Keys instead
-  // export interface LinkSecret extends Domain.Pluto.Storable {
-  //   name: string;
-  //   value: string;
-  // }
-
-  export interface Message extends Domain.Pluto.Storable {
-    dataJson: string;
-
-    id: string;
-    createdTime: number;
-    thid?: string;
-    piuri: string;
-    // Q: these are DIDs - should we normalize?
-    from?: string;
-    to?: string;
-    isReceived: number;
-  }
-
-  export interface StorableKey extends Domain.Pluto.Storable, Domain.StorableKey {
-    name?: string;
-    // curve: string; - handled by restorationId
-  }
-
-
-  /** Relationships **/
-
-  // define the relationship between DIDs and Keys
-  // many to many
-  export interface linkDIDKey extends Domain.Pluto.Storable {
-    didId: string;
-    keyId: string;
-  }
-
-  export interface linkedDIDKey {
-    linkId: string;
-    did: Stored<DID>;
-    key: Stored<StorableKey>;
-  }
-
-  // DIDPair or DIDs?
-  export interface linkDIDPair extends Domain.Pluto.Storable {
-    hostId: string;
-    targetId: string;
-    alias?: string;
-  }
-
-  export interface linkedDIDPair {
-    linkId: string;
-    hostDID: Stored<DID>;
-    targetDID: Stored<DID>;
-    alias?: string;
-  }
-
-  export interface linkMediatorDIDs extends Domain.Pluto.Storable {
-    hostId: string;
-    routingId: string;
-    mediatorId: string;
-  }
-
-  // "linked" returns the underlying Models instead of the link item
-  // allows for less db calls
-  export interface linkedMediatorDIDs {
-    linkId: string;
-    hostDID: Stored<DID>;
-    routingDID: Stored<DID>;
-    mediatorDID: Stored<DID>;
-  }
-
-  /**
-   * StorageDriver handles low level storable types
-   * Allows us to:
-   *   - implement Pluto with our logic and error handling
-   *   - condense functions ie (storePrismDid + storePeerDid > storeDID)
-   *   - create separation between Domain and Storage types
-   *      Pluto always has Domain Type
-   *      StorableDriver always has "Storable" Type (json object with id)
-   *     ? do we need storage details (id, etc) to persist? (for updates etc?)
-   * 
-   * lesser breaking update (Pluto interface can keep same Types as current)
-   * 
-   * ??? Pluto Repository Pattern ???
-   *    ??? doesn't have to be enforced with Interface, can just be useful helper 
-   * 
-   * 
-   * Notes:
-   * - formalize fn naming convention
-   *   - (get/store) (Domain name Pluralized) ie getCredentials
-   * 
-   * - formalize property naming convention
-   *   - dataJson always used for JSON.stringified objects
-   * 
-   *   StorageDriver only handle multiple, saves on making two functions for saving any type
-   *     all Gets return arrays based on Query object
-   *     all Stores take arrays and return arrays
-   *     ? should order be important ?
-   * 
-   * - define LinkTable structure
-   *   - getters return underlying items not link model
-   * 
-   * Pluto can handle syntactic sugar
-   *   - accept 1 or multiple items
-   *   - handle logic and concepts
-   * ? should every data type have normalized functions, getOne, getMany, store, etc ?
-   *   
-   */
-  export interface StorageDriver {
-    getCredentials(query?: Query<Credential>): Promise<Stored<Credential>[]>;
-    storeCredentials(credentials: Credential[]): Promise<Stored<Credential>[]>;
-
-
-    getCredentialMetadata(query?: Query<CredentialMetadata>): Promise<CredentialMetadata[]>;
-    storeCredentialMetadata(meta: CredentialMetadata): Promise<Stored<CredentialMetadata>>;
-
-
-    getMessages(query?: Query<Message>): Promise<Stored<Message>[]>;
-    storeMessages(messages: Message[]): Promise<Stored<Message>[]>;
-
-
-    getDIDs(query?: Query<DID>): Promise<Stored<DID>[]>;
-    storeDIDs(dids: DID[]): Promise<Stored<DID>[]>;
-
-
-    getKeys(query?: Query<StorableKey>): Promise<Stored<StorableKey>[]>;
-    storeKeys(keys: StorableKey[]): Promise<Stored<StorableKey>[]>;
-
-    // Mediators are just 3 DIDs?
-    // also stored in memory of BasicMediationHandler
-    linkMediatorDIDs(link: linkMediatorDIDs): Promise<Stored<linkMediatorDIDs>>;
-    getLinkedMediatorDIDs(query?: Query<linkMediatorDIDs>): Promise<linkedMediatorDIDs[]>;
-
-
-    // DIDPair is just two DIDs that have been linked (because of DIDComm connection etc)
-    // DIDPair - has a name, is it necessary?
-    linkDIDs(link: linkDIDPair): Promise<Stored<linkDIDPair>>;
-    getLinkedDIDs(query?: Query<linkDIDPair>): Promise<linkedDIDPair[]>;
-
-
-    linkDIDKey(link: linkDIDKey): Promise<Stored<linkDIDKey>>;
-    getLinkedDIDKey(query?: Query<linkDIDKey>): Promise<linkedDIDKey[]>;
+    // update (table: string, model: Partial<T>): Promise<boolean>;
+    // delete (table: string, id: string): Promise<boolean>;
   }
 }
 
-
-/**
- * Pluto keeps Domain types and allows user to handle storage
- */
 export class Pluto implements Domain.Pluto {
-  constructor(
-    private readonly driver: Pluto.StorageDriver,
-    private readonly keyRestoration: Domain.KeyRestoration
-  ) {}
+  private Repositories: ReturnType<typeof repositoryFactory>;
 
-  async start(): Promise<void> {
-    // throw new Error("Method not implemented.");
+  constructor(
+    private readonly store: Pluto.Store,
+    private readonly keyRestoration: Domain.KeyRestoration
+  ) {
+    this.Repositories = repositoryFactory(store, keyRestoration);
   }
 
+  async start(): Promise<void> {}
 
-  /** Credentials **/
 
   async getAllCredentials(): Promise<Domain.Credential[]> {
-    const result = await this.driver.getCredentials();
-    const credentials = result.map(x => this.mapCredentialToDomain(x));
-
-    return credentials;
+    return this.Repositories.Credentials.get();
   }
 
   async storeCredential(credential: Domain.Credential): Promise<void> {
-    const item = this.mapCredentialToStorable(credential);
-    this.driver.storeCredentials([item]);
-  }
-
-  private mapCredentialToStorable(credential: Domain.Credential): Pluto.Credential {
-    if (!credential.isStorable()) {
-      throw new Domain.PlutoError.CredentialNotStorable();
-    }
-
-    const item = credential.toStorable();
-
-    return {
-      uuid: credential.uuid,
-      recoveryId: credential.recoveryId,
-      dataJson: item.credentialData,
-
-      issuer: item.issuer,
-      subject: item.subject,
-      credentialCreated: item.credentialCreated,
-      credentialUpdated: item.credentialUpdated,
-      credentialSchema: item.credentialSchema,
-      validUntil: item.validUntil,
-      revoked: item.revoked
-    };
-  }
-
-  private mapCredentialToDomain(stored: Pluto.Stored<Pluto.Credential>): Domain.Credential {
-    switch (stored.recoveryId) {
-      case JWTVerifiableCredentialRecoveryId: {
-        const credential = JWTCredential.fromJWT(stored, stored.dataJson);
-        credential.uuid = stored.uuid;
-
-        return credential;
-      }
-      case AnonCredsRecoveryId: {
-        const json = JSON.parse(stored.dataJson);
-        const credential = new AnonCredsCredential(json);
-        credential.uuid = stored.uuid;
-
-        return credential;
-      }
-    }
-
-    throw new Domain.PlutoError.UnknownCredentialTypeError();
+    await this.Repositories.Credentials.save(credential);
   }
 
 
   /** Credential Metadata **/
 
-  async storeCredentialMetadata(metadata: Domain.Anoncreds.CredentialRequestMeta, alias: string): Promise<void> {
-    this.driver.storeCredentialMetadata({
-      name: alias,
-      dataJson: JSON.stringify(metadata),
-    });
+  // TODO refactor to take domain CredentialMetadata
+  async storeCredentialMetadata(metadata: Domain.Anoncreds.CredentialRequestMeta, name: string): Promise<void> {
+    const domain = new Domain.CredentialMetadata(Domain.CredentialType.AnonCreds, name, metadata);
+    await this.Repositories.CredentialMetadata.save(domain);
   }
 
   // Q: name change - fetch doesn't align, should be get
   async fetchCredentialMetadata(name: string): Promise<Domain.Anoncreds.CredentialRequestMeta | null> {
-    const stored = await this.driver.getCredentialMetadata({ name });
-    const item = this.onlyOne(stored);
-    const json = JSON.parse(item.dataJson);
-
-    // TODO: validate
-    return json as Domain.Anoncreds.CredentialRequestMeta;
+    const result = await this.Repositories.CredentialMetadata.find({ name });
+    return result?.toJSON() as any ?? null;
   }
 
 
   /** LinkSecret **/
 
   async getLinkSecret(name?: string): Promise<string | null> {
-    const items = await this.driver.getKeys({ recoveryId: "linkSecret", name });
-    const item = this.onlyOne(items);
-
-    const value = Buffer.from(item.raw).toString();
-    return value;
+    const linkSecret = await this.Repositories.LinkSecrets.find({ alias: name });
+    return linkSecret?.secret ?? null;
   }
 
   async storeLinkSecret(secret: string, name: string): Promise<void> {
-    this.driver.storeKeys([{
-      recoveryId: "linkSecret",
-      raw: Buffer.from(secret),
-      name: name
-    }]);
+    await this.Repositories.LinkSecrets.save({ name, secret });
   }
 
 
   /** PrivateKeys **/
 
   async storePrivateKeys(privateKey: Domain.PrivateKey): Promise<void> {
-    const item = this.mapPrivateKeyToStorable(privateKey);
-    await this.driver.storeKeys([item]);
+    await this.Repositories.Keys.save(privateKey);
   }
 
   async getDIDPrivateKeysByDID(did: Domain.DID): Promise<Domain.PrivateKey[]> {
     const didId = await this.getDIDUUID(did);
-    const result = await this.driver.getLinkedDIDKey({ didId });
-    const keys = result.map(x => this.keyRestoration.restorePrivateKey(x.key));
+    const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
+    const keys = await this.Repositories.Keys.get(links.map(x => ({ uuid: x.keyId })));
 
     return keys;
   }
@@ -316,27 +151,13 @@ export class Pluto implements Domain.Pluto {
   private async getDIDUUID(did: Domain.DID): Promise<string> {
     if (typeof did.uuid === "string") return did.uuid;
 
-    const result = await this.driver.getDIDs(did);
-    const item = this.onlyOne(result);
+    const result = await this.Repositories.DIDs.find(did);
 
-    return item.uuid;
-  }
-
-  private mapPrivateKeyToStorable(key: Domain.PrivateKey): Pluto.StorableKey {
-    if (!key.isStorable()) {
-      throw new Domain.PlutoError.PrivateKeyNotStorable();
+    if (!result) {
+      throw new Error("DID not found");
     }
 
-    return {
-      uuid: key.uuid,
-      recoveryId: key.recoveryId,
-      raw: key.raw,
-      index: key.index
-    };
-  }
-
-  private mapKeyToDomain(item: Pluto.StorableKey): Domain.Key {
-    return this.keyRestoration.restorePrivateKey(item);
+    return result.uuid;
   }
 
 
@@ -350,124 +171,86 @@ export class Pluto implements Domain.Pluto {
     metaId: string | null,
     alias?: string
   ): Promise<void> {
-    const storedDids = await this.driver.storeDIDs([{ ...did, alias }]);
-    const storedKeys = await this.driver.storeKeys([this.mapPrivateKeyToStorable(privateKey)]);
+    const didModel = await this.Repositories.DIDs.save(did, alias);
+    const storedKey = await this.Repositories.Keys.save(privateKey);
 
-    const storedDid = this.onlyOne(storedDids);
-    const storedKey = this.onlyOne(storedKeys);
-
-    did.uuid = storedDid.uuid;
-    privateKey.uuid = storedKey.uuid;
-
-    await this.driver.linkDIDKey({
-      didId: storedDid.uuid,
+    await this.Repositories.DIDKeyLinks.insert({
+      alias,
+      didId: didModel.uuid,
       keyId: storedKey.uuid
     });
   }
 
+  // Q: can we remove DIDInfo - replace with PrismDID?
   async getPrismDID(didId: string) {
-    const links = await this.driver.getLinkedDIDKey({ didId });
+    const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
     const link = this.onlyOne(links);
-    const did = this.mapDIDToDomain(link.did);
+    const dids = await this.Repositories.DIDs.getModels({ uuid: link.didId });
+    const did = this.onlyOne(dids);
+    const key = await this.Repositories.Keys.byId(link.keyId);
 
-    return new Domain.PrismDIDInfo(did, link.key.index, link.did.alias);
+    return new Domain.PrismDIDInfo(this.Repositories.DIDs.toDomain(did), key?.index, did.alias);
   }
 
   async getAllPrismDIDs(): Promise<Domain.PrismDIDInfo[]> {
-    const storedDids = await this.driver.getDIDs({ method: "prism" });
-    const links = await this.driver.getLinkedDIDKey(storedDids.map(x => ({ uuid: x.uuid })));
+    const dids = await this.Repositories.DIDs.getModels({ method: "prism" });
+    const results = Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
 
-    const prismDids = storedDids.map(item => {
-      const link = links.find(x => x.did.uuid === item.uuid);
-      const did = this.mapDIDToDomain(item);
-
-      return new Domain.PrismDIDInfo(did, link?.key.index, item.alias);
-    });
-
-    return prismDids;
+    return results;
   }
 
-  // Q: can we remove DIDInfo - replace with PrismDID?
   async getDIDInfoByDID(did: Domain.DID): Promise<Domain.PrismDIDInfo | null> {
     const didId = await this.getDIDUUID(did);
-    const links = await this.driver.getLinkedDIDKey({ didId });
 
-    if (links.length > 0) {
-      const index = this.getLatestIndex(links);
-      const alias = links.at(0)?.did.alias;
-      const didInfo = new Domain.PrismDIDInfo(did, index, alias);
-
-      return didInfo;
+    try {
+      return this.getPrismDID(didId);
     }
-
-    return null;
+    catch {
+      return null;
+    }
   }
 
   async getDIDInfoByAlias(alias: string): Promise<Domain.PrismDIDInfo[]> {
-    const dids = await this.driver.getDIDs({ alias });
-    const links = await this.driver.getLinkedDIDKey(
-      dids.map(x => ({ didId: x.uuid }))
-    );
+    const dids = await this.Repositories.DIDs.getModels({ alias });
+    const results = Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
 
-    const didInfos = dids.map(did => {
-      const filtered = links.filter(x => x.did.uuid === did.uuid);
-      const index = this.getLatestIndex(filtered);
-      const didInfo = new Domain.PrismDIDInfo(this.mapDIDToDomain(did), index, alias);
-
-      return didInfo;
-    }, []);
-
-    return didInfos;
+    return results;
   }
 
-  // Q: does this belong in Pluto?
+  // Q: does this belong in Pluto? 
+  // A: no move to Agent
   async getPrismLastKeyPathIndex(): Promise<number> {
-    const dids = await this.driver.getDIDs({ method: "prism" });
-    const links = await this.driver.getLinkedDIDKey(
-      dids.map(x => ({ didId: x.uuid }))
-    );
-    const keyPathIndex = this.getLatestIndex(links);
-
-    return keyPathIndex;
-  }
-
-  private getLatestIndex(links: Pluto.linkedDIDKey[]): number {
-    const indexes = links.map(x => x.key.index ?? 0);
+    const dids = await this.Repositories.DIDs.getModels({ method: "prism" });
+    const links = await this.Repositories.DIDKeyLinks.getModels(dids.map(x => ({ didId: x.uuid })));
+    const keys = await this.Repositories.Keys.getModels(links.map(x => ({ uuid: x.keyId })));
+    const indexes = keys.map(x => x.index ?? 0);
     const keyPathIndex = Math.max(0, ...indexes);
 
     return keyPathIndex;
   }
 
-  // private mapToPrismDID(): Domain.PrismDIDInfo {}
-
-  // Q: Domain.PeerDID
   async storePeerDID(did: Domain.DID, privateKeys: Domain.PrivateKey[]): Promise<void> {
-    const storedDids = await this.driver.storeDIDs([did]);
-    const storedDid = this.onlyOne(storedDids);
-    const storedKeys = await this.driver.storeKeys(
-      privateKeys.map(x => this.mapPrivateKeyToStorable(x))
-    );
+    const storedDid = await this.Repositories.DIDs.save(did);
+    const storedKeys = await Promise.all(privateKeys.map(x => this.Repositories.Keys.save(x)));
 
-    storedKeys.forEach(x => this.driver.linkDIDKey({
-      didId: storedDid.uuid,
-      keyId: x.uuid
-    }));
+    await Promise.all(
+      storedKeys.map(x => this.Repositories.DIDKeyLinks.insert({ didId: storedDid.uuid, keyId: x.uuid }))
+    );
   }
 
   async getAllPeerDIDs(): Promise<PeerDID[]> {
-    const storedDids = await this.driver.getDIDs({ method: "peer" });
-    const links = await this.driver.getLinkedDIDKey(storedDids.map(x => ({ didId: x.uuid })));
+    const allDids = await this.Repositories.DIDs.get({ method: "peer" });
+    const allLinks = await this.Repositories.DIDKeyLinks.getModels(allDids.map(x => ({ didId: x.uuid })));
+    const allKeys = await this.Repositories.Keys.get(allLinks.map(x => ({ uuid: x.keyId })));
 
-    const peerDids = storedDids.map(did => {
-      const keys = links.filter(x => x.did.uuid === did.uuid).map(x => x.key);
-
-      const domainKeys = keys.map(x => this.mapKeyToDomain(x))
-        .filter((x): x is Domain.PrivateKey => x instanceof Domain.PrivateKey);
+    const peerDids = allDids.map(did => {
+      const keyIds = allLinks.filter(x => x.didId === did.uuid).map(x => x.keyId);
+      const keys = allKeys.filter(x => keyIds.includes(x.uuid));
 
       const peerDid = new PeerDID(
-        this.mapDIDToDomain(did),
+        did,
         // TODO: remove this when PeerDIDs are updated to use PrivateKey
-        domainKeys.map(x => ({
+        keys.map(x => ({
           keyCurve: Domain.getKeyCurveByNameAndIndex(x.curve, x.index),
           value: x.getEncoded()
         }))
@@ -480,149 +263,133 @@ export class Pluto implements Domain.Pluto {
   }
 
 
-  async storeDIDPair(host: Domain.DID, receiver: Domain.DID, name: string): Promise<void> {
-    const stored = await this.driver.storeDIDs([host, receiver]);
+  /** Messages **/
 
-    this.driver.linkDIDs({
-      alias: name,
-      hostId: stored.at(0)?.uuid!,
-      targetId: stored.at(1)?.uuid!
+  async storeMessage(message: Domain.Message): Promise<void> {
+    await this.Repositories.Messages.save(message);
+  }
+
+  async storeMessages(messages: Domain.Message[]): Promise<void> {
+    await Promise.all(messages.map(x => this.Repositories.Messages.save(x)));
+  }
+
+  async getMessage(id: string): Promise<Domain.Message | null> {
+    return await this.Repositories.Messages.find({ id }) ?? null;
+  }
+
+  async getAllMessages(): Promise<Domain.Message[]> {
+    return this.Repositories.Messages.get();
+  }
+
+
+  /** DID Pairs **/
+
+  async storeDIDPair(host: Domain.DID, receiver: Domain.DID, alias: string): Promise<void> {
+    const hostDID = await this.Repositories.DIDs.save(host);
+    const targetDID = await this.Repositories.DIDs.save(receiver);
+
+    await this.Repositories.DIDLinks.insert({
+      alias,
+      role: Models.DIDLink.role.pair,
+      hostId: hostDID.uuid,
+      targetId: targetDID.uuid
     });
   }
 
   async getAllDidPairs(): Promise<Domain.DIDPair[]> {
-    const items = await this.driver.getLinkedDIDs();
-    const didPairs = items.map(x => this.mapDIDPairToDomain(x));
+    const links = await this.Repositories.DIDLinks.getModels({ role: Models.DIDLink.role.pair });
+    const didPairs = await Promise.all(links.map(x => this.mapDIDPairToDomain(x)));
+    const filtered = didPairs.filter((x): x is Domain.DIDPair => x != null);
 
-    return didPairs;
+    return filtered;
   }
 
   async getPairByDID(did: Domain.DID): Promise<Domain.DIDPair | null> {
     const didId = await this.getDIDUUID(did);
-    const items = await this.driver.getLinkedDIDs([{ hostId: didId }, { targetId: didId }]);
-    const item = this.onlyOne(items);
-    const didPair = this.mapDIDPairToDomain(item);
+    const links = await this.Repositories.DIDLinks.getModels([
+      { role: Models.DIDLink.role.pair, hostId: didId },
+      { role: Models.DIDLink.role.pair, targetId: didId }
+    ]);
+
+    // ?? this seems presumptuous? couldnt hostDID be re-used?
+    const link = this.onlyOne(links);
+    const didPair = this.mapDIDPairToDomain(link);
 
     return didPair;
   }
 
   async getPairByName(alias: string): Promise<Domain.DIDPair | null> {
-    // const didId = await this.getDIDUUID(did);
-    const items = await this.driver.getLinkedDIDs({ alias });
-    const item = this.onlyOne(items);
-    const didPair = this.mapDIDPairToDomain(item);
+    const links = await this.Repositories.DIDLinks.getModels({ alias, role: Models.DIDLink.role.pair });
+    const link = this.onlyOne(links);
+    const didPair = this.mapDIDPairToDomain(link);
 
     return didPair;
   }
 
-  private mapDIDPairToDomain(item: Pluto.linkedDIDPair): Domain.DIDPair {
-    const didPair = new Domain.DIDPair(
-      this.mapDIDToDomain(item.hostDID),
-      this.mapDIDToDomain(item.targetDID),
-      item.alias ?? ""
-    );
+  private async mapDIDPairToDomain(link: Models.DIDLink): Promise<Domain.DIDPair | null> {
+    const hostDID = await this.Repositories.DIDs.byId(link.hostId);
+    const targetDID = await this.Repositories.DIDs.byId(link.targetId);
+    const alias = link.alias ?? "";
 
+    if (!hostDID || !targetDID) {
+      return null;
+    }
+
+    const didPair = new Domain.DIDPair(hostDID, targetDID, alias);
     return didPair;
-  }
-
-
-  private mapDIDToDomain(item: Pluto.Stored<Pluto.DID>): Domain.DID {
-    const did = Domain.DID.from(item);
-    did.uuid = item.uuid;
-
-    return did;
-  }
-
-  private mapDIDToStorable(did: Domain.DID): Pluto.DID {
-    return {
-      uuid: did.uuid,
-      method: did.method,
-      methodId: did.methodId,
-      schema: did.schema,
-    };
-  }
-
-
-  /** Messages **/
-  async storeMessage(message: Domain.Message): Promise<void> {
-    return await this.storeMessages([message]);
-  }
-
-  async storeMessages(messages: Domain.Message[]): Promise<void> {
-    await this.driver.storeMessages(messages.map(x => this.mapMessageToStorable(x)));
-  }
-
-  async getMessage(id: string): Promise<Domain.Message | null> {
-    const stored = await this.driver.getMessages({ id });
-    const item = this.onlyOne(stored);
-
-    return this.mapMessageToDomain(item);
-  }
-
-  async getAllMessages(): Promise<Domain.Message[]> {
-    const stored = await this.driver.getMessages();
-    const mapped = stored.map(x => this.mapMessageToDomain(x));
-    return mapped;
-  }
-
-  private mapMessageToDomain(item: Pluto.Stored<Pluto.Message>): Domain.Message {
-    const msg = Domain.Message.fromJson(item.dataJson);
-    msg.uuid = item.uuid;
-    return msg;
-  }
-
-  private mapMessageToStorable(msg: Domain.Message): Pluto.Message {
-    const msgJson = {
-      id: msg.id,
-      body: msg.body,
-      piuri: msg.piuri,
-      from: msg.from?.toString(),
-      to: msg.to?.toString(),
-      thid: msg.thid,
-      pthid: msg.pthid,
-      createdTime: Number(msg.createdTime),
-      expiresTime: Number(msg.expiresTimePlus),
-      attachments: msg.attachments,
-      ack: msg.ack,
-      direction: msg.direction,
-      extraHeaders: msg.extraHeaders,
-      fromPrior: msg.fromPrior,
-    };
-
-    return {
-      uuid: msg.uuid,
-      dataJson: JSON.stringify(msgJson),
-      id: msg.id,
-      createdTime: Number(msg.createdTime),
-      from: msg.from?.toString(),
-      isReceived: msg.direction,
-      thid: msg.thid,
-      to: msg.to?.toString(),
-      piuri: msg.piuri,
-    };
   }
 
 
   /** Mediators **/
 
   async getAllMediators(): Promise<Domain.Mediator[]> {
-    const stored = await this.driver.getLinkedMediatorDIDs();
+    const links = await this.Repositories.DIDLinks.getModels([
+      { role: Models.DIDLink.role.mediator },
+      { role: Models.DIDLink.role.routing },
+    ]);
+    const hostIds = links.map(x => x.hostId).filter((x, i, s) => s.indexOf(x) === i);
 
-    return stored.map<Domain.Mediator>(x => ({
-      hostDID: Domain.DID.from(x.hostDID),
-      mediatorDID: Domain.DID.from(x.mediatorDID),
-      routingDID: Domain.DID.from(x.routingDID),
-    }));
+    const result = await Promise.all(
+      hostIds.map(async hostId => {
+        const mediatorLink = links.find(x => x.hostId === hostId && x.role === Models.DIDLink.role.mediator);
+        const routingLink = links.find(x => x.hostId === hostId && x.role === Models.DIDLink.role.routing);
+
+        if (!mediatorLink || !routingLink) {
+          throw new Error();
+        }
+
+        const hostDID = await this.Repositories.DIDs.byId(hostId);
+        const mediatorDID = await this.Repositories.DIDs.byId(mediatorLink.targetId);
+        const routingDID = await this.Repositories.DIDs.byId(routingLink.targetId);
+
+        if (!hostDID || !mediatorDID || !routingDID) {
+          throw new Error();
+        }
+
+        const domain: Domain.Mediator = { hostDID, mediatorDID, routingDID };
+        return domain;
+      })
+    );
+
+    return result;
   }
 
   // Q: Mediator type instead of 3 dids 
   async storeMediator(mediator: Domain.DID, host: Domain.DID, routing: Domain.DID): Promise<void> {
-    const stored = await this.driver.storeDIDs([mediator, host, routing]);
+    const hostDID = await this.Repositories.DIDs.save(host);
+    const mediatorDID = await this.Repositories.DIDs.save(mediator);
+    const routingDID = await this.Repositories.DIDs.save(routing);
 
-    this.driver.linkMediatorDIDs({
-      mediatorId: stored.at(0)?.uuid!,
-      hostId: stored.at(1)?.uuid!,
-      routingId: stored.at(2)?.uuid!
+    await this.Repositories.DIDLinks.insert({
+      role: Models.DIDLink.role.mediator,
+      hostId: hostDID.uuid,
+      targetId: mediatorDID.uuid
+    });
+
+    await this.Repositories.DIDLinks.insert({
+      role: Models.DIDLink.role.routing,
+      hostId: hostDID.uuid,
+      targetId: routingDID.uuid
     });
   }
 

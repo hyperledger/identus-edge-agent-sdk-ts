@@ -3,6 +3,10 @@ export class DatabaseConnectionError extends Error {}
 export class DatabaseContextError extends Error {}
 export class DatabaseServiceAlreadyRunning extends Error {}
 
+export class StoreInsertError extends Error {}
+export class StoreUUIDNotReturned extends Error {}
+export class StoreQueryFailed extends Error {}
+
 export class CredentialNotStorable extends Error {}
 export class UnknownCredentialTypeError extends Error {}
 export class InvalidCredentialJsonError extends Error {}
