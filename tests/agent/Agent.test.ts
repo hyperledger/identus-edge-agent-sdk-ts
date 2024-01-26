@@ -21,6 +21,7 @@ import {
   CredentialType,
   DID,
   HttpResponse,
+  LinkSecret,
   Message,
   Service,
   ServiceEndpoint,
@@ -279,7 +280,7 @@ describe("Agent Tests", () => {
 
           sandbox
             .stub(pluto, "getLinkSecret")
-            .returns(Promise.resolve(linkSecret));
+            .resolves(linkSecret);
 
           sandbox
             .stub(pollux as any, "fetchCredentialDefinition")
@@ -464,7 +465,7 @@ describe("Agent Tests", () => {
 
           const stubFetchCredentialMetadata = sandbox
             .stub(pluto, "getCredentialMetadata")
-            .resolves({ mock: "CredentialMetadata" } as any);
+            .resolves(new CredentialMetadata(CredentialType.AnonCreds, "mock", { mock: "CredentialMetadata" }) as any);
 
           await agent.processIssuedCredentialMessage(issueCredential);
 
@@ -472,8 +473,8 @@ describe("Agent Tests", () => {
         });
 
         it("Pollux.parseCredential is called with correct decoded data and CredentialType, LinkSecret, CredentialMetadata", async () => {
-          const getLinkSecretResult = "linkSecret123";
-          const fetchCredentialMetadataResult = { mock: "CredentialMetadata" };
+          const getLinkSecretResult = new LinkSecret("linkSecret123");
+          const fetchCredentialMetadataResult = new CredentialMetadata(CredentialType.AnonCreds, "mock", { mock: "CredentialMetadata" });
           sandbox.stub(pluto, "storeCredential").resolves();
           sandbox.stub(pluto, "getLinkSecret").resolves(getLinkSecretResult);
           sandbox
@@ -489,8 +490,8 @@ describe("Agent Tests", () => {
           const credData = base64url.baseDecode(base64Data);
           expect(stubParseCredential).to.have.been.calledOnceWith(credData, {
             type: CredentialType.AnonCreds,
-            linkSecret: getLinkSecretResult,
-            credentialMetadata: fetchCredentialMetadataResult,
+            linkSecret: getLinkSecretResult.secret,
+            credentialMetadata: fetchCredentialMetadataResult.toJSON(),
           });
         });
 
@@ -498,7 +499,7 @@ describe("Agent Tests", () => {
           sandbox.stub(pluto, "getLinkSecret").resolves("linkSecret123");
           sandbox
             .stub(pluto, "getCredentialMetadata")
-            .resolves({ mock: "CredentialMetadata" } as any);
+            .resolves(new CredentialMetadata(CredentialType.AnonCreds, "mock", { mock: "CredentialMetadata" }) as any);
           sandbox
             .stub(pollux, "parseCredential")
             .resolves(parseCredentialResult as any);
@@ -519,7 +520,7 @@ describe("Agent Tests", () => {
           sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
           sandbox
             .stub(pluto, "getCredentialMetadata")
-            .resolves(Fixtures.Credentials.Anoncreds.credentialRequestMeta);
+            .resolves(new CredentialMetadata(CredentialType.AnonCreds, "mock", Fixtures.Credentials.Anoncreds.credentialRequestMeta) as any);
           sandbox
             .stub(pollux, "parseCredential")
             .resolves(parseCredentialResult as any);
@@ -536,7 +537,7 @@ describe("Agent Tests", () => {
         sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
         sandbox
           .stub(pluto, "getCredentialMetadata")
-          .resolves(new CredentialMetadata(CredentialType.AnonCreds, "name", Fixtures.Credentials.Anoncreds.credentialRequestMeta) as any);
+          .resolves(new CredentialMetadata(CredentialType.AnonCreds, "mock", Fixtures.Credentials.Anoncreds.credentialRequestMeta) as any);
         sandbox
           .stub(pollux as any, "fetchCredentialDefinition")
           .resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);

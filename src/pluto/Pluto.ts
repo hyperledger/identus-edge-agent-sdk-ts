@@ -120,14 +120,12 @@ export class Pluto implements Domain.Pluto {
 
   /** LinkSecret **/
 
-  // TODO domain linksecret
-  async getLinkSecret(name?: string): Promise<string | null> {
-    const linkSecret = await this.Repositories.LinkSecrets.find({ alias: name });
-    return linkSecret?.secret ?? null;
+  async getLinkSecret(name?: string): Promise<Domain.LinkSecret | undefined> {
+    return await this.Repositories.LinkSecrets.find({ alias: name });
   }
 
-  async storeLinkSecret(secret: string, name: string): Promise<void> {
-    await this.Repositories.LinkSecrets.save({ name, secret });
+  async storeLinkSecret(linkSecret: Domain.LinkSecret): Promise<void> {
+    await this.Repositories.LinkSecrets.save(linkSecret);
   }
 
 

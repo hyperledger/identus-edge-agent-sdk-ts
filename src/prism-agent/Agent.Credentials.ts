@@ -81,7 +81,10 @@ export class AgentCredentials implements AgentCredentialsClass {
     };
 
     if (credentialType === CredentialType.AnonCreds) {
-      parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
+      const linkSecret = await this.pluto.getLinkSecret();
+
+      parseOpts.linkSecret = linkSecret?.secret;
+
       const credentialMetadata = await this.pluto.getCredentialMetadata(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         issueCredential.thid!
@@ -122,12 +125,10 @@ export class AgentCredentials implements AgentCredentialsClass {
       if (!linkSecret) {
         throw new Error("No linkSecret available.");
       }
+
       const [credentialRequest, credentialRequestMetadata] =
-        await this.pollux.processAnonCredsCredential(message, {
-          linkSecret: linkSecret,
-          // TODO: why are we using `offer.thid` here? and below (line 135)
-          linkSecretName: offer.thid,
-        });
+        await this.pollux.processAnonCredsCredential(message, { linkSecret });
+
       credRequestBuffer = JSON.stringify(credentialRequest);
 
       // TODO can we fallback here? would need another identifier

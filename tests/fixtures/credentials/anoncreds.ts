@@ -1,9 +1,9 @@
-import { Anoncreds, AttachmentDescriptor } from "../../../src/domain";
+import { Anoncreds, AttachmentDescriptor, LinkSecret } from "../../../src/domain";
 import { ProtocolType } from "../../../src/prism-agent/protocols/ProtocolTypes";
 import { OfferCredential } from "../../../src/prism-agent/protocols/issueCredential/OfferCredential";
 import { DIDs } from "../dids";
 
-export const linkSecret: Anoncreds.LinkSecret = "11713282333014162675185775227133916651856831195832037281552411830422122210216";
+export const linkSecret = new LinkSecret("11713282333014162675185775227133916651856831195832037281552411830422122210216");
 
 export const schema: Anoncreds.Schema = {
   name: "schema name",

@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { expect } from "chai";
 
-import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, Message } from "../../src/domain";
+import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, LinkSecret, Message } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -427,7 +427,8 @@ describe("Pollux", () => {
       it("options missing linkSecretName - throws", () => {
         const body = { formats: [{ format: CredentialType.AnonCreds }] };
         const msg = new Message(JSON.stringify(body), undefined, "piuri");
-        const options: CredentialRequestOptions = { linkSecret: "3" };
+        const linkSecret = new LinkSecret("3");
+        const options: CredentialRequestOptions = { linkSecret };
 
         const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -438,7 +439,8 @@ describe("Pollux", () => {
         it("no message attachments - throws", () => {
           const body = { formats: [{ format: CredentialType.AnonCreds }] };
           const msg = new Message(JSON.stringify(body), undefined, "piuri");
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -453,7 +455,8 @@ describe("Pollux", () => {
             id: attach_id,
             data: { base64: "" }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -468,7 +471,8 @@ describe("Pollux", () => {
             id: "not_attach_id",
             data: { base64: "" }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -488,7 +492,8 @@ describe("Pollux", () => {
             id: attach_id,
             data: { base64: b64Data }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -507,7 +512,8 @@ describe("Pollux", () => {
             id: attach_id,
             data: { base64: b64Data }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -527,7 +533,8 @@ describe("Pollux", () => {
             id: attach_id,
             data: { base64: b64Data }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -548,7 +555,8 @@ describe("Pollux", () => {
             id: attach_id,
             data: { base64: b64Data }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -574,7 +582,8 @@ describe("Pollux", () => {
             id: attach_id,
             data: { base64: b64Data }
           });
-          const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+          const linkSecret = new LinkSecret("123", "linkSecretName");
+          const options: CredentialRequestOptions = { linkSecret };
 
           const result = pollux.processAnonCredsCredential(msg, options);
 
@@ -613,14 +622,15 @@ describe("Pollux", () => {
           id: attach_id,
           data: { base64: b64Data }
         });
-        const options: CredentialRequestOptions = { linkSecret: "123", linkSecretName: "linkSecretName" };
+        const linkSecret = new LinkSecret("123", "linkSecretName");
+        const options: CredentialRequestOptions = { linkSecret };
 
         const result = await pollux.processAnonCredsCredential(msg, options);
 
         expect(result).to.be.an("array").to.have.length(2);
         expect(result[0]).to.equal(createCredentialRequestResult);
         expect(stubFetchCredentialDefinition).to.have.been.calledOnceWith(anonCredsBody.cred_def_id);
-        expect(stubCreateCredentialRequest).to.have.been.calledOnceWith(anonCredsBody, credDef, options.linkSecret);
+        expect(stubCreateCredentialRequest).to.have.been.calledOnceWith(anonCredsBody, credDef, options.linkSecret?.secret);
       });
     });
   });
@@ -676,8 +686,8 @@ describe("Pollux", () => {
       const result = pollux.anoncreds.createCredentialRequest(
         Fixtures.Credentials.Anoncreds.credentialOffer,
         Fixtures.Credentials.Anoncreds.credentialDefinition,
-        Fixtures.Credentials.Anoncreds.linkSecret,
-        "link-secret-id"
+        Fixtures.Credentials.Anoncreds.linkSecret.secret,
+        Fixtures.Credentials.Anoncreds.linkSecret.name,
       );
 
       expect(result).to.be.an("array").to.have.length(2);
@@ -714,7 +724,7 @@ describe("Pollux", () => {
         Fixtures.Credentials.Anoncreds.schemas,
         Fixtures.Credentials.Anoncreds.credDefs,
         Fixtures.Credentials.Anoncreds.credential,
-        Fixtures.Credentials.Anoncreds.linkSecret
+        Fixtures.Credentials.Anoncreds.linkSecret.secret
       );
 
       expect(result).to.be.an("object");
@@ -807,7 +817,7 @@ describe("Pollux", () => {
         Fixtures.Credentials.Anoncreds.credentialDefinition,
         Fixtures.Credentials.Anoncreds.credentialIssued,
         Fixtures.Credentials.Anoncreds.credentialRequestMeta,
-        Fixtures.Credentials.Anoncreds.linkSecret
+        Fixtures.Credentials.Anoncreds.linkSecret.secret
       );
 
       expect(result).to.have.property("schema_id", Fixtures.Credentials.Anoncreds.schemaId);

@@ -1,11 +1,10 @@
-import { CredentialMetadata, DID } from "../models";
+import { CredentialMetadata, DID, LinkSecret } from "../models";
 import { DIDPair } from "../models/DIDPair";
 import { PrivateKey } from "../models";
 import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
 import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
-import { Anoncreds } from "../models/Anoncreds";
 import { PeerDID } from "../../peer-did/PeerDID";
 
 export namespace Pluto {
@@ -159,15 +158,12 @@ export interface Pluto {
   getAllCredentials(): Promise<Array<Credential>>;
 
   /**
-   * Retrieve the anoncreds stored link secret by its name
+   * Retrieve the stored link secret by its name
    */
-  getLinkSecret(linkSecretName?: string): Promise<Anoncreds.LinkSecret | null>;
+  getLinkSecret(name?: string): Promise<LinkSecret | undefined>;
 
   /**
-   * Store a new anoncreds linkSecret
+   * Store a new linkSecret
    */
-  storeLinkSecret(
-    linkSecret: Anoncreds.LinkSecret,
-    linkSecretName: string
-  ): Promise<void>;
+  storeLinkSecret(linkSecret: LinkSecret): Promise<void>;
 }

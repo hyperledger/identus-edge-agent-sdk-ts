@@ -1,6 +1,5 @@
-import { CredentialType } from ".";
+import { CredentialType, LinkSecret } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
-import { Anoncreds } from "./Anoncreds";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
 
@@ -52,8 +51,7 @@ export interface StorableCredential {
 export interface CredentialRequestOptions {
   keyPair?: KeyPair;
   did?: DID;
-  linkSecret?: string;
-  linkSecretName?: string;
+  linkSecret?: LinkSecret;
   [name: string]: any;
 }
 

@@ -1,14 +1,10 @@
-import type * as Domain from "../../domain";
+import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
 import { MapperRepository } from "./builders/MapperRepository";
 
-interface LinkSecret extends Domain.Pluto.Storable {
-  name: string;
-  secret: string;
-}
 
-export class LinkSecretRepository extends MapperRepository<Models.Key, LinkSecret> {
+export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.LinkSecret> {
   baseModel: Partial<Models.Key> = {
     recoveryId: "linkSecret"
   };
@@ -18,14 +14,13 @@ export class LinkSecretRepository extends MapperRepository<Models.Key, LinkSecre
   }
 
   toDomain(model: Models.Key) {
-    return {
-      uuid: model.uuid,
-      name: model.alias ?? "",
-      secret: Buffer.from(model.raw).toString(),
-    };
+    const secret = Buffer.from(model.raw).toString();
+    const domain = new Domain.LinkSecret(secret, model.alias);
+
+    return this.withId(domain, model.uuid);
   }
 
-  toModel(domain: LinkSecret) {
+  toModel(domain: Domain.LinkSecret) {
     return {
       uuid: domain.uuid,
       recoveryId: "linkSecret",
