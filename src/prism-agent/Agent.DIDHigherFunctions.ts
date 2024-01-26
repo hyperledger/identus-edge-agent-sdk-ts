@@ -1,6 +1,7 @@
 import {
   Curve,
   DID,
+  KeyProperties,
   PublicKey,
   Seed,
   Service,
@@ -44,7 +45,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected manager: ConnectionsManager,
     protected mediationHandler: MediatorHandler,
     protected seed: Seed
-  ) { }
+  ) {}
 
   /**
    * Asyncronously sign with a DID
@@ -151,7 +152,10 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
     const publicKey = privateKey.publicKey();
     const did = await this.castor.createPrismDID(publicKey, services);
-    await this.pluto.storePrismDID(did, index, privateKey, null, alias);
+    // TODO tmp fix as index not set on key currently (PR open)
+    privateKey.keySpecification.set(KeyProperties.index, index.toString());
+
+    await this.pluto.storePrismDID(did, privateKey, alias);
     return did;
   }
 }

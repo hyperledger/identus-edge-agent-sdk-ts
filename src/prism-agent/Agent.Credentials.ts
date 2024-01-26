@@ -133,6 +133,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         offer.thid!
       );
     } else if (credentialType === CredentialType.JWT) {
+      // ?? duplicated Agent.DIDHigherFunctions.createNewPrismDID
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
@@ -143,13 +144,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
       const did = await this.castor.createPrismDID(privateKey.publicKey());
 
-      await this.pluto.storePrismDID(
-        did,
-        keyIndex,
-        privateKey,
-        null,
-        did.toString()
-      );
+      await this.pluto.storePrismDID(did, privateKey);
 
       credRequestBuffer = await this.pollux.processJWTCredential(message, {
         did: did,

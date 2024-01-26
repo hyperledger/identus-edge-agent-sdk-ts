@@ -123,12 +123,7 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
             "01011010011101010100011000100010"
           );
 
-          await instance.storePrismDID(
-            prismDid,
-            keyPathIndex,
-            privateKey,
-            null
-          );
+          await instance.storePrismDID(prismDid, privateKey);
 
           const result = await instance.getDIDPrivateKeysByDID(prismDid);
           const resultKey = result.at(0)!;
@@ -193,7 +188,7 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
     const privateKey: Domain.PrivateKey = new Secp256k1PrivateKey(
       Buffer.from("01011010011101010100011000100010")
     );
-    await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
+    await instance.storePrismDID(did, privateKey, alias);
   });
 
   it("should store message", async function () {
@@ -351,7 +346,7 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
+    await instance.storePrismDID(did, privateKey, alias);
 
     const dids = await instance.getAllPrismDIDs();
 
@@ -362,14 +357,13 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
     const did = Domain.DID.fromString(
       "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
     );
-    const keyPathIndex = 0;
     const alias = "Did test";
 
     const privateKey: Domain.PrivateKey = new X25519PrivateKey(
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
+    await instance.storePrismDID(did, privateKey, alias);
 
     const result = await instance.getDIDInfoByDID(did);
 
@@ -378,13 +372,12 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
 
   it("should get DID info by alias", async function () {
     const did = Domain.DID.fromString("did:prism:dadsa:asdpijasiopdj");
-    const keyPathIndex = 0;
     const alias = "Did test";
     const privateKey: Domain.PrivateKey = new X25519PrivateKey(
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
+    await instance.storePrismDID(did, privateKey, alias);
 
     const result = await instance.getDIDInfoByAlias(alias);
     expect(!!result.find((item) => item.alias === alias)).true;
@@ -409,13 +402,12 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
 
   it("should get prism last key path index", async function () {
     const did = Domain.DID.fromString("did:prism:dadsa:92jsadn1");
-    const keyPathIndex = 11;
     const alias = "Did test";
 
     const privateKey: Domain.PrivateKey = new X25519PrivateKey(
       Buffer.from("01011010011101010100011000100010")
     );
-    await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
+    await instance.storePrismDID(did, privateKey, alias);
 
     const result = await instance.getPrismLastKeyPathIndex();
     expect(result).equals(0);
@@ -438,15 +430,9 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(
-      prismDid,
-      keyPathIndex,
-      prismPrivateKey,
-      null,
-      alias
-    );
-
+    await instance.storePrismDID(prismDid, prismPrivateKey, alias);
     await instance.storePeerDID(peerDid, [privateKey1, privateKey2]);
+
     const dids = await instance.getAllPeerDIDs();
     expect(dids.length).equals(1);
     expect(dids[0].privateKeys.length).equals(2);
@@ -491,8 +477,8 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(host, 10, privateKey, null);
-    await instance.storePrismDID(receiver, 12, privateKey, null);
+    await instance.storePrismDID(host, privateKey);
+    await instance.storePrismDID(receiver, privateKey);
 
     await instance.storeDIDPair(host, receiver, name);
     const dids = await instance.getAllDidPairs();
@@ -508,8 +494,8 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(host, 10, privateKey, null);
-    await instance.storePrismDID(receiver, 12, privateKey, null);
+    await instance.storePrismDID(host, privateKey);
+    await instance.storePrismDID(receiver, privateKey);
 
     await instance.storeDIDPair(host, receiver, name);
     const data = await instance.getPairByDID(host);
@@ -527,8 +513,8 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(host, 10, privateKey, null);
-    await instance.storePrismDID(receiver, 12, privateKey, null);
+    await instance.storePrismDID(host, privateKey);
+    await instance.storePrismDID(receiver, privateKey);
 
     await instance.storeDIDPair(host, receiver, name);
     const data = await instance.getPairByName(name);
@@ -791,22 +777,9 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
         "hex"
       )
     );
-    await instance.storePrismDID(
-      mediator,
-      10,
-      mediatorPrivateKey,
-      null,
-      "Mediator"
-    );
-    await instance.storePrismDID(host, 11, hostPrivateKey, null, "Host");
-    await instance.storePrismDID(
-      routing,
-      12,
-      routingPrivateKey,
-      null,
-      "Routing"
-    );
-
+    await instance.storePrismDID(mediator, mediatorPrivateKey, "Mediator");
+    await instance.storePrismDID(host, hostPrivateKey, "Host");
+    await instance.storePrismDID(routing, routingPrivateKey, "Routing");
     await instance.storeMediator(mediator, host, routing);
 
     const data = await instance.getAllMediators();

@@ -163,14 +163,7 @@ export class Pluto implements Domain.Pluto {
 
   /** DIDs **/
 
-  async storePrismDID(
-    did: Domain.DID,
-    // TODO
-    keyPathIndex: number,
-    privateKey: Domain.PrivateKey,
-    metaId: string | null,
-    alias?: string
-  ): Promise<void> {
+  async storePrismDID(did: Domain.DID, privateKey: Domain.PrivateKey, alias?: string): Promise<void> {
     const didModel = await this.Repositories.DIDs.save(did, alias);
     const storedKey = await this.Repositories.Keys.save(privateKey);
 

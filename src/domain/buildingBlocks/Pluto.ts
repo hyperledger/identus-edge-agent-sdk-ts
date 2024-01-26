@@ -56,9 +56,7 @@ export interface Pluto {
    */
   storePrismDID(
     did: DID,
-    keyPathIndex: number,
     privateKey: PrivateKey,
-    privateKeyMetaId: string | null,
     alias?: string
   ): Promise<void>;
 
