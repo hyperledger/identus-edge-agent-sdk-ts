@@ -60,6 +60,6 @@ export interface CredentialRequestOptions {
 export interface CredentialIssueOptions {
   type: CredentialType;
   linkSecret?: string;
-  credentialMetadata?: Anoncreds.CredentialRequestMeta;
+  credentialMetadata?: Record<string, any>;
   [name: string]: any;
 }

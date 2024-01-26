@@ -17,6 +17,7 @@ import * as Fixtures from "../fixtures";
 import {
   Api,
   Credential,
+  CredentialMetadata,
   CredentialType,
   DID,
   HttpResponse,
@@ -441,20 +442,20 @@ describe("Agent Tests", () => {
           "thid"
         );
 
-        it("Pluto.fetchCredentialMetadata returns nullish - throws", async () => {
+        it("Pluto.getCredentialMetadata returns nullish - throws", async () => {
           sandbox.stub(pluto, "storeCredential").resolves();
           sandbox.stub(pluto, "getLinkSecret").resolves();
           sandbox
             .stub(pollux, "parseCredential")
             .resolves(parseCredentialResult as any);
-          sandbox.stub(pluto, "fetchCredentialMetadata").resolves(undefined);
+          sandbox.stub(pluto, "getCredentialMetadata").resolves(undefined);
 
           const result = agent.processIssuedCredentialMessage(issueCredential);
 
           expect(result).to.eventually.be.rejected;
         });
 
-        it("Pluto.fetchCredentialMetadata gets called with issueCredential.thid", async () => {
+        it("Pluto.getCredentialMetadata gets called with issueCredential.thid", async () => {
           sandbox.stub(pluto, "storeCredential").resolves();
           sandbox.stub(pluto, "getLinkSecret").resolves();
           sandbox
@@ -462,7 +463,7 @@ describe("Agent Tests", () => {
             .resolves(parseCredentialResult as any);
 
           const stubFetchCredentialMetadata = sandbox
-            .stub(pluto, "fetchCredentialMetadata")
+            .stub(pluto, "getCredentialMetadata")
             .resolves({ mock: "CredentialMetadata" } as any);
 
           await agent.processIssuedCredentialMessage(issueCredential);
@@ -476,7 +477,7 @@ describe("Agent Tests", () => {
           sandbox.stub(pluto, "storeCredential").resolves();
           sandbox.stub(pluto, "getLinkSecret").resolves(getLinkSecretResult);
           sandbox
-            .stub(pluto, "fetchCredentialMetadata")
+            .stub(pluto, "getCredentialMetadata")
             .resolves(fetchCredentialMetadataResult as any);
 
           const stubParseCredential = sandbox
@@ -496,7 +497,7 @@ describe("Agent Tests", () => {
         it("Pluto.storeCredential is called with result of parseCredential", async () => {
           sandbox.stub(pluto, "getLinkSecret").resolves("linkSecret123");
           sandbox
-            .stub(pluto, "fetchCredentialMetadata")
+            .stub(pluto, "getCredentialMetadata")
             .resolves({ mock: "CredentialMetadata" } as any);
           sandbox
             .stub(pollux, "parseCredential")
@@ -517,7 +518,7 @@ describe("Agent Tests", () => {
           sandbox.stub(pluto, "storeCredential").resolves();
           sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
           sandbox
-            .stub(pluto, "fetchCredentialMetadata")
+            .stub(pluto, "getCredentialMetadata")
             .resolves(Fixtures.Credentials.Anoncreds.credentialRequestMeta);
           sandbox
             .stub(pollux, "parseCredential")
@@ -534,8 +535,8 @@ describe("Agent Tests", () => {
         sandbox.stub(pluto, "storeCredential").resolves();
         sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
         sandbox
-          .stub(pluto, "fetchCredentialMetadata")
-          .resolves(Fixtures.Credentials.Anoncreds.credentialRequestMeta);
+          .stub(pluto, "getCredentialMetadata")
+          .resolves(new CredentialMetadata(CredentialType.AnonCreds, "name", Fixtures.Credentials.Anoncreds.credentialRequestMeta) as any);
         sandbox
           .stub(pollux as any, "fetchCredentialDefinition")
           .resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);

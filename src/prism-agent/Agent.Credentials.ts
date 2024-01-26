@@ -16,7 +16,8 @@ import {
   Seed,
   Message,
   Pluto,
-  Pollux
+  Pollux,
+  CredentialMetadata
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -81,14 +82,16 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     if (credentialType === CredentialType.AnonCreds) {
       parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
-      const credentialMetadata = await this.pluto.fetchCredentialMetadata(
+      const credentialMetadata = await this.pluto.getCredentialMetadata(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         issueCredential.thid!
       );
-      if (!credentialMetadata) {
+
+      if (!credentialMetadata || !credentialMetadata.isType(CredentialType.AnonCreds)) {
         throw new Error("Invalid credential Metadata");
       }
-      parseOpts.credentialMetadata = credentialMetadata;
+
+      parseOpts.credentialMetadata = credentialMetadata.toJSON();
     }
 
     const credential = await this.pollux.parseCredential(credData, parseOpts);
@@ -127,11 +130,16 @@ export class AgentCredentials implements AgentCredentialsClass {
         });
       credRequestBuffer = JSON.stringify(credentialRequest);
 
-      await this.pluto.storeCredentialMetadata(
-        credentialRequestMetadata,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        offer.thid!
-      );
+      // TODO can we fallback here? would need another identifier
+      const metaname = offer.thid;
+
+      if (!metaname) {
+        throw new Error("Missing offer.thid");
+      }
+
+      const metadata = new CredentialMetadata(CredentialType.AnonCreds, metaname, credentialRequestMetadata);
+
+      await this.pluto.storeCredentialMetadata(metadata);
     } else if (credentialType === CredentialType.JWT) {
       // ?? duplicated Agent.DIDHigherFunctions.createNewPrismDID
       const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;

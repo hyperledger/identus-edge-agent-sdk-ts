@@ -1,4 +1,4 @@
-import { DID } from "../models";
+import { CredentialMetadata, DID } from "../models";
 import { DIDPair } from "../models/DIDPair";
 import { PrivateKey } from "../models";
 import { Mediator } from "../models/Mediator";
@@ -26,30 +26,23 @@ export namespace Pluto {
  * Pluto is a storage interface describing storage requirements of the edge agents
  * which will be implemented using this SDK. Implement this interface using your
  * preferred underlying storage technology, most appropriate for your use case.
- *
  */
 export interface Pluto {
-  /**
-   * Store the AnonCreds Credential Metadata referencing its linkSecret name
-   */
-  storeCredentialMetadata(
-    metadata: Anoncreds.CredentialRequestMeta,
-    linkSecret: Anoncreds.LinkSecret
-  ): Promise<void>;
-
-  /**
-   * Fetch the AnonCreds Credential Metadata by its linkSecret name
-   * deprecate this - should be getCredentialMetadata
-   * @param linkSecretName 
-   */
-  fetchCredentialMetadata(
-    linkSecretName: string
-  ): Promise<Anoncreds.CredentialRequestMeta | null>;
-
   /**
    * Pluto initialise function
    */
   start(): Promise<void>;
+
+  /**
+   * Store the Credential Metadata
+   */
+  storeCredentialMetadata(metadata: CredentialMetadata): Promise<void>;
+
+  /**
+   * Fetch the Credential Metadata by its name
+   * @param name 
+   */
+  getCredentialMetadata(name: string): Promise<CredentialMetadata | undefined>;
 
   /**
    * Store a PRISM DID and its private key with given metadata.

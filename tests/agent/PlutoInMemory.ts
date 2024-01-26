@@ -35,7 +35,7 @@ export class PlutoInMemory implements SDK.Domain.Pluto {
   /**
    * no async setup for in-memory implementation
    */
-  async start() { }
+  async start() {}
 
   async destroy() {
     this._didStorage = {};
@@ -358,7 +358,7 @@ export class PlutoInMemory implements SDK.Domain.Pluto {
     this._requestMetadata[metadata.link_secret_name] = metadata;
   }
 
-  async fetchCredentialMetadata(
+  async getCredentialMetadata(
     linkSecretName: string
   ): Promise<SDK.Domain.Anoncreds.CredentialRequestMeta | null> {
     return this._requestMetadata[linkSecretName];

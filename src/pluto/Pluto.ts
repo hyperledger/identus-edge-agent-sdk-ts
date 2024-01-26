@@ -109,21 +109,18 @@ export class Pluto implements Domain.Pluto {
 
   /** Credential Metadata **/
 
-  // TODO refactor to take domain CredentialMetadata
-  async storeCredentialMetadata(metadata: Domain.Anoncreds.CredentialRequestMeta, name: string): Promise<void> {
-    const domain = new Domain.CredentialMetadata(Domain.CredentialType.AnonCreds, name, metadata);
-    await this.Repositories.CredentialMetadata.save(domain);
+  async storeCredentialMetadata(metadata: Domain.CredentialMetadata): Promise<void> {
+    await this.Repositories.CredentialMetadata.save(metadata);
   }
 
-  // Q: name change - fetch doesn't align, should be get
-  async fetchCredentialMetadata(name: string): Promise<Domain.Anoncreds.CredentialRequestMeta | null> {
-    const result = await this.Repositories.CredentialMetadata.find({ name });
-    return result?.toJSON() as any ?? null;
+  async getCredentialMetadata(name: string): Promise<Domain.CredentialMetadata | undefined> {
+    return await this.Repositories.CredentialMetadata.find({ name });
   }
 
 
   /** LinkSecret **/
 
+  // TODO domain linksecret
   async getLinkSecret(name?: string): Promise<string | null> {
     const linkSecret = await this.Repositories.LinkSecrets.find({ alias: name });
     return linkSecret?.secret ?? null;
