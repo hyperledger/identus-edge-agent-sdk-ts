@@ -75,12 +75,7 @@ export interface Pluto {
   /**
    * Store a list of private keys with its metadata and a reference to the DID it belongs to.
    */
-  storePrivateKeys(
-    privateKey: PrivateKey,
-    did: DID,
-    keyPathIndex: number,
-    metaId: string | null
-  ): Promise<void>;
+  storePrivateKey(privateKey: PrivateKey): Promise<void>;
 
   /**
    * Store a mediator information.

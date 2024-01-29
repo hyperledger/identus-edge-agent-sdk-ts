@@ -248,7 +248,7 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
       Buffer.from("01011010011101010100011000100010")
     );
     const did = Domain.DID.fromString("did:prism:123");
-    await instance.storePrivateKeys(privateKey, did, 0, null);
+    await instance.storePrivateKey(privateKey);
   });
 
   it("should store mediator", async function () {

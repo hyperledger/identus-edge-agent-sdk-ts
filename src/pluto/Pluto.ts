@@ -132,7 +132,7 @@ export class Pluto implements Domain.Pluto {
 
   /** PrivateKeys **/
 
-  async storePrivateKeys(privateKey: Domain.PrivateKey): Promise<void> {
+  async storePrivateKey(privateKey: Domain.PrivateKey): Promise<void> {
     await this.Repositories.Keys.save(privateKey);
   }
 
