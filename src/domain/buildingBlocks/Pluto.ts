@@ -85,7 +85,7 @@ export interface Pluto {
   /**
    * Store a mediator information.
    */
-  storeMediator(mediator: DID, host: DID, routing: DID): Promise<void>;
+  storeMediator(mediator: Mediator): Promise<void>;
 
   /**
    * Store a Credential into the Database

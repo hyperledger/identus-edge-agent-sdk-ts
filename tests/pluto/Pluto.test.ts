@@ -252,11 +252,12 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
   });
 
   it("should store mediator", async function () {
-    const mediator = Domain.DID.fromString("did:prism:123");
-    const host = Domain.DID.fromString("did:prism:321");
-    const routing = Domain.DID.fromString("did:prism:432");
+    const mediatorDID = Domain.DID.fromString("did:prism:123");
+    const hostDID = Domain.DID.fromString("did:prism:321");
+    const routingDID = Domain.DID.fromString("did:prism:432");
+    const mediator: Domain.Mediator = { hostDID, mediatorDID, routingDID };
 
-    await instance.storeMediator(mediator, host, routing);
+    await instance.storeMediator(mediator);
   });
 
   it("should store credential", async function () {
@@ -780,7 +781,11 @@ describe.each(PlutoCtors)("Pluto", (ctor) => {
     await instance.storePrismDID(mediator, mediatorPrivateKey, "Mediator");
     await instance.storePrismDID(host, hostPrivateKey, "Host");
     await instance.storePrismDID(routing, routingPrivateKey, "Routing");
-    await instance.storeMediator(mediator, host, routing);
+    await instance.storeMediator({
+      mediatorDID: mediator,
+      hostDID: host,
+      routingDID: routing
+    });
 
     const data = await instance.getAllMediators();
     expect(data).not.empty;

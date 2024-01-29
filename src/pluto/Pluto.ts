@@ -366,11 +366,10 @@ export class Pluto implements Domain.Pluto {
     return result;
   }
 
-  // Q: Mediator type instead of 3 dids 
-  async storeMediator(mediator: Domain.DID, host: Domain.DID, routing: Domain.DID): Promise<void> {
-    const hostDID = await this.Repositories.DIDs.save(host);
-    const mediatorDID = await this.Repositories.DIDs.save(mediator);
-    const routingDID = await this.Repositories.DIDs.save(routing);
+  async storeMediator(mediator: Domain.Mediator): Promise<void> {
+    const hostDID = await this.Repositories.DIDs.save(mediator.hostDID);
+    const mediatorDID = await this.Repositories.DIDs.save(mediator.mediatorDID);
+    const routingDID = await this.Repositories.DIDs.save(mediator.routingDID);
 
     await this.Repositories.DIDLinks.insert({
       role: Models.DIDLink.role.mediator,
