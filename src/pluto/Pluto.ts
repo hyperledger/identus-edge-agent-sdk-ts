@@ -17,6 +17,7 @@ import { repositoryFactory } from "./repositories";
  * - manage relationships
  * - handle logic and concepts
  * - throw known Errors
+ * - return null
  * - naming convention
  *   - (get/store) (Domain name Pluralized) ie getCredentials
  * 
@@ -113,14 +114,14 @@ export class Pluto implements Domain.Pluto {
     await this.Repositories.CredentialMetadata.save(metadata);
   }
 
-  async getCredentialMetadata(name: string): Promise<Domain.CredentialMetadata | undefined> {
+  async getCredentialMetadata(name: string): Promise<Domain.CredentialMetadata | null> {
     return await this.Repositories.CredentialMetadata.find({ name });
   }
 
 
   /** LinkSecret **/
 
-  async getLinkSecret(name?: string): Promise<Domain.LinkSecret | undefined> {
+  async getLinkSecret(name?: string): Promise<Domain.LinkSecret | null> {
     return await this.Repositories.LinkSecrets.find({ alias: name });
   }
 
@@ -173,11 +174,14 @@ export class Pluto implements Domain.Pluto {
   async getPrismDID(didId: string) {
     const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
     const link = this.onlyOne(links);
-    const dids = await this.Repositories.DIDs.getModels({ uuid: link.didId });
-    const did = this.onlyOne(dids);
+    const did = await this.Repositories.DIDs.byId(link.didId);
     const key = await this.Repositories.Keys.byId(link.keyId);
 
-    return new Domain.PrismDIDInfo(this.Repositories.DIDs.toDomain(did), key?.index, did.alias);
+    if (!did || !key) {
+      throw new Error("PrismDID not found");
+    }
+
+    return new Domain.PrismDIDInfo(did, key.index, link.alias);
   }
 
   async getAllPrismDIDs(): Promise<Domain.PrismDIDInfo[]> {
@@ -191,7 +195,7 @@ export class Pluto implements Domain.Pluto {
     const didId = await this.getDIDUUID(did);
 
     try {
-      return this.getPrismDID(didId);
+      return await this.getPrismDID(didId);
     }
     catch {
       return null;

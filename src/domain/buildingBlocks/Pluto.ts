@@ -41,7 +41,7 @@ export interface Pluto {
    * Fetch the Credential Metadata by its name
    * @param name 
    */
-  getCredentialMetadata(name: string): Promise<CredentialMetadata | undefined>;
+  getCredentialMetadata(name: string): Promise<CredentialMetadata | null>;
 
   /**
    * Store a PRISM DID and its private key with given metadata.
@@ -160,7 +160,7 @@ export interface Pluto {
   /**
    * Retrieve the stored link secret by its name
    */
-  getLinkSecret(name?: string): Promise<LinkSecret | undefined>;
+  getLinkSecret(name?: string): Promise<LinkSecret | null>;
 
   /**
    * Store a new linkSecret

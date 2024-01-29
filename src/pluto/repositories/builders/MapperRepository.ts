@@ -44,11 +44,11 @@ export abstract class MapperRepository<T extends Model, D extends Domain.Pluto.S
    * @returns first found Domain instance or undefined
    * @throws {@link StoreQueryFailed} if the query fails
    */
-  async find(selector: Partial<T>): Promise<WithId<D> | undefined> {
+  async find(selector: Partial<T>): Promise<WithId<D> | null> {
     const result = await this.getModels(selector);
     const first = result.at(0);
 
-    return first != null ? this.toDomain(first) : undefined;
+    return first != null ? this.toDomain(first) : null;
   }
 
   /**
