@@ -1,4 +1,4 @@
-import { Domain } from "@atala/prism-wallet-sdk"
+import { Domain, PeerDID } from "@atala/prism-wallet-sdk"
 
 interface DIDRecord {
   did: Domain.DID;
@@ -211,7 +211,7 @@ export class PlutoInMemory implements Domain.Pluto {
         value: key.privateKey.value,
       }))
 
-      return new Domain.PeerDID(didRecord.did, privateKeysForPeerDID)
+      return new PeerDID(didRecord.did, privateKeysForPeerDID)
     })
 
     return allPeerDIDsWithKeys
