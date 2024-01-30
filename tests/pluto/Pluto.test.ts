@@ -10,69 +10,16 @@ import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 
 import { Apollo } from "../../src";
 import { Pluto } from "../../src/pluto/Pluto";
-// import { PlutoInMemory } from "./PlutoInMemory";
+import { InMemoryStore } from "../fixtures/InMemoryStore";
 
-class TestStore implements Pluto.Store {
-  private store = new Map<string, any[]>();
-
-  async query<T>(table: string, selector: Partial<T>[]): Promise<T[]> {
-    const items = this.get(table);
-
-    const filtered = items.filter(item => {
-      if (selector.length === 0) return true;
-
-      const match = selector.some(query => this.match(query, item));
-      return match;
-    });
-
-    return filtered;
-  }
-
-  async insert(table: string, model: any): Promise<string | { uuid: string; }> {
-    const items = this.get(table);
-    const uuid = (items.length + 1).toString();
-    items.push({ ...model, uuid });
-
-    return uuid;
-  }
-
-  private get(key: string) {
-    const current = this.store.get(key);
-
-    if (!current) {
-      this.store.set(key, []);
-    }
-
-    return this.store.get(key)!;
-  }
-
-  private match(query: Record<string, any>, item: any) {
-    const keys = Object.keys(query);
-    const match = keys.every(key => item[key] == query[key]);
-    return match;
-  }
-}
-
-const testCtor = () => {
-  const driver = new TestStore();
-  const apollo = new Apollo();
-  const pluto = new Pluto(driver, apollo);
-
-  return pluto;
-};
-
-// const inMemCtor = () => new PlutoInMemory();
-
-const PlutoCtors: (() => Domain.Pluto)[] = [
-  // inMemCtor,
-  testCtor
-];
-
-describe.each(PlutoCtors)("Pluto", (ctor) => {
+describe("Pluto", () => {
   let instance: Domain.Pluto;
 
   beforeEach(async () => {
-    instance = ctor();
+    const apollo = new Apollo();
+    const store = new InMemoryStore();
+    instance = new Pluto(store, apollo);
+
     await instance.start();
   });
 

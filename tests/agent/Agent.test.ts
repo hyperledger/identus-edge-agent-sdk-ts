@@ -6,7 +6,6 @@ import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import Agent from "../../src/prism-agent/Agent";
-import { PlutoInMemory as Pluto } from "./PlutoInMemory";
 import Mercury from "../../src/mercury/Mercury";
 import * as UUIDLib from "@stablelib/uuid";
 import Apollo from "../../src/apollo/Apollo";
@@ -43,6 +42,9 @@ import { RequestPresentation } from "../../src/prism-agent/protocols/proofPresen
 import { Presentation } from "../../src/prism-agent/protocols/proofPresentation/Presentation";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import { AnonCredsCredential } from "../../src/pollux/models/AnonCredsVerifiableCredential";
+import { InMemoryStore } from "../fixtures/InMemoryStore";
+import { Pluto as IPluto } from "../../src/domain";
+import { Pluto } from "../../src/pluto/Pluto";
 
 
 chai.use(SinonChai);
@@ -50,7 +52,7 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 let agent: Agent;
-let pluto: Pluto;
+let pluto: IPluto;
 let pollux: Pollux;
 let castor: Castor;
 let sandbox: sinon.SinonSandbox;
@@ -81,13 +83,15 @@ describe("Agent Tests", () => {
       packEncrypted: async () => "",
       unpack: async () => new Message("{}", undefined, "TypeofMessage"),
     };
-    pluto = new Pluto();
+
+    const store = new InMemoryStore();
+    pluto = new Pluto(store, apollo);
     const mercury = new Mercury(castor, didProtocol, httpManager);
     const connectionsManager = new ConnectionsManagerMock();
     agent = Agent.instanceFromConnectionManager(
       apollo,
       castor,
-      pluto as any,
+      pluto,
       mercury,
       connectionsManager
     );
@@ -496,7 +500,7 @@ describe("Agent Tests", () => {
         });
 
         it("Pluto.storeCredential is called with result of parseCredential", async () => {
-          sandbox.stub(pluto, "getLinkSecret").resolves("linkSecret123");
+          sandbox.stub(pluto, "getLinkSecret").resolves(new LinkSecret("linkSecret123"));
           sandbox
             .stub(pluto, "getCredentialMetadata")
             .resolves(new CredentialMetadata(CredentialType.AnonCreds, "mock", { mock: "CredentialMetadata" }) as any);
