@@ -18,6 +18,7 @@ import {
   ConnectionsManager,
   MediatorHandler,
 } from "./types";
+import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -140,9 +141,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     keyPathIndex?: number
   ): Promise<DID> {
-    const index = keyPathIndex
-      ? keyPathIndex
-      : await this.pluto.getPrismLastKeyPathIndex();
+    const index = keyPathIndex ?? this.getNextKeyPathIndex();
 
     const privateKey = this.apollo.createPrivateKey({
       type: KeyTypes.EC,
@@ -157,5 +156,13 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
     await this.pluto.storePrismDID(did, privateKey, alias);
     return did;
+  }
+
+  private async getNextKeyPathIndex() {
+    const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
+    const index = await getIndexTask.run();
+    const next = index + 1;
+
+    return next;
   }
 }

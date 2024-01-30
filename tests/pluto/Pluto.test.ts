@@ -301,66 +301,7 @@ describe("Pluto", () => {
     expect(dids).not.empty;
   });
 
-  it("should get DID info by DID", async function () {
-    const did = Domain.DID.fromString(
-      "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
-    );
-    const alias = "Did test";
 
-    const privateKey: Domain.PrivateKey = new X25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    );
-
-    await instance.storePrismDID(did, privateKey, alias);
-
-    const result = await instance.getDIDInfoByDID(did);
-
-    expect(result?.did.toString()).equals(did.toString());
-  });
-
-  it("should get DID info by alias", async function () {
-    const did = Domain.DID.fromString("did:prism:dadsa:asdpijasiopdj");
-    const alias = "Did test";
-    const privateKey: Domain.PrivateKey = new X25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    );
-
-    await instance.storePrismDID(did, privateKey, alias);
-
-    const result = await instance.getDIDInfoByAlias(alias);
-    expect(!!result.find((item) => item.alias === alias)).true;
-  });
-
-  /*
-    it("should get prism DID key path index", async function () {
-      const did = Domain.DID.fromString("did:prism:dadsa:1231321dhsauda23847");
-      const keyPathIndex = 10;
-      const alias = "Did test";
-  
-      const privateKey: Domain.PrivateKey = new X25519PrivateKey(
-        Buffer.from("01011010011101010100011000100010")
-      );
-  
-      await instance.storePrismDID(did, keyPathIndex, privateKey, null, alias);
-  
-      const result = await instance.getPrismDIDKeyPathIndex(did);
-      expect(result).equals(keyPathIndex);
-    });
-  //*/
-
-  it("should get prism last key path index", async function () {
-    const did = Domain.DID.fromString("did:prism:dadsa:92jsadn1");
-    const alias = "Did test";
-
-    const privateKey: Domain.PrivateKey = new X25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    );
-    await instance.storePrismDID(did, privateKey, alias);
-
-    const result = await instance.getPrismLastKeyPathIndex();
-    expect(result).equals(0);
-  });
-  //
   it("should get all peer DIDs", async function () {
     const peerDid = Domain.DID.fromString("did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19");
     const privateKey1: Domain.PrivateKey = new Ed25519PrivateKey(

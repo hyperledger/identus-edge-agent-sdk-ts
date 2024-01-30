@@ -158,6 +158,7 @@ export class Pluto implements Domain.Pluto {
 
 
   /** DIDs **/
+  /** Prism DIDs **/
 
   async storePrismDID(did: Domain.DID, privateKey: Domain.PrivateKey, alias?: string): Promise<void> {
     const didModel = await this.Repositories.DIDs.save(did, alias);
@@ -170,56 +171,35 @@ export class Pluto implements Domain.Pluto {
     });
   }
 
-  // Q: can we remove DIDInfo - replace with PrismDID?
-  async getPrismDID(didId: string) {
-    const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
-    const link = this.onlyOne(links);
-    const did = await this.Repositories.DIDs.byId(link.didId);
-    const key = await this.Repositories.Keys.byId(link.keyId);
-
-    if (!did || !key) {
-      throw new Error("PrismDID not found");
-    }
-
-    return new Domain.PrismDIDInfo(did, key.index, link.alias);
-  }
-
-  async getAllPrismDIDs(): Promise<Domain.PrismDIDInfo[]> {
+  async getAllPrismDIDs(): Promise<Domain.PrismDID[]> {
     const dids = await this.Repositories.DIDs.getModels({ method: "prism" });
-    const results = Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
+    const results = await Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
+    const filtered = results.filter((x): x is Domain.PrismDID => x != null);
 
-    return results;
+    return filtered;
   }
 
-  async getDIDInfoByDID(did: Domain.DID): Promise<Domain.PrismDIDInfo | null> {
-    const didId = await this.getDIDUUID(did);
-
+  private async getPrismDID(didId: string): Promise<Domain.PrismDID | null> {
     try {
-      return await this.getPrismDID(didId);
+      const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
+      const link = this.onlyOne(links);
+      const did = await this.Repositories.DIDs.byId(link.didId);
+      const key = await this.Repositories.Keys.byId(link.keyId);
+
+      if (!did || !key) {
+        throw new Error("PrismDID not found");
+      }
+
+      const prismDID = new Domain.PrismDID(did, key, link.alias);
+      return prismDID;
     }
-    catch {
+    catch (e) {
       return null;
     }
   }
 
-  async getDIDInfoByAlias(alias: string): Promise<Domain.PrismDIDInfo[]> {
-    const dids = await this.Repositories.DIDs.getModels({ alias });
-    const results = Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
 
-    return results;
-  }
-
-  // Q: does this belong in Pluto? 
-  // A: no move to Agent
-  async getPrismLastKeyPathIndex(): Promise<number> {
-    const dids = await this.Repositories.DIDs.getModels({ method: "prism" });
-    const links = await this.Repositories.DIDKeyLinks.getModels(dids.map(x => ({ didId: x.uuid })));
-    const keys = await this.Repositories.Keys.getModels(links.map(x => ({ uuid: x.keyId })));
-    const indexes = keys.map(x => x.index ?? 0);
-    const keyPathIndex = Math.max(0, ...indexes);
-
-    return keyPathIndex;
-  }
+  /** Peer DIDs **/
 
   async storePeerDID(did: Domain.DID, privateKeys: Domain.PrivateKey[]): Promise<void> {
     const storedDid = await this.Repositories.DIDs.save(did);

@@ -1,9 +1,8 @@
-import { CredentialMetadata, DID, LinkSecret } from "../models";
+import { CredentialMetadata, DID, LinkSecret, PrismDID } from "../models";
 import { DIDPair } from "../models/DIDPair";
 import { PrivateKey } from "../models";
 import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
-import { PrismDIDInfo } from "../models/PrismDIDInfo";
 import { Credential } from "../models/Credential";
 import { PeerDID } from "../../peer-did/PeerDID";
 
@@ -46,11 +45,7 @@ export interface Pluto {
   /**
    * Store a PRISM DID and its private key with given metadata.
    */
-  storePrismDID(
-    did: DID,
-    privateKey: PrivateKey,
-    alias?: string
-  ): Promise<void>;
+  storePrismDID(did: DID, privateKey: PrivateKey, alias?: string): Promise<void>;
 
   /**
    * Store a Peer DID and an array of its privateKeys.
@@ -90,22 +85,7 @@ export interface Pluto {
   /**
    * Retrieve all stored PRISM DIDs.
    */
-  getAllPrismDIDs(): Promise<PrismDIDInfo[]>;
-
-  /**
-   * Retrieve DID information for a given DID.
-   */
-  getDIDInfoByDID(did: DID): Promise<PrismDIDInfo | null>;
-
-  /**
-   * Retrieve DID information for a given DID alias.
-   */
-  getDIDInfoByAlias(alias: string): Promise<PrismDIDInfo[]>;
-
-  /**
-   * Get the last used PRISM key path index.
-   */
-  getPrismLastKeyPathIndex(): Promise<number>;
+  getAllPrismDIDs(): Promise<PrismDID[]>;
 
   /**
    * Retrieve all stored Peer DIDs.

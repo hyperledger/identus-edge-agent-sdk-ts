@@ -31,6 +31,7 @@ import { Presentation } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 
 import { AgentCredentials as AgentCredentialsClass } from "./types";
+import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -143,7 +144,8 @@ export class AgentCredentials implements AgentCredentialsClass {
       await this.pluto.storeCredentialMetadata(metadata);
     } else if (credentialType === CredentialType.JWT) {
       // ?? duplicated Agent.DIDHigherFunctions.createNewPrismDID
-      const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
+      const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
+      const keyIndex = await getIndexTask.run();
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
         [KeyProperties.index]: keyIndex,
