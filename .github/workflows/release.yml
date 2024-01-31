@@ -30,15 +30,6 @@ jobs:
           node-version: "lts/*"
           registry-url: 'https://registry.npmjs.org/'
 
-      - name: Setup Node.js for @hyperledger-labs
-        uses: actions/setup-node@v3
-        env:
-            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          node-version: "lts/*"
-          registry-url: https://npm.pkg.github.com/
-          scope: "@hyperledger-labs"
-  
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
