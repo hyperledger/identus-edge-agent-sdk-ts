@@ -30,12 +30,10 @@ on:
       apiKey:
         required: false
         description: Authorization key
-  # pull_request:
-  #   branches:
-  #     - master
   push:
     branches:
       - master
+      - 'release/**'
 
 jobs:
   run-e2e-tests:
