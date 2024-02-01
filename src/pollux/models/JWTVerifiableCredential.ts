@@ -143,12 +143,12 @@ export class JWTCredential
   }
 
   toStorable() {
-    const credentialData = JSON.stringify(Object.fromEntries(this.properties));
+    const data = { id: this.id, ...Object.fromEntries(this.properties) };
 
     return {
-      id: this.getProperty(JWTVerifiableCredentialProperties.jti),
       recoveryId: this.recoveryId,
-      credentialData: credentialData,
+      credentialData: JSON.stringify(data),
+      id: this.getProperty(JWTVerifiableCredentialProperties.jti),
       issuer: this.getProperty(JWTVerifiableCredentialProperties.iss),
       subject: this.getProperty(JWTVerifiableCredentialProperties.sub),
       validUntil: this.getProperty(JWTVerifiableCredentialProperties.exp),

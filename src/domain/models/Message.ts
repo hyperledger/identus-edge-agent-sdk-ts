@@ -16,75 +16,6 @@ export enum MessageDirection {
   RECEIVED = 1,
 }
 
-interface IMessage {
-  /**
-   * identifier unique to the sender.
-   */
-  id: string;
-  /**
-   * body
-   */
-  body: string;
-  /**
-   * attachments.
-   * arbitrary data connected to the Message
-   * @see {AttachmentDescriptor}
-   */
-  attachments: AttachmentDescriptor[];
-  /**
-   * Protocol Identifier URI.
-   * should resolve to human-friendly documentation about the protocol.
-   */
-  piuri: string;
-  /**
-   * identifier of the sender
-   */
-  from?: string;
-  /**
-   * identifier of the recipient
-   */
-  to?: string;
-  /**
-   * Thread Identifier.
-   * Uniquely identifiers the Thread the Message belongs to.
-   */
-  thid?: string;
-  /**
-   * arbitrary headers
-   * Q: how is this a string[]? shouldn't it be a [key:value]
-   */
-  extraHeaders: string[];
-  /**
-   * when the Message was created.
-   * expressed in UTC Epoch Seconds (seconds since 1970-01-01T00:00:00Z) as an integer
-   */
-  createdTime: number;
-  /**
-   * when the Sender will consider the Message expired.
-   * expressed in UTC Epoch Seconds (seconds since 1970-01-01T00:00:00Z) as an integer
-   */
-  expiresTime: number;
-  /**
-   * TODO: comments
-   */
-  ack: string[];
-  /**
-   * enum for whether the Message sent or received.
-   *   0 : Sent
-   *   1 : Received
-   */
-  direction: number;
-  /**
-   * header used to notify Recipient of DID rotation.
-   */
-  fromPrior?: string;
-  /**
-   * Parent Thread Identifier.
-   * uniquely identify which thread is the parent
-   */
-  pthid?: string;
-}
-
 export class Message implements Pluto.Storable {
   public uuid?: string;
 
@@ -172,8 +103,9 @@ export class Message implements Pluto.Storable {
     const piuri = messageObj.piuri;
     const thid = messageObj.thid;
     const extraHeaders = messageObj.extraHeaders;
-    const createdTime = messageObj.createdTime;
-    const expiredTimePlus = messageObj.expiredTimePlus;
+    // ??? update this when no longer strings
+    const createdTime = messageObj.createdTime?.toString();
+    const expiredTimePlus = messageObj.expiredTimePlus?.toString();
     const ack = messageObj.ack;
     const direction = messageObj.direction;
     const fromPrior = messageObj.fromPrior;

@@ -1,6 +1,6 @@
 import { AttachmentDescriptor, CredentialType } from "../../../src/domain";
 import { OfferCredential } from "../../../src/prism-agent/protocols/issueCredential/OfferCredential";
-import { DIDs } from "../dids";
+import { list } from "../dids";
 
 // credential-offer
 // credential-issue
@@ -62,8 +62,8 @@ export const credentialOfferMessage = new OfferCredential(
       "prism/jwt"
     )
   ],
-  DIDs[2],
-  DIDs[3],
+  list[2],
+  list[3],
   "e0670d7d-933f-4408-9dfb-340cd6230584",
   "f8fe3752-710a-4d76-8d9b-87d7d045c85e"
 );

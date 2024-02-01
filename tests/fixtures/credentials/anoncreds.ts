@@ -1,7 +1,7 @@
 import { Anoncreds, AttachmentDescriptor, LinkSecret } from "../../../src/domain";
 import { ProtocolType } from "../../../src/prism-agent/protocols/ProtocolTypes";
 import { OfferCredential } from "../../../src/prism-agent/protocols/issueCredential/OfferCredential";
-import { DIDs } from "../dids";
+import { list } from "../dids";
 
 export const linkSecret = new LinkSecret("11713282333014162675185775227133916651856831195832037281552411830422122210216");
 
@@ -71,8 +71,8 @@ export const credentialOfferMessage = new OfferCredential(
       "anoncreds/credential-offer@v1.0"
     )
   ],
-  DIDs[2],
-  DIDs[3],
+  list[2],
+  list[3],
   "4195ffdf-6bdc-45b2-b149-0aa40575ece2",
   "4fd78c22-ec2a-4d64-9238-a96689fcd8c0"
 );

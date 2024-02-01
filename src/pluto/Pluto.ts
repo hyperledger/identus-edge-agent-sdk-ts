@@ -98,13 +98,14 @@ export class Pluto implements Domain.Pluto {
 
   async start(): Promise<void> {}
 
-
-  async getAllCredentials(): Promise<Domain.Credential[]> {
-    return this.Repositories.Credentials.get();
-  }
+  /** Credentials **/
 
   async storeCredential(credential: Domain.Credential): Promise<void> {
     await this.Repositories.Credentials.save(credential);
+  }
+
+  async getAllCredentials(): Promise<Domain.Credential[]> {
+    return this.Repositories.Credentials.get();
   }
 
 
@@ -121,12 +122,12 @@ export class Pluto implements Domain.Pluto {
 
   /** LinkSecret **/
 
-  async getLinkSecret(name?: string): Promise<Domain.LinkSecret | null> {
-    return await this.Repositories.LinkSecrets.find({ alias: name });
-  }
-
   async storeLinkSecret(linkSecret: Domain.LinkSecret): Promise<void> {
     await this.Repositories.LinkSecrets.save(linkSecret);
+  }
+
+  async getLinkSecret(name?: string): Promise<Domain.LinkSecret | null> {
+    return await this.Repositories.LinkSecrets.find({ alias: name });
   }
 
 
@@ -144,6 +145,9 @@ export class Pluto implements Domain.Pluto {
     return keys;
   }
 
+
+  /** DIDs **/
+
   private async getDIDUUID(did: Domain.DID): Promise<string> {
     if (typeof did.uuid === "string") return did.uuid;
 
@@ -157,7 +161,6 @@ export class Pluto implements Domain.Pluto {
   }
 
 
-  /** DIDs **/
   /** Prism DIDs **/
 
   async storePrismDID(did: Domain.DID, privateKey: Domain.PrivateKey, alias?: string): Promise<void> {

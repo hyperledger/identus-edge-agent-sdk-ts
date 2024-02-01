@@ -659,7 +659,7 @@ describe("Pollux", () => {
 
         const pr = new PresentationRequest(CredentialType.JWT, Fixtures.Credentials.JWT.presentationRequest);
         const cred = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
-        const did = Fixtures.DIDs[0];
+        const did = Fixtures.DIDs.peerDID1;
         const privateKey = Fixtures.Keys.ed25519.privateKey;
 
         const result = await pollux.createPresentationProof(pr, cred, {

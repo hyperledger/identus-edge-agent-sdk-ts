@@ -741,7 +741,7 @@ describe("Pluto", () => {
       vc: vc,
     };
 
-    const credential = new JWTCredential(
+    const credentialIn = new JWTCredential(
       jwtPayload.iss,
       vc,
       jwtString,
@@ -751,10 +751,18 @@ describe("Pluto", () => {
       jwtPayload.aud,
       jwtString
     );
-    await instance.storeCredential(credential);
+    await instance.storeCredential(credentialIn);
 
     const data = await instance.getAllCredentials();
+    const credentialOut = data[0];
     expect(data).not.empty;
+    expect(credentialOut).to.be.instanceOf(JWTCredential);
+
+    expect(credentialOut.claims).to.deep.eq(credentialIn.claims);
+    expect(credentialOut.id).to.eq(credentialIn.id);
+    expect(credentialOut.issuer).to.eq(credentialIn.issuer);
+    expect(credentialOut.recoveryId).to.eq(credentialIn.recoveryId);
+    expect(credentialOut.subject).to.eq(credentialIn.subject);
   });
 
   /*

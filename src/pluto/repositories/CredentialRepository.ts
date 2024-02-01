@@ -13,7 +13,8 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
   toDomain(model: Models.Credential) {
     switch (model.recoveryId) {
       case JWTVerifiableCredentialRecoveryId: {
-        const credential = JWTCredential.fromJWT(model, model.dataJson);
+        const jwtObj = JSON.parse(model.dataJson);
+        const credential = JWTCredential.fromJWT(jwtObj, jwtObj.id);
         return this.withId(credential, model.uuid);
       }
       case AnonCredsRecoveryId: {

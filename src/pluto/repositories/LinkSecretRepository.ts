@@ -1,6 +1,7 @@
 import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
+import { OptionalId } from "./builders/BaseRepository";
 import { MapperRepository } from "./builders/MapperRepository";
 
 
@@ -20,12 +21,12 @@ export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.Li
     return this.withId(domain, model.uuid);
   }
 
-  toModel(domain: Domain.LinkSecret) {
+  toModel(domain: Domain.LinkSecret): OptionalId<Models.Key> {
     return {
       uuid: domain.uuid,
       recoveryId: "linkSecret",
       raw: Buffer.from(domain.secret),
-      name: domain.name,
+      alias: domain.name,
     };
   }
 }
