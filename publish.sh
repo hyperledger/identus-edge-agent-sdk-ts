@@ -29,5 +29,3 @@ else
     npm publish --access public
 fi
 
-# Updates the version of e2e tests to the most recent
-yarn --cwd integration-tests/e2e-tests add @atala/prism-wallet-sdk@^${release_version}

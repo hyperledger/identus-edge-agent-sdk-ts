@@ -13,8 +13,6 @@ module.exports = (extraConfig = {}) => (
                         'package.json',
                         'package-lock.json',
                         'CHANGELOG.md',
-                        'integration-tests/e2e-tests/package.json',
-                        'integration-tests/e2e-tests/yarn.lock',
                         'docs/**/*',
                     ],
                     message: 'chore(release): release ${nextRelease.version}\n\n${nextRelease.notes}',
