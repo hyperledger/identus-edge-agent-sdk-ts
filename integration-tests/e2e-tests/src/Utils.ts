@@ -17,4 +17,17 @@ export class Utils {
       await callback()
     }
   }
+
+  static async retry<T>(message: string, times: number, callback: () => Promise<T>) {
+    let retry = 0
+    while (retry < times) {
+      try {
+        return await callback()
+      } catch (err) {
+        Utils.appendToNotes(`Failure: ${message}. Trying to run again.`)
+      }
+      retry++
+    }
+    throw Error(`Failed retrying [${times}] times: ${message}`)
+  }
 }

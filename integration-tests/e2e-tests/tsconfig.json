@@ -1,26 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "build",
-    "allowJs": false,
-    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "lib": ["ESNext"],
     "module": "CommonJS",
     "moduleResolution": "node",
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "sourceMap": true,
-    "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES6",
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": false,
     "experimentalDecorators": true,
-    "skipLibCheck": true
+    "sourceMap": true,
+    "declaration": false
   },
-  "include": ["tests/**/*.ts", "config/**/*.ts"],
+  "include": [
+    "src/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

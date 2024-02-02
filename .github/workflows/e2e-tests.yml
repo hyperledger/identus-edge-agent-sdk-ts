@@ -111,17 +111,13 @@ jobs:
         working-directory: integration-tests/e2e-tests
         run: yarn test:sdk
 
-      - name: Generate end-to-end report
-        working-directory: integration-tests/e2e-tests
-        run: yarn test:sdk:report
-
       - name: Add notes to summary
         working-directory: integration-tests/e2e-tests
         run: cat notes >> $GITHUB_STEP_SUMMARY
 
       - name: Publish Serenity report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: atala-prism-sdk-ts
-          path: integration-tests/e2e-tests/target/site/wallet-sdk-ts
+          name: sdk-ts-e2e-results
+          path: integration-tests/e2e-tests/target/sdk-ts-e2e-results.html
           if-no-files-found: error

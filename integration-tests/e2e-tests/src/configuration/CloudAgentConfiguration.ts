@@ -5,7 +5,7 @@ import {
   CredentialSchemaInput,
   ManagedDIDKeyTemplate
 } from "@hyperledger-labs/open-enterprise-agent-ts-client"
-import {Utils} from "../../Utils"
+import {Utils} from "../Utils"
 import {randomUUID} from "crypto"
 import * as fs from "fs"
 import assert from "assert"

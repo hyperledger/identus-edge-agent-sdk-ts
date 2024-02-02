@@ -13,15 +13,19 @@ import {
 } from "@atala/prism-wallet-sdk"
 import {Message} from "@atala/prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
-import {PlutoInMemory} from "./src/PlutoInMemory"
-import {CloudAgentConfiguration} from "./configuration/CloudAgentConfiguration"
+import {PlutoInMemory} from "../configuration/PlutoInMemory"
+import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
+import { Utils } from "../Utils"
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
   sdk!: Agent
   messages: MessageQueue = new MessageQueue()
 
   static async withANewInstance(): Promise<Ability> {
-    return new WalletSdk(await WalletSdkBuilder.createInstance())
+    const instance: Agent = await Utils.retry("Failed to create the wallet sdk", 3, async () => {
+      return await WalletSdkBuilder.createInstance()
+    })
+    return new WalletSdk(instance)
   }
 
   constructor(sdk: Agent) {
