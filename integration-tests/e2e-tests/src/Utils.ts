@@ -18,16 +18,20 @@ export class Utils {
     }
   }
 
-  static async retry<T>(message: string, times: number, callback: () => Promise<T>) {
+  static async retry<T>(times: number, callback: () => Promise<T>) {
     let retry = 0
+    let delegateError = null
     while (retry < times) {
       try {
         return await callback()
       } catch (err) {
-        Utils.appendToNotes(`Failure: ${message}. Trying to run again.`)
+        Utils.appendToNotes(`Failure: ${err.message}. Trying to run again.`)
+        delegateError = err
       }
       retry++
     }
-    throw Error(`Failed retrying [${times}] times: ${message}`)
+    let error = Error(`${delegateError.message} afer retrying [${times}] times`)
+    error.stack = delegateError.stack
+    throw error
   }
 }

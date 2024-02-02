@@ -22,7 +22,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   messages: MessageQueue = new MessageQueue()
 
   static async withANewInstance(): Promise<Ability> {
-    const instance: Agent = await Utils.retry("Failed to create the wallet sdk", 3, async () => {
+    const instance: Agent = await Utils.retry(2, async () => {
       return await WalletSdkBuilder.createInstance()
     })
     return new WalletSdk(instance)
