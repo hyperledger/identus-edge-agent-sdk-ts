@@ -3,11 +3,8 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "postinstall": "serenity-bdd update",
     "clean": "rimraf target",
-    "test:sdk": "failsafe clean test:sdk:run test:sdk:report",
-    "test:sdk:run": "cucumber-js --config config/cucumber.sdk.js tests/sdk/features -b --exit",
-    "test:sdk:report": "serenity-bdd run --features tests/sdk/features --destination target/site/wallet-sdk-ts"
+    "test:sdk": "yarn clean && cucumber-js -b"
   },
   "repository": {
     "type": "git",
@@ -16,38 +13,39 @@
   "author": "Allain Magyar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/amagyar-iohk/atala-prism-wallet-sdk-ts-e2e/issues"
+    "url": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts-e2e/issues"
   },
-  "homepage": "https://github.com/amagyar-iohk/atala-prism-wallet-sdk-ts-e2e#readme",
+  "homepage": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts-e2e",
   "dependencies": {
-    "@atala/prism-wallet-sdk": "^3.1.0",
-    "@cucumber/cucumber": "^9.6.0",
-    "@hyperledger-labs/open-enterprise-agent-ts-client": "^1.18.0",
-    "@serenity-js/assertions": "^3.13.0",
-    "@serenity-js/console-reporter": "^3.13.0",
-    "@serenity-js/core": "^3.13.0",
-    "@serenity-js/cucumber": "^3.13.0",
-    "@serenity-js/rest": "^3.13.0",
-    "@serenity-js/serenity-bdd": "^3.13.0",
-    "@types/node": "^20.4.7",
-    "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
-    "eslint": "^8.48.0",
-    "npm-check": "^6.0.1",
-    "npm-failsafe": "^1.0.0",
-    "rimraf": "^5.0.0",
-    "sql.js": "^1.8.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "@atala/prism-wallet-sdk": "^4.0.0",
+    "@cucumber/cucumber": "^10.3.1",
+    "@cucumber/pretty-formatter": "^1.0.0",
+    "@hyperledger-labs/open-enterprise-agent-ts-client": "^1.19.1",
+    "@serenity-js/assertions": "^3.16.0",
+    "@serenity-js/console-reporter": "^3.16.0",
+    "@serenity-js/core": "^3.16.0",
+    "@serenity-js/cucumber": "^3.16.0",
+    "@serenity-js/rest": "^3.16.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^18.19.14",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
+    "axios": "^1.6.7",
+    "cliui": "^8.0.1",
+    "dotenv": "^16.4.1",
+    "eslint": "^8.56.0",
     "eslint-config-standard-with-typescript": "^39.0.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
-    "esm": "^3.2.25",
-    "typescript": "^5.2.2"
+    "lodash": "^4.17.21",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "resolutions": {
+    "wrap-ansi": "^7.0.0"
   }
 }

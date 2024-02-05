@@ -1,8 +1,8 @@
 import { Given, Then, When } from "@cucumber/cucumber"
 import { Actor, Notepad } from "@serenity-js/core"
-import { EdgeAgentWorkflow } from "../src/EdgeAgentWorkflow"
-import { CloudAgentWorkflow } from "../src/CloudAgentWorkflow"
-import { Utils } from "../../Utils"
+import { EdgeAgentWorkflow } from "../workflow/EdgeAgentWorkflow"
+import { CloudAgentWorkflow } from "../workflow/CloudAgentWorkflow"
+import { Utils } from "../Utils"
 
 Given("{actor} has {int} credentials issued by {actor}",
   async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {

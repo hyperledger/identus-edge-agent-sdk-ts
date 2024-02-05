@@ -1,4 +1,6 @@
-Feature: Receive verifiable credential
+@jwt
+@credential
+Feature: Receive JWT Credential
   The Edge Agent should be able to receive a verifiable credential from Cloud Agent
 
   Scenario: Receive one verifiable credential

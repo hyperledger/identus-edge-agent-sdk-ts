@@ -1,17 +1,9 @@
 import {Before, BeforeAll} from "@cucumber/cucumber"
 import {Actor, actorCalled, Cast, engage, TakeNotes} from "@serenity-js/core"
 import {CallAnApi} from "@serenity-js/rest"
-import {Utils} from "../../Utils"
-import {WalletSdk} from "../WalletSdk"
+import {Utils} from "../Utils"
+import {WalletSdk} from "../abilities/WalletSdk"
 import {axiosInstance, CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
-import nodeCrypto from "crypto"
-
-Object.defineProperty(globalThis, "crypto", {
-  value: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getRandomValues: (arr: any) => nodeCrypto.getRandomValues(arr),
-  },
-})
 
 BeforeAll(async () => {
   Utils.prepareNotes()

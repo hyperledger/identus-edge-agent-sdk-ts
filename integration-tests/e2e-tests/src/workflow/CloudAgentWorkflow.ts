@@ -2,8 +2,8 @@ import {Actor, Duration, Notepad, Wait} from "@serenity-js/core"
 import {LastResponse, PostRequest, Send} from "@serenity-js/rest"
 import {Ensure, equals} from "@serenity-js/assertions"
 import {HttpStatusCode} from "axios"
-import {Expectations} from "../../Expectations"
-import {Questions} from "../../Questions"
+import {Expectations} from "../screenplay/Expectations"
+import {Questions} from "../screenplay/Questions"
 import {randomUUID} from "crypto"
 import {
   CreateConnectionRequest,
@@ -15,9 +15,12 @@ import {
 import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
 
 export class CloudAgentWorkflow {
-  static async createConnection(cloudAgent: Actor) {
+  static async createConnection(cloudAgent: Actor, label?: string, goalCode?: string, goal?: string) {
     const createConnection = new CreateConnectionRequest()
-    createConnection.label = "Alice"
+    createConnection.label = label
+    createConnection.goalCode = goalCode
+    createConnection.goal = goal
+
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("connections").with(createConnection)),
       Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
