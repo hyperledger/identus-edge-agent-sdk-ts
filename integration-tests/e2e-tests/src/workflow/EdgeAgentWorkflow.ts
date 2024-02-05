@@ -1,8 +1,8 @@
 import {IssueCredential, OfferCredential, RequestPresentation,} from "@atala/prism-wallet-sdk"
 import {Actor, Duration, Notepad, Wait} from "@serenity-js/core"
 import {equals} from "@serenity-js/assertions"
-import {WalletSdk} from "../WalletSdk"
-import {Utils} from "../../Utils"
+import {WalletSdk} from "../abilities/WalletSdk"
+import {Utils} from "../Utils"
 
 export class EdgeAgentWorkflow {
   static async connect(edgeAgent: Actor) {
