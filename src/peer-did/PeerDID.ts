@@ -20,9 +20,11 @@ export namespace PeerDID {
 
 export interface PeerDIDEncoded {
   t: string;
-  s: string;
-  r: string[];
-  a: string[];
+  s: {
+    uri: string;
+    r?: string[];
+    a?: string[];
+  }
 }
 
 export class PeerDID {
@@ -30,7 +32,7 @@ export class PeerDID {
     public readonly did: DID,
     public readonly privateKeys: PeerDID.PrivateKey[] = []
   ) {
-    const regex = /(([01](z)([1-9a-km-zA-HJ-NP-Z]{46,47}))|(2((\.[AEVID](z)([1-9a-km-zA-HJ-NP-Z]{46,47}))+(\.(S)[0-9a-zA-Z=]*)?)))$/;
+    const regex = /(([01](z)([1-9a-km-zA-HJ-NP-Z]{46,47}))|(2((\.[AEVID](z)([1-9a-km-zA-HJ-NP-Z]{46,47}))+(\.(S)[0-9a-zA-Z=]*)*)))$/;
     const isValid = did.schema === "did" && did.method === "peer" && regex.test(did.methodId);
 
     if (isValid === false) {
@@ -45,14 +47,14 @@ export class PeerDID {
 export class PeerDIDService {
   readonly type: string;
   readonly serviceEndpoint: string;
-  readonly routingKeys: string[];
-  readonly accept: string[];
+  readonly routingKeys?: string[];
+  readonly accept?: string[];
 
   constructor(
     type: string,
     serviceEndpoint: string,
-    routingKeys: string[],
-    accept: string[]
+    routingKeys?: string[],
+    accept?: string[]
   ) {
     this.type = type;
     this.serviceEndpoint = serviceEndpoint;
@@ -72,24 +74,24 @@ export class PeerDIDService {
 
   encode(): PeerDIDEncoded {
     return {
-      r: this.routingKeys,
-      s: this.serviceEndpoint,
-      a: this.accept,
       t: this.type.replace(
         PeerDIDService.DIDCommMessagingKey,
         PeerDIDService.DIDCommMessagingEncodedKey
       ),
+      s: {
+        uri: this.serviceEndpoint,
+        r: this.routingKeys,
+        a: this.accept,
+      },
     };
   }
 
   static decode(encoded: PeerDIDEncoded): PeerDIDService {
     return new PeerDIDService(
-      encoded.t === PeerDIDService.DIDCommMessagingEncodedKey
-        ? PeerDIDService.DIDCommMessagingKey
-        : encoded.t,
-      encoded.s,
-      encoded.r,
-      encoded.a
+      encoded.t === PeerDIDService.DIDCommMessagingEncodedKey ? PeerDIDService.DIDCommMessagingKey : encoded.t,
+      encoded.s.uri,
+      encoded.s.r,
+      encoded.s.a
     );
   }
 }

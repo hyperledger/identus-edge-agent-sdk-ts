@@ -7,6 +7,7 @@ import {
   PublicKey,
   KeyTypes,
   Curve,
+  VerificationMethods,
 } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 
@@ -50,7 +51,7 @@ describe("PEERDID CreateTest", () => {
     expect(result.format).to.equal(ecnumbasisResult[1].format);
   });
   it("Should create the peerDID correctly", async () => {
-    const validPeerDID = `did:peer:2.Ez6LSoHkfN1Y4nK9RCjx7vopWsLrMGNFNgTNZgoCNQrTzmb1n.Vz6MknRZmapV7uYZQuZez9n9N3tQotjRN18UGS68Vcfo6gR4h.SeyJyIjpbImRpZDpleGFtcGxlOnNvbWVtZWRpYXRvciNzb21la2V5Il0sInMiOiJodHRwczovL2V4YW1wbGUuY29tL2VuZHBvaW50IiwiYSI6W10sInQiOiJkbSJ9`;
+    const validPeerDID = `did:peer:2.Ez6LSoHkfN1Y4nK9RCjx7vopWsLrMGNFNgTNZgoCNQrTzmb1n.Vz6MknRZmapV7uYZQuZez9n9N3tQotjRN18UGS68Vcfo6gR4h.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHBzOi8vZXhhbXBsZS5jb20vZW5kcG9pbnQiLCJyIjpbImRpZDpleGFtcGxlOnNvbWVtZWRpYXRvciNzb21la2V5Il0sImEiOltdfX0`;
     const apollo = new Apollo();
     const castor = new Castor(apollo);
 
@@ -95,11 +96,34 @@ describe("PEERDID CreateTest", () => {
     const mypeerDID = new DID(
       "did",
       "peer",
-      "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
+      "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ"
     );
     const apollo = new Apollo();
     const castor = new Castor(apollo);
     const document = await castor.resolveDID(mypeerDID.toString());
+    expect(document.id.toString()).to.equal(mypeerDID.toString());
+  });
+
+  it("Should resolver peerdid's kid of the keys correctly according to https://github.com/decentralized-identity/peer-did-method-spec/pull/62", async () => {
+    const mypeerDID = new DID(
+      "did",
+      "peer",
+      "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ"
+    );
+    const apollo = new Apollo();
+    const castor = new Castor(apollo);
+    const document = await castor.resolveDID(mypeerDID.toString());
+    document.coreProperties.forEach((element) => {
+      if (element instanceof VerificationMethods) {
+        expect(element.values.length).to.equal(2);
+        expect(element.values[0].id)
+          .to.equal(element.values[0].publicKeyJwk?.kid)
+          .to.equal("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ#key-2");
+        expect(element.values[1].id)
+          .to.equal(element.values[1].publicKeyJwk?.kid)
+          .to.equal("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ#key-1");
+      }
+    });
     expect(document.id.toString()).to.equal(mypeerDID.toString());
   });
 
