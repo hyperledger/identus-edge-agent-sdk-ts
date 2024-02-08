@@ -20,8 +20,7 @@ export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
 export class JWTCredential
   extends Credential
-  implements ProvableCredential, StorableCredential
-{
+  implements ProvableCredential, StorableCredential {
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();
@@ -41,7 +40,7 @@ export class JWTCredential
     public readonly originalJWTString?: string
   ) {
     super();
-
+    this.properties.set(JWTVerifiableCredentialProperties.jti, jti);
     this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
     this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
     this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
@@ -143,7 +142,7 @@ export class JWTCredential
     const credentialData = JSON.stringify(Object.fromEntries(this.properties));
 
     return {
-      id: this.getProperty(JWTVerifiableCredentialProperties.jti),
+      id: this.jti || this.getProperty(JWTVerifiableCredentialProperties.jti),
       recoveryId: this.recoveryId,
       credentialData: credentialData,
       issuer: this.getProperty(JWTVerifiableCredentialProperties.iss),
