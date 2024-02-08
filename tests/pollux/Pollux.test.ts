@@ -356,6 +356,21 @@ describe("Pollux", () => {
         expect(result.issuanceDate).to.equal(issuanceDate);
         expect(result.expirationDate).to.equal(expirationDate);
       });
+
+      it("should be able to recover JTI from a toStorable", async () => {
+        const result = await pollux.parseCredential(
+          Buffer.from(Fixtures.Credentials.JWT.credentialPayloadEncoded),
+          {
+            type: CredentialType.JWT,
+          }
+        ) as JWTCredential;
+
+        const storable = result.toStorable();
+
+        expect(storable).to.be.an("object");
+        expect(storable).to.have.property("id");
+        expect(storable.id).to.equal(Fixtures.Credentials.JWT.credentialPayloadEncoded);
+      });
     });
   });
 
