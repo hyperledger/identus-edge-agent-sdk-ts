@@ -101,7 +101,6 @@ export default class Agent
       this.pollux,
       seed
     );
-
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
