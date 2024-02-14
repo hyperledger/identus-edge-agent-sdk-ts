@@ -1,3 +1,4 @@
+import type { MangoQuery } from "rxdb";
 import * as Domain from "../domain";
 import * as Models from "./models";
 import { PeerDID } from "../peer-did/PeerDID";
@@ -40,10 +41,16 @@ import { repositoryFactory } from "./repositories";
 export namespace Pluto {
   export interface Store {
     /**
+     * Handle any necessary startup.
+     * Will be called first before any usage, if provided.
+     */
+    start?(): Promise<void>;
+
+    /**
      * Run a query to fetch data from the Store
      * 
      * @param name Model name
-     * @param selector either an object or array of objects with matchable properties
+     * @param query either an object or array of objects with matchable properties
      * 
      * properties within an object will be AND'ed
      * different objects will be OR'd
@@ -66,7 +73,7 @@ export namespace Pluto {
      * 
      * @returns relevant Models
      */
-    query<T>(name: string, selector: Partial<T>[]): Promise<T[]>;
+    query<T extends Models.Model>(name: string, query?: MangoQuery<T>): Promise<T[]>;
 
     /**
      * Persist new data in the Store.
@@ -79,7 +86,7 @@ export namespace Pluto {
      * @param model object to save
      * @return {string | { uuid: string }} UUID value
      */
-    insert(name: string, model: any): Promise<string | { uuid: string; }>;
+    insert<T extends Models.Model>(name: string, model: T): Promise<void>;
 
     // update (table: string, model: Partial<T>): Promise<boolean>;
     // delete (table: string, id: string): Promise<boolean>;
@@ -96,7 +103,11 @@ export class Pluto implements Domain.Pluto {
     this.Repositories = repositoryFactory(store, keyRestoration);
   }
 
-  async start(): Promise<void> {}
+  async start(): Promise<void> {
+    if (this.store.start !== undefined) {
+      await this.store.start();
+    }
+  }
 
   /** Credentials **/
 
@@ -116,7 +127,7 @@ export class Pluto implements Domain.Pluto {
   }
 
   async getCredentialMetadata(name: string): Promise<Domain.CredentialMetadata | null> {
-    return await this.Repositories.CredentialMetadata.find({ name });
+    return await this.Repositories.CredentialMetadata.findOne({ name });
   }
 
 
@@ -126,8 +137,8 @@ export class Pluto implements Domain.Pluto {
     await this.Repositories.LinkSecrets.save(linkSecret);
   }
 
-  async getLinkSecret(name?: string): Promise<Domain.LinkSecret | null> {
-    return await this.Repositories.LinkSecrets.find({ alias: name });
+  async getLinkSecret(name: string = Domain.LinkSecret.defaultName): Promise<Domain.LinkSecret | null> {
+    return await this.Repositories.LinkSecrets.findOne({ alias: name });
   }
 
 
@@ -138,44 +149,30 @@ export class Pluto implements Domain.Pluto {
   }
 
   async getDIDPrivateKeysByDID(did: Domain.DID): Promise<Domain.PrivateKey[]> {
-    const didId = await this.getDIDUUID(did);
-    const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
-    const keys = await this.Repositories.Keys.get(links.map(x => ({ uuid: x.keyId })));
+    const links = await this.Repositories.DIDKeyLinks.getModels({ selector: { didId: did.uuid } });
+    const $or = links.map(x => ({ uuid: x.keyId }));
+    const keys = await this.Repositories.Keys.get({ selector: { $or } });
 
     return keys;
   }
 
 
   /** DIDs **/
-
-  private async getDIDUUID(did: Domain.DID): Promise<string> {
-    if (typeof did.uuid === "string") return did.uuid;
-
-    const result = await this.Repositories.DIDs.find(did);
-
-    if (!result) {
-      throw new Error("DID not found");
-    }
-
-    return result.uuid;
-  }
-
-
   /** Prism DIDs **/
 
   async storePrismDID(did: Domain.DID, privateKey: Domain.PrivateKey, alias?: string): Promise<void> {
-    const didModel = await this.Repositories.DIDs.save(did, alias);
-    const storedKey = await this.Repositories.Keys.save(privateKey);
+    await this.Repositories.DIDs.save(did, alias);
+    await this.Repositories.Keys.save(privateKey);
 
     await this.Repositories.DIDKeyLinks.insert({
       alias,
-      didId: didModel.uuid,
-      keyId: storedKey.uuid
+      didId: did.uuid,
+      keyId: privateKey.uuid
     });
   }
 
   async getAllPrismDIDs(): Promise<Domain.PrismDID[]> {
-    const dids = await this.Repositories.DIDs.getModels({ method: "prism" });
+    const dids = await this.Repositories.DIDs.find({ method: "prism" });
     const results = await Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
     const filtered = results.filter((x): x is Domain.PrismDID => x != null);
 
@@ -184,10 +181,10 @@ export class Pluto implements Domain.Pluto {
 
   private async getPrismDID(didId: string): Promise<Domain.PrismDID | null> {
     try {
-      const links = await this.Repositories.DIDKeyLinks.getModels({ didId });
+      const links = await this.Repositories.DIDKeyLinks.getModels({ selector: { didId } });
       const link = this.onlyOne(links);
-      const did = await this.Repositories.DIDs.byId(link.didId);
-      const key = await this.Repositories.Keys.byId(link.keyId);
+      const did = await this.Repositories.DIDs.byUUID(link.didId);
+      const key = await this.Repositories.Keys.byUUID(link.keyId);
 
       if (!did || !key) {
         throw new Error("PrismDID not found");
@@ -205,18 +202,22 @@ export class Pluto implements Domain.Pluto {
   /** Peer DIDs **/
 
   async storePeerDID(did: Domain.DID, privateKeys: Domain.PrivateKey[]): Promise<void> {
-    const storedDid = await this.Repositories.DIDs.save(did);
-    const storedKeys = await Promise.all(privateKeys.map(x => this.Repositories.Keys.save(x)));
+    await this.Repositories.DIDs.save(did);
+    await Promise.all(privateKeys.map(x => this.Repositories.Keys.save(x)));
 
     await Promise.all(
-      storedKeys.map(x => this.Repositories.DIDKeyLinks.insert({ didId: storedDid.uuid, keyId: x.uuid }))
+      privateKeys.map(x => this.Repositories.DIDKeyLinks.insert({ didId: did.uuid, keyId: x.uuid }))
     );
   }
 
   async getAllPeerDIDs(): Promise<PeerDID[]> {
-    const allDids = await this.Repositories.DIDs.get({ method: "peer" });
-    const allLinks = await this.Repositories.DIDKeyLinks.getModels(allDids.map(x => ({ didId: x.uuid })));
-    const allKeys = await this.Repositories.Keys.get(allLinks.map(x => ({ uuid: x.keyId })));
+    const allDids = await this.Repositories.DIDs.find({ method: "peer" });
+    const allLinks = await this.Repositories.DIDKeyLinks.getModels({
+      selector: { $or: allDids.map(x => ({ didId: x.uuid })) }
+    });
+    const allKeys = await this.Repositories.Keys.get({
+      selector: { $or: allLinks.map(x => ({ uuid: x.keyId })) }
+    });
 
     const peerDids = allDids.map(did => {
       const keyIds = allLinks.filter(x => x.didId === did.uuid).map(x => x.keyId);
@@ -249,7 +250,7 @@ export class Pluto implements Domain.Pluto {
   }
 
   async getMessage(id: string): Promise<Domain.Message | null> {
-    return await this.Repositories.Messages.find({ id }) ?? null;
+    return await this.Repositories.Messages.findOne({ id });
   }
 
   async getAllMessages(): Promise<Domain.Message[]> {
@@ -260,19 +261,19 @@ export class Pluto implements Domain.Pluto {
   /** DID Pairs **/
 
   async storeDIDPair(host: Domain.DID, receiver: Domain.DID, alias: string): Promise<void> {
-    const hostDID = await this.Repositories.DIDs.save(host);
-    const targetDID = await this.Repositories.DIDs.save(receiver);
+    await this.Repositories.DIDs.save(host);
+    await this.Repositories.DIDs.save(receiver);
 
     await this.Repositories.DIDLinks.insert({
       alias,
       role: Models.DIDLink.role.pair,
-      hostId: hostDID.uuid,
-      targetId: targetDID.uuid
+      hostId: host.uuid,
+      targetId: receiver.uuid
     });
   }
 
   async getAllDidPairs(): Promise<Domain.DIDPair[]> {
-    const links = await this.Repositories.DIDLinks.getModels({ role: Models.DIDLink.role.pair });
+    const links = await this.Repositories.DIDLinks.getModels({ selector: { role: Models.DIDLink.role.pair } });
     const didPairs = await Promise.all(links.map(x => this.mapDIDPairToDomain(x)));
     const filtered = didPairs.filter((x): x is Domain.DIDPair => x != null);
 
@@ -280,11 +281,14 @@ export class Pluto implements Domain.Pluto {
   }
 
   async getPairByDID(did: Domain.DID): Promise<Domain.DIDPair | null> {
-    const didId = await this.getDIDUUID(did);
-    const links = await this.Repositories.DIDLinks.getModels([
-      { role: Models.DIDLink.role.pair, hostId: didId },
-      { role: Models.DIDLink.role.pair, targetId: didId }
-    ]);
+    const links = await this.Repositories.DIDLinks.getModels({
+      selector: {
+        $or: [
+          { role: Models.DIDLink.role.pair, hostId: did.uuid },
+          { role: Models.DIDLink.role.pair, targetId: did.uuid }
+        ]
+      }
+    });
 
     // ?? this seems presumptuous? couldnt hostDID be re-used?
     const link = this.onlyOne(links);
@@ -294,7 +298,10 @@ export class Pluto implements Domain.Pluto {
   }
 
   async getPairByName(alias: string): Promise<Domain.DIDPair | null> {
-    const links = await this.Repositories.DIDLinks.getModels({ alias, role: Models.DIDLink.role.pair });
+    const links = await this.Repositories.DIDLinks.getModels(
+      {
+        selector: { alias, role: Models.DIDLink.role.pair }
+      });
     const link = this.onlyOne(links);
     const didPair = this.mapDIDPairToDomain(link);
 
@@ -302,8 +309,8 @@ export class Pluto implements Domain.Pluto {
   }
 
   private async mapDIDPairToDomain(link: Models.DIDLink): Promise<Domain.DIDPair | null> {
-    const hostDID = await this.Repositories.DIDs.byId(link.hostId);
-    const targetDID = await this.Repositories.DIDs.byId(link.targetId);
+    const hostDID = await this.Repositories.DIDs.byUUID(link.hostId);
+    const targetDID = await this.Repositories.DIDs.byUUID(link.targetId);
     const alias = link.alias ?? "";
 
     if (!hostDID || !targetDID) {
@@ -318,10 +325,14 @@ export class Pluto implements Domain.Pluto {
   /** Mediators **/
 
   async getAllMediators(): Promise<Domain.Mediator[]> {
-    const links = await this.Repositories.DIDLinks.getModels([
-      { role: Models.DIDLink.role.mediator },
-      { role: Models.DIDLink.role.routing },
-    ]);
+    const links = await this.Repositories.DIDLinks.getModels({
+      selector: {
+        $or: [
+          { role: Models.DIDLink.role.mediator },
+          { role: Models.DIDLink.role.routing },
+        ]
+      }
+    });
     const hostIds = links.map(x => x.hostId).filter((x, i, s) => s.indexOf(x) === i);
 
     const result = await Promise.all(
@@ -333,9 +344,9 @@ export class Pluto implements Domain.Pluto {
           throw new Error();
         }
 
-        const hostDID = await this.Repositories.DIDs.byId(hostId);
-        const mediatorDID = await this.Repositories.DIDs.byId(mediatorLink.targetId);
-        const routingDID = await this.Repositories.DIDs.byId(routingLink.targetId);
+        const hostDID = await this.Repositories.DIDs.byUUID(hostId);
+        const mediatorDID = await this.Repositories.DIDs.byUUID(mediatorLink.targetId);
+        const routingDID = await this.Repositories.DIDs.byUUID(routingLink.targetId);
 
         if (!hostDID || !mediatorDID || !routingDID) {
           throw new Error();
@@ -350,20 +361,20 @@ export class Pluto implements Domain.Pluto {
   }
 
   async storeMediator(mediator: Domain.Mediator): Promise<void> {
-    const hostDID = await this.Repositories.DIDs.save(mediator.hostDID);
-    const mediatorDID = await this.Repositories.DIDs.save(mediator.mediatorDID);
-    const routingDID = await this.Repositories.DIDs.save(mediator.routingDID);
+    await this.Repositories.DIDs.save(mediator.hostDID);
+    await this.Repositories.DIDs.save(mediator.mediatorDID);
+    await this.Repositories.DIDs.save(mediator.routingDID);
 
     await this.Repositories.DIDLinks.insert({
       role: Models.DIDLink.role.mediator,
-      hostId: hostDID.uuid,
-      targetId: mediatorDID.uuid
+      hostId: mediator.hostDID.uuid,
+      targetId: mediator.mediatorDID.uuid
     });
 
     await this.Repositories.DIDLinks.insert({
       role: Models.DIDLink.role.routing,
-      hostId: hostDID.uuid,
-      targetId: routingDID.uuid
+      hostId: mediator.hostDID.uuid,
+      targetId: mediator.routingDID.uuid
     });
   }
 

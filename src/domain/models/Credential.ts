@@ -13,7 +13,7 @@ export abstract class Credential implements Pluto.Storable {
   abstract claims: Claim[];
   abstract properties: Map<string, any>;
 
-  uuid?: string;
+  public readonly uuid = Pluto.makeUUID();
 
   getProperty(name: string) {
     return this.properties.get(name);

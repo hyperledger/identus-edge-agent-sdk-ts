@@ -16,12 +16,14 @@ describe("Pluto", () => {
   });
 
   describe("CredentialMetadata", () => {
-    test("uuid set on store", async () => {
+    test("uuid set on Domain instance - same after store", async () => {
       const sut = new Domain.CredentialMetadata(Domain.CredentialType.JWT, "mock", { mock: 123 });
-      expect(sut.uuid).to.be.undefined;
+      const uuid = sut.uuid;
+      expect(uuid).to.be.a.string;
 
       await instance.storeCredentialMetadata(sut);
       expect(sut.uuid).to.be.a.string;
+      expect(sut.uuid).to.eql(uuid);
     });
 
     test("Retrieved should match Stored", async () => {

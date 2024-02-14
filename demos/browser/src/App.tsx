@@ -5,8 +5,8 @@
  * WARNING: This is an example using an encrypted inMemory storage.
  * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
  */
-import InMemory from "@pluto-encrypted/inmemory";
-import { Database } from "@pluto-encrypted/database";
+// import InMemory from "@pluto-encrypted/inmemory";
+// import { Database } from "@pluto-encrypted/database";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import * as jose from "jose";
@@ -16,6 +16,7 @@ import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
+import IndexDB from "@pluto-encrypted/indexdb";
 
 const BasicMessage = SDK.BasicMessage;
 const ListenerKey = SDK.ListenerKey;
@@ -362,7 +363,7 @@ const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto; }> = props => {
   </>;
 };
 
-const Agent: React.FC<{ pluto: SDK.Domain.Pluto }> = props => {
+const Agent: React.FC<{ pluto: SDK.Domain.Pluto; }> = props => {
   const [mediatorDID, setMediatorDID] = useState<string>(defaultMediatorDID);
 
   const sdk = useMemo(() => useSDK(SDK.Domain.DID.fromString(mediatorDID), props.pluto), [mediatorDID]);
@@ -388,8 +389,9 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto }> = props => {
     if (requestPresentations.length) {
       for (const requestPresentation of requestPresentations) {
         const lastCredentials = await pluto.getAllCredentials();
-        const lastCredential = lastCredentials.at(-1);
+        const lastCredential = lastCredentials.at(0);
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
+
         try {
           if (lastCredential === undefined) throw new Error("last credential not found");
 
@@ -495,7 +497,7 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto }> = props => {
 
       );
     }
-    catch (e) { }
+    catch (e) {}
   };
 
   const handleStop = async () => {
@@ -625,22 +627,14 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto }> = props => {
 };
 
 
+const store = new SDK.RxdbStore({
+  name: "test",
+  storage: IndexDB,
+  password: Buffer.from("demoapp").toString("hex")
+});
+const pluto = new SDK.Pluto(store, apollo);
+
 function App() {
-  const [pluto, setPluto] = useState<SDK.Domain.Pluto>()
-
-  useEffect(() => {
-    if (!pluto) {
-      const defaultPassword = new Uint8Array(32).fill(1);
-      Database.createEncrypted(
-        {
-          name: `my-db`,
-          encryptionKey: defaultPassword,
-          storage: InMemory,
-        }
-      ).then((db) => setPluto(db as any))
-    }
-  }, [pluto, setPluto])
-
   return (
     <div className="App">
       <h1>Atala PRISM Wallet SDK Usage Examples</h1>

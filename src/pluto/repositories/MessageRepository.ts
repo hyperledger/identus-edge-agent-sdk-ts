@@ -8,12 +8,12 @@ export class MessageRepository extends MapperRepository<Models.Message, Domain.M
     super(store, "messages");
   }
 
-  toDomain(model: Models.Message) {
+  toDomain(model: Models.Message): Domain.Message {
     const domain = Domain.Message.fromJson(model.dataJson);
     return this.withId(domain, model.uuid);
   }
 
-  toModel(domain: Domain.Message) {
+  toModel(domain: Domain.Message): Models.Message {
     const msgJson = {
       id: domain.id,
       body: domain.body,

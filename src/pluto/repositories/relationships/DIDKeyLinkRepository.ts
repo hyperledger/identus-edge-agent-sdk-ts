@@ -1,8 +1,8 @@
 import type * as Models from "../../models";
 import type { Pluto } from "../../Pluto";
-import { BaseRepository } from "../builders/BaseRepository";
+import { LinkRepository } from "../builders/LinkRepository";
 
-export class DIDKeyLinkRepository extends BaseRepository<Models.DIDKeyLink> {
+export class DIDKeyLinkRepository extends LinkRepository<Models.DIDKeyLink> {
   constructor(store: Pluto.Store) {
     super(store, "didkeyLink");
   }

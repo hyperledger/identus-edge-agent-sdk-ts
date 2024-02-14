@@ -2,7 +2,7 @@ import { Pluto } from "../buildingBlocks/Pluto";
 import { CredentialType } from "./VerifiableCredential";
 
 export class CredentialMetadata implements Pluto.Storable {
-  uuid?: string;
+  public readonly uuid = Pluto.makeUUID();
 
   constructor(
     public readonly type: CredentialType,

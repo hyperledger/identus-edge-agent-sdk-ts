@@ -1,7 +1,6 @@
 import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
-import { WithId } from "./builders/BaseRepository";
 import { MapperRepository } from "./builders/MapperRepository";
 
 export class DIDRepository extends MapperRepository<Models.DID, Domain.DID> {
@@ -10,15 +9,7 @@ export class DIDRepository extends MapperRepository<Models.DID, Domain.DID> {
   }
 
   override async save(domain: Domain.DID, alias?: string) {
-    if (typeof domain.uuid === "string") {
-      return domain as WithId<Domain.DID>;
-    }
-
-    const existing = await this.find({
-      method: domain.method,
-      methodId: domain.methodId,
-      schema: domain.schema
-    });
+    const existing = await this.byUUID(domain.uuid);
 
     if (existing) {
       return existing;
@@ -30,15 +21,14 @@ export class DIDRepository extends MapperRepository<Models.DID, Domain.DID> {
     return this.withId(domain, result.uuid);
   }
 
-  toDomain(model: Models.DID) {
-    const did = Domain.DID.from(model);
+  toDomain(model: Models.DID): Domain.DID {
+    const did = Domain.DID.from(model.uuid);
     return this.withId(did, model.uuid);
   }
 
-  toModel(domain: Domain.DID, alias?: string) {
+  toModel(domain: Domain.DID, alias?: string): Models.DID {
     return {
       method: domain.method,
-      methodId: domain.methodId,
       schema: domain.schema,
       uuid: domain.uuid,
       alias

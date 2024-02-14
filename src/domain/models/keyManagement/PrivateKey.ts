@@ -5,7 +5,8 @@ import { Pluto } from "../../buildingBlocks/Pluto";
 
 export abstract class PrivateKey extends Key implements Pluto.Storable {
   abstract publicKey(): PublicKey;
-  public uuid?: string;
+
+  public readonly uuid = Pluto.makeUUID();
 
   get curve() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

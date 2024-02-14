@@ -194,6 +194,7 @@
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
+    "rxdb": "^14.17.0",
     "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"

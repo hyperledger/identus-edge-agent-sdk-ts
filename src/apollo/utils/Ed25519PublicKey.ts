@@ -33,10 +33,6 @@ export class Ed25519PublicKey extends PublicKey implements ExportableKey, Storab
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
   }
 
-  get storableData() {
-    return this.raw;
-  }
-
   getEncoded(): Buffer {
     return this.getInstance().getEncoded();
   }

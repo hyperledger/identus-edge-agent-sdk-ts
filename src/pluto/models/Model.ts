@@ -5,4 +5,4 @@ import type * as Domain from "../../domain";
  * 
  *   - uuid: Universally Unique Identifier
  */
-export type Model = Required<Domain.Pluto.Storable>;
+export type Model = Domain.Pluto.Storable;

@@ -1,4 +1,5 @@
 import type { Model } from "../Model";
+import { schemaFactory } from "../Schema";
 
 /**
  * Definition for DID -> Key relationships
@@ -19,3 +20,10 @@ export interface DIDKeyLink extends Model {
    */
   alias?: string;
 }
+
+export const DIDKeyLinkSchema = schemaFactory<DIDKeyLink>(schema => {
+  schema.setRequired("didId", "keyId");
+  schema.addProperty("string", "didId");
+  schema.addProperty("string", "keyId");
+  schema.addProperty("string", "alias");
+});

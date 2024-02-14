@@ -1,7 +1,6 @@
 import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
-import { OptionalId } from "./builders/BaseRepository";
 import { MapperRepository } from "./builders/MapperRepository";
 
 
@@ -14,18 +13,18 @@ export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.Li
     super(store, "keys");
   }
 
-  toDomain(model: Models.Key) {
-    const secret = Buffer.from(model.raw).toString();
+  toDomain(model: Models.Key): Domain.LinkSecret {
+    const secret = Buffer.from(model.rawHex, "hex").toString();
     const domain = new Domain.LinkSecret(secret, model.alias);
 
     return this.withId(domain, model.uuid);
   }
 
-  toModel(domain: Domain.LinkSecret): OptionalId<Models.Key> {
+  toModel(domain: Domain.LinkSecret): Models.Key {
     return {
       uuid: domain.uuid,
       recoveryId: "linkSecret",
-      raw: Buffer.from(domain.secret),
+      rawHex: Buffer.from(domain.secret).toString("hex"),
       alias: domain.name,
     };
   }

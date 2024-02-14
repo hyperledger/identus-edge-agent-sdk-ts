@@ -1,8 +1,8 @@
 
-export abstract class StorableKey {
-  abstract recoveryId: string;
-  abstract raw: Uint8Array;
-  abstract index?: number;
+export interface StorableKey {
+  recoveryId: string;
+  raw: Uint8Array;
+  index?: number;
 }
 
 export namespace StorableKey {

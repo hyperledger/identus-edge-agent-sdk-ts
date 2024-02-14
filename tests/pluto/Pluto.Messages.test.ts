@@ -17,12 +17,14 @@ describe("Pluto", () => {
   });
 
   describe("Messages", () => {
-    test("uuid set on store", async () => {
+    test("uuid set on Domain instance - same after store", async () => {
       const sut = Fixtures.Credentials.JWT.credentialOfferMessage.makeMessage();
-      expect(sut.uuid).to.be.undefined;
+      const uuid = sut.uuid;
+      expect(uuid).to.be.a.string;
 
       await instance.storeMessage(sut);
       expect(sut.uuid).to.be.a.string;
+      expect(sut.uuid).to.eql(uuid);
     });
 
     test("Retrieved should match Stored", async () => {

@@ -5,6 +5,7 @@ import { Mediator } from "../models/Mediator";
 import { Message } from "../models/Message";
 import { Credential } from "../models/Credential";
 import { PeerDID } from "../../peer-did/PeerDID";
+import { uuid } from "@stablelib/uuid";
 
 export namespace Pluto {
   /**
@@ -16,8 +17,12 @@ export namespace Pluto {
      * Universally Unique Identifier.
      * should be unique across all items.
      */
-    uuid?: string;
+    uuid: string;
   }
+
+  export const makeUUID = (): string => {
+    return uuid();
+  };
 }
 
 /**

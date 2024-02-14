@@ -85,10 +85,6 @@ export class Secp256k1PrivateKey
     return newExtendedPrivateKey;
   }
 
-  get storableData() {
-    return this.raw;
-  }
-
   publicKey() {
     const secp256K1PublicKey = this.native.getPublicKey();
     return new Secp256k1PublicKey(Uint8Array.from(secp256K1PublicKey.raw));

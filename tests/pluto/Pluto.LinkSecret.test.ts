@@ -16,12 +16,14 @@ describe("Pluto", () => {
   });
 
   describe("LinkSecret", () => {
-    test("uuid set on store", async () => {
+    test("uuid set on Domain instance - same after store", async () => {
       const sut = new Domain.LinkSecret("test");
-      expect(sut.uuid).to.be.undefined;
+      const uuid = sut.uuid;
+      expect(uuid).to.be.a.string;
 
       await instance.storeLinkSecret(sut);
       expect(sut.uuid).to.be.a.string;
+      expect(sut.uuid).to.eql(uuid);
     });
 
     test("Retrieved should match Stored", async () => {

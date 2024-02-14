@@ -20,8 +20,6 @@ export class AnonCredsCredential
   extends Credential
   implements StorableCredential
 {
-  public uuid?: string;
-
   public credentialType = CredentialType.AnonCreds;
   public recoveryId = AnonCredsRecoveryId;
   public properties = new Map<AnonCredsCredentialProperties, any>();

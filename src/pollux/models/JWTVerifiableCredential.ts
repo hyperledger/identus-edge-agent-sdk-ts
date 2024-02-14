@@ -23,8 +23,6 @@ export class JWTCredential
   extends Credential
   implements ProvableCredential, StorableCredential, Pluto.Storable
 {
-  public uuid?: string;
-
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();

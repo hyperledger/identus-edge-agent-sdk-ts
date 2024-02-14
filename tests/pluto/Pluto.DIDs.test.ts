@@ -18,15 +18,20 @@ describe("Pluto", () => {
 
   describe("DIDs", () => {
     describe("PrismDIDs", () => {
-      test("uuid set on store", async () => {
+      test("uuid set on Domain instance - same after store", async () => {
         const sutDID = Domain.DID.from("did:prism:mock1");
         const sutKey = new X25519PrivateKey(Fixtures.Keys.x25519.privateKey.raw);
-        expect(sutDID.uuid).to.be.undefined;
-        expect(sutKey.uuid).to.be.undefined;
+
+        const uuidDID = sutDID.uuid;
+        const uuidKey = sutKey.uuid;
+        expect(uuidDID).to.be.a.string;
+        expect(uuidKey).to.be.a.string;
 
         await instance.storePrismDID(sutDID, sutKey);
         expect(sutDID.uuid).to.be.a.string;
         expect(sutKey.uuid).to.be.a.string;
+        expect(sutDID.uuid).to.eql(uuidDID);
+        expect(sutKey.uuid).to.eql(uuidKey);
       });
 
       test("Retrieved should match Stored", async () => {
@@ -61,15 +66,19 @@ describe("Pluto", () => {
     });
 
     describe("PeerDIDs", () => {
-      test("uuid set on store", async () => {
+      test("uuid set on Domain instance - same after store", async () => {
         const sutDID = Domain.DID.from(Fixtures.DIDs.peerDID1.toString());
         const sutKey = new X25519PrivateKey(Fixtures.Keys.x25519.privateKey.raw);
-        expect(sutDID.uuid).to.be.undefined;
-        expect(sutKey.uuid).to.be.undefined;
+        const uuidDID = sutDID.uuid;
+        const uuidKey = sutKey.uuid;
+        expect(sutDID.uuid).to.be.a.string;
+        expect(sutKey.uuid).to.be.a.string;
 
         await instance.storePeerDID(sutDID, [sutKey]);
         expect(sutDID.uuid).to.be.a.string;
         expect(sutKey.uuid).to.be.a.string;
+        expect(sutDID.uuid).to.eql(uuidDID);
+        expect(sutKey.uuid).to.eql(uuidKey);
       });
 
       test("Retrieved should match Stored", async () => {

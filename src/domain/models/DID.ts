@@ -2,8 +2,7 @@ import { Pluto } from "../buildingBlocks/Pluto";
 import { InvalidDIDString } from "./errors/Castor";
 
 export class DID implements Pluto.Storable {
-  public uuid?: string;
-
+  public readonly uuid: string;
   public readonly schema: string;
   public readonly method: string;
   public readonly methodId: string;
@@ -12,6 +11,7 @@ export class DID implements Pluto.Storable {
     this.schema = schema;
     this.method = method;
     this.methodId = methodId;
+    this.uuid = this.toString();
   }
 
   toString() {

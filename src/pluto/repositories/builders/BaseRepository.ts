@@ -1,3 +1,4 @@
+import { MangoQuery } from "rxdb";
 import * as Domain from "../../../domain";
 import type { Model } from "../../models";
 import type { Pluto } from "../../Pluto";
@@ -17,31 +18,33 @@ export abstract class BaseRepository<T extends Model> {
   protected baseModel: Partial<T> = {};
 
   constructor(
-    protected readonly store: Pluto.Store,
+    private readonly store: Pluto.Store,
     protected readonly name: string,
   ) {}
 
   /**
    * Persist the Model in the Store.
-   * Update and return the given Model with the created UUID
    * 
    * @param model
    * @returns {T}
    * @throws {@link StoreInsertError} if insert fails
    * @throws {@link StoreUUIDNotReturned} if UUID not returned
    */
-  async insert(model: OptionalId<T>): Promise<T> {
+  async insert(model: T): Promise<T> {
     const obj = { ...model, ...this.baseModel };
-    const result = await this.tryInsert(obj);
-    const uuid = this.parseId(result);
-
-    return this.withId(model, uuid) as T;
+    try {
+      await this.store.insert(this.name, obj);
+      return model;
+    }
+    catch (e) {
+      throw new Domain.PlutoError.StoreInsertError();
+    }
   }
 
   /**
    * Search the Store for Models
    * 
-   * @param selector either an object or array of objects with matchable properties
+   * @param query either an object or array of objects with matchable properties
    * 
    * properties within an object will be AND'ed
    *   different objects will be OR'd
@@ -65,23 +68,35 @@ export abstract class BaseRepository<T extends Model> {
    * @returns {T[]} Array of matched Models
    * @throws {@link StoreQueryFailed} if the query fails
    */
-  async getModels(selector?: Partial<T> | Partial<T>[]): Promise<T[]> {
-    return this.runQuery(selector ?? []);
+  async getModels(query?: MangoQuery<T>): Promise<T[]> {
+    // const queryObj = typeof query === "function"
+    //   ? this.buildQuery(query)
+    //   : new NoSqlQueryBuilderClass(query);
+
+    return this.runQuery(query);
   }
 
   /**
    * Handle internal logic for running a query
    * 
-   * @param model 
+   * @param builder
    * @returns {T[]}
    * @throws {@link StoreQueryFailed}
    */
-  private async runQuery(model: Partial<T> | Partial<T>[]): Promise<T[]> {
-    const arr = Array.isArray(model) ? model : [model];
-    const selector = arr.map(x => ({ ...x, ...this.baseModel }));
+  private async runQuery(query?: MangoQuery<T>): Promise<T[]> {
+    // const query = builder?.merge(this.baseModel).toJSON().query;
+    if (Object.keys(this.baseModel).length > 0) {
+      query = {
+        ...query,
+        selector: {
+          $and: [query?.selector ?? {}, this.baseModel]
+        } as any
+      };
+    }
+
 
     try {
-      return this.store.query(this.name, selector);
+      return this.store.query(this.name, query);
     }
     catch (e) {
       throw new Domain.PlutoError.StoreQueryFailed();
@@ -98,43 +113,6 @@ export abstract class BaseRepository<T extends Model> {
   protected withId<X extends Domain.Pluto.Storable>(obj: X, uuid: string): WithId<X> {
     obj.uuid = uuid;
     return obj as WithId<X>;
-  }
-
-  /**
-   * Error wrapper for store.insert
-   * 
-   * @param obj 
-   */
-  private async tryInsert(obj: Partial<T>) {
-    try {
-      return await this.store.insert(this.name, obj);
-    }
-    catch (e) {
-      throw new Domain.PlutoError.StoreInsertError();
-    }
-  }
-
-  /**
-   * Retrieve the UUID from a returned value
-   * 
-   * @param value 
-   * @returns {string} UUID
-   */
-  private parseId(value: unknown): string {
-    if (typeof value === "string") {
-      return value;
-    }
-
-    if (
-      typeof value === "object"
-      && value != null
-      && "uuid" in value
-      && typeof value.uuid === "string"
-    ) {
-      return value.uuid;
-    }
-
-    throw new Domain.PlutoError.StoreUUIDNotReturned();
   }
 
   // update

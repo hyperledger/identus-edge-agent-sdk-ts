@@ -18,12 +18,14 @@ describe("Pluto", () => {
 
   describe("Credentials", () => {
     describe("JWT", () => {
-      test("uuid set on store", async () => {
-        const credential = new JWTCredential("did:peer:2.issuer", {}, "jwtString", 1680615608435, "did:peer:2.sub", 1680615608435, ["aud-json"], "jwtString");
-        expect(credential.uuid).to.be.undefined;
+      test("uuid set on Domain instance - same after store", async () => {
+        const sut = new JWTCredential("did:peer:2.issuer", {}, "jwtString", 1680615608435, "did:peer:2.sub", 1680615608435, ["aud-json"], "jwtString");
+        const uuid = sut.uuid;
+        expect(uuid).to.be.a.string;
 
-        await instance.storeCredential(credential);
-        expect(credential.uuid).to.be.a.string;
+        await instance.storeCredential(sut);
+        expect(sut.uuid).to.be.a.string;
+        expect(sut.uuid).to.eql(uuid);
       });
 
       test("Retrieved should match Stored", async () => {
@@ -77,14 +79,14 @@ describe("Pluto", () => {
     });
 
     describe("Anoncreds", () => {
-      test("uuid set on store", async () => {
-        const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+      test("uuid set on Domain instance - same after store", async () => {
+        const sut = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+        const uuid = sut.uuid;
+        expect(uuid).to.be.a.string;
 
-        expect(credential.uuid).to.be.undefined;
-
-        await instance.storeCredential(credential);
-
-        expect(credential.uuid).to.be.a.string;
+        await instance.storeCredential(sut);
+        expect(sut.uuid).to.be.a.string;
+        expect(sut.uuid).to.eql(uuid);
       });
 
       test("Retrieved should match Stored", async () => {

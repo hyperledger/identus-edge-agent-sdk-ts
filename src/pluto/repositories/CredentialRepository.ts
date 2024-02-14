@@ -10,7 +10,7 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
     super(store, "credentials");
   }
 
-  toDomain(model: Models.Credential) {
+  toDomain(model: Models.Credential): Domain.Credential {
     switch (model.recoveryId) {
       case JWTVerifiableCredentialRecoveryId: {
         const jwtObj = JSON.parse(model.dataJson);
@@ -27,7 +27,7 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
     throw new Domain.PlutoError.UnknownCredentialTypeError();
   }
 
-  toModel(credential: Domain.Credential) {
+  toModel(credential: Domain.Credential): Models.Credential {
     if (!credential.isStorable()) {
       throw new Domain.PlutoError.CredentialNotStorable();
     }

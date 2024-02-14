@@ -18,12 +18,15 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
     return this.withId(domain, result.uuid);
   }
 
-  toDomain(model: Models.Key) {
-    const domain = this.keyRestoration.restorePrivateKey(model);
+  toDomain(model: Models.Key): Domain.PrivateKey {
+    const domain = this.keyRestoration.restorePrivateKey({
+      ...model,
+      raw: Buffer.from(model.rawHex, "hex")
+    });
     return this.withId(domain, model.uuid);
   }
 
-  toModel(domain: Domain.PrivateKey) {
+  toModel(domain: Domain.PrivateKey): Models.Key {
     if (!domain.isStorable()) {
       throw new Domain.PlutoError.PrivateKeyNotStorable();
     }
@@ -31,7 +34,7 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
     return {
       uuid: domain.uuid,
       recoveryId: domain.recoveryId,
-      raw: domain.raw,
+      rawHex: domain.to.String("hex"),
       index: domain.index
     };
   }

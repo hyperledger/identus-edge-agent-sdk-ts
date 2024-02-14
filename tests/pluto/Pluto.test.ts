@@ -141,6 +141,7 @@ describe("Pluto", () => {
   it("should store message", async function () {
     const messageId = randomUUID();
     const message = {
+      uuid: "abc-123",
       piuri: "test a",
       from: Domain.DID.fromString("did:prism:100"),
       thid: "test",
@@ -166,6 +167,7 @@ describe("Pluto", () => {
     const messageId = randomUUID();
 
     const message = {
+      uuid: "abc-123",
       piuri: "test a",
       from: Domain.DID.fromString("did:prism:100"),
       thid: "test",
@@ -183,7 +185,7 @@ describe("Pluto", () => {
     await instance.storeMessages(
       Array(10)
         .fill("_")
-        .map(() => message)
+        .map((x, i) => ({ ...message, uuid: `${message.uuid}-${i}` }))
     );
     const values = await instance.getAllMessages();
 
@@ -413,6 +415,7 @@ describe("Pluto", () => {
   //
   it("should get all messages", async function () {
     await instance.storeMessage({
+      uuid: randomUUID(),
       id: randomUUID(),
       thid: "",
       to: Domain.DID.fromString("did:prism:123"),
@@ -622,6 +625,7 @@ describe("Pluto", () => {
     const from = Domain.DID.fromString("did:prism:321");
 
     const message = {
+      uuid: randomUUID(),
       id: randomUUID(),
       thid: "",
       to,

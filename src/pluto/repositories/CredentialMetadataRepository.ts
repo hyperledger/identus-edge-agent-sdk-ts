@@ -8,7 +8,7 @@ export class CredentialMetadataRepository extends MapperRepository<Models.Creden
     super(store, "credentialMetadata");
   }
 
-  toDomain(model: Models.CredentialMetadata) {
+  toDomain(model: Models.CredentialMetadata): Domain.CredentialMetadata {
     const json = JSON.parse(model.dataJson);
     const type = this.parseCredentialType(model);
     const domain = new Domain.CredentialMetadata(type, model.name, json);
@@ -16,7 +16,7 @@ export class CredentialMetadataRepository extends MapperRepository<Models.Creden
     return this.withId(domain, model.uuid);
   }
 
-  toModel(domain: Domain.CredentialMetadata) {
+  toModel(domain: Domain.CredentialMetadata): Models.CredentialMetadata {
     return {
       recoveryId: domain.type,
       dataJson: JSON.stringify(domain.toJSON()),
@@ -35,6 +35,6 @@ export class CredentialMetadataRepository extends MapperRepository<Models.Creden
 
     }
 
-    throw new Error();
+    throw new Error("Unable to recover CredentialMetadata");
   }
 }

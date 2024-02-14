@@ -1,31 +1,33 @@
+import { MangoQuery } from "rxdb";
 import { Pluto } from "../../src/pluto/Pluto";
 
 /**
  * WARNING: Do not  use this Pluto Store implementation, its for test purposes only.
  * Persistence is inMemory and totally unprotected.
+ * Functionality isn't 100% covered - only handling what is necessary
  */
 export class InMemoryStore implements Pluto.Store {
   private store = new Map<string, any[]>();
 
-  async query<T>(table: string, selector: Partial<T>[]): Promise<T[]> {
+  async query<T>(table: string, query?: MangoQuery<T>): Promise<T[]> {
     const items = this.get(table);
+    const selector = { ...query?.selector ?? {} };
 
     const filtered = items.filter(item => {
-      if (selector.length === 0) return true;
+      if (Object.keys(selector).length === 0) return true;
 
-      const match = selector.some(query => this.match(query, item));
-      return match;
+      const { $or, $and, ...props } = selector;
+      const matchProps = this.match(props, item);
+      const matchOr = ($or ?? []).reduce((acc, x) => acc || this.match(x, item), false);
+      return matchOr || matchProps;
     });
 
     return filtered;
   }
 
-  async insert(table: string, model: any): Promise<string | { uuid: string; }> {
+  async insert(table: string, model: any): Promise<void> {
     const items = this.get(table);
-    const uuid = (items.length + 1).toString();
-    items.push({ ...model, uuid });
-
-    return uuid;
+    items.push(model);
   }
 
   private get(key: string) {

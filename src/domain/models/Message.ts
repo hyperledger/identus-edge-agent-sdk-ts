@@ -17,7 +17,7 @@ export enum MessageDirection {
 }
 
 export class Message implements Pluto.Storable {
-  public uuid?: string;
+  public readonly uuid = Pluto.makeUUID();
 
   constructor(
     public readonly body: string,

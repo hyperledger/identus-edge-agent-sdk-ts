@@ -1,4 +1,5 @@
 import type { Model } from "./Model";
+import { schemaFactory } from "./Schema";
 
 /**
  * Definition for CredentialMetadata model
@@ -17,3 +18,11 @@ export interface CredentialMetadata extends Model {
    */
   name: string;
 }
+
+export const CredentialMetadataSchema = schemaFactory<CredentialMetadata>(schema => {
+  schema.setRequired("recoveryId", "dataJson", "name");
+  schema.addProperty("string", "recoveryId");
+  schema.addProperty("string", "dataJson");
+  schema.addProperty("string", "name");
+  schema.setEncrypted("dataJson");
+});

@@ -32,10 +32,6 @@ export class X25519PrivateKey extends PrivateKey implements ExportableKey, Stora
     this.keySpecification.set(KeyProperties.curve, Curve.X25519);
   }
 
-  get storableData() {
-    return this.raw;
-  }
-
   getEncoded(): Buffer {
     return this.getInstance().getEncoded();
   }

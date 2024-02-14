@@ -88,10 +88,6 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
     this.size = this.raw.length;
   }
 
-  get storableData() {
-    return this.raw;
-  }
-
   getEncoded(): Uint8Array {
     if (this.isCompressed) {
       if (this.raw.length !== ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE) {

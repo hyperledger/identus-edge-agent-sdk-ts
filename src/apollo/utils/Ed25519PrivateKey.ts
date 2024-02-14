@@ -35,10 +35,6 @@ export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, Sign
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
   }
 
-  get storableData() {
-    return this.raw;
-  }
-
   publicKey() {
     return new Ed25519PublicKey(this.getInstance().publicKey().raw);
   }

@@ -1,4 +1,5 @@
 import type { Model } from "../Model";
+import { schemaFactory } from "../Schema";
 
 /**
  * Definition for DID -> DID relationships
@@ -44,3 +45,11 @@ export namespace DIDLink {
     routing
   }
 }
+
+export const DIDLinkSchema = schemaFactory<DIDLink>(schema => {
+  schema.setRequired("hostId", "role", "targetId");
+  schema.addProperty("number", "role");
+  schema.addProperty("string", "hostId");
+  schema.addProperty("string", "targetId");
+  schema.addProperty("string", "alias");
+});
