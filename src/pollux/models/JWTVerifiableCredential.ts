@@ -106,7 +106,7 @@ export class JWTCredential
   }
 
   get issuanceDate() {
-    return new Date(this.nbf).toISOString();
+    return new Date(this.nbf*1000).toISOString();
   }
 
   get issuer() {
