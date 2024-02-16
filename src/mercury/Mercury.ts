@@ -30,7 +30,7 @@ export default class Mercury implements MercuryInterface {
     public castor: Castor,
     public protocol: DIDCommProtocol,
     public api: Api
-  ) {}
+  ) { }
 
   /**
    * Asynchronously packs a given message object into a string representation. This function may throw an error if the
@@ -136,7 +136,7 @@ export default class Mercury implements MercuryInterface {
   }
 
   private notDid(did: Domain.DID | undefined): did is undefined {
-    return !(did instanceof Domain.DID);
+    return false
   }
 
   private prepareForwardMessage(

@@ -1,4 +1,8 @@
-type Task<T> = () => Promise<T>;
+type Task<T> = (signal?: AbortSignal) => Promise<T>;
+
+
+
+
 
 export class CancellableTask<T> {
   private period?: number;
@@ -18,7 +22,7 @@ export class CancellableTask<T> {
         this.period = Math.max(repeatEvery, 10);
         this.loopOnTaskEvery(task, reject);
       } else {
-        task().then(resolve).catch(reject);
+        task(this.controller.signal).then(resolve).catch(reject);
       }
     });
   }
@@ -30,12 +34,12 @@ export class CancellableTask<T> {
     }
   }
 
-  private loopOnTaskEvery(task: Task<T>, reject: (reason?: Error) => void) {
-    task()
+  private loopOnTaskEvery(task: Task<T>, reject: (reason?: Error) => void, signal?: AbortSignal) {
+    task(signal)
       .then(() => {
         this.clearTimer();
         this.timer = setTimeout(() => {
-          this.loopOnTaskEvery(task, reject);
+          this.loopOnTaskEvery(task, reject, signal);
         }, this.period);
       })
       .catch(reject);

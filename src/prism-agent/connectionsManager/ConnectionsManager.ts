@@ -1,3 +1,4 @@
+import { uuid } from "@stablelib/uuid";
 import { DID, Message, MessageDirection } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
@@ -12,6 +13,12 @@ import {
   ListenerKey,
   MediatorHandler,
 } from "../types";
+
+import { WebSocket } from 'isows'
+
+
+
+
 
 /**
  * ConnectionsManager is responsible of establishing didcomm connection and
@@ -225,23 +232,87 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    *
    * @param {number} iterationPeriod
    */
-  startFetchingMessages(iterationPeriod: number): void {
-    if (this.cancellable) {
+  async startFetchingMessages(iterationPeriod: number): Promise<void> {
+    if (this.cancellable || !this.mediationHandler.mediator) {
       return;
     }
-    const timeInterval = Math.max(iterationPeriod, 5) * 1000;
-    this.cancellable = new CancellableTask(async () => {
-      const unreadMessages = await this.awaitMessages();
-      if (unreadMessages.length) {
-        this.events.emit(ListenerKey.MESSAGE, unreadMessages);
-      }
-    }, timeInterval);
+    const currentMediator = this.mediationHandler.mediator.mediatorDID;
+    const resolvedMediator = await this.castor.resolveDID(currentMediator.toString())
+    const hasWebsocket = resolvedMediator.services.find(({ serviceEndpoint: { uri } }) =>
+      uri.startsWith("ws://") ||
+      uri.startsWith("wss://")
+    )
+    debugger;
+    if (!hasWebsocket) {
+      const timeInterval = Math.max(iterationPeriod, 5) * 1000;
+      this.cancellable = new CancellableTask(async () => {
+        const unreadMessages = await this.awaitMessages();
+        if (unreadMessages.length) {
+          this.events.emit(ListenerKey.MESSAGE, unreadMessages);
+        }
+      }, timeInterval);
 
-    this.cancellable.then().catch((err) => {
-      if (err instanceof Error) {
-        if (err.message !== "Task was cancelled") throw err;
-      } else throw err;
-    });
+      this.cancellable.then().catch((err) => {
+        if (err instanceof Error) {
+          if (err.message !== "Task was cancelled") throw err;
+        } else throw err;
+      });
+    } else {
+      debugger;
+      //Connecting to websockets, do not repeat the task
+      this.cancellable = new CancellableTask(async (signal) => {
+
+        const socket = new WebSocket(hasWebsocket.serviceEndpoint.uri);
+
+        if (signal) {
+          signal.addEventListener("abort", () => {
+            debugger;
+            socket.close()
+          });
+        }
+
+        socket.addEventListener("open", () => {
+          debugger
+        })
+
+        socket.addEventListener("error", () => {
+          debugger
+        })
+
+        socket.addEventListener("message", () => {
+          debugger
+        })
+
+
+        const message = new Message(
+          JSON.stringify({
+            live_delivery: true
+          }),
+          uuid(),
+          "https://didcomm.org/messagepickup/3.0/live-delivery-change",
+          this.mediationHandler.mediator?.hostDID,
+          this.mediationHandler.mediator?.mediatorDID,
+        );
+
+        const packedMessage = await this.mercury.packMessage(message)
+        socket.send(packedMessage)
+        debugger;
+
+        //connect to websockets
+        //activate life mode
+        //listen and emit messages when required
+      })
+
+      this.cancellable.then().catch((err) => {
+        if (err instanceof Error) {
+          if (err.message !== "Task was cancelled") throw err;
+        } else throw err;
+      });
+
+    }
+
+
+
   }
 
   /**

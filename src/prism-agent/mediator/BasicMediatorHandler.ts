@@ -38,7 +38,7 @@ export class BasicMediatorHandler implements MediatorHandler {
     public mediatorDID: DID,
     public mercury: Mercury,
     public store: MediatorStore
-  ) {}
+  ) { }
 
   /**
    * Secondary constructor for BasicMediation Handler, to instanciate if from an existing Mediator
@@ -170,7 +170,7 @@ export class BasicMediatorHandler implements MediatorHandler {
       this.mediator.hostDID,
       this.mediator.mediatorDID
     ).makeMessage();
-
+    debugger;
     const message = await this.mercury.sendMessageParseMessage(request);
     if (!message) {
       return [];

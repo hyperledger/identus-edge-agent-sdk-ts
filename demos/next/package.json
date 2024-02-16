@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@atala/prism-wallet-sdk": "^4.0.2",
+    "@atala/prism-wallet-sdk": "../../",
     "@pluto-encrypted/database": "^1.15.5",
     "@pluto-encrypted/indexdb": "^1.12.2",
     "@pluto-encrypted/schemas": "^1.3.5",
