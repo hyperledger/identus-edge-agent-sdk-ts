@@ -89,6 +89,7 @@ Browser NextJS
 ```bash
 cd demos/next
 npm i
+npm run build # becuase Error: ENOENT: no such file or directory, open '/.../atala-prism-wallet-sdk-ts/demos/next/.next/BUILD_ID']
 npm run start
 ```
 

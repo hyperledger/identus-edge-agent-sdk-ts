@@ -62,6 +62,9 @@ export class DIDCommWrapper implements DIDCommProtocol {
     if (type === ProtocolType.PickupRequest) {
       return true;
     }
+    if (type === ProtocolType.LiveDeliveryChange) {
+      return true;
+    }
     return false;
   }
 
