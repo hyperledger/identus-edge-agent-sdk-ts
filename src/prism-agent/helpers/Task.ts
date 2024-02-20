@@ -1,4 +1,4 @@
-type Task<T> = (signal?: AbortSignal) => Promise<T>;
+type Task<T> = (signal: AbortSignal) => Promise<T>;
 
 
 
@@ -20,7 +20,7 @@ export class CancellableTask<T> {
       this.controller.signal.addEventListener("abort", onAbort);
       if (repeatEvery !== undefined) {
         this.period = Math.max(repeatEvery, 10);
-        this.loopOnTaskEvery(task, reject);
+        this.loopOnTaskEvery(task, reject, this.controller.signal);
       } else {
         task(this.controller.signal).then(resolve).catch(reject);
       }
@@ -34,7 +34,7 @@ export class CancellableTask<T> {
     }
   }
 
-  private loopOnTaskEvery(task: Task<T>, reject: (reason?: Error) => void, signal?: AbortSignal) {
+  private loopOnTaskEvery(task: Task<T>, reject: (reason?: Error) => void, signal: AbortSignal) {
     task(signal)
       .then(() => {
         this.clearTimer();

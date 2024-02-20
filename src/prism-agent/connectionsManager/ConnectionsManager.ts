@@ -141,6 +141,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     return messages;
   }
 
+
   /**
    * Asyncronously wait for a message response just by waiting for new messages that match the specified ID
    *
@@ -252,65 +253,29 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           this.events.emit(ListenerKey.MESSAGE, unreadMessages);
         }
       }, timeInterval);
-
-      this.cancellable.then().catch((err) => {
-        if (err instanceof Error) {
-          if (err.message !== "Task was cancelled") throw err;
-        } else throw err;
-      });
     } else {
       //Connecting to websockets, do not repeat the task
       this.cancellable = new CancellableTask(async (signal) => {
-
-        const socket = new WebSocket(hasWebsocket.serviceEndpoint.uri);
-
-        if (signal) {
-          signal.addEventListener("abort", () => {
-            socket.close()
-          });
-        }
-
-        socket.addEventListener("open", async () => {
-          const message = new Message(
-            JSON.stringify({
-              live_delivery: true
-            }),
-            uuid(),
-            "https://didcomm.org/messagepickup/3.0/live-delivery-change",
-            this.mediationHandler.mediator?.hostDID,
-            this.mediationHandler.mediator?.mediatorDID,
-          );
-          const packedMessage = await this.mercury.packMessage(message)
-          socket.send(packedMessage)
-        })
-
-        socket.addEventListener("message", async (message) => {
-          const decryptMessage = await this.mercury.unpackMessage(message.data);
-          if (
-            decryptMessage.piuri === ProtocolType.PickupStatus ||
-            decryptMessage.piuri === ProtocolType.PickupDelivery) {
-
-            const delivered = await new PickupRunner(decryptMessage, this.mercury).run()
-            const deliveredMessages = delivered.map(({ message }) => message)
-            const deliveredMessageIds = deliveredMessages.map(({ id }) => id)
-
-            await this.pluto.storeMessages(deliveredMessages);
-            await this.mediationHandler.registerMessagesAsRead(deliveredMessageIds);
-            this.events.emit(ListenerKey.MESSAGE, deliveredMessages);
+        this.mediationHandler.listenUnreadMessages(
+          signal,
+          hasWebsocket.serviceEndpoint.uri,
+          async (messages) => {
+            debugger;
+            const messageIds = messages.map(({ id }) => id)
+            await this.pluto.storeMessages(messages);
+            await this.mediationHandler.registerMessagesAsRead(messageIds);
+            this.events.emit(ListenerKey.MESSAGE, messages);
           }
-        })
+        )
+        debugger;
       })
-
-      this.cancellable.then().catch((err) => {
-        if (err instanceof Error) {
-          if (err.message !== "Task was cancelled") throw err;
-        } else throw err;
-      });
-
     }
 
-
-
+    this.cancellable.then().catch((err) => {
+      if (err instanceof Error) {
+        if (err.message !== "Task was cancelled") throw err;
+      } else throw err;
+    });
   }
 
   /**
