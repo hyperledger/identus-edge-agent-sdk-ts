@@ -15,6 +15,8 @@ import {
 } from "../types";
 
 import { WebSocket } from 'isows'
+import { PickupRunner } from "../protocols/pickup/PickupRunner";
+import { ProtocolType } from "../protocols/ProtocolTypes";
 
 
 
@@ -242,7 +244,6 @@ export class ConnectionsManager implements ConnectionsManagerClass {
       uri.startsWith("ws://") ||
       uri.startsWith("wss://")
     )
-    debugger;
     if (!hasWebsocket) {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
       this.cancellable = new CancellableTask(async () => {
@@ -258,7 +259,6 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         } else throw err;
       });
     } else {
-      debugger;
       //Connecting to websockets, do not repeat the task
       this.cancellable = new CancellableTask(async (signal) => {
 
@@ -266,41 +266,39 @@ export class ConnectionsManager implements ConnectionsManagerClass {
 
         if (signal) {
           signal.addEventListener("abort", () => {
-            debugger;
             socket.close()
           });
         }
 
-        socket.addEventListener("open", () => {
-          debugger
+        socket.addEventListener("open", async () => {
+          const message = new Message(
+            JSON.stringify({
+              live_delivery: true
+            }),
+            uuid(),
+            "https://didcomm.org/messagepickup/3.0/live-delivery-change",
+            this.mediationHandler.mediator?.hostDID,
+            this.mediationHandler.mediator?.mediatorDID,
+          );
+          const packedMessage = await this.mercury.packMessage(message)
+          socket.send(packedMessage)
         })
 
-        socket.addEventListener("error", () => {
-          debugger
+        socket.addEventListener("message", async (message) => {
+          const decryptMessage = await this.mercury.unpackMessage(message.data);
+          if (
+            decryptMessage.piuri === ProtocolType.PickupStatus ||
+            decryptMessage.piuri === ProtocolType.PickupDelivery) {
+
+            const delivered = await new PickupRunner(decryptMessage, this.mercury).run()
+            const deliveredMessages = delivered.map(({ message }) => message)
+            const deliveredMessageIds = deliveredMessages.map(({ id }) => id)
+
+            await this.pluto.storeMessages(deliveredMessages);
+            await this.mediationHandler.registerMessagesAsRead(deliveredMessageIds);
+            this.events.emit(ListenerKey.MESSAGE, deliveredMessages);
+          }
         })
-
-        socket.addEventListener("message", () => {
-          debugger
-        })
-
-
-        const message = new Message(
-          JSON.stringify({
-            live_delivery: true
-          }),
-          uuid(),
-          "https://didcomm.org/messagepickup/3.0/live-delivery-change",
-          this.mediationHandler.mediator?.hostDID,
-          this.mediationHandler.mediator?.mediatorDID,
-        );
-
-        const packedMessage = await this.mercury.packMessage(message)
-        socket.send(packedMessage)
-        debugger;
-
-        //connect to websockets
-        //activate life mode
-        //listen and emit messages when required
       })
 
       this.cancellable.then().catch((err) => {
