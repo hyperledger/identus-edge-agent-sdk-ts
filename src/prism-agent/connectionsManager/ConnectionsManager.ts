@@ -260,14 +260,12 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           signal,
           hasWebsocket.serviceEndpoint.uri,
           async (messages) => {
-            debugger;
             const messageIds = messages.map(({ id }) => id)
             await this.pluto.storeMessages(messages);
             await this.mediationHandler.registerMessagesAsRead(messageIds);
             this.events.emit(ListenerKey.MESSAGE, messages);
           }
         )
-        debugger;
       })
     }
 

@@ -197,18 +197,12 @@ export class BasicMediatorHandler implements MediatorHandler {
     serviceEndpointUri: string,
     onMessage: EventCallback
   ) {
-    debugger;
     const socket = new WebSocket(serviceEndpointUri);
     signal.addEventListener("abort", () => {
       socket.close()
     });
 
-    signal.addEventListener("error", () => {
-      debugger;
-    });
-
     socket.addEventListener("open", async () => {
-      debugger;
       const mediator = this.mediator;
       if (!mediator) {
         throw new Error("No mediator, establish mediation first!")
@@ -218,18 +212,15 @@ export class BasicMediatorHandler implements MediatorHandler {
           live_delivery: true
         }),
         uuid(),
-        ProtocolType.PickupDelivery,
+        ProtocolType.LiveDeliveryChange,
         this.mediator?.hostDID,
         this.mediator?.mediatorDID,
       );
       const packedMessage = await this.mercury.packMessage(message)
       socket.send(packedMessage)
-      debugger;
-
     })
 
     socket.addEventListener("message", async (message) => {
-      debugger;
       const decryptMessage = await this.mercury.unpackMessage(message.data);
       if (
         decryptMessage.piuri === ProtocolType.PickupStatus ||
