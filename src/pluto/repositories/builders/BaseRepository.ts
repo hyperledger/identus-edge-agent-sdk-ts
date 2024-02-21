@@ -105,7 +105,7 @@ export abstract class BaseRepository<T extends Model> {
         selector: { $and: [this.baseModel] }
       };
 
-      if (!!query?.selector) {
+      if (query?.selector) {
         baseQuery.selector?.$and?.push(query.selector);
       }
 

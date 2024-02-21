@@ -25,8 +25,8 @@ type KeysFor<T, P extends PropertyTypes> = P extends "number"
 type PropertyTypes = "boolean" | "number" | "string";
 
 interface SchemaGenerator<T> {
-  addProperty<P extends PropertyTypes>(type: P, key: KeysFor<T, P>, opts?: {}): void;
-  addProperty(type: PropertyTypes, key: string, opts?: {}): void;
+  addProperty<P extends PropertyTypes>(type: P, key: KeysFor<T, P>, opts?: any): void;
+  addProperty(type: PropertyTypes, key: string, opts?: any): void;
   setEncrypted(...keys: StringKeys<T>[]): void;
   setRequired(...keys: StringKeys<T>[]): void;
 }

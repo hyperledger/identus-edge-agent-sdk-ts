@@ -21,8 +21,6 @@ import {
   MnemonicWordException,
 } from "../domain/models/errors/Mnemonic";
 
-import { DerivationPath } from "./utils/derivation/DerivationPath";
-import { KeyDerivation } from "./utils/derivation/KeyDerivation";
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";

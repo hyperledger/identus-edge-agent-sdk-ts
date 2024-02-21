@@ -1,4 +1,3 @@
-import type * as Domain from "../../domain";
 import type { Model } from "./Model";
 import { schemaFactory } from "./Schema";
 
