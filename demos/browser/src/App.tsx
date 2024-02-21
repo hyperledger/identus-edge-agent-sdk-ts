@@ -2,21 +2,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
- * WARNING: This is an example using an encrypted inMemory storage.
+ * WARNING: This is an example using an encrypted indexDB storage.
  * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
  */
-// import InMemory from "@pluto-encrypted/inmemory";
-// import { Database } from "@pluto-encrypted/database";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import "./App.css";
 import * as jose from "jose";
 import { useAtom } from "jotai";
 import SDK from "@atala/prism-wallet-sdk";
+import IndexDB from "@pluto-encrypted/indexdb";
+
+import "./App.css";
 import { mnemonicsAtom } from "./state";
 import { trimString } from "./utils";
 import Spacer from "./Spacer";
 import { Box } from "./Box";
-import IndexDB from "@pluto-encrypted/indexdb";
 
 const BasicMessage = SDK.BasicMessage;
 const ListenerKey = SDK.ListenerKey;
@@ -497,7 +496,7 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto; }> = props => {
 
       );
     }
-    catch (e) {}
+    catch (e) { }
   };
 
   const handleStop = async () => {
@@ -627,7 +626,7 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto; }> = props => {
 };
 
 
-const store = new SDK.RxdbStore({
+const store = new SDK.Store({
   name: "test",
   storage: IndexDB,
   password: Buffer.from("demoapp").toString("hex")

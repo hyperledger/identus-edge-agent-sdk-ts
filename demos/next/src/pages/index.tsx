@@ -1,10 +1,9 @@
-import Image from 'next/image'
-import InMemory from "@pluto-encrypted/inmemory";
-import { Database } from "@pluto-encrypted/database";
+import IndexDB from "@pluto-encrypted/indexdb";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import * as jose from "jose";
 import { useAtom } from "jotai";
 import SDK from "@atala/prism-wallet-sdk";
+
 import { mnemonicsAtom } from "../app/state";
 import { trimString } from "../app/utils";
 import Spacer from "../app/Spacer";
@@ -22,6 +21,12 @@ const apollo = new SDK.Apollo();
 const castor = new SDK.Castor(apollo);
 const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19";
 
+const store = new SDK.Store({
+  name: "test",
+  storage: IndexDB,
+  password: Buffer.from("demoapp").toString("hex")
+});
+const pluto = new SDK.Pluto(store, apollo);
 
 const useSDK = (mediatorDID: SDK.Domain.DID, pluto: SDK.Domain.Pluto) => {
   const agent = SDK.Agent.initialize({ mediatorDID, pluto });
@@ -620,23 +625,9 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto }> = props => {
   );
 };
 
-export default
-  function App() {
-  const [pluto, setPluto] = useState<SDK.Domain.Pluto>()
 
-  useEffect(() => {
-    if (!pluto) {
-      const defaultPassword = new Uint8Array(32).fill(1);
-      Database.createEncrypted(
-        {
-          name: `my-db`,
-          encryptionKey: defaultPassword,
-          storage: InMemory,
-        }
-      ).then((db) => setPluto(db as any))
-    }
-  }, [pluto, setPluto])
 
+export default function App() {
   return (
     <div className="App">
       <h1>Atala PRISM Wallet SDK Usage Examples</h1>

@@ -1,1 +1,1 @@
-export * from "./Store";
+export { RxdbStore as Store } from "./Store";

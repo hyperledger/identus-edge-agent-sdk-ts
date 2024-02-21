@@ -3,7 +3,6 @@
  * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
  */
 const InMemory = require("@pluto-encrypted/inmemory");
-const { Database } = require("@pluto-encrypted/database");
 const SDK = require("@atala/prism-wallet-sdk");
 
 async function createTestScenario() {
@@ -13,18 +12,16 @@ async function createTestScenario() {
   const apollo = new SDK.Apollo();
   const api = new SDK.ApiImpl();
   const castor = new SDK.Castor(apollo);
-  const defaultPassword = new Uint8Array(32).fill(1);
-  const pluto = await Database.createEncrypted(
-    {
-      name: `my-db`,
-      encryptionKey: defaultPassword,
-      storage: InMemory,
-    }
-  );
+  const store = new SDK.Store({
+    name: "test",
+    storage: InMemory,
+    password: Buffer.from("demoapp").toString("hex")
+  });
+  const pluto = new SDK.Pluto(store, apollo);
   const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
   const mercury = new SDK.Mercury(castor, didcomm, api);
-  const store = new SDK.PublicMediatorStore(pluto);
-  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
+  const mediationStore = new SDK.PublicMediatorStore(pluto);
+  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, mediationStore);
   const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
   const seed = apollo.createRandomSeed();
   const agent = new SDK.Agent(
