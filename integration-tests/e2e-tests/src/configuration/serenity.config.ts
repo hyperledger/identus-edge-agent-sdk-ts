@@ -7,12 +7,7 @@ BeforeAll(async function () {
   // Configure Serenity/JS
   configure({
     crew: [
-      "@serenity-js/console-reporter",
-      "@serenity-js/serenity-bdd",
-      [
-        "@serenity-js/core:ArtifactArchiver",
-        { outputDirectory: "target/site/serenity" },
-      ],
+      "@serenity-js/console-reporter"
     ]
   })
 })

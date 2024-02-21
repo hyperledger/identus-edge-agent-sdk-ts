@@ -1,3 +1,38 @@
+# [4.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.1.0...v4.0.0) (2024-02-02)
+
+* fix: removing terser to allow an unminified build that is easier to d… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/127
+* feat: Integrate Apollo back + make secp256k1 keys part of derivable abstraction by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/110
+* test: update e2e env vars by @amagyar-iohk in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/122
+* docs: remove the github authentication token notice from the demos an… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/125
+* fix: Update demos to use the new Mediator peer did by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/128
+* fix: Change the demo mediator ID for the beta one. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/135
+* feat(ExportableKey): adding ExportableKey protocol and implementation by @curtis-h in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/131
+* fix: Integrate rust auto-generated code through submodules. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/136
+* fix: wrong CI pipelines for git submodules. Missing With. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/139
+* refactor: PrivateKey.index to return an integer | undefined by @curtis-h in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/140
+* fix: merging multiple PeerDID classes by @curtis-h in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/130
+* docs: ADR sdk package release + docs generation in MD by @curtis-h in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/120
+* fix: add docusaurus sidebar by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/143
+* feat: release hybrid browser-nodejs as commonjs and module dependency by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/142
+* fix: update apollo dependency. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/145
+* fix: typos InvalidBasicMEssageBodyError and signasture by @curtis-h in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/144
+* fix: approve the ADR + implement the CI changes to release RC packages. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/146
+* fix: CI fix, make sure that we build package before publishing into npm by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/147
+* fix: try to set the prerelease property through env vars the current … by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/149
+* fix: adding the right variables to the ci pipeline. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/151
+* fix: Releasing with semantic-release -e extending a js configuration … by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/152
+* fix: build script not able to find file. by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/153
+* fix: replace rc and release with correct configuration files in relea… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/154
+* fix: package name update by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/155
+* feat(Pollux)!: Adding Anoncreds presentation by @curtis-h in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/137
+
+BREAKING CHANGE: 
+* PrivateKey.index now returns number | undefined
+PrivateKey.index was returning a string it's possible where that's being used (ie Pluto) will need to handle the new number | undefined type
+* The SDK is now exportes as default, in order to import it use import sdk from '@atala/prism-wallet-sdk', vs import * as sdk from '@atala/prism-wallet-sdk'. Browsers now also don't need to build complex webpack configuration, check the demos for more info.
+* Pollux requires a new function: createPresentationProof to handle creating a Presentation for the relevant Request and Credential.
+
+
 # [3.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.0.0...v3.1.0) (2023-11-13)
 
 

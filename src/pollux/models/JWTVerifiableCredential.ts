@@ -21,8 +21,7 @@ export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
 export class JWTCredential
   extends Credential
-  implements ProvableCredential, StorableCredential, Pluto.Storable
-{
+  implements ProvableCredential, StorableCredential, Pluto.Storable {
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();
@@ -42,7 +41,7 @@ export class JWTCredential
     public readonly originalJWTString?: string
   ) {
     super();
-
+    this.properties.set(JWTVerifiableCredentialProperties.jti, jti);
     this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
     this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
     this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
@@ -141,12 +140,13 @@ export class JWTCredential
   }
 
   toStorable() {
-    const data = { id: this.id, ...Object.fromEntries(this.properties) };
+    const id = this.jti || this.getProperty(JWTVerifiableCredentialProperties.jti);
+    const data = { id, ...Object.fromEntries(this.properties) };
 
     return {
+      id,
       recoveryId: this.recoveryId,
       credentialData: JSON.stringify(data),
-      id: this.getProperty(JWTVerifiableCredentialProperties.jti),
       issuer: this.getProperty(JWTVerifiableCredentialProperties.iss),
       subject: this.getProperty(JWTVerifiableCredentialProperties.sub),
       validUntil: this.getProperty(JWTVerifiableCredentialProperties.exp),

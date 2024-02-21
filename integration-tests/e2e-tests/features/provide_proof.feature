@@ -1,4 +1,5 @@
-Feature: Provide proof of request
+@proof
+Feature: Provide proof
   The Edge Agent should provide proof to Cloud Agent
 
   Scenario: Edge Agent with a credential should provide proof to Cloud Agent

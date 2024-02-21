@@ -5,32 +5,7 @@ module.exports = (extraConfig = {}) => (
             '@semantic-release/commit-analyzer',
             '@semantic-release/release-notes-generator',
             ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
-            [
-                '@semantic-release/exec',
-                {
-                    prepareCmd: 'npm version ${nextRelease.version} --git-tag-version false',
-                },
-            ],
-            [
-                '@semantic-release/exec',
-                {
-                    prepareCmd: 'npm run build',
-                },
-            ],
-            ['@semantic-release/exec', { prepareCmd: 'npm publish --access public' }],
-            [
-                '@semantic-release/exec',
-                {
-                    prepareCmd: 'npm run docs',
-                },
-            ],
-            [
-                '@semantic-release/exec',
-                {
-                    prepareCmd:
-                        'yarn --cwd integration-tests/e2e-tests add @atala/prism-wallet-sdk@^${nextRelease.version}',
-                },
-            ],
+            ['@semantic-release/exec', { "prepareCmd": './publish.sh ${nextRelease.version}' }],
             [
                 '@semantic-release/git',
                 {
@@ -38,8 +13,6 @@ module.exports = (extraConfig = {}) => (
                         'package.json',
                         'package-lock.json',
                         'CHANGELOG.md',
-                        'integration-tests/e2e-tests/package.json',
-                        'integration-tests/e2e-tests/yarn.lock',
                         'docs/**/*',
                     ],
                     message: 'chore(release): release ${nextRelease.version}\n\n${nextRelease.notes}',
