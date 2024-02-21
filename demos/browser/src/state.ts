@@ -1,6 +1,6 @@
 import { atom } from "jotai";
-import { Domain } from "@atala/prism-wallet-sdk";
+import SDK from "@atala/prism-wallet-sdk";
 
-export const mnemonicsAtom = atom<Domain.MnemonicWordList | undefined>(
+export const mnemonicsAtom = atom<SDK.Domain.MnemonicWordList | undefined>(
   undefined
 );

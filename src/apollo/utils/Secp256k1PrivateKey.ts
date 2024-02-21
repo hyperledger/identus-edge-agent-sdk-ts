@@ -26,7 +26,8 @@ const BigIntegerWrapper = Apollo.derivation.BigIntegerWrapper;
  */
 export class Secp256k1PrivateKey
   extends PrivateKey
-  implements DerivableKey, ExportableKey, SignableKey, StorableKey {
+  implements DerivableKey, ExportableKey, SignableKey, StorableKey
+{
   public readonly recoveryId = StorableKey.recoveryId("secp256k1", "priv");
 
   public keySpecification: Map<string, string> = new Map();

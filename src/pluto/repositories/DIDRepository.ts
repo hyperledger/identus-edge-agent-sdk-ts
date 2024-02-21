@@ -11,14 +11,10 @@ export class DIDRepository extends MapperRepository<Models.DID, Domain.DID> {
   override async save(domain: Domain.DID, alias?: string) {
     const existing = await this.byUUID(domain.uuid);
 
-    if (existing) {
-      return existing;
+    if (!existing) {
+      const model = this.toModel(domain, alias);
+      await this.insert(model);
     }
-
-    const model = this.toModel(domain, alias);
-    const result = await this.insert(model);
-
-    return this.withId(domain, result.uuid);
   }
 
   toDomain(model: Models.DID): Domain.DID {

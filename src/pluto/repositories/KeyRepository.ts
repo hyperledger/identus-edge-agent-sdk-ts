@@ -11,13 +11,6 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
     super(store, "keys");
   }
 
-  override async save(domain: Domain.PrivateKey) {
-    const model = this.toModel(domain);
-    const result = await this.insert(model);
-
-    return this.withId(domain, result.uuid);
-  }
-
   toDomain(model: Models.Key): Domain.PrivateKey {
     const domain = this.keyRestoration.restorePrivateKey({
       ...model,

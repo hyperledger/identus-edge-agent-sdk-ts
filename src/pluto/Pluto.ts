@@ -50,7 +50,7 @@ export namespace Pluto {
      * Run a query to fetch data from the Store
      * 
      * @param name Model name
-     * @param query either an object or array of objects with matchable properties
+     * @param query a MangoQuery object, a set of values and operators defining the query
      * 
      * properties within an object will be AND'ed
      * different objects will be OR'd
@@ -58,17 +58,17 @@ export namespace Pluto {
      * @example
      * search for a model in TableOne with uuid and name
      * ```ts
-     *   store.query("TableOne", { uuid: "1", name: "eg" })
+     *   store.query("TableOne", { selector: { uuid: "1", name: "eg" }})
      * ```
      * @example
      * search for models in TableOne with uuid of 1 or 2
      * ```ts
-     *   store.query("TableOne", [{ uuid: "1" }, { uuid: "2" }])
+     *   store.query("TableOne", { selector: { $or: [{ uuid: "1" }, { uuid: "2" }] }})
      * ```
      * @example
      * search for all models in TableOne
      * ```ts
-     *   store.query("TableOne", [])
+     *   store.query("TableOne")
      * ```
      * 
      * @returns relevant Models
@@ -78,18 +78,13 @@ export namespace Pluto {
     /**
      * Persist new data in the Store.
      * 
-     * Should return UUID of newly saved data as either:
-     *   - standalone string
-     *   - inside an object
-     * 
-     * @param name Model name
+     * @param name table name
      * @param model object to save
-     * @return {string | { uuid: string }} UUID value
      */
     insert<T extends Models.Model>(name: string, model: T): Promise<void>;
 
-    // update (table: string, model: Partial<T>): Promise<boolean>;
-    // delete (table: string, id: string): Promise<boolean>;
+    // update (table: string, model: Partial<T>): Promise<void>;
+    // delete (table: string, id: string): Promise<void>;
   }
 }
 

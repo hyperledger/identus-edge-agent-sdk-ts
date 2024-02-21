@@ -388,7 +388,7 @@ const Agent: React.FC<{ pluto: SDK.Domain.Pluto; }> = props => {
     if (requestPresentations.length) {
       for (const requestPresentation of requestPresentations) {
         const lastCredentials = await pluto.getAllCredentials();
-        const lastCredential = lastCredentials.at(0);
+        const lastCredential = lastCredentials.at(-1);
         const requestPresentationMessage = RequestPresentation.fromMessage(requestPresentation);
 
         try {

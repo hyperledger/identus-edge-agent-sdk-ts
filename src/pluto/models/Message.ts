@@ -15,13 +15,13 @@ export interface Message extends Model {
   dataJson: string;
 
   // searchable properties
-  id: string;
-  createdTime: number;
+  id?: string;
+  createdTime?: number;
   thid?: string;
-  piuri: string;
+  piuri?: string;
   from?: string;
   to?: string;
-  isReceived: number;
+  isReceived?: number;
 }
 
 export const MessageSchema = schemaFactory<Message>(schema => {

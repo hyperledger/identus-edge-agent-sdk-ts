@@ -80,20 +80,16 @@ export abstract class MapperRepository<T extends Model, D extends Domain.Pluto.S
 
   /**
    * Persist the Domain instance in the Store.
-   * Update and return the given instance with the created UUID
    * 
    * @param domain 
-   * @returns domain with uuid set
    * 
    * Will be mapped to relevant Model for persistance
    * @see {@link BaseRepository.insert}
    * @throws {@link StoreInsertError} if insert fails
    * @throws {@link StoreUUIDNotReturned} if UUID not returned
    */
-  async save(domain: D): Promise<D> {
+  async save(domain: D): Promise<void> {
     const model = this.toModel(domain);
-    const result = await this.insert(model);
-
-    return this.withId(domain, result.uuid);
+    await this.insert(model);
   }
 }

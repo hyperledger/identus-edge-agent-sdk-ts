@@ -35,7 +35,6 @@ export class Message implements Pluto.Storable {
       createdTime +
       1 * 24 * 60 * 60
     ).toString(),
-    // Q: what is this?
     public readonly ack: string[] = [],
     public readonly direction: MessageDirection = MessageDirection.RECEIVED,
     public readonly fromPrior?: string,

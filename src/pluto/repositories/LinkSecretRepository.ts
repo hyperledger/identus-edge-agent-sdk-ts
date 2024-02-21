@@ -3,9 +3,8 @@ import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
 import { MapperRepository } from "./builders/MapperRepository";
 
-
 export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.LinkSecret> {
-  baseModel: Partial<Models.Key> = {
+  baseModel = {
     recoveryId: "linkSecret"
   };
 
@@ -22,8 +21,8 @@ export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.Li
 
   toModel(domain: Domain.LinkSecret): Models.Key {
     return {
+      ...this.baseModel,
       uuid: domain.uuid,
-      recoveryId: "linkSecret",
       rawHex: Buffer.from(domain.secret).toString("hex"),
       alias: domain.name,
     };

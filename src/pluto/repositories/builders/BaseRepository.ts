@@ -9,7 +9,7 @@ export type WithId<T> = T & Required<Domain.Pluto.Storable>;
 /**
  * @class BaseRepository
  * 
- * Define the basic functionality for interacting with the Store
+ * Encapsulate the functionality for interacting with the Store
  */
 export abstract class BaseRepository<T extends Model> {
   /**
@@ -34,7 +34,7 @@ export abstract class BaseRepository<T extends Model> {
     const obj = { ...model, ...this.baseModel };
     try {
       await this.store.insert(this.name, obj);
-      return model;
+      return obj;
     }
     catch (e) {
       throw new Domain.PlutoError.StoreInsertError();
@@ -44,20 +44,18 @@ export abstract class BaseRepository<T extends Model> {
   /**
    * Search the Store for Models
    * 
-   * @param query either an object or array of objects with matchable properties
-   * 
-   * properties within an object will be AND'ed
-   *   different objects will be OR'd
+   * @param query a MangoQuery object, a set of values and operators defining the query
+   * @see rxdb/rx-query.d.ts
    * 
    * @example
    * search for a model with uuid and name
    * ```ts
-   *   repo.getModels({ uuid: "1", name: "eg" })
+   *   repo.getModels({ selector: { uuid: "1", name: "eg" }})
    * ```
    * @example
    * search for models with uuid of 1 or 2
    * ```ts
-   *   repo.getModels([{ uuid: "1" }, { uuid: "2" }])
+   *   repo.getModels({ selector: { $or: [{ uuid: "1" }, { uuid: "2" }] }})
    * ```
    * @example
    * search for all models
@@ -85,22 +83,36 @@ export abstract class BaseRepository<T extends Model> {
    */
   private async runQuery(query?: MangoQuery<T>): Promise<T[]> {
     // const query = builder?.merge(this.baseModel).toJSON().query;
-    if (Object.keys(this.baseModel).length > 0) {
-      query = {
-        ...query,
-        selector: {
-          $and: [query?.selector ?? {}, this.baseModel]
-        } as any
-      };
-    }
-
+    const mQuery = this.makeMangoQuery(query);
 
     try {
-      return this.store.query(this.name, query);
+      return this.store.query(this.name, mQuery);
     }
     catch (e) {
       throw new Domain.PlutoError.StoreQueryFailed();
     }
+  }
+
+  /**
+   * Create the query to run from the given query and baseQuery
+   * 
+   * @param query 
+   * @returns 
+   */
+  private makeMangoQuery(query?: MangoQuery<T>): MangoQuery<T> | undefined {
+    if (Object.keys(this.baseModel).length > 0) {
+      const baseQuery: MangoQuery = {
+        selector: { $and: [this.baseModel] }
+      };
+
+      if (!!query?.selector) {
+        baseQuery.selector?.$and?.push(query.selector);
+      }
+
+      return Object.assign({}, query, baseQuery);
+    }
+
+    return query;
   }
 
   /**

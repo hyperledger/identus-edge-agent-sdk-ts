@@ -12,6 +12,9 @@ import { schemaFactory } from "./Schema";
  */
 export interface Key extends Model {
   recoveryId: string;
+  /**
+   * Hex encoded Key.raw
+   */
   rawHex: string;
   /**
    * Optional name
