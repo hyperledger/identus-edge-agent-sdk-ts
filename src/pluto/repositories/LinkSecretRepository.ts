@@ -5,7 +5,7 @@ import { MapperRepository } from "./builders/MapperRepository";
 
 export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.LinkSecret> {
   baseModel = {
-    recoveryId: "linkSecret"
+    recoveryId: "linksecret"
   };
 
   constructor(store: Pluto.Store) {

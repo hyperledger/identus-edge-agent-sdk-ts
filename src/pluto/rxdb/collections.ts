@@ -4,12 +4,12 @@ import * as Models from "../models";
 export type CollectionList = Record<string, RxCollectionCreator>;
 
 export const makeCollections = (additional: CollectionList = {}) => ({
+  "credentials": { schema: Models.CredentialSchema },
+  "credential-metadata": { schema: Models.CredentialMetadataSchema },
+  "didkey-link": { schema: Models.DIDKeyLinkSchema },
+  "did-link": { schema: Models.DIDLinkSchema },
+  "dids": { schema: Models.DIDSchema },
+  "keys": { schema: Models.KeySchema },
+  "messages": { schema: Models.MessageSchema },
   ...additional,
-  credentials: { schema: Models.CredentialSchema },
-  credentialMetadata: { schema: Models.CredentialMetadataSchema },
-  didkeyLink: { schema: Models.DIDKeyLinkSchema },
-  didLink: { schema: Models.DIDLinkSchema },
-  dids: { schema: Models.DIDSchema },
-  keys: { schema: Models.KeySchema },
-  messages: { schema: Models.MessageSchema },
 });

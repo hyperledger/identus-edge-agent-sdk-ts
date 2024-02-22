@@ -32,7 +32,7 @@
     "types": "rm -rf build/typings && tsc",
     "build:browser": "rollup -c rollup/rollup.browser.mjs",
     "build:node": "rollup -c rollup/rollup.node.mjs",
-    "test": "jest",
+    "test": "jest ./tests/pluto/Pluto.Migrations.test.ts",
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
     "docs": "npx typedoc --options typedoc.js --hideGenerator"
@@ -59,6 +59,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@babel/traverse": "^7.23.2",
     "@droppedcode/typedoc-plugin-relative-includes": "^1.0.5",
+    "@pluto-encrypted/inmemory": "^1.12.2",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",

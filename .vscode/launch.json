@@ -28,7 +28,8 @@
         "--colors",
         "--workerThreads",
         "--maxWorkers",
-        "1"
+        "1",
+        "./tests/pluto/Pluto.Migrations.test.ts"
       ],
       "skipFiles": [
         "${workspaceRoot}/../../node_modules/**/*",

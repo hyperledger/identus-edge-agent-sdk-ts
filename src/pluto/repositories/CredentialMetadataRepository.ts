@@ -5,7 +5,7 @@ import { MapperRepository } from "./builders/MapperRepository";
 
 export class CredentialMetadataRepository extends MapperRepository<Models.CredentialMetadata, Domain.CredentialMetadata> {
   constructor(store: Pluto.Store) {
-    super(store, "credentialMetadata");
+    super(store, "credential-metadata");
   }
 
   toDomain(model: Models.CredentialMetadata): Domain.CredentialMetadata {

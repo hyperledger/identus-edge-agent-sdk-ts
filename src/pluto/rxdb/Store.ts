@@ -4,7 +4,7 @@ import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
 import { CollectionList, makeCollections } from "./collections";
 import type { Pluto } from "../Pluto";
 import { Model } from '../models';
-// import { RxDBEncryptedMigrationPlugin } from '@pluto-encrypted/encryption';
+import { RxDBEncryptedMigrationPlugin } from '../migration';
 
 export class RxdbStore implements Pluto.Store {
   private _db?: RxDatabase<CollectionsOfDatabase, any, any>;
@@ -15,7 +15,7 @@ export class RxdbStore implements Pluto.Store {
   ) {
     addRxPlugin(RxDBQueryBuilderPlugin);
     addRxPlugin(RxDBJsonDumpPlugin);
-    // addRxPlugin(RxDBEncryptedMigrationPlugin);
+    addRxPlugin(RxDBEncryptedMigrationPlugin);
   }
 
   get db() {
@@ -33,7 +33,7 @@ export class RxdbStore implements Pluto.Store {
     if (!this._db) {
       this._db = await createRxDatabase({
         ...this.options,
-        multiInstance: false
+        multiInstance: true
       });
 
       const collections = makeCollections(this.collections);
