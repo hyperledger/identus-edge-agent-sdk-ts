@@ -59,7 +59,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@babel/traverse": "^7.23.2",
     "@droppedcode/typedoc-plugin-relative-includes": "^1.0.5",
-    "@pluto-encrypted/inmemory": "^1.12.2",
+    "@pluto-encrypted/inmemory": "^1.12.3",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
