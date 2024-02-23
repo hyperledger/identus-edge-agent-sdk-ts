@@ -41,12 +41,15 @@ export class RxdbStore implements Pluto.Store {
     }
   }
 
+
+
   getCollection(name: string) {
-    if (!this.db.collections[name]) {
+    const safeName = name.replace(/([A-Z])/g, "-$1").toLowerCase()
+    if (!this.db.collections[safeName]) {
       throw new Error("Collection does not exist");
     }
 
-    return this.db.collections[name];
+    return this.db.collections[safeName];
   }
 
   async query<T extends Model>(name: string, query?: MangoQuery<T>) {
