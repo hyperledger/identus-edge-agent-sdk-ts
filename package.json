@@ -32,7 +32,7 @@
     "types": "rm -rf build/typings && tsc",
     "build:browser": "rollup -c rollup/rollup.browser.mjs",
     "build:node": "rollup -c rollup/rollup.node.mjs",
-    "test": "jest ./tests/pluto/Pluto.Migrations.test.ts",
+    "test": "jest",
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
     "docs": "npx typedoc --options typedoc.js --hideGenerator"
