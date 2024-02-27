@@ -1,3 +1,6 @@
+import { WebSocket } from 'isows'
+import { uuid } from "@stablelib/uuid";
+
 import { DID, Mediator, Message } from "../../domain";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { AgentError } from "../../domain/models/Errors";
@@ -7,7 +10,8 @@ import { MediationRequest } from "../protocols/mediation/MediationRequest";
 import { PickupReceived } from "../protocols/pickup/PickupReceived";
 import { PickupRequest } from "../protocols/pickup/PickupRequest";
 import { PickupRunner } from "../protocols/pickup/PickupRunner";
-import { MediatorHandler, MediatorStore } from "../types";
+import { EventCallback, MediatorHandler, MediatorStore } from "../types";
+import { ProtocolType } from '../protocols/ProtocolTypes';
 
 /**
  * A basic implementation of our MediatorHandler Interface which is mainly used
@@ -38,7 +42,7 @@ export class BasicMediatorHandler implements MediatorHandler {
     public mediatorDID: DID,
     public mercury: Mercury,
     public store: MediatorStore
-  ) {}
+  ) { }
 
   /**
    * Secondary constructor for BasicMediation Handler, to instanciate if from an existing Mediator
@@ -177,6 +181,59 @@ export class BasicMediatorHandler implements MediatorHandler {
     }
     return new PickupRunner(message, this.mercury).run();
   }
+
+  /**
+   * Asyncronously create a websocket connection with the mediator
+   * Establish a websocket connection and activate the live-mode with the mediator
+   * and also listen for incomming unread messages with existing protocols.
+   * 
+   * @async
+   * @param signal 
+   * @param serviceEndpointUri 
+   * @param onMessage 
+   */
+  listenUnreadMessages(
+    signal: AbortSignal,
+    serviceEndpointUri: string,
+    onMessage: EventCallback
+  ) {
+    const socket = new WebSocket(serviceEndpointUri);
+    signal.addEventListener("abort", () => {
+      socket.close()
+    });
+
+    socket.addEventListener("open", async () => {
+      const mediator = this.mediator;
+      if (!mediator) {
+        throw new Error("No mediator, establish mediation first!")
+      }
+      const message = new Message(
+        JSON.stringify({
+          live_delivery: true
+        }),
+        uuid(),
+        ProtocolType.LiveDeliveryChange,
+        this.mediator?.hostDID,
+        this.mediator?.mediatorDID,
+      );
+      const packedMessage = await this.mercury.packMessage(message)
+      socket.send(packedMessage)
+    })
+
+    socket.addEventListener("message", async (message) => {
+      const decryptMessage = await this.mercury.unpackMessage(message.data);
+      if (
+        decryptMessage.piuri === ProtocolType.PickupStatus ||
+        decryptMessage.piuri === ProtocolType.PickupDelivery) {
+        const delivered = await new PickupRunner(decryptMessage, this.mercury).run()
+        const deliveredMessages = delivered.map(({ message }) => message);
+        onMessage(deliveredMessages)
+      }
+    })
+
+  }
+
+
   /**
    * Asyncronously notify the current mediator that one or multiple message ID's have been read (or stored)
    *

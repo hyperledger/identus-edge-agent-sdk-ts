@@ -20,6 +20,7 @@ export enum ProtocolType {
   PickupDelivery = "https://didcomm.org/messagepickup/3.0/delivery",
   PickupStatus = "https://didcomm.org/messagepickup/3.0/status",
   PickupReceived = "https://didcomm.org/messagepickup/3.0/messages-received",
+  LiveDeliveryChange = "https://didcomm.org/messagepickup/3.0/live-delivery-change",
 }
 
 export function findProtocolTypeByValue(string: string): ProtocolType {

@@ -147,4 +147,10 @@ export abstract class MediatorHandler {
   ): Promise<Array<{ attachmentId: string; message: Message }>>;
 
   abstract registerMessagesAsRead(ids: string[]): Promise<void>;
+
+  abstract listenUnreadMessages(
+    signal: AbortSignal,
+    serviceEndpointUri: string,
+    onMessage: EventCallback
+  ): void
 }
