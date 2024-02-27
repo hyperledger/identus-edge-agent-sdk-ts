@@ -1,5 +1,6 @@
 import { MangoQuery } from "rxdb";
 import { Pluto } from "../../src/pluto/Pluto";
+import { Domain } from "../../src";
 
 /**
  * WARNING: Do not  use this Pluto Store implementation, its for test purposes only.
@@ -7,6 +8,7 @@ import { Pluto } from "../../src/pluto/Pluto";
  * Functionality isn't 100% covered - only handling what is necessary
  */
 export class InMemoryStore implements Pluto.Store {
+
   private store = new Map<string, any[]>();
 
   async query<T>(table: string, query?: MangoQuery<T>): Promise<T[]> {
@@ -44,5 +46,14 @@ export class InMemoryStore implements Pluto.Store {
     const keys = Object.keys(query);
     const match = keys.every(key => item[key] == query[key]);
     return match;
+  }
+
+
+  update<T extends Domain.Pluto.Storable>(table: string, model: T): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  delete(table: string, uuid: string): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 }

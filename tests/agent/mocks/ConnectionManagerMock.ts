@@ -38,7 +38,7 @@ export class ConnectionsManagerMock implements ConnectionsManagerClass {
   stopFetchingMessages() {
     return;
   }
-  startFetchingMessages() {
+  async startFetchingMessages() {
     return;
   }
   stopAllEvents(): void {
