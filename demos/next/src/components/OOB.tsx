@@ -37,6 +37,9 @@ export const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto; }> = pro
         if (!oob) {
             return;
         }
+        if (!agent) {
+            throw new Error("Start the agent first")
+        }
         const parsed = await agent.parseOOBInvitation(new URL(oob));
         await agent.acceptInvitation(parsed);
     }

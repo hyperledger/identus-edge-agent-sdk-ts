@@ -1,6 +1,8 @@
+import { Pluto } from "../buildingBlocks/Pluto";
 import { InvalidDIDString } from "./errors/Castor";
 
-export class DID {
+export class DID implements Pluto.Storable {
+  public readonly uuid: string;
   public readonly schema: string;
   public readonly method: string;
   public readonly methodId: string;
@@ -9,6 +11,7 @@ export class DID {
     this.schema = schema;
     this.method = method;
     this.methodId = methodId;
+    this.uuid = this.toString();
   }
 
   toString() {
@@ -20,13 +23,22 @@ export class DID {
    * @param {DID | string} value - some representation of a DID
    * @returns {DID}
    */
-  static from(value: DID | string): DID {
+  static from(value: DID | string | unknown): DID {
     if (value instanceof DID) {
       return value;
     }
 
     if (typeof value === "string") {
       return DID.fromString(value);
+    }
+
+    if (
+      typeof value === "object" && value !== null
+      && "method" in value && typeof value.method === "string"
+      && "methodId" in value && typeof value.methodId === "string"
+      && "schema" in value && typeof value.schema === "string"
+    ) {
+      return new DID(value.schema, value.method, value.methodId);
     }
 
     throw new Error("Invalid DID value");

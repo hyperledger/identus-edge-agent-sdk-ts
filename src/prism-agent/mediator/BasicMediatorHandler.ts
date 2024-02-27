@@ -75,6 +75,7 @@ export class BasicMediatorHandler implements MediatorHandler {
    * @returns {Promise<Mediator | undefined>}
    */
   async bootRegisteredMediator(): Promise<Mediator | undefined> {
+    // Q: is this correct? shouldn't we be able to use multiple or select the Mediator to use
     if (!this.mediator) {
       const mediators = await this.store.getAllMediators();
       const mediator = mediators.slice(0, 1).at(0);
@@ -165,7 +166,7 @@ export class BasicMediatorHandler implements MediatorHandler {
    */
   async pickupUnreadMessages(
     limit: number
-  ): Promise<Array<{ attachmentId: string; message: Message }>> {
+  ): Promise<Array<{ attachmentId: string; message: Message; }>> {
     if (!this.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }

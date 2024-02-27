@@ -5,22 +5,10 @@ addRxPlugin(RxDBDevModePlugin);
 
 import { AnyAction, ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
 import SDK from "@atala/prism-wallet-sdk";
-import { Database } from "@pluto-encrypted/database";
 import { sha512 } from '@noble/hashes/sha512'
 import { RootState, reduxActions } from "@/reducers/app";
-import { DBNAME } from "@/utils/types";
 import IndexDB from '@pluto-encrypted/indexdb'
-import {
-    getDefaultCollections,
-    DIDCollection,
-    DIDPairCollection,
-    MediatorCollection,
-    PrivateKeyColletion,
-    CredentialCollection,
-    CredentialRequestMetadataCollection,
-    LinkSecretColletion,
-    MessageColletion
-} from "@pluto-encrypted/schemas";
+
 
 const Agent = SDK.Agent;
 const BasicMessage = SDK.BasicMessage;
@@ -63,14 +51,7 @@ export const rejectPresentationRequest = createAsyncThunk<
     try {
         const { message, pluto } = options;
         const requestPresentation = RequestPresentation.fromMessage(message);
-        const storedMessage = await pluto.getCollection("messages").findOne({
-            selector: {
-                id: {
-                    $eq: message.id
-                }
-            }
-        }).exec();
-        await storedMessage?.remove()
+        await pluto.deleteMessage(message.id)
         return api.fulfillWithValue(requestPresentation);
     } catch (err) {
         return api.rejectWithValue(err as Error);
@@ -87,14 +68,7 @@ export const rejectCredentialOffer = createAsyncThunk<
     try {
         const { message, pluto } = options;
         const credentialOffer = OfferCredential.fromMessage(message);
-        const storedMessage = await pluto.getCollection("messages").findOne({
-            selector: {
-                id: {
-                    $eq: message.id
-                }
-            }
-        }).exec();
-        await storedMessage?.remove()
+        await pluto.deleteMessage(message.id)
         return api.fulfillWithValue(credentialOffer);
     } catch (err) {
         return api.rejectWithValue(err as Error);
@@ -226,23 +200,14 @@ export const connectDatabase = createAsyncThunk<
 >("connectDatabase", async (options, api) => {
     try {
         const hashedPassword = sha512(options.encryptionKey)
-        const db = await Database.createEncrypted<{
-            dids: DIDCollection;
-            didpairs: DIDPairCollection;
-            mediators: MediatorCollection;
-            privatekeys: PrivateKeyColletion;
-            credentials: CredentialCollection;
-            credentialrequestmetadatas: CredentialRequestMetadataCollection;
-            linksecrets: LinkSecretColletion;
-            messages: MessageColletion;
-        }>(
-            {
-                name: DBNAME,
-                encryptionKey: hashedPassword,
-                storage: IndexDB,
-                collections: getDefaultCollections()
-            }
-        );
+        const apollo = new SDK.Apollo();
+        const store = new SDK.Store({
+            name: "test",
+            storage: IndexDB,
+            password: Buffer.from(hashedPassword).toString("hex")
+        });
+        const db = new SDK.Pluto(store, apollo);
+        await db.start();
         const messages = await db.getAllMessages()
         const connections = await db.getAllDidPairs()
         const credentials = await db.getAllCredentials();

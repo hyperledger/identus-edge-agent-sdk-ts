@@ -4,25 +4,29 @@ import BigInteger from "bn.js";
 
 import * as ECConfig from "../../config/ECConfig";
 import { ECPoint } from "./ec/ECPoint";
-import { ApolloError } from "../../domain/models/Errors";
 import {
+  ApolloError,
   Curve,
   ExportableKey,
   ImportableKey,
   KeyProperties,
   KeyTypes,
   PublicKey,
+  StorableKey,
   VerifiableKey
 } from "../../domain";
 
 /**
  * @ignore
  */
-export class Secp256k1PublicKey extends PublicKey implements ExportableKey, VerifiableKey {
+export class Secp256k1PublicKey extends PublicKey implements StorableKey, ExportableKey, VerifiableKey {
+  public readonly recoveryId = StorableKey.recoveryId("secp256k1", "pub");
+
+
   public keySpecification: Map<KeyProperties | string, string> = new Map();
   public size: number;
   public raw: Uint8Array;
-  public type: KeyTypes = KeyTypes.EC;
+  public type = KeyTypes.EC;
 
   public readonly to = ExportableKey.factory(this, { pemLabel: "EC PUBLIC KEY" });
   static from = ImportableKey.factory(Secp256k1PublicKey, { pemLabel: "EC PUBLIC KEY" });

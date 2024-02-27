@@ -1,20 +1,19 @@
-import { CredentialType } from ".";
-import { Anoncreds } from "./Anoncreds";
+import { CredentialType, LinkSecret } from ".";
+import { Pluto } from "../buildingBlocks/Pluto";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
 
 type Claim = Record<string, any>;
 
-export abstract class Credential {
+export abstract class Credential implements Pluto.Storable {
   abstract recoveryId: string;
-
-  // in Swift
   abstract id: string;
-
   abstract issuer: string;
   abstract subject: string;
   abstract claims: Claim[];
   abstract properties: Map<string, any>;
+
+  public readonly uuid = Pluto.makeUUID();
 
   getProperty(name: string) {
     return this.properties.get(name);
@@ -52,14 +51,13 @@ export interface StorableCredential {
 export interface CredentialRequestOptions {
   keyPair?: KeyPair;
   did?: DID;
-  linkSecret?: string;
-  linkSecretName?: string;
+  linkSecret?: LinkSecret;
   [name: string]: any;
 }
 
 export interface CredentialIssueOptions {
   type: CredentialType;
   linkSecret?: string;
-  credentialMetadata?: Anoncreds.CredentialRequestMeta;
+  credentialMetadata?: Record<string, any>;
   [name: string]: any;
 }

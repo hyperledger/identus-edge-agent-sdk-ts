@@ -1,6 +1,7 @@
 import {
   Curve,
   DID,
+  KeyProperties,
   PublicKey,
   Seed,
   Service,
@@ -17,6 +18,7 @@ import {
   ConnectionsManager,
   MediatorHandler,
 } from "./types";
+import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -44,7 +46,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected manager: ConnectionsManager,
     protected mediationHandler: MediatorHandler,
     protected seed: Seed
-  ) { }
+  ) {}
 
   /**
    * Asyncronously sign with a DID
@@ -139,9 +141,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     keyPathIndex?: number
   ): Promise<DID> {
-    const index = keyPathIndex
-      ? keyPathIndex
-      : await this.pluto.getPrismLastKeyPathIndex();
+    const index = keyPathIndex ?? this.getNextKeyPathIndex();
 
     const privateKey = this.apollo.createPrivateKey({
       type: KeyTypes.EC,
@@ -151,7 +151,18 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
     const publicKey = privateKey.publicKey();
     const did = await this.castor.createPrismDID(publicKey, services);
-    await this.pluto.storePrismDID(did, index, privateKey, null, alias);
+    // TODO tmp fix as index not set on key currently (PR open)
+    privateKey.keySpecification.set(KeyProperties.index, index.toString());
+
+    await this.pluto.storePrismDID(did, privateKey, alias);
     return did;
+  }
+
+  private async getNextKeyPathIndex() {
+    const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
+    const index = await getIndexTask.run();
+    const next = index + 1;
+
+    return next;
   }
 }

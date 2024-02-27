@@ -2,20 +2,33 @@ import { Apollo as ApolloInterface } from "../domain/buildingBlocks/Apollo";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 
-import { Curve, KeyTypes, PrivateKey, Seed, SeedWords } from "../domain/models";
-import { MnemonicWordList } from "../domain/models/WordList";
+import {
+  getKeyCurveByNameAndIndex,
+  ApolloError,
+  Curve,
+  KeyTypes,
+  KeyProperties,
+  MnemonicWordList,
+  PrivateKey,
+  PublicKey,
+  Seed,
+  SeedWords,
+  StorableKey,
+  KeyRestoration,
+} from "../domain";
 import {
   MnemonicLengthException,
   MnemonicWordException,
 } from "../domain/models/errors/Mnemonic";
+
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
-import { ApolloError } from "../domain/models/Errors";
 import { X25519PrivateKey } from "./utils/X25519PrivateKey";
-import { KeyProperties } from "../domain/models/KeyProperties";
-import { getKeyCurveByNameAndIndex } from "../domain/models";
 import { Secp256k1PrivateKey } from "./utils/Secp256k1PrivateKey";
 import { Ed25519KeyPair } from "./utils/Ed25519KeyPair";
 import { X25519KeyPair } from "./utils/X25519KeyPair";
+import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
+import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
+import { X25519PublicKey } from "./utils/X25519PublicKey";
 
 import ApolloPKG from "@atala/apollo";
 
@@ -97,7 +110,7 @@ const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
  * @class Apollo
  * @typedef {Apollo}
  */
-export default class Apollo implements ApolloInterface {
+export default class Apollo implements ApolloInterface, KeyRestoration {
   static Secp256k1PrivateKey = Secp256k1PrivateKey;
   static Ed25519PrivateKey = Ed25519PrivateKey;
   static X25519PrivateKey = X25519PrivateKey;
@@ -273,9 +286,7 @@ export default class Apollo implements ApolloInterface {
         }
 
         const derivationPathStr = parameters[KeyProperties.derivationPath]
-          ? Buffer.from(parameters[KeyProperties.derivationPath]).toString(
-            "hex"
-          )
+          ? Buffer.from(parameters[KeyProperties.derivationPath]).toString("hex")
           : Buffer.from(`m/0'/0'/0'`).toString("hex");
 
         const seedStr = parameters[KeyProperties.seed];
@@ -325,5 +336,36 @@ export default class Apollo implements ApolloInterface {
     }
 
     throw new ApolloError.InvalidKeyType(keyType, Object.values(KeyTypes));
+  }
+
+
+  restorePrivateKey(key: StorableKey): PrivateKey {
+    switch (key.recoveryId) {
+      case "secp256k1+priv":
+        return new Secp256k1PrivateKey(key.raw);
+
+      case "ed25519+priv":
+        return new Ed25519PrivateKey(key.raw);
+
+      case "x25519+priv":
+        return new X25519PrivateKey(key.raw);
+    }
+
+    throw new ApolloError.KeyRestoratonFailed(key);
+  }
+
+  restorePublicKey(key: StorableKey): PublicKey {
+    switch (key.recoveryId) {
+      case "secp256k1+pub":
+        return new Secp256k1PublicKey(key.raw);
+
+      case "ed25519+pub":
+        return new Ed25519PublicKey(key.raw);
+
+      case "x25519+pub":
+        return new X25519PublicKey(key.raw);
+    }
+
+    throw new ApolloError.KeyRestoratonFailed(key);
   }
 }

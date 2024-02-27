@@ -1,0 +1,34 @@
+import * as Domain from "../../domain";
+import type * as Models from "../models";
+import type { Pluto } from "../Pluto";
+import { MapperRepository } from "./builders/MapperRepository";
+
+export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKey> {
+  constructor(
+    store: Pluto.Store,
+    private readonly keyRestoration: Domain.KeyRestoration
+  ) {
+    super(store, "keys");
+  }
+
+  toDomain(model: Models.Key): Domain.PrivateKey {
+    const domain = this.keyRestoration.restorePrivateKey({
+      ...model,
+      raw: Buffer.from(model.rawHex, "hex")
+    });
+    return this.withId(domain, model.uuid);
+  }
+
+  toModel(domain: Domain.PrivateKey): Models.Key {
+    if (!domain.isStorable()) {
+      throw new Domain.PlutoError.PrivateKeyNotStorable();
+    }
+
+    return {
+      uuid: domain.uuid,
+      recoveryId: domain.recoveryId,
+      rawHex: domain.to.String("hex"),
+      index: domain.index
+    };
+  }
+}

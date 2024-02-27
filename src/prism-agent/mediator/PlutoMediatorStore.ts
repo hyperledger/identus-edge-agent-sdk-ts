@@ -27,11 +27,7 @@ export class PublicMediatorStore implements MediatorStore {
    * @returns {Promise<void>}
    */
   async storeMediator(mediator: Mediator): Promise<void> {
-    const response = await this.pluto.storeMediator(
-      mediator.mediatorDID,
-      mediator.hostDID,
-      mediator.routingDID
-    );
+    const response = await this.pluto.storeMediator(mediator);
     return response;
   }
 

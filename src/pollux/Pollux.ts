@@ -196,11 +196,8 @@ export default class Pollux implements IPollux {
     offer: Message,
     options: CredentialRequestOptions
   ) {
-    const { linkSecret, linkSecretName } = options;
+    const linkSecret = options.linkSecret;
     if (!linkSecret) {
-      throw new Error("Link Secret is not available.");
-    }
-    if (!linkSecretName) {
       throw new Error("Link Secret is not available.");
     }
 
@@ -220,8 +217,8 @@ export default class Pollux implements IPollux {
     return this.anoncreds.createCredentialRequest(
       credentialOfferBody,
       credentialDefinition,
-      linkSecret,
-      linkSecretName
+      linkSecret.secret,
+      linkSecret.name
     );
   }
 
@@ -320,7 +317,7 @@ export default class Pollux implements IPollux {
         schemas,
         credDefs,
         credential.toJSON(),
-        options.linkSecret
+        options.linkSecret.secret
       );
 
       return result;

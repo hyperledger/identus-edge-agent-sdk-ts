@@ -13,8 +13,11 @@ function Signatures({ keyPair }: { keyPair: SDK.Domain.KeyPair; }) {
     const [isSignatureValid, setIsSignatureValid] = React.useState<boolean | undefined>(undefined);
 
     function signData() {
+        if (!originalText) {
+            throw new Error("Incomplete originaalText")
+        }
         if (keyPair.privateKey.isSignable()) {
-            const helloWorldSig = keyPair.privateKey.sign(originalText);
+            const helloWorldSig = keyPair.privateKey.sign(Buffer.from(originalText));
             setSignatureEncoded(jose.base64url.encode(helloWorldSig));
         }
     }
@@ -25,8 +28,11 @@ function Signatures({ keyPair }: { keyPair: SDK.Domain.KeyPair; }) {
         let isValid;
 
         try {
+            if (!originalText) {
+                throw new Error("Incomplete originaalText")
+            }
             if (keyPair.publicKey.canVerify()) {
-                isValid = keyPair.publicKey.verify(originalText, Buffer.from(jose.base64url.decode(signatureEncoded)));
+                isValid = keyPair.publicKey.verify(Buffer.from(originalText), Buffer.from(jose.base64url.decode(signatureEncoded)));
             }
 
         } catch (e) {

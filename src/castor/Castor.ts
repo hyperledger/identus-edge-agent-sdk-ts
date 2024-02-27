@@ -10,7 +10,7 @@ import {
   DID,
   Service,
   DIDDocument,
-  PrismDIDMethodId,
+  PrismDID,
   DIDDocumentCoreProperty,
   DIDResolver,
   KeyPair,
@@ -168,7 +168,7 @@ export default class Castor implements CastorInterface {
 
     const base64State = base64.base64url.baseEncode(encodedState);
 
-    const methodSpecificId = new PrismDIDMethodId([stateHash, base64State]);
+    const methodSpecificId = PrismDID.parseMethodId([stateHash, base64State]);
 
     return new DID("did", "prism", methodSpecificId.toString());
   }
@@ -333,24 +333,24 @@ export default class Castor implements CastorInterface {
         const material =
           method.publicKeyJwk.crv === Curve.X25519
             ? new VerificationMaterialAgreement(
-                JSON.stringify(method.publicKeyJwk),
-                VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
-                VerificationMaterialFormatPeerDID.JWK
-              )
+              JSON.stringify(method.publicKeyJwk),
+              VerificationMethodTypeAgreement.JSON_WEB_KEY_2020,
+              VerificationMaterialFormatPeerDID.JWK
+            )
             : new VerificationMaterialAuthentication(
-                JSON.stringify(method.publicKeyJwk),
-                VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
-                VerificationMaterialFormatPeerDID.JWK
-              );
+              JSON.stringify(method.publicKeyJwk),
+              VerificationMethodTypeAuthentication.JSON_WEB_KEY_2020,
+              VerificationMaterialFormatPeerDID.JWK
+            );
 
         const decodedKey =
           method.publicKeyJwk.crv === Curve.X25519
             ? JWKHelper.fromJWKAgreement(
-                material as VerificationMaterialAgreement
-              )
+              material as VerificationMaterialAgreement
+            )
             : JWKHelper.fromJWKAuthentication(
-                material as VerificationMaterialAuthentication
-              );
+              material as VerificationMaterialAuthentication
+            );
 
         publicKey =
           method.publicKeyJwk.crv === Curve.X25519

@@ -3,28 +3,27 @@
  * Checkout Community maintained NPM package @pluto-encrypted/database for more DB wrappers.
  */
 const InMemory = require("@pluto-encrypted/inmemory");
-const { Database } = require("@pluto-encrypted/database");
 const SDK = require("@atala/prism-wallet-sdk");
 
 async function createTestScenario() {
+  const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHBzOi8vc2l0LXByaXNtLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJhIjpbImRpZGNvbW0vdjIiXX19.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzczovL3NpdC1wcmlzbS1tZWRpYXRvci5hdGFsYXByaXNtLmlvL3dzIiwiYSI6WyJkaWRjb21tL3YyIl19fQ";
+
   const mediatorDID = SDK.Domain.DID.fromString(
-    "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19"
+    defaultMediatorDID
   );
   const apollo = new SDK.Apollo();
   const api = new SDK.ApiImpl();
   const castor = new SDK.Castor(apollo);
-  const defaultPassword = new Uint8Array(32).fill(1);
-  const pluto = await Database.createEncrypted(
-    {
-      name: `my-db`,
-      encryptionKey: defaultPassword,
-      storage: InMemory,
-    }
-  );
+  const store = new SDK.Store({
+    name: "test",
+    storage: InMemory,
+    password: Buffer.from("demoapp").toString("hex")
+  });
+  const pluto = new SDK.Pluto(store, apollo);
   const didcomm = new SDK.DIDCommWrapper(apollo, castor, pluto);
   const mercury = new SDK.Mercury(castor, didcomm, api);
-  const store = new SDK.PublicMediatorStore(pluto);
-  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, store);
+  const mediationStore = new SDK.PublicMediatorStore(pluto);
+  const handler = new SDK.BasicMediatorHandler(mediatorDID, mercury, mediationStore);
   const manager = new SDK.ConnectionsManager(castor, mercury, pluto, handler);
   const seed = apollo.createRandomSeed();
   const agent = new SDK.Agent(

@@ -1,6 +1,8 @@
-
+import IndexDB from "@pluto-encrypted/indexdb";
 import React, { useEffect, useState } from "react";
+
 import SDK from "@atala/prism-wallet-sdk";
+
 import { Box } from "../app/Box";
 import '../app/index.css'
 import { FooterNavigation } from "@/components/FooterNavigation";
@@ -8,21 +10,24 @@ import { DBConnect } from "@/components/DBConnect";
 import { useMountedApp } from "@/reducers/store";
 import { Message } from "@/components/Message";
 
-
 const ListenerKey = SDK.ListenerKey;
-
+const apollo = new SDK.Apollo();
+const store = new SDK.Store({
+  name: "test",
+  storage: IndexDB,
+  password: Buffer.from("demoapp").toString("hex")
+});
 
 const Agent: React.FC<{}> = props => {
   const app = useMountedApp();
   const { db, mediatorDID, initAgent, startAgent, stopAgent } = app;
 
-  const pluto = db.instance;
   const agent = app.agent.instance;
 
   const [state, setState] = useState<string>(agent && agent.state !== undefined ? agent.state : "loading");
-  const [error, setError] = React.useState<any>();
+  const [error] = React.useState<any>();
 
-  const [messages, setNewMessage] = React.useState<SDK.Domain.Message>([]);
+  const [messages, setNewMessage] = React.useState<SDK.Domain.Message[]>([]);
 
   const handleMessages = async (
     newMessages: SDK.Domain.Message[]
@@ -37,7 +42,7 @@ const Agent: React.FC<{}> = props => {
     setNewMessage([
       ...messages
         .filter(({ id }) => app.messages.find((appMessage) => appMessage.id === id) !== undefined)
-        .map(({ id }) => app.messages.find((appMessage) => appMessage.id === id))
+        .map(({ id }) => app.messages.find((appMessage) => appMessage.id === id)!)
     ])
   }, [app.messages]);
 
@@ -62,11 +67,16 @@ const Agent: React.FC<{}> = props => {
   }, [agent])
 
   const handleStart = async () => {
-    startAgent({ agent })
+    if (agent) {
+      startAgent({ agent })
+
+    }
   };
 
   const handleStop = async () => {
-    stopAgent({ agent })
+    if (agent) {
+      stopAgent({ agent })
+    }
   };
 
   return (

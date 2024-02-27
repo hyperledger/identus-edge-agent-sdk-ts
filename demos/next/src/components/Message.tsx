@@ -42,6 +42,9 @@ export function Message({ message }) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const from = message?.from as SDK.Domain.DID;
         try {
+            if (!agent) {
+                throw new Error("Start the agent first")
+            }
             await agent.sendMessage(
                 new BasicMessage(
                     { content: text },
@@ -256,10 +259,19 @@ export function Message({ message }) {
                             }
 
                             <button className="mt-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                                if (!agent) {
+                                    throw new Error("Start the agent first")
+                                }
                                 app.acceptCredentialOffer({ agent: agent, message: message })
                             }}>Accept</button>
 
                             <button className="mt-5 mx-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                                if (!agent) {
+                                    throw new Error("Start the agent first")
+                                }
+                                if (!app.db.instance) {
+                                    throw new Error("Start the database first")
+                                }
                                 app.rejectCredentialOffer({ message: message, pluto: app.db.instance })
                             }}>Reject</button>
                         </>
@@ -383,6 +395,9 @@ export function Message({ message }) {
                                                 <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                                     <button
                                                         onClick={() => {
+                                                            if (!agent) {
+                                                                throw new Error("Start the agent first")
+                                                            }
                                                             app.acceptPresentationRequest({
                                                                 agent,
                                                                 message,
@@ -403,6 +418,9 @@ export function Message({ message }) {
                             </div>
 
                             <button className="mt-5 mx-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                                if (!app.db.instance) {
+                                    throw new Error("Start the db first")
+                                }
                                 app.rejectCredentialOffer({ message: message, pluto: app.db.instance })
                             }}>Reject</button>
                         </>
