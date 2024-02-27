@@ -20,7 +20,7 @@ export abstract class BaseRepository<T extends Model> {
   constructor(
     private readonly store: Pluto.Store,
     protected readonly name: string,
-  ) {}
+  ) { }
 
   /**
    * Persist the Model in the Store.
@@ -38,6 +38,24 @@ export abstract class BaseRepository<T extends Model> {
     }
     catch (e) {
       throw new Domain.PlutoError.StoreInsertError();
+    }
+  }
+
+  async update(model: T) {
+    try {
+      await this.store.update(this.name, model)
+    }
+    catch (e) {
+      throw new Domain.PlutoError.StoreUpdateError();
+    }
+  }
+
+  async delete(uuid: string) {
+    try {
+      await this.store.delete(this.name, uuid)
+    }
+    catch (e) {
+      throw new Domain.PlutoError.StoreDeleteError();
     }
   }
 

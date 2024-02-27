@@ -146,4 +146,14 @@ export interface Pluto {
    * Store a new linkSecret
    */
   storeLinkSecret(linkSecret: LinkSecret): Promise<void>;
+
+  /**
+   * Revoke a Credential
+   */
+  revokeCredential(uuid: string): Promise<void>;
+
+  /**
+   * Delete a previously stored messages
+   */
+  deleteMessage(uuid: string): Promise<void>;
 }

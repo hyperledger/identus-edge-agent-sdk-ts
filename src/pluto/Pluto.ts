@@ -83,8 +83,19 @@ export namespace Pluto {
      */
     insert<T extends Models.Model>(name: string, model: T): Promise<void>;
 
-    // update (table: string, model: Partial<T>): Promise<void>;
-    // delete (table: string, id: string): Promise<void>;
+    /**
+     * Updating a new row in the Store
+     * @param table 
+     * @param model 
+     */
+    update<T extends Models.Model>(table: string, model: T): Promise<void>;
+
+    /**
+     * Deleting a  row in the Store
+     * @param table 
+     * @param model 
+     */
+    delete(table: string, uuid: string): Promise<void>;
   }
 }
 
@@ -96,6 +107,14 @@ export class Pluto implements Domain.Pluto {
     private readonly keyRestoration: Domain.KeyRestoration
   ) {
     this.Repositories = repositoryFactory(store, keyRestoration);
+  }
+
+  revokeCredential(uuid: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  async deleteMessage(uuid: string): Promise<void> {
+    return this.Repositories.Messages.delete(uuid)
   }
 
   async start(): Promise<void> {

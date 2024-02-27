@@ -5,6 +5,7 @@ import { CollectionList, makeCollections } from "./collections";
 import type { Pluto } from "../Pluto";
 import { Model } from '../models';
 import { RxDBEncryptedMigrationPlugin } from '../migration';
+import { Domain } from '../..';
 
 export class RxdbStore implements Pluto.Store {
   private _db?: RxDatabase<CollectionsOfDatabase, any, any>;
@@ -17,6 +18,7 @@ export class RxdbStore implements Pluto.Store {
     addRxPlugin(RxDBJsonDumpPlugin);
     addRxPlugin(RxDBEncryptedMigrationPlugin);
   }
+
 
   get db() {
     if (!this._db) {
@@ -41,6 +43,20 @@ export class RxdbStore implements Pluto.Store {
     }
   }
 
+  update<T extends Domain.Pluto.Storable>(name: string, model: T): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  async delete(name: string, uuid: string): Promise<void> {
+    const table = this.getCollection(name);
+    const row = await table.findOne({
+      selector: {
+        uuid: uuid
+      }
+    })
+    //TODO: Improve error handling
+    await row?.remove();
+  }
 
 
   getCollection(name: string) {
