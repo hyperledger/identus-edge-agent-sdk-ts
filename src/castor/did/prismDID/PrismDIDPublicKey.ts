@@ -4,9 +4,8 @@ import { Apollo } from "../../../domain/buildingBlocks/Apollo";
 import { Curve } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 import * as ApolloPKG from "@atala/apollo";
-
 import * as Protos from "../../protos/node_models";
-import { Secp256k1PrivateKey } from "../../../apollo/utils/Secp256k1PrivateKey";
+
 export enum Usage {
   MASTER_KEY = "masterKey",
   ISSUING_KEY = "issuingKey",
@@ -17,16 +16,6 @@ export enum Usage {
   KEY_AGREEMENT_KEY = "keyAgreementKey",
   UNKNOWN_KEY = "unknownKey",
 }
-
-const {
-  io: {
-    iohk: {
-      atala: {
-        prism: { apollo },
-      },
-    },
-  },
-} = ApolloPKG;
 
 export function getProtosUsage(
   usage: Usage

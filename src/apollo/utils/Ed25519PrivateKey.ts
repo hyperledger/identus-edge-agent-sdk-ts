@@ -7,6 +7,7 @@ import {
   KeyProperties,
   KeyTypes,
   PrivateKey,
+  StorableKey,
   SignableKey
 } from "../../domain";
 
@@ -14,11 +15,14 @@ import {
 /**
  * @ignore
  */
-export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, SignableKey {
+export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, SignableKey, StorableKey {
+  public readonly recoveryId = StorableKey.recoveryId("ed25519", "priv");
+
+
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;
   public size: number;
-  public type: KeyTypes = KeyTypes.EC;
+  public type = KeyTypes.EC;
 
   public readonly to = ExportableKey.factory(this, { pemLabel: "PRIVATE KEY" });
   static from = ImportableKey.factory(Ed25519PrivateKey, { pemLabel: "PRIVATE KEY" });

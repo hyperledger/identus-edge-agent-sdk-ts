@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DID } from "./DID";
 import { v4 as uuidv4 } from "uuid";
+import { DID } from "./DID";
 import {
   AttachmentBase64,
   AttachmentData,
@@ -9,13 +9,16 @@ import {
 } from "./MessageAttachment";
 import { AgentError } from "./Errors";
 import { JsonString } from ".";
+import { Pluto } from "../buildingBlocks/Pluto";
 
 export enum MessageDirection {
   SENT = 0,
   RECEIVED = 1,
 }
 
-export class Message {
+export class Message implements Pluto.Storable {
+  public readonly uuid = Pluto.makeUUID();
+
   constructor(
     public readonly body: string,
     public readonly id: string = uuidv4(),
@@ -25,7 +28,9 @@ export class Message {
     public readonly attachments: AttachmentDescriptor[] = [],
     public readonly thid?: string,
     public readonly extraHeaders: string[] = [],
+    // Q: why is this a string?
     public readonly createdTime: string = Date.now().toString(),
+    // TODO: deprecate this name, also what is this math?
     public readonly expiresTimePlus: string = (
       createdTime +
       1 * 24 * 60 * 60
@@ -97,8 +102,9 @@ export class Message {
     const piuri = messageObj.piuri;
     const thid = messageObj.thid;
     const extraHeaders = messageObj.extraHeaders;
-    const createdTime = messageObj.createdTime;
-    const expiredTimePlus = messageObj.expiredTimePlus;
+    // ??? update this when no longer strings
+    const createdTime = messageObj.createdTime?.toString();
+    const expiredTimePlus = messageObj.expiredTimePlus?.toString();
     const ack = messageObj.ack;
     const direction = messageObj.direction;
     const fromPrior = messageObj.fromPrior;

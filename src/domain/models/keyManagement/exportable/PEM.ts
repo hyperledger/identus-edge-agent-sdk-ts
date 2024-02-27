@@ -39,7 +39,7 @@ export namespace PEM {
    * @returns {string}
    */
   export const fromKey = (key: Key, label: string): string => {
-    let base64Data = Buffer.from(key.raw).toString("base64");
+    const base64Data = Buffer.from(key.raw).toString("base64");
 
     return `-----BEGIN ${label}-----\n${base64Data}\n-----END ${label}-----`;
   };

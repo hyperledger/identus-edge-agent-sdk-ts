@@ -162,6 +162,9 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    * @returns {Promise<void>}
    */
   async addConnection(paired: DIDPair): Promise<void> {
+    // TODO: what is the desired functionality here?
+    // can/should we re-use connections?
+    // seems always false as `paired.name` is always unique so will never match?
     if (this.findIndex(paired) !== -1) {
       return;
     }

@@ -33,7 +33,7 @@ export default function App() {
                                 :
                                 null
                         }
-                        <OOB agent={app.agent} pluto={app.db.instance} />
+                        <OOB agent={app.agent.instance!} pluto={app.db.instance!} />
                         {
                             connections.map((connection, i) => {
                                 return <p key={`connection${i}`} className="my-5 overflow-x-auto h-auto text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">

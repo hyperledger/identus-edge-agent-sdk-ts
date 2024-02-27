@@ -1,10 +1,29 @@
-export enum SecurityLevel {
-  high,
-  low,
+
+export interface StorableKey {
+  recoveryId: string;
+  raw: Uint8Array;
+  index?: number;
 }
-export abstract class StorableKey {
-  abstract store(): void;
-  abstract securityLevel: SecurityLevel;
-  abstract StorableData: Uint8Array;
-  abstract restorationIdentifier: string;
+
+export namespace StorableKey {
+  // export type RecoveryId = `${RecoveryId.algorithm}+${RecoveryId.privacy}`;
+
+  namespace RecoveryId {
+    export type algorithm = "secp256k1" | "x25519" | "ed25519";
+    export type suffix = privacy;
+    export type privacy = "pub" | "priv";
+  }
+
+  /**
+   * Factory for RecoveryId.
+   * Nomenclature:
+   *   - algorithm first
+   *   - arbitrary suffixes for customisation
+   *   - separated by "+"
+   * 
+   * @param algorithm 
+   * @param suffix 
+   * @returns {string}
+   */
+  export const recoveryId = (algorithm: RecoveryId.algorithm, ...suffix: RecoveryId.suffix[]) => `${[algorithm, ...suffix].join("+")}`;
 }

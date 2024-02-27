@@ -54,7 +54,7 @@ export type RootState = {
     },
     messages: ExtendedMessage[],
     connections: SDK.Domain.DIDPair[],
-    credentials: SDK.Domain.Credentials[],
+    credentials: SDK.Domain.Credential[],
     mediatorDID: SDK.Domain.DID,
     agent: {
         instance: SDK.Agent | null,
@@ -72,11 +72,11 @@ const appSlice = createSlice({
             state,
             action: PayloadAction<{
                 messages: SDK.Domain.Message[],
-                connections: SDK.Domain.DIRPair[],
-                credentials: SDK.Domain.Credentials[]
+                connections: SDK.Domain.DIDPair[],
+                credentials: SDK.Domain.Credential[]
             }>
         ) => {
-            state.messages = action.payload.messages;
+            state.messages = action.payload.messages as any;
             state.connections = action.payload.connections;
             state.credentials = action.payload.credentials;
         },
@@ -97,7 +97,7 @@ const appSlice = createSlice({
                     return oldMessage
                 }),
 
-            ];
+            ] as any;
         },
     },
     extraReducers: (builder) => {

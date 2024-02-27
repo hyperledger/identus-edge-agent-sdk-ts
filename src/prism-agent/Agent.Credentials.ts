@@ -16,7 +16,8 @@ import {
   Seed,
   Message,
   Pluto,
-  Pollux
+  Pollux,
+  CredentialMetadata
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -30,6 +31,7 @@ import { Presentation } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 
 import { AgentCredentials as AgentCredentialsClass } from "./types";
+import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -80,15 +82,20 @@ export class AgentCredentials implements AgentCredentialsClass {
     };
 
     if (credentialType === CredentialType.AnonCreds) {
-      parseOpts.linkSecret = (await this.pluto.getLinkSecret()) || undefined;
-      const credentialMetadata = await this.pluto.fetchCredentialMetadata(
+      const linkSecret = await this.pluto.getLinkSecret();
+
+      parseOpts.linkSecret = linkSecret?.secret;
+
+      const credentialMetadata = await this.pluto.getCredentialMetadata(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         issueCredential.thid!
       );
-      if (!credentialMetadata) {
+
+      if (!credentialMetadata || !credentialMetadata.isType(CredentialType.AnonCreds)) {
         throw new Error("Invalid credential Metadata");
       }
-      parseOpts.credentialMetadata = credentialMetadata;
+
+      parseOpts.credentialMetadata = credentialMetadata.toJSON();
     }
 
     const credential = await this.pollux.parseCredential(credData, parseOpts);
@@ -119,20 +126,26 @@ export class AgentCredentials implements AgentCredentialsClass {
       if (!linkSecret) {
         throw new Error("No linkSecret available.");
       }
+
       const [credentialRequest, credentialRequestMetadata] =
-        await this.pollux.processAnonCredsCredential(message, {
-          linkSecret: linkSecret,
-          linkSecretName: offer.thid,
-        });
+        await this.pollux.processAnonCredsCredential(message, { linkSecret });
+
       credRequestBuffer = JSON.stringify(credentialRequest);
 
-      await this.pluto.storeCredentialMetadata(
-        credentialRequestMetadata,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        offer.thid!
-      );
+      // TODO can we fallback here? would need another identifier
+      const metaname = offer.thid;
+
+      if (!metaname) {
+        throw new Error("Missing offer.thid");
+      }
+
+      const metadata = new CredentialMetadata(CredentialType.AnonCreds, metaname, credentialRequestMetadata);
+
+      await this.pluto.storeCredentialMetadata(metadata);
     } else if (credentialType === CredentialType.JWT) {
-      const keyIndex = (await this.pluto.getPrismLastKeyPathIndex()) || 0;
+      // ?? duplicated Agent.DIDHigherFunctions.createNewPrismDID
+      const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
+      const keyIndex = await getIndexTask.run();
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
         [KeyProperties.index]: keyIndex,
@@ -142,13 +155,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
       const did = await this.castor.createPrismDID(privateKey.publicKey());
 
-      await this.pluto.storePrismDID(
-        did,
-        keyIndex,
-        privateKey,
-        null,
-        did.toString()
-      );
+      await this.pluto.storePrismDID(did, privateKey);
 
       credRequestBuffer = await this.pollux.processJWTCredential(message, {
         did: did,

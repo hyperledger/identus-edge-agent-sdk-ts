@@ -1,7 +1,7 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { CredentialType, DID, Message, PrivateKey } from "../models";
+import { CredentialType, DID, LinkSecret, Message, PrivateKey } from "../models";
 import { Anoncreds } from "../models/Anoncreds";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
 
@@ -52,7 +52,7 @@ export namespace Pollux {
 
     export namespace options {
       export interface Anoncreds {
-        linkSecret: string;
+        linkSecret: LinkSecret;
       }
 
       export interface JWT {

@@ -8,11 +8,13 @@
     ".": {
       "import": "./index.mjs",
       "require": "./index.cjs",
-      "default": "./index.mjs"
+      "default": "./index.mjs",
+      "types": "./index.d.ts"
     }
   },
-  "types": "./build/typings/index.d.ts",
+  "types": "./index.d.ts",
   "files": [
+    "index.d.ts",
     "index.mjs",
     "index.cjs",
     "build/**/*",
@@ -57,6 +59,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@babel/traverse": "^7.23.2",
     "@droppedcode/typedoc-plugin-relative-includes": "^1.0.5",
+    "@pluto-encrypted/inmemory": "^1.12.3",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
@@ -195,9 +198,12 @@
     "jose": "^4.12.2",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
-    "socket.io-client": "^4.7.4",
+    "rxdb": "^14.17.1",
     "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"
+  },
+  "overrides": {
+    "crypto-js": "^4.2.0"
   }
 }

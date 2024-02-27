@@ -12,7 +12,7 @@ import { useMountedApp } from "@/reducers/store";
 
 export default function App() {
   const app = useMountedApp();
-  const [mediatorDID, setMediatorDID] = useState<string>(app.mediatorDID)
+  const [mediatorDID, setMediatorDID] = useState<string>(app.mediatorDID.toString())
 
   function onChangeMediatorDID(e) {
     setMediatorDID(e.target.value)

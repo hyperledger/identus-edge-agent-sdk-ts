@@ -5,20 +5,21 @@ import { CredentialType } from "../../domain/models/VerifiableCredential";
 export enum AnonCredsCredentialProperties {
   iss = "iss",
   jti = "jti",
-  schemaId = "schemaId",
   sub = "sub",
-  credentialDefinitionId = "credentialDefinitionId",
-  values = "values",
-  signature = "signature",
-  signatureCorrectnessProof = "signatureCorrectnessProof",
   exp = "exp",
+  schemaId = "schema_id",
+  credentialDefinitionId = "cred_def_id",
+  signature = "signature",
+  signatureCorrectnessProof = "signature_correctness_proof",
+  values = "values",
 }
 
 export const AnonCredsRecoveryId = "anonCreds+credential";
 
 export class AnonCredsCredential
   extends Credential
-  implements StorableCredential {
+  implements StorableCredential
+{
   public credentialType = CredentialType.AnonCreds;
   public recoveryId = AnonCredsRecoveryId;
   public properties = new Map<AnonCredsCredentialProperties, any>();
@@ -35,17 +36,10 @@ export class AnonCredsCredential
     } = credential;
 
     this.properties.set(AnonCredsCredentialProperties.schemaId, schema_id);
-    this.properties.set(
-      AnonCredsCredentialProperties.credentialDefinitionId,
-      cred_def_id
-    );
+    this.properties.set(AnonCredsCredentialProperties.credentialDefinitionId, cred_def_id );
     this.properties.set(AnonCredsCredentialProperties.values, values);
-
     this.properties.set(AnonCredsCredentialProperties.signature, signature);
-    this.properties.set(
-      AnonCredsCredentialProperties.signatureCorrectnessProof,
-      signature_correctness_proof
-    );
+    this.properties.set(AnonCredsCredentialProperties.signatureCorrectnessProof, signature_correctness_proof );
   }
 
   get id() {
@@ -53,8 +47,10 @@ export class AnonCredsCredential
   }
 
   get claims() {
-    //TODO: SOLVE THIS DURING THE PRESENTATION PHASE
-    return [];
+    const values: Record<string, any> = this.getProperty(AnonCredsCredentialProperties.values);
+    const claims = Object.keys(values).map(key => ({ [key]: values[key] }));
+
+    return claims;
   }
 
   get credentialDefinitionId(): string {
@@ -75,15 +71,15 @@ export class AnonCredsCredential
 
   toStorable() {
     const credentialData = JSON.stringify(Object.fromEntries(this.properties));
-    const { id, recoveryId, issuer, subject, claims } = this;
+
     return {
-      id,
-      recoveryId,
+      recoveryId: this.recoveryId,
       credentialData: credentialData,
-      issuer,
-      subject,
+      id: this.id,
+      issuer: this.issuer,
+      subject: this.subject,
       validUntil: this.getProperty(AnonCredsCredentialProperties.exp),
-      availableClaims: claims,
+      // availableClaims: claims,
     };
   }
 
