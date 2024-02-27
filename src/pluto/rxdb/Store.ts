@@ -37,7 +37,6 @@ export class RxdbStore implements Pluto.Store {
         ...this.options,
         multiInstance: true
       });
-
       const collections = makeCollections(this.collections);
       await this._db.addCollections(collections);
     }

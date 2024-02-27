@@ -101,7 +101,6 @@ export default class Agent
       this.pollux,
       seed
     );
-
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
@@ -239,7 +238,7 @@ export default class Agent
     }
 
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      this.connectionManager.startFetchingMessages(5);
+      await this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
     } else {
       throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
@@ -387,8 +386,8 @@ export default class Agent
    *
    * @param {number} iterationPeriod
    */
-  startFetchingMessages(iterationPeriod: number): void {
-    this.connectionManager.startFetchingMessages(iterationPeriod);
+  async startFetchingMessages(iterationPeriod: number): Promise<void> {
+    return this.connectionManager.startFetchingMessages(iterationPeriod);
   }
 
   /**

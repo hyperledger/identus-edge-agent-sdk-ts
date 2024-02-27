@@ -1,3 +1,4 @@
+import { uuid } from "@stablelib/uuid";
 import { DID, Message, MessageDirection } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
@@ -12,6 +13,14 @@ import {
   ListenerKey,
   MediatorHandler,
 } from "../types";
+
+import { WebSocket } from 'isows'
+import { PickupRunner } from "../protocols/pickup/PickupRunner";
+import { ProtocolType } from "../protocols/ProtocolTypes";
+
+
+
+
 
 /**
  * ConnectionsManager is responsible of establishing didcomm connection and
@@ -132,6 +141,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     return messages;
   }
 
+
   /**
    * Asyncronously wait for a message response just by waiting for new messages that match the specified ID
    *
@@ -228,17 +238,39 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    *
    * @param {number} iterationPeriod
    */
-  startFetchingMessages(iterationPeriod: number): void {
-    if (this.cancellable) {
+  async startFetchingMessages(iterationPeriod: number): Promise<void> {
+    if (this.cancellable || !this.mediationHandler.mediator) {
       return;
     }
-    const timeInterval = Math.max(iterationPeriod, 5) * 1000;
-    this.cancellable = new CancellableTask(async () => {
-      const unreadMessages = await this.awaitMessages();
-      if (unreadMessages.length) {
-        this.events.emit(ListenerKey.MESSAGE, unreadMessages);
-      }
-    }, timeInterval);
+    const currentMediator = this.mediationHandler.mediator.mediatorDID;
+    const resolvedMediator = await this.castor.resolveDID(currentMediator.toString())
+    const hasWebsocket = resolvedMediator.services.find(({ serviceEndpoint: { uri } }) =>
+      uri.startsWith("ws://") ||
+      uri.startsWith("wss://")
+    )
+    if (!hasWebsocket) {
+      const timeInterval = Math.max(iterationPeriod, 5) * 1000;
+      this.cancellable = new CancellableTask(async () => {
+        const unreadMessages = await this.awaitMessages();
+        if (unreadMessages.length) {
+          this.events.emit(ListenerKey.MESSAGE, unreadMessages);
+        }
+      }, timeInterval);
+    } else {
+      //Connecting to websockets, do not repeat the task
+      this.cancellable = new CancellableTask(async (signal) => {
+        this.mediationHandler.listenUnreadMessages(
+          signal,
+          hasWebsocket.serviceEndpoint.uri,
+          async (messages) => {
+            const messageIds = messages.map(({ id }) => id)
+            await this.pluto.storeMessages(messages);
+            await this.mediationHandler.registerMessagesAsRead(messageIds);
+            this.events.emit(ListenerKey.MESSAGE, messages);
+          }
+        )
+      })
+    }
 
     this.cancellable.then().catch((err) => {
       if (err instanceof Error) {

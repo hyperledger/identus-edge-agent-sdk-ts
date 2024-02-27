@@ -113,8 +113,12 @@ export class Pluto implements Domain.Pluto {
     throw new Error("Method not implemented.");
   }
 
-  async deleteMessage(uuid: string): Promise<void> {
-    return this.Repositories.Messages.delete(uuid)
+  async deleteMessage(id: string): Promise<void> {
+    const message = await this.Repositories.Messages.findOne({ id });
+    //TODO: Improve error handling
+    if (message) {
+      await this.Repositories.Messages.delete(message.uuid)
+    }
   }
 
   async start(): Promise<void> {
