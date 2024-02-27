@@ -196,7 +196,7 @@ export class CloudAgentConfiguration {
       version: "1.0.0",
       tag: "automation-test",
       author: this.publishedDid,
-      schemaId: `${this.agentUrl}schema-registry/schemas/${newSchemaGuid}`,
+      schemaId: `${this.agentUrl}schema-registry/schemas/${newSchemaGuid}/schema`,
       signatureType: "CL",
       supportRevocation: false,
       description: "Test Automation Auto-Generated TS"
