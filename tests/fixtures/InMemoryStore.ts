@@ -18,10 +18,11 @@ export class InMemoryStore implements Pluto.Store {
     const filtered = items.filter(item => {
       if (Object.keys(selector).length === 0) return true;
 
-      const { $or, $and, ...props } = selector;
+      const { $or, $and = [], ...props } = selector;
       const matchProps = this.match(props, item);
       const matchOr = ($or ?? []).reduce((acc, x) => acc || this.match(x, item), false);
-      return matchOr || matchProps;
+      const matchAnd = $and?.length > 0 ? ($and ?? []).reduce((acc, x) => acc && this.match(x, item), true) : false
+      return matchOr || matchAnd || matchProps;
     });
 
     return filtered;
@@ -44,6 +45,9 @@ export class InMemoryStore implements Pluto.Store {
 
   private match(query: Record<string, any>, item: any) {
     const keys = Object.keys(query);
+    if (keys.length <= 0) {
+      return false
+    }
     const match = keys.every(key => item[key] == query[key]);
     return match;
   }

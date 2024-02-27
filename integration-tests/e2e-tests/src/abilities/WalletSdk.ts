@@ -4,7 +4,7 @@ import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
-import { pluto } from "../configuration/PlutoInMemory"
+import { InMemoryStore } from "../configuration/InMemoryStore"
 const {
   Agent,
   ApiImpl,
@@ -98,7 +98,8 @@ class WalletSdkBuilder {
   static async createInstance() {
     const apollo = new Apollo()
     const castor = new Castor(apollo);
-
+    const store = new InMemoryStore()
+    const pluto = new SDK.Pluto(store, apollo);
     await pluto.start()
 
     const api = new ApiImpl()

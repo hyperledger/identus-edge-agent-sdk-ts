@@ -7,7 +7,7 @@ import { MangoQuery } from "rxdb";
  * Persistence is inMemory and totally unprotected.
  * Functionality isn't 100% covered - only handling what is necessary
  */
-class InMemoryStore implements SDK.Pluto.Store {
+export class InMemoryStore implements SDK.Pluto.Store {
 
   private store = new Map<string, any[]>();
 
@@ -21,7 +21,8 @@ class InMemoryStore implements SDK.Pluto.Store {
       const { $or, $and, ...props } = selector;
       const matchProps = this.match(props, item);
       const matchOr = ($or ?? []).reduce((acc, x) => acc || this.match(x, item), false);
-      return matchOr || matchProps;
+      const matchAnd = $and?.length > 0 ? ($and ?? []).reduce((acc, x) => acc && this.match(x, item), true) : false
+      return matchOr || matchAnd || matchProps;
     });
 
     return filtered;
@@ -44,6 +45,9 @@ class InMemoryStore implements SDK.Pluto.Store {
 
   private match(query: Record<string, any>, item: any) {
     const keys = Object.keys(query);
+    if (keys.length <= 0) {
+      return false
+    }
     const match = keys.every(key => item[key] == query[key]);
     return match;
   }
@@ -57,8 +61,3 @@ class InMemoryStore implements SDK.Pluto.Store {
     throw new Error("Method not implemented.");
   }
 }
-
-const apollo = new SDK.Apollo();
-const store = new InMemoryStore();
-
-export const pluto = new SDK.Pluto(store, apollo);
