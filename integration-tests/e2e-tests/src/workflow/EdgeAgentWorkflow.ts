@@ -1,8 +1,10 @@
-import {IssueCredential, OfferCredential, RequestPresentation,} from "@atala/prism-wallet-sdk"
-import {Actor, Duration, Notepad, Wait} from "@serenity-js/core"
-import {equals} from "@serenity-js/assertions"
-import {WalletSdk} from "../abilities/WalletSdk"
-import {Utils} from "../Utils"
+import SDK from "@atala/prism-wallet-sdk"
+import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
+import { equals } from "@serenity-js/assertions"
+import { WalletSdk } from "../abilities/WalletSdk"
+import { Utils } from "../Utils"
+
+const { IssueCredential, OfferCredential, RequestPresentation, } = SDK;
 
 export class EdgeAgentWorkflow {
   static async connect(edgeAgent: Actor) {
@@ -75,7 +77,7 @@ export class EdgeAgentWorkflow {
         const credentials = await sdk.verifiableCredentials()
         const credential = credentials[0]
         const requestPresentationMessage = RequestPresentation.fromMessage(
-            messages.proofRequestStack.shift()!,
+          messages.proofRequestStack.shift()!,
         )
         const presentation = await sdk.createPresentationForRequestProof(
           requestPresentationMessage,
