@@ -299,7 +299,7 @@ describe("Apollo", () => {
     expect(privateKey.isDerivable()).to.be.equal(true);
   });
 
-  it.only("Should derive secp256k1 privateKey the same way as if we create a new key in Apollo.", async () => {
+  it("Should derive secp256k1 privateKey the same way as if we create a new key in Apollo.", async () => {
     // const seed = apollo.createRandomSeed().seed;
     const seedHex = "a4dd58542e9959eccb56832a953c0e54b3321036b6165ec2f3c1ef533cd1d6da5fae8010c587535404534c192397483c765505f67e62b26026392f8a0cf8ba51";
     const privateKey = apollo.createPrivateKey({
