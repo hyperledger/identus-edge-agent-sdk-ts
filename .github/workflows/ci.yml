@@ -59,6 +59,7 @@ jobs:
           audit_level: moderate
           create_issues: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          production_flag: true
 
       - name: Jest Coverage Comment
         uses: MishaKav/jest-coverage-comment@v1.0.23
