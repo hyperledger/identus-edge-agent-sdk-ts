@@ -136,6 +136,18 @@ export default class Mercury implements MercuryInterface {
   }
 
   private notDid(did: Domain.DID | undefined): did is undefined {
+    if (!did) {
+      return true;
+    }
+    if (!did?.method || !did.methodId || !did.schema || !did.toString) {
+      return true;
+    }
+    if (typeof did.method !== "string" || typeof did.methodId !== "string" || typeof did.schema !== "string") {
+      return true;
+    }
+    if (typeof did.toString !== "function") {
+      return true;
+    }
     return false
   }
 
