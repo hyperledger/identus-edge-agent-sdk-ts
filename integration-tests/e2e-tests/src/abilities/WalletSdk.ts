@@ -1,5 +1,11 @@
-import {Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter} from "@serenity-js/core"
-import {
+import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
+import SDK from "@atala/prism-wallet-sdk"
+import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
+import axios from "axios"
+import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
+import { Utils } from "../Utils"
+import { pluto } from "../configuration/PlutoInMemory"
+const {
   Agent,
   ApiImpl,
   Apollo,
@@ -10,25 +16,20 @@ import {
   Domain, ListenerKey,
   Mercury,
   PublicMediatorStore
-} from "@atala/prism-wallet-sdk"
-import {Message} from "@atala/prism-wallet-sdk/build/typings/domain"
-import axios from "axios"
-import {PlutoInMemory} from "../configuration/PlutoInMemory"
-import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
-import { Utils } from "../Utils"
+} = SDK;
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
-  sdk!: Agent
+  sdk!: SDK.Agent
   messages: MessageQueue = new MessageQueue()
 
   static async withANewInstance(): Promise<Ability> {
-    const instance: Agent = await Utils.retry(2, async () => {
+    const instance: SDK.Agent = await Utils.retry(2, async () => {
       return await WalletSdkBuilder.createInstance()
     })
     return new WalletSdk(instance)
   }
 
-  constructor(sdk: Agent) {
+  constructor(sdk: SDK.Agent) {
     super()
     this.sdk = sdk
   }
@@ -51,7 +52,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
   }
 
-  static execute(callback: (sdk: Agent, messages: {
+  static execute(callback: (sdk: SDK.Agent, messages: {
     credentialOfferStack: Message[],
     issuedCredentialStack: Message[],
     proofRequestStack: Message[]
@@ -71,7 +72,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
 
   async initialise(): Promise<void> {
     this.sdk.addListener(
-      ListenerKey.MESSAGE, (messages: Domain.Message[]) => {
+      ListenerKey.MESSAGE, (messages: SDK.Domain.Message[]) => {
         for (const message of messages) {
           this.messages.enqueue(message)
         }
@@ -96,8 +97,9 @@ class WalletSdkBuilder {
 
   static async createInstance() {
     const apollo = new Apollo()
-    const castor = new Castor(apollo)
-    const pluto = new PlutoInMemory()
+    const castor = new Castor(apollo);
+
+    await pluto.start()
 
     const api = new ApiImpl()
     const didcomm = new DIDCommWrapper(apollo, castor, pluto)
