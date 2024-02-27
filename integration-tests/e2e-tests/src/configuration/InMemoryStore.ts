@@ -1,13 +1,13 @@
+import SDK from "@atala/prism-wallet-sdk"
+
 import { MangoQuery } from "rxdb";
-import { Pluto } from "../../src/pluto/Pluto";
-import { Domain } from "../../src";
 
 /**
  * WARNING: Do not  use this Pluto Store implementation, its for test purposes only.
  * Persistence is inMemory and totally unprotected.
  * Functionality isn't 100% covered - only handling what is necessary
  */
-export class InMemoryStore implements Pluto.Store {
+export class InMemoryStore implements SDK.Pluto.Store {
 
   private store = new Map<string, any[]>();
 
@@ -18,7 +18,7 @@ export class InMemoryStore implements Pluto.Store {
     const filtered = items.filter(item => {
       if (Object.keys(selector).length === 0) return true;
 
-      const { $or, $and = [], ...props } = selector;
+      const { $or, $and, ...props } = selector;
       const matchProps = this.match(props, item);
       const matchOr = ($or ?? []).reduce((acc, x) => acc || this.match(x, item), false);
       const matchAnd = $and?.length > 0 ? ($and ?? []).reduce((acc, x) => acc && this.match(x, item), true) : false
@@ -53,7 +53,7 @@ export class InMemoryStore implements Pluto.Store {
   }
 
 
-  update<T extends Domain.Pluto.Storable>(table: string, model: T): Promise<void> {
+  update<T extends SDK.Domain.Pluto.Storable>(table: string, model: T): Promise<void> {
     throw new Error("Method not implemented.");
   }
 
