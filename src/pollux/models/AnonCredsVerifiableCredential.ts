@@ -12,19 +12,19 @@ export enum AnonCredsCredentialProperties {
   signature = "signature",
   signatureCorrectnessProof = "signature_correctness_proof",
   values = "values",
+  revoked = "revoked"
 }
 
 export const AnonCredsRecoveryId = "anonCreds+credential";
 
 export class AnonCredsCredential
   extends Credential
-  implements StorableCredential
-{
+  implements StorableCredential {
   public credentialType = CredentialType.AnonCreds;
   public recoveryId = AnonCredsRecoveryId;
   public properties = new Map<AnonCredsCredentialProperties, any>();
 
-  constructor(credential: Anoncreds.Credential) {
+  constructor(credential: Anoncreds.Credential, isRevoked: boolean = false) {
     super();
 
     const {
@@ -35,11 +35,12 @@ export class AnonCredsCredential
       signature_correctness_proof,
     } = credential;
 
+    this.properties.set(AnonCredsCredentialProperties.revoked, isRevoked);
     this.properties.set(AnonCredsCredentialProperties.schemaId, schema_id);
-    this.properties.set(AnonCredsCredentialProperties.credentialDefinitionId, cred_def_id );
+    this.properties.set(AnonCredsCredentialProperties.credentialDefinitionId, cred_def_id);
     this.properties.set(AnonCredsCredentialProperties.values, values);
     this.properties.set(AnonCredsCredentialProperties.signature, signature);
-    this.properties.set(AnonCredsCredentialProperties.signatureCorrectnessProof, signature_correctness_proof );
+    this.properties.set(AnonCredsCredentialProperties.signatureCorrectnessProof, signature_correctness_proof);
   }
 
   get id() {
@@ -67,6 +68,10 @@ export class AnonCredsCredential
 
   get subject() {
     return this.properties.get(AnonCredsCredentialProperties.sub);
+  }
+
+  get revoked() {
+    return this.properties.get(AnonCredsCredentialProperties.revoked);
   }
 
   toStorable() {

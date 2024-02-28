@@ -14,12 +14,19 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
     switch (model.recoveryId) {
       case JWTVerifiableCredentialRecoveryId: {
         const jwtObj = JSON.parse(model.dataJson);
-        const credential = JWTCredential.fromJWT(jwtObj, jwtObj.id);
+        const credential = JWTCredential.fromJWT(
+          jwtObj,
+          jwtObj.id,
+          jwtObj.revoked ?? false
+        );
         return this.withId(credential, model.uuid);
       }
       case AnonCredsRecoveryId: {
         const json = JSON.parse(model.dataJson);
-        const credential = new AnonCredsCredential(json);
+        const credential = new AnonCredsCredential(
+          json,
+          json.revoked ?? false
+        );
         return this.withId(credential, model.uuid);
       }
     }
