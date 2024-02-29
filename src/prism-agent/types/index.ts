@@ -114,9 +114,13 @@ export interface ConnectionsManager {
 
   removeConnection(pair: DIDPair): Promise<void>;
 
-  awaitMessages(): Promise<Array<Message>>;
 
   awaitMessageResponse(id: string): Promise<Message | undefined>;
+
+  processMessages(messages: {
+    attachmentId: string;
+    message: Message;
+  }[]): Promise<void>;
 
   sendMessage(message: Message): Promise<Message | undefined>;
 

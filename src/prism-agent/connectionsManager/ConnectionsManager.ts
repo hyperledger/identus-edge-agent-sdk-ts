@@ -14,13 +14,6 @@ import {
   MediatorHandler,
 } from "../types";
 
-import { WebSocket } from 'isows'
-import { PickupRunner } from "../protocols/pickup/PickupRunner";
-import { ProtocolType } from "../protocols/ProtocolTypes";
-
-
-
-
 
 /**
  * ConnectionsManager is responsible of establishing didcomm connection and
@@ -108,37 +101,40 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   }
 
   /**
-   * Asyncronously fetch unread messages from the mediator, if messages are found they will be stored
-   * and the mediator will be notified that they have been read. Mediator shouldn't return a read message again
-   * in next iteration.
-   *
-   * @async
-   * @returns {Promise<Message[]>}
+   * Asyncronously process unread messages that are received by either http or websockets didcomm transport
+   * This method replaces awaitMessages()
+   * @param messages 
    */
-  async awaitMessages(): Promise<Message[]> {
+  async processMessages(unreadMessages: {
+    attachmentId: string;
+    message: Message;
+  }[]): Promise<void> {
     if (!this.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
 
-    const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
+    if (unreadMessages.length) {
+      const received = unreadMessages
+        .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
 
-    const messages = unreadMessages
-      .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
-      .map(({ message }) => message);
+      const messages = received
+        .map(({ message }) => message);
 
-    const messageIds = unreadMessages
-      .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
-      .map(({ attachmentId }) => attachmentId);
+      const messageIds = received
+        .map(({ attachmentId }) => attachmentId);
 
-    if (messages.length) {
-      await this.pluto.storeMessages(messages);
+      if (messages.length) {
+        await this.pluto.storeMessages(messages);
+      }
+
+      //Run some automated logic to revoke existing credentials
+
+      if (messageIds.length) {
+        await this.mediationHandler.registerMessagesAsRead(messageIds);
+      }
+
+      this.events.emit(ListenerKey.MESSAGE, unreadMessages);
     }
-
-    if (messageIds.length) {
-      await this.mediationHandler.registerMessagesAsRead(messageIds);
-    }
-
-    return messages;
   }
 
 
@@ -251,10 +247,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     if (!hasWebsocket) {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
       this.cancellable = new CancellableTask(async () => {
-        const unreadMessages = await this.awaitMessages();
-        if (unreadMessages.length) {
-          this.events.emit(ListenerKey.MESSAGE, unreadMessages);
-        }
+        const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
+        await this.processMessages(unreadMessages)
       }, timeInterval);
     } else {
       //Connecting to websockets, do not repeat the task
@@ -263,10 +257,24 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           signal,
           hasWebsocket.serviceEndpoint.uri,
           async (messages) => {
-            const messageIds = messages.map(({ id }) => id)
-            await this.pluto.storeMessages(messages);
-            await this.mediationHandler.registerMessagesAsRead(messageIds);
-            this.events.emit(ListenerKey.MESSAGE, messages);
+            const unreadMessages = messages.reduce<{
+              attachmentId: string;
+              message: Message;
+            }[]>((unreads, message) => {
+              const attachment = message.attachments.at(0);
+              if (!attachment) {
+                return unreads;
+              }
+              return [
+                ...unreads,
+                {
+                  message: message,
+                  attachmentId: attachment.id
+                }
+              ]
+            }, []);
+
+            await this.processMessages(unreadMessages)
           }
         )
       })
