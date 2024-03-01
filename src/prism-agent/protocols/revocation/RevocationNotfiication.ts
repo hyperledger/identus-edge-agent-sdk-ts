@@ -22,4 +22,15 @@ export class RevocationNotification {
         );
         return message;
     }
+
+    static fromMessage(message: Message): RevocationNotification {
+        if (!message.from || !message.to) {
+            throw new Error("Invalid RevocationNotificationMessage (from or to) are undefined or invalid.")
+        }
+        return new RevocationNotification(
+            JSON.parse(message.body),
+            message.from!,
+            message.to!
+        )
+    }
 }

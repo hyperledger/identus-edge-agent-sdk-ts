@@ -26,6 +26,11 @@ export abstract class Credential implements Pluto.Storable {
   isStorable(): this is StorableCredential {
     return "toStorable" in this;
   }
+
+  isRevoked() {
+    const revoked = this.properties.get("revoked");
+    return revoked && revoked === true ? true : false
+  }
 }
 
 export interface ProvableCredential {

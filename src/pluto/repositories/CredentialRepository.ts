@@ -52,7 +52,7 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
       credentialUpdated: item.credentialUpdated,
       credentialSchema: item.credentialSchema,
       validUntil: item.validUntil,
-      revoked: item.revoked
+      revoked: item.revoked ?? false
     };
   }
 }

@@ -45,6 +45,8 @@ import { AnonCredsCredential } from "../../src/pollux/models/AnonCredsVerifiable
 import { InMemoryStore } from "../fixtures/InMemoryStore";
 import { Pluto as IPluto } from "../../src/domain";
 import { Pluto } from "../../src/pluto/Pluto";
+import { RevocationNotification } from "../../src/prism-agent/protocols/revocation/RevocationNotfiication";
+import { AgentCredentials } from "../../src/prism-agent/Agent.Credentials";
 
 
 chai.use(SinonChai);
@@ -87,7 +89,21 @@ describe("Agent Tests", () => {
     const store = new InMemoryStore();
     pluto = new Pluto(store, apollo);
     const mercury = new Mercury(castor, didProtocol, httpManager);
-    const connectionsManager = new ConnectionsManagerMock();
+
+    const pollux = new Pollux(castor)
+
+    const agentCredentials = new AgentCredentials(
+      apollo,
+      castor,
+      pluto,
+      pollux,
+      apollo.createRandomSeed().seed
+    )
+
+    const connectionsManager = new ConnectionsManagerMock(
+      castor, mercury, pluto, agentCredentials
+
+    );
     agent = Agent.instanceFromConnectionManager(
       apollo,
       castor,
@@ -95,8 +111,6 @@ describe("Agent Tests", () => {
       mercury,
       connectionsManager
     );
-
-    pollux = (agent as any).pollux as Pollux;
 
     await pollux.start();
   });
@@ -192,6 +206,10 @@ describe("Agent Tests", () => {
 
       expect(sendMessage).calledWith(validHanshakeMessage);
     });
+
+    it("As a developer I want to be notified when one of my credentials have been revoked", async () => {
+
+    })
   });
 
   // Requires Agent not to be started in before hook
@@ -381,8 +399,41 @@ describe("Agent Tests", () => {
           { formats: [{ attach_id: "attach_id", format: CredentialType.JWT }] },
           [{ id: "attach_1", format: "prism/jwt", data: { base64: base64Data } }],
           new DID("did", "prism", "from"),
-          new DID("did", "prism", "to")
+          new DID("did", "prism", "to"),
+          "test-revocation-thid"
         );
+
+        it("Should revoke a JWT Credential", async () => {
+
+          const thid = issueCredential.thid!;
+
+          const revocationMessage = new RevocationNotification(
+            {
+              threadId: thid
+            },
+            new DID("did", "prism", "from"),
+            new DID("did", "prism", "to")
+          )
+          const credential = await agent.processIssuedCredentialMessage(issueCredential);
+
+          credential.properties.set("revoke", true);
+
+          await agent.pluto.storeMessage(issueCredential.makeMessage())
+          await agent.pluto.storeCredential(credential)
+
+          expect(credential.isRevoked()).to.equal(false)
+
+          await agent.connectionManager.processMessages([{
+            attachmentId: "123",
+            message: revocationMessage.makeMessage()
+          }])
+
+          const revokedCredential = (await agent.pluto.getAllCredentials()).find(({ uuid }) => credential.uuid === uuid);
+
+          expect(revokedCredential).to.not.equal(undefined)
+
+          expect(revokedCredential!.isRevoked()).to.equal(true)
+        })
 
         it("Pollux.parseCredential is called with correct decoded data and CredentialType", async () => {
           sandbox.stub(pluto, "storeCredential").resolves();

@@ -1,5 +1,5 @@
 import { uuid } from "@stablelib/uuid";
-import { DID, Message, MessageDirection } from "../../domain";
+import { DID, Message, MessageDirection, Pollux } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { Pluto } from "../../domain/buildingBlocks/Pluto";
@@ -8,11 +8,15 @@ import { AgentError } from "../../domain/models/Errors";
 import { AgentMessageEvents } from "../Agent.MessageEvents";
 import { CancellableTask } from "../helpers/Task";
 import {
+  AgentCredentials,
   AgentMessageEvents as AgentMessageEventsClass,
   ConnectionsManager as ConnectionsManagerClass,
   ListenerKey,
   MediatorHandler,
 } from "../types";
+import { ProtocolType } from "../protocols/ProtocolTypes";
+import { RevocationNotification } from "../protocols/revocation/RevocationNotfiication";
+import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 
 
 /**
@@ -66,6 +70,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public castor: Castor,
     public mercury: Mercury,
     public pluto: Pluto,
+    public agentCredentials: AgentCredentials,
     public mediationHandler: MediatorHandler,
     public pairings: DIDPair[] = []
   ) {
@@ -101,6 +106,20 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   }
 
   /**
+   * Asyncronously wait for a message response just by waiting for new messages that match the specified ID
+   *
+   * @async
+   * @param {string} id
+   * @returns {Promise<Message | undefined>}
+   */
+  async awaitMessageResponse(id: string): Promise<Message | undefined> {
+    console.log("Deprecated, use agent.addListener('THREAD-{{Your thread || messageId}}', fn), this method does not support live-mode.");
+    const messages = await this.mediationHandler.pickupUnreadMessages(10);
+    return messages
+      .find(({ message }) => message.thid === id)?.message
+  }
+
+  /**
    * Asyncronously process unread messages that are received by either http or websockets didcomm transport
    * This method replaces awaitMessages()
    * @param messages 
@@ -127,27 +146,43 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         await this.pluto.storeMessages(messages);
       }
 
-      //Run some automated logic to revoke existing credentials
+      const revokeMessages = messages
+        .filter((message) => message.piuri === ProtocolType.PrismRevocation);
+
+      const allMessages = await this.pluto.getAllMessages()
+      for (let message of revokeMessages) {
+        const revokeMessage = RevocationNotification.fromMessage(message)
+        const threadId = revokeMessage.body.threadId;
+
+        const matchingMessages = allMessages.filter(({ thid, piuri }) =>
+          thid === threadId &&
+          piuri === ProtocolType.DidcommIssueCredential
+        );
+
+        if (matchingMessages.length) {
+
+          for (let message of matchingMessages) {
+            const issueMessage = IssueCredential.fromMessage(message)
+            const credential = await this.agentCredentials.processIssuedCredentialMessage(
+              issueMessage
+            )
+            await this.pluto.revokeCredential(credential.uuid)
+          }
+        }
+
+      }
 
       if (messageIds.length) {
         await this.mediationHandler.registerMessagesAsRead(messageIds);
       }
 
       this.events.emit(ListenerKey.MESSAGE, unreadMessages);
+
+      //This replaces awaitMessageResponse(id: string): Promise<Message | undefined>;
+      for (let message of unreadMessages) {
+        this.events.emit(`${ListenerKey.THREAD}-${message.attachmentId}`, message.message)
+      }
     }
-  }
-
-
-  /**
-   * Asyncronously wait for a message response just by waiting for new messages that match the specified ID
-   *
-   * @async
-   * @param {string} id
-   * @returns {Promise<Message | undefined>}
-   */
-  async awaitMessageResponse(id: string): Promise<Message | undefined> {
-    const messages = await this.awaitMessages();
-    return messages.find((message) => message.thid === id);
   }
 
   /**
