@@ -22,8 +22,10 @@
     hash.js "1.1.7"
     stream-browserify "3.0.0"
 
-"@atala/prism-wallet-sdk@../..":
-  version "3.1.0"
+"@atala/prism-wallet-sdk@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@atala/prism-wallet-sdk/-/prism-wallet-sdk-5.0.0.tgz#683e2180e343abb71b8d13b4a9008babc4d664d0"
+  integrity sha512-S7Jp/8ug6djr/CRGfBzUozo762bJsfSLIPTTRLVI730o+TFBesyUbyrfB2wb82xl9Hd31BsVcO71yjki77/PVw==
   dependencies:
     "@atala/apollo" "^1.2.10"
     "@scure/bip32" "^1.3.0"

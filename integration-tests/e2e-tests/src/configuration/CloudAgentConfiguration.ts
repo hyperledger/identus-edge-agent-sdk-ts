@@ -8,9 +8,9 @@ import {
 import {Utils} from "../Utils"
 import {randomUUID} from "crypto"
 import * as fs from "fs"
-import assert from "assert"
 import axios from "axios"
 import {configDotenv} from "dotenv"
+import assert from "assert"
 
 configDotenv()
 
@@ -54,6 +54,7 @@ export class CloudAgentConfiguration {
    */
   static async preparePublishedDid() {
     try {
+      assert(this.publishedDid != null)
       assert(this.publishedDid != "")
       await axiosInstance.get(
         `did-registrar/dids/${this.publishedDid}`
@@ -112,6 +113,8 @@ export class CloudAgentConfiguration {
    */
   static async prepareJwtSchema() {
     try {
+      assert(this.jwtSchemaGuid != null)
+      assert(this.jwtSchemaGuid != "")
       await axiosInstance.get(
         `schema-registry/schemas/${this.jwtSchemaGuid}`
       )
@@ -159,6 +162,8 @@ export class CloudAgentConfiguration {
    */
   static async prepareAnoncredDefinition() {
     try {
+      assert(this.anoncredDefinitionGuid != null)
+      assert(this.anoncredDefinitionGuid != "")
       await axiosInstance.get(
         `credential-definition-registry/definitions/${this.anoncredDefinitionGuid}`
       )
