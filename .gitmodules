@@ -1,7 +1,8 @@
 [submodule "externals/anoncreds"]
-	path = externals/anoncreds
-	url = git@github.com:curtis-h/anoncreds-rs.git
-	branch = wasm-prism
+  path = externals/anoncreds
+  url = git@github.com:input-output-hk/anoncreds-rs.git
+  branch = feature/wasm
+
 [submodule "externals/didcomm"]
-	path = externals/didcomm
-	url = git@github.com:sicpa-dlab/didcomm-rust.git
+  path = externals/didcomm
+  url = git@github.com:sicpa-dlab/didcomm-rust.git
