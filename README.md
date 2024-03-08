@@ -16,7 +16,7 @@ The complete platform is separated into multiple repositories:
 
 - Apollo: Provides a suite of necessary cryptographic operations.
 - Castor: Provides a suite of operations to create, manage and resolve decentralized identifiers.
-- Pollux: Provides a suite of operations for handling [verifiable credentials](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#verifiable-credentials).
+- Pollux: Provides a suite of operations for handling [verifiable credentials](https://github.com/input-output-hk/atala-prism-docs/blob/master/documentation/docs/concepts/glossary.md#verifiable-credentials).
 - Mercury: Provides a suite of operations for handling DIDComm V2 messages.
 - Pluto: Provides an interface for storage operations in a portable, storage-agnostic manner.
 - PrismAgent: PrismAgent, a component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
