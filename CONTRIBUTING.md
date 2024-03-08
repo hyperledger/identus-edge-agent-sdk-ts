@@ -33,11 +33,11 @@ The complete platform is separated into multiple repositories:
 
 ### Atala PRISM TS SDK
 
-Atala PRISM TS software development kit will help adoption within TS platforms (Browser/Node) by providing key functionalities. For more information about the SDK, please have a look at the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/main/README.md)
+Atala PRISM TS software development kit will help adoption within TS platforms (Browser/Node) by providing key functionalities. For more information about the SDK, please have a look at the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md)
 
 ### Your First Code Contribution
 
-Unsure where to begin contributing to Atala PRISM TS SDK? You can start by looking through the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/main/README.md) that provides all the steps to setup your environment.
+Unsure where to begin contributing to Atala PRISM TS SDK? You can start by looking through the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md) that provides all the steps to setup your environment.
 
 ### Pull Requests
 
@@ -60,12 +60,12 @@ While the prerequisites above must be satisfied before your pull request is revi
 
 This section guides you through submitting a bug report for Atala PRISM TS SDK. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behaviour:computer: :computer:, and find related reports :mag_right:.
 
-Before creating bug reports, please check [this list](#before-submitting-a-bug-report), as you might not need to create one. When creating a bug report, please [include as many details as possible](#how-do-i-submit-a-good-bug-report). Fill out [the required template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/main/.github/ISSUE_TEMPLATE/1-bug-report.yaml), the information it asks for helps us resolve issues faster.
+Before creating bug reports, please check [this list](#before-submitting-a-bug-report), as you might not need to create one. When creating a bug report, please [include as many details as possible](#how-do-i-submit-a-good-bug-report). Fill out [the required template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/.github/ISSUE_TEMPLATE/1-bug-report.yaml), the information it asks for helps us resolve issues faster.
 
 > **Note:** If you find a **Closed** issue that seems like the same thing you're experiencing, open a new issue and include a link to the original issue in the body of your new one.
 
 * **You might be able to find the cause of the problem and fix things yourself by Debugging**. Most importantly, check if you can reproduce the problem in the latest version.
-* **Check the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/main/README.md) ** if you have problems with the setup and the [discussions](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/discussions)** for a list of common questions and problems.
+* **Check the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md) ** if you have problems with the setup and the [discussions](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/discussions)** for a list of common questions and problems.
 * **Perform a cursory search to see if the problem has already been reported**. If it has **and the issue is still open**, add a comment to the existing issue instead of opening a new one.
 
 Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue on that repository and provide the following information by filling in [the template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/new/choose).
@@ -90,7 +90,7 @@ Provide more context by answering these questions:
 
 This section guides you through submitting an enhancement suggestion for the SDK, including completely new features and minor improvements to existing functionality. Following these guidelines helps maintainers and the community understand your suggestion :pencil: and find related suggestions :mag_right:.
 
-Before creating enhancement suggestions, please check [this list](#before-submitting-an-enhancement-suggestion), as you might find out that you don't need to create one. When creating an enhancement suggestion, please [include as many details as possible](#how-do-i-submit-a-good-enhancement-suggestion). Fill in [the template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/main/.github/ISSUE_TEMPLATE/2-feature-request.yaml), including the steps that you imagine you would take if the feature you're requesting existed.
+Before creating enhancement suggestions, please check [this list](#before-submitting-an-enhancement-suggestion), as you might find out that you don't need to create one. When creating an enhancement suggestion, please [include as many details as possible](#how-do-i-submit-a-good-enhancement-suggestion). Fill in [the template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/.github/ISSUE_TEMPLATE/2-feature-request.yaml), including the steps that you imagine you would take if the feature you're requesting existed.
 
 * Most importantly, **check if you're using the latest version.** 
 * **Perform a cursory search** to see if the enhancement has already been suggested. If it has, comment on the existing issue instead of opening a new one.
