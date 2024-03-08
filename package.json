@@ -195,7 +195,7 @@
     "google-protobuf": "^3.21.2",
     "hash.js": "1.1.7",
     "isows": "^1.0.3",
-    "jose": "^4.12.2",
+    "jose": "^4.15.5",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
     "rxdb": "^14.17.1",
