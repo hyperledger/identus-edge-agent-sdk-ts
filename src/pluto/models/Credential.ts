@@ -60,25 +60,25 @@ export const CredentialSchema = schemaFactory<Credential>(schema => {
 export const CredentialMigration: MigrationStrategies = {
   1: function (document) {
     const recoveryId = document.recoveryId;
-    switch (recoveryId) {
-      case JWTVerifiableCredentialRecoveryId:
-        const jwtObj = JSON.parse(document.dataJson);
-        return {
-          ...document,
-          id: jwtObj.id
-        }
-      case AnonCredsRecoveryId:
-        const anoncredsObject = JSON.parse(document.dataJson);
-        if (anoncredsObject.revoked !== undefined) {
-          delete anoncredsObject.revoked;
-        }
-        const anoncredsStr = JSON.stringify(anoncredsObject)
-        return {
-          ...document,
-          id: Buffer.from(sha256.hash(Buffer.from(anoncredsStr))).toString('hex')
-        }
+    if (recoveryId === JWTVerifiableCredentialRecoveryId) {
+      const jwtObj = JSON.parse(document.dataJson);
+      return {
+        ...document,
+        id: jwtObj.id
+      }
     }
+    if (recoveryId === AnonCredsRecoveryId) {
+      const anoncredsObject = JSON.parse(document.dataJson);
+      if (anoncredsObject.revoked !== undefined) {
+        delete anoncredsObject.revoked;
+      }
+      const anoncredsStr = JSON.stringify(anoncredsObject)
+      return {
+        ...document,
+        id: Buffer.from(sha256.hash(Buffer.from(anoncredsStr))).toString('hex')
+      }
 
+    }
     throw new PlutoError.UnknownCredentialTypeError();
   }
 }
