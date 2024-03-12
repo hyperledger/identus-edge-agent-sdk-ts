@@ -56,11 +56,7 @@ export const CredentialSchema = schemaFactory<Credential>(schema => {
 export const CredentialMigration: MigrationStrategies = {
   1: function (document) {
     const jwtObj = JSON.parse(document.dataJson);
-    const credential = JWTCredential.fromJWT(
-      jwtObj,
-      jwtObj.id,
-      jwtObj.revoked ?? false
-    );
-    debugger;
+    document.id = jwtObj.id;
+    return document
   }
 }
