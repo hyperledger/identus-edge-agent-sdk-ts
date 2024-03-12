@@ -423,7 +423,7 @@ describe("Agent Tests", () => {
 
           const revocationMessage = new RevocationNotification(
             {
-              threadId: thid
+              issueCredentialProtocolThreadId: thid
             },
             new DID("did", "prism", "from"),
             new DID("did", "prism", "to")

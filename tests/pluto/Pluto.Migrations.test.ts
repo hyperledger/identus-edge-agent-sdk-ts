@@ -110,7 +110,7 @@ describe("Pluto", () => {
 
             expect(v1Credential).not.toBe(undefined);
             expect(v1Credential).toHaveProperty("id");
-            expect(v1Credential.id).toBe(id)
+            expect(v1Credential.id).toBe(result.id)
 
         });
 

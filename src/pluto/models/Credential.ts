@@ -60,14 +60,14 @@ export const CredentialSchema = schemaFactory<Credential>(schema => {
 export const CredentialMigration: MigrationStrategies = {
   1: function (document) {
     const recoveryId = document.recoveryId;
-    if (recoveryId === JWTVerifiableCredentialRecoveryId) {
+    if (recoveryId == JWTVerifiableCredentialRecoveryId) {
       const jwtObj = JSON.parse(document.dataJson);
       return {
         ...document,
         id: jwtObj.id
       }
     }
-    if (recoveryId === AnonCredsRecoveryId) {
+    if (recoveryId == AnonCredsRecoveryId) {
       const anoncredsObject = JSON.parse(document.dataJson);
       if (anoncredsObject.revoked !== undefined) {
         delete anoncredsObject.revoked;
