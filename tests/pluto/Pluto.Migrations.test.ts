@@ -6,7 +6,7 @@ import * as Models from "../../src/pluto/models";
 import { addRxPlugin } from "rxdb";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 
-import InMemory from '@pluto-encrypted/inmemory'
+import InMemory from "../fixtures/inmemory";
 import { makeCollections } from "../../src/pluto/rxdb/collections";
 
 addRxPlugin(RxDBDevModePlugin);
