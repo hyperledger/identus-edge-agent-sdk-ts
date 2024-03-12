@@ -36,7 +36,7 @@ export class JWTCredential
     public readonly exp?: number,
     public readonly aud: Array<string> = [],
     public readonly originalJWTString?: string,
-    isRevoked: boolean = false
+    isRevoked = false
   ) {
     super();
 
@@ -58,7 +58,7 @@ export class JWTCredential
   }
 
   // TODO - Types and validation
-  static fromJWT(jwtObj: any, jwtString: string, isRevoked: boolean = false) {
+  static fromJWT(jwtObj: any, jwtString: string, isRevoked = false) {
     return new JWTCredential(
       jwtObj.iss,
       jwtObj.vc,

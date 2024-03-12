@@ -25,7 +25,7 @@ export class AnonCredsCredential
   public recoveryId = AnonCredsRecoveryId;
   public properties = new Map<AnonCredsCredentialProperties, any>();
 
-  constructor(credential: Anoncreds.Credential, isRevoked: boolean = false) {
+  constructor(credential: Anoncreds.Credential, isRevoked = false) {
     super();
 
     const {

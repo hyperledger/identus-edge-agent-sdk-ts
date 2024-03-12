@@ -5,6 +5,7 @@ import type { Model } from "./Model";
 import { schemaFactory } from "./Schema";
 import { JWTVerifiableCredentialRecoveryId } from "../../pollux/models/JWTVerifiableCredential";
 import { AnonCredsRecoveryId } from "../../pollux/models/AnonCredsVerifiableCredential";
+import { PlutoError } from '../../domain';
 
 /**
  * Definition for Storable Credential model
@@ -62,18 +63,22 @@ export const CredentialMigration: MigrationStrategies = {
     switch (recoveryId) {
       case JWTVerifiableCredentialRecoveryId:
         const jwtObj = JSON.parse(document.dataJson);
-        document.id = jwtObj.id;
-        break;
+        return {
+          ...document,
+          id: jwtObj.id
+        }
       case AnonCredsRecoveryId:
         const anoncredsObject = JSON.parse(document.dataJson);
         if (anoncredsObject.revoked !== undefined) {
           delete anoncredsObject.revoked;
         }
         const anoncredsStr = JSON.stringify(anoncredsObject)
-        document.id = Buffer.from(sha256.hash(Buffer.from(anoncredsStr))).toString('hex');
-        break;
+        return {
+          ...document,
+          id: Buffer.from(sha256.hash(Buffer.from(anoncredsStr))).toString('hex')
+        }
     }
 
-    return document
+    throw new PlutoError.UnknownCredentialTypeError();
   }
 }
