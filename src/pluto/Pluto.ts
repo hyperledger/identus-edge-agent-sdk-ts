@@ -135,15 +135,13 @@ export class Pluto implements Domain.Pluto {
   }
 
 
-  async revokeCredential(uuid: string): Promise<void> {
-    const credential = await this.Repositories.Credentials.findOne({ uuid });
+  async revokeCredential(credential: Domain.Credential): Promise<void> {
     if (!credential || !credential.isStorable()) {
       throw new Error("Credential not found or invalid")
     }
     credential.properties.set("revoked", true);
-    await this.Repositories.Credentials.update(credential)
-    const credential2 = await this.Repositories.Credentials.findOne({ uuid });
-    debugger;
+    const credentialModel = await this.Repositories.Credentials.toModel(credential)
+    await this.Repositories.Credentials.update(credentialModel)
   }
 
 

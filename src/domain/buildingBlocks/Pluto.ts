@@ -150,7 +150,7 @@ export interface Pluto {
   /**
    * Revoke a Credential
    */
-  revokeCredential(uuid: string): Promise<void>;
+  revokeCredential(credential: Credential): Promise<void>;
 
   /**
    * Delete a previously stored messages

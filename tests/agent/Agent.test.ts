@@ -42,11 +42,13 @@ import { RequestPresentation } from "../../src/prism-agent/protocols/proofPresen
 import { Presentation } from "../../src/prism-agent/protocols/proofPresentation/Presentation";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import { AnonCredsCredential } from "../../src/pollux/models/AnonCredsVerifiableCredential";
-import { InMemoryStore } from "../fixtures/InMemoryStore";
+import InMemoryStore from "../fixtures/inmemory";
 import { Pluto as IPluto } from "../../src/domain";
 import { Pluto } from "../../src/pluto/Pluto";
 import { RevocationNotification } from "../../src/prism-agent/protocols/revocation/RevocationNotfiication";
 import { AgentCredentials } from "../../src/prism-agent/Agent.Credentials";
+import { Store } from "../../src";
+import { randomUUID } from "crypto";
 
 
 chai.use(SinonChai);
@@ -58,7 +60,7 @@ let pluto: IPluto;
 let pollux: Pollux;
 let castor: Castor;
 let sandbox: sinon.SinonSandbox;
-
+let store: Pluto.Store
 // jest.mock("../apollo/utils/jwt/JWT", () => () => ({
 //   sign: jest.fn(() => "")
 // }));
@@ -85,18 +87,21 @@ describe("Agent Tests", () => {
       packEncrypted: async () => "",
       unpack: async () => new Message("{}", undefined, "TypeofMessage"),
     };
-
-    const store = new InMemoryStore();
+    store = new Store({
+      name: 'test' + randomUUID(),
+      storage: InMemoryStore,
+      password: Buffer.from("demoapp").toString("hex")
+    })
     pluto = new Pluto(store, apollo);
     const mercury = new Mercury(castor, didProtocol, httpManager);
 
-    const pollux = new Pollux(castor)
+    const polluxInstance = new Pollux(castor)
 
     const agentCredentials = new AgentCredentials(
       apollo,
       castor,
       pluto,
-      pollux,
+      polluxInstance,
       apollo.createRandomSeed().seed
     )
 
@@ -112,7 +117,10 @@ describe("Agent Tests", () => {
       connectionsManager
     );
 
-    await pollux.start();
+    await polluxInstance.start();
+
+    pollux = (agent as any).pollux as Pollux;
+
   });
 
   describe("Integration Tests", () => {
@@ -161,6 +169,8 @@ describe("Agent Tests", () => {
       ).to.eventually.be.rejectedWith(AgentError.UnknownInvitationTypeError);
     });
 
+
+
     it("As a developer with a valid invitationMessage I will be sending a Handshake request with the correct information and store the didPair in pluto right after.", async () => {
       const agentInvitations = (agent as any).agentInvitations;
       const agentInvitationsConnection = agentInvitations.connection;
@@ -206,10 +216,6 @@ describe("Agent Tests", () => {
 
       expect(sendMessage).calledWith(validHanshakeMessage);
     });
-
-    it("As a developer I want to be notified when one of my credentials have been revoked", async () => {
-
-    })
   });
 
   // Requires Agent not to be started in before hook
@@ -243,6 +249,8 @@ describe("Agent Tests", () => {
     beforeEach(async () => {
       await agent.start();
     });
+
+
 
     describe("prepareRequestCredentialWithIssuer", () => {
       const credentialPreview: CredentialPreview = {
@@ -404,8 +412,14 @@ describe("Agent Tests", () => {
         );
 
         it("Should revoke a JWT Credential", async () => {
-
-          const thid = issueCredential.thid!;
+          const revocationIssueMessage = new IssueCredential(
+            { formats: [{ attach_id: "attach_id", format: CredentialType.JWT }] },
+            [{ id: "attach_1", format: "prism/jwt", data: { base64: base64Data } }],
+            new DID("did", "prism", "from"),
+            new DID("did", "prism", "to"),
+            "12345"
+          );
+          const thid = revocationIssueMessage.thid!;
 
           const revocationMessage = new RevocationNotification(
             {
@@ -414,26 +428,19 @@ describe("Agent Tests", () => {
             new DID("did", "prism", "from"),
             new DID("did", "prism", "to")
           )
-          const credential = await agent.processIssuedCredentialMessage(issueCredential);
 
-          credential.properties.set("revoke", true);
-
-          await agent.pluto.storeMessage(issueCredential.makeMessage())
-          await agent.pluto.storeCredential(credential)
-
-          expect(credential.isRevoked()).to.equal(false)
+          await agent.pluto.storeMessage(revocationIssueMessage.makeMessage())
 
           await agent.connectionManager.processMessages([{
             attachmentId: "123",
             message: revocationMessage.makeMessage()
           }])
 
-          const revokedCredential = (await agent.pluto.getAllCredentials()).find(({ uuid }) => credential.uuid === uuid);
+          const [revokedCredential] = await agent.pluto.getAllCredentials()
 
           expect(revokedCredential).to.not.equal(undefined)
-
           expect(revokedCredential!.isRevoked()).to.equal(true)
-        })
+        });
 
         it("Pollux.parseCredential is called with correct decoded data and CredentialType", async () => {
           sandbox.stub(pluto, "storeCredential").resolves();

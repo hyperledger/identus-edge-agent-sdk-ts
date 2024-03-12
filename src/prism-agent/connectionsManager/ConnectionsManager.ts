@@ -166,7 +166,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
             const credential = await this.agentCredentials.processIssuedCredentialMessage(
               issueMessage
             )
-            await this.pluto.revokeCredential(credential.uuid)
+            await this.pluto.revokeCredential(credential)
           }
         }
 
