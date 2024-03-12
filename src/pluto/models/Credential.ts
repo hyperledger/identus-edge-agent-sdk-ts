@@ -66,7 +66,7 @@ export const CredentialMigration: MigrationStrategies = {
         break;
       case AnonCredsRecoveryId:
         const anoncredsObject = JSON.parse(document.dataJson);
-        if (anoncredsObject.revoked) {
+        if (anoncredsObject.revoked !== undefined) {
           delete anoncredsObject.revoked;
         }
         const anoncredsStr = JSON.stringify(anoncredsObject)

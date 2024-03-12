@@ -47,7 +47,7 @@ export class AnonCredsCredential
   get id() {
     const anoncredsObject = JSON.stringify(
       {
-        schemaId: this.properties.get(AnonCredsCredentialProperties.schemaId),
+        schema_id: this.properties.get(AnonCredsCredentialProperties.schemaId),
         cred_def_id: this.properties.get(AnonCredsCredentialProperties.credentialDefinitionId),
         values: this.properties.get(AnonCredsCredentialProperties.values),
         signature: this.properties.get(AnonCredsCredentialProperties.signature),
