@@ -1,7 +1,10 @@
-import { MigrationState, MigrationStrategies } from "rxdb";
+import * as sha256 from '@stablelib/sha256';
+
+import { MigrationStrategies } from "rxdb";
 import type { Model } from "./Model";
 import { schemaFactory } from "./Schema";
-import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
+import { JWTVerifiableCredentialRecoveryId } from "../../pollux/models/JWTVerifiableCredential";
+import { AnonCredsRecoveryId } from "../../pollux/models/AnonCredsVerifiableCredential";
 
 /**
  * Definition for Storable Credential model
@@ -55,8 +58,22 @@ export const CredentialSchema = schemaFactory<Credential>(schema => {
 
 export const CredentialMigration: MigrationStrategies = {
   1: function (document) {
-    const jwtObj = JSON.parse(document.dataJson);
-    document.id = jwtObj.id;
+    const recoveryId = document.recoveryId;
+    switch (recoveryId) {
+      case JWTVerifiableCredentialRecoveryId:
+        const jwtObj = JSON.parse(document.dataJson);
+        document.id = jwtObj.id;
+        break;
+      case AnonCredsRecoveryId:
+        const anoncredsObject = JSON.parse(document.dataJson);
+        if (anoncredsObject.revoked) {
+          delete anoncredsObject.revoked;
+        }
+        const anoncredsStr = JSON.stringify(anoncredsObject)
+        document.id = Buffer.from(sha256.hash(Buffer.from(anoncredsStr))).toString('hex');
+        break;
+    }
+
     return document
   }
 }

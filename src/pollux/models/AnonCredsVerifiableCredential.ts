@@ -1,3 +1,4 @@
+import * as sha256 from '@stablelib/sha256';
 import { Anoncreds } from "../../domain/models/Anoncreds";
 import { Credential, StorableCredential } from "../../domain/models/Credential";
 import { CredentialType } from "../../domain/models/VerifiableCredential";
@@ -44,7 +45,17 @@ export class AnonCredsCredential
   }
 
   get id() {
-    return this.getProperty(AnonCredsCredentialProperties.jti);
+    const anoncredsObject = JSON.stringify(
+      {
+        schemaId: this.properties.get(AnonCredsCredentialProperties.schemaId),
+        cred_def_id: this.properties.get(AnonCredsCredentialProperties.credentialDefinitionId),
+        values: this.properties.get(AnonCredsCredentialProperties.values),
+        signature: this.properties.get(AnonCredsCredentialProperties.signature),
+        signature_correctness_proof: this.properties.get(AnonCredsCredentialProperties.signatureCorrectnessProof),
+      }
+    )
+    const hash = sha256.hash(Buffer.from(anoncredsObject));
+    return Buffer.from(hash).toString('hex')
   }
 
   get claims() {

@@ -94,7 +94,6 @@ export class InMemoryInternal<RxDocType> implements InMemoryStorageInternals<RxD
         await this.removeFromIndex(`[${collectionName}+${primaryKeyKey}]`, id)
         await this.removeFromIndex('[all]', id)
         await this.data.delete(id)
-        this.documents.delete(id)
       } else {
         for (const requiredIndexes of saferIndexList) {
           const requiredIndex = `[${collectionName}+${requiredIndexes.join('+')}]`
@@ -103,7 +102,6 @@ export class InMemoryInternal<RxDocType> implements InMemoryStorageInternals<RxD
         await this.addIndex(`[${collectionName}+${primaryKeyKey}]`, id)
         await this.addIndex('[all]', id)
         await this.data.set(id, item)
-        this.documents.set(id, item)
       }
     }
   }

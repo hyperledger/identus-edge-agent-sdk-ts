@@ -1,3 +1,4 @@
+import * as sinon from "sinon";
 
 import * as Domain from "../../src/domain";
 import { Apollo, Castor, Pollux, Store } from "../../src";
@@ -17,14 +18,107 @@ addRxPlugin(RxDBDevModePlugin);
 
 const apollo = new Apollo();
 const castor = new Castor(apollo);
-const pollux = new Pollux(castor);
 
 
+let sandbox: sinon.SinonSandbox;
 describe("Pluto", () => {
+
+    beforeEach(async () => {
+        sandbox = sinon.createSandbox();
+
+    });
+
+    afterEach(async () => {
+        sandbox.restore();
+    });
 
     describe("Migrations", () => {
 
-        test("Should migrate old v0Credentials into v1 credentials", async () => {
+        test("Should migrate old anoncreds v0Credentials into v1 credentials", async () => {
+            const pollux = new Pollux(castor);
+            const encodeToBuffer = (cred: object) => {
+                const json = JSON.stringify(cred);
+                return Buffer.from(json);
+            };
+            const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
+            const encoded = encodeToBuffer(payload);
+            sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves({});
+            sandbox.stub(pollux, "anoncreds").get(() => ({
+                processCredential: sandbox.stub().returns(payload)
+            }));
+
+            const result = await pollux.parseCredential(Buffer.from(encoded), {
+                type: Domain.CredentialType.AnonCreds,
+                linkSecret: "linkSecret",
+                credentialMetadata: {} as any
+            });
+
+            const store = new Store({
+                name: "randomdb",
+                storage: InMemory,
+                password: 'random12434',
+                ignoreDuplicate: true
+            }, {
+                credentials: {
+                    schema: schemaFactory<Credential>(schema => {
+                        schema.addProperty("string", "recoveryId");
+                        schema.addProperty("string", "dataJson");
+                        schema.addProperty("string", "issuer");
+                        schema.addProperty("string", "subject");
+                        schema.addProperty("string", "credentialCreated");
+                        schema.addProperty("string", "credentialUpdated");
+                        schema.addProperty("string", "credentialSchema");
+                        schema.addProperty("string", "validUntil");
+                        schema.addProperty("boolean", "revoked");
+                        schema.setEncrypted("dataJson");
+                        schema.setRequired("recoveryId", "dataJson");
+                        schema.setVersion(0);
+                    })
+                }
+            });
+
+            const credentialRepository = new CredentialRepository(store);
+
+            const credentialModel = credentialRepository.toModel(result) as any
+            delete credentialModel.id
+
+            await store.start();
+
+
+
+            await store.insert("credentials", credentialModel);
+            const [v0Credential] = await store.query("credentials", {
+                selector: {
+                    uuid: credentialModel.uuid
+                }
+            })
+
+            expect(v0Credential).not.toBe(undefined);
+            expect(v0Credential).not.toHaveProperty("id");
+
+            const currentStore = new Store({
+                name: "randomdb",
+                storage: InMemory,
+                password: 'random12434',
+                ignoreDuplicate: true
+            });
+
+            await currentStore.start();
+
+            const [v1Credential] = await currentStore.query("credentials", {
+                selector: {
+                    uuid: credentialModel.uuid
+                }
+            })
+
+            expect(v1Credential).not.toBe(undefined);
+            expect(v1Credential).toHaveProperty("id");
+            expect(v1Credential.id).toBe(result.id)
+
+        });
+
+        test("Should migrate old jwt v0Credentials into v1 credentials", async () => {
+            const pollux = new Pollux(castor);
             const jwtParts = [
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
                 "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
