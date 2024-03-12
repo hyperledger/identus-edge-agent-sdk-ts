@@ -1,5 +1,7 @@
+import { MigrationState, MigrationStrategies } from "rxdb";
 import type { Model } from "./Model";
 import { schemaFactory } from "./Schema";
+import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
 
 /**
  * Definition for Storable Credential model
@@ -27,10 +29,10 @@ export interface Credential extends Model {
   validUntil?: string;
   revoked?: boolean;
   // availableClaims?: string[];
+  id: string;
 }
 
 export const CredentialSchema = schemaFactory<Credential>(schema => {
-  schema.setRequired("recoveryId", "dataJson");
   schema.addProperty("string", "recoveryId");
   schema.addProperty("string", "dataJson");
 
@@ -43,4 +45,22 @@ export const CredentialSchema = schemaFactory<Credential>(schema => {
   schema.addProperty("boolean", "revoked");
 
   schema.setEncrypted("dataJson");
+  schema.setVersion(1);
+
+  //V1
+  schema.addProperty("string", "id");
+  schema.setRequired("recoveryId", "dataJson", "id");
+
 });
+
+export const CredentialMigration: MigrationStrategies = {
+  1: function (document) {
+    const jwtObj = JSON.parse(document.dataJson);
+    const credential = JWTCredential.fromJWT(
+      jwtObj,
+      jwtObj.id,
+      jwtObj.revoked ?? false
+    );
+    debugger;
+  }
+}

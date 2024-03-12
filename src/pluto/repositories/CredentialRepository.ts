@@ -38,14 +38,12 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
     if (!credential.isStorable()) {
       throw new Domain.PlutoError.CredentialNotStorable();
     }
-
     const item = credential.toStorable();
-
     return {
       uuid: credential.uuid,
+      id: item.id,
       recoveryId: credential.recoveryId,
       dataJson: item.credentialData,
-
       issuer: item.issuer,
       subject: item.subject,
       credentialCreated: item.credentialCreated,
