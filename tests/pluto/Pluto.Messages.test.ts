@@ -4,6 +4,7 @@ import InMemoryStore from "../fixtures/inmemory";
 import * as Domain from "../../src/domain";
 import { Apollo, Store } from "../../src";
 import * as Fixtures from "../fixtures";
+import { randomUUID } from "crypto";
 
 describe("Pluto", () => {
   let instance: Domain.Pluto;
@@ -11,7 +12,7 @@ describe("Pluto", () => {
   beforeEach(async () => {
     const apollo = new Apollo();
     const store = new Store({
-      name: "randomdb",
+      name: "randomdb" + randomUUID(),
       storage: InMemoryStore,
       password: 'random12434',
       ignoreDuplicate: true
