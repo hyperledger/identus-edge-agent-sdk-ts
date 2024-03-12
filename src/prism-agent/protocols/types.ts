@@ -13,7 +13,7 @@ export interface IssueCredentialBody extends CredentialBody {
 }
 
 export interface PrismRevocationBody {
-  threadId: string
+  issueCredentialProtocolThreadId: string
   comment?: string
 }
 

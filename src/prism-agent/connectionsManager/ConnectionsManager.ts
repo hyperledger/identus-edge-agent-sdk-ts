@@ -152,7 +152,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
       const allMessages = await this.pluto.getAllMessages()
       for (let message of revokeMessages) {
         const revokeMessage = RevocationNotification.fromMessage(message)
-        const threadId = revokeMessage.body.threadId;
+        const threadId = revokeMessage.body.issueCredentialProtocolThreadId;
 
         const matchingMessages = allMessages.filter(({ thid, piuri }) =>
           thid === threadId &&
@@ -167,6 +167,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
               issueMessage
             )
             await this.pluto.revokeCredential(credential)
+            this.events.emit(`${ListenerKey.REVOKE}`, credential)
           }
         }
 
@@ -178,10 +179,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
 
       this.events.emit(ListenerKey.MESSAGE, unreadMessages);
 
-      //This replaces awaitMessageResponse(id: string): Promise<Message | undefined>;
-      for (let message of unreadMessages) {
-        this.events.emit(`${ListenerKey.THREAD}-${message.attachmentId}`, message.message)
-      }
+
     }
   }
 

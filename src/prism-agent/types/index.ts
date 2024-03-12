@@ -89,7 +89,7 @@ export type EventCallback = (messages: Message[]) => void;
 export enum ListenerKey {
   "MESSAGE" = "message",
   "CONNECTION" = "connection",
-  "THREAD" = "thread"
+  "REVOKE" = "revoke"
 }
 
 export interface AgentMessageEvents {
