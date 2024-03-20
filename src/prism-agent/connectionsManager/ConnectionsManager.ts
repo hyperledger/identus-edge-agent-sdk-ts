@@ -167,7 +167,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
               issueMessage
             )
             await this.pluto.revokeCredential(credential)
-            this.events.emit(`${ListenerKey.REVOKE}`, credential)
+            this.events.emit(ListenerKey.REVOKE, credential)
           }
         }
 
