@@ -1,3 +1,4 @@
+import { MangoQuery } from "rxdb";
 import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
@@ -9,6 +10,13 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
     private readonly keyRestoration: Domain.KeyRestoration
   ) {
     super(store, "keys");
+  }
+
+  override async getModels(query?: MangoQuery<Models.Key>): Promise<Models.Key[]> {
+    const result = await super.getModels(query);
+    const filtered = result.filter(x => x.recoveryId !== "linksecret");
+
+    return filtered;
   }
 
   toDomain(model: Models.Key): Domain.PrivateKey {

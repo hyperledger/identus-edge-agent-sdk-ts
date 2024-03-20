@@ -6,6 +6,7 @@ import { Message } from "../models/Message";
 import { Credential } from "../models/Credential";
 import { PeerDID } from "../../peer-did/PeerDID";
 import { uuid } from "@stablelib/uuid";
+import { Arrayable } from "../../utils";
 
 export namespace Pluto {
   /**
@@ -23,6 +24,43 @@ export namespace Pluto {
   export const makeUUID = (): string => {
     return uuid();
   };
+
+  export interface Backup {
+    credentials: Backup.Credential[];
+    dids: Backup.DID[];
+    did_pairs: Backup.DIDPair[];
+    keys: Backup.Key[];
+    messages: Backup.Message[];
+    link_secret: Backup.LinkSecret;
+  }
+
+  export namespace Backup {
+    export interface Credential {
+      recoveryId: string;
+      data: string;
+    }
+
+    export interface DID {
+      did: string;
+      alias?: string;
+    }
+
+    export interface DIDPair {
+      holder: string;
+      recipient: string;
+      alias: string;
+    }
+
+    export interface Key {
+      key: string;
+      did?: string;
+      index?: number;
+    }
+
+    export type LinkSecret = string | undefined;
+
+    export type Message = string;
+  }
 }
 
 /**
@@ -36,6 +74,10 @@ export interface Pluto {
    */
   start(): Promise<void>;
 
+  backup(): Promise<Pluto.Backup>;
+
+  restore(backup: Pluto.Backup): Promise<void>;
+
   /**
    * Store the Credential Metadata
    */
@@ -48,14 +90,10 @@ export interface Pluto {
   getCredentialMetadata(name: string): Promise<CredentialMetadata | null>;
 
   /**
-   * Store a PRISM DID and its private key with given metadata.
+   * Store a DID
+   * and its private key with given metadata.
    */
-  storePrismDID(did: DID, privateKey: PrivateKey, alias?: string): Promise<void>;
-
-  /**
-   * Store a Peer DID and an array of its privateKeys.
-   */
-  storePeerDID(did: DID, privateKeys: Array<PrivateKey>): Promise<void>;
+  storeDID(did: DID, alias?: string, keys?: Arrayable<PrivateKey>): Promise<void>;
 
   /**
    * Store a named pair of DIDs representing a DIDComm connection.

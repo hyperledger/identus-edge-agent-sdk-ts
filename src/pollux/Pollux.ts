@@ -235,19 +235,7 @@ export default class Pollux implements IPollux {
     const credentialString = Buffer.from(credentialBuffer).toString();
 
     if (credentialType === CredentialType.JWT) {
-      const parts = credentialString.split(".");
-
-      if (parts.length != 3 || parts.at(1) === undefined) {
-        throw new InvalidJWTString();
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const jwtCredentialString = parts.at(1)!;
-      const base64Data = base64url.baseDecode(jwtCredentialString);
-      const jsonString = Buffer.from(base64Data).toString();
-      const jsonParsed = JSON.parse(jsonString);
-
-      return JWTCredential.fromJWT(jsonParsed, credentialString);
+      return JWTCredential.fromJWT(credentialString);
     }
 
     if (credentialType === CredentialType.AnonCreds) {

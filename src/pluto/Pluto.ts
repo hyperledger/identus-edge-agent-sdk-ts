@@ -3,6 +3,9 @@ import * as Domain from "../domain";
 import * as Models from "./models";
 import { PeerDID } from "../peer-did/PeerDID";
 import { repositoryFactory } from "./repositories";
+import { PlutoBackupTask } from "./backup/Backup.task";
+import { PlutoRestoreTask } from "./backup/Restore.task";
+import { Arrayable, asArray } from "../utils";
 
 /**
  * Pluto implementation
@@ -99,6 +102,7 @@ export namespace Pluto {
   }
 }
 
+
 export class Pluto implements Domain.Pluto {
   private Repositories: ReturnType<typeof repositoryFactory>;
 
@@ -109,11 +113,22 @@ export class Pluto implements Domain.Pluto {
     this.Repositories = repositoryFactory(store, keyRestoration);
   }
 
+  async backup() {
+    const task = new PlutoBackupTask(this.Repositories);
+    const result = await task.run();
+    return result;
+  }
+
+  async restore(backup: Domain.Pluto.Backup) {
+    const task = new PlutoRestoreTask(this, backup);
+    await task.run();
+  }
+
   async deleteMessage(id: string): Promise<void> {
     const message = await this.Repositories.Messages.findOne({ id });
-    //TODO: Improve error handling
+    // TODO: Improve error handling
     if (message) {
-      await this.Repositories.Messages.delete(message.uuid)
+      await this.Repositories.Messages.delete(message.uuid);
     }
   }
 
@@ -137,11 +152,11 @@ export class Pluto implements Domain.Pluto {
 
   async revokeCredential(credential: Domain.Credential): Promise<void> {
     if (!credential || !credential.isStorable()) {
-      throw new Error("Credential not found or invalid")
+      throw new Error("Credential not found or invalid");
     }
     credential.properties.set("revoked", true);
-    const credentialModel = await this.Repositories.Credentials.toModel(credential)
-    await this.Repositories.Credentials.update(credentialModel)
+    const credentialModel = await this.Repositories.Credentials.toModel(credential);
+    await this.Repositories.Credentials.update(credentialModel);
   }
 
 
@@ -183,18 +198,24 @@ export class Pluto implements Domain.Pluto {
 
 
   /** DIDs **/
-  /** Prism DIDs **/
 
-  async storePrismDID(did: Domain.DID, privateKey: Domain.PrivateKey, alias?: string): Promise<void> {
+  async storeDID(did: Domain.DID, alias?: string, keys?: Arrayable<Domain.PrivateKey>): Promise<void> {
     await this.Repositories.DIDs.save(did, alias);
-    await this.Repositories.Keys.save(privateKey);
 
-    await this.Repositories.DIDKeyLinks.insert({
-      alias,
-      didId: did.uuid,
-      keyId: privateKey.uuid
-    });
+    await Promise.all(
+      asArray(keys).map(async key => {
+        await this.Repositories.Keys.save(key);
+
+        await this.Repositories.DIDKeyLinks.insert({
+          alias,
+          didId: did.uuid,
+          keyId: key.uuid
+        });
+      })
+    );
   }
+
+  /** Prism DIDs **/
 
   async getAllPrismDIDs(): Promise<Domain.PrismDID[]> {
     const dids = await this.Repositories.DIDs.find({ method: "prism" });
@@ -225,15 +246,6 @@ export class Pluto implements Domain.Pluto {
 
 
   /** Peer DIDs **/
-
-  async storePeerDID(did: Domain.DID, privateKeys: Domain.PrivateKey[]): Promise<void> {
-    await this.Repositories.DIDs.save(did);
-    await Promise.all(privateKeys.map(x => this.Repositories.Keys.save(x)));
-
-    await Promise.all(
-      privateKeys.map(x => this.Repositories.DIDKeyLinks.insert({ didId: did.uuid, keyId: x.uuid }))
-    );
-  }
 
   async getAllPeerDIDs(): Promise<PeerDID[]> {
     const allDids = await this.Repositories.DIDs.find({ method: "peer" });

@@ -60,7 +60,7 @@ let pluto: IPluto;
 let pollux: Pollux;
 let castor: Castor;
 let sandbox: sinon.SinonSandbox;
-let store: Pluto.Store
+let store: Pluto.Store;
 // jest.mock("../apollo/utils/jwt/JWT", () => () => ({
 //   sign: jest.fn(() => "")
 // }));
@@ -91,11 +91,11 @@ describe("Agent Tests", () => {
       name: 'test' + randomUUID(),
       storage: InMemoryStore,
       password: Buffer.from("demoapp").toString("hex")
-    })
+    });
     pluto = new Pluto(store, apollo);
     const mercury = new Mercury(castor, didProtocol, httpManager);
 
-    const polluxInstance = new Pollux(castor)
+    const polluxInstance = new Pollux(castor);
 
     const agentCredentials = new AgentCredentials(
       apollo,
@@ -103,7 +103,7 @@ describe("Agent Tests", () => {
       pluto,
       polluxInstance,
       apollo.createRandomSeed().seed
-    )
+    );
 
     const connectionsManager = new ConnectionsManagerMock(
       castor, mercury, pluto, agentCredentials
@@ -131,7 +131,7 @@ describe("Agent Tests", () => {
 
     it("As a developer when a peerDID is created and we have specified to updateKeyList the services are correctly added and updateKeyList is called correctly.", async () => {
       const didHigherFunctions = (agent as any).agentDIDHigherFunctions;
-      const storePeerDID = sandbox.stub(pluto, "storePeerDID").resolves();
+      const storePeerDID = sandbox.stub(pluto, "storeDID").resolves();
       const updateKeyList = sandbox.stub(
         didHigherFunctions.mediationHandler,
         "updateKeyListWithDIDs"
@@ -427,19 +427,19 @@ describe("Agent Tests", () => {
             },
             new DID("did", "prism", "from"),
             new DID("did", "prism", "to")
-          )
+          );
 
-          await agent.pluto.storeMessage(revocationIssueMessage.makeMessage())
+          await agent.pluto.storeMessage(revocationIssueMessage.makeMessage());
 
           await agent.connectionManager.processMessages([{
             attachmentId: "123",
             message: revocationMessage.makeMessage()
-          }])
+          }]);
 
-          const [revokedCredential] = await agent.pluto.getAllCredentials()
+          const [revokedCredential] = await agent.pluto.getAllCredentials();
 
-          expect(revokedCredential).to.not.equal(undefined)
-          expect(revokedCredential!.isRevoked()).to.equal(true)
+          expect(revokedCredential).to.not.equal(undefined);
+          expect(revokedCredential!.isRevoked()).to.equal(true);
         });
 
         it("Pollux.parseCredential is called with correct decoded data and CredentialType", async () => {
@@ -685,7 +685,6 @@ describe("Agent Tests", () => {
         });
 
         test("JWTCredential + JWTPresentationRequest - returns Presentation", async () => {
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
@@ -693,7 +692,7 @@ describe("Agent Tests", () => {
             didTo
           );
 
-          const result = await agent.createPresentationForRequestProof(request, credential);
+          const result = await agent.createPresentationForRequestProof(request, Fixtures.Credentials.JWT.credential);
 
           expect(result).to.be.instanceOf(Presentation);
           expect(result).to.have.property("attachments")
@@ -714,7 +713,6 @@ describe("Agent Tests", () => {
         });
 
         test("Attachment format - not JWT - throws", () => {
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
           const request = new RequestPresentation(
             { proofTypes: [] },
             [{ ...Fixtures.PresentationRequests.JWTAttachment, format: "wrong" }],
@@ -722,13 +720,13 @@ describe("Agent Tests", () => {
             didTo
           );
 
-          const result = agent.createPresentationForRequestProof(request, credential);
+          const result = agent.createPresentationForRequestProof(request, Fixtures.Credentials.JWT.credential);
 
           expect(result).to.eventually.be.rejected;
         });
 
         test("Credential.subjectDID - invalid - throws", () => {
-          const credential = JWTCredential.fromJWT({}, "");
+          const credential = new JWTCredential("", {}, "", 1, "");
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
@@ -744,7 +742,7 @@ describe("Agent Tests", () => {
         test("Credential.subjectDID - doesn't match PrivateKey - throws", () => {
           stubGetDIDPrivateKeysByDID.resolves([]);
 
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, Fixtures.Credentials.JWT.credentialPayloadEncoded);
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
@@ -760,7 +758,7 @@ describe("Agent Tests", () => {
 
       describe("Fail cases", () => {
         test("RequestPresentation.attachments - empty - throws", () => {
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+
           const request = new RequestPresentation(
             { proofTypes: [] },
             [],
@@ -768,7 +766,7 @@ describe("Agent Tests", () => {
             didTo
           );
 
-          const result = agent.createPresentationForRequestProof(request, credential);
+          const result = agent.createPresentationForRequestProof(request, Fixtures.Credentials.JWT.credential);
 
           expect(result).to.eventually.be.rejected;
         });

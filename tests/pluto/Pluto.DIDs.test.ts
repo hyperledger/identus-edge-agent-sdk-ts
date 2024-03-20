@@ -33,7 +33,7 @@ describe("Pluto", () => {
         expect(uuidDID).to.be.a.string;
         expect(uuidKey).to.be.a.string;
 
-        await instance.storePrismDID(sutDID, sutKey);
+        await instance.storeDID(sutDID, undefined, sutKey);
         expect(sutDID.uuid).to.be.a.string;
         expect(sutKey.uuid).to.be.a.string;
         expect(sutDID.uuid).to.eql(uuidDID);
@@ -44,7 +44,7 @@ describe("Pluto", () => {
         const sutDID = Domain.DID.from("did:prism:mock2");
         const sutKey = new X25519PrivateKey(Fixtures.Keys.x25519.privateKey.raw);
 
-        await instance.storePrismDID(sutDID, sutKey);
+        await instance.storeDID(sutDID, undefined, sutKey);
         const results = await instance.getAllPrismDIDs();
 
         expect(results).to.be.an("array");
@@ -80,7 +80,7 @@ describe("Pluto", () => {
         expect(sutDID.uuid).to.be.a.string;
         expect(sutKey.uuid).to.be.a.string;
 
-        await instance.storePeerDID(sutDID, [sutKey]);
+        await instance.storeDID(sutDID, undefined, [sutKey]);
         expect(sutDID.uuid).to.be.a.string;
         expect(sutKey.uuid).to.be.a.string;
         expect(sutDID.uuid).to.eql(uuidDID);
@@ -91,7 +91,7 @@ describe("Pluto", () => {
         const sutDID = Domain.DID.from(Fixtures.DIDs.peerDID1.toString());
         const sutKey = new X25519PrivateKey(Fixtures.Keys.x25519.privateKey.raw);
 
-        await instance.storePeerDID(sutDID, [sutKey]);
+        await instance.storeDID(sutDID, undefined, [sutKey]);
         const results = await instance.getAllPeerDIDs();
 
         expect(results).to.be.an("array");

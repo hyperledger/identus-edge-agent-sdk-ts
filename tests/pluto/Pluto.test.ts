@@ -42,7 +42,7 @@ describe("Pluto", () => {
         );
         const privateKey = keyClass.from.Buffer(raw);
 
-        await instance.storePeerDID(peerDid, [privateKey]);
+        await instance.storeDID(peerDid, undefined, [privateKey]);
 
         const result = await instance.getAllPeerDIDs();
 
@@ -74,7 +74,7 @@ describe("Pluto", () => {
             "01011010011101010100011000100010"
           );
 
-          await instance.storePrismDID(prismDid, privateKey);
+          await instance.storeDID(prismDid, undefined, privateKey);
 
           const result = await instance.getDIDPrivateKeysByDID(prismDid);
           const resultKey = result.at(0)!;
@@ -139,7 +139,7 @@ describe("Pluto", () => {
     const privateKey: Domain.PrivateKey = new Secp256k1PrivateKey(
       Buffer.from("01011010011101010100011000100010")
     );
-    await instance.storePrismDID(did, privateKey, alias);
+    await instance.storeDID(did, alias, privateKey);
   });
 
   it("should store message", async function () {
@@ -300,7 +300,7 @@ describe("Pluto", () => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(did, privateKey, alias);
+    await instance.storeDID(did, alias, privateKey);
 
     const dids = await instance.getAllPrismDIDs();
 
@@ -325,8 +325,8 @@ describe("Pluto", () => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePrismDID(prismDid, prismPrivateKey, alias);
-    await instance.storePeerDID(peerDid, [privateKey1, privateKey2]);
+    await instance.storeDID(prismDid, alias, prismPrivateKey);
+    await instance.storeDID(peerDid, undefined, [privateKey1, privateKey2]);
 
     const dids = await instance.getAllPeerDIDs();
     expect(dids.length).equals(1);
@@ -339,7 +339,7 @@ describe("Pluto", () => {
       Buffer.from("01011010011101010100011000100010")
     );
 
-    await instance.storePeerDID(peerDid, [privateKey]);
+    await instance.storeDID(peerDid, undefined, [privateKey]);
     const result = await instance.getDIDPrivateKeysByDID(peerDid);
     expect(
       !!result?.find(
@@ -349,59 +349,47 @@ describe("Pluto", () => {
   });
 
   it("should get all did pairs", async function () {
+    const name = "test";
     const host = Domain.DID.fromString("did:prism:123");
     const receiver = Domain.DID.fromString("did:prism:321");
-    const name = "test";
-
-    await instance.storePrismDID(host, new Ed25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    ));
-    await instance.storePrismDID(receiver, new Ed25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    ));
 
     await instance.storeDIDPair(host, receiver, name);
-    const dids = await instance.getAllDidPairs();
-    expect(dids).not.empty;
+    const result = await instance.getAllDidPairs();
+
+    expect(result).to.be.an("array").to.have.length(1);
+    expect(result[0].name).to.eq(name);
+    expect(result[0].host).to.deep.eq(host);
+    expect(result[0].receiver).to.deep.eq(receiver);
   });
 
   it("should get pair by DID", async function () {
+    const name = "test";
     const host = Domain.DID.fromString("did:prism:123");
     const receiver = Domain.DID.fromString("did:prism:321");
-    const name = "test";
-
-    await instance.storePrismDID(host, new Ed25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    ));
-    await instance.storePrismDID(receiver, new Ed25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    ));
 
     await instance.storeDIDPair(host, receiver, name);
-    const data = await instance.getPairByDID(host);
-    expect(data).not.null;
-    expect(data?.name).equals(name);
-    expect(data?.host.toString()).equals(host.toString());
+    const result = await instance.getPairByDID(host);
+
+    expect(result).not.null;
+    expect(result?.name).equals(name);
+    expect(result?.host.toString()).equals(host.toString());
+    expect(result?.receiver.toString()).equals(receiver.toString());
   });
 
   it("should get pair by name", async function () {
+    const name = "abc";
     const host = Domain.DID.fromString("did:prism:123");
     const receiver = Domain.DID.fromString("did:prism:321");
-    const name = "test";
-
-    await instance.storePrismDID(host, new Ed25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    ));
-    await instance.storePrismDID(receiver, new Ed25519PrivateKey(
-      Buffer.from("01011010011101010100011000100010")
-    ));
 
     await instance.storeDIDPair(host, receiver, name);
-    const data = await instance.getPairByName(name);
-    expect(data).not.null;
-    expect(data?.name).equals(name);
+    const result = await instance.getPairByName(name);
+
+    expect(result).not.null;
+    expect(result?.name).equals(name);
+    expect(result?.host.toString()).equals(host.toString());
+    expect(result?.receiver.toString()).equals(receiver.toString());
   });
-  //
+
   it("should get all messages", async function () {
     await instance.storeMessage({
       uuid: randomUUID(),
@@ -636,7 +624,6 @@ describe("Pluto", () => {
     expect(result?.body).equal(message.body);
   });
 
-  //
   it("should get all mediators", async function () {
     const mediator = Domain.DID.fromString("did:prism:123");
     const host = Domain.DID.fromString("did:prism:321");
@@ -659,9 +646,9 @@ describe("Pluto", () => {
         "hex"
       )
     );
-    await instance.storePrismDID(mediator, mediatorPrivateKey, "Mediator");
-    await instance.storePrismDID(host, hostPrivateKey, "Host");
-    await instance.storePrismDID(routing, routingPrivateKey, "Routing");
+    await instance.storeDID(mediator, "Mediator", mediatorPrivateKey);
+    await instance.storeDID(host, "Host", hostPrivateKey);
+    await instance.storeDID(routing, "Routing", routingPrivateKey);
     await instance.storeMediator({
       mediatorDID: mediator,
       hostDID: host,
@@ -669,6 +656,7 @@ describe("Pluto", () => {
     });
 
     const data = await instance.getAllMediators();
+
     expect(data).not.empty;
   });
 

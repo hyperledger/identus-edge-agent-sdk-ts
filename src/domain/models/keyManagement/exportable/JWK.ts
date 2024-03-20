@@ -26,7 +26,7 @@ export namespace JWK {
     // Algorithm
     alg?: string;
     // Extractable
-    ext?: string;
+    ext?: boolean;
     // Key operations
     key_ops?: key_ops[];
     // Key ID
@@ -36,13 +36,15 @@ export namespace JWK {
     // Public key use
     use?: "sig" | "enc";
     // X.509 Certificate chain
-    x5c?: string;
+    x5c?: string[];
     // X.509 Certificate SHA-1 Thumbprint
     x5t?: string;
     // X.509 Certificate SHA-256 Thumbprint
     'x5t#S256'?: string;
     // X.509 URL
     x5u?: string;
+
+    [propName: string]: unknown;
   }
 
   // Elliptic Curve (DSS) key type 
@@ -51,11 +53,11 @@ export namespace JWK {
     // curve
     crv: string;
     // ECC private key
-    d: string;
+    d?: string;
     // X coord
-    x: string;
+    x?: string;
     // Y coord
-    y: string;
+    y?: string;
   }
 
   // Octet sequence key type
@@ -84,7 +86,11 @@ export namespace JWK {
     dq: string;
     e: string;
     n: string;
-    oth: string;
+    oth: Array<{
+      d?: string;
+      r?: string;
+      t?: string;
+    }>;
     p: string;
     q: string;
     qi: string;
@@ -102,11 +108,11 @@ export namespace JWK {
     const prototype = Object.getPrototypeOf(key);
 
     if (prototype instanceof PublicKey) {
-      return Object.assign(base, publicKeyToJWK(key as PublicKey));
+      return Object.assign({}, base, publicKeyToJWK(key as PublicKey));
     }
 
     if (prototype instanceof PrivateKey) {
-      return Object.assign(base, privateKeyToJWK(key as PrivateKey));
+      return Object.assign({}, base, privateKeyToJWK(key as PrivateKey));
     }
 
     throw new Error("invalid Key given");

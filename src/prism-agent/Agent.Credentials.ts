@@ -155,7 +155,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
       const did = await this.castor.createPrismDID(privateKey.publicKey());
 
-      await this.pluto.storePrismDID(did, privateKey);
+      await this.pluto.storeDID(did, undefined, privateKey);
 
       credRequestBuffer = await this.pollux.processJWTCredential(message, {
         did: did,

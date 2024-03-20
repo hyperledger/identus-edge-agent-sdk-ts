@@ -17,8 +17,8 @@ describe("Keys", () => {
         expect(privateKey.isDerivable()).to.be.false;
       });
 
-      test("isExportable - not implemented", () => {
-        expect(privateKey.isExportable()).to.be.false;
+      test("isExportable - implemented", () => {
+        expect(privateKey.isExportable()).to.be.true;
       });
 
       test("isSignable - not implemented", () => {
@@ -172,8 +172,8 @@ describe("Keys", () => {
         expect(publicKey.isDerivable()).to.be.false;
       });
 
-      test("isExportable - not implemented", () => {
-        expect(publicKey.isExportable()).to.be.false;
+      test("isExportable - implemented", () => {
+        expect(publicKey.isExportable()).to.be.true;
       });
 
       test("isSignable - not implemented", () => {

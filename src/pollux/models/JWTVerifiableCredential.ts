@@ -1,3 +1,4 @@
+import { base64url } from "multiformats/bases/base64";
 import { Pluto } from "../../domain";
 import {
   Credential,
@@ -5,6 +6,8 @@ import {
   StorableCredential,
 } from "../../domain/models/Credential";
 import { CredentialType } from "../../domain/models/VerifiableCredential";
+import { InvalidJWTString } from "../../domain/models/errors/Pollux";
+import { isObject, notEmptyString } from "../../utils";
 
 export enum JWTVerifiableCredentialProperties {
   iss = "iss",
@@ -46,30 +49,58 @@ export class JWTCredential
     this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
     this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
     this.properties.set(JWTVerifiableCredentialProperties.aud, aud);
-
-    this.properties.set(
-      JWTVerifiableCredentialProperties.vc,
-      verifiableCredential
-    );
+    this.properties.set(JWTVerifiableCredentialProperties.vc, verifiableCredential);
 
     if (exp) {
       this.properties.set(JWTVerifiableCredentialProperties.exp, exp);
     }
   }
 
-  // TODO - Types and validation
-  static fromJWT(jwtObj: any, jwtString: string, isRevoked = false) {
-    return new JWTCredential(
-      jwtObj.iss,
-      jwtObj.vc,
-      jwtString,
-      jwtObj.nbf,
-      jwtObj.sub,
-      jwtObj.exp,
-      jwtObj.aud,
-      jwtString,
-      isRevoked
-    );
+  /**
+   * Create JWTCredential from a JWT string
+   * 
+   * @param jwt JWT string
+   * @param revoked revocation status
+   */
+  static fromJWT(jwt: string, revoked?: boolean): JWTCredential;
+  /**
+   * Create JWTCredential from JWT object and string
+   * @param jwt JSON parsed from the JWT string
+   * @param jwtstr JWT string
+   * @param revoked revocation status
+   */
+  static fromJWT(jwt: unknown, jwtstr: string, revoked?: boolean): JWTCredential;
+  static fromJWT(jwt: unknown, strOrRev?: string | boolean, isRevoked?: boolean) {
+    if (notEmptyString(jwt)) {
+      const revoked = typeof strOrRev === "boolean" ? strOrRev : undefined;
+      const parts = jwt.split(".");
+      const body = parts.at(1);
+
+      if (parts.length == 3 && notEmptyString(body)) {
+        const base64Data = base64url.baseDecode(body);
+        const jsonString = Buffer.from(base64Data).toString();
+        const jsonParsed = JSON.parse(jsonString);
+
+        return JWTCredential.fromJWT(jsonParsed, jwt, revoked);
+      }
+    }
+
+    const jwtString = strOrRev;
+    if (isObject(jwt) && notEmptyString(jwtString)) {
+      return new JWTCredential(
+        jwt.iss,
+        jwt.vc,
+        jwtString,
+        jwt.nbf,
+        jwt.sub,
+        jwt.exp,
+        jwt.aud,
+        jwtString,
+        isRevoked
+      );
+    }
+
+    throw new InvalidJWTString();
   }
 
   get id() {
