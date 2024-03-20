@@ -14,13 +14,13 @@ interface Property {
 
 type StringKeys<T> = Exclude<Extract<keyof T, string>, "uuid">;
 type KeysOf<T, X> = { [K in keyof T]-?: X extends T[K] ? K : never; }[StringKeys<T>];
-type KeysFor<T, P extends PropertyTypes> = P extends "number" 
-  ? KeysOf<T, number> 
-  : P extends "string" 
-    ? KeysOf<T, string> 
-    : P extends "boolean" 
-      ? KeysOf<T, boolean> 
-      : never;
+type KeysFor<T, P extends PropertyTypes> = P extends "number"
+  ? KeysOf<T, number>
+  : P extends "string"
+  ? KeysOf<T, string>
+  : P extends "boolean"
+  ? KeysOf<T, boolean>
+  : never;
 
 type PropertyTypes = "boolean" | "number" | "string";
 
@@ -29,6 +29,7 @@ interface SchemaGenerator<T> {
   addProperty(type: PropertyTypes, key: string, opts?: any): void;
   setEncrypted(...keys: StringKeys<T>[]): void;
   setRequired(...keys: StringKeys<T>[]): void;
+  setVersion(version: number): void;
 }
 
 /**
@@ -57,6 +58,7 @@ export const schemaFactory = <T>(generator: (schema: SchemaGenerator<T>) => void
     addProperty: (type: any, key: string, opts = {}) => { schema.properties[key] = { type, ...opts }; },
     setEncrypted: (...keys) => { schema.encrypted.push(...keys); },
     setRequired: (...keys) => { schema.required.push(...keys); },
+    setVersion: (version) => { schema.version = version; }
   });
 
   return schema;

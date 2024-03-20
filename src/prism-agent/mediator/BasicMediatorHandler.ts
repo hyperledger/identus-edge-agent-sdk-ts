@@ -75,7 +75,6 @@ export class BasicMediatorHandler implements MediatorHandler {
    * @returns {Promise<Mediator | undefined>}
    */
   async bootRegisteredMediator(): Promise<Mediator | undefined> {
-    // Q: is this correct? shouldn't we be able to use multiple or select the Mediator to use
     if (!this.mediator) {
       const mediators = await this.store.getAllMediators();
       const mediator = mediators.slice(0, 1).at(0);
@@ -133,9 +132,9 @@ export class BasicMediatorHandler implements MediatorHandler {
         }
       }
     }
-
     return mediator;
   }
+
   /**
    * Asyncronously update the mediator with the new keyList, used during the mediation process or during DID Rotation
    *
@@ -180,6 +179,7 @@ export class BasicMediatorHandler implements MediatorHandler {
     if (!message) {
       return [];
     }
+
     return new PickupRunner(message, this.mercury).run();
   }
 
@@ -198,6 +198,8 @@ export class BasicMediatorHandler implements MediatorHandler {
     serviceEndpointUri: string,
     onMessage: EventCallback
   ) {
+    //Todo: we may want to abstract this to allow users to use their own native implementations for websockets
+    //Or potentially be TCP sockets directly, this can be used in electron and nodejs can establish tcp connections directly.
     const socket = new WebSocket(serviceEndpointUri);
     signal.addEventListener("abort", () => {
       socket.close()

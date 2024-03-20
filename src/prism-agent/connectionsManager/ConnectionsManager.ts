@@ -1,5 +1,5 @@
 import { uuid } from "@stablelib/uuid";
-import { DID, Message, MessageDirection } from "../../domain";
+import { DID, Message, MessageDirection, Pollux } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { Pluto } from "../../domain/buildingBlocks/Pluto";
@@ -8,18 +8,15 @@ import { AgentError } from "../../domain/models/Errors";
 import { AgentMessageEvents } from "../Agent.MessageEvents";
 import { CancellableTask } from "../helpers/Task";
 import {
+  AgentCredentials,
   AgentMessageEvents as AgentMessageEventsClass,
   ConnectionsManager as ConnectionsManagerClass,
   ListenerKey,
   MediatorHandler,
 } from "../types";
-
-import { WebSocket } from 'isows'
-import { PickupRunner } from "../protocols/pickup/PickupRunner";
 import { ProtocolType } from "../protocols/ProtocolTypes";
-
-
-
+import { RevocationNotification } from "../protocols/revocation/RevocationNotfiication";
+import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 
 
 /**
@@ -73,6 +70,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public castor: Castor,
     public mercury: Mercury,
     public pluto: Pluto,
+    public agentCredentials: AgentCredentials,
     public mediationHandler: MediatorHandler,
     public pairings: DIDPair[] = []
   ) {
@@ -108,41 +106,6 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   }
 
   /**
-   * Asyncronously fetch unread messages from the mediator, if messages are found they will be stored
-   * and the mediator will be notified that they have been read. Mediator shouldn't return a read message again
-   * in next iteration.
-   *
-   * @async
-   * @returns {Promise<Message[]>}
-   */
-  async awaitMessages(): Promise<Message[]> {
-    if (!this.mediationHandler.mediator) {
-      throw new AgentError.NoMediatorAvailableError();
-    }
-
-    const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
-
-    const messages = unreadMessages
-      .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
-      .map(({ message }) => message);
-
-    const messageIds = unreadMessages
-      .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
-      .map(({ attachmentId }) => attachmentId);
-
-    if (messages.length) {
-      await this.pluto.storeMessages(messages);
-    }
-
-    if (messageIds.length) {
-      await this.mediationHandler.registerMessagesAsRead(messageIds);
-    }
-
-    return messages;
-  }
-
-
-  /**
    * Asyncronously wait for a message response just by waiting for new messages that match the specified ID
    *
    * @async
@@ -150,8 +113,74 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    * @returns {Promise<Message | undefined>}
    */
   async awaitMessageResponse(id: string): Promise<Message | undefined> {
-    const messages = await this.awaitMessages();
-    return messages.find((message) => message.thid === id);
+    console.log("Deprecated, use agent.addListener('THREAD-{{Your thread || messageId}}', fn), this method does not support live-mode.");
+    const messages = await this.mediationHandler.pickupUnreadMessages(10);
+    return messages
+      .find(({ message }) => message.thid === id)?.message
+  }
+
+  /**
+   * Asyncronously process unread messages that are received by either http or websockets didcomm transport
+   * This method replaces awaitMessages()
+   * @param messages 
+   */
+  async processMessages(unreadMessages: {
+    attachmentId: string;
+    message: Message;
+  }[]): Promise<void> {
+    if (!this.mediationHandler.mediator) {
+      throw new AgentError.NoMediatorAvailableError();
+    }
+
+    if (unreadMessages.length) {
+      const received = unreadMessages
+        .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
+
+      const messages = received
+        .map(({ message }) => message);
+
+      const messageIds = received
+        .map(({ attachmentId }) => attachmentId);
+
+      if (messages.length) {
+        await this.pluto.storeMessages(messages);
+      }
+
+      const revokeMessages = messages
+        .filter((message) => message.piuri === ProtocolType.PrismRevocation);
+
+      const allMessages = await this.pluto.getAllMessages()
+      for (let message of revokeMessages) {
+        const revokeMessage = RevocationNotification.fromMessage(message)
+        const threadId = revokeMessage.body.issueCredentialProtocolThreadId;
+
+        const matchingMessages = allMessages.filter(({ thid, piuri }) =>
+          thid === threadId &&
+          piuri === ProtocolType.DidcommIssueCredential
+        );
+
+        if (matchingMessages.length) {
+
+          for (let message of matchingMessages) {
+            const issueMessage = IssueCredential.fromMessage(message)
+            const credential = await this.agentCredentials.processIssuedCredentialMessage(
+              issueMessage
+            )
+            await this.pluto.revokeCredential(credential)
+            this.events.emit(ListenerKey.REVOKE, credential)
+          }
+        }
+
+      }
+
+      if (messageIds.length) {
+        await this.mediationHandler.registerMessagesAsRead(messageIds);
+      }
+
+      this.events.emit(ListenerKey.MESSAGE, unreadMessages);
+
+
+    }
   }
 
   /**
@@ -251,10 +280,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     if (!hasWebsocket) {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
       this.cancellable = new CancellableTask(async () => {
-        const unreadMessages = await this.awaitMessages();
-        if (unreadMessages.length) {
-          this.events.emit(ListenerKey.MESSAGE, unreadMessages);
-        }
+        const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
+        await this.processMessages(unreadMessages)
       }, timeInterval);
     } else {
       //Connecting to websockets, do not repeat the task
@@ -263,10 +290,24 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           signal,
           hasWebsocket.serviceEndpoint.uri,
           async (messages) => {
-            const messageIds = messages.map(({ id }) => id)
-            await this.pluto.storeMessages(messages);
-            await this.mediationHandler.registerMessagesAsRead(messageIds);
-            this.events.emit(ListenerKey.MESSAGE, messages);
+            const unreadMessages = messages.reduce<{
+              attachmentId: string;
+              message: Message;
+            }[]>((unreads, message) => {
+              const attachment = message.attachments.at(0);
+              if (!attachment) {
+                return unreads;
+              }
+              return [
+                ...unreads,
+                {
+                  message: message,
+                  attachmentId: attachment.id
+                }
+              ]
+            }, []);
+
+            await this.processMessages(unreadMessages)
           }
         )
       })
