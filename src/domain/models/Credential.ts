@@ -29,7 +29,7 @@ export abstract class Credential implements Pluto.Storable {
 
   isRevoked() {
     const revoked = this.properties.get("revoked");
-    return revoked && revoked === true ? true : false
+    return revoked === true
   }
 }
 
