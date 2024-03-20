@@ -12,5 +12,5 @@ export const makeCollections: MakeCollections = (additional: CollectionList = {}
   "dids": { schema: Models.DIDSchema },
   "keys": { schema: Models.KeySchema },
   "messages": { schema: Models.MessageSchema },
-  ...(additional ?? {}),
+  ...(additional),
 });
