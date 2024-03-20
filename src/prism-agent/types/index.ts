@@ -6,6 +6,7 @@ import {
   Service as DIDDocumentService,
   Signature,
   Credential,
+  Pollux,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
@@ -88,12 +89,13 @@ export type EventCallback = (messages: Message[]) => void;
 export enum ListenerKey {
   "MESSAGE" = "message",
   "CONNECTION" = "connection",
+  "REVOKE" = "revoke"
 }
 
 export interface AgentMessageEvents {
   addListener(eventName: ListenerKey, callback: EventCallback): void;
   removeListener(eventName: ListenerKey, callback: EventCallback): void;
-  emit(eventName: ListenerKey, data: any): void;
+  emit(eventName: ListenerKey | string, data: any): void;
   // startFetchingMessages(iterationPeriod: number): void;
   // stopFetchingMessages(): void;
   // sendMessage(message: Message): Promise<Message | undefined>;
@@ -103,6 +105,7 @@ export interface ConnectionsManager {
   castor: Castor;
   mercury: Mercury;
   pluto: Pluto;
+  agentCredentials: AgentCredentials;
   mediationHandler: MediatorHandler;
   pairings: DIDPair[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,9 +117,13 @@ export interface ConnectionsManager {
 
   removeConnection(pair: DIDPair): Promise<void>;
 
-  awaitMessages(): Promise<Array<Message>>;
 
   awaitMessageResponse(id: string): Promise<Message | undefined>;
+
+  processMessages(messages: {
+    attachmentId: string;
+    message: Message;
+  }[]): Promise<void>;
 
   sendMessage(message: Message): Promise<Message | undefined>;
 

@@ -15,6 +15,7 @@ export enum JWTVerifiableCredentialProperties {
   exp = "exp",
   aud = "aud",
   type = "type",
+  revoked = "revoked"
 }
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
@@ -26,10 +27,6 @@ export class JWTCredential
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();
 
-  // public proof?: string | undefined;
-  // public validFrom?: VerifiableCredentialTypeContainer;
-  // public validUntil?: VerifiableCredentialTypeContainer;
-
   constructor(
     public readonly iss: string,
     public readonly verifiableCredential: Record<string, any>,
@@ -38,14 +35,18 @@ export class JWTCredential
     public readonly sub: string,
     public readonly exp?: number,
     public readonly aud: Array<string> = [],
-    public readonly originalJWTString?: string
+    public readonly originalJWTString?: string,
+    isRevoked = false
   ) {
     super();
+
+    this.properties.set(JWTVerifiableCredentialProperties.revoked, isRevoked);
     this.properties.set(JWTVerifiableCredentialProperties.jti, jti);
     this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
     this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
     this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
     this.properties.set(JWTVerifiableCredentialProperties.aud, aud);
+
     this.properties.set(
       JWTVerifiableCredentialProperties.vc,
       verifiableCredential
@@ -57,7 +58,7 @@ export class JWTCredential
   }
 
   // TODO - Types and validation
-  static fromJWT(jwtObj: any, jwtString: string) {
+  static fromJWT(jwtObj: any, jwtString: string, isRevoked = false) {
     return new JWTCredential(
       jwtObj.iss,
       jwtObj.vc,
@@ -66,7 +67,8 @@ export class JWTCredential
       jwtObj.sub,
       jwtObj.exp,
       jwtObj.aud,
-      jwtString
+      jwtString,
+      isRevoked
     );
   }
 
@@ -120,6 +122,10 @@ export class JWTCredential
 
   get subject() {
     return this.properties.get(JWTVerifiableCredentialProperties.sub);
+  }
+
+  get revoked() {
+    return this.properties.get(JWTVerifiableCredentialProperties.revoked);
   }
 
   get termsOfUse() {
