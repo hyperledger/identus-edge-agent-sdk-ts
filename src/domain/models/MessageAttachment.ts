@@ -46,17 +46,33 @@ export class AttachmentDescriptor {
     public readonly lastModTime?: string,
     public readonly byteCount?: number,
     public readonly description?: string
-  ) {}
+  ) { }
 
   static build<T>(
     payload: T,
     id: string = uuid(),
-    mediaType = "application/json"
+    mediaType = "application/json",
+    filename?: Array<string>,
+    format?: string,
+    lastModTime?: string,
+    byteCount?: number,
+    description?: string
+
   ): AttachmentDescriptor {
     const encoded = base64.baseEncode(Buffer.from(JSON.stringify(payload)));
     const attachment: AttachmentBase64 = {
       base64: encoded,
     };
-    return new AttachmentDescriptor(attachment, mediaType, id);
+
+    return new AttachmentDescriptor(
+      attachment,
+      mediaType,
+      id,
+      filename,
+      format,
+      lastModTime,
+      byteCount,
+      description
+    );
   }
 }

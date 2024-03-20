@@ -1,5 +1,7 @@
+import { uuid } from "@stablelib/uuid";
+
 import { Castor } from "../domain/buildingBlocks/Castor";
-import { Pollux as IPollux } from "../domain/buildingBlocks/Pollux";
+import { Pollux as IPollux, PresentationOptions } from "../domain/buildingBlocks/Pollux";
 import { InvalidJWTString } from "../domain/models/errors/Pollux";
 import { base64url, base64 } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
@@ -12,6 +14,14 @@ import {
   Api,
   PolluxError,
   Credential,
+  PresentationDefinitionRequest,
+  PublicKey,
+  InputConstraints,
+  InputField,
+  InputLimitDisclosure,
+  InputDescriptor,
+  DefinitionFormat,
+  JWT_FORMAT,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
@@ -20,6 +30,7 @@ import { JWT } from "../apollo/utils/jwt/JWT";
 import { Anoncreds } from "../domain/models/Anoncreds";
 import { ApiImpl } from "../prism-agent/helpers/ApiImpl";
 import { PresentationRequest } from "./models/PresentationRequest";
+import { ProofTypes } from "../prism-agent/protocols/types";
 
 /**
  * Implementation of Pollux
@@ -35,6 +46,83 @@ export default class Pollux implements IPollux {
     private castor: Castor,
     private api: Api = new ApiImpl()
   ) { }
+
+
+
+  async createPresentationDefinitionRequest(
+    type: CredentialType,
+    proofs: ProofTypes[],
+    options: PresentationOptions
+  ): Promise<PresentationDefinitionRequest> {
+    if (type !== CredentialType.JWT) {
+      throw new PolluxError.CredsentialTypeNotSupported()
+    }
+
+    const jwtOptions = options.jwt;
+    if (!jwtOptions) {
+      //TODO: improve erorr handling
+      throw new Error("Required field options jwt is undefined")
+    }
+
+    if (!jwtOptions.jwtAlg &&
+      !jwtOptions.jwtVcAlg &&
+      !jwtOptions.jwtVpAlg) {
+      throw new PolluxError.InvalidJWTPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
+    }
+
+    const paths =
+      proofs.reduce<string[]>((all, proof) => {
+        return [
+          ...all,
+          ...(proof.requiredFields ?? []),
+          ...(proof.trustIssuers ?? [])
+        ]
+      }, []);
+
+    const constaints: InputConstraints = {
+      fields: paths.map((path) => {
+        const inputField: InputField = {
+          path: [path],
+          id: uuid(),
+          optional: false
+        }
+        return inputField
+      }),
+      limitDisclosure: InputLimitDisclosure.REQUIRED
+    };
+
+    const inputDescriptor: InputDescriptor = {
+      id: uuid(),
+      name: options.name,
+      purpose: options.purpose,
+      constraints: constaints
+    }
+
+    const format: JWT_FORMAT = {
+      jwt_vc: {
+        alg: jwtOptions.jwtVcAlg ?? []
+      },
+      jwt_vp: {
+        alg: jwtOptions.jwtVpAlg ?? []
+      }
+    }
+
+    const presentationDefinitionRequest: PresentationDefinitionRequest = {
+      id: uuid(),
+      inputDescriptors: [
+        inputDescriptor
+      ],
+      format: {
+        jwt: format
+      }
+    }
+
+    return presentationDefinitionRequest
+  }
+
+  verifyPresentationSubmissionJWT(submission: Uint8Array, publicKey: PublicKey): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
 
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
@@ -57,14 +145,15 @@ export default class Pollux implements IPollux {
     }
 
     if (
-      attachment.format === "anoncreds/proof-request@v1.0" ||
-      attachment.format === "anoncreds/credential-offer@v1.0" ||
-      attachment.format === "anoncreds/credential@v1.0"
+      attachment.format === CredentialType.ANONCREDS_PROOF_REQUEST ||
+      attachment.format === CredentialType.ANONCREDS_OFFER ||
+      attachment.format === CredentialType.ANONCREDS_ISSUE ||
+      attachment.format === CredentialType.ANONCREDS_REQUEST
     ) {
       return CredentialType.AnonCreds;
     }
 
-    if (attachment.format === "prism/jwt") {
+    if (attachment.format === CredentialType.JWT) {
       return CredentialType.JWT;
     }
 

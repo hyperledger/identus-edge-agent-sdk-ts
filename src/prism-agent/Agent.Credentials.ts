@@ -17,7 +17,10 @@ import {
   Message,
   Pluto,
   Pollux,
-  CredentialMetadata
+  CredentialMetadata,
+  PrivateKey,
+  PresentationOptions,
+  Mercury,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -30,8 +33,10 @@ import { IssueCredential } from "./protocols/issueCredential/IssueCredential";
 import { Presentation } from "./protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "./protocols/proofPresentation/RequestPresentation";
 
-import { AgentCredentials as AgentCredentialsClass } from "./types";
+import { AgentCredentials as AgentCredentialsClass, AgentDIDHigherFunctions } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
+import { ProofTypes, RequestPresentationBody } from "./protocols/types";
+import { uuid } from "@stablelib/uuid";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -49,8 +54,60 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected castor: Castor,
     protected pluto: Pluto,
     protected pollux: Pollux,
-    protected seed: Seed
-  ) {}
+    protected seed: Seed,
+    protected mercury: Mercury,
+    protected agentDIDHigherFunctions: AgentDIDHigherFunctions
+  ) { }
+
+  async initiatePresentationRequest(
+    type: CredentialType,
+    toDID: DID,
+    proofTypes: ProofTypes[]): Promise<RequestPresentation> {
+
+    const didDocument = await this.castor.resolveDID(toDID.toString());
+    const newPeerDID = await this.agentDIDHigherFunctions.createNewPeerDID(
+      didDocument.services,
+      true
+    );
+
+    const options = new PresentationOptions({
+      jwt: {
+        jwtAlg: ['EdDSA']
+      },
+      challenge: "Sign this text " + uuid(),
+      domain: 'N/A'
+    });
+
+
+    const presentationDefinitionRequest = this.pollux.createPresentationDefinitionRequest(
+      type,
+      proofTypes,
+      options
+    );
+
+    const attachment = AttachmentDescriptor.build(
+      presentationDefinitionRequest,
+      uuid(),
+      'application/json',
+      undefined,
+      CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS
+    )
+
+    const requestPresentationBody: RequestPresentationBody = {
+      proofTypes: proofTypes,
+      goalCode: options.challenge
+    }
+
+    const presentationRequest = new RequestPresentation(
+      requestPresentationBody,
+      [attachment],
+      newPeerDID,
+      toDID,
+      uuid()
+    );
+
+    return presentationRequest
+  }
 
   async verifiableCredentials(): Promise<Credential[]> {
     return await this.pluto.getAllCredentials();
@@ -184,9 +241,9 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const credentialFormat =
       credentialType === CredentialType.AnonCreds
-        ? "anoncreds/credential-request@v1.0"
+        ? CredentialType.ANONCREDS_REQUEST
         : credentialType === CredentialType.JWT
-          ? "prism/jwt"
+          ? CredentialType.JWT
           : CredentialType.Unknown;
 
     const attachments = [
@@ -275,11 +332,11 @@ export class AgentCredentials implements AgentCredentialsClass {
   private parseProofRequest(attachment: AttachmentDescriptor): PresentationRequest {
     const data = Message.Attachment.extractJSON(attachment);
 
-    if (attachment.format === "anoncreds/proof-request@v1.0") {
+    if (attachment.format === CredentialType.ANONCREDS_PROOF_REQUEST) {
       return new PresentationRequest(CredentialType.AnonCreds, data);
     }
 
-    if (attachment.format === "prism/jwt") {
+    if (attachment.format === CredentialType.JWT) {
       return new PresentationRequest(CredentialType.JWT, data);
     }
 
@@ -324,4 +381,6 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     throw new AgentError.UnhandledPresentationRequest();
   }
+
+
 }
