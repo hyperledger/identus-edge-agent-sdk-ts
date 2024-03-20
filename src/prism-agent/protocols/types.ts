@@ -12,6 +12,11 @@ export interface IssueCredentialBody extends CredentialBody {
   replacementId?: string;
 }
 
+export interface PrismRevocationBody {
+  issueCredentialProtocolThreadId: string
+  comment?: string
+}
+
 export interface MediationGrantBody {
   routing_did: string;
 }

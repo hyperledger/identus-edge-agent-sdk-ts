@@ -1,16 +1,22 @@
 import { expect } from "chai";
 import { Pluto } from "../../src/pluto/Pluto";
-import { InMemoryStore } from "../fixtures/InMemoryStore";
+import InMemoryStore from "../fixtures/inmemory";
 import * as Fixtures from "../fixtures";
 import * as Domain from "../../src/domain";
-import { AnonCredsCredential, Apollo, JWTCredential } from "../../src";
+import { AnonCredsCredential, Apollo, JWTCredential, Store } from "../../src";
+import { randomUUID } from "crypto";
 
 describe("Pluto", () => {
   let instance: Domain.Pluto;
 
   beforeEach(async () => {
     const apollo = new Apollo();
-    const store = new InMemoryStore();
+    const store = new Store({
+      name: "randomdb" + randomUUID(),
+      storage: InMemoryStore,
+      password: 'random12434',
+      ignoreDuplicate: true
+    });
     instance = new Pluto(store, apollo);
 
     await instance.start();

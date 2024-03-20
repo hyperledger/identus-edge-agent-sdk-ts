@@ -14,12 +14,19 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
     switch (model.recoveryId) {
       case JWTVerifiableCredentialRecoveryId: {
         const jwtObj = JSON.parse(model.dataJson);
-        const credential = JWTCredential.fromJWT(jwtObj, jwtObj.id);
+        const credential = JWTCredential.fromJWT(
+          jwtObj,
+          jwtObj.id,
+          jwtObj.revoked ?? false
+        );
         return this.withId(credential, model.uuid);
       }
       case AnonCredsRecoveryId: {
         const json = JSON.parse(model.dataJson);
-        const credential = new AnonCredsCredential(json);
+        const credential = new AnonCredsCredential(
+          json,
+          json.revoked ?? false
+        );
         return this.withId(credential, model.uuid);
       }
     }
@@ -31,21 +38,19 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
     if (!credential.isStorable()) {
       throw new Domain.PlutoError.CredentialNotStorable();
     }
-
     const item = credential.toStorable();
-
     return {
       uuid: credential.uuid,
+      id: item.id,
       recoveryId: credential.recoveryId,
       dataJson: item.credentialData,
-
       issuer: item.issuer,
       subject: item.subject,
       credentialCreated: item.credentialCreated,
       credentialUpdated: item.credentialUpdated,
       credentialSchema: item.credentialSchema,
       validUntil: item.validUntil,
-      revoked: item.revoked
+      revoked: item.revoked ?? false
     };
   }
 }

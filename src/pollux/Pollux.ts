@@ -34,7 +34,7 @@ export default class Pollux implements IPollux {
   constructor(
     private castor: Castor,
     private api: Api = new ApiImpl()
-  ) {}
+  ) { }
 
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
