@@ -45,14 +45,15 @@ export class AnonCredsCredential
   }
 
   get id() {
+    const credential: Anoncreds.Credential = {
+      schema_id: this.properties.get(AnonCredsCredentialProperties.schemaId),
+      cred_def_id: this.properties.get(AnonCredsCredentialProperties.credentialDefinitionId),
+      values: this.properties.get(AnonCredsCredentialProperties.values),
+      signature: this.properties.get(AnonCredsCredentialProperties.signature),
+      signature_correctness_proof: this.properties.get(AnonCredsCredentialProperties.signatureCorrectnessProof),
+    }
     const anoncredsObject = JSON.stringify(
-      {
-        schema_id: this.properties.get(AnonCredsCredentialProperties.schemaId),
-        cred_def_id: this.properties.get(AnonCredsCredentialProperties.credentialDefinitionId),
-        values: this.properties.get(AnonCredsCredentialProperties.values),
-        signature: this.properties.get(AnonCredsCredentialProperties.signature),
-        signature_correctness_proof: this.properties.get(AnonCredsCredentialProperties.signatureCorrectnessProof),
-      }
+      credential
     )
     const hash = sha256.hash(Buffer.from(anoncredsObject));
     return Buffer.from(hash).toString('hex')
