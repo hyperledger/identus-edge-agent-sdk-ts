@@ -33,12 +33,6 @@ export class RxdbStore implements Pluto.Store {
    * Start the database and build collections
    */
   async start(): Promise<void> {
-    if (process && process.env.NODE_ENV === "test") {
-      if (this._db) {
-        this._db.destroy()
-        this._db = undefined;
-      }
-    }
     this._db = await createRxDatabase({
       ...this.options,
       multiInstance: true
