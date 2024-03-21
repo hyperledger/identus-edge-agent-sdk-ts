@@ -1,5 +1,13 @@
 # Atala PRISM TypeScript SDK
 
+[![Coverage Status](https://coveralls.io/repos/github/input-output-hk/atala-prism-wallet-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/input-output-hk/atala-prism-wallet-sdk-ts?branch=master)
+
+<p align="center">
+    <img src="atala-logo.png" alt="Atala logo" width="300"/>
+</p>
+
+---
+
 Atala PRISM is a self-sovereign identity (SSI) platform and service suite for
 verifiable data and digital identity. Built on Cardano, it offers core
 infrastructure for issuing DIDs (Decentralized identifiers) and verifiable
