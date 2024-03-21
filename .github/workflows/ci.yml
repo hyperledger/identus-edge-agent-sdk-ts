@@ -61,6 +61,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           production_flag: true
 
+      - name: Coveralls
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: coverallsapp/github-action@v2
+        with:
+          file: "coverage/lcov.info"
+
       - name: Jest Coverage Comment
         uses: MishaKav/jest-coverage-comment@v1.0.23
         with:

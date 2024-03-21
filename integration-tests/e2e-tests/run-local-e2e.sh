@@ -12,7 +12,7 @@ npm install
 npm run build
 npm pack
 
-PACKAGE_NAME=$(find . -maxdepth 1 -name input-output* | tr -d '\n')
+PACKAGE_NAME=$(find . -maxdepth 1 -name atala-prism-wallet-sdk-* | tr -d '\n')
 echo "Generated package: $PACKAGE_NAME"
 
 # e2e
