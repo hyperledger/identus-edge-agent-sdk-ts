@@ -133,7 +133,6 @@ export default class Agent
     );
   }
 
-
   /**
    * Convenience initializer for Agent
    * allowing default instantiation, omitting all but the absolute necessary parameters
@@ -523,6 +522,13 @@ export default class Agent
   }
 
 
+  /**
+   * Initiate a PresentationRequest from the SDK, to create oob Verification Requests
+   * @param {Domain.CredentialType} type 
+   * @param {Domain.DID} toDID 
+   * @param {ProofTypes[]} proofTypes[]
+   * @returns 
+   */
   async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, proofTypes: ProofTypes[]): Promise<RequestPresentation> {
     const requestPresentation = await this.agentCredentials.initiatePresentationRequest(
       type,
@@ -535,4 +541,13 @@ export default class Agent
 
     return requestPresentation
   }
+
+  /**
+   * Initiate the Presentation and presentationSubmission
+   * @param presentation 
+   */
+  async handlePresentation(presentation: Presentation): Promise<Boolean> {
+    return this.agentCredentials.handlePresentation(presentation)
+  }
+
 }

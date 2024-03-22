@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { expect } from "chai";
 
-import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, LinkSecret, Message } from "../../src/domain";
+import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, LinkSecret, Message, PresentationOptions } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -18,9 +18,17 @@ import * as Fixtures from "../fixtures";
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 let sandbox: sinon.SinonSandbox;
+const encodeJWTCredential = (cred: object): string => {
+  const json = JSON.stringify(cred);
+  const encoded = Buffer.from(json).toString("base64");
+  return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
+};
 
 jest.mock("../../src/apollo/utils/jwt/JWT", () => ({
-  JWT: jest.fn(() => ({ sign: jest.fn(() => "JWT.sign.result") }))
+  JWT: jest.fn(() => ({
+    sign: jest.fn(() => "JWT.sign.result"),
+    verify: jest.fn(() => true)
+  }))
 }));
 
 const jwtParts = [
@@ -286,11 +294,6 @@ describe("Pollux", () => {
         });
       });
 
-      const encodeJWTCredential = (cred: object): string => {
-        const json = JSON.stringify(cred);
-        const encoded = Buffer.from(json).toString("base64");
-        return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
-      };
 
       describe("Valid Credential", () => {
         it(`should return JWTVerifiableCredential`, async () => {
@@ -847,4 +850,75 @@ describe("Pollux", () => {
       });
     });
   });
+
+  describe("CreatePresentationDefinitionRequest", () => {
+
+
+    it("Should be able to create a presentationDefinitionRequest for a JWT Credential", async () => {
+
+      const presentationDefinition = await pollux.createPresentationDefinitionRequest(
+        CredentialType.JWT,
+        [
+          {
+            requiredFields: ['name'],
+            trustIssuers: ["did:prism:12345"],
+          }
+        ],
+        new PresentationOptions({
+          challenge: 'sign this'
+        })
+      );
+
+      expect(presentationDefinition).haveOwnProperty("id");
+      expect(presentationDefinition).haveOwnProperty("format");
+      expect(presentationDefinition).haveOwnProperty("inputDescriptors");
+      expect(presentationDefinition.format.jwt).haveOwnProperty("jwt_vc");
+      expect(presentationDefinition.format.jwt).haveOwnProperty("jwt_vp");
+      expect(presentationDefinition.format.jwt?.jwt_vc?.alg).contains('ES256K');
+      expect(presentationDefinition.format.jwt?.jwt_vp?.alg).contains('ES256K');
+      expect(Array.isArray(presentationDefinition.inputDescriptors)).to.eq(true)
+      expect(presentationDefinition.inputDescriptors.length).to.eq(1)
+      expect(presentationDefinition.inputDescriptors.at(0)).haveOwnProperty('constraints');
+      expect(presentationDefinition.inputDescriptors.at(0)?.constraints.fields.length).to.eq(2);
+      expect(presentationDefinition.inputDescriptors.at(0)?.constraints.fields[0].path.at(0)).to.eq('$.vc.credentialSubject.name')
+      expect(presentationDefinition.inputDescriptors.at(0)?.constraints.fields[1].path.at(0)).to.eq('$.vc.issuer')
+
+    })
+
+    it("Should create a valid presentationSubmission from a valid presentationRequest", async () => {
+
+      const presentationDefinition = await pollux.createPresentationDefinitionRequest(
+        CredentialType.JWT,
+        [
+          {
+            requiredFields: ['name'],
+            trustIssuers: ["did:prism:12345"],
+          }
+        ],
+        new PresentationOptions({
+          challenge: 'sign this'
+        })
+      );
+
+      const jwtPayload = Fixtures.Credentials.JWT.credentialPayload;
+      const privateKey = Fixtures.Keys.secp256K1.privateKey;
+      const encoded = encodeJWTCredential(jwtPayload);
+      const result = await pollux.parseCredential(Buffer.from(encoded), {
+        type: CredentialType.JWT,
+      });
+      const jwtCred = result as JWTCredential;
+
+      const presentaationSubmissionJSON = await pollux.createPresentationSubmission(
+        presentationDefinition,
+        'sign this',
+        jwtCred,
+        privateKey
+      );
+
+      const verify = await pollux.verifyPresentationSubmission(presentaationSubmissionJSON)
+      expect(verify).to.eq(true)
+
+
+    })
+  })
 });

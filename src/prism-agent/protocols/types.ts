@@ -78,7 +78,7 @@ export interface RequestPresentationBody extends PresentationBody {
 export type ProposePresentationBody = RequestPresentationBody;
 
 export interface ProofTypes {
-  schema: string;
+  schema?: string;
   requiredFields?: string[];
   trustIssuers?: string[];
 }

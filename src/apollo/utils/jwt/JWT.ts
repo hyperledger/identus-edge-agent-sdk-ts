@@ -18,6 +18,24 @@ export class JWT {
     this.castor = castor;
   }
 
+  async verify(
+    did: string,
+    jws: string
+  ): Promise<boolean> {
+
+    try {
+      const resolved = await this.resolve(did);
+      const verificationMethod = resolved.didDocument?.verificationMethod;
+      if (!verificationMethod) {
+        throw new Error("Invalid did document");
+      }
+      const validVerificationMethod = didJWT.verifyJWS(jws, verificationMethod);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
   private async resolve(did: string): Promise<didResolver.DIDResolutionResult> {
     const resolved = await this.castor.resolveDID(did);
     const alsoKnownAs = resolved.coreProperties.find(
@@ -32,7 +50,6 @@ export class JWT {
     const service = resolved.coreProperties.find(
       (prop): prop is Services => prop instanceof Services
     );
-
     return {
       didResolutionMetadata: { contentType: "application/did+ld+json" },
       didDocumentMetadata: {},
@@ -68,9 +85,7 @@ export class JWT {
         service:
           service?.values?.reduce<didResolver.Service[]>((acc, service) => {
             const type = service.type.at(0);
-
             if (type === undefined) return acc;
-
             return acc.concat({
               id: service.id,
               type: type,
@@ -80,6 +95,7 @@ export class JWT {
       },
     };
   }
+
 
   async sign(
     issuer: DID,

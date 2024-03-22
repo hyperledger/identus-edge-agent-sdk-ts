@@ -62,9 +62,7 @@ export interface AgentCredentials {
   ): Promise<RequestCredential>;
   processIssuedCredentialMessage(message: IssueCredential): Promise<Credential>;
 
-  ///Not abstracted
   verifiableCredentials(): Promise<Credential[]>;
-
 
   initiatePresentationRequest(
     type: CredentialType,
@@ -76,6 +74,8 @@ export interface AgentCredentials {
     request: RequestPresentation,
     credential: Credential
   ): Promise<Presentation>;
+
+  handlePresentation(presentation: Presentation): Promise<Boolean>
 }
 
 export interface AgentDIDHigherFunctions {

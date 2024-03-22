@@ -18,7 +18,6 @@ import {
   Pluto,
   Pollux,
   CredentialMetadata,
-  PrivateKey,
   PresentationOptions,
   Mercury,
 } from "../domain";
@@ -77,7 +76,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       challenge: "Sign this text " + uuid(),
       domain: 'N/A'
     });
-
 
     const presentationDefinitionRequest = this.pollux.createPresentationDefinitionRequest(
       type,
@@ -277,6 +275,25 @@ export class AgentCredentials implements AgentCredentialsClass {
     return requestCredential;
   }
 
+  async handlePresentation(presentation: Presentation): Promise<Boolean> {
+    const fromDID = presentation.from;
+    const attachment = presentation.attachments.at(0);
+    if (!attachment) {
+      throw new Error("Invalid presentation message, attachment missing")
+    }
+    const presentationSubmission = Message.Attachment.extractJSON(attachment);
+
+
+    const proof = presentationSubmission.proof;
+    const jws = Buffer.from(proof.jws);
+
+
+
+
+
+    return true
+  }
+
   /**
    * Asyncronously create a verifiablePresentation from a valid stored verifiableCredential
    * This is used when the verified requests a specific verifiable credential, this will create the actual
@@ -296,15 +313,16 @@ export class AgentCredentials implements AgentCredentialsClass {
     // if so could need multiple Credentials...
     // validation: there needs to be at least one...
     const attachment = message.attachments.at(0);
-
     if (!attachment) {
       throw new AgentError.OfferDoesntProvideEnoughInformation();
     }
-
+    const attachmentFormat = attachment.format ?? 'unknown';
     const presentationRequest = this.parseProofRequest(attachment);
-    const proof = await this.handlePresentationRequest(presentationRequest, credential);
-    const base64Encoded = base64.baseEncode(Buffer.from(proof));
+    const proof = attachmentFormat === CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS ?
+      await this.handlePresentationDefinitionRequest(presentationRequest, credential, message.body.goalCode!) :
+      await this.handlePresentationRequest(presentationRequest, credential);
 
+    const base64Encoded = base64.baseEncode(Buffer.from(proof));
     const presentation = new Presentation(
       {
         comment: message.body.comment,
@@ -317,7 +335,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       message.from,
       message.thid
     );
-
     return presentation;
   }
 
@@ -331,16 +348,41 @@ export class AgentCredentials implements AgentCredentialsClass {
    */
   private parseProofRequest(attachment: AttachmentDescriptor): PresentationRequest {
     const data = Message.Attachment.extractJSON(attachment);
-
     if (attachment.format === CredentialType.ANONCREDS_PROOF_REQUEST) {
       return new PresentationRequest(CredentialType.AnonCreds, data);
     }
-
     if (attachment.format === CredentialType.JWT) {
       return new PresentationRequest(CredentialType.JWT, data);
     }
-
+    if (attachment.format === CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS) {
+      return new PresentationRequest(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS, data)
+    }
     throw new Error("Unsupported Proof Request");
+  }
+
+  private async handlePresentationDefinitionRequest(
+    request: PresentationRequest,
+    credential: Credential,
+    challenge: string,
+  ): Promise<string> {
+    if (request.isType(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS) && (credential instanceof JWTCredential)) {
+      const privateKeys = await this.pluto.getDIDPrivateKeysByDID(DID.fromString(credential.subject));
+      const privateKey = privateKeys.at(0);
+      if (!privateKey) {
+        throw new Error("Undefined privatekey from credential subject.");
+      }
+      if (!request.isType(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+        throw new Error("Undefined privatekey from credential subject.");
+      }
+      const presentationSubmission = await this.pollux.createPresentationSubmission(
+        request.toJSON(),
+        challenge,
+        credential,
+        privateKey
+      )
+      return JSON.stringify(presentationSubmission)
+    }
+    throw new Error("Not implemented")
   }
 
   private async handlePresentationRequest(
@@ -352,35 +394,26 @@ export class AgentCredentials implements AgentCredentialsClass {
       if (!linkSecret) {
         throw new AgentError.CannotFindLinkSecret();
       }
-
       const presentation = await this.pollux.createPresentationProof(request, credential, { linkSecret });
-
       return JSON.stringify(presentation);
     }
-
     if (credential instanceof JWTCredential && request.isType(CredentialType.JWT)) {
       if (!credential.isProvable()) {
         throw new Error("Credential is not Provable");
       }
-
       const subjectDID = DID.from(credential.subject);
       const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
       const prismPrivateKey = prismPrivateKeys.at(0);
-
       if (prismPrivateKey === undefined) {
         throw new AgentError.CannotFindDIDPrivateKey();
       }
-
       const signedJWT = await this.pollux.createPresentationProof(request, credential, {
         did: subjectDID,
         privateKey: prismPrivateKey
       });
-
       return signedJWT;
     }
-
     throw new AgentError.UnhandledPresentationRequest();
   }
-
 
 }

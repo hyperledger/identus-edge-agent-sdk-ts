@@ -15,13 +15,19 @@ import {
   PolluxError,
   Credential,
   PresentationDefinitionRequest,
-  PublicKey,
   InputConstraints,
   InputField,
   InputLimitDisclosure,
   InputDescriptor,
-  DefinitionFormat,
   JWT_FORMAT,
+  PrivateKey,
+  PresentationSubmission,
+  DescriptorItem,
+  Authentication,
+  CastorError,
+  ProofTypesEnum,
+  ProofPurpose,
+  SubmissionDescriptorFormat,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
@@ -31,6 +37,8 @@ import { Anoncreds } from "../domain/models/Anoncreds";
 import { ApiImpl } from "../prism-agent/helpers/ApiImpl";
 import { PresentationRequest } from "./models/PresentationRequest";
 import { ProofTypes } from "../prism-agent/protocols/types";
+import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
+import { DescriptorPath } from "./utils/DescriptorPath";
 
 /**
  * Implementation of Pollux
@@ -44,10 +52,139 @@ export default class Pollux implements IPollux {
 
   constructor(
     private castor: Castor,
-    private api: Api = new ApiImpl()
+    private api: Api = new ApiImpl(),
+    private jwt = new JWT(castor)
   ) { }
 
+  async createPresentationSubmission(
+    presentationDefinition: PresentationDefinitionRequest,
+    challenge: string,
+    credential: Credential,
+    privateKey: PrivateKey
+  ): Promise<PresentationSubmission> {
+    if (credential instanceof JWTCredential) {
+      if (!(privateKey instanceof Secp256k1PrivateKey)) {
+        throw new CastorError.InvalidKeyError()
+      }
 
+      const descriptorItems: DescriptorItem[] = presentationDefinition.inputDescriptors.map(
+        (inputDescriptor) => {
+          if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt?.jwt_vp || !inputDescriptor.format.jwt?.jwt_vc)) {
+            //TODO: Improive error
+            throw new Error("Invalid format")
+          }
+          return {
+            id: inputDescriptor.id,
+            format: "jwt_vc",
+            path: "$.verifiableCredential[0]"
+          }
+        });
+
+      const subject = credential.subject;
+      const didDocument = await this.castor.resolveDID(subject);
+      const authenticationKey = didDocument.coreProperties.find((key) => {
+        return key instanceof Authentication
+      });
+
+      if (!authenticationKey) {
+        throw new CastorError.InvalidKeyError()
+      }
+
+      const verificationMethod = (authenticationKey as Authentication).verificationMethods.at(0)?.id;
+      if (!verificationMethod) {
+        throw new CastorError.InvalidKeyError()
+      }
+
+      if (!privateKey.isSignable()) {
+        throw new Error("Cannot sign the proof challenge with this key.")
+      }
+
+      const jws = await this.jwt.sign(subject, privateKey, {
+        aud: 'N/A',
+        nonce: Buffer.from(privateKey.sign(Buffer.from(challenge))).toString('hex'),
+        vp: {
+          "@context": ["https://www.w3.org/2018/presentations/v1"],
+          type: ["VerifiablePresentation"],
+        },
+      })
+
+      const presentationSubmission: PresentationSubmission = {
+        presentation_submission: {
+          id: uuid(),
+          definition_id: presentationDefinition.id,
+          descriptor_map: descriptorItems
+        },
+        verifiable_credential: [
+          {
+            vc: credential.vc,
+            proof: {
+              type: ProofTypesEnum.JsonWebSignature2020,
+              created: Date().toString(),
+              proofPurpose: ProofPurpose.AUTHENTTICATION,
+              verificationMethod: verificationMethod,
+              jws: credential.id
+            }
+          }
+        ],
+        proof: {
+          type: ProofTypesEnum.JsonWebSignature2020,
+          proofPurpose: ProofPurpose.AUTHENTTICATION,
+          verificationMethod: subject,
+          jws: jws
+        }
+      }
+      return presentationSubmission
+    } else {
+      throw new PolluxError.CredsentialTypeNotSupported()
+    }
+  }
+
+  parsePresentationSubmission(data: any): data is PresentationSubmission {
+    //Validate object
+    if (typeof data !== "object") {
+      return false;
+    }
+
+    const {
+      presentation_submission,
+      verifiable_credential,
+      proof
+    } = data;
+
+    //Validate required fields
+    if (!presentation_submission || (typeof presentation_submission !== "object")) {
+      return false;
+    }
+
+    if (!verifiable_credential ||
+      !Array.isArray(verifiable_credential)
+    ) {
+      return false;
+    }
+
+    if (!proof || (typeof proof !== "object")) {
+      return false;
+    }
+
+    const {
+      type,
+      proofPurpose,
+      verificationMethod,
+      jws
+    } = proof;
+
+    //Validate proof types
+    if (
+      !type || (typeof type !== "string") ||
+      !verificationMethod || (typeof verificationMethod !== "string") ||
+      !jws || (typeof jws !== "string") ||
+      !proofPurpose || (typeof proofPurpose !== "string") || proofPurpose !== ProofPurpose.AUTHENTTICATION
+    ) {
+      return false
+    }
+
+    return true;
+  }
 
   async createPresentationDefinitionRequest(
     type: CredentialType,
@@ -75,14 +212,16 @@ export default class Pollux implements IPollux {
         return [
           ...all,
           ...(proof.requiredFields ?? []),
-          ...(proof.trustIssuers ?? [])
+          //...(proof.trustIssuers ?? [])
         ]
       }, []);
 
     const constaints: InputConstraints = {
       fields: paths.map((path) => {
         const inputField: InputField = {
-          path: [path],
+          path: [
+            `$.vc.credentialSubject.${path}`
+          ],
           id: uuid(),
           optional: false
         }
@@ -90,6 +229,12 @@ export default class Pollux implements IPollux {
       }),
       limitDisclosure: InputLimitDisclosure.REQUIRED
     };
+
+    constaints.fields.push({
+      path: ["$.vc.issuer"],
+      id: uuid(),
+      optional: false
+    })
 
     const inputDescriptor: InputDescriptor = {
       id: uuid(),
@@ -120,8 +265,54 @@ export default class Pollux implements IPollux {
     return presentationDefinitionRequest
   }
 
-  verifyPresentationSubmissionJWT(submission: Uint8Array, publicKey: PublicKey): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async verifyPresentationSubmission(presentationSubmission: any): Promise<boolean> {
+    const isValidPresentationSubmission = this.parsePresentationSubmission(presentationSubmission);
+    if (!isValidPresentationSubmission) {
+      throw new Error("Invalid presentationSubmission object")
+    }
+
+    if (!presentationSubmission.proof ||
+      !presentationSubmission.proof.jws) {
+      throw new Error("Invalid presentationSubmission object, signed jws is required")
+    }
+
+    const descriptorMapper = new DescriptorPath(presentationSubmission);
+    const descriptorMaps = presentationSubmission.presentation_submission.descriptor_map;
+
+    //Validate all the descriptor items
+    for (let descriptorItem of descriptorMaps) {
+
+      if (descriptorItem.format === SubmissionDescriptorFormat.JWT_VC) {
+        const [credentialObject] = descriptorMapper.getValue(descriptorItem.path);
+        if (!credentialObject || !credentialObject.vc || !credentialObject.proof || !credentialObject.proof.jws) {
+          throw new Error("Invalid Credential Object");
+        }
+        const vc = credentialObject.vc;
+        const proof = credentialObject.proof;
+        const jws = proof.jws;
+
+        const isPrismJWTCredentialType = vc.type !== undefined &&
+          Array.isArray(vc.type) &&
+          vc.type.includes(CredentialType.JWT);
+
+        if (!isPrismJWTCredentialType) {
+          throw new Error("Invalid JWT Credential only prism/jwt is supported for jwt_vc");
+        }
+
+        const issuer = vc.issuer;
+        const credentialValid = await this.jwt.verify(issuer, jws);
+        if (!credentialValid) {
+          return false
+        }
+      } else {
+        debugger;
+      }
+    }
+
+    //Get the proof on the root of the submission, this should contain a challenge signed by the user, a verificationMethod, and a keyPurpose
+    //To verify, we grab the subject's did, and resolve it using castor to extract the correct "keyPurpose key".
+    //We instanciate the key using Apollo or something and verify the challenge signature using Apollo.
+    return true;
   }
 
   async start() {
@@ -174,13 +365,12 @@ export default class Pollux implements IPollux {
     }
 
     const domainChallenge = this.extractDomainChallenge(offer.attachments);
-    const jwt = new JWT(this.castor);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const challenge = domainChallenge.challenge!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const domain = domainChallenge.domain!;
 
-    const signedJWT = await jwt.sign(did, keyPair.privateKey.value, {
+    const signedJWT = await this.jwt.sign(did, keyPair.privateKey.value, {
       aud: domain,
       nonce: challenge,
       vp: {
@@ -418,9 +608,8 @@ export default class Pollux implements IPollux {
       && "did" in options
       && "privateKey" in options
     ) {
-      const jwt = new JWT(this.castor);
       const presReqJson = presentationRequest.toJSON();
-      const signedJWT = await jwt.sign(options.did, options.privateKey, {
+      const signedJWT = await this.jwt.sign(options.did, options.privateKey, {
         iss: options.did.toString(),
         aud: presReqJson.options.domain,
         nonce: presReqJson.options.challenge,

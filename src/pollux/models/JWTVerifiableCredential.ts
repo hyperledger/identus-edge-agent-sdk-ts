@@ -1,24 +1,17 @@
+import { base64url } from "multiformats/bases/base64";
 import { Pluto } from "../../domain";
 import {
   Credential,
   ProvableCredential,
   StorableCredential,
 } from "../../domain/models/Credential";
-import { CredentialType } from "../../domain/models/VerifiableCredential";
+import { InvalidJWTString } from "../../domain/models/errors/Pollux";
+import { CredentialType, JWTCredentialPayload, JWTVerifiableCredentialProperties } from "../../domain/models/VerifiableCredential";
 
-export enum JWTVerifiableCredentialProperties {
-  iss = "iss",
-  vc = "vc",
-  jti = "jti",
-  nbf = "nbf",
-  sub = "sub",
-  exp = "exp",
-  aud = "aud",
-  type = "type",
-  revoked = "revoked"
-}
+
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
+
 
 export class JWTCredential
   extends Credential
@@ -29,7 +22,7 @@ export class JWTCredential
 
   constructor(
     public readonly iss: string,
-    public readonly verifiableCredential: Record<string, any>,
+    public readonly verifiableCredential: JWTCredentialPayload,
     public readonly jti: string,
     public readonly nbf: number,
     public readonly sub: string,
@@ -70,6 +63,18 @@ export class JWTCredential
       jwtString,
       isRevoked
     );
+  }
+
+  static fromJWS(jws: string): JWTCredential {
+    const parts = jws.split(".");
+    if (parts.length != 3 || parts.at(1) === undefined) {
+      throw new InvalidJWTString();
+    }
+    const jwtCredentialString = parts.at(1)!;
+    const base64Data = base64url.baseDecode(jwtCredentialString);
+    const jsonString = Buffer.from(base64Data).toString();
+    const jsonParsed = JSON.parse(jsonString);
+    return JWTCredential.fromJWT(jsonParsed, jws)
   }
 
   get id() {

@@ -47,8 +47,9 @@ import { Pluto as IPluto } from "../../src/domain";
 import { Pluto } from "../../src/pluto/Pluto";
 import { RevocationNotification } from "../../src/prism-agent/protocols/revocation/RevocationNotfiication";
 import { AgentCredentials } from "../../src/prism-agent/Agent.Credentials";
-import { Store } from "../../src";
+import { BasicMediatorHandler, Store } from "../../src";
 import { randomUUID } from "crypto";
+import { AgentDIDHigherFunctions } from "../../src/prism-agent/Agent.DIDHigherFunctions";
 
 
 chai.use(SinonChai);
@@ -99,13 +100,25 @@ describe("Agent Tests", () => {
     const mercury = new Mercury(castor, didProtocol, httpManager);
 
     const polluxInstance = new Pollux(castor)
+    const handler = new BasicMediatorHandler(DID.fromString("did:peer:123456"), mercury, pluto);
+    const seed = apollo.createRandomSeed().seed
+    const didHigherFunctions = new AgentDIDHigherFunctions(
+      apollo,
+      castor,
+      pluto,
+      DID.fromString("did:peer:123456"),
+      handler,
+      seed
+    )
 
     const agentCredentials = new AgentCredentials(
       apollo,
       castor,
       pluto,
       polluxInstance,
-      apollo.createRandomSeed().seed
+      apollo.createRandomSeed().seed,
+      mercury,
+      didHigherFunctions
     )
 
     const connectionsManager = ConnectionsManagerMock.buildMock({

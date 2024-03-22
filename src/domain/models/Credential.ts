@@ -6,6 +6,7 @@ import { KeyPair } from "./KeyPair";
 type Claim = Record<string, any>;
 
 export abstract class Credential implements Pluto.Storable {
+  abstract credentialType: CredentialType;
   abstract recoveryId: string;
   abstract id: string;
   abstract issuer: string;

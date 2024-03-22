@@ -1,4 +1,4 @@
-import { Anoncreds, CredentialType } from "../../domain";
+import { Anoncreds, CredentialType, PresentationDefinitionRequest } from "../../domain";
 
 interface JWTJson {
   options: {
@@ -23,12 +23,13 @@ export class PresentationRequest<T = unknown> {
    * @param type - CredentialType the json is related to
    * @param json - the raw value
    */
+  constructor(type: CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS, json: PresentationDefinitionRequest);
   constructor(type: CredentialType.AnonCreds, json: Anoncreds.PresentationRequest);
   constructor(type: CredentialType.JWT, json: JWTJson);
   constructor(
     private readonly type: CredentialType,
     private readonly json: T
-  ) {}
+  ) { }
 
   /**
    * Type guard that the instance is for the given CredentialType
@@ -36,6 +37,7 @@ export class PresentationRequest<T = unknown> {
    * @param type 
    * @returns {boolean}
    */
+  isType(type: CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS): this is PresentationRequest<PresentationDefinitionRequest>;
   isType(type: CredentialType.AnonCreds): this is PresentationRequest<Anoncreds.PresentationRequest>;
   isType(type: CredentialType.JWT): this is PresentationRequest<JWTJson>;
   isType(target: CredentialType) {
