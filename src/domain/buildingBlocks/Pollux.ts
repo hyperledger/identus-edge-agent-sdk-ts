@@ -14,8 +14,6 @@ type CredentialRequestTuple<
 
 export type PresentationJWTOptions = {
   jwtAlg?: string[],
-  jwtVcAlg?: string[],
-  jwtVpAlg?: string[]
 }
 
 export class PresentationOptions {
@@ -40,8 +38,6 @@ export class PresentationOptions {
     this.domain = options.domain ?? 'N/A';
     this.jwt = options.jwt ?? {
       jwtAlg: ['ES256K'],
-      jwtVcAlg: ['ES256K'],
-      jwtVpAlg: ['ES256K'],
     };
   }
 }

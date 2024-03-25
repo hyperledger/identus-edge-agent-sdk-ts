@@ -54,21 +54,14 @@ export type InputDescriptor = {
   format?: DefinitionFormat,
 }
 
-export type JWT_FORMAT = {
-  jwt_vc?: {
-    alg: string[]
-  },
-  jwt_vp?: {
-    alg: string[]
-  }
-}
-
 export enum SubmissionDescriptorFormat {
   JWT_VC = 'jwt_vc'
 }
 
 export type DefinitionFormat = {
-  jwt?: JWT_FORMAT
+  jwt: {
+    alg: string[]
+  },
 };
 
 export type PresentationDefinitionRequest = {
@@ -84,20 +77,13 @@ export type DescriptorItem = {
   path_nested?: DescriptorItem
 }
 
-export type VerifiableCredentialSubmission = {
-  comment?: string,
-  vc: JWTCredentialPayload | any,
-  proof: Proof
-}
-
 export type PresentationSubmission = {
   presentation_submission: {
     id: string,
     definition_id: string,
     descriptor_map: DescriptorItem[]
   },
-  verifiable_credential: VerifiableCredentialSubmission[],
-  proof?: Proof
+  verifiable_presentation: string[],
 }
 
 export enum JWTVerifiableCredentialProperties {

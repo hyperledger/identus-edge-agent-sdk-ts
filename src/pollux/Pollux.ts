@@ -19,7 +19,6 @@ import {
   InputField,
   InputLimitDisclosure,
   InputDescriptor,
-  JWT_FORMAT,
   PrivateKey,
   PresentationSubmission,
   DescriptorItem,
@@ -28,6 +27,7 @@ import {
   ProofTypesEnum,
   ProofPurpose,
   SubmissionDescriptorFormat,
+  DefinitionFormat,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
@@ -69,14 +69,14 @@ export default class Pollux implements IPollux {
 
       const descriptorItems: DescriptorItem[] = presentationDefinition.inputDescriptors.map(
         (inputDescriptor) => {
-          if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt?.jwt_vp || !inputDescriptor.format.jwt?.jwt_vc)) {
+          if (!inputDescriptor.format || !inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg) {
             //TODO: Improive error
             throw new Error("Invalid format")
           }
           return {
             id: inputDescriptor.id,
             format: "jwt_vc",
-            path: "$.verifiableCredential[0]"
+            path: "$.verifiablePresentation[0]"
           }
         });
 
@@ -114,25 +114,12 @@ export default class Pollux implements IPollux {
           definition_id: presentationDefinition.id,
           descriptor_map: descriptorItems
         },
-        verifiable_credential: [
-          {
-            vc: credential.vc,
-            proof: {
-              type: ProofTypesEnum.JsonWebSignature2020,
-              created: Date().toString(),
-              proofPurpose: ProofPurpose.AUTHENTTICATION,
-              verificationMethod: verificationMethod,
-              jws: credential.id
-            }
-          }
-        ],
-        proof: {
-          type: ProofTypesEnum.JsonWebSignature2020,
-          proofPurpose: ProofPurpose.AUTHENTTICATION,
-          verificationMethod: subject,
-          jws: jws
-        }
+        verifiable_presentation: [
+          credential.id,
+          jws
+        ]
       }
+
       return presentationSubmission
     } else {
       throw new PolluxError.CredsentialTypeNotSupported()
@@ -147,8 +134,7 @@ export default class Pollux implements IPollux {
 
     const {
       presentation_submission,
-      verifiable_credential,
-      proof
+      verifiable_presentation,
     } = data;
 
     //Validate required fields
@@ -156,31 +142,10 @@ export default class Pollux implements IPollux {
       return false;
     }
 
-    if (!verifiable_credential ||
-      !Array.isArray(verifiable_credential)
+    if (!verifiable_presentation ||
+      !Array.isArray(verifiable_presentation)
     ) {
       return false;
-    }
-
-    if (!proof || (typeof proof !== "object")) {
-      return false;
-    }
-
-    const {
-      type,
-      proofPurpose,
-      verificationMethod,
-      jws
-    } = proof;
-
-    //Validate proof types
-    if (
-      !type || (typeof type !== "string") ||
-      !verificationMethod || (typeof verificationMethod !== "string") ||
-      !jws || (typeof jws !== "string") ||
-      !proofPurpose || (typeof proofPurpose !== "string") || proofPurpose !== ProofPurpose.AUTHENTTICATION
-    ) {
-      return false
     }
 
     return true;
@@ -201,9 +166,7 @@ export default class Pollux implements IPollux {
       throw new Error("Required field options jwt is undefined")
     }
 
-    if (!jwtOptions.jwtAlg &&
-      !jwtOptions.jwtVcAlg &&
-      !jwtOptions.jwtVpAlg) {
+    if (!jwtOptions.jwtAlg) {
       throw new PolluxError.InvalidJWTPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
     }
 
@@ -212,7 +175,6 @@ export default class Pollux implements IPollux {
         return [
           ...all,
           ...(proof.requiredFields ?? []),
-          //...(proof.trustIssuers ?? [])
         ]
       }, []);
 
@@ -236,20 +198,19 @@ export default class Pollux implements IPollux {
       optional: false
     })
 
+    const format: DefinitionFormat = {
+      jwt: {
+        alg: jwtOptions.jwtAlg ?? []
+      },
+
+    }
+
     const inputDescriptor: InputDescriptor = {
       id: uuid(),
       name: options.name,
       purpose: options.purpose,
-      constraints: constaints
-    }
-
-    const format: JWT_FORMAT = {
-      jwt_vc: {
-        alg: jwtOptions.jwtVcAlg ?? []
-      },
-      jwt_vp: {
-        alg: jwtOptions.jwtVpAlg ?? []
-      }
+      constraints: constaints,
+      format: format
     }
 
     const presentationDefinitionRequest: PresentationDefinitionRequest = {
@@ -257,9 +218,7 @@ export default class Pollux implements IPollux {
       inputDescriptors: [
         inputDescriptor
       ],
-      format: {
-        jwt: format
-      }
+      format: format
     }
 
     return presentationDefinitionRequest
@@ -270,36 +229,23 @@ export default class Pollux implements IPollux {
     if (!isValidPresentationSubmission) {
       throw new Error("Invalid presentationSubmission object")
     }
-
-    if (!presentationSubmission.proof ||
-      !presentationSubmission.proof.jws) {
-      throw new Error("Invalid presentationSubmission object, signed jws is required")
-    }
-
     const descriptorMapper = new DescriptorPath(presentationSubmission);
     const descriptorMaps = presentationSubmission.presentation_submission.descriptor_map;
-
-    //Validate all the descriptor items
     for (let descriptorItem of descriptorMaps) {
-
       if (descriptorItem.format === SubmissionDescriptorFormat.JWT_VC) {
-        const [credentialObject] = descriptorMapper.getValue(descriptorItem.path);
-        if (!credentialObject || !credentialObject.vc || !credentialObject.proof || !credentialObject.proof.jws) {
+        const [jws] = descriptorMapper.getValue(descriptorItem.path);
+        if (!jws) {
           throw new Error("Invalid Credential Object");
         }
-        const vc = credentialObject.vc;
-        const proof = credentialObject.proof;
-        const jws = proof.jws;
-
-        const isPrismJWTCredentialType = vc.type !== undefined &&
-          Array.isArray(vc.type) &&
-          vc.type.includes(CredentialType.JWT);
+        const credential = JWTCredential.fromJWS(jws);
+        const isPrismJWTCredentialType = credential.type !== undefined &&
+          Array.isArray(credential.type) &&
+          credential.type.includes(CredentialType.JWT);
 
         if (!isPrismJWTCredentialType) {
           throw new Error("Invalid JWT Credential only prism/jwt is supported for jwt_vc");
         }
-
-        const issuer = vc.issuer;
+        const issuer = credential.issuer;
         const credentialValid = await this.jwt.verify(issuer, jws);
         if (!credentialValid) {
           return false
@@ -308,10 +254,6 @@ export default class Pollux implements IPollux {
         debugger;
       }
     }
-
-    //Get the proof on the root of the submission, this should contain a challenge signed by the user, a verificationMethod, and a keyPurpose
-    //To verify, we grab the subject's did, and resolve it using castor to extract the correct "keyPurpose key".
-    //We instanciate the key using Apollo or something and verify the challenge signature using Apollo.
     return true;
   }
 

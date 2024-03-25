@@ -872,10 +872,8 @@ describe("Pollux", () => {
       expect(presentationDefinition).haveOwnProperty("id");
       expect(presentationDefinition).haveOwnProperty("format");
       expect(presentationDefinition).haveOwnProperty("inputDescriptors");
-      expect(presentationDefinition.format.jwt).haveOwnProperty("jwt_vc");
-      expect(presentationDefinition.format.jwt).haveOwnProperty("jwt_vp");
-      expect(presentationDefinition.format.jwt?.jwt_vc?.alg).contains('ES256K');
-      expect(presentationDefinition.format.jwt?.jwt_vp?.alg).contains('ES256K');
+      expect(presentationDefinition.format).haveOwnProperty("jwt");
+      expect(presentationDefinition.format.jwt?.alg).contains('ES256K');
       expect(Array.isArray(presentationDefinition.inputDescriptors)).to.eq(true)
       expect(presentationDefinition.inputDescriptors.length).to.eq(1)
       expect(presentationDefinition.inputDescriptors.at(0)).haveOwnProperty('constraints');
