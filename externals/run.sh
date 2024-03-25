@@ -39,7 +39,7 @@ buildDIDComm() {
   #This code fails on browser when wasm is first loaded, it can just be ignored
   #The code will fully work
   cd "${GenDIDComm}-wasm-browser"
-  sed -i "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+  sed -i '' "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
 
   cd $ExternalsDir
   git submodule | grep $DIDComm | awk '{print $1}' > "./${DIDComm}.commit"
@@ -64,7 +64,7 @@ buildAnonCreds() {
   #This code fails on browser when wasm is first loaded, it can just be ignored
   #The code will fully work
   cd "${GenAnonCreds}-wasm-browser"
-  sed -i '/if (typeof input === '\''undefined'\'') {/,/}/d' "./${AnonCreds}.js"
+  sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
 
   cd $ExternalsDir
   git submodule | grep $AnonCreds | awk '{print $1}' > "./${AnonCreds}.commit"
