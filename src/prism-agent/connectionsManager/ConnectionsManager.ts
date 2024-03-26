@@ -115,8 +115,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   async awaitMessageResponse(id: string): Promise<Message | undefined> {
     console.log("Deprecated, use agent.addListener('THREAD-{{Your thread || messageId}}', fn), this method does not support live-mode.");
     const messages = await this.mediationHandler.pickupUnreadMessages(10);
-    return messages
-      .find(({ message }) => message.thid === id)?.message
+    return messages.find(x => x.message.thid === id)?.message;
   }
 
   /**
@@ -133,25 +132,19 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
 
     if (unreadMessages.length) {
-      const received = unreadMessages
-        .filter(({ message }) => message.direction === MessageDirection.RECEIVED)
+      const received = unreadMessages.filter(x => x.message.direction === MessageDirection.RECEIVED);
+      const messages = received.map(x => x.message);
+      const messageIds = received.map(x => x.attachmentId);
 
-      const messages = received
-        .map(({ message }) => message);
-
-      const messageIds = received
-        .map(({ attachmentId }) => attachmentId);
-
-      if (messages.length) {
+      if (messages.length > 0) {
         await this.pluto.storeMessages(messages);
       }
 
-      const revokeMessages = messages
-        .filter((message) => message.piuri === ProtocolType.PrismRevocation);
+      const revokeMessages = messages.filter(x => x.piuri === ProtocolType.PrismRevocation);
+      const allMessages = await this.pluto.getAllMessages();
 
-      const allMessages = await this.pluto.getAllMessages()
       for (let message of revokeMessages) {
-        const revokeMessage = RevocationNotification.fromMessage(message)
+        const revokeMessage = RevocationNotification.fromMessage(message);
         const threadId = revokeMessage.body.issueCredentialProtocolThreadId;
 
         const matchingMessages = allMessages.filter(({ thid, piuri }) =>
@@ -159,27 +152,23 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           piuri === ProtocolType.DidcommIssueCredential
         );
 
-        if (matchingMessages.length) {
-
+        if (matchingMessages.length > 0) {
           for (let message of matchingMessages) {
-            const issueMessage = IssueCredential.fromMessage(message)
+            const issueMessage = IssueCredential.fromMessage(message);
             const credential = await this.agentCredentials.processIssuedCredentialMessage(
               issueMessage
-            )
-            await this.pluto.revokeCredential(credential)
-            this.events.emit(ListenerKey.REVOKE, credential)
+            );
+            await this.pluto.revokeCredential(credential);
+            this.events.emit(ListenerKey.REVOKE, credential);
           }
         }
-
       }
 
       if (messageIds.length) {
         await this.mediationHandler.registerMessagesAsRead(messageIds);
       }
 
-      this.events.emit(ListenerKey.MESSAGE, unreadMessages);
-
-
+      this.events.emit(ListenerKey.MESSAGE, messages);
     }
   }
 
@@ -272,16 +261,16 @@ export class ConnectionsManager implements ConnectionsManagerClass {
       return;
     }
     const currentMediator = this.mediationHandler.mediator.mediatorDID;
-    const resolvedMediator = await this.castor.resolveDID(currentMediator.toString())
+    const resolvedMediator = await this.castor.resolveDID(currentMediator.toString());
     const hasWebsocket = resolvedMediator.services.find(({ serviceEndpoint: { uri } }) =>
       uri.startsWith("ws://") ||
       uri.startsWith("wss://")
-    )
+    );
     if (!hasWebsocket) {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
       this.cancellable = new CancellableTask(async () => {
         const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
-        await this.processMessages(unreadMessages)
+        await this.processMessages(unreadMessages);
       }, timeInterval);
     } else {
       //Connecting to websockets, do not repeat the task
@@ -304,13 +293,13 @@ export class ConnectionsManager implements ConnectionsManagerClass {
                   message: message,
                   attachmentId: attachment.id
                 }
-              ]
+              ];
             }, []);
 
-            await this.processMessages(unreadMessages)
+            await this.processMessages(unreadMessages);
           }
-        )
-      })
+        );
+      });
     }
 
     this.cancellable.then().catch((err) => {
