@@ -35,7 +35,8 @@ export class RxdbStore implements Pluto.Store {
   async start(): Promise<void> {
     this._db = await createRxDatabase({
       ...this.options,
-      multiInstance: true
+      multiInstance: true,
+      ignoreDuplicate: true
     });
     const collections = makeCollections(this.collections ?? {});
     await this._db.addCollections(collections);
