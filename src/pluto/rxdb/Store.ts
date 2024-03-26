@@ -7,6 +7,7 @@ import { Model } from '../models';
 import { RxDBEncryptedMigrationPlugin } from '../migration';
 import { Domain } from '../..';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+
 export class RxdbStore implements Pluto.Store {
   private _db?: RxDatabase<CollectionsOfDatabase, any, any>;
 
@@ -33,13 +34,14 @@ export class RxdbStore implements Pluto.Store {
    * Start the database and build collections
    */
   async start(): Promise<void> {
-    this._db = await createRxDatabase({
-      ...this.options,
-      multiInstance: true,
-      ignoreDuplicate: true
-    });
-    const collections = makeCollections(this.collections ?? {});
-    await this._db.addCollections(collections);
+    if (!this._db) {
+      this._db = await createRxDatabase({
+        ...this.options,
+        multiInstance: true
+      });
+      const collections = makeCollections(this.collections ?? {});
+      await this._db.addCollections(collections);
+    }
   }
 
   async update<T extends Domain.Pluto.Storable>(name: string, model: T): Promise<void> {
