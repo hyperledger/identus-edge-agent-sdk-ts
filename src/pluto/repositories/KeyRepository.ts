@@ -16,6 +16,11 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
       ...model,
       raw: Buffer.from(model.rawHex, "hex")
     });
+
+    if (model.index != undefined) {
+      domain.keySpecification.set(Domain.KeyProperties.index, model.index.toString());
+    }
+
     return this.withId(domain, model.uuid);
   }
 

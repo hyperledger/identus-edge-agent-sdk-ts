@@ -160,7 +160,7 @@ export default class Agent
 
     const store = new PublicMediatorStore(pluto);
     const handler = new BasicMediatorHandler(mediatorDID, mercury, store);
-    const pollux = new Pollux(castor)
+    const pollux = new Pollux(castor);
     const seed = params.seed ?? apollo.createRandomSeed().seed;
 
     const agentCredentials = new AgentCredentials(
@@ -169,7 +169,7 @@ export default class Agent
       pluto,
       pollux,
       seed
-    )
+    );
     const manager = new ConnectionsManager(castor, mercury, pluto, agentCredentials, handler);
 
     const agent = new Agent(
