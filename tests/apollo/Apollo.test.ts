@@ -1,5 +1,4 @@
 import { expect, assert } from "chai";
-import * as Fixtures from "../fixtures";
 
 import Apollo from "../../src/apollo/Apollo";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
@@ -22,6 +21,7 @@ import {
   StorableKey,
   MnemonicWordList
 } from "../../src/domain/models";
+import * as Fixtures from "../fixtures";
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -300,37 +300,25 @@ describe("Apollo", () => {
   });
 
   it("Should derive secp256k1 privateKey the same way as if we create a new key in Apollo.", async () => {
-    // const seed = apollo.createRandomSeed().seed;
     const seedHex = "a4dd58542e9959eccb56832a953c0e54b3321036b6165ec2f3c1ef533cd1d6da5fae8010c587535404534c192397483c765505f67e62b26026392f8a0cf8ba51";
-    const privateKey = apollo.createPrivateKey({
+    const createKeyArgs = {
       type: KeyTypes.EC,
       curve: Curve.SECP256K1,
-      // seed: Buffer.from(seed.value).toString("hex"),
-      seed: seedHex
-    });
-
-    const derivationPathStr = `m/0'/0'/1'`;
-    const path = DerivationPath.fromPath(derivationPathStr);
-
-    const derivedFromPrivate =
-      privateKey.isDerivable() && privateKey.derive(path);
-
-    expect(derivedFromPrivate).to.not.equal(false);
-
-    const privateKey2 = apollo.createPrivateKey({
-      type: KeyTypes.EC,
-      curve: Curve.SECP256K1,
-      // seed: Buffer.from(seed.value).toString("hex"),
       seed: seedHex,
-      derivationPath: derivationPathStr,
+    };
+    const privateKey = apollo.createPrivateKey({ ...createKeyArgs });
+    const path = DerivationPath.from(`m/0'/0'/1'`);
+    const derived = privateKey.isDerivable() && privateKey.derive(path);
+
+    expect(derived).to.not.equal(false);
+
+    const withDerivationPath = apollo.createPrivateKey({
+      ...createKeyArgs,
+      derivationPath: path,
     });
 
-    const raw1 = Buffer.from(
-      (derivedFromPrivate as PrivateKey).getEncoded()
-    ).toString("base64url");
-
-    const raw2 = Buffer.from(privateKey2.getEncoded()).toString("base64url");
-
+    const raw1 = Buffer.from((derived as PrivateKey).getEncoded()).toString("base64url");
+    const raw2 = Buffer.from(withDerivationPath.getEncoded()).toString("base64url");
     const raw3 = Buffer.from(privateKey.getEncoded()).toString("base64url");
 
     expect(raw1).to.equal(raw2);

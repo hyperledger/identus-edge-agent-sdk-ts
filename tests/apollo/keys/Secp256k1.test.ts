@@ -7,9 +7,18 @@ import { Secp256k1KeyPair } from "../../../src/apollo/utils/Secp256k1KeyPair";
 import { ECPublicKeyInitialization } from "../../../src/domain/models/errors/Apollo";
 import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
 
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
+const HDKey = ApolloSDK.derivation.HDKey;
+const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
+
 describe("Keys", () => {
   describe("Secp256k1", () => {
     describe("PrivateKey", () => {
+      const seedHex = "947877896c61a5c64f266adbebbc69a2a01f1a2cfbf72c08a11c693d0429ccded34bdc0c28b5be910a5095b97e7bc6e3e209527ce8e75f9964d25cd6f6ad63e0";
+      const chainCodeHex = "7e9952eb18d135283fd633180e31b202a5ec87e3e37cc66c6836f18bdf9684b2";
+
+
       test("invalid key size - throws", () => {
         const raw = new Uint8Array([36]);
         expect(() => new Secp256k1PrivateKey(raw)).throws(ECPublicKeyInitialization);
@@ -22,6 +31,90 @@ describe("Keys", () => {
       // implementations
       test("isDerivable - implemented", () => {
         expect(privateKey.isDerivable()).to.be.true;
+      });
+
+      // isDerivable true - so test derive function
+      describe("derive", () => {
+        const baseHex = "e8133470f8b807e7b405a8d1214d1a6c82c989a80fc51d9858eb574c49ff9fe5";
+        const baseRaw = Buffer.from(baseHex, "hex");
+
+        test("keySpecification.chainCode missing - throws", () => {
+          const key = new Secp256k1PrivateKey(baseRaw);
+          const derivationPath = DerivationPath.from(0);
+
+          expect(() => key.derive(derivationPath)).to.throw;
+        });
+
+        test("DerivationPath - m/0'/0'/0'", () => {
+          const key = new Secp256k1PrivateKey(raw);
+          const derivationPath = DerivationPath.from(`m/0'/0'/0'`);
+          key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
+
+          const result = key.derive(derivationPath);
+
+          expect(result).to.be.an.instanceOf(Secp256k1PrivateKey);
+          expect(result.raw).to.eql(Uint8Array.from([12, 175, 213, 208, 150, 154, 3, 194, 3, 156, 49, 33, 35, 255, 156, 238, 125, 190, 36, 208, 31, 209, 82, 108, 171, 255, 50, 80, 236, 226, 166, 255]));
+          expect(result.type).to.eq(KeyTypes.EC);
+          expect(result.curve).to.eq(Curve.SECP256K1);
+
+          // chainCode changes parent -> child
+          expect(result.getProperty(KeyProperties.chainCode)).to.not.eq(chainCodeHex);
+          expect(result.getProperty(KeyProperties.chainCode)).to.eq("55c577fab08382958dcdfcfd6c34e4c45d9ec467c20abb81ce627991ac9e7863");
+          expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
+          expect(result.getProperty(KeyProperties.index)).to.eq("0");
+
+          // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(derivationPath.toString());
+          expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f30272f30272f3027");
+        });
+
+        test("DerivationPath - m/1'/0'/0'", () => {
+          const key = new Secp256k1PrivateKey(raw);
+          const derivationPath = DerivationPath.from("m/1'/0'/0'");
+          key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
+
+          const result = key.derive(derivationPath);
+
+
+          expect(result.raw).to.eql(Uint8Array.from([220, 223, 118, 183, 102, 141, 198, 60, 221, 162, 132, 68, 233, 188, 169, 39, 128, 174, 202, 114, 4, 203, 31, 40, 35, 85, 166, 164, 178, 17, 158, 150]));
+          expect(result.getProperty(KeyProperties.chainCode)).to.eq("f22fdc4dd573ce17243983faa6492fc33fab35ecfa3f8ad09aa958044a2752f7");
+          expect(result.getProperty(KeyProperties.index)).to.eq("1");
+          // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(`m/1'/0'/0'`);
+          expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f31272f30272f3027");
+        });
+
+        test("DerivationPath - m/2'/0'/0'", () => {
+          const key = new Secp256k1PrivateKey(raw);
+          const derivationPath = DerivationPath.from("m/2'/0'/0'");
+          key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
+
+          const result = key.derive(derivationPath);
+
+          expect(result.raw).to.eql(Uint8Array.from([58, 84, 10, 170, 72, 91, 146, 143, 203, 60, 169, 120, 33, 226, 221, 43, 96, 150, 44, 108, 105, 33, 243, 19, 115, 162, 33, 142, 129, 22, 122, 221]));
+          expect(result.getProperty(KeyProperties.chainCode)).to.eq("e56cd109bae854dcf3fc0b766067f9e825901bf1bcfc67dc4f5eaee74cf9c8ea");
+          expect(result.getProperty(KeyProperties.index)).to.eq("2");
+          // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(`m/1'/0'/0'`);
+          expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f32272f30272f3027");
+        });
+
+        test("Secp.derive returns same as HDKey.derive", () => {
+          const path = "m/42'/0'/0'";
+          const hdkey = new HDKey(
+            Int8Array.from(baseRaw),
+            null,
+            Int8Array.from(Buffer.from(chainCodeHex, "hex")),
+            0,
+            BigIntegerWrapper.initFromInt(0)
+          );
+          const hdChild = hdkey.derive(path);
+
+          const secp = new Secp256k1PrivateKey(baseRaw);
+          secp.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
+          const secpChild = secp.derive(DerivationPath.from(path));
+
+          const hdResult = Buffer.from(hdChild.privateKey!).toString("hex");
+          const spResult = Buffer.from(secpChild.raw).toString("hex");
+          expect(hdResult).to.eql(spResult);
+        });
       });
 
       test("isExportable - not implemented", () => {
@@ -80,10 +173,9 @@ describe("Keys", () => {
 
         test("instantiated through `derive` - index set", () => {
           const path = DerivationPath.fromPath(`m/0'/0'/0'`);
-          const tmp = new Secp256k1PrivateKey(privateKey.raw);
-          const seed = "223fa7bd4bde29fb0eada057770d3f70c32421bca9846fcaec58d6a36bc21a77ef49ac1c3b45163b2450e5679b55ef8a11006607ae78830bce425c02778b5210";
-          tmp.keySpecification.set(KeyProperties.seed, seed);
-          const derived = tmp.derive(path);
+          const key = new Secp256k1PrivateKey(privateKey.raw);
+          key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
+          const derived = key.derive(path);
 
           expect(derived.index).to.equal(0);
         });
