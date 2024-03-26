@@ -61,3 +61,6 @@ export class KeyRestoratonFailed extends Error {
     super(`Key Restoration Failed: [${key?.recoveryId}]`);
   }
 }
+
+export class MissingPrivateKey extends Error {}
+export class MissingChainCode extends Error {}

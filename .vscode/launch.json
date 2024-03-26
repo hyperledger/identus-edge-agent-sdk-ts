@@ -25,6 +25,7 @@
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
+        "${fileBasenameNoExtension}",
         "--colors",
         "--workerThreads",
         "--maxWorkers",

@@ -2,6 +2,7 @@ import {
   Curve,
   DID,
   KeyProperties,
+  KeyTypes,
   PublicKey,
   Seed,
   Service,
@@ -12,13 +13,13 @@ import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { AgentError } from "../domain/models/Errors";
-import { KeyTypes } from "../domain/models";
 import {
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
   ConnectionsManager,
   MediatorHandler,
 } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
+import { DerivationPath } from "../apollo/utils/derivation/DerivationPath";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -141,12 +142,13 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     keyPathIndex?: number
   ): Promise<DID> {
-    const index = keyPathIndex ?? this.getNextKeyPathIndex();
-
+    const index = keyPathIndex ?? await this.getNextKeyPathIndex();
+    const derivationPath = DerivationPath.fromIndex(index);
     const privateKey = this.apollo.createPrivateKey({
-      type: KeyTypes.EC,
-      curve: Curve.SECP256K1,
-      seed: Buffer.from(this.seed.value).toString("hex"),
+      [KeyProperties.type]: KeyTypes.EC,
+      [KeyProperties.curve]: Curve.SECP256K1,
+      [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
+      [KeyProperties.derivationPath]: derivationPath,
     });
 
     const publicKey = privateKey.publicKey();
@@ -158,7 +160,12 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     return did;
   }
 
-  private async getNextKeyPathIndex() {
+  /**
+   * Determine the Index for the subsequent Key
+   * 
+   * @returns {number}
+   */
+  private async getNextKeyPathIndex(): Promise<number> {
     const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
     const index = await getIndexTask.run();
     const next = index + 1;
