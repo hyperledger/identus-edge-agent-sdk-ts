@@ -98,7 +98,6 @@ export default class Agent
       apollo,
       castor,
       pluto,
-      mediationHandler.mediator?.routingDID,
       mediationHandler,
       seed
     );
@@ -183,7 +182,6 @@ export default class Agent
         apollo,
         castor,
         pluto,
-        handler.mediator?.routingDID,
         handler,
         seed
       )
@@ -265,39 +263,39 @@ export default class Agent
     }
     this.state = AgentState.STARTING;
     try {
-      debugger
+
       await this.pluto.start();
-      debugger
+
       await this.pollux.start();
-      debugger
+
       await this.connectionManager.startMediator();
-      debugger
+
     } catch (e) {
       if (e instanceof Domain.AgentError.NoMediatorAvailableError) {
         const hostDID = await this.createNewPeerDID([], false);
-        debugger
+
         await this.connectionManager.registerMediator(hostDID);
-        debugger
+
       } else throw e;
     }
 
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
       await this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
-      debugger
+
     } else {
       throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
-      debugger
+
     }
 
     const storedLinkSecret = await this.pluto.getLinkSecret();
     if (storedLinkSecret == null) {
       const secret = this.pollux.anoncreds.createLinksecret();
       const linkSecret = new Domain.LinkSecret(secret);
-      debugger
+
       await this.pluto.storeLinkSecret(linkSecret);
     }
-    debugger
+
     return this.state;
   }
 

@@ -106,6 +106,13 @@ export interface AgentInvitations {
 }
 
 export type EventCallback = (messages: Message[]) => void;
+export type EventPickupCallback = (messages: {
+  attachmentId: string;
+  message: Message;
+}[]) => void;
+
+
+
 export enum ListenerKey {
   "MESSAGE" = "message",
   "CONNECTION" = "connection",
