@@ -22,7 +22,7 @@ export class JWTCredential
 
   constructor(
     public readonly iss: string,
-    public readonly verifiableCredential: JWTCredentialPayload,
+    verifiableCredential: JWTCredentialPayload,
     public readonly jti: string,
     public readonly nbf: number,
     public readonly sub: string,
@@ -32,19 +32,23 @@ export class JWTCredential
     isRevoked = false
   ) {
     super();
-
     this.properties.set(JWTVerifiableCredentialProperties.revoked, isRevoked);
     this.properties.set(JWTVerifiableCredentialProperties.jti, jti);
     this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
     this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
     this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
     this.properties.set(JWTVerifiableCredentialProperties.aud, aud);
-
-    this.properties.set(
-      JWTVerifiableCredentialProperties.vc,
-      verifiableCredential
-    );
-
+    if (verifiableCredential.vc) {
+      this.properties.set(
+        JWTVerifiableCredentialProperties.vc,
+        verifiableCredential.vc
+      );
+    } else if (verifiableCredential.vp) {
+      this.properties.set(
+        JWTVerifiableCredentialProperties.vp,
+        verifiableCredential.vp
+      );
+    }
     if (exp) {
       this.properties.set(JWTVerifiableCredentialProperties.exp, exp);
     }
@@ -54,7 +58,7 @@ export class JWTCredential
   static fromJWT(jwtObj: any, jwtString: string, isRevoked = false) {
     return new JWTCredential(
       jwtObj.iss,
-      jwtObj.vc,
+      jwtObj,
       jwtString,
       jwtObj.nbf,
       jwtObj.sub,
@@ -64,6 +68,7 @@ export class JWTCredential
       isRevoked
     );
   }
+
 
   static fromJWS(jws: string): JWTCredential {
     const parts = jws.split(".");
@@ -83,6 +88,10 @@ export class JWTCredential
 
   get vc() {
     return this.properties.get(JWTVerifiableCredentialProperties.vc);
+  }
+
+  get vp() {
+    return this.properties.get(JWTVerifiableCredentialProperties.vp);
   }
 
   get claims() {

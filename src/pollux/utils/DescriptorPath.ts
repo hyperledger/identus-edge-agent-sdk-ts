@@ -7,15 +7,9 @@ import { PresentationSubmission } from "../../domain";
 export class DescriptorPath {
 
     constructor(private obj: PresentationSubmission) { }
-    private camelCaseToSlash(input: string): string {
-        // Use regular expression to match camelCase pattern
-        const regex = /([a-z])([A-Z])/g;
 
-        // Replace camelCase with slash-separated and convert to lowercase
-        return input.replace(regex, '$1_$2').toLowerCase();
-    }
     getValue(path: string): any {
-        const segments = path.split(/\.|\[|\]/).filter(segment => segment !== '').slice(1, -1).map((segment) => this.camelCaseToSlash(segment))
+        const segments = path.split(/\.|\[|\]/).filter(segment => segment !== '').slice(1, -1)
         let currentObj: any = this.obj;
         for (const segment of segments) {
             if (Array.isArray(currentObj)) {

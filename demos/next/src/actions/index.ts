@@ -173,6 +173,40 @@ export const startAgent = createAsyncThunk<
     }
 })
 
+export const initiatePresentationRequest = createAsyncThunk<
+    any,
+    {
+        agent: SDK.Agent,
+        toDID: SDK.Domain.DID,
+        trustIssuers: string[],
+        requiredFields: string[]
+    }
+>("initiatePresentationRequest", async (options, api) => {
+    try {
+        const {
+            agent,
+            trustIssuers,
+            requiredFields,
+            toDID
+        } = options;
+
+        await agent.initiatePresentationRequest(
+            SDK.Domain.CredentialType.JWT,
+            toDID,
+            [
+                {
+                    trustIssuers: trustIssuers,
+                    requiredFields: requiredFields
+                }
+            ]
+        );
+
+        return api.fulfillWithValue(null)
+    } catch (err) {
+        return api.rejectWithValue(err as Error);
+    }
+})
+
 export const initAgent = createAsyncThunk<
     { agent: SDK.Agent },
     {

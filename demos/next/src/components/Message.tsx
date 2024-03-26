@@ -8,7 +8,7 @@ export function Message({ message }) {
     const app = useMountedApp();
     const [response, setResponse] = useState<string>("");
     const [collapsed, setCollapsed] = useState<boolean>(true)
-
+    const [options, setOptions] = useState<any>({});
 
     const body = JSON.parse(message.body);
     const agent = app.agent.instance;
@@ -283,34 +283,45 @@ export function Message({ message }) {
     }
 
     if (message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/presentation") {
-
-
         return <div
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
         >
             <div>
                 <p
                     className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-                    <b>Verification Proof </b> {message.id}
-
-
-
+                    <b>Verification Proof </b> {message.id} {message.direction}
                 </p>
-
                 <p
                     className="overflow-x-auto h-auto text-sm font-normal text-gray-500dark:text-gray-400">
                     You have sent proof in the past to {message.to.toString()}
-
-
+                    <button className="mt-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                        app.agent.instance?.handlePresentation(SDK.Presentation.fromMessage(message))
+                            .then((valid) => {
+                                setOptions({ valid: valid })
+                                debugger;
+                            })
+                            .catch((err) => {
+                                setOptions({ valid: false });
+                            })
+                    }}>Verify the Proof</button>
+                    {
+                        options && <>
+                            {
+                                options.valid === true && <p>Presentation is VALID</p>
+                            }
+                            {
+                                options.valid === false && <p>Presentation is NOT VALID</p>
+                            }
+                        </>}
                 </p>
-
-
             </div>
         </div>
     }
 
     if (message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation") {
-        const requiredFields = body.proof_types.reduce((all, pt) => {
+
+        const proofTypes = body.proofTypes || body.proof_types;
+        const requiredFields = proofTypes.reduce((all, pt) => {
             const entry = {
                 ...pt,
                 requiredFields: ['all']
@@ -318,7 +329,7 @@ export function Message({ message }) {
             if (pt.requiredFields) {
                 entry.requiredFields = pt.requiredFields;
             }
-            entry.credentials = app.credentials
+            entry.credentials = app.credentials;
             return [
                 ...all,
                 entry
@@ -344,7 +355,7 @@ export function Message({ message }) {
                         return <div
                             key={`field${i}`}
                         >
-                            <p className=" text-sm font-normal text-gray-500 dark:text-gray-400"> {field.requiredFields.join(", ")} from schema({field.schema})</p>
+                            <p className=" text-sm font-normal text-gray-500 dark:text-gray-400"> {field.requiredFields.join(", ")} from issuer({field.trustIssuers.at(0)}) and schema {field.schema ?? 'any'}</p>
                         </div>
 
                     })

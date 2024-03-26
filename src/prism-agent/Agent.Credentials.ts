@@ -20,6 +20,7 @@ import {
   CredentialMetadata,
   PresentationOptions,
   Mercury,
+  PresentationSubmission,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -77,12 +78,11 @@ export class AgentCredentials implements AgentCredentialsClass {
       domain: 'N/A'
     });
 
-    const presentationDefinitionRequest = this.pollux.createPresentationDefinitionRequest(
+    const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest(
       type,
       proofTypes,
       options
     );
-
     const attachment = AttachmentDescriptor.build(
       presentationDefinitionRequest,
       uuid(),
@@ -93,7 +93,6 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const requestPresentationBody: RequestPresentationBody = {
       proofTypes: proofTypes,
-      goalCode: options.challenge
     }
 
     const presentationRequest = new RequestPresentation(
@@ -276,22 +275,13 @@ export class AgentCredentials implements AgentCredentialsClass {
   }
 
   async handlePresentation(presentation: Presentation): Promise<Boolean> {
-    const fromDID = presentation.from;
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
       throw new Error("Invalid presentation message, attachment missing")
     }
     const presentationSubmission = Message.Attachment.extractJSON(attachment);
-
-
-    const proof = presentationSubmission.proof;
-    const jws = Buffer.from(proof.jws);
-
-
-
-
-
-    return true
+    const verified = await this.pollux.verifyPresentationSubmission(JSON.parse(presentationSubmission))
+    return verified
   }
 
   /**
@@ -319,17 +309,23 @@ export class AgentCredentials implements AgentCredentialsClass {
     const attachmentFormat = attachment.format ?? 'unknown';
     const presentationRequest = this.parseProofRequest(attachment);
     const proof = attachmentFormat === CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS ?
-      await this.handlePresentationDefinitionRequest(presentationRequest, credential, message.body.goalCode!) :
+      await this.handlePresentationDefinitionRequest(presentationRequest, credential) :
       await this.handlePresentationRequest(presentationRequest, credential);
 
-    const base64Encoded = base64.baseEncode(Buffer.from(proof));
+    const presentationAttachment = AttachmentDescriptor.build(
+      proof,
+      uuid(),
+      'application/json',
+      undefined,
+      CredentialType.PRESENTATION_EXCHANGE_SUBMISSION
+    )
     const presentation = new Presentation(
       {
         comment: message.body.comment,
         goalCode: message.body.goalCode
       },
       [
-        new AttachmentDescriptor({ base64: base64Encoded }),
+        presentationAttachment,
       ],
       message.to,
       message.from,
@@ -363,7 +359,6 @@ export class AgentCredentials implements AgentCredentialsClass {
   private async handlePresentationDefinitionRequest(
     request: PresentationRequest,
     credential: Credential,
-    challenge: string,
   ): Promise<string> {
     if (request.isType(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS) && (credential instanceof JWTCredential)) {
       const privateKeys = await this.pluto.getDIDPrivateKeysByDID(DID.fromString(credential.subject));
@@ -376,7 +371,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       }
       const presentationSubmission = await this.pollux.createPresentationSubmission(
         request.toJSON(),
-        challenge,
         credential,
         privateKey
       )

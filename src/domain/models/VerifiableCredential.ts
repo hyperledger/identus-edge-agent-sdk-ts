@@ -55,7 +55,7 @@ export type InputDescriptor = {
 }
 
 export enum SubmissionDescriptorFormat {
-  JWT_VC = 'jwt_vc'
+  JWT = 'jwt'
 }
 
 export type DefinitionFormat = {
@@ -65,9 +65,15 @@ export type DefinitionFormat = {
 };
 
 export type PresentationDefinitionRequest = {
-  id: string,
-  inputDescriptors: InputDescriptor[],
-  format: DefinitionFormat
+  presentation_definition: {
+    id: string,
+    inputDescriptors: InputDescriptor[],
+    format: DefinitionFormat
+  },
+  options: {
+    challenge: string,
+    domain: string
+  }
 }
 
 export type DescriptorItem = {
@@ -83,12 +89,13 @@ export type PresentationSubmission = {
     definition_id: string,
     descriptor_map: DescriptorItem[]
   },
-  verifiable_presentation: string[],
+  verifiablePresentation: string[],
 }
 
 export enum JWTVerifiableCredentialProperties {
   iss = "iss",
   vc = "vc",
+  vp = "vp",
   jti = "jti",
   nbf = "nbf",
   sub = "sub",

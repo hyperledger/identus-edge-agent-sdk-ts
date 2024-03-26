@@ -75,7 +75,6 @@ export interface Pollux {
 
   createPresentationSubmission(
     presentationDefinition: PresentationDefinitionRequest,
-    challenge: string,
     credential: Credential,
     privateKey: PrivateKey
   ): Promise<PresentationSubmission>
@@ -90,17 +89,14 @@ export interface Pollux {
    */
   verifyPresentationSubmission(
     submission: PresentationSubmission,
-    credential: JWTCredential,
     options?: Pollux.verifyPresentationSubmission.options.JWT
   ): Promise<boolean>
   verifyPresentationSubmission(
     submission: PresentationSubmission,
-    credential: AnonCredsCredential,
     options?: Pollux.verifyPresentationSubmission.options.Anoncreds
   ): Promise<boolean>
   verifyPresentationSubmission(
     submission: PresentationSubmission,
-    credential: Credential,
     options?: Record<string, any>
   ): Promise<boolean>
   /**

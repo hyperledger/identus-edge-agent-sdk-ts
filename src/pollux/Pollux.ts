@@ -24,8 +24,6 @@ import {
   DescriptorItem,
   Authentication,
   CastorError,
-  ProofTypesEnum,
-  ProofPurpose,
   SubmissionDescriptorFormat,
   DefinitionFormat,
 } from "../domain";
@@ -57,8 +55,7 @@ export default class Pollux implements IPollux {
   ) { }
 
   async createPresentationSubmission(
-    presentationDefinition: PresentationDefinitionRequest,
-    challenge: string,
+    presentationDefinitionRequest: PresentationDefinitionRequest,
     credential: Credential,
     privateKey: PrivateKey
   ): Promise<PresentationSubmission> {
@@ -66,8 +63,9 @@ export default class Pollux implements IPollux {
       if (!(privateKey instanceof Secp256k1PrivateKey)) {
         throw new CastorError.InvalidKeyError()
       }
+      const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
 
-      const descriptorItems: DescriptorItem[] = presentationDefinition.inputDescriptors.map(
+      const descriptorItems: DescriptorItem[] = presentation_definition.inputDescriptors.map(
         (inputDescriptor) => {
           if (!inputDescriptor.format || !inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg) {
             //TODO: Improive error
@@ -75,7 +73,7 @@ export default class Pollux implements IPollux {
           }
           return {
             id: inputDescriptor.id,
-            format: "jwt_vc",
+            format: "jwt",
             path: "$.verifiablePresentation[0]"
           }
         });
@@ -99,23 +97,24 @@ export default class Pollux implements IPollux {
         throw new Error("Cannot sign the proof challenge with this key.")
       }
 
+      if (!credential.isProvable()) {
+        throw new Error("Cannot create proofs with this type of credential.")
+
+      }
+
       const jws = await this.jwt.sign(subject, privateKey, {
-        aud: 'N/A',
+        aud: domain,
         nonce: Buffer.from(privateKey.sign(Buffer.from(challenge))).toString('hex'),
-        vp: {
-          "@context": ["https://www.w3.org/2018/presentations/v1"],
-          type: ["VerifiablePresentation"],
-        },
-      })
+        vp: credential.presentation(),
+      });
 
       const presentationSubmission: PresentationSubmission = {
         presentation_submission: {
           id: uuid(),
-          definition_id: presentationDefinition.id,
+          definition_id: presentation_definition.id,
           descriptor_map: descriptorItems
         },
-        verifiable_presentation: [
-          credential.id,
+        verifiablePresentation: [
           jws
         ]
       }
@@ -134,7 +133,7 @@ export default class Pollux implements IPollux {
 
     const {
       presentation_submission,
-      verifiable_presentation,
+      verifiablePresentation,
     } = data;
 
     //Validate required fields
@@ -142,8 +141,8 @@ export default class Pollux implements IPollux {
       return false;
     }
 
-    if (!verifiable_presentation ||
-      !Array.isArray(verifiable_presentation)
+    if (!verifiablePresentation ||
+      !Array.isArray(verifiablePresentation)
     ) {
       return false;
     }
@@ -214,11 +213,17 @@ export default class Pollux implements IPollux {
     }
 
     const presentationDefinitionRequest: PresentationDefinitionRequest = {
-      id: uuid(),
-      inputDescriptors: [
-        inputDescriptor
-      ],
-      format: format
+      presentation_definition: {
+        id: uuid(),
+        inputDescriptors: [
+          inputDescriptor
+        ],
+        format: format,
+      },
+      options: {
+        challenge: options.challenge,
+        domain: options.domain
+      }
     }
 
     return presentationDefinitionRequest
@@ -232,26 +237,32 @@ export default class Pollux implements IPollux {
     const descriptorMapper = new DescriptorPath(presentationSubmission);
     const descriptorMaps = presentationSubmission.presentation_submission.descriptor_map;
     for (let descriptorItem of descriptorMaps) {
-      if (descriptorItem.format === SubmissionDescriptorFormat.JWT_VC) {
+      if (descriptorItem.format === SubmissionDescriptorFormat.JWT) {
         const [jws] = descriptorMapper.getValue(descriptorItem.path);
         if (!jws) {
           throw new Error("Invalid Credential Object");
         }
-        const credential = JWTCredential.fromJWS(jws);
-        const isPrismJWTCredentialType = credential.type !== undefined &&
-          Array.isArray(credential.type) &&
-          credential.type.includes(CredentialType.JWT);
-
+        const presentation = JWTCredential.fromJWS(jws);
+        const credType = presentation.credentialType;
+        const isPrismJWTCredentialType = credType === CredentialType.JWT;
         if (!isPrismJWTCredentialType) {
           throw new Error("Invalid JWT Credential only prism/jwt is supported for jwt_vc");
         }
-        const issuer = credential.issuer;
+        const issuer = presentation.issuer;
         const credentialValid = await this.jwt.verify(issuer, jws);
         if (!credentialValid) {
-          return false
+          return false;
         }
-      } else {
-        debugger;
+        const verifiablePresentation = presentation.vp;
+        const vc = verifiablePresentation.verifiableCredential.at(0)
+        if (!vc) {
+          throw new Error("Invalid VC");
+        }
+        const verifiableCredential = JWTCredential.fromJWS(vc);
+        const verifiableCredentialValid = await this.jwt.verify(verifiableCredential.issuer, verifiableCredential.id);
+        if (!verifiableCredentialValid) {
+          return false;
+        }
       }
     }
     return true;
