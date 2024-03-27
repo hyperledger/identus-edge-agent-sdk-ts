@@ -17,6 +17,19 @@ Given("{actor} has {int} credentials issued by {actor}",
     })
   })
 
+Given("{actor} has {int} anonymous credentials issued by {actor}",
+    async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
+        await Utils.repeat(numberOfIssuedCredentials, async () => {
+            await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
+            await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent)
+            await EdgeAgentWorkflow.acceptCredential(edgeAgent)
+            const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
+            await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
+            await EdgeAgentWorkflow.waitToReceiveCredentialIssuance(edgeAgent, 1)
+            await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, 1)
+        })
+    })
+
 When("{actor} accepts {int} credential offer sequentially from {actor}",
   async function (edgeAgent: Actor, numberOfCredentialOffers: number, cloudAgent: Actor) {
     const recordIdList: string[] = []

@@ -98,7 +98,8 @@ export class CloudAgentWorkflow {
     const credential: CreateIssueCredentialRecordRequest = {
       claims: {
         "name": "automation",
-        "age": "99"
+        "age": "99",
+        "gender": "M"
       },
       automaticIssuance: true,
       issuingDID: CloudAgentConfiguration.publishedDid,
@@ -140,5 +141,53 @@ export class CloudAgentWorkflow {
       ),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
     )
+  }
+
+  static async askForPresentProofAnonCreds(cloudAgent: Actor) {
+
+    const cred_def_id = CloudAgentConfiguration.anoncredDefinitionGuid;
+    const connection_id = await cloudAgent.answer(Notepad.notes().get("connectionId"));
+    const nonce = randomUUID();
+
+    const presentationRequest = JSON.stringify({
+      "connectionId": connection_id,
+      "credentialFormat": "AnonCreds",
+      "anoncredPresentationRequest": {
+        "requested_attributes": {
+          "gender": {
+            "name": "gender",
+            "restrictions": [
+              {
+                "attr::gender::value": "M",
+                "cred_def_id": cred_def_id
+              }
+            ]
+          }
+        },
+        "requested_predicates": {
+          "age": {
+            "name": "age",
+            "p_type": ">=",
+            "p_value": 18,
+            "restrictions": []
+          }
+        },
+        "name": "proof_req_1",
+        "nonce": nonce,
+        "version": "0.1"
+      },
+      "proofs": []
+    });
+
+    // Dispatch:
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations").with(presentationRequest)),
+      Notepad.notes().set("presentationId", LastResponse.body().presentationId)
+    );
+    await cloudAgent.answer(LastResponse.body<string>())
+        .then((responseBody) => {
+          console.log('Response:', responseBody)
+        })
+
   }
 }
