@@ -109,10 +109,6 @@ export class Pluto implements Domain.Pluto {
     this.Repositories = repositoryFactory(store, keyRestoration);
   }
 
-  revokeCredential(uuid: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
   async deleteMessage(id: string): Promise<void> {
     const message = await this.Repositories.Messages.findOne({ id });
     //TODO: Improve error handling
@@ -120,6 +116,7 @@ export class Pluto implements Domain.Pluto {
       await this.Repositories.Messages.delete(message.uuid)
     }
   }
+
 
   async start(): Promise<void> {
     if (this.store.start !== undefined) {
@@ -135,6 +132,16 @@ export class Pluto implements Domain.Pluto {
 
   async getAllCredentials(): Promise<Domain.Credential[]> {
     return this.Repositories.Credentials.get();
+  }
+
+
+  async revokeCredential(credential: Domain.Credential): Promise<void> {
+    if (!credential || !credential.isStorable()) {
+      throw new Error("Credential not found or invalid")
+    }
+    credential.properties.set("revoked", true);
+    const credentialModel = await this.Repositories.Credentials.toModel(credential)
+    await this.Repositories.Credentials.update(credentialModel)
   }
 
 

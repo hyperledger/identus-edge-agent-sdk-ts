@@ -89,11 +89,6 @@ export default class Agent
     public readonly api: Domain.Api = new ApiImpl()
   ) {
     this.pollux = new Pollux(castor);
-
-    this.connectionManager =
-      connectionManager ||
-      new ConnectionsManager(castor, mercury, pluto, mediationHandler, []);
-
     this.agentCredentials = new AgentCredentials(
       apollo,
       castor,
@@ -101,6 +96,18 @@ export default class Agent
       this.pollux,
       seed
     );
+    this.connectionManager =
+      connectionManager ||
+      new ConnectionsManager(
+        castor,
+        mercury,
+        pluto,
+        this.agentCredentials,
+        mediationHandler,
+        []
+      );
+
+
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
@@ -153,8 +160,17 @@ export default class Agent
 
     const store = new PublicMediatorStore(pluto);
     const handler = new BasicMediatorHandler(mediatorDID, mercury, store);
-    const manager = new ConnectionsManager(castor, mercury, pluto, handler);
+    const pollux = new Pollux(castor);
     const seed = params.seed ?? apollo.createRandomSeed().seed;
+
+    const agentCredentials = new AgentCredentials(
+      apollo,
+      castor,
+      pluto,
+      pollux,
+      seed
+    );
+    const manager = new ConnectionsManager(castor, mercury, pluto, agentCredentials, handler);
 
     const agent = new Agent(
       apollo,

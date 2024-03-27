@@ -6,6 +6,7 @@ import type { Pluto } from "../Pluto";
 import { Model } from '../models';
 import { RxDBEncryptedMigrationPlugin } from '../migration';
 import { Domain } from '../..';
+import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 
 export class RxdbStore implements Pluto.Store {
   private _db?: RxDatabase<CollectionsOfDatabase, any, any>;
@@ -17,6 +18,7 @@ export class RxdbStore implements Pluto.Store {
     addRxPlugin(RxDBQueryBuilderPlugin);
     addRxPlugin(RxDBJsonDumpPlugin);
     addRxPlugin(RxDBEncryptedMigrationPlugin);
+    addRxPlugin(RxDBUpdatePlugin);
   }
 
 
@@ -37,13 +39,23 @@ export class RxdbStore implements Pluto.Store {
         ...this.options,
         multiInstance: true
       });
-      const collections = makeCollections(this.collections);
+      const collections = makeCollections(this.collections ?? {});
       await this._db.addCollections(collections);
     }
   }
 
-  update<T extends Domain.Pluto.Storable>(name: string, model: T): Promise<void> {
-    throw new Error('Method not implemented.');
+  async update<T extends Domain.Pluto.Storable>(name: string, model: T): Promise<void> {
+    const table = this.getCollection(name);
+    const row = await table.findOne({
+      selector: {
+        uuid: model.uuid
+      }
+    }).exec();
+    if (row) {
+
+      //Improve error handling when not found
+      await row.patch(model)
+    }
   }
 
   async delete(name: string, uuid: string): Promise<void> {
@@ -53,7 +65,7 @@ export class RxdbStore implements Pluto.Store {
         uuid: uuid
       }
     })
-    //TODO: Improve error handling
+    //TODO: Improve error handling, specially when not found
     await row?.remove();
   }
 
