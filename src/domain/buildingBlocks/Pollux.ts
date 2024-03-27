@@ -88,16 +88,16 @@ export interface Pollux {
    * @returns {boolean} true if the submission is valid or false if it is not
    */
   verifyPresentationSubmission(
-    submission: PresentationSubmission,
+    presentationSubmission: PresentationSubmission,
     options?: Pollux.verifyPresentationSubmission.options.JWT
   ): Promise<boolean>
   verifyPresentationSubmission(
-    submission: PresentationSubmission,
+    presentationSubmission: PresentationSubmission,
     options?: Pollux.verifyPresentationSubmission.options.Anoncreds
   ): Promise<boolean>
   verifyPresentationSubmission(
-    submission: PresentationSubmission,
-    options?: Record<string, any>
+    presentationSubmission: PresentationSubmission,
+    options?: Pollux.verifyPresentationSubmission.options.JWT | Pollux.verifyPresentationSubmission.options.Anoncreds
   ): Promise<boolean>
   /**
    * Process a PresentationRequest with Credential to create a Presentation.
@@ -118,7 +118,9 @@ export namespace Pollux {
     export type options = options.Anoncreds | options.JWT;
     export namespace options {
       export interface Anoncreds { }
-      export interface JWT { }
+      export interface JWT {
+        presentationDefinitionRequest: PresentationDefinitionRequest,
+      }
     }
   }
   export namespace createPresentationProof {

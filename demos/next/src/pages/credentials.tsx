@@ -5,6 +5,7 @@ import { FooterNavigation } from "@/components/FooterNavigation";
 import { Box } from "@/app/Box";
 import { useMountedApp } from "@/reducers/store";
 import { DBConnect } from "@/components/DBConnect";
+import { PageHeader } from "@/components/PageHeader";
 
 function protect(claims) {
     const newClaims: any[] = []
@@ -19,7 +20,7 @@ function protect(claims) {
 }
 
 function Credential({ credential }) {
-
+    const app = useMountedApp();
     const [claims, setClaims] = useState(protect(credential.claims));
 
     function disclose(claimIndex, field) {
@@ -70,9 +71,11 @@ export default function App() {
     return (
         <>
             <div className="mx-10 mt-5 mb-30">
-                <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    Credentials
-                </h1>
+                <PageHeader>
+                    <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                        Credentials
+                    </h1>
+                </PageHeader>
                 <DBConnect>
                     <Box>
                         {

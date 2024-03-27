@@ -21,6 +21,7 @@ import {
   PresentationOptions,
   Mercury,
   PresentationSubmission,
+  PresentationDefinitionRequest,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -274,13 +275,39 @@ export class AgentCredentials implements AgentCredentialsClass {
     return requestCredential;
   }
 
+  private async getPresentationDefinitionByThid(thid: string): Promise<PresentationDefinitionRequest> {
+    const allMessages = (await this.pluto.getAllMessages())
+    const message = allMessages.find((message) => {
+      return message.thid === thid && message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation"
+    });
+    if (message) {
+      const attachment = message.attachments.at(0);
+      if (!attachment) {
+        throw new Error("Invalid presentation message, attachment missing")
+      }
+      const presentationDefinitionRequest = Message.Attachment.extractJSON(attachment);
+      return presentationDefinitionRequest
+    }
+    throw new Error("Cannot find any message with that threadID");
+  }
+
   async handlePresentation(presentation: Presentation): Promise<Boolean> {
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
       throw new Error("Invalid presentation message, attachment missing")
     }
-    const presentationSubmission = Message.Attachment.extractJSON(attachment);
-    const verified = await this.pollux.verifyPresentationSubmission(JSON.parse(presentationSubmission))
+    if (!presentation.thid) {
+      throw new Error("Invalid presentation message, does not contain thid, we can't fetch definition")
+    }
+    const presentationSubmission = JSON.parse(Message.Attachment.extractJSON(attachment));
+    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid(presentation.thid!)
+    const options = {
+      presentationDefinitionRequest
+    }
+    const verified = await this.pollux.verifyPresentationSubmission(
+      presentationSubmission,
+      options
+    )
     return verified
   }
 

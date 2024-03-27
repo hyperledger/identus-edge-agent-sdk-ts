@@ -1,4 +1,3 @@
-import { PresentationSubmission } from "../../domain";
 
 
 
@@ -6,10 +5,10 @@ import { PresentationSubmission } from "../../domain";
 
 export class DescriptorPath {
 
-    constructor(private obj: PresentationSubmission) { }
+    constructor(private obj: any) { }
 
-    getValue(path: string): any {
-        const segments = path.split(/\.|\[|\]/).filter(segment => segment !== '').slice(1, -1)
+    getValue(path: string): null | any {
+        const segments = path.split(/\.|\[|\]/).filter(segment => segment !== '').slice(1)
         let currentObj: any = this.obj;
         for (const segment of segments) {
             if (Array.isArray(currentObj)) {
@@ -18,10 +17,10 @@ export class DescriptorPath {
                     throw new Error(`Array index ${segment} out of bounds.`);
                 }
                 currentObj = currentObj[index];
-            } else if (currentObj && typeof currentObj === 'object' && currentObj.hasOwnProperty(segment)) {
+            } else if (currentObj && typeof currentObj === 'object' && currentObj[segment] !== undefined) {
                 currentObj = currentObj[segment];
             } else {
-                throw new Error(`Property '${segment}' does not exist.`);
+                return null
             }
         }
         return currentObj;

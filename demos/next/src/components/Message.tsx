@@ -301,7 +301,8 @@ export function Message({ message }) {
                                 debugger;
                             })
                             .catch((err) => {
-                                setOptions({ valid: false });
+                                debugger;
+                                setOptions({ valid: false, reason: err.message });
                             })
                     }}>Verify the Proof</button>
                     {
@@ -310,7 +311,7 @@ export function Message({ message }) {
                                 options.valid === true && <p>Presentation is VALID</p>
                             }
                             {
-                                options.valid === false && <p>Presentation is NOT VALID</p>
+                                options.valid === false && <p>Presentation is NOT VALID: {options.reason || 'unknown'} </p>
                             }
                         </>}
                 </p>
