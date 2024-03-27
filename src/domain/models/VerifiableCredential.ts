@@ -21,10 +21,23 @@ export interface VerifiableCredentialTypeContainer {
   type: string;
 }
 
+export type PredicateType = string | number
+
+export type Claims = {
+  [name: string]: InputFieldFilter
+}
+export interface PresentationClaims {
+  schema?: string;
+  issuer?: string;
+  claims: Claims
+}
 
 export type InputFieldFilter = {
   type: string,
-  pattern: string
+  pattern?: string,
+  enum?: PredicateType[],
+  const?: PredicateType[],
+  value?: PredicateType
 }
 
 export type InputField = {

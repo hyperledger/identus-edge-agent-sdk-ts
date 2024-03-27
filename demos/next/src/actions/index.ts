@@ -8,6 +8,7 @@ import SDK from "@atala/prism-wallet-sdk";
 import { sha512 } from '@noble/hashes/sha512'
 import { RootState, reduxActions } from "@/reducers/app";
 import IndexDB from '@pluto-encrypted/indexdb'
+import { PresentationClaims } from "../../../../src/domain";
 
 
 const Agent = SDK.Agent;
@@ -178,27 +179,20 @@ export const initiatePresentationRequest = createAsyncThunk<
     {
         agent: SDK.Agent,
         toDID: SDK.Domain.DID,
-        trustIssuers: string[],
-        requiredFields: string[]
+        presentationClaims: PresentationClaims
     }
 >("initiatePresentationRequest", async (options, api) => {
     try {
         const {
             agent,
-            trustIssuers,
-            requiredFields,
+            presentationClaims,
             toDID
         } = options;
 
         await agent.initiatePresentationRequest(
             SDK.Domain.CredentialType.JWT,
             toDID,
-            [
-                {
-                    trustIssuers: trustIssuers,
-                    requiredFields: requiredFields
-                }
-            ]
+            presentationClaims
         );
 
         return api.fulfillWithValue(null)

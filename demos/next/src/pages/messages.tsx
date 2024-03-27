@@ -1,4 +1,4 @@
-
+import SDK from "@atala/prism-wallet-sdk";
 import React, { useEffect, useState } from "react";
 import '../app/index.css'
 import { FooterNavigation } from "@/components/FooterNavigation";
@@ -7,6 +7,9 @@ import { useMountedApp } from "@/reducers/store";
 import { DBConnect } from "@/components/DBConnect";
 import { Message } from "@/components/Message";
 import { PageHeader } from "@/components/PageHeader";
+
+
+
 
 export default function App() {
     const app = useMountedApp();

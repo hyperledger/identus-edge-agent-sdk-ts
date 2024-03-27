@@ -12,10 +12,16 @@ import { AgentRequire } from "@/components/AgentRequire";
 import { PageHeader } from "@/components/PageHeader";
 
 const ListenerKey = SDK.ListenerKey;
-
+function removeDuplicates(messages: SDK.Domain.Message[]) {
+    const uniqueMessages = new Map();
+    messages.forEach(message => {
+        uniqueMessages.set(message.id, message);
+    });
+    return Array.from(uniqueMessages.values());
+}
 const Verification: React.FC<{}> = props => {
     const app = useMountedApp();
-    const { db, mediatorDID, initAgent, startAgent, stopAgent } = app;
+    const { db, mediatorDID, initAgent } = app;
 
     const agent = app.agent.instance;
 
@@ -28,25 +34,25 @@ const Verification: React.FC<{}> = props => {
         setMessages(app.messages)
     }, [app.messages, app.db])
 
-    const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress")
-    const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:64dab5c8e887c705e3079f61373929eecfc4f570952adaef7a04192b50cb3138")
+    const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress=javier.ribo@iohk.io")
+    const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:be0f14c426a73c12498a3f9966adbcc46f7288f27191bc02e53eb04b7992f123")
 
     const handleMessages = async (
         newMessages: SDK.Domain.Message[]
     ) => {
-        setMessages([
+        setMessages(removeDuplicates([
             ...newMessages,
             ...messages,
-        ] as any)
+        ] as any))
     };
 
     useEffect(() => {
-        setMessages([
+        setMessages(removeDuplicates([
             ...messages
                 .filter(({ id }) => app.messages.find((appMessage) => appMessage.id === id) !== undefined)
                 .map(({ id }) => app.messages.find((appMessage) => appMessage.id === id)!),
             ...(app.messages || [])
-        ].filter(({ piuri }) => piuri === "https://didcomm.atalaprism.io/present-proof/3.0/presentation"))
+        ]).filter(({ piuri }) => piuri === "https://didcomm.atalaprism.io/present-proof/3.0/presentation"))
     }, [app.messages, db.connected]);
 
     useEffect(() => {
@@ -75,11 +81,28 @@ const Verification: React.FC<{}> = props => {
             [],
             true
         ).then((did) => {
+            const claims = requiredFields.split(",").reduce<SDK.Domain.Claims>((all, requiredField) => {
+                const [varName, varValue] = requiredField.split("=");
+                if (typeof varValue === "string") {
+                    all[varName] = {
+                        type: 'string',
+                        pattern: varValue
+                    }
+                } else {
+                    all[varName] = {
+                        type: 'string',
+                        value: varValue
+                    }
+                }
+                return all
+            }, {});
             return app.initiatePresentationRequest({
                 agent: agent,
                 toDID: did,
-                trustIssuers: trustIssuers.split(","),
-                requiredFields: requiredFields.split(",")
+                presentationClaims: {
+                    issuer: trustIssuers.split(",").at(0),
+                    claims: claims
+                }
             })
         })
     }
@@ -100,7 +123,7 @@ const Verification: React.FC<{}> = props => {
                                     <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
                                         Initiate Verification request
                                     </h1>
-                                    <label htmlFor="mediatordid">Required fields by ,</label>
+                                    <label htmlFor="mediatordid">Required claims by variable=value,</label>
                                     <input
                                         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
@@ -124,7 +147,7 @@ const Verification: React.FC<{}> = props => {
                                 </Box>
                             </AgentRequire>
                             <>
-                                {messages.reverse().map((message, i) => {
+                                {messages.map((message, i) => {
                                     return <Message message={message} key={`responseField${i}`} />
                                 })}
                             </>

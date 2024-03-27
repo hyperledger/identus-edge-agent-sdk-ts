@@ -22,6 +22,7 @@ import {
   Mercury,
   PresentationSubmission,
   PresentationDefinitionRequest,
+  PresentationClaims,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -63,7 +64,7 @@ export class AgentCredentials implements AgentCredentialsClass {
   async initiatePresentationRequest(
     type: CredentialType,
     toDID: DID,
-    proofTypes: ProofTypes[]): Promise<RequestPresentation> {
+    claims: PresentationClaims): Promise<RequestPresentation> {
 
     const didDocument = await this.castor.resolveDID(toDID.toString());
     const newPeerDID = await this.agentDIDHigherFunctions.createNewPeerDID(
@@ -81,9 +82,10 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest(
       type,
-      proofTypes,
+      claims,
       options
     );
+
     const attachment = AttachmentDescriptor.build(
       presentationDefinitionRequest,
       uuid(),
@@ -93,7 +95,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     )
 
     const requestPresentationBody: RequestPresentationBody = {
-      proofTypes: proofTypes,
+      proofTypes: [],
     }
 
     const presentationRequest = new RequestPresentation(

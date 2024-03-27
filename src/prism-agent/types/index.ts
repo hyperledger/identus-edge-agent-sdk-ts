@@ -9,6 +9,7 @@ import {
   Pollux,
   CredentialType,
   PrivateKey,
+  PresentationClaims,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
@@ -20,7 +21,6 @@ import { RequestCredential } from "../protocols/issueCredential/RequestCredentia
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { RequestPresentation } from "../protocols/proofPresentation/RequestPresentation";
 import { Presentation } from "../protocols/proofPresentation/Presentation";
-import { ProofTypes } from "../protocols/types";
 
 interface InvitationInterface {
   type: InvitationTypes;
@@ -67,7 +67,7 @@ export interface AgentCredentials {
   initiatePresentationRequest(
     type: CredentialType,
     toDID: DID,
-    proofTypes: ProofTypes[]
+    claims: PresentationClaims
   ): Promise<RequestPresentation>;
 
   createPresentationForRequestProof(

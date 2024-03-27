@@ -1,3 +1,4 @@
+import { PredicateType } from "../../domain";
 import { CredentialFormat } from "./issueCredential/CredentialFormat";
 import { CredentialPreview } from "./issueCredential/CredentialPreview";
 
@@ -82,6 +83,7 @@ export interface ProofTypes {
   requiredFields?: string[];
   trustIssuers?: string[];
 }
+
 
 export interface HandshakeRequestBody {
   goalCode?: string;

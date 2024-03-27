@@ -14,8 +14,12 @@ export class DescriptorPath {
             if (Array.isArray(currentObj)) {
                 const index = parseInt(segment);
                 if (isNaN(index) || index >= currentObj.length) {
-                    throw new Error(`Array index ${segment} out of bounds.`);
+                    return null
                 }
+                if (!currentObj[index]) {
+                    return null;
+                }
+
                 currentObj = currentObj[index];
             } else if (currentObj && typeof currentObj === 'object' && currentObj[segment] !== undefined) {
                 currentObj = currentObj[segment];

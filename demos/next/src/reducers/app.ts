@@ -63,6 +63,13 @@ export type RootState = {
     }
 };
 
+function removeDuplicates(messages: SDK.Domain.Message[]) {
+    const uniqueMessages = new Map();
+    messages.forEach(message => {
+        uniqueMessages.set(message.id, message);
+    });
+    return Array.from(uniqueMessages.values());
+}
 
 const appSlice = createSlice({
     name: "app",
@@ -84,7 +91,7 @@ const appSlice = createSlice({
             state,
             action: PayloadAction<SDK.Domain.Message[]>
         ) => {
-            state.messages = [
+            state.messages = removeDuplicates([
                 ...action.payload,
                 ...state.messages.map((oldMessage) => {
                     if (action.payload.find((m) => m.thid === oldMessage.thid)) {
@@ -97,7 +104,7 @@ const appSlice = createSlice({
                     return oldMessage
                 }),
 
-            ] as any;
+            ]);
         },
     },
     extraReducers: (builder) => {

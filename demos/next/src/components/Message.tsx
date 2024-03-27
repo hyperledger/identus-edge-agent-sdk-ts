@@ -289,7 +289,7 @@ export function Message({ message }) {
             <div>
                 <p
                     className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-                    <b>Verification Proof </b> {message.id} {message.direction}
+                    <b>Verification Proof </b> {message.id}
                 </p>
                 <p
                     className="overflow-x-auto h-auto text-sm font-normal text-gray-500dark:text-gray-400">
@@ -320,26 +320,13 @@ export function Message({ message }) {
     }
 
     if (message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation") {
+        const requestPresentation = SDK.RequestPresentation.fromMessage(message)
+        const presentationRequest: SDK.Domain.PresentationDefinitionRequest = requestPresentation.decodedAttachments.at(0)
 
-        const proofTypes = body.proofTypes || body.proof_types;
-        const requiredFields = proofTypes.reduce((all, pt) => {
-            const entry = {
-                ...pt,
-                requiredFields: ['all']
-            }
-            if (pt.requiredFields) {
-                entry.requiredFields = pt.requiredFields;
-            }
-            entry.credentials = app.credentials;
-            return [
-                ...all,
-                entry
-            ];
-        }, []);
+        const inputDescriptorField = presentationRequest.presentation_definition.inputDescriptors.at(0)?.constraints.fields ?? [];
 
-        const credentials = requiredFields.reduce((all, field) => {
-            return [...all, ...field.credentials]
-        }, [])
+
+        const credentials = app.credentials;
 
         return <div
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
@@ -352,11 +339,17 @@ export function Message({ message }) {
 
                 Should proof the following claims:
                 {
-                    requiredFields.map((field, i) => {
+                    inputDescriptorField.map((field, i) => {
                         return <div
                             key={`field${i}`}
                         >
-                            <p className=" text-sm font-normal text-gray-500 dark:text-gray-400"> {field.requiredFields.join(", ")} from issuer({field.trustIssuers.at(0)}) and schema {field.schema ?? 'any'}</p>
+                            <p className=" text-sm font-normal text-gray-500 dark:text-gray-400">
+                                {
+                                    field.name
+                                } must match {
+                                    JSON.stringify(field.filter)
+                                }
+                            </p>
                         </div>
 
                     })

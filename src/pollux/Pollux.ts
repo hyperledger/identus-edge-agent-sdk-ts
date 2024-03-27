@@ -26,6 +26,7 @@ import {
   CastorError,
   SubmissionDescriptorFormat,
   DefinitionFormat,
+  PresentationClaims,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
@@ -79,34 +80,21 @@ export default class Pollux implements IPollux {
         });
 
       const subject = credential.subject;
-      const didDocument = await this.castor.resolveDID(subject);
-      const authenticationKey = didDocument.coreProperties.find((key) => {
-        return key instanceof Authentication
-      });
-
-      if (!authenticationKey) {
-        throw new CastorError.InvalidKeyError()
-      }
-
-      const verificationMethod = (authenticationKey as Authentication).verificationMethods.at(0)?.id;
-      if (!verificationMethod) {
-        throw new CastorError.InvalidKeyError()
-      }
-
       if (!privateKey.isSignable()) {
         throw new Error("Cannot sign the proof challenge with this key.")
       }
 
       if (!credential.isProvable()) {
         throw new Error("Cannot create proofs with this type of credential.")
-
       }
 
-      const jws = await this.jwt.sign(subject, privateKey, {
+
+      const payload = {
         aud: domain,
         nonce: Buffer.from(privateKey.sign(Buffer.from(challenge))).toString('hex'),
         vp: credential.presentation(),
-      });
+      }
+      const jws = await this.jwt.sign(subject, privateKey, payload);
 
       const presentationSubmission: PresentationSubmission = {
         presentation_submission: {
@@ -152,7 +140,7 @@ export default class Pollux implements IPollux {
 
   async createPresentationDefinitionRequest(
     type: CredentialType,
-    proofs: ProofTypes[],
+    presentationClaims: PresentationClaims,
     options: PresentationOptions
   ): Promise<PresentationDefinitionRequest> {
     if (type !== CredentialType.JWT) {
@@ -169,14 +157,7 @@ export default class Pollux implements IPollux {
       throw new PolluxError.InvalidJWTPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
     }
 
-    const paths =
-      proofs.reduce<string[]>((all, proof) => {
-        return [
-          ...all,
-          ...(proof.requiredFields ?? []),
-        ]
-      }, []);
-
+    const paths = Object.keys(presentationClaims.claims);
     const constaints: InputConstraints = {
       fields: paths.map((path) => {
         const inputField: InputField = {
@@ -184,18 +165,27 @@ export default class Pollux implements IPollux {
             `$.vc.credentialSubject.${path}`
           ],
           id: uuid(),
-          optional: false
+          optional: false,
+          filter: presentationClaims.claims[path],
+          name: path
         }
         return inputField
       }),
       limitDisclosure: InputLimitDisclosure.REQUIRED
     };
 
-    constaints.fields.push({
-      path: ["$.issuer", "$.iss", "$.vc.iss", "$.vc.issuer"],
-      id: uuid(),
-      optional: false
-    })
+    if (presentationClaims.issuer) {
+      constaints.fields.push({
+        path: ["$.issuer", "$.iss", "$.vc.iss", "$.vc.issuer"],
+        id: uuid(),
+        optional: false,
+        name: "issuer",
+        filter: {
+          type: "string",
+          pattern: presentationClaims.issuer
+        }
+      })
+    }
 
     const format: DefinitionFormat = {
       jwt: {
@@ -262,7 +252,6 @@ export default class Pollux implements IPollux {
         if (!isPrismJWTCredentialType) {
           throw new InvalidVerifyCredentialError(jws, "Invalid JWT Credential only prism/jwt is supported for jwt");
         }
-        //TODO CHECK THIS INMEDIATELY
         const issuer = presentation.issuer;
         const credentialValid = await this.jwt.verify(issuer, jws);
         if (!credentialValid) {
@@ -292,25 +281,36 @@ export default class Pollux implements IPollux {
               ];
               const optional = field.optional;
               if (!optional) {
-                let pathFound = false;
-                while (paths.length && !pathFound) {
+                let validClaim = false;
+                while (paths.length && !validClaim) {
                   const [path] = paths.splice(0, 1);
                   if (path) {
                     const fieldInVC = verifiableCredentialPropsMapper.getValue(path);
-                    pathFound = fieldInVC !== null ? true : false;
+                    if (field.filter && fieldInVC !== null) {
+                      const filter = field.filter;
+                      if (filter.pattern) {
+                        const pattern = new RegExp(filter.pattern);
+                        validClaim = pattern.test(fieldInVC) || fieldInVC === filter.pattern;
+                      } else if (filter.enum) {
+                        validClaim = filter.enum.includes(fieldInVC)
+                      } else if (filter.pattern && fieldInVC === filter.pattern) {
+                        validClaim = fieldInVC === filter.pattern;
+                      }
+                    }
                   }
                 }
-                if (!pathFound) {
-                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${field.path.join(',')} paths cannot be found in the vc field.`);
+                if (!validClaim) {
+                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${field.path.join(',')} paths are not found or have unexpected value.`);
                 }
               }
             }
           }
         }
+        return true;
       }
 
     }
-    return true;
+    return false;
   }
 
   async start() {

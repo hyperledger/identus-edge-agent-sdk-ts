@@ -1,10 +1,9 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { CredentialType, DID, LinkSecret, Message, PresentationDefinitionRequest, PresentationSubmission, PrivateKey, PublicKey } from "../models";
+import { CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationSubmission, PrivateKey, PublicKey } from "../models";
 import { Anoncreds } from "../models/Anoncreds";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
-import { ProofTypes } from "../../prism-agent/protocols/types";
 
 type CredentialRequestTuple<
   T1 = Anoncreds.CredentialRequest,
@@ -69,7 +68,7 @@ export interface Pollux {
    */
   createPresentationDefinitionRequest(
     type: CredentialType,
-    proofs: ProofTypes[],
+    claims: PresentationClaims,
     options: PresentationOptions
   ): Promise<PresentationDefinitionRequest>
 
@@ -102,7 +101,7 @@ export interface Pollux {
   /**
    * Process a PresentationRequest with Credential to create a Presentation.
    * 
-   * @param {PresentationRequest} presentationRequest
+   * @param {PresentationRequest} presentationRºequest
    * @param {Credential} credential 
    * @param options - object containing necessary metadata
    * @returns dependent on the CredentialType 

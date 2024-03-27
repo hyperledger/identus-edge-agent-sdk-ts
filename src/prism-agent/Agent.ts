@@ -535,11 +535,11 @@ export default class Agent
    * @param {ProofTypes[]} proofTypes[]
    * @returns 
    */
-  async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, proofTypes: ProofTypes[]): Promise<RequestPresentation> {
+  async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims): Promise<RequestPresentation> {
     const requestPresentation = await this.agentCredentials.initiatePresentationRequest(
       type,
       toDID,
-      proofTypes
+      presentationClaims
     );
 
     const requestPresentationMessage = requestPresentation.makeMessage()
