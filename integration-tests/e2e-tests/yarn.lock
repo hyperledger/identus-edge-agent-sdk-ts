@@ -24,7 +24,7 @@
 
 "@atala/prism-wallet-sdk@^5.0.0":
   version "5.0.0"
-  resolved "https://registry.npmjs.org/@atala/prism-wallet-sdk/-/prism-wallet-sdk-5.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/@atala/prism-wallet-sdk/-/prism-wallet-sdk-5.0.0.tgz#683e2180e343abb71b8d13b4a9008babc4d664d0"
   integrity sha512-S7Jp/8ug6djr/CRGfBzUozo762bJsfSLIPTTRLVI730o+TFBesyUbyrfB2wb82xl9Hd31BsVcO71yjki77/PVw==
   dependencies:
     "@atala/apollo" "^1.2.10"
@@ -3107,9 +3107,9 @@ jackspeak@^2.3.5:
     "@pkgjs/parseargs" "^0.11.0"
 
 jose@^4.12.2:
-  version "4.15.4"
-  resolved "https://registry.npmjs.org/jose/-/jose-4.15.4.tgz"
-  integrity sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==
+  version "4.15.5"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.15.5.tgz#6475d0f467ecd3c630a1b5dadd2735a7288df706"
+  integrity sha512-jc7BFxgKPKi94uOvEmzlSWFFe2+vASyXaKUpdQKatWAESU2MWjDfFf0fdfc83CDKcA5QecabZeNLyfhe3yKNkg==
 
 js-base64@3.7.5:
   version "3.7.5"

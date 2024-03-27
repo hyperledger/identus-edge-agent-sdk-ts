@@ -135,7 +135,6 @@ class MessageQueue {
       if (!this.isEmpty()) {
         const message: Message = this.dequeue();
         // checks if sdk already received message
-        console.log("&&& Message: ", message.piuri)
         if (this.receivedMessages.includes(message.id)) {
           return;
         }

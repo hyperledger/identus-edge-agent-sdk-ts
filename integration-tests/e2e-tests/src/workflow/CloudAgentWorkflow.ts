@@ -145,12 +145,13 @@ export class CloudAgentWorkflow {
 
   static async askForPresentProofAnonCreds(cloudAgent: Actor) {
 
-    const cred_def_id = CloudAgentConfiguration.anoncredDefinitionGuid;
-    const connection_id = await cloudAgent.answer(Notepad.notes().get("connectionId"));
-    const nonce = randomUUID();
-
-    const presentationRequest = JSON.stringify({
-      "connectionId": connection_id,
+    const cred_def_id = CloudAgentConfiguration.agentUrl +
+      "credential-definition-registry/definitions/" +
+      CloudAgentConfiguration.anoncredDefinitionGuid +
+      "/definition";
+    const connectionId = await cloudAgent.answer(Notepad.notes().get("connectionId"));
+    const presentationRequest = {
+      "connectionId": connectionId,
       "credentialFormat": "AnonCreds",
       "anoncredPresentationRequest": {
         "requested_attributes": {
@@ -173,21 +174,16 @@ export class CloudAgentWorkflow {
           }
         },
         "name": "proof_req_1",
-        "nonce": nonce,
+        "nonce": randomUUID(),
         "version": "0.1"
       },
       "proofs": []
-    });
+    }
 
     // Dispatch:
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("present-proof/presentations").with(presentationRequest)),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
-    );
-    await cloudAgent.answer(LastResponse.body<string>())
-        .then((responseBody) => {
-          console.log('Response:', responseBody)
-        })
-
+    )
   }
 }
