@@ -37,14 +37,13 @@ export class Utils {
   }
 
   static generateNonce(length: number): string {
-    const bytesNeeded = Math.ceil(length * 0.75)
-    const randomBytes = crypto.randomBytes(bytesNeeded)
-
     let result = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(i * 0.75)
-      const randomByte = randomBytes[randomIndex];
-      const randomDigit = randomByte % 10
+    while (result.length < length) {
+      const byte = crypto.randomBytes(1)[0]
+      if (byte >= 250) {
+        continue;
+      }
+      const randomDigit = byte % 10
       result += randomDigit.toString()
     }
     return result;
