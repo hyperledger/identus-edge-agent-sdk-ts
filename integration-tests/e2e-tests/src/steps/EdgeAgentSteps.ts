@@ -18,17 +18,17 @@ Given("{actor} has {int} credentials issued by {actor}",
   })
 
 Given("{actor} has {int} anonymous credentials issued by {actor}",
-    async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
-        await Utils.repeat(numberOfIssuedCredentials, async () => {
-            await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
-            await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent)
-            await EdgeAgentWorkflow.acceptCredential(edgeAgent)
-            const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
-            await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
-            await EdgeAgentWorkflow.waitToReceiveCredentialIssuance(edgeAgent, 1)
-            await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, 1)
-        })
+  async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
+    await Utils.repeat(numberOfIssuedCredentials, async () => {
+      await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
+      await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent)
+      await EdgeAgentWorkflow.acceptCredential(edgeAgent)
+      const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
+      await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
+      await EdgeAgentWorkflow.waitToReceiveCredentialIssuance(edgeAgent, 1)
+      await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, 1)
     })
+  })
 
 When("{actor} accepts {int} credential offer sequentially from {actor}",
   async function (edgeAgent: Actor, numberOfCredentialOffers: number, cloudAgent: Actor) {
@@ -55,18 +55,18 @@ When("{actor} accepts {int} credentials offer at once from {actor}",
     await cloudAgent.attemptsTo(Notepad.notes().set("recordIdList", recordIdList))
 
     await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, numberOfCredentials)
-    
+
     await Utils.repeat(numberOfCredentials, async () => {
       await EdgeAgentWorkflow.acceptCredential(edgeAgent)
     })
   })
 
-When("{actor} connects through the invite", 
+When("{actor} connects through the invite",
   async function (edgeAgent: Actor) {
     await EdgeAgentWorkflow.connect(edgeAgent)
   })
 
-When("{actor} accepts the credential", 
+When("{actor} accepts the credential",
   async function (edgeAgent: Actor) {
     await EdgeAgentWorkflow.acceptCredential(edgeAgent)
   })
@@ -77,12 +77,12 @@ When("{actor} sends the present-proof",
     await EdgeAgentWorkflow.presentProof(edgeAgent)
   })
 
-Then("{actor} should receive the credential", 
+Then("{actor} should receive the credential",
   async function (edgeAgent: Actor) {
     await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent)
   })
 
-Then("{actor} process {int} issued credentials", 
+Then("{actor} process {int} issued credentials",
   async function (edgeAgent: Actor, numberOfCredentials: number) {
     await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, numberOfCredentials)
   })
