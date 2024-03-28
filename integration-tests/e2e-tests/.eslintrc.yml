@@ -1,6 +1,7 @@
 root: true
 ignorePatterns:
   - target
+  - InMemoryStore.ts
 env:
   node: true
 extends:
