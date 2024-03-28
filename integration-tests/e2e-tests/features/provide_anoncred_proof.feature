@@ -8,4 +8,3 @@ Feature: Provide proof
     When Cloud Agent asks for presentation of AnonCred proof
     And Edge Agent sends the present-proof
     Then Cloud Agent should see the present-proof is verified
-    

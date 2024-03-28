@@ -13,6 +13,7 @@ import {
   RequestPresentationInput,
 } from "@hyperledger-labs/open-enterprise-agent-ts-client"
 import {CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
+import { Utils } from "../Utils"
 
 export class CloudAgentWorkflow {
   static async createConnection(cloudAgent: Actor, label?: string, goalCode?: string, goal?: string) {
@@ -170,7 +171,7 @@ export class CloudAgentWorkflow {
           }
         },
         name: "proof_req_1",
-        nonce: "1103253414365527824079144",
+        nonce: Utils.generateNonce(25),
         version: "0.1"
       },
       proofs: [],
