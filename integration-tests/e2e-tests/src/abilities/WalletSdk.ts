@@ -1,45 +1,45 @@
-import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core";
-import SDK from "@atala/prism-wallet-sdk";
-import { Message } from "@atala/prism-wallet-sdk/build/typings/domain";
-import axios from "axios";
-import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration";
-import { Utils } from "../Utils";
-import { InMemoryStore } from "../configuration/InMemoryStore";
+import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
+import SDK from "@atala/prism-wallet-sdk"
+import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
+import axios from "axios"
+import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
+import { Utils } from "../Utils"
+import { InMemoryStore } from "../configuration/InMemoryStore"
 
-const { Agent, Apollo, Domain, ListenerKey, } = SDK;
+const { Agent, Apollo, Domain, ListenerKey, } = SDK
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
-  sdk!: SDK.Agent;
-  messages: MessageQueue = new MessageQueue();
+  sdk!: SDK.Agent
+  messages: MessageQueue = new MessageQueue()
 
   static async withANewInstance(): Promise<Ability> {
     const instance: SDK.Agent = await Utils.retry(2, async () => {
-      return await WalletSdkBuilder.createInstance();
-    });
-    return new WalletSdk(instance);
+      return await WalletSdkBuilder.createInstance()
+    })
+    return new WalletSdk(instance)
   }
 
   constructor(sdk: SDK.Agent) {
-    super();
-    this.sdk = sdk;
+    super()
+    this.sdk = sdk
   }
 
   static credentialOfferStackSize(): QuestionAdapter<number> {
     return Question.about("credential offer stack", actor => {
-      return WalletSdk.as(actor).messages.credentialOfferStack.length;
-    });
+      return WalletSdk.as(actor).messages.credentialOfferStack.length
+    })
   }
 
   static issuedCredentialStackSize(): QuestionAdapter<number> {
     return Question.about("issued credential stack", actor => {
-      return WalletSdk.as(actor).messages.issuedCredentialStack.length;
-    });
+      return WalletSdk.as(actor).messages.issuedCredentialStack.length
+    })
   }
 
   static proofOfRequestStackSize(): QuestionAdapter<number> {
     return Question.about("proof of request stack", actor => {
-      return WalletSdk.as(actor).messages.proofRequestStack.length;
-    });
+      return WalletSdk.as(actor).messages.proofRequestStack.length
+    })
   }
 
   static execute(callback: (sdk: SDK.Agent, messages: {
@@ -52,46 +52,46 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
         credentialOfferStack: WalletSdk.as(actor).messages.credentialOfferStack,
         issuedCredentialStack: WalletSdk.as(actor).messages.issuedCredentialStack,
         proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack
-      });
-    });
+      })
+    })
   }
 
   async discard(): Promise<void> {
-    await this.sdk.stop();
+    await this.sdk.stop()
   }
 
   async initialise(): Promise<void> {
     this.sdk.addListener(
       ListenerKey.MESSAGE, (messages: SDK.Domain.Message[]) => {
         for (const message of messages) {
-          this.messages.enqueue(message);
+          this.messages.enqueue(message)
         }
       }
-    );
+    )
 
-    await this.sdk.start();
+    await this.sdk.start()
   }
 
   isInitialised(): boolean {
-    return this.sdk.state != "stopped";
+    return this.sdk.state != "stopped"
   }
 }
 
 class WalletSdkBuilder {
   private static async getMediatorDidThroughOob(): Promise<string> {
-    const response = await axios.get(CloudAgentConfiguration.mediatorOobUrl);
-    const encodedData = response.data.split("?_oob=")[1];
-    const oobData = JSON.parse(Buffer.from(encodedData, "base64").toString());
-    return oobData.from;
+    const response = await axios.get(CloudAgentConfiguration.mediatorOobUrl)
+    const encodedData = response.data.split("?_oob=")[1]
+    const oobData = JSON.parse(Buffer.from(encodedData, "base64").toString())
+    return oobData.from
   }
 
   static async createInstance() {
-    const apollo = new Apollo();
-    const store = new InMemoryStore();
-    const pluto = new SDK.Pluto(store, apollo);
-    const mediatorDID = Domain.DID.fromString(await WalletSdkBuilder.getMediatorDidThroughOob());
+    const apollo = new Apollo()
+    const store = new InMemoryStore()
+    const pluto = new SDK.Pluto(store, apollo)
+    const mediatorDID = Domain.DID.fromString(await WalletSdkBuilder.getMediatorDidThroughOob())
 
-    return Agent.initialize({ apollo, pluto, mediatorDID });
+    return Agent.initialize({ apollo, pluto, mediatorDID })
   }
 }
 
@@ -99,59 +99,59 @@ class WalletSdkBuilder {
  * Helper class for message queueing processor
  */
 class MessageQueue {
-  private processingId: NodeJS.Timeout | null = null;
-  private queue: Message[] = [];
+  private processingId: NodeJS.Timeout | null = null
+  private queue: Message[] = []
 
-  credentialOfferStack: Message[] = [];
-  proofRequestStack: Message[] = [];
-  issuedCredentialStack: Message[] = [];
-  receivedMessages: string[] = [];
+  credentialOfferStack: Message[] = []
+  proofRequestStack: Message[] = []
+  issuedCredentialStack: Message[] = []
+  receivedMessages: string[] = []
 
   enqueue(message: Message) {
-    this.queue.push(message);
+    this.queue.push(message)
 
     // auto start processing messages
     if (!this.processingId) {
-      this.processMessages();
+      this.processMessages()
     }
   }
 
   dequeue(): Message {
-    return this.queue.shift()!;
+    return this.queue.shift()!
   }
 
   // Check if the queue is empty
   isEmpty(): boolean {
-    return this.queue.length === 0;
+    return this.queue.length === 0
   }
 
   // Get the number of messages in the queue
   size(): number {
-    return this.queue.length;
+    return this.queue.length
   }
 
   processMessages() {
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
-        const message: Message = this.dequeue();
+        const message: Message = this.dequeue()
         // checks if sdk already received message
         if (this.receivedMessages.includes(message.id)) {
-          return;
+          return
         }
 
-        this.receivedMessages.push(message.id);
+        this.receivedMessages.push(message.id)
 
         if (message.piuri.includes("/offer-credential")) {
-          this.credentialOfferStack.push(message);
+          this.credentialOfferStack.push(message)
         } else if (message.piuri.includes("/present-proof")) {
-          this.proofRequestStack.push(message);
+          this.proofRequestStack.push(message)
         } else if (message.piuri.includes("/issue-credential")) {
-          this.issuedCredentialStack.push(message);
+          this.issuedCredentialStack.push(message)
         }
       } else {
-        clearInterval(this.processingId!);
-        this.processingId = null;
+        clearInterval(this.processingId!)
+        this.processingId = null
       }
-    }, 50);
+    }, 50)
   }
 }

@@ -1,8 +1,8 @@
 root: true
 ignorePatterns:
   - target
+  - InMemoryStore.ts
 env:
-  esnext: true
   node: true
 extends:
   - eslint:recommended
