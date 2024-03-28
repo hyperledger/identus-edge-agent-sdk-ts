@@ -1,4 +1,5 @@
-import {appendFile, writeFileSync} from "fs"
+import { appendFile, writeFileSync } from "fs"
+import crypto from "crypto"
 
 export class Utils {
   static prepareNotes() {
@@ -8,7 +9,7 @@ export class Utils {
   static appendToNotes(message: string) {
     console.info("Adding to notes:", message)
     appendFile("notes", message + "\n", (err) => {
-      if(err) console.error(err)
+      if (err) console.error(err)
     })
   }
 
@@ -30,8 +31,21 @@ export class Utils {
       }
       retry++
     }
-    let error = Error(`${delegateError.message} afer retrying [${times}] times`)
+    const error = Error(`${delegateError.message} afer retrying [${times}] times`)
     error.stack = delegateError.stack
     throw error
+  }
+
+  static generateNonce(length: number): string {
+    let result = ""
+    while (result.length < length) {
+      const byte = crypto.randomBytes(1)[0]
+      if (byte >= 250) {
+        continue
+      }
+      const randomDigit = byte % 10
+      result += randomDigit.toString()
+    }
+    return result
   }
 }

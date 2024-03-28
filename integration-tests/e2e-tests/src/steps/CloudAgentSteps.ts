@@ -34,6 +34,10 @@ When("{actor} asks for present-proof", async function (cloudAgent: Actor) {
   await CloudAgentWorkflow.askForPresentProof(cloudAgent)
 })
 
+When("{actor} asks for presentation of AnonCred proof", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.askForPresentProofAnonCreds(cloudAgent)
+})
+
 Then("{actor} should have the connection status updated to '{}'", async (cloudAgent: Actor, expectedStatus: string) => {
   await CloudAgentWorkflow.waitForConnectionState(cloudAgent, expectedStatus)
 })

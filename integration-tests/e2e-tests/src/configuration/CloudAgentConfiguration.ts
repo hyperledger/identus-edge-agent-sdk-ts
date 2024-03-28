@@ -3,7 +3,8 @@ import {
   CreateManagedDidRequestDocumentTemplate,
   CredentialDefinitionInput,
   CredentialSchemaInput,
-  ManagedDIDKeyTemplate
+  ManagedDIDKeyTemplate,
+  Purpose
 } from "@hyperledger-labs/open-enterprise-agent-ts-client"
 import {Utils} from "../Utils"
 import {randomUUID} from "crypto"
@@ -70,7 +71,7 @@ export class CloudAgentConfiguration {
 
     const publicKey = new ManagedDIDKeyTemplate()
     publicKey.id = "key-1"
-    publicKey.purpose = "assertionMethod"
+    publicKey.purpose = Purpose.AssertionMethod
 
     creationData.documentTemplate.publicKeys = [publicKey]
     creationData.documentTemplate.services = []
@@ -176,7 +177,7 @@ export class CloudAgentConfiguration {
       name: "Automation Anoncred",
       version: "1.0",
       issuerId : this.publishedDid,
-      attrNames: ["name", "age"]
+      attrNames: ["name", "age", "gender"]
     }
 
     const credentialSchemaInput: CredentialSchemaInput = {
@@ -201,7 +202,7 @@ export class CloudAgentConfiguration {
       version: "1.0.0",
       tag: "automation-test",
       author: this.publishedDid,
-      schemaId: `${this.agentUrl}schema-registry/schemas/${newSchemaGuid}/schema`,
+      schemaId: `${this.agentUrl}/schema-registry/schemas/${newSchemaGuid}/schema`,
       signatureType: "CL",
       supportRevocation: false,
       description: "Test Automation Auto-Generated TS"
