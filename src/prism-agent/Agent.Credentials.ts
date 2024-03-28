@@ -306,7 +306,6 @@ export class AgentCredentials implements AgentCredentialsClass {
     const options = {
       presentationDefinitionRequest
     }
-    debugger;
     const verified = await this.pollux.verifyPresentationSubmission(
       presentationSubmission,
       options

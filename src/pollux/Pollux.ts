@@ -5,6 +5,7 @@ import { Pollux as IPollux, PresentationOptions } from "../domain/buildingBlocks
 import { InvalidJWTString, InvalidVerifyCredentialError, InvalidVerifyFormatError, } from "../domain/models/errors/Pollux";
 import { base64url, base64 } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
+
 import {
   AttachmentDescriptor,
   CredentialRequestOptions,
@@ -22,20 +23,18 @@ import {
   PrivateKey,
   PresentationSubmission,
   DescriptorItem,
-  Authentication,
   CastorError,
   SubmissionDescriptorFormat,
   DefinitionFormat,
   PresentationClaims,
 } from "../domain";
-import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 
+import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
 import { JWT } from "../apollo/utils/jwt/JWT";
 import { Anoncreds } from "../domain/models/Anoncreds";
 import { ApiImpl } from "../prism-agent/helpers/ApiImpl";
 import { PresentationRequest } from "./models/PresentationRequest";
-import { ProofTypes } from "../prism-agent/protocols/types";
 import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 import { DescriptorPath } from "./utils/DescriptorPath";
 
@@ -283,6 +282,8 @@ export default class Pollux implements IPollux {
               const optional = field.optional;
               if (!optional) {
                 let validClaim = false;
+                let reason = null;
+
                 while (paths.length && !validClaim) {
                   const [path] = paths.splice(0, 1);
                   if (path) {
@@ -291,17 +292,33 @@ export default class Pollux implements IPollux {
                       const filter = field.filter;
                       if (filter.pattern) {
                         const pattern = new RegExp(filter.pattern);
-                        validClaim = pattern.test(fieldInVC) || fieldInVC === filter.pattern;
+                        if (pattern.test(fieldInVC) || fieldInVC === filter.pattern) {
+                          validClaim = true
+                        } else {
+                          reason = `Expected the ${path} field to be ${filter.pattern} but got ${fieldInVC}`
+                        }
+
                       } else if (filter.enum) {
+                        if (filter.enum.includes(fieldInVC)) {
+                          validClaim = true
+                        } else {
+                          reason = `Expected the ${path} field to be one of ${filter.enum.join(", ")} but got ${fieldInVC}`
+                        }
                         validClaim = filter.enum.includes(fieldInVC)
-                      } else if (filter.pattern && fieldInVC === filter.pattern) {
-                        validClaim = fieldInVC === filter.pattern;
+                      } else if (filter.const && fieldInVC === filter.pattern) {
+                        if (fieldInVC === filter.const) {
+                          validClaim = true
+                        } else {
+                          reason = `Expected the ${path} field to be ${filter.const} but got ${fieldInVC}`
+                        }
+                        validClaim = fieldInVC === filter.const;
                       }
+
                     }
                   }
                 }
                 if (!validClaim) {
-                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${field.path.join(',')} paths are not found or have unexpected value.`);
+                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${reason || 'paths are not found or have unexpected value'}.`);
                 }
               }
             }

@@ -298,10 +298,8 @@ export function Message({ message }) {
                         app.agent.instance?.handlePresentation(SDK.Presentation.fromMessage(message))
                             .then((valid) => {
                                 setOptions({ valid: valid })
-                                debugger;
                             })
                             .catch((err) => {
-                                debugger;
                                 setOptions({ valid: false, reason: err.message });
                             })
                     }}>Verify the Proof</button>

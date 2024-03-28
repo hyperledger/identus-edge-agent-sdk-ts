@@ -36,8 +36,6 @@ function Credential({ credential }) {
         setClaims(disclosed)
     }
 
-    debugger;
-
     return <div className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <h1 className="mb-4 text-1xl font-extrabold tracking-tight leading-none text-gray-900 dark:text-white">
             Credential type {credential.credentialType}
