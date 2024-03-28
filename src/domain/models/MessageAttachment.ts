@@ -59,7 +59,9 @@ export class AttachmentDescriptor {
     description?: string
 
   ): AttachmentDescriptor {
-    const encoded = base64.baseEncode(Buffer.from(JSON.stringify(payload)));
+    debugger;
+    const jsonString = typeof payload === "string" ? payload : JSON.stringify(payload)
+    const encoded = base64.baseEncode(Buffer.from(jsonString));
     const attachment: AttachmentBase64 = {
       base64: encoded,
     };

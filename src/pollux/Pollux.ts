@@ -162,7 +162,8 @@ export default class Pollux implements IPollux {
       fields: paths.map((path) => {
         const inputField: InputField = {
           path: [
-            `$.vc.credentialSubject.${path}`
+            `$.vc.credentialSubject.${path}`,
+            `$.credentialSubject.${path}`
           ],
           id: uuid(),
           optional: false,

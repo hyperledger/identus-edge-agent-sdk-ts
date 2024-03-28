@@ -301,11 +301,12 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (!presentation.thid) {
       throw new Error("Invalid presentation message, does not contain thid, we can't fetch definition")
     }
-    const presentationSubmission = JSON.parse(Message.Attachment.extractJSON(attachment));
+    const presentationSubmission = Message.Attachment.extractJSON(attachment);
     const presentationDefinitionRequest = await this.getPresentationDefinitionByThid(presentation.thid!)
     const options = {
       presentationDefinitionRequest
     }
+    debugger;
     const verified = await this.pollux.verifyPresentationSubmission(
       presentationSubmission,
       options

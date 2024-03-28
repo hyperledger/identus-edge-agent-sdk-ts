@@ -112,7 +112,12 @@ async function handleMessages(
     if (issuedCredentials.length) {
         for (const issuedCredential of issuedCredentials) {
             const issueCredential = IssueCredential.fromMessage(issuedCredential);
-            await agent.processIssuedCredentialMessage(issueCredential);
+            const credential = await agent.processIssuedCredentialMessage(issueCredential);
+            dispatch(
+                reduxActions.credentialSuccess(
+                    credential
+                )
+            )
         }
     }
     dispatch(
