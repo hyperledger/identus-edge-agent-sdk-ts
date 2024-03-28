@@ -4,7 +4,7 @@ import { equals } from "@serenity-js/assertions"
 import { WalletSdk } from "../abilities/WalletSdk"
 import { Utils } from "../Utils"
 
-const { IssueCredential, OfferCredential, RequestPresentation, } = SDK;
+const { IssueCredential, OfferCredential, RequestPresentation, } = SDK
 
 export class EdgeAgentWorkflow {
   static async connect(edgeAgent: Actor) {
