@@ -1,4 +1,4 @@
-@connectionx
+@anoncred @proof
 Feature: Provide proof
   The Edge Agent should provide proof to Cloud Agent
 

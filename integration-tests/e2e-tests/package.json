@@ -4,7 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "clean": "rimraf target",
-    "test:sdk": "yarn clean && cucumber-js -b --tags '@connectionx'"
+    "test:sdk": "yarn clean && cucumber-js -b"
   },
   "repository": {
     "type": "git",

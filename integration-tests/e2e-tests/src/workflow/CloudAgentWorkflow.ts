@@ -22,7 +22,7 @@ export class CloudAgentWorkflow {
     createConnection.goal = goal
 
     await cloudAgent.attemptsTo(
-      Send.a(PostRequest.to("connections").with(createConnection)),
+      Send.a(PostRequest.to("/connections").with(createConnection)),
       Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
       Notepad.notes().set(
         "invitation",
@@ -45,7 +45,7 @@ export class CloudAgentWorkflow {
     )
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
-        Questions.httpGet(`connections/${connectionId}`),
+        Questions.httpGet(`/connections/${connectionId}`),
         Expectations.propertyValueToBe("state", state)
       )
     )
@@ -54,7 +54,7 @@ export class CloudAgentWorkflow {
   static async verifyCredentialState(cloudAgent: Actor, recordId: string, state: string) {
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
-        Questions.httpGet(`issue-credentials/records/${recordId}`),
+        Questions.httpGet(`/issue-credentials/records/${recordId}`),
         Expectations.propertyValueToBe("protocolState", state)
       )
     )
@@ -66,7 +66,7 @@ export class CloudAgentWorkflow {
     )
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
-        Questions.httpGet(`present-proof/presentations/${presentationId}`),
+        Questions.httpGet(`/present-proof/presentations/${presentationId}`),
         Expectations.propertyValueToBe("status", state)
       )
     )
@@ -86,7 +86,7 @@ export class CloudAgentWorkflow {
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("issue-credentials/credential-offers").with(credential)
+        PostRequest.to("/issue-credentials/credential-offers").with(credential)
       )
     )
     await cloudAgent.attemptsTo(
@@ -112,7 +112,7 @@ export class CloudAgentWorkflow {
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("issue-credentials/credential-offers").with(credential)
+        PostRequest.to("/issue-credentials/credential-offers").with(credential)
       )
     )
     await cloudAgent.attemptsTo(
@@ -137,52 +137,48 @@ export class CloudAgentWorkflow {
 
     await cloudAgent.attemptsTo(
       Send.a(
-        PostRequest.to("present-proof/presentations").with(presentProofRequest)
+        PostRequest.to("/present-proof/presentations").with(presentProofRequest)
       ),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
     )
   }
 
   static async askForPresentProofAnonCreds(cloudAgent: Actor) {
+    const anoncredGuid = CloudAgentConfiguration.anoncredDefinitionGuid
+    const definitionUrl = `${CloudAgentConfiguration.agentUrl}/credential-definition-registry/definitions/${anoncredGuid}/definition`
+    const connectionId = await cloudAgent.answer(Notepad.notes().get("connectionId"))
 
-    const cred_def_id = CloudAgentConfiguration.agentUrl +
-      "credential-definition-registry/definitions/" +
-      CloudAgentConfiguration.anoncredDefinitionGuid +
-      "/definition";
-    const connectionId = await cloudAgent.answer(Notepad.notes().get("connectionId"));
     const presentationRequest = {
-      "connectionId": connectionId,
-      "credentialFormat": "AnonCreds",
-      "anoncredPresentationRequest": {
-        "requested_attributes": {
-          "gender": {
-            "name": "gender",
-            "restrictions": [
-              {
-                "attr::gender::value": "M",
-                "cred_def_id": cred_def_id
-              }
-            ]
+      connectionId: connectionId,
+      credentialFormat: "AnonCreds",
+      anoncredPresentationRequest: {
+        requested_attributes: {
+          gender: {
+            name: "gender",
+            restrictions: [{
+              "attr::gender::value": "M",
+              cred_def_id: definitionUrl
+            }]
           }
         },
-        "requested_predicates": {
-          "age": {
-            "name": "age",
-            "p_type": ">=",
-            "p_value": 18,
-            "restrictions": []
+        requested_predicates: {
+          age: {
+            name: "age",
+            p_type: ">=",
+            p_value: 18,
+            restrictions: []
           }
         },
-        "name": "proof_req_1",
-        "nonce": randomUUID(),
-        "version": "0.1"
+        name: "proof_req_1",
+        nonce: "1103253414365527824079144",
+        version: "0.1"
       },
-      "proofs": []
+      proofs: [],
+      options: null
     }
 
-    // Dispatch:
     await cloudAgent.attemptsTo(
-      Send.a(PostRequest.to("present-proof/presentations").with(presentationRequest)),
+      Send.a(PostRequest.to("/present-proof/presentations").with(presentationRequest)),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
     )
   }
