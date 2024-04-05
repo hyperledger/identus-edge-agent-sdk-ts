@@ -265,26 +265,23 @@ describe("Pluto", () => {
       proof: "proof",
     };
 
-    const jwtPayload: any = {
-      id: "123",
+    const jwtPayload: Domain.JWTCredentialPayload = {
       iss: "did:peer:2.issuer",
       nbf: 1680615608435,
       sub: "did:peer:2.sub",
       exp: 1680615608435,
       aud: ["aud-json"],
       vc: vc,
+      vp: undefined,
+      jti: jwtString,
+      revoked: false,
+      type: CredentialType.JWT
     };
 
-    const credential = new JWTCredential(
-      jwtPayload.iss,
-      vc,
-      jwtString,
-      jwtPayload.nbf,
-      jwtPayload.sub,
-      jwtPayload.exp,
-      jwtPayload.aud,
+    const credential = JWTCredential.fromJWT(
+      jwtPayload,
       jwtString
-    );
+    )
 
     await instance.storeCredential(credential);
   });
@@ -724,19 +721,22 @@ describe("Pluto", () => {
       proof: "proof",
     };
 
-    const jwtPayload: any = {
-      id: "123",
+    const jwtPayload: Domain.JWTCredentialPayload = {
       iss: "did:peer:2.issuer",
       nbf: 1680615608435,
       sub: "did:peer:2.sub",
       exp: 1680615608435,
       aud: ["aud-json"],
       vc: vc,
+      vp: undefined,
+      type: CredentialType.JWT,
+      revoked: false,
+      jti: jwtString
     };
 
     const credentialIn = new JWTCredential(
       jwtPayload.iss,
-      vc,
+      jwtPayload,
       jwtString,
       jwtPayload.nbf,
       jwtPayload.sub,

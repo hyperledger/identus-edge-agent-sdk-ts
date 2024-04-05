@@ -856,30 +856,37 @@ describe("Pollux", () => {
 
     it("Should be able to create a presentationDefinitionRequest for a JWT Credential", async () => {
 
-      const presentationDefinition = await pollux.createPresentationDefinitionRequest(
+      const presentationDefinitionRequest = await pollux.createPresentationDefinitionRequest(
         CredentialType.JWT,
-        [
-          {
-            requiredFields: ['name'],
-            trustIssuers: ["did:prism:12345"],
+        {
+          issuer: "did:prism:12345",
+          claims: {
+            name: {
+              type: 'string',
+              pattern: 'identus'
+            }
           }
-        ],
+        },
         new PresentationOptions({
           challenge: 'sign this'
         })
       );
 
-      expect(presentationDefinition).haveOwnProperty("id");
-      expect(presentationDefinition).haveOwnProperty("format");
-      expect(presentationDefinition).haveOwnProperty("inputDescriptors");
-      expect(presentationDefinition.format).haveOwnProperty("jwt");
-      expect(presentationDefinition.format.jwt?.alg).contains('ES256K');
-      expect(Array.isArray(presentationDefinition.inputDescriptors)).to.eq(true)
-      expect(presentationDefinition.inputDescriptors.length).to.eq(1)
-      expect(presentationDefinition.inputDescriptors.at(0)).haveOwnProperty('constraints');
-      expect(presentationDefinition.inputDescriptors.at(0)?.constraints.fields.length).to.eq(2);
-      expect(presentationDefinition.inputDescriptors.at(0)?.constraints.fields[0].path.at(0)).to.eq('$.vc.credentialSubject.name')
-      expect(presentationDefinition.inputDescriptors.at(0)?.constraints.fields[1].path.at(0)).to.eq('$.vc.issuer')
+      const { presentation_definition } = presentationDefinitionRequest;
+
+      expect(presentation_definition).haveOwnProperty("id");
+      expect(presentation_definition).haveOwnProperty("format");
+      expect(presentation_definition).haveOwnProperty("inputDescriptors");
+
+
+      expect(presentation_definition.format).haveOwnProperty("jwt");
+      expect(presentation_definition.format.jwt?.alg).contains('ES256K');
+      expect(Array.isArray(presentation_definition.inputDescriptors)).to.eq(true)
+      expect(presentation_definition.inputDescriptors.length).to.eq(1)
+      expect(presentation_definition.inputDescriptors.at(0)).haveOwnProperty('constraints');
+      expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields.length).to.eq(2);
+      expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields[0].path.at(0)).to.eq('$.vc.credentialSubject.name')
+      expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields[1].path.at(0)).to.eq('$.vc.issuer')
 
     })
 
@@ -887,12 +894,15 @@ describe("Pollux", () => {
 
       const presentationDefinition = await pollux.createPresentationDefinitionRequest(
         CredentialType.JWT,
-        [
-          {
-            requiredFields: ['name'],
-            trustIssuers: ["did:prism:12345"],
+        {
+          issuer: "did:prism:12345",
+          claims: {
+            name: {
+              type: 'string',
+              pattern: 'identus'
+            }
           }
-        ],
+        },
         new PresentationOptions({
           challenge: 'sign this'
         })
@@ -908,7 +918,6 @@ describe("Pollux", () => {
 
       const presentaationSubmissionJSON = await pollux.createPresentationSubmission(
         presentationDefinition,
-        'sign this',
         jwtCred,
         privateKey
       );

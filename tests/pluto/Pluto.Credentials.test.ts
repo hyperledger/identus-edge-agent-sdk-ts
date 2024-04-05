@@ -25,7 +25,17 @@ describe("Pluto", () => {
   describe("Credentials", () => {
     describe("JWT", () => {
       test("uuid set on Domain instance - same after store", async () => {
-        const sut = new JWTCredential("did:peer:2.issuer", {}, "jwtString", 1680615608435, "did:peer:2.sub", 1680615608435, ["aud-json"], "jwtString");
+
+        const sut = new JWTCredential(
+          "did:peer:2.issuer",
+          Fixtures.Credentials.JWT.credentialPayload,
+          "jwtString",
+          1680615608435,
+          "did:peer:2.sub",
+          1680615608435,
+          ["aud-json"],
+          "jwtString"
+        );
         const uuid = sut.uuid;
         expect(uuid).to.be.a.string;
 
@@ -37,13 +47,12 @@ describe("Pluto", () => {
       test("Retrieved should match Stored", async () => {
         const credentialIn = new JWTCredential(
           Fixtures.Credentials.JWT.credentialPayload.iss,
-          Fixtures.Credentials.JWT.credentialPayload.vc,
+          Fixtures.Credentials.JWT.credentialPayload,
           Fixtures.Credentials.JWT.credentialPayloadEncoded,
           Fixtures.Credentials.JWT.credentialPayload.nbf,
           Fixtures.Credentials.JWT.credentialPayload.sub,
           Fixtures.Credentials.JWT.credentialPayload.exp,
-          // Fixtures.Credentials.JWT.credentialPayload.aud,
-          ["aud"],
+          Fixtures.Credentials.JWT.credentialPayload.aud,
           Fixtures.Credentials.JWT.credentialPayloadEncoded
         );
 
@@ -80,7 +89,6 @@ describe("Pluto", () => {
         expect(jwtCred.termsOfUse).to.eql(credentialIn.termsOfUse);
         expect(jwtCred.type).to.eql(credentialIn.type);
         expect(jwtCred.vc).to.deep.eq(credentialIn.vc);
-        expect(jwtCred.verifiableCredential).to.deep.eq(credentialIn.verifiableCredential);
       });
     });
 

@@ -176,7 +176,7 @@ export default class Pollux implements IPollux {
 
     if (presentationClaims.issuer) {
       constaints.fields.push({
-        path: ["$.issuer", "$.iss", "$.vc.iss", "$.vc.issuer"],
+        path: ["$.vc.issuer", "$.issuer", "$.iss", "$.vc.iss"],
         id: uuid(),
         optional: false,
         name: "issuer",
