@@ -118,9 +118,92 @@ export enum JWTVerifiableCredentialProperties {
   revoked = "revoked"
 }
 
-export type JWTCredentialPayload = {
-  [key in JWTVerifiableCredentialProperties]: any;
+
+export type W3CVerifiableCredentialSubject = {
+  [name: string | number | symbol]: any
 }
+
+export enum W3CVerifiableCredentialContext {
+  presentation = "https://www.w3.org/2018/presentations/v1",
+  credential = "https://www.w3.org/2018/credentials/v1"
+}
+
+export enum W3CVerifiableCredentialType {
+  presentation = "VerifiablePresentation",
+  credential = "VerifiableCredential"
+}
+
+export type W3CVerifiablePresentation = {
+  "@context": W3CVerifiableCredentialContext[],
+  type: W3CVerifiableCredentialType[],
+  verifiableCredential: string[]
+}
+
+export type W3CVerifiableCredential = {
+  "@context": W3CVerifiableCredentialContext[],
+  type: W3CVerifiableCredentialType[],
+  issuer: string,
+  issuanceDate: string,
+  issued?: string,
+  credentialSubject: W3CVerifiableCredentialSubject,
+  expirationDate?: string,
+  evidence?: {
+    id: string,
+    type: string
+  },
+  refreshService?: {
+    id: string,
+    type: string
+  },
+  termsOfUse?: {
+    id: string,
+    type: string
+  },
+  validFrom?: {
+    id: string,
+    type: string
+  },
+  validUntil?: {
+    id: string,
+    type: string
+  },
+  credentialSchema?: {
+    id: string,
+    type: string
+  },
+  credentialStatus?: {
+    id: string,
+    type: string
+  }
+}
+
+
+export type JWTCredentialPayloadExtra = {
+  [JWTVerifiableCredentialProperties.vc]: W3CVerifiableCredential
+} |
+{
+  [JWTVerifiableCredentialProperties.vp]: W3CVerifiablePresentation
+}
+
+
+export type JWTCredentialPayload = {
+  [JWTVerifiableCredentialProperties.iss]: string;
+  [JWTVerifiableCredentialProperties.nbf]: number;
+  [JWTVerifiableCredentialProperties.exp]: number;
+  [JWTVerifiableCredentialProperties.sub]: string;
+  [JWTVerifiableCredentialProperties.vc]: W3CVerifiableCredential
+
+}
+
+export type JWTPresentationPayload = {
+  [JWTVerifiableCredentialProperties.iss]: string;
+  [JWTVerifiableCredentialProperties.nbf]: number;
+  [JWTVerifiableCredentialProperties.exp]: number;
+  [JWTVerifiableCredentialProperties.vp]: W3CVerifiablePresentation
+
+}
+
+export type JWTPayload = JWTCredentialPayload | JWTPresentationPayload;
 
 export enum ProofTypesEnum {
   EcdsaSecp256k1Signature2019 = "EcdsaSecp256k1Signature2019",

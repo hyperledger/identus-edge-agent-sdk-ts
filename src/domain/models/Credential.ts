@@ -1,4 +1,4 @@
-import { CredentialType, LinkSecret } from ".";
+import { CredentialType, LinkSecret, W3CVerifiableCredential, W3CVerifiablePresentation } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";
@@ -35,7 +35,8 @@ export abstract class Credential implements Pluto.Storable {
 }
 
 export interface ProvableCredential {
-  presentation(): unknown;
+  presentation(): W3CVerifiablePresentation;
+  verifiableCredential(): W3CVerifiableCredential
 }
 
 export interface StorableCredential {

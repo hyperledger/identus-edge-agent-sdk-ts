@@ -10,6 +10,7 @@ import {
   DID,
   PrivateKey,
 } from "../../../domain";
+import { JWTCredential } from "../../../pollux/models/JWTVerifiableCredential";
 
 export class JWT {
   private castor: Castor;
@@ -19,17 +20,33 @@ export class JWT {
   }
 
   async verify(
-    did: string,
-    jws: string
+    options: {
+      issuerDID: DID,
+      holderDID?: DID,
+      jws: string
+    }
   ): Promise<boolean> {
-
     try {
-      const resolved = await this.resolve(did);
+      const { issuerDID, jws, holderDID } = options;
+      if (!issuerDID) {
+        throw new Error("Required issuerId");
+      }
+      const resolved = await this.resolve(issuerDID.toString());
       const verificationMethod = resolved.didDocument?.verificationMethod;
       if (!verificationMethod) {
         throw new Error("Invalid did document");
       }
       const validVerificationMethod = didJWT.verifyJWS(jws, verificationMethod);
+      const jwtObject = JWTCredential.fromJWS(jws);
+
+      if (jwtObject.issuer !== issuerDID) {
+        throw new Error("Invalid issuer");
+      }
+
+      if (jwtObject.isCredential && holderDID && holderDID.toString() !== jwtObject.sub) {
+        throw new Error("Invalid subject (holder)");
+      }
+
       return true;
     } catch (err) {
       return false;
@@ -98,16 +115,19 @@ export class JWT {
 
 
   async sign(
-    issuer: DID,
-    privateKey: PrivateKey | Uint8Array,
-    payload: Partial<didJWT.JWTPayload>
+    options: {
+      issuerDID: DID,
+      privateKey: PrivateKey | Uint8Array,
+      payload: Partial<didJWT.JWTPayload>
+    }
   ): Promise<string> {
+    const { issuerDID, privateKey, payload } = options;
     const raw = privateKey instanceof PrivateKey ? privateKey.raw : privateKey;
     //TODO: Better check if this method is called with PrismDID and not PeerDID or other
     const signer = didJWT.ES256KSigner(raw);
     const jwt = await didJWT.createJWT(
       payload,
-      { issuer: issuer.toString(), signer },
+      { issuer: issuerDID.toString(), signer },
       { alg: "ES256K" }
     );
     return jwt;

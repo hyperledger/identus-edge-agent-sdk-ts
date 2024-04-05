@@ -27,6 +27,7 @@ import {
   SubmissionDescriptorFormat,
   DefinitionFormat,
   PresentationClaims,
+  DID,
 } from "../domain";
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
@@ -93,7 +94,11 @@ export default class Pollux implements IPollux {
         nonce: Buffer.from(privateKey.sign(Buffer.from(challenge))).toString('hex'),
         vp: credential.presentation(),
       }
-      const jws = await this.jwt.sign(subject, privateKey, payload);
+      const jws = await this.jwt.sign({
+        issuerDID: DID.fromString(subject),
+        privateKey,
+        payload
+      });
 
       const presentationSubmission: PresentationSubmission = {
         presentation_submission: {
@@ -228,11 +233,11 @@ export default class Pollux implements IPollux {
   ): Promise<boolean> {
     const isValidPresentationSubmission = this.parsePresentationSubmission(presentationSubmission);
     if (!isValidPresentationSubmission) {
-      throw new InvalidVerifyFormatError('PresentationSubmission format is invalid.')
+      throw new InvalidVerifyFormatError('PresentationSubmission format is invalid')
     }
     const validJWTPresentationSubmissionOptions = this.validJWTPresentationSubmissionOptions(options)
     if (!validJWTPresentationSubmissionOptions) {
-      throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid.')
+      throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid')
     }
 
     const presentationDefinitionRequest = options.presentationDefinitionRequest;
@@ -244,7 +249,7 @@ export default class Pollux implements IPollux {
       if (descriptorItem.format === SubmissionDescriptorFormat.JWT) {
         const jws = descriptorMapper.getValue(descriptorItem.path);
         if (!jws) {
-          throw new InvalidVerifyFormatError(`Invalid Submission, ${descriptorItem.path} not found in submission.`);
+          throw new InvalidVerifyFormatError(`Invalid Submission, ${descriptorItem.path} not found in submission`);
         }
         const presentation = JWTCredential.fromJWS(jws);
         const credType = presentation.credentialType;
@@ -253,21 +258,27 @@ export default class Pollux implements IPollux {
           throw new InvalidVerifyCredentialError(jws, "Invalid JWT Credential only prism/jwt is supported for jwt");
         }
         const issuer = presentation.issuer;
-        const credentialValid = await this.jwt.verify(issuer, jws);
+        const credentialValid = await this.jwt.verify({
+          issuerDID: issuer,
+          jws
+        });
         if (!credentialValid) {
-          throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature.");
-
+          throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
         }
         const verifiablePresentation = presentation.vp;
         const vc = verifiablePresentation.verifiableCredential.at(0)
         if (!vc) {
-          throw new InvalidVerifyCredentialError(jws, "Invalid Verifiable Presentation payload, cannot find vc.");
+          throw new InvalidVerifyCredentialError(jws, "Invalid Verifiable Presentation payload, cannot find vc");
 
         }
         const verifiableCredential = JWTCredential.fromJWS(vc);
-        const verifiableCredentialValid = await this.jwt.verify(verifiableCredential.issuer, verifiableCredential.id);
+        const verifiableCredentialValid = await this.jwt.verify({
+          holderDID: verifiableCredential.sub ? DID.fromString(verifiableCredential.sub) : undefined,
+          issuerDID: verifiableCredential.issuer,
+          jws: verifiableCredential.id
+        });
         if (!verifiableCredentialValid) {
-          throw new InvalidVerifyCredentialError(vc, "Invalid Issuer Presentation JWS Signature.");
+          throw new InvalidVerifyCredentialError(vc, "Invalid Presentation Credential JWS Signature");
         }
         const verifiableCredentialPropsMapper = new DescriptorPath(verifiableCredential);
         const inputDescriptor = inputDescriptors.find((inputDescriptor) => inputDescriptor.id === descriptorItem.id);
@@ -295,7 +306,7 @@ export default class Pollux implements IPollux {
                         if (pattern.test(fieldInVC) || fieldInVC === filter.pattern) {
                           validClaim = true
                         } else {
-                          reason = `Expected the ${path} field to be ${filter.pattern} but got ${fieldInVC}`
+                          reason = `Expected the ${path} field to be "${filter.pattern}" but got "${fieldInVC}"`
                         }
 
                       } else if (filter.enum) {
@@ -309,16 +320,19 @@ export default class Pollux implements IPollux {
                         if (fieldInVC === filter.const) {
                           validClaim = true
                         } else {
-                          reason = `Expected the ${path} field to be ${filter.const} but got ${fieldInVC}`
+                          reason = `Expected the ${path} field to be "${filter.const}" but got "${fieldInVC}"`
                         }
                         validClaim = fieldInVC === filter.const;
                       }
-
+                    } else {
+                      reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
                     }
+                  } else {
+                    reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
                   }
                 }
                 if (!validClaim) {
-                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${reason || 'paths are not found or have unexpected value'}.`);
+                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${reason || 'paths are not found or have unexpected value'}`);
                 }
               }
             }
@@ -386,13 +400,16 @@ export default class Pollux implements IPollux {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const domain = domainChallenge.domain!;
 
-    const signedJWT = await this.jwt.sign(did, keyPair.privateKey.value, {
-      aud: domain,
-      nonce: challenge,
-      vp: {
-        "@context": ["https://www.w3.org/2018/presentations/v1"],
-        type: ["VerifiablePresentation"],
-      },
+    const signedJWT = await this.jwt.sign({
+      issuerDID: did,
+      privateKey: keyPair.privateKey.value, payload: {
+        aud: domain,
+        nonce: challenge,
+        vp: {
+          "@context": ["https://www.w3.org/2018/presentations/v1"],
+          type: ["VerifiablePresentation"],
+        },
+      }
     });
 
     return signedJWT;
@@ -625,11 +642,15 @@ export default class Pollux implements IPollux {
       && "privateKey" in options
     ) {
       const presReqJson = presentationRequest.toJSON();
-      const signedJWT = await this.jwt.sign(options.did, options.privateKey, {
-        iss: options.did.toString(),
-        aud: presReqJson.options.domain,
-        nonce: presReqJson.options.challenge,
-        vp: credential.presentation()
+      const signedJWT = await this.jwt.sign({
+        issuerDID: options.did,
+        privateKey: options.privateKey,
+        payload: {
+          iss: options.did.toString(),
+          aud: presReqJson.options.domain,
+          nonce: presReqJson.options.challenge,
+          vp: credential.presentation()
+        }
       });
 
       return signedJWT;

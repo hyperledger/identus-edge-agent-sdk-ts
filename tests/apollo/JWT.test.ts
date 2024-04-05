@@ -16,20 +16,20 @@ describe("Apollo - JWT", () => {
       test(`${keyClass.name} - can sign with raw key (Uint8Array)`, async function () {
         const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
         const privateKey = keyClass.from.Hex("5ee38f66d07fc5a7f3968b33564bbd3b00eaddd481365838a9d6d3ad2fb82f41");
-
         const sut = new JWT({} as any);
-
-        const result = await sut.sign(prismDid, privateKey.raw, { testing: 123 });
+        const result = await sut.sign({
+          issuerDID: prismDid, privateKey: privateKey.raw, payload: { testing: 123 }
+        });
         expect(result).to.be.a.string;
       });
 
       test(`${keyClass.name} - can sign with PrivateKey`, async function () {
         const prismDid = DID.fromString("did:prism:dadsa:1231321dhsauda23847");
         const privateKey = keyClass.from.Hex("5ee38f66d07fc5a7f3968b33564bbd3b00eaddd481365838a9d6d3ad2fb82f41");
-
         const sut = new JWT({} as any);
-
-        const result = await sut.sign(prismDid, privateKey, { testing: 123 });
+        const result = await sut.sign({
+          issuerDID: prismDid, privateKey, payload: { testing: 123 }
+        });
         expect(result).to.be.a.string;
       });
     });

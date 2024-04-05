@@ -6,7 +6,7 @@ import {
   StorableCredential,
 } from "../../domain/models/Credential";
 import { InvalidJWTString } from "../../domain/models/errors/Pollux";
-import { CredentialType, JWTCredentialPayload, JWTVerifiableCredentialProperties } from "../../domain/models/VerifiableCredential";
+import { CredentialType, JWTCredentialPayload, JWTPayload, JWTVerifiableCredentialProperties, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../domain/models/VerifiableCredential";
 
 
 
@@ -20,9 +20,13 @@ export class JWTCredential
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWTVerifiableCredentialProperties, any>();
 
+  private isCredentialPayload(payload: any): payload is JWTCredentialPayload {
+    return payload.vc !== undefined
+  }
+
   constructor(
     public readonly iss: string,
-    verifiableCredential: JWTCredentialPayload,
+    payload: JWTPayload,
     public readonly jti: string,
     public readonly nbf: number,
     public readonly sub: string,
@@ -34,21 +38,23 @@ export class JWTCredential
     super();
     this.properties.set(JWTVerifiableCredentialProperties.revoked, isRevoked);
     this.properties.set(JWTVerifiableCredentialProperties.jti, jti);
-    this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
+    this.properties.set(JWTVerifiableCredentialProperties.iss, iss || payload.iss);
     this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
-    this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
+    this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf || payload.nbf);
     this.properties.set(JWTVerifiableCredentialProperties.aud, aud);
-    if (verifiableCredential.vc) {
+
+    if (this.isCredentialPayload(payload)) {
       this.properties.set(
         JWTVerifiableCredentialProperties.vc,
-        verifiableCredential.vc
+        payload.vc
       );
-    } else if (verifiableCredential.vp) {
+    } else {
       this.properties.set(
         JWTVerifiableCredentialProperties.vp,
-        verifiableCredential.vp
+        payload.vp
       );
     }
+
     if (exp) {
       this.properties.set(JWTVerifiableCredentialProperties.exp, exp);
     }
@@ -82,9 +88,10 @@ export class JWTCredential
     return JWTCredential.fromJWT(jsonParsed, jws)
   }
 
-  static createPayload(obj: any): JWTCredentialPayload {
-    return obj
+  get isCredential() {
+    return this.isCredentialPayload(Object.fromEntries(this.properties))
   }
+
 
   get id() {
     return this.jti;
@@ -103,7 +110,7 @@ export class JWTCredential
   }
 
   get context() {
-    return this.vc.context;
+    return this.vc.context || this.vc['@context'];
   }
 
   get credentialSchema() {
@@ -155,32 +162,29 @@ export class JWTCredential
   }
 
   presentation() {
-    // TODO - Type information
     return {
-      "@context": ["https://www.w3.org/2018/presentations/v1"],
-      type: ["VerifiablePresentation"],
+      "@context": [W3CVerifiableCredentialContext.presentation],
+      type: [W3CVerifiableCredentialType.presentation],
       verifiableCredential: [this.jti],
     };
   }
 
-  verificableCredential() {
-    // TODO - Type information
+  verifiableCredential() {
     return {
       "@context": [
-        "https://www.w3.org/2018/credentials/v1"
+        W3CVerifiableCredentialContext.credential
       ],
-      type: ["VerifiableCredential"],
-      "issuer": this.issuer,
-      "issuanceDate": this.issuanceDate,
-      "expirationDate": this.expirationDate,
-      "credentialSubject": this.subject
+      type: [W3CVerifiableCredentialType.credential],
+      issuer: this.issuer,
+      issuanceDate: this.issuanceDate,
+      expirationDate: this.expirationDate,
+      credentialSubject: this.subject,
     };
   }
 
   toStorable() {
     const id = this.jti || this.getProperty(JWTVerifiableCredentialProperties.jti);
     const data = { id, ...Object.fromEntries(this.properties) };
-
     return {
       id,
       recoveryId: this.recoveryId,

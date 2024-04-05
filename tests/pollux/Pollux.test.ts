@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { expect } from "chai";
 
-import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, LinkSecret, Message, PresentationOptions, PrivateKey } from "../../src/domain";
+import { AttachmentDescriptor, Claims, CredentialRequestOptions, CredentialType, Curve, DID, JWTCredentialPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialSubject, W3CVerifiableCredentialType } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -15,7 +15,6 @@ import { AnonCredsCredential, AnonCredsRecoveryId } from "../../src/pollux/model
 import { PresentationRequest } from "../../src/pollux/models/PresentationRequest";
 import * as Fixtures from "../fixtures";
 import { JWT } from "../../src/apollo/utils/jwt/JWT";
-import { JWTPayload } from "did-jwt";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -39,6 +38,82 @@ const jwtParts = [
   "18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM",
 ];
 const jwtString = jwtParts.join(".");
+
+type VerificationTestCase = {
+  apollo: Apollo,
+  castor: Castor,
+  jwt: JWT,
+  pollux: Pollux,
+  issuer: DID,
+  holder: DID,
+  holderPrv: PrivateKey,
+  issuerPrv: PrivateKey,
+  subject: W3CVerifiableCredentialSubject,
+  claims: Claims
+}
+
+
+async function createVerificationTestCase(options: VerificationTestCase) {
+  const {
+    pollux,
+    issuer,
+    holder,
+    issuerPrv,
+    holderPrv,
+    jwt,
+    subject,
+    claims
+  } = options;
+
+  const currentDate = new Date();
+  const nextMonthDate = new Date(currentDate);
+  nextMonthDate.setMonth(currentDate.getMonth() + 1);
+  const issuanceDate = currentDate.getTime()
+  const expirationDate = nextMonthDate.getTime();
+
+  const payload: JWTCredentialPayload = {
+    iss: issuer.toString(),
+    nbf: issuanceDate,
+    exp: expirationDate,
+    sub: holder.toString(),
+    vc: {
+      "@context": [W3CVerifiableCredentialContext.credential],
+      type: [W3CVerifiableCredentialType.credential],
+      issuer: issuer.toString(),
+      issuanceDate: new Date(issuanceDate).toISOString(),
+      credentialSubject: subject,
+    }
+  }
+
+  const signedJWT = await jwt.sign({
+    issuerDID: issuer,
+    privateKey: issuerPrv,
+    payload
+  })
+  const jwtCredential = JWTCredential.fromJWS(signedJWT);
+  const presentationDefinition = await pollux.createPresentationDefinitionRequest(
+    CredentialType.JWT,
+    {
+      issuer: issuer.toString(),
+      claims: claims
+    },
+    new PresentationOptions({
+      challenge: 'sign this'
+    })
+  );
+
+  const presentaationSubmissionJSON = await pollux.createPresentationSubmission(
+    presentationDefinition,
+    jwtCredential,
+    holderPrv
+  );
+
+  return {
+    presentationDefinition,
+    presentaationSubmissionJSON,
+    issuedJWS: signedJWT
+  }
+}
 
 describe("Pollux", () => {
   let apollo: Apollo;
@@ -315,14 +390,12 @@ describe("Pollux", () => {
 
           expect(jwtCred.id).to.equal(encoded);
           // expect(jwtCred.aud).to.be.deep.equal(jwtPayload.aud);
-          expect(jwtCred.context).to.be.deep.equal(credential.context);
+          expect(jwtCred['context']).to.be.deep.equal(credential['@context']);
           expect(jwtCred.credentialSubject).to.be.deep.equal(
             credential.credentialSubject
           );
-          expect(jwtCred.credentialType).to.be.equal(credential.credentialType);
-
           expect(jwtCred.expirationDate).to.be.equal(
-            new Date(jwtPayload.exp).toISOString()
+            new Date(jwtPayload[JWTVerifiableCredentialProperties.exp]).toISOString()
           );
           expect(jwtCred.issuanceDate).to.be.equal(
             new Date(jwtPayload.nbf).toISOString()
@@ -855,11 +928,32 @@ describe("Pollux", () => {
     });
   });
 
-  describe("CreatePresentationDefinitionRequest", () => {
+  describe("SDK Verification", () => {
+    let apollo: Apollo;
+    let castor: Castor;
+    let jwt: JWT;
+    let pollux: Pollux;
+
+    beforeEach(async () => {
+      jest.restoreAllMocks();
+
+      const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
+      const Castor = jest.requireActual("../../src/castor/Castor").default;
+      const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
+      const JWT = jest.requireActual("../../src/apollo/utils/jwt/JWT").JWT;
+
+      apollo = new Apollo();
+      castor = new Castor(apollo);
+      jwt = new JWT(castor)
+      pollux = new Pollux(
+        castor,
+        undefined,
+        jwt
+      )
+    })
 
 
     it("Should be able to create a presentationDefinitionRequest for a JWT Credential", async () => {
-      jest.restoreAllMocks();
 
 
       const presentationDefinitionRequest = await pollux.createPresentationDefinitionRequest(
@@ -894,75 +988,303 @@ describe("Pollux", () => {
       expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields[0].path.at(0)).to.eq('$.vc.credentialSubject.name')
       expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields[1].path.at(0)).to.eq('$.vc.issuer')
 
-    })
+    });
 
-    it("Should create a valid presentationSubmission from a valid presentationRequest", async () => {
-      jest.restoreAllMocks();
+    it("Should Verify false when the presentation contains a credential that has been issued by an issuer with keys that don't match", async () => {
 
-      const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
-      const Castor = jest.requireActual("../../src/castor/Castor").default;
-      const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
-      const JWT = jest.requireActual("../../src/apollo/utils/jwt/JWT").JWT;
+      const issuerSeed = apollo.createRandomSeed().seed;
+      const holderSeed = apollo.createRandomSeed().seed;
+      const wrongIssuerSeed = apollo.createRandomSeed().seed;
 
-      type VerificationTestCase = {
-        apollo: Apollo,
-        castor: Castor,
-        jwt: JWT,
-        pollux: Pollux,
-        issuer: DID,
-        holder: DID,
-      }
+      const issuerPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
 
-      function createVerificationTestCase(options: VerificationTestCase) {
+      const wrongIssuerPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(wrongIssuerSeed.value).toString("hex"),
+      });
 
-      }
+      const holderPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(holderSeed.value).toString("hex"),
+      });
 
-      const apollo = new Apollo();
-      const castor = new Castor(apollo);
-      const jwt = new JWT(castor)
-      const pollux = new Pollux(
-        castor,
-        undefined,
-        jwt
+      const issuerDID = await castor.createPrismDID(
+        issuerPrv.publicKey()
       )
 
-      const presentationDefinition = await pollux.createPresentationDefinitionRequest(
-        CredentialType.JWT,
-        {
-          issuer: "did:prism:12345",
-          claims: {
-            name: {
-              type: 'string',
-              pattern: 'identus'
-            }
-          }
-        },
-        new PresentationOptions({
-          challenge: 'sign this'
-        })
-      );
+      const holderDID = await castor.createPrismDID(
+        holderPrv.publicKey()
+      )
 
-      const jwtPayload = Fixtures.Credentials.JWT.credentialPayload;
-      const privateKey = Fixtures.Keys.secp256K1.privateKey;
-      const encoded = encodeJWTCredential(jwtPayload);
-      const result = await pollux.parseCredential(Buffer.from(encoded), {
-        type: CredentialType.JWT,
-      });
-      const jwtCred = result as JWTCredential;
-
-      const presentaationSubmissionJSON = await pollux.createPresentationSubmission(
+      const {
         presentationDefinition,
-        jwtCred,
-        privateKey
-      );
-
-      const verify = await pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
-        presentationDefinitionRequest: presentationDefinition
+        presentaationSubmissionJSON,
+        issuedJWS
+      } = await createVerificationTestCase({
+        apollo,
+        castor,
+        jwt,
+        pollux,
+        //Play with this data in order to build tests
+        issuer: issuerDID,
+        holder: holderDID,
+        holderPrv: holderPrv,
+        issuerPrv: wrongIssuerPrv,
+        subject: {
+          course: 'Identus Training course Certification 2024'
+        },
+        claims: {
+          course: {
+            type: 'string',
+            pattern: 'Identus Training course Certification 2024'
+          }
+        }
       });
 
-      expect(verify).to.eq(true)
+      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+        presentationDefinitionRequest: presentationDefinition
+      })).to.eventually.be.rejectedWith(
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Presentation Credential JWS Signature`
+      );
 
 
+    })
+
+    it("Should Verify false when the presentation is signed with holder keys that don't match", async () => {
+      const issuerSeed = apollo.createRandomSeed().seed;
+      const holderSeed = apollo.createRandomSeed().seed;
+      const wrongHolder = apollo.createRandomSeed().seed;
+
+      const issuerPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
+
+      const wrongHolderPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(wrongHolder.value).toString("hex"),
+      });
+
+      const holderPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(holderSeed.value).toString("hex"),
+      });
+
+      const issuerDID = await castor.createPrismDID(
+        issuerPrv.publicKey()
+      )
+
+      const holderDID = await castor.createPrismDID(
+        holderPrv.publicKey()
+      )
+
+      const {
+        presentationDefinition,
+        presentaationSubmissionJSON,
+        issuedJWS
+      } = await createVerificationTestCase({
+        apollo,
+        castor,
+        jwt,
+        pollux,
+        //Play with this data in order to build tests
+        issuer: issuerDID,
+        holder: holderDID,
+        holderPrv: wrongHolderPrv,
+        issuerPrv: issuerPrv,
+        subject: {
+          course: 'Identus Training course Certification 2024'
+        },
+        claims: {
+          course: {
+            type: 'string',
+            pattern: 'Identus Training course Certification 2024'
+          }
+        }
+      });
+
+      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+        presentationDefinitionRequest: presentationDefinition
+      })).to.eventually.be.rejectedWith(
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Holder Presentation JWS Signature`
+      );
+    })
+
+    it("Should Verify false when the Credential Subject does not match", async () => {
+      const issuerSeed = apollo.createRandomSeed().seed;
+      const holderSeed = apollo.createRandomSeed().seed;
+
+      const issuerPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
+
+      const holderPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(holderSeed.value).toString("hex"),
+      });
+
+
+      const issuerDID = await castor.createPrismDID(
+        issuerPrv.publicKey()
+      )
+
+      const holderDID = await castor.createPrismDID(
+        holderPrv.publicKey()
+      )
+
+      const {
+        presentationDefinition,
+        presentaationSubmissionJSON,
+        issuedJWS
+      } = await createVerificationTestCase({
+        apollo,
+        castor,
+        jwt,
+        pollux,
+        //Play with this data in order to build tests
+        issuer: issuerDID,
+        holder: holderDID,
+        holderPrv: holderPrv,
+        issuerPrv: issuerPrv,
+        subject: {
+          course: 'Identus Training course Certification 2023'
+        },
+        claims: {
+          course: {
+            type: 'string',
+            pattern: 'Identus Training course Certification 2024'
+          }
+        }
+      });
+
+      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+        presentationDefinitionRequest: presentationDefinition
+      })).to.eventually.be.rejectedWith(
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected the $.credentialSubject.course field to be "Identus Training course Certification 2024" but got "Identus Training course Certification 2023"`
+      );
+    })
+
+    it("Should Verify false when the Credential subject does not provide required field", async () => {
+      const issuerSeed = apollo.createRandomSeed().seed;
+      const holderSeed = apollo.createRandomSeed().seed;
+
+      const issuerPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
+
+      const holderPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(holderSeed.value).toString("hex"),
+      });
+
+
+      const issuerDID = await castor.createPrismDID(
+        issuerPrv.publicKey()
+      )
+
+      const holderDID = await castor.createPrismDID(
+        holderPrv.publicKey()
+      )
+
+      const {
+        presentationDefinition,
+        presentaationSubmissionJSON,
+        issuedJWS
+      } = await createVerificationTestCase({
+        apollo,
+        castor,
+        jwt,
+        pollux,
+        //Play with this data in order to build tests
+        issuer: issuerDID,
+        holder: holderDID,
+        holderPrv: holderPrv,
+        issuerPrv: issuerPrv,
+        subject: {
+          course2: 'Identus Training course Certification 2024'
+        },
+        claims: {
+          course: {
+            type: 'string',
+            pattern: 'Identus Training course Certification 2024'
+          }
+        }
+      });
+
+      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+        presentationDefinitionRequest: presentationDefinition
+      })).to.eventually.be.rejectedWith(
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected one of the paths $.vc.credentialSubject.course, $.credentialSubject.course to exist.`
+      );
+    })
+
+    it("Should Verify true when the presentation and the credential are completely valid", async () => {
+      const issuerSeed = apollo.createRandomSeed().seed;
+      const holderSeed = apollo.createRandomSeed().seed;
+
+      const issuerPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
+
+      const holderPrv = apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(holderSeed.value).toString("hex"),
+      });
+
+
+      const issuerDID = await castor.createPrismDID(
+        issuerPrv.publicKey()
+      )
+
+      const holderDID = await castor.createPrismDID(
+        holderPrv.publicKey()
+      )
+
+      const {
+        presentationDefinition,
+        presentaationSubmissionJSON,
+      } = await createVerificationTestCase({
+        apollo,
+        castor,
+        jwt,
+        pollux,
+        //Play with this data in order to build tests
+        issuer: issuerDID,
+        holder: holderDID,
+        holderPrv: holderPrv,
+        issuerPrv: issuerPrv,
+        subject: {
+          course: 'Identus Training course Certification 2024'
+        },
+        claims: {
+          course: {
+            type: 'string',
+            pattern: 'Identus Training course Certification 2024'
+          }
+        }
+      });
+
+      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+        presentationDefinitionRequest: presentationDefinition
+      })).to.eventually.equal(true)
     })
   })
 });
