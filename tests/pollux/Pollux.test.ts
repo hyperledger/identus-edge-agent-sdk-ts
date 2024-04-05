@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { expect } from "chai";
 
-import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, LinkSecret, Message, PresentationOptions } from "../../src/domain";
+import { AttachmentDescriptor, CredentialRequestOptions, CredentialType, Curve, DID, LinkSecret, Message, PresentationOptions, PrivateKey } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -14,6 +14,8 @@ import { base64 } from "multiformats/bases/base64";
 import { AnonCredsCredential, AnonCredsRecoveryId } from "../../src/pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../src/pollux/models/PresentationRequest";
 import * as Fixtures from "../fixtures";
+import { JWT } from "../../src/apollo/utils/jwt/JWT";
+import { JWTPayload } from "did-jwt";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -39,12 +41,14 @@ const jwtParts = [
 const jwtString = jwtParts.join(".");
 
 describe("Pollux", () => {
+  let apollo: Apollo;
   let pollux: Pollux;
+  let castor: Castor;
 
   beforeEach(async () => {
     sandbox = sinon.createSandbox();
-    const apollo = {} as Apollo;
-    const castor = new Castor(apollo);
+    apollo = {} as Apollo;
+    castor = new Castor(apollo);
     pollux = new Pollux(castor);
     await pollux.start();
   });
@@ -855,6 +859,8 @@ describe("Pollux", () => {
 
 
     it("Should be able to create a presentationDefinitionRequest for a JWT Credential", async () => {
+      jest.restoreAllMocks();
+
 
       const presentationDefinitionRequest = await pollux.createPresentationDefinitionRequest(
         CredentialType.JWT,
@@ -891,6 +897,34 @@ describe("Pollux", () => {
     })
 
     it("Should create a valid presentationSubmission from a valid presentationRequest", async () => {
+      jest.restoreAllMocks();
+
+      const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
+      const Castor = jest.requireActual("../../src/castor/Castor").default;
+      const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
+      const JWT = jest.requireActual("../../src/apollo/utils/jwt/JWT").JWT;
+
+      type VerificationTestCase = {
+        apollo: Apollo,
+        castor: Castor,
+        jwt: JWT,
+        pollux: Pollux,
+        issuer: DID,
+        holder: DID,
+      }
+
+      function createVerificationTestCase(options: VerificationTestCase) {
+
+      }
+
+      const apollo = new Apollo();
+      const castor = new Castor(apollo);
+      const jwt = new JWT(castor)
+      const pollux = new Pollux(
+        castor,
+        undefined,
+        jwt
+      )
 
       const presentationDefinition = await pollux.createPresentationDefinitionRequest(
         CredentialType.JWT,
@@ -922,7 +956,10 @@ describe("Pollux", () => {
         privateKey
       );
 
-      const verify = await pollux.verifyPresentationSubmission(presentaationSubmissionJSON)
+      const verify = await pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+        presentationDefinitionRequest: presentationDefinition
+      });
+
       expect(verify).to.eq(true)
 
 

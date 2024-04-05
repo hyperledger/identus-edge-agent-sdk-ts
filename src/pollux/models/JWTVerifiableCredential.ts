@@ -82,6 +82,10 @@ export class JWTCredential
     return JWTCredential.fromJWT(jsonParsed, jws)
   }
 
+  static createPayload(obj: any): JWTCredentialPayload {
+    return obj
+  }
+
   get id() {
     return this.jti;
   }
@@ -156,6 +160,20 @@ export class JWTCredential
       "@context": ["https://www.w3.org/2018/presentations/v1"],
       type: ["VerifiablePresentation"],
       verifiableCredential: [this.jti],
+    };
+  }
+
+  verificableCredential() {
+    // TODO - Type information
+    return {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1"
+      ],
+      type: ["VerifiableCredential"],
+      "issuer": this.issuer,
+      "issuanceDate": this.issuanceDate,
+      "expirationDate": this.expirationDate,
+      "credentialSubject": this.subject
     };
   }
 
