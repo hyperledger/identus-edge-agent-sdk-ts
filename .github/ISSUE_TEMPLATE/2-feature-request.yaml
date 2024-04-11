@@ -1,5 +1,5 @@
 name: 'Feature Request'
-description: Suggest a new feature for Atala PRISM TS SDK
+description: Suggest a new feature for Edge Agent SDK TS
 
 body:
   - type: textarea
