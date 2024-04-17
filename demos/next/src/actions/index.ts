@@ -169,11 +169,40 @@ export const startAgent = createAsyncThunk<
 
         try {
             await agent.sendMessage(testMessage);
+            await agent.pluto.storeMessage(testMessage);
+            api.dispatch(
+                reduxActions.messageSuccess(
+                    [testMessage]
+                )
+            )
         } catch (err) {
             console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.");
         }
 
         return api.fulfillWithValue({ agent })
+    } catch (err) {
+        return api.rejectWithValue(err as Error);
+    }
+})
+
+export const sendMessage = createAsyncThunk<
+    { message: SDK.Domain.Message },
+    {
+        agent: SDK.Agent,
+        message: SDK.Domain.Message
+    }
+>('sendMessage', async (options, api) => {
+    try {
+        const { agent, message } = options;
+        await agent.sendMessage(message);
+        await agent.pluto.storeMessage(message);
+
+        api.dispatch(
+            reduxActions.messageSuccess(
+                [message]
+            )
+        )
+        return api.fulfillWithValue({ message });
     } catch (err) {
         return api.rejectWithValue(err as Error);
     }

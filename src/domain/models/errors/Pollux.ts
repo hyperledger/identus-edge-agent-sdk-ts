@@ -1,10 +1,39 @@
+export class InvalidCredentialError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid credential error");
+    }
+}
 
-export class InvalidCredentialError extends Error { }
-export class InvalidJWTString extends Error { }
-export class InvalidPresentationProofArgs extends Error { }
-export class CredsentialTypeNotSupported extends Error { }
-export class InvalidJWTPresentationDefinitionError extends Error { }
-export class NoDomainOrChallengeFound extends Error { }
+export class InvalidJWTString extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid JWT string");
+    }
+}
+
+export class InvalidPresentationProofArgs extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid presentation proof arguments");
+    }
+}
+
+export class CredentialTypeNotSupported extends Error {
+    constructor(message?: string) {
+        super(message || "Credential type not supported");
+    }
+}
+
+export class InvalidJWTPresentationDefinitionError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid JWT presentation definition error");
+    }
+}
+
+export class NoDomainOrChallengeFound extends Error {
+    constructor(message?: string) {
+        super(message || "No domain or challenge found");
+    }
+}
+
 
 export class InvalidVerifyFormatError extends Error {
     constructor(public reason: string) {

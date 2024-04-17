@@ -2,7 +2,6 @@ import SDK from "@atala/prism-wallet-sdk";
 import { useState } from "react";
 import { useMountedApp } from "@/reducers/store";
 import { AgentRequire } from "./AgentRequire";
-const BasicMessage = SDK.BasicMessage;
 
 export function Message({ message }) {
     const app = useMountedApp();
@@ -41,20 +40,25 @@ export function Message({ message }) {
         const text = response;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const from = message?.from as SDK.Domain.DID;
+        const to = message?.to as SDK.Domain.DID;
+        const thid = message?.thid || message?.id;
         try {
             if (!agent) {
                 throw new Error("Start the agent first")
             }
             await agent.sendMessage(
-                new BasicMessage(
+                new SDK.BasicMessage(
                     { content: text },
+                    to,
                     from,
-                    from
+                    thid
                 ).makeMessage()
 
             );
         }
-        catch (e) { }
+        catch (e) {
+            console.log(e)
+        }
     };
 
     const hasResponse = app.messages.find((appMessage) => {
@@ -70,12 +74,16 @@ export function Message({ message }) {
         return response;
     })
 
+    const isReceived = message.direction !== SDK.Domain.MessageDirection.SENT;
+
     if (message.piuri === "https://didcomm.org/basicmessage/2.0/message") {
         return <div
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
         >
             <div>
-                <b>Basic Message: </b> {message.id}
+                <b>Basic Message: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
+                <p>from {message.from.toString()}</p>
+                <p>to {message.to.toString()}</p>
                 <pre style={{
                     textAlign: "left",
                     wordWrap: "break-word",
@@ -99,15 +107,27 @@ export function Message({ message }) {
                 )}
 
             </div>
+            {
+                message?.isAnswering && <>
+                    <div role="status">
+                        <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                        </svg>
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </>
+            }
+            {
+                !message?.isAnswering && isReceived && !hasResponse && <AgentRequire>
+                    <input
+                        className="block mt-5 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" value={response} placeholder="Your response" onChange={(e) => setResponse(e.target.value)} />
 
-            {!hasResponse && <AgentRequire>
-                <input
-                    className="block mt-5 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" value={response} placeholder="Your response" onChange={(e) => setResponse(e.target.value)} />
-
-                <button className="mt-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
-                    handleSend();
-                }}>Respond</button>
-            </AgentRequire>}
+                    <button className="mt-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                        handleSend();
+                    }}>Respond</button>
+                </AgentRequire>
+            }
         </div>
     }
 
@@ -116,7 +136,7 @@ export function Message({ message }) {
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
         >
             <div>
-                <b>Connection Request: </b> {message.id}
+                <b>Connection Request: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 <pre style={{
                     textAlign: "left",
                     wordWrap: "break-word",
@@ -136,7 +156,7 @@ export function Message({ message }) {
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
         >
             <div>
-                <b>Connection established: </b> {message.id}
+                <b>Connection established: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 <pre style={{
                     textAlign: "left",
                     wordWrap: "break-word",
@@ -158,7 +178,7 @@ export function Message({ message }) {
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
         >
             <div>
-                <b>Credential Request: </b> {message.id}
+                <b>Credential Request: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 <pre style={{
                     textAlign: "left",
                     wordWrap: "break-word",
@@ -190,7 +210,7 @@ export function Message({ message }) {
             className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
         >
             <div>
-                <b>Credential Issued: </b> {message.id}
+                <b>Credential Issued: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 <pre style={{
                     textAlign: "left",
                     wordWrap: "break-word",
@@ -225,7 +245,7 @@ export function Message({ message }) {
             <div>
                 <p
                     className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-                    <b>Credential Offer </b> {message.id}
+                    <b>Credential Offer </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 </p>
 
                 Credential will contain the following fields
@@ -240,7 +260,7 @@ export function Message({ message }) {
                     })
                 }
 
-                {!hasResponse && <AgentRequire>
+                {isReceived && !hasResponse && <AgentRequire>
                     {
                         message?.isAnswering && <>
                             <div role="status">
@@ -289,7 +309,7 @@ export function Message({ message }) {
             <div>
                 <p
                     className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-                    <b>Verification Proof </b> {message.id}
+                    <b>Verification Proof </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 </p>
                 <p
                     className="overflow-x-auto h-auto text-sm font-normal text-gray-500dark:text-gray-400">
@@ -321,7 +341,7 @@ export function Message({ message }) {
         const requestPresentation = SDK.RequestPresentation.fromMessage(message)
         const presentationRequest: SDK.Domain.PresentationDefinitionRequest = requestPresentation.decodedAttachments.at(0)
 
-        const inputDescriptorField = presentationRequest.presentation_definition.inputDescriptors.at(0)?.constraints.fields ?? [];
+        const inputDescriptorField = presentationRequest.presentation_definition.input_descriptors.at(0)?.constraints.fields ?? [];
 
 
         const credentials = app.credentials;
@@ -332,7 +352,7 @@ export function Message({ message }) {
             <div>
                 <p
                     className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-                    <b>Verification request </b> {message.id}
+                    <b>Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
                 </p>
 
                 Should proof the following claims:
@@ -353,7 +373,7 @@ export function Message({ message }) {
                     })
                 }
 
-                {!hasResponse && <AgentRequire>
+                {isReceived && !hasResponse && <AgentRequire>
                     {
                         message?.isAnswering && <>
                             <div role="status">
@@ -390,29 +410,45 @@ export function Message({ message }) {
                                 <ul className="px-5 py-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
                                     {
                                         credentials.map((credential, i) => {
-                                            const fields = credential.claims.reduce((all, claim) => [
+                                            const fields = credential.claims.reduce<any>((all, claim) => [
                                                 ...all,
                                                 Object.keys(claim).slice(0, 3).join(",")
                                             ], [])
                                             return <li key={`cred${i}`}>
                                                 <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                    <button
-                                                        onClick={() => {
-                                                            if (!agent) {
-                                                                throw new Error("Start the agent first")
-                                                            }
-                                                            app.acceptPresentationRequest({
-                                                                agent,
-                                                                message,
-                                                                credential
-                                                            })
-                                                            setCollapsed(true);
-                                                        }}
-                                                    >
-                                                        <span className="ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 overflow-x-auto h-auto">
-                                                            Credential with {fields} from {credential.iss.slice(0, 30)}...
-                                                        </span>
-                                                    </button>
+                                                    {
+                                                        app.agent.isSendingMessage === false && <button
+                                                            onClick={() => {
+                                                                if (!agent) {
+                                                                    throw new Error("Start the agent first")
+                                                                }
+                                                                app.acceptPresentationRequest({
+                                                                    agent,
+                                                                    message,
+                                                                    credential
+                                                                })
+                                                                setCollapsed(true);
+                                                            }}
+                                                        >
+                                                            <span className="ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 overflow-x-auto h-auto">
+                                                                Credential with {fields} from {credential.issuer.slice(0, 30)}...
+                                                            </span>
+                                                        </button>
+                                                    }
+
+                                                    {
+                                                        app.agent.isSendingMessage === true && <button
+
+                                                        >
+                                                            <div role="status">
+                                                                <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                                </svg>
+                                                                <span className="sr-only">Loading...</span>
+                                                            </div>
+                                                        </button>
+                                                    }
                                                 </div>
                                             </li>
                                         })
@@ -438,7 +474,7 @@ export function Message({ message }) {
         className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
     >
         <div>
-            <b>Message: </b> {message.id}
+            <b>Message: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
             {message.piuri === "https://atalaprism.io/mercury/connections/1.0/response" && (
                 <p>Connection Established with {message.from!.toString()} (Goal: {body.goal})?</p>
             )}

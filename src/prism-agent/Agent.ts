@@ -552,7 +552,7 @@ export default class Agent
    * Initiate the Presentation and presentationSubmission
    * @param presentation 
    */
-  async handlePresentation(presentation: Presentation): Promise<Boolean> {
+  async handlePresentation(presentation: Presentation): Promise<boolean> {
     return this.agentCredentials.handlePresentation(presentation)
   }
 

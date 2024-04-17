@@ -1,6 +1,9 @@
+import Apollo from "../../../src/apollo";
 import { AttachmentDescriptor, JWTCredentialPayload, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
 import { OfferCredential } from "../../../src/prism-agent/protocols/issueCredential/OfferCredential";
 import { list } from "../dids";
+
+const apollo = new Apollo();
 
 export const credentialOfferMessage = new OfferCredential(
   {
@@ -77,9 +80,11 @@ export const credentialAgent: W3CVerifiableCredential = {
 export const credential: W3CVerifiableCredential = {
   type: [W3CVerifiableCredentialType.credential],
   "@context": [W3CVerifiableCredentialContext.credential],
-  credentialSubject: { whatever: "credSubject" },
-  expirationDate: new Date().toISOString(),
-  issuanceDate: new Date().toISOString(),
+  credentialSubject: {
+    additionalProp2: 'Test3', id: 'did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w'
+  },
+  expirationDate: new Date(1685635595).toISOString(),
+  issuanceDate: new Date(1685631995).toISOString(),
   issuer: "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0",
 };
 
@@ -90,7 +95,9 @@ export const credentialPayload: JWTCredentialPayload = {
   sub: "did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w",
   nbf: 1685631995,
   exp: 1685635595,
-  vc: credential
+  vc: credential,
+  jti: credentialPayloadEncoded,
+  aud: "did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w",
 };
 
 export const presentationRequest = {

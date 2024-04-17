@@ -2,9 +2,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import SDK from "@atala/prism-wallet-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { DBPreload, Message, Credential } from "@/actions/types";
-import { acceptCredentialOffer, acceptPresentationRequest, connectDatabase, initAgent, rejectCredentialOffer, startAgent, stopAgent } from "../actions";
+import { acceptCredentialOffer, acceptPresentationRequest, connectDatabase, initAgent, rejectCredentialOffer, sendMessage, startAgent, stopAgent } from "../actions";
 
-const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19";
+const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHBzOi8vY3Jpc3RpYW4tbWVkaWF0b3IuanJpYm8ua2l3aSIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzczovL2NyaXN0aWFuLW1lZGlhdG9yLmpyaWJvLmtpd2kvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19";
 
 class TraceableError extends Error {
 
@@ -39,6 +39,8 @@ export const initialState: RootState = {
         instance: null,
         hasStarted: false,
         isStarting: false,
+        isSendingMessage: false,
+        hasSentMessage: false
     }
 }
 
@@ -59,7 +61,9 @@ export type RootState = {
     agent: {
         instance: SDK.Agent | null,
         isStarting: boolean,
-        hasStarted: boolean
+        hasStarted: boolean,
+        isSendingMessage: boolean,
+        hasSentMessage: boolean
     }
 };
 
@@ -100,6 +104,7 @@ const appSlice = createSlice({
             state,
             action: PayloadAction<SDK.Domain.Message[]>
         ) => {
+            const nonExisting = action.payload.filter((m) => !state.messages.find((d) => d.id === m.id))
             state.messages = removeDuplicates([
                 ...action.payload,
                 ...state.messages.map((oldMessage) => {
@@ -112,11 +117,33 @@ const appSlice = createSlice({
                     }
                     return oldMessage
                 }),
-
+                ...nonExisting
             ]);
         },
     },
     extraReducers: (builder) => {
+
+        builder.addCase(sendMessage.fulfilled, (state, action) => {
+            state.agent.isSendingMessage = false;
+            state.agent.hasSentMessage = true;
+        })
+
+        builder.addCase(sendMessage.pending, (state, action) => {
+            state.agent.isSendingMessage = true;
+            state.agent.hasSentMessage = false;
+            state.messages.push({
+                ...action.meta.arg.message,
+                isAnswering: true,
+                hasAnswered: false,
+                error: null
+            })
+        })
+
+        builder.addCase(sendMessage.rejected, (state, action) => {
+            state.agent.isSendingMessage = false;
+            state.agent.hasSentMessage = false;
+            state.errors.push(TraceableError.fromError(action.payload as Error));
+        })
 
         builder.addCase(stopAgent.fulfilled, (state, action) => {
             state.agent.isStarting = false;

@@ -75,7 +75,7 @@ export interface AgentCredentials {
     credential: Credential
   ): Promise<Presentation>;
 
-  handlePresentation(presentation: Presentation): Promise<Boolean>
+  handlePresentation(presentation: Presentation): Promise<boolean>
 }
 
 export interface AgentDIDHigherFunctions {

@@ -24,20 +24,22 @@ import {
   PresentationSubmission,
   DescriptorItem,
   CastorError,
-  SubmissionDescriptorFormat,
   DefinitionFormat,
   PresentationClaims,
   DID,
+  DescriptorItemFormat,
+  JWTVerifiablePresentationProperties,
+  JWTPresentationPayload,
 } from "../domain";
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
-import { JWT } from "../apollo/utils/jwt/JWT";
 import { Anoncreds } from "../domain/models/Anoncreds";
 import { ApiImpl } from "../prism-agent/helpers/ApiImpl";
 import { PresentationRequest } from "./models/PresentationRequest";
 import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 import { DescriptorPath } from "./utils/DescriptorPath";
+import { JWT } from "./utils/JWT";
 
 /**
  * Implementation of Pollux
@@ -66,7 +68,7 @@ export default class Pollux implements IPollux {
       }
       const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
 
-      const descriptorItems: DescriptorItem[] = presentation_definition.inputDescriptors.map(
+      const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
         (inputDescriptor) => {
           if (!inputDescriptor.format || !inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg) {
             //TODO: Improive error
@@ -74,8 +76,13 @@ export default class Pollux implements IPollux {
           }
           return {
             id: inputDescriptor.id,
-            format: "jwt",
-            path: "$.verifiablePresentation[0]"
+            format: DescriptorItemFormat.JWT_VP,
+            path: "$.verifiablePresentation[0]",
+            path_nested: {
+              id: inputDescriptor.id,
+              format: DescriptorItemFormat.JWT_VC,
+              path: "$.verifiableCredential[0]",
+            }
           }
         });
 
@@ -88,12 +95,14 @@ export default class Pollux implements IPollux {
         throw new Error("Cannot create proofs with this type of credential.")
       }
 
-
-      const payload = {
+      const payload: JWTPresentationPayload = {
+        iss: subject,
         aud: domain,
+        nbf: Date.parse(new Date().toISOString()),
         nonce: Buffer.from(privateKey.sign(Buffer.from(challenge))).toString('hex'),
         vp: credential.presentation(),
       }
+
       const jws = await this.jwt.sign({
         issuerDID: DID.fromString(subject),
         privateKey,
@@ -113,7 +122,7 @@ export default class Pollux implements IPollux {
 
       return presentationSubmission
     } else {
-      throw new PolluxError.CredsentialTypeNotSupported()
+      throw new PolluxError.CredentialTypeNotSupported()
     }
   }
 
@@ -148,7 +157,7 @@ export default class Pollux implements IPollux {
     options: PresentationOptions
   ): Promise<PresentationDefinitionRequest> {
     if (type !== CredentialType.JWT) {
-      throw new PolluxError.CredsentialTypeNotSupported()
+      throw new PolluxError.CredentialTypeNotSupported()
     }
 
     const jwtOptions = options.jwt;
@@ -176,7 +185,7 @@ export default class Pollux implements IPollux {
         }
         return inputField
       }),
-      limitDisclosure: InputLimitDisclosure.REQUIRED
+      limit_disclosure: InputLimitDisclosure.REQUIRED
     };
 
     if (presentationClaims.issuer) {
@@ -209,7 +218,7 @@ export default class Pollux implements IPollux {
     const presentationDefinitionRequest: PresentationDefinitionRequest = {
       presentation_definition: {
         id: uuid(),
-        inputDescriptors: [
+        input_descriptors: [
           inputDescriptor
         ],
         format: format,
@@ -241,107 +250,141 @@ export default class Pollux implements IPollux {
     }
 
     const presentationDefinitionRequest = options.presentationDefinitionRequest;
-    const inputDescriptors = presentationDefinitionRequest.presentation_definition.inputDescriptors;
-    const descriptorMapper = new DescriptorPath(presentationSubmission);
+    const inputDescriptors = presentationDefinitionRequest.presentation_definition.input_descriptors;
+    const presentationSubmissionMapper = new DescriptorPath(presentationSubmission);
     const descriptorMaps = presentationSubmission.presentation_submission.descriptor_map;
 
     for (let descriptorItem of descriptorMaps) {
-      if (descriptorItem.format === SubmissionDescriptorFormat.JWT) {
-        const jws = descriptorMapper.getValue(descriptorItem.path);
-        if (!jws) {
-          throw new InvalidVerifyFormatError(`Invalid Submission, ${descriptorItem.path} not found in submission`);
-        }
-        const presentation = JWTCredential.fromJWS(jws);
-        const credType = presentation.credentialType;
-        const isPrismJWTCredentialType = credType === CredentialType.JWT;
-        if (!isPrismJWTCredentialType) {
-          throw new InvalidVerifyCredentialError(jws, "Invalid JWT Credential only prism/jwt is supported for jwt");
-        }
-        const issuer = presentation.issuer;
-        const credentialValid = await this.jwt.verify({
-          issuerDID: issuer,
-          jws
-        });
-        if (!credentialValid) {
-          throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
-        }
-        const verifiablePresentation = presentation.vp;
-        const vc = verifiablePresentation.verifiableCredential.at(0)
-        if (!vc) {
-          throw new InvalidVerifyCredentialError(jws, "Invalid Verifiable Presentation payload, cannot find vc");
+      if (descriptorItem.format !== DescriptorItemFormat.JWT_VP) {
+        throw new InvalidVerifyFormatError(
+          `Invalid Submission, ${descriptorItem.path} expected to have format ${DescriptorItemFormat.JWT_VP}`
+        );
+      }
 
-        }
-        const verifiableCredential = JWTCredential.fromJWS(vc);
-        const verifiableCredentialValid = await this.jwt.verify({
-          holderDID: verifiableCredential.sub ? DID.fromString(verifiableCredential.sub) : undefined,
-          issuerDID: verifiableCredential.issuer,
-          jws: verifiableCredential.id
-        });
-        if (!verifiableCredentialValid) {
-          throw new InvalidVerifyCredentialError(vc, "Invalid Presentation Credential JWS Signature");
-        }
-        const verifiableCredentialPropsMapper = new DescriptorPath(verifiableCredential);
-        const inputDescriptor = inputDescriptors.find((inputDescriptor) => inputDescriptor.id === descriptorItem.id);
-        if (inputDescriptor) {
-          const constraints = inputDescriptor.constraints;
-          const fields = constraints.fields;
-          if (constraints.limitDisclosure === InputLimitDisclosure.REQUIRED) {
-            for (let field of fields) {
-              const paths = [
-                ...field.path
-              ];
-              const optional = field.optional;
-              if (!optional) {
-                let validClaim = false;
-                let reason = null;
+      const jws = presentationSubmissionMapper.getValue(descriptorItem.path);
+      if (!jws) {
+        throw new InvalidVerifyFormatError(`Invalid Submission, ${descriptorItem.path} not found in submission`);
+      }
 
-                while (paths.length && !validClaim) {
-                  const [path] = paths.splice(0, 1);
-                  if (path) {
-                    const fieldInVC = verifiableCredentialPropsMapper.getValue(path);
-                    if (field.filter && fieldInVC !== null) {
-                      const filter = field.filter;
-                      if (filter.pattern) {
-                        const pattern = new RegExp(filter.pattern);
-                        if (pattern.test(fieldInVC) || fieldInVC === filter.pattern) {
-                          validClaim = true
-                        } else {
-                          reason = `Expected the ${path} field to be "${filter.pattern}" but got "${fieldInVC}"`
-                        }
+      const presentation = JWTCredential.fromJWS(jws);
+      const issuer = presentation.issuer;
 
-                      } else if (filter.enum) {
-                        if (filter.enum.includes(fieldInVC)) {
-                          validClaim = true
-                        } else {
-                          reason = `Expected the ${path} field to be one of ${filter.enum.join(", ")} but got ${fieldInVC}`
-                        }
-                        validClaim = filter.enum.includes(fieldInVC)
-                      } else if (filter.const && fieldInVC === filter.pattern) {
-                        if (fieldInVC === filter.const) {
-                          validClaim = true
-                        } else {
-                          reason = `Expected the ${path} field to be "${filter.const}" but got "${fieldInVC}"`
-                        }
-                        validClaim = fieldInVC === filter.const;
+      const presentationDefinitionOptions = presentationDefinitionRequest.options;
+      const challenge = presentationDefinitionOptions.challenge;
+      if (challenge && challenge !== '') {
+        const nonce = presentation.getProperty(JWTVerifiablePresentationProperties.nonce);
+        if (!nonce || typeof nonce !== "string") {
+          throw new InvalidVerifyCredentialError(jws, `Invalid Submission, ${descriptorItem.path} does not contain a nonce in its payload with a valid signature for '${challenge}'`);
+        }
+        const signatureHex = nonce as string;
+        const signatureValid = await this.castor.verifySignature(
+          DID.fromString(issuer),
+          Buffer.from(challenge),
+          Buffer.from(signatureHex, 'hex')
+        );
+        if (!signatureValid) {
+          throw new InvalidVerifyCredentialError(jws, `Invalid Submission, ${descriptorItem.path} does not contain valid signature for '${challenge}'`);
+        }
+      }
+
+      const credType = presentation.credentialType;
+      const isPrismJWTCredentialType = credType === CredentialType.JWT;
+      if (!isPrismJWTCredentialType) {
+        throw new InvalidVerifyCredentialError(jws, "Invalid JWT Credential only prism/jwt is supported for jwt");
+      }
+      const credentialValid = await this.jwt.verify({
+        issuerDID: issuer,
+        jws
+      });
+      if (!credentialValid) {
+        throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
+      }
+      const verifiablePresentation = presentation.vp;
+      const nestedPath = descriptorItem.path_nested;
+      if (!nestedPath) {
+        throw new InvalidVerifyFormatError(
+          `Invalid Submission, ${descriptorItem.path} of format ${DescriptorItemFormat.JWT_VP} must provide a nested_path with ${DescriptorItemFormat.JWT_VC} for JWT`
+        );
+      }
+      const verifiableCredentialMapper = new DescriptorPath(verifiablePresentation)
+      const vc = verifiableCredentialMapper.getValue(nestedPath.path)
+      if (!vc) {
+        throw new InvalidVerifyCredentialError(jws, "Invalid Verifiable Presentation payload, cannot find vc");
+      }
+
+      const verifiableCredential = JWTCredential.fromJWS(vc);
+      if (verifiableCredential.subject !== issuer) {
+        throw new InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation payload, the credential has been issued to another holder");
+      }
+
+      const verifiableCredentialValid = await this.jwt.verify({
+        holderDID: verifiableCredential.subject ? DID.fromString(verifiableCredential.subject) : undefined,
+        issuerDID: verifiableCredential.issuer,
+        jws: verifiableCredential.id
+      });
+      if (!verifiableCredentialValid) {
+        throw new InvalidVerifyCredentialError(vc, "Invalid Presentation Credential JWS Signature");
+      }
+      const verifiableCredentialPropsMapper = new DescriptorPath(verifiableCredential);
+      const inputDescriptor = inputDescriptors.find((inputDescriptor) => inputDescriptor.id === descriptorItem.id);
+      if (inputDescriptor) {
+        const constraints = inputDescriptor.constraints;
+        const fields = constraints.fields;
+        if (constraints.limit_disclosure === InputLimitDisclosure.REQUIRED) {
+          for (let field of fields) {
+            const paths = [
+              ...field.path
+            ];
+            const optional = field.optional;
+            if (!optional) {
+              let validClaim = false;
+              let reason = null;
+              while (paths.length && !validClaim) {
+                const [path] = paths.splice(0, 1);
+                if (path) {
+                  const fieldInVC = verifiableCredentialPropsMapper.getValue(path);
+                  if (field.filter && fieldInVC !== null) {
+                    const filter = field.filter;
+                    if (filter.pattern) {
+                      const pattern = new RegExp(filter.pattern);
+                      if (pattern.test(fieldInVC) || fieldInVC === filter.pattern) {
+                        validClaim = true
+                      } else {
+                        reason = `Expected the ${path} field to be "${filter.pattern}" but got "${fieldInVC}"`
                       }
-                    } else {
-                      reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
+                    } else if (filter.enum) {
+                      if (filter.enum.includes(fieldInVC)) {
+                        validClaim = true
+                      } else {
+                        reason = `Expected the ${path} field to be one of ${filter.enum.join(", ")} but got ${fieldInVC}`
+                      }
+                      validClaim = filter.enum.includes(fieldInVC)
+                    } else if (filter.const && fieldInVC === filter.pattern) {
+                      if (fieldInVC === filter.const) {
+                        validClaim = true
+                      } else {
+                        reason = `Expected the ${path} field to be "${filter.const}" but got "${fieldInVC}"`
+                      }
+                      validClaim = fieldInVC === filter.const;
                     }
                   } else {
                     reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
                   }
+                } else {
+                  reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
                 }
-                if (!validClaim) {
-                  throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${reason || 'paths are not found or have unexpected value'}`);
-                }
+              }
+              if (!validClaim) {
+                throw new InvalidVerifyCredentialError(vc, `Invalid Claim: ${reason || 'paths are not found or have unexpected value'}`);
               }
             }
           }
         }
-        return true;
       }
+      return true;
 
     }
+
     return false;
   }
 
@@ -402,7 +445,8 @@ export default class Pollux implements IPollux {
 
     const signedJWT = await this.jwt.sign({
       issuerDID: did,
-      privateKey: keyPair.privateKey.value, payload: {
+      privateKey: keyPair.privateKey,
+      payload: {
         aud: domain,
         nonce: challenge,
         vp: {
@@ -547,19 +591,7 @@ export default class Pollux implements IPollux {
     const credentialString = Buffer.from(credentialBuffer).toString();
 
     if (credentialType === CredentialType.JWT) {
-      const parts = credentialString.split(".");
-
-      if (parts.length != 3 || parts.at(1) === undefined) {
-        throw new InvalidJWTString();
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const jwtCredentialString = parts.at(1)!;
-      const base64Data = base64url.baseDecode(jwtCredentialString);
-      const jsonString = Buffer.from(base64Data).toString();
-      const jsonParsed = JSON.parse(jsonString);
-
-      return JWTCredential.fromJWT(jsonParsed, credentialString);
+      return JWTCredential.fromJWS(credentialString);
     }
 
     if (credentialType === CredentialType.AnonCreds) {

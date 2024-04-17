@@ -35,8 +35,8 @@ const Verification: React.FC<{}> = props => {
     }, [app.messages, app.db])
 
     const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress=javier.ribo@iohk.io")
-    const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:be0f14c426a73c12498a3f9966adbcc46f7288f27191bc02e53eb04b7992f123")
-
+    const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:a0209ebd691c5ec20636f206b3e101c726fdc1c22b9b850b4b811ac4a82e28d8")
+    const [sendTo, setSendTo] = React.useState<string>("did:peer:2.Ez6LShzJ7Ew7dFka1sfhP5KtXQfCXp8Zj9VU5ay9KxgRoCJ5x.Vz6MkgTWF2hKU4e3cCrTuPwXJV2mUXZrxgBB9tYgAXwFbXeDC");
     const handleMessages = async (
         newMessages: SDK.Domain.Message[]
     ) => {
@@ -76,34 +76,33 @@ const Verification: React.FC<{}> = props => {
     }, [agent])
 
     const handleInitiate = async () => {
+        if (!sendTo) {
+            throw new Error("Sent to is required")
+        }
         const agent = app.agent.instance!;
-        agent.createNewPeerDID(
-            [],
-            true
-        ).then((did) => {
-            const claims = requiredFields.split(",").reduce<SDK.Domain.Claims>((all, requiredField) => {
-                const [varName, varValue] = requiredField.split("=");
-                if (typeof varValue === "string") {
-                    all[varName] = {
-                        type: 'string',
-                        pattern: varValue
-                    }
-                } else {
-                    all[varName] = {
-                        type: 'string',
-                        value: varValue
-                    }
+        const claims = requiredFields.split(",").reduce<SDK.Domain.Claims>((all, requiredField) => {
+            const [varName, varValue] = requiredField.split("=");
+            if (typeof varValue === "string") {
+                all[varName] = {
+                    type: 'string',
+                    pattern: varValue
                 }
-                return all
-            }, {});
-            return app.initiatePresentationRequest({
-                agent: agent,
-                toDID: did,
-                presentationClaims: {
-                    issuer: trustIssuers.split(",").at(0),
-                    claims: claims
+            } else {
+                all[varName] = {
+                    type: 'string',
+                    value: varValue
                 }
-            })
+            }
+            return all
+        }, {});
+        const did = SDK.Domain.DID.fromString(sendTo)
+        return app.initiatePresentationRequest({
+            agent: agent,
+            toDID: did,
+            presentationClaims: {
+                issuer: trustIssuers.split(",").at(0),
+                claims: claims
+            }
         })
     }
 
@@ -137,6 +136,13 @@ const Verification: React.FC<{}> = props => {
                                         type="text"
                                         value={trustIssuers}
                                         onChange={(e) => { setTrustIssuers(e.target.value) }}
+                                    />
+                                    <label htmlFor="mediatordid">Send to ,</label>
+                                    <input
+                                        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        type="text"
+                                        value={sendTo}
+                                        onChange={(e) => { setSendTo(e.target.value) }}
                                     />
                                     <button
                                         className="my-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"

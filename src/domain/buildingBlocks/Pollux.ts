@@ -116,7 +116,9 @@ export namespace Pollux {
   export namespace verifyPresentationSubmission {
     export type options = options.Anoncreds | options.JWT;
     export namespace options {
-      export interface Anoncreds { }
+      export interface Anoncreds {
+        [name: string | number | symbol]: any
+      }
       export interface JWT {
         presentationDefinitionRequest: PresentationDefinitionRequest,
       }

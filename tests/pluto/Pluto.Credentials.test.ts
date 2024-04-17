@@ -26,16 +26,7 @@ describe("Pluto", () => {
     describe("JWT", () => {
       test("uuid set on Domain instance - same after store", async () => {
 
-        const sut = new JWTCredential(
-          "did:peer:2.issuer",
-          Fixtures.Credentials.JWT.credentialPayload,
-          "jwtString",
-          1680615608435,
-          "did:peer:2.sub",
-          1680615608435,
-          ["aud-json"],
-          "jwtString"
-        );
+        const sut = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded)
         const uuid = sut.uuid;
         expect(uuid).to.be.a.string;
 
@@ -45,16 +36,7 @@ describe("Pluto", () => {
       });
 
       test("Retrieved should match Stored", async () => {
-        const credentialIn = new JWTCredential(
-          Fixtures.Credentials.JWT.credentialPayload.iss,
-          Fixtures.Credentials.JWT.credentialPayload,
-          Fixtures.Credentials.JWT.credentialPayloadEncoded,
-          Fixtures.Credentials.JWT.credentialPayload.nbf,
-          Fixtures.Credentials.JWT.credentialPayload.sub,
-          Fixtures.Credentials.JWT.credentialPayload.exp,
-          Fixtures.Credentials.JWT.credentialPayload.aud,
-          Fixtures.Credentials.JWT.credentialPayloadEncoded
-        );
+        const credentialIn = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded)
 
         await instance.storeCredential(credentialIn);
         const data = await instance.getAllCredentials();
@@ -70,22 +52,21 @@ describe("Pluto", () => {
         expect(credentialOut.subject).to.eql(credentialIn.subject);
 
         const jwtCred = credentialOut as JWTCredential;
-        expect(jwtCred.aud).to.eql(credentialIn.aud);
+        expect(jwtCred.audience).to.eql(credentialIn.audience);
         expect(jwtCred.context).to.eql(credentialIn.context);
         expect(jwtCred.credentialSchema).to.eql(credentialIn.credentialSchema);
         expect(jwtCred.credentialStatus).to.eql(credentialIn.credentialStatus);
         expect(jwtCred.credentialSubject).to.eql(credentialIn.credentialSubject);
         expect(jwtCred.credentialType).to.eql(credentialIn.credentialType);
         expect(jwtCred.evidence).to.eql(credentialIn.evidence);
-        expect(jwtCred.exp).to.eql(credentialIn.exp);
+        expect(jwtCred.expirationDate?.toString()).to.eql(credentialIn.expirationDate?.toString());
         expect(jwtCred.expirationDate).to.eql(credentialIn.expirationDate);
-        expect(jwtCred.iss).to.eql(credentialIn.iss);
+        expect(jwtCred.issuer).to.eql(credentialIn.issuer);
         expect(jwtCred.issuanceDate).to.eql(credentialIn.issuanceDate);
-        expect(jwtCred.jti).to.eql(credentialIn.jti);
-        expect(jwtCred.nbf).to.eql(credentialIn.nbf);
-        expect(jwtCred.originalJWTString).to.eql(credentialIn.originalJWTString);
+        expect(jwtCred.id).to.eql(credentialIn.id);
+        expect(jwtCred.issuanceDate.toString()).to.eql(credentialIn.issuanceDate.toString());
         expect(jwtCred.refreshService).to.eql(credentialIn.refreshService);
-        expect(jwtCred.sub).to.eql(credentialIn.sub);
+        expect(jwtCred.subject).to.eql(credentialIn.subject);
         expect(jwtCred.termsOfUse).to.eql(credentialIn.termsOfUse);
         expect(jwtCred.type).to.eql(credentialIn.type);
         expect(jwtCred.vc).to.deep.eq(credentialIn.vc);

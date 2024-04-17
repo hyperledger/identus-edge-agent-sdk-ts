@@ -293,7 +293,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     throw new Error("Cannot find any message with that threadID");
   }
 
-  async handlePresentation(presentation: Presentation): Promise<Boolean> {
+  async handlePresentation(presentation: Presentation): Promise<boolean> {
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
       throw new Error("Invalid presentation message, attachment missing")

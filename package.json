@@ -158,6 +158,7 @@
       "externals",
       "generated",
       "src/castor/protos",
+      "src/domain/models/errors",
       "build"
     ],
     "testPathIgnorePatterns": [

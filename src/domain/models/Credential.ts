@@ -1,4 +1,4 @@
-import { CredentialType, LinkSecret, W3CVerifiableCredential, W3CVerifiablePresentation } from ".";
+import { CredentialType, LinkSecret, W3CVerifiableCredential, W3CVerifiablePresentation, W3CVerifiablePresentationProof } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
 import { DID } from "./DID";
 import { KeyPair } from "./KeyPair";

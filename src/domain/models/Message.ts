@@ -36,10 +36,10 @@ export class Message implements Pluto.Storable {
       1 * 24 * 60 * 60
     ).toString(),
     public readonly ack: string[] = [],
-    public readonly direction: MessageDirection = MessageDirection.RECEIVED,
+    public direction: MessageDirection = MessageDirection.RECEIVED,
     public readonly fromPrior?: string,
     public readonly pthid?: string
-  ) {}
+  ) { }
 
   static fromJson(jsonString: JsonString): Message {
     const messageObj = JSON.parse(jsonString);

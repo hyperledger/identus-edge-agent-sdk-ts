@@ -2,9 +2,9 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import { expect } from "chai";
+import { expect, assert } from "chai";
 
-import { AttachmentDescriptor, Claims, CredentialRequestOptions, CredentialType, Curve, DID, JWTCredentialPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialSubject, W3CVerifiableCredentialType } from "../../src/domain";
+import { AttachmentDescriptor, Claims, CredentialRequestOptions, CredentialType, Curve, DID, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -14,18 +14,13 @@ import { base64 } from "multiformats/bases/base64";
 import { AnonCredsCredential, AnonCredsRecoveryId } from "../../src/pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../src/pollux/models/PresentationRequest";
 import * as Fixtures from "../fixtures";
-import { JWT } from "../../src/apollo/utils/jwt/JWT";
+import { JWT } from "../../src/pollux/utils/JWT";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 let sandbox: sinon.SinonSandbox;
-const encodeJWTCredential = (cred: object): string => {
-  const json = JSON.stringify(cred);
-  const encoded = Buffer.from(json).toString("base64");
-  return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
-};
 
-jest.mock("../../src/apollo/utils/jwt/JWT", () => ({
+jest.mock("../../src/pollux/utils/JWT", () => ({
   JWT: jest.fn(() => ({
     sign: jest.fn(() => "JWT.sign.result"),
     verify: jest.fn(() => true)
@@ -40,6 +35,7 @@ const jwtParts = [
 const jwtString = jwtParts.join(".");
 
 type VerificationTestCase = {
+  challenge?: string,
   apollo: Apollo,
   castor: Castor,
   jwt: JWT,
@@ -48,7 +44,7 @@ type VerificationTestCase = {
   holder: DID,
   holderPrv: PrivateKey,
   issuerPrv: PrivateKey,
-  subject: W3CVerifiableCredentialSubject,
+  subject: Record<string, any>,
   claims: Claims
 }
 
@@ -62,7 +58,8 @@ async function createVerificationTestCase(options: VerificationTestCase) {
     holderPrv,
     jwt,
     subject,
-    claims
+    claims,
+    challenge = 'sign this'
   } = options;
 
   const currentDate = new Date();
@@ -90,6 +87,7 @@ async function createVerificationTestCase(options: VerificationTestCase) {
     privateKey: issuerPrv,
     payload
   })
+
   const jwtCredential = JWTCredential.fromJWS(signedJWT);
   const presentationDefinition = await pollux.createPresentationDefinitionRequest(
     CredentialType.JWT,
@@ -98,11 +96,11 @@ async function createVerificationTestCase(options: VerificationTestCase) {
       claims: claims
     },
     new PresentationOptions({
-      challenge: 'sign this'
+      challenge
     })
   );
 
-  const presentaationSubmissionJSON = await pollux.createPresentationSubmission(
+  const presentationSubmissionJSON = await pollux.createPresentationSubmission(
     presentationDefinition,
     jwtCredential,
     holderPrv
@@ -110,7 +108,7 @@ async function createVerificationTestCase(options: VerificationTestCase) {
 
   return {
     presentationDefinition,
-    presentaationSubmissionJSON,
+    presentationSubmissionJSON,
     issuedJWS: signedJWT
   }
 }
@@ -375,11 +373,11 @@ describe("Pollux", () => {
 
 
       describe("Valid Credential", () => {
+
         it(`should return JWTVerifiableCredential`, async () => {
           const credential = Fixtures.Credentials.JWT.credential;
           const jwtPayload = Fixtures.Credentials.JWT.credentialPayload;
-          const encoded = encodeJWTCredential(jwtPayload);
-          const result = await pollux.parseCredential(Buffer.from(encoded), {
+          const result = await pollux.parseCredential(Buffer.from(Fixtures.Credentials.JWT.credentialPayloadEncoded), {
             type: CredentialType.JWT,
           });
 
@@ -388,7 +386,7 @@ describe("Pollux", () => {
 
           const jwtCred = result as JWTCredential;
 
-          expect(jwtCred.id).to.equal(encoded);
+          expect(jwtCred.id).to.equal(Fixtures.Credentials.JWT.credentialPayloadEncoded);
           // expect(jwtCred.aud).to.be.deep.equal(jwtPayload.aud);
           expect(jwtCred['context']).to.be.deep.equal(credential['@context']);
           expect(jwtCred.credentialSubject).to.be.deep.equal(
@@ -398,7 +396,7 @@ describe("Pollux", () => {
             new Date(jwtPayload[JWTVerifiableCredentialProperties.exp]).toISOString()
           );
           expect(jwtCred.issuanceDate).to.be.equal(
-            new Date(jwtPayload.nbf).toISOString()
+            new Date(jwtPayload[JWTVerifiableCredentialProperties.nbf]).toISOString()
           );
 
           expect(jwtCred.type).to.be.deep.equal(credential.type);
@@ -753,9 +751,9 @@ describe("Pollux", () => {
       test("ok", async () => {
 
         const pr = new PresentationRequest(CredentialType.JWT, Fixtures.Credentials.JWT.presentationRequest);
-        const cred = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+        const cred = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
         const did = Fixtures.DIDs.peerDID1;
-        const privateKey = Fixtures.Keys.ed25519.privateKey;
+        const privateKey = Fixtures.Keys.secp256K1.privateKey;
 
         const result = await pollux.createPresentationProof(pr, cred, {
           did,
@@ -940,7 +938,7 @@ describe("Pollux", () => {
       const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
       const Castor = jest.requireActual("../../src/castor/Castor").default;
       const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
-      const JWT = jest.requireActual("../../src/apollo/utils/jwt/JWT").JWT;
+      const JWT = jest.requireActual("../../src/pollux/utils/JWT").JWT;
 
       apollo = new Apollo();
       castor = new Castor(apollo);
@@ -950,6 +948,478 @@ describe("Pollux", () => {
         undefined,
         jwt
       )
+    })
+
+    it("Should throw an error a non signable key is used", async () => {
+      const issuer = DID.fromString("did:issuer:123")
+      const payload: JWTCredentialPayload = {
+        iss: issuer.toString(),
+        sub: undefined as any,
+        nbf: false as any,
+        exp: 2134564321,
+        vc: {} as any
+      }
+      expect(jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.x25519.privateKey,
+        payload: payload,
+      })).to.eventually.be.rejectedWith("Key is not signable")
+    })
+
+    it("Should throw an error when nbf is not number in jwt credential", async () => {
+      const issuer = DID.fromString("did:issuer:123")
+      const payload: JWTCredentialPayload = {
+        iss: issuer.toString(),
+        sub: undefined as any,
+        nbf: false as any,
+        exp: 2134564321,
+        vc: {} as any
+      }
+      const jwtString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: payload,
+      })
+
+      assert.throws(
+        () => {
+          const a = JWTCredential.fromJWS(jwtString)
+          JWTCredential.fromJWS(jwtString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid nbf in credential payload should be number"
+      );
+
+    })
+
+    it("Should throw an error when nbf is not number in jwt credential, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTCredentialPayload> = {
+        iss: issuer.toString(),
+        sub: undefined as any,
+        nbf: false as any,
+        vc: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid nbf in credential payload should be number"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        sub: undefined as any,
+        vc: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+    it("Should throw an error when exp is not number in jwt credential, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTCredentialPayload> = {
+        iss: issuer.toString(),
+        sub: undefined as any,
+        exp: false as any,
+        vc: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid exp in credential payload should be number"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        sub: undefined as any,
+        vc: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+
+    it("Should throw an error when sub is not string in jwt credential, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTCredentialPayload> = {
+        iss: issuer.toString(),
+        sub: false as any,
+        vc: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid sub in credential payload should be string"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vc: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    });
+
+    it("should throw an error when calling verifiableCredential on a presentation", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+      const invalidJWTPresentationString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+      const credential = JWTCredential.fromJWS(invalidJWTPresentationString)
+      assert.throws(
+        () => {
+          credential.verifiableCredential()
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid payload is not VC"
+      );
+
+      const validCredential = JWTCredential.fromJWS(
+        Fixtures.Credentials.JWT.credentialPayloadEncoded
+      )
+
+      validCredential.verifiableCredential()
+    })
+
+    it("should throw an error when calling subject on a presentation", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+      const invalidJWTPresentationString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+      const credential = JWTCredential.fromJWS(invalidJWTPresentationString)
+      assert.throws(
+        () => {
+          credential.subject
+        },
+        PolluxError.InvalidCredentialError,
+        "Subject is only available in a VC"
+      );
+    })
+
+    it("should throw an error when calling presentation on a presentation", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+      const invalidJWTPresentationString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+      const credential = JWTCredential.fromJWS(invalidJWTPresentationString)
+      assert.throws(
+        () => {
+          credential.presentation()
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid payload is not VC"
+      );
+    })
+
+    it("Should throw an error when aud is not string in jwt presentation, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        aud: false as any,
+        vp: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid aud in presentation payload should be string"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+    it("Should throw an error when exp is not string in jwt presentation, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        exp: false as any,
+        vp: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid exp in presentation payload should be number"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+    it("Should throw an error when nbf is not string in jwt presentation, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        nbf: false as any,
+        vp: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid nbf in presentation payload should be number"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+    it("Should throw an error when vp is not object in jwt presentation", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        vp: false as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid vp in presentation payload should be an object"
+      );
+
+    })
+
+
+    it("Should throw an error when nonce is not string in jwt presentation, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTPresentationPayload> = {
+        iss: issuer.toString(),
+        nonce: false as any,
+        vp: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid nonce in presentation payload should be string"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vp: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+    it("Should throw an error when aud is not string in jwt credential, not specifying is okey", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTCredentialPayload> = {
+        iss: issuer.toString(),
+        aud: false as any,
+        vc: {} as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid aud in credential payload should be string"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vc: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
+    })
+
+    it("Should throw an error when vc is not object in jwt credential", async () => {
+      const issuer = DID.fromString("did:issuer:123");
+
+      const invalidPayload: Partial<JWTCredentialPayload> = {
+        iss: issuer.toString(),
+        vc: false as any
+      }
+      const invalidJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: invalidPayload,
+      })
+
+      assert.throws(
+        () => {
+          JWTCredential.fromJWS(invalidJWTString)
+        },
+        PolluxError.InvalidCredentialError,
+        "Invalid vc in credential payload should be an object"
+      );
+
+      const validPayload = {
+        iss: issuer.toString(),
+        vc: {} as any
+      }
+
+      const validJWTString = await jwt.sign({
+        issuerDID: issuer,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: validPayload,
+      })
+
+      JWTCredential.fromJWS(validJWTString)
+
     })
 
 
@@ -976,19 +1446,104 @@ describe("Pollux", () => {
 
       expect(presentation_definition).haveOwnProperty("id");
       expect(presentation_definition).haveOwnProperty("format");
-      expect(presentation_definition).haveOwnProperty("inputDescriptors");
+      expect(presentation_definition).haveOwnProperty("input_descriptors");
 
 
       expect(presentation_definition.format).haveOwnProperty("jwt");
-      expect(presentation_definition.format.jwt?.alg).contains('ES256K');
-      expect(Array.isArray(presentation_definition.inputDescriptors)).to.eq(true)
-      expect(presentation_definition.inputDescriptors.length).to.eq(1)
-      expect(presentation_definition.inputDescriptors.at(0)).haveOwnProperty('constraints');
-      expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields.length).to.eq(2);
-      expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields[0].path.at(0)).to.eq('$.vc.credentialSubject.name')
-      expect(presentation_definition.inputDescriptors.at(0)?.constraints.fields[1].path.at(0)).to.eq('$.vc.issuer')
+      expect(Array.isArray(presentation_definition.input_descriptors)).to.eq(true)
+      expect(presentation_definition.input_descriptors.length).to.eq(1)
+      expect(presentation_definition.input_descriptors.at(0)).haveOwnProperty('constraints');
+      expect(presentation_definition.input_descriptors.at(0)?.constraints.fields.length).to.eq(2);
+      expect(presentation_definition.input_descriptors.at(0)?.constraints.fields[0].path.at(0)).to.eq('$.vc.credentialSubject.name')
+      expect(presentation_definition.input_descriptors.at(0)?.constraints.fields[1].path.at(0)).to.eq('$.vc.issuer')
 
     });
+
+    it("Should create and verify an Secp256k1 prism did JWS", async () => {
+      const issuerDID = await castor.createPrismDID(
+        Fixtures.Keys.secp256K1.privateKey.publicKey(),
+        []
+      )
+      const payload: JWTCredentialPayload = {
+        iss: issuerDID.toString(),
+        sub: issuerDID.toString(),
+        nbf: 23456543222,
+        exp: 2134564321,
+        vc: {} as any
+      }
+
+      const signed = await jwt.sign({
+        issuerDID: issuerDID,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: payload,
+      })
+
+      const verified = await jwt.verify({
+        issuerDID: issuerDID,
+        jws: signed
+      })
+
+      expect(verified).to.equal(true)
+    })
+
+    it("Should create and fail verifying an Secp256k1 prism did JWS with wrong issuer", async () => {
+      const issuerDID = await castor.createPrismDID(
+        Fixtures.Keys.secp256K1.privateKey.publicKey(),
+        []
+      )
+      const payload: JWTCredentialPayload = {
+        iss: issuerDID.toString(),
+        sub: issuerDID.toString(),
+        nbf: 23456543222,
+        exp: 2134564321,
+        vc: {} as any
+      }
+
+      const signed = await jwt.sign({
+        issuerDID: issuerDID,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: payload,
+      })
+
+
+      const verified = await jwt.verify({
+        issuerDID: DID.fromString("did:test:12345"),
+        jws: signed
+      })
+
+      expect(verified).to.equal(false)
+
+
+    })
+
+    it("Should create and fail verifying an Secp256k1 prism did JWS with wrong issuer", async () => {
+      const issuerDID = await castor.createPrismDID(
+        Fixtures.Keys.secp256K1.privateKey.publicKey(),
+        []
+      )
+      const payload: JWTCredentialPayload = {
+        iss: issuerDID.toString(),
+        sub: "did:test:12345",
+        nbf: 23456543222,
+        exp: 2134564321,
+        vc: {} as any
+      }
+
+      const signed = await jwt.sign({
+        issuerDID: issuerDID,
+        privateKey: Fixtures.Keys.secp256K1.privateKey,
+        payload: payload,
+      })
+
+      const verified = await jwt.verify({
+        issuerDID: issuerDID,
+        holderDID: DID.fromString("did:test:123457"),
+        jws: signed
+      })
+
+      expect(verified).to.equal(false)
+
+    })
 
     it("Should Verify false when the presentation contains a credential that has been issued by an issuer with keys that don't match", async () => {
 
@@ -1024,7 +1579,7 @@ describe("Pollux", () => {
 
       const {
         presentationDefinition,
-        presentaationSubmissionJSON,
+        presentationSubmissionJSON,
         issuedJWS
       } = await createVerificationTestCase({
         apollo,
@@ -1047,7 +1602,7 @@ describe("Pollux", () => {
         }
       });
 
-      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.be.rejectedWith(
         `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Presentation Credential JWS Signature`
@@ -1087,16 +1642,18 @@ describe("Pollux", () => {
         holderPrv.publicKey()
       )
 
+      const challenge = 'sign this';
+
       const {
         presentationDefinition,
-        presentaationSubmissionJSON,
+        presentationSubmissionJSON,
         issuedJWS
       } = await createVerificationTestCase({
         apollo,
         castor,
         jwt,
         pollux,
-        //Play with this data in order to build tests
+        challenge,
         issuer: issuerDID,
         holder: holderDID,
         holderPrv: wrongHolderPrv,
@@ -1112,10 +1669,10 @@ describe("Pollux", () => {
         }
       });
 
-      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.be.rejectedWith(
-        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Holder Presentation JWS Signature`
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Submission, $.verifiablePresentation[0] does not contain valid signature for '${challenge}'`
       );
     })
 
@@ -1146,7 +1703,7 @@ describe("Pollux", () => {
 
       const {
         presentationDefinition,
-        presentaationSubmissionJSON,
+        presentationSubmissionJSON,
         issuedJWS
       } = await createVerificationTestCase({
         apollo,
@@ -1169,7 +1726,7 @@ describe("Pollux", () => {
         }
       });
 
-      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.be.rejectedWith(
         `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected the $.credentialSubject.course field to be "Identus Training course Certification 2024" but got "Identus Training course Certification 2023"`
@@ -1203,7 +1760,7 @@ describe("Pollux", () => {
 
       const {
         presentationDefinition,
-        presentaationSubmissionJSON,
+        presentationSubmissionJSON,
         issuedJWS
       } = await createVerificationTestCase({
         apollo,
@@ -1226,7 +1783,7 @@ describe("Pollux", () => {
         }
       });
 
-      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.be.rejectedWith(
         `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected one of the paths $.vc.credentialSubject.course, $.credentialSubject.course to exist.`
@@ -1249,7 +1806,6 @@ describe("Pollux", () => {
         seed: Buffer.from(holderSeed.value).toString("hex"),
       });
 
-
       const issuerDID = await castor.createPrismDID(
         issuerPrv.publicKey()
       )
@@ -1260,7 +1816,7 @@ describe("Pollux", () => {
 
       const {
         presentationDefinition,
-        presentaationSubmissionJSON,
+        presentationSubmissionJSON,
       } = await createVerificationTestCase({
         apollo,
         castor,
@@ -1282,7 +1838,7 @@ describe("Pollux", () => {
         }
       });
 
-      expect(pollux.verifyPresentationSubmission(presentaationSubmissionJSON, {
+      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.equal(true)
     })

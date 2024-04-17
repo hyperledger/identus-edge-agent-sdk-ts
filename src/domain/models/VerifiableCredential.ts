@@ -12,6 +12,53 @@ export enum CredentialType {
   Unknown = "Unknown"
 }
 
+export enum InputLimitDisclosure {
+  REQUIRED = "required",
+  PREFERRED = "preferred"
+}
+
+
+export enum DescriptorItemFormat {
+  JWT_VC = 'jwt_vc',
+  JWT_VP = 'jwt_vp'
+}
+
+
+
+
+export enum W3CVerifiableCredentialContext {
+  credential = "https://www.w3.org/2018/credentials/v1"
+}
+
+export enum W3CVerifiableCredentialType {
+  presentation = "VerifiablePresentation",
+  credential = "VerifiableCredential"
+}
+
+
+export enum JWTVerifiableCredentialProperties {
+  iss = "iss",
+  sub = "sub",
+  jti = "jti",
+  nbf = "nbf",
+  exp = "exp",
+  aud = "aud",
+  vc = "vc",
+  type = "type",
+  revoked = "revoked"
+}
+
+export enum JWTVerifiablePresentationProperties {
+  iss = "iss",
+  jti = "jti",
+  aud = "aud",
+  nbf = "nbf",
+  iat = 'iat',
+  exp = "exp",
+  nonce = 'nonce',
+  vp = 'vp'
+}
+
 export interface CredentialSubject {
   [name: string]: string;
 }
@@ -49,14 +96,11 @@ export type InputField = {
   optional?: boolean
 }
 
-export enum InputLimitDisclosure {
-  REQUIRED = "required",
-  PREFERRED = "preferred"
-}
+
 
 export type InputConstraints = {
   fields: InputField[],
-  limitDisclosure: InputLimitDisclosure
+  limit_disclosure: InputLimitDisclosure
 }
 
 export type InputDescriptor = {
@@ -65,10 +109,6 @@ export type InputDescriptor = {
   name?: string,
   purpose?: string,
   format?: DefinitionFormat,
-}
-
-export enum SubmissionDescriptorFormat {
-  JWT = 'jwt'
 }
 
 export type DefinitionFormat = {
@@ -80,8 +120,8 @@ export type DefinitionFormat = {
 export type PresentationDefinitionRequest = {
   presentation_definition: {
     id: string,
-    inputDescriptors: InputDescriptor[],
-    format: DefinitionFormat
+    input_descriptors: InputDescriptor[],
+    format?: DefinitionFormat
   },
   options: {
     challenge: string,
@@ -89,9 +129,10 @@ export type PresentationDefinitionRequest = {
   }
 }
 
+
 export type DescriptorItem = {
   id: string,
-  format: string,
+  format: DescriptorItemFormat,
   path: string,
   path_nested?: DescriptorItem
 }
@@ -105,47 +146,14 @@ export type PresentationSubmission = {
   verifiablePresentation: string[],
 }
 
-export enum JWTVerifiableCredentialProperties {
-  iss = "iss",
-  vc = "vc",
-  vp = "vp",
-  jti = "jti",
-  nbf = "nbf",
-  sub = "sub",
-  exp = "exp",
-  aud = "aud",
-  type = "type",
-  revoked = "revoked"
-}
-
-
-export type W3CVerifiableCredentialSubject = {
-  [name: string | number | symbol]: any
-}
-
-export enum W3CVerifiableCredentialContext {
-  presentation = "https://www.w3.org/2018/presentations/v1",
-  credential = "https://www.w3.org/2018/credentials/v1"
-}
-
-export enum W3CVerifiableCredentialType {
-  presentation = "VerifiablePresentation",
-  credential = "VerifiableCredential"
-}
-
-export type W3CVerifiablePresentation = {
-  "@context": W3CVerifiableCredentialContext[],
-  type: W3CVerifiableCredentialType[],
-  verifiableCredential: string[]
-}
 
 export type W3CVerifiableCredential = {
-  "@context": W3CVerifiableCredentialContext[],
-  type: W3CVerifiableCredentialType[],
+  "@context": [W3CVerifiableCredentialContext.credential],
+  type: [W3CVerifiableCredentialType.credential],
   issuer: string,
   issuanceDate: string,
   issued?: string,
-  credentialSubject: W3CVerifiableCredentialSubject,
+  credentialSubject: Record<string, any>,
   expirationDate?: string,
   evidence?: {
     id: string,
@@ -178,48 +186,44 @@ export type W3CVerifiableCredential = {
 }
 
 
-export type JWTCredentialPayloadExtra = {
-  [JWTVerifiableCredentialProperties.vc]: W3CVerifiableCredential
-} |
-{
-  [JWTVerifiableCredentialProperties.vp]: W3CVerifiablePresentation
-}
-
-
 export type JWTCredentialPayload = {
   [JWTVerifiableCredentialProperties.iss]: string;
+  [JWTVerifiableCredentialProperties.jti]?: string;
   [JWTVerifiableCredentialProperties.nbf]: number;
   [JWTVerifiableCredentialProperties.exp]: number;
   [JWTVerifiableCredentialProperties.sub]: string;
+  [JWTVerifiableCredentialProperties.aud]?: string;
+  [JWTVerifiableCredentialProperties.revoked]?: boolean;
   [JWTVerifiableCredentialProperties.vc]: W3CVerifiableCredential
-
 }
+
 
 export type JWTPresentationPayload = {
-  [JWTVerifiableCredentialProperties.iss]: string;
-  [JWTVerifiableCredentialProperties.nbf]: number;
-  [JWTVerifiableCredentialProperties.exp]: number;
-  [JWTVerifiableCredentialProperties.vp]: W3CVerifiablePresentation
-
+  [JWTVerifiablePresentationProperties.iss]?: string;
+  [JWTVerifiablePresentationProperties.jti]?: string;
+  [JWTVerifiablePresentationProperties.aud]: string;
+  [JWTVerifiablePresentationProperties.nbf]?: number;
+  [JWTVerifiablePresentationProperties.exp]?: number;
+  [JWTVerifiablePresentationProperties.nonce]: string
+  [JWTVerifiablePresentationProperties.vp]: W3CVerifiablePresentation
 }
+
+
+export type W3CVerifiablePresentation = {
+  "@context": [
+    W3CVerifiableCredentialContext.credential
+  ],
+  type: [
+    W3CVerifiableCredentialType.presentation
+  ],
+  verifiableCredential: string[],
+  proof?: W3CVerifiablePresentationProof
+}
+
+export type W3CVerifiablePresentationProof = {
+  challenge: string,
+  domain: string
+}
+
 
 export type JWTPayload = JWTCredentialPayload | JWTPresentationPayload;
-
-export enum ProofTypesEnum {
-  EcdsaSecp256k1Signature2019 = "EcdsaSecp256k1Signature2019",
-  JsonWebSignature2020 = "JsonWebSignature2020"
-}
-
-export type Proof = {
-  type: string,
-  created?: string,
-  proofPurpose: ProofPurpose,
-  verificationMethod: string,
-  challenge?: string,
-  domain?: string,
-  jws?: string
-}
-
-export enum ProofPurpose {
-  AUTHENTTICATION = "authentication"
-}
