@@ -534,6 +534,15 @@ export default class Agent
    * @param {Domain.DID} toDID 
    * @param {ProofTypes[]} proofTypes[]
    * @returns 
+   * 
+   * Example usecase: Send a Presentation Request to a specific PeerDID for a Credential issued by a specific issuer
+   * ```ts
+   *  agent.initiatePresentationRequest(
+   *    Domain.CredentialType.JWT,
+   *    toDID,
+   *    { issuer: Domain.DID.fromString("did:peer:12345"), claims: {email: 'test@test.com'}}
+   * );
+   * ```
    */
   async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims): Promise<RequestPresentation> {
     const requestPresentation = await this.agentCredentials.initiatePresentationRequest(
