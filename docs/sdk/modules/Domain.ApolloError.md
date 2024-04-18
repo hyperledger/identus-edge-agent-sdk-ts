@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / ApolloError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / ApolloError
 
 # Namespace: ApolloError
 
@@ -15,4 +15,7 @@
 - [InvalidKeyType](../classes/Domain.ApolloError.InvalidKeyType.md)
 - [InvalidMnemonicWord](../classes/Domain.ApolloError.InvalidMnemonicWord.md)
 - [InvalidPrivateKey](../classes/Domain.ApolloError.InvalidPrivateKey.md)
+- [KeyRestoratonFailed](../classes/Domain.ApolloError.KeyRestoratonFailed.md)
+- [MissingChainCode](../classes/Domain.ApolloError.MissingChainCode.md)
 - [MissingKeyParameters](../classes/Domain.ApolloError.MissingKeyParameters.md)
+- [MissingPrivateKey](../classes/Domain.ApolloError.MissingPrivateKey.md)

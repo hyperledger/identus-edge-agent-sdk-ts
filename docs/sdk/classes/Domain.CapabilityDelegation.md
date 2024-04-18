@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / CapabilityDelegation
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / CapabilityDelegation
 
 # Class: CapabilityDelegation
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L93)
+[src/domain/models/DIDDocument.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L93)
 
 ## Properties
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L94)
+[src/domain/models/DIDDocument.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L94)
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:95](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L95)
+[src/domain/models/DIDDocument.ts:95](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L95)

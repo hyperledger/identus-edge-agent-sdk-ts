@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ExportableKey](../modules/Domain.ExportableKey.md) / Common
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ExportableKey](../modules/Domain.ExportableKey.md) / Common
 
 # Interface: Common
 
@@ -21,8 +21,8 @@
 | Name | Type |
 | :------ | :------ |
 | `Buffer` | () => `Buffer` |
-| `String` | (`encoding?`: ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
+| `String` | (`encoding?`: ``"base64"`` \| ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/ExportableKey.ts#L27)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L27)

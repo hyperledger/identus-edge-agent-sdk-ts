@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidMessageError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidMessageError
 
 # Class: InvalidMessageError
 
@@ -37,42 +37,21 @@
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `message` | `string` | `"Invalid Message"` |
 
 #### Returns
 
 [`InvalidMessageError`](Domain.AgentError.InvalidMessageError.md)
 
-#### Inherited from
+#### Overrides
 
 Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1059
-
-• **new InvalidMessageError**(`message?`, `options?`): [`InvalidMessageError`](Domain.AgentError.InvalidMessageError.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
-| `options?` | `ErrorOptions` |
-
-#### Returns
-
-[`InvalidMessageError`](Domain.AgentError.InvalidMessageError.md)
-
-#### Inherited from
-
-Error.constructor
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es5.d.ts:1059
+[src/domain/models/errors/Agent.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Agent.ts#L8)
 
 ## Properties
 
@@ -169,7 +148,7 @@ Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:11
+node_modules/@types/node/globals.d.ts:27
 
 ___
 
@@ -183,7 +162,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:13
+node_modules/@types/node/globals.d.ts:29
 
 ## Methods
 
@@ -210,4 +189,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:4
+node_modules/@types/node/globals.d.ts:20

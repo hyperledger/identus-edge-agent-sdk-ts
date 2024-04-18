@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / DIDCommProtocol
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / DIDCommProtocol
 
 # Interface: DIDCommProtocol
 
@@ -23,7 +23,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](../classes/Domain.Message.md) |
+| `message` | [`Message`](../classes/Domain.Message-1.md) |
 | `to` | [`DID`](../classes/Domain.DID.md) |
 | `from?` | [`DID`](../classes/Domain.DID.md) |
 
@@ -33,13 +33,13 @@
 
 #### Defined in
 
-[src/mercury/DIDCommProtocol.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/DIDCommProtocol.ts#L4)
+[src/mercury/DIDCommProtocol.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/DIDCommProtocol.ts#L4)
 
 ___
 
 ### unpack
 
-▸ **unpack**(`message`): `Promise`\<[`Message`](../classes/Domain.Message.md)\>
+▸ **unpack**(`message`): `Promise`\<[`Message`](../classes/Domain.Message-1.md)\>
 
 #### Parameters
 
@@ -49,8 +49,8 @@ ___
 
 #### Returns
 
-`Promise`\<[`Message`](../classes/Domain.Message.md)\>
+`Promise`\<[`Message`](../classes/Domain.Message-1.md)\>
 
 #### Defined in
 
-[src/mercury/DIDCommProtocol.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/DIDCommProtocol.ts#L14)
+[src/mercury/DIDCommProtocol.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/DIDCommProtocol.ts#L14)

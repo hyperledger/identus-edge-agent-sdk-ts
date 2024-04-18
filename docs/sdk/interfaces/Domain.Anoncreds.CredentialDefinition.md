@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Anoncreds](../modules/Domain.Anoncreds.md) / CredentialDefinition
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Anoncreds](../modules/Domain.Anoncreds.md) / CredentialDefinition
 
 # Interface: CredentialDefinition
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L56)
+[src/domain/models/Anoncreds.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L56)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L52)
+[src/domain/models/Anoncreds.ts:52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L52)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L54)
+[src/domain/models/Anoncreds.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L54)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L53)
+[src/domain/models/Anoncreds.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L53)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L55)
+[src/domain/models/Anoncreds.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L55)

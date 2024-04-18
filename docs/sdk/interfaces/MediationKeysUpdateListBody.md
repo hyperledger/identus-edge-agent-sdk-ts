@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / MediationKeysUpdateListBody
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / MediationKeysUpdateListBody
 
 # Interface: MediationKeysUpdateListBody
 
@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/types.ts#L33)
+[src/prism-agent/protocols/types.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L39)

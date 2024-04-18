@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / ExportableKey
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / ExportableKey
 
 # Namespace: ExportableKey
 
@@ -30,7 +30,7 @@ Declaration merge to contain key conversion functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
 
 ## Functions
 
@@ -60,8 +60,8 @@ object with exportable functions
 | `Hex` | () => `string` |
 | `JWK` | (`base?`: [`Base`](../interfaces/Domain.JWK.Base.md)) => [`JWK`](Domain.md#jwk) |
 | `PEM` | () => `string` |
-| `String` | (`encoding?`: ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
+| `String` | (`encoding?`: ``"base64"`` \| ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)

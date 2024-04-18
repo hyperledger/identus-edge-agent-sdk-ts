@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / ProofTypes
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / ProofTypes
 
 # Interface: ProofTypes
 
@@ -18,17 +18,17 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:77](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/types.ts#L77)
+[src/prism-agent/protocols/types.ts:83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L83)
 
 ___
 
 ### schema
 
-• **schema**: `string`
+• `Optional` **schema**: `string`
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/types.ts#L76)
+[src/prism-agent/protocols/types.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L82)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/types.ts#L78)
+[src/prism-agent/protocols/types.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L84)

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / AttachmentJwsData
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / AttachmentJwsData
 
 # Interface: AttachmentJwsData
 
@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/MessageAttachment.ts#L14)
+[src/domain/models/MessageAttachment.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/MessageAttachment.ts#L14)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/MessageAttachment.ts#L15)
+[src/domain/models/MessageAttachment.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/MessageAttachment.ts#L15)

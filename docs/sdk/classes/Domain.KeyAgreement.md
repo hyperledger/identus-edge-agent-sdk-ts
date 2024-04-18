@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / KeyAgreement
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / KeyAgreement
 
 # Class: KeyAgreement
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L79)
+[src/domain/models/DIDDocument.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L79)
 
 ## Properties
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L80)
+[src/domain/models/DIDDocument.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L80)
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:81](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L81)
+[src/domain/models/DIDDocument.ts:81](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L81)

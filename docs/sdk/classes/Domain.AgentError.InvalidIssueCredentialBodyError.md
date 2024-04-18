@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidIssueCredentialBodyError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidIssueCredentialBodyError
 
 # Class: InvalidIssueCredentialBodyError
 
@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Agent.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/errors/Agent.ts#L44)
+[src/domain/models/errors/Agent.ts:135](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Agent.ts#L135)
 
 ## Properties
 
@@ -148,7 +148,7 @@ Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:11
+node_modules/@types/node/globals.d.ts:27
 
 ___
 
@@ -162,7 +162,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:13
+node_modules/@types/node/globals.d.ts:29
 
 ## Methods
 
@@ -189,4 +189,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:4
+node_modules/@types/node/globals.d.ts:20

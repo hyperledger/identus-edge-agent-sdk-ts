@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Anoncreds](../modules/Domain.Anoncreds.md) / CredentialOffer
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Anoncreds](../modules/Domain.Anoncreds.md) / CredentialOffer
 
 # Interface: CredentialOffer
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L38)
+[src/domain/models/Anoncreds.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L38)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L40)
+[src/domain/models/Anoncreds.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L40)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L42)
+[src/domain/models/Anoncreds.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L42)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L41)
+[src/domain/models/Anoncreds.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L41)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L39)
+[src/domain/models/Anoncreds.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L39)

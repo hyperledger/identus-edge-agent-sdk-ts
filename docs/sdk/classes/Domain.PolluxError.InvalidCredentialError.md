@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidCredentialError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidCredentialError
 
 # Class: InvalidCredentialError
 
@@ -45,34 +45,13 @@
 
 [`InvalidCredentialError`](Domain.PolluxError.InvalidCredentialError.md)
 
-#### Inherited from
+#### Overrides
 
 Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1059
-
-• **new InvalidCredentialError**(`message?`, `options?`): [`InvalidCredentialError`](Domain.PolluxError.InvalidCredentialError.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
-| `options?` | `ErrorOptions` |
-
-#### Returns
-
-[`InvalidCredentialError`](Domain.PolluxError.InvalidCredentialError.md)
-
-#### Inherited from
-
-Error.constructor
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es5.d.ts:1059
+[src/domain/models/errors/Pollux.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pollux.ts#L2)
 
 ## Properties
 
@@ -169,7 +148,7 @@ Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:11
+node_modules/@types/node/globals.d.ts:27
 
 ___
 
@@ -183,7 +162,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:13
+node_modules/@types/node/globals.d.ts:29
 
 ## Methods
 
@@ -210,4 +189,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:4
+node_modules/@types/node/globals.d.ts:20

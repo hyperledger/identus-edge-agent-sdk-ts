@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Castor
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Castor
 
 # Interface: Castor
 
@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Castor.ts#L10)
+[src/domain/buildingBlocks/Castor.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Castor.ts#L10)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Castor.ts#L6)
+[src/domain/buildingBlocks/Castor.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Castor.ts#L6)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Castor.ts#L20)
+[src/domain/buildingBlocks/Castor.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Castor.ts#L20)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Castor.ts#L5)
+[src/domain/buildingBlocks/Castor.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Castor.ts#L5)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Castor.ts#L14)
+[src/domain/buildingBlocks/Castor.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Castor.ts#L14)
 
 ___
 
@@ -142,4 +142,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Castor.ts#L15)
+[src/domain/buildingBlocks/Castor.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Castor.ts#L15)
