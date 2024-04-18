@@ -6,7 +6,7 @@
 
 Pluto is a storage interface describing storage requirements of the edge agents
 implemented in this SDK. Implement this interface using your 
-preferred underlying storage technology, most appropriate for your use case.
+preferred underlying storage technology most appropriate for your use case.
 
 ## Implemented by
 
