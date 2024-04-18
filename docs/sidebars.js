@@ -106,7 +106,18 @@ const sidebars = {
                         }, [])
                 }
             ]
-        }
+        },
+        {
+            type: 'category',
+            label: 'Decision records',
+            items: [
+                {
+                    type: 'doc',
+                    id: 'decisions/sdk-package-release',
+                }
+
+            ]
+        },
     ]
 }
 
