@@ -5,7 +5,7 @@
 [Domain](../modules/Domain.md).Pluto
 
 Pluto is a storage interface describing storage requirements of the edge agents
-which will be implemented using this SDK. Implement this interface using your
+implemented in this SDK. Implement this interface using your 
 preferred underlying storage technology, most appropriate for your use case.
 
 ## Implemented by
