@@ -1733,6 +1733,30 @@ describe("Pollux", () => {
       );
     })
 
+    it("Should throw an error if presentationSubmission is not an object", async () => {
+      expect(pollux.verifyPresentationSubmission(null as any, {
+        presentationDefinitionRequest: null as any
+      })).to.eventually.be.rejectedWith(
+        `Verification format is invalid: reason -> PresentationSubmission format is invalid`
+      );
+    })
+
+    it("Should throw an error if the actual presentationSubmission is not an object", async () => {
+      expect(pollux.verifyPresentationSubmission({ presentation_submission: null, verifiablePresentation: null } as any, {
+        presentationDefinitionRequest: null as any
+      })).to.eventually.be.rejectedWith(
+        `Verification format is invalid: reason -> PresentationSubmission format is invalid`
+      );
+    })
+
+    it("Should throw an error if the actual presentationSubmission.verifiablePresentation is not an array", async () => {
+      expect(pollux.verifyPresentationSubmission({ presentation_submission: {}, verifiablePresentation: null } as any, {
+        presentationDefinitionRequest: null as any
+      })).to.eventually.be.rejectedWith(
+        `Verification format is invalid: reason -> PresentationSubmission format is invalid`
+      );
+    })
+
     it("Should Verify false when the Credential subject does not provide required field", async () => {
       const issuerSeed = apollo.createRandomSeed().seed;
       const holderSeed = apollo.createRandomSeed().seed;

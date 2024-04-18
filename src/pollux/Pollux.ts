@@ -128,7 +128,7 @@ export default class Pollux implements IPollux {
 
   parsePresentationSubmission(data: any): data is PresentationSubmission {
     //Validate object
-    if (typeof data !== "object") {
+    if (!data || (data && typeof data !== "object")) {
       return false;
     }
 
