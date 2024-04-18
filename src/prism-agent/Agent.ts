@@ -535,12 +535,21 @@ export default class Agent
    * @param {ProofTypes[]} proofTypes[]
    * @returns 
    * 
-   * Example usecase: Send a Presentation Request to a specific PeerDID for a Credential issued by a specific issuer
+   * 1. Example use-case: Send a Presentation Request for a JWT credential issued by a specific issuer
    * ```ts
    *  agent.initiatePresentationRequest(
    *    Domain.CredentialType.JWT,
    *    toDID,
-   *    { issuer: Domain.DID.fromString("did:peer:12345"), claims: {email: 'test@test.com'}}
+   *    { issuer: Domain.DID.fromString("did:peer:12345"), claims: {}}
+   * );
+   * ```
+   * 
+   * 2. Example use-case: Send a Presentation Request for a JWT credential issued by a specific issuer and specific claims
+   * ```ts
+   *  agent.initiatePresentationRequest(
+   *    Domain.CredentialType.JWT,
+   *    toDID,
+   *    { issuer: Domain.DID.fromString("did:peer:12345"), claims: {email: {type: 'string', pattern:'email@email.com'}}}
    * );
    * ```
    */
