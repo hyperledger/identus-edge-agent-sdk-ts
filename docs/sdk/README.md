@@ -1,5 +1,3 @@
-@atala/prism-wallet-sdk / [Exports](modules.md)
-
 # Atala PRISM TypeScript SDK
 
 [![Coverage Status](https://coveralls.io/repos/github/input-output-hk/atala-prism-wallet-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/input-output-hk/atala-prism-wallet-sdk-ts?branch=master)
@@ -71,8 +69,8 @@ npm run build
 ```
 
 ### Running the sample applications
-We have enabled sample implementations for browser (react or nextjs) and nodejs.
-In order to run each demo, make sure the whole SDK is built from source, then cd into the demo.
+We have enabled sample implementations for browsers (React or Next.js) and Node.js.
+To run each demo, ensure the whole SDK builds from the source, then cd into the demo.
 
 Nodejs CommonJS
 ```bash
@@ -108,4 +106,5 @@ This SDK exposes Pluto, a storage interface that should be implemented by the us
 
 We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
 
-Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production.
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
+
