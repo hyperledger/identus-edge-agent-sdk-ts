@@ -1757,6 +1757,17 @@ describe("Pollux", () => {
       );
     })
 
+    it("Should throw an error if the actual presentationSubmission options presentationDefinitionRequest is not an undefined", async () => {
+      expect(pollux.verifyPresentationSubmission(
+        { presentation_submission: {}, verifiablePresentation: [] } as any,
+        {
+          presentationDefinitionRequest: undefined
+        }
+      )).to.eventually.be.rejectedWith(
+        `VerifyPresentationSubmission options are invalid`
+      );
+    })
+
     it("Should Verify false when the Credential subject does not provide required field", async () => {
       const issuerSeed = apollo.createRandomSeed().seed;
       const holderSeed = apollo.createRandomSeed().seed;
