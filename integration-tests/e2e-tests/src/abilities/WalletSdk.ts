@@ -42,16 +42,32 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
   }
 
+  static revocationCredentialStackSize(): QuestionAdapter<number> {
+    return Question.about("credential for revocation size", actor => {
+      return WalletSdk.as(actor).messages.revocationCredentialStack.length
+    })
+  }
+
+  static revocationStackSize(): QuestionAdapter<number> {
+    return Question.about("revocation messages stack", actor => {
+      return WalletSdk.as(actor).messages.revocationStack.length
+    })
+  }
+
   static execute(callback: (sdk: SDK.Agent, messages: {
     credentialOfferStack: Message[];
     issuedCredentialStack: Message[];
     proofRequestStack: Message[];
+    revocationCredentialStack:Message[];
+    revocationStack: Message[],
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
       await callback(WalletSdk.as(actor).sdk, {
         credentialOfferStack: WalletSdk.as(actor).messages.credentialOfferStack,
         issuedCredentialStack: WalletSdk.as(actor).messages.issuedCredentialStack,
-        proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack
+        proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack,
+        revocationCredentialStack: WalletSdk.as(actor).messages.revocationCredentialStack,
+        revocationStack: WalletSdk.as(actor).messages.revocationStack,
       })
     })
   }
@@ -105,7 +121,15 @@ class MessageQueue {
   credentialOfferStack: Message[] = []
   proofRequestStack: Message[] = []
   issuedCredentialStack: Message[] = []
+  
   receivedMessages: string[] = []
+
+
+  //Stores the credential issue messages for revocation
+  revocationCredentialStack: Message[] = [];
+  //Stores the revocation messages
+  revocationStack: Message[] = [];
+
 
   enqueue(message: Message) {
     this.queue.push(message)
@@ -147,7 +171,10 @@ class MessageQueue {
           this.proofRequestStack.push(message)
         } else if (message.piuri.includes("/issue-credential")) {
           this.issuedCredentialStack.push(message)
-        }
+          this.revocationCredentialStack.push(message)
+        } else if (message.piuri.includes("/revoke")) {
+          this.revocationStack.push(message)
+        } 
       } else {
         clearInterval(this.processingId!)
         this.processingId = null

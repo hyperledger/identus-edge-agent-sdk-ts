@@ -82,6 +82,11 @@ Then("{actor} should receive the credential",
     await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent)
   })
 
+Then("{actor} has the credential as revoked",
+  async function (edgeAgent: Actor) {
+    await EdgeAgentWorkflow.waitUntilCredentialIsRevoked(edgeAgent)
+  })
+
 Then("{actor} process {int} issued credentials",
   async function (edgeAgent: Actor, numberOfCredentials: number) {
     await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, numberOfCredentials)
