@@ -4,24 +4,26 @@ import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
-import { InMemoryStore } from "../configuration/InMemoryStore"
+import InMemoryStore from "../configuration/inmemory"
 
 const { Agent, Apollo, Domain, ListenerKey, } = SDK
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
   sdk!: SDK.Agent
+  store: SDK.Store
   messages: MessageQueue = new MessageQueue()
 
   static async withANewInstance(): Promise<Ability> {
-    const instance: SDK.Agent = await Utils.retry(2, async () => {
+    const {sdk, store} = await Utils.retry(2, async () => {
       return await WalletSdkBuilder.createInstance()
     })
-    return new WalletSdk(instance)
+    return new WalletSdk(sdk, store)
   }
 
-  constructor(sdk: SDK.Agent) {
+  constructor(sdk: SDK.Agent, store: SDK.Store) {
     super()
     this.sdk = sdk
+    this.store = store
   }
 
   static credentialOfferStackSize(): QuestionAdapter<number> {
@@ -42,21 +44,30 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
   }
 
+  static revocationStackSize(): QuestionAdapter<number> {
+    return Question.about("revocation messages stack", actor => {
+      return WalletSdk.as(actor).messages.revocationStack.length
+    })
+  }
+
   static execute(callback: (sdk: SDK.Agent, messages: {
     credentialOfferStack: Message[];
     issuedCredentialStack: Message[];
     proofRequestStack: Message[];
+    revocationStack: Message[],
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
       await callback(WalletSdk.as(actor).sdk, {
         credentialOfferStack: WalletSdk.as(actor).messages.credentialOfferStack,
         issuedCredentialStack: WalletSdk.as(actor).messages.issuedCredentialStack,
-        proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack
+        proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack,
+        revocationStack: WalletSdk.as(actor).messages.revocationStack,
       })
     })
   }
 
   async discard(): Promise<void> {
+    await this.store.clear()
     await this.sdk.stop()
   }
 
@@ -87,11 +98,19 @@ class WalletSdkBuilder {
 
   static async createInstance() {
     const apollo = new Apollo()
-    const store = new InMemoryStore()
+    const store = new SDK.Store({
+      name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
+      storage: InMemoryStore,
+      password: "random12434",
+      ignoreDuplicate: true
+    })
     const pluto = new SDK.Pluto(store, apollo)
     const mediatorDID = Domain.DID.fromString(await WalletSdkBuilder.getMediatorDidThroughOob())
 
-    return Agent.initialize({ apollo, pluto, mediatorDID })
+    return {
+      sdk: Agent.initialize({ apollo, pluto, mediatorDID }),
+      store
+    }
   }
 }
 
@@ -105,7 +124,9 @@ class MessageQueue {
   credentialOfferStack: Message[] = []
   proofRequestStack: Message[] = []
   issuedCredentialStack: Message[] = []
+  revocationStack: Message[] = []
   receivedMessages: string[] = []
+
 
   enqueue(message: Message) {
     this.queue.push(message)
@@ -134,6 +155,7 @@ class MessageQueue {
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
         const message: Message = this.dequeue()
+        
         // checks if sdk already received message
         if (this.receivedMessages.includes(message.id)) {
           return
@@ -147,6 +169,8 @@ class MessageQueue {
           this.proofRequestStack.push(message)
         } else if (message.piuri.includes("/issue-credential")) {
           this.issuedCredentialStack.push(message)
+        } else if (message.piuri.includes("/revoke")) {
+          this.revocationStack.push(message)
         }
       } else {
         clearInterval(this.processingId!)
