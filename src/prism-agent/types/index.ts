@@ -158,6 +158,9 @@ export abstract class MediatorHandler {
   abstract listenUnreadMessages(
     signal: AbortSignal,
     serviceEndpointUri: string,
-    onMessage: EventCallback
+    onMessage: (delivered: {
+      attachmentId: string;
+      message: Message;
+    }[]) => void
   ): void
 }

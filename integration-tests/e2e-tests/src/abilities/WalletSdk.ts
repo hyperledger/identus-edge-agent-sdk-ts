@@ -4,7 +4,7 @@ import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
-import { InMemoryStore } from "../configuration/InMemoryStore"
+import InMemoryStore from "../configuration/inmemory"
 
 const { Agent, Apollo, Domain, ListenerKey, } = SDK
 
@@ -58,7 +58,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     credentialOfferStack: Message[];
     issuedCredentialStack: Message[];
     proofRequestStack: Message[];
-    revocationCredentialStack:Message[];
+    revocationCredentialStack: Message[];
     revocationStack: Message[],
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
@@ -103,7 +103,12 @@ class WalletSdkBuilder {
 
   static async createInstance() {
     const apollo = new Apollo()
-    const store = new InMemoryStore()
+    const store = new SDK.Store({
+      name: "randomdb123werfdvfdewq",
+      storage: InMemoryStore,
+      password: 'random12434',
+      ignoreDuplicate: true
+    });
     const pluto = new SDK.Pluto(store, apollo)
     const mediatorDID = Domain.DID.fromString(await WalletSdkBuilder.getMediatorDidThroughOob())
 
@@ -121,7 +126,7 @@ class MessageQueue {
   credentialOfferStack: Message[] = []
   proofRequestStack: Message[] = []
   issuedCredentialStack: Message[] = []
-  
+
   receivedMessages: string[] = []
 
 
@@ -174,7 +179,7 @@ class MessageQueue {
           this.revocationCredentialStack.push(message)
         } else if (message.piuri.includes("/revoke")) {
           this.revocationStack.push(message)
-        } 
+        }
       } else {
         clearInterval(this.processingId!)
         this.processingId = null

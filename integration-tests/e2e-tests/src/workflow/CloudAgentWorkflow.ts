@@ -1,5 +1,5 @@
-import {Actor, Duration, Interaction, Notepad, Wait} from "@serenity-js/core"
-import {GetRequest, LastResponse, PatchRequest, PostRequest, Send} from "@serenity-js/rest"
+import { Actor, Duration, Interaction, Notepad, Wait } from "@serenity-js/core"
+import { GetRequest, LastResponse, PatchRequest, PostRequest, Send } from "@serenity-js/rest"
 import { Ensure, equals } from "@serenity-js/assertions"
 import { HttpStatusCode } from "axios"
 import { Expectations } from "../screenplay/Expectations"
@@ -186,20 +186,28 @@ export class CloudAgentWorkflow {
 
   static async revokeCredential(cloudAgent: Actor) {
 
-    // Get recordId from thid:
     await cloudAgent.attemptsTo(
 
       Interaction.where("#actor logs the last response body for revocation", async actor => {
-        const body = await actor.answer(LastResponse.body())
-        const recordId = body.recordId;
         await cloudAgent.attemptsTo(
-          Send.a(PatchRequest.to(`credential-status/revoke-credential/${recordId}`)),
-          Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok)),
-        );
+          Send.a(
+            GetRequest.to("issue-credentials/records")
+          )
+        )
+        const body = await actor.answer(LastResponse.body())
+        const records = body.contents;
+
+        for (let record of records) {
+          await cloudAgent.attemptsTo(
+            Send.a(PatchRequest.to(`credential-status/revoke-credential/${record.recordId}`)),
+          );
+        }
+
+
       }),
-      
+
     )
-    
-    
+
+
   }
 }

@@ -1,4 +1,3 @@
-import { uuid } from "@stablelib/uuid";
 import { DID, Message, MessageDirection, Pollux } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
@@ -279,24 +278,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           signal,
           hasWebsocket.serviceEndpoint.uri,
           async (messages) => {
-            const unreadMessages = messages.reduce<{
-              attachmentId: string;
-              message: Message;
-            }[]>((unreads, message) => {
-              const attachment = message.attachments.at(0);
-              if (!attachment) {
-                return unreads;
-              }
-              return [
-                ...unreads,
-                {
-                  message: message,
-                  attachmentId: attachment.id
-                }
-              ];
-            }, []);
-
-            await this.processMessages(unreadMessages);
+            await this.processMessages(messages);
           }
         );
       });

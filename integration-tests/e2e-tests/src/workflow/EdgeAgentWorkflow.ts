@@ -1,11 +1,10 @@
 import SDK from "@atala/prism-wallet-sdk"
 import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
-import {equals, isGreaterThan} from "@serenity-js/assertions"
+import { Ensure, equals, isGreaterThan } from "@serenity-js/assertions"
 import { WalletSdk } from "../abilities/WalletSdk"
 import { Utils } from "../Utils"
 
 const { IssueCredential, OfferCredential, RequestPresentation, } = SDK
-
 
 export class EdgeAgentWorkflow {
 
@@ -95,7 +94,7 @@ export class EdgeAgentWorkflow {
       )
     )
   }
-  
+
   static async waitUntilCredentialIsRevoked(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofMinutes(2)).until(
@@ -103,60 +102,14 @@ export class EdgeAgentWorkflow {
         isGreaterThan(0)
       )
     )
-
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
         const credential = credentials[0]
-
         await edgeAgent.attemptsTo(
-          Wait.upTo(Duration.ofMinutes(2)).until(
-            WalletSdk.revocationStackSize(),
-            isGreaterThan(0)
-          )
+          Ensure.that(credential.isRevoked(), equals(true))
         )
-        
-        debugger;
       })
-
     )
-  
-
-
-    //   const blap = WalletSdk.issuedCredentialStackSize()
-    //   console.log("<><><>" + blap)
-      
-      
-    // await edgeAgent.attemptsTo(
-    //   Wait.upTo(Duration.ofMinutes(2)).until(
-    //     WalletSdk.credentialOfferStackSize(),
-    //     isGreaterThan(0)
-    //   ),
-    // )
-
-
-    /*
-    await edgeAgent.attemptsTo(
-      WalletSdk.execute(async (sdk, messages) => {
-        const credentials = await sdk.verifiableCredentials()
-        const credential = credentials[0]
-        let blap = messages
-        console.log("<><><>")
-      }),
-      */
-        
-      
-    /*
-    await edgeAgent.attemptsTo(
-      Wait.upTo(Duration.ofMinutes(2)).until(
-        WalletSdk.execute(async (sdk, messages) => {
-          const credentials = await sdk.verifiableCredentials()
-          const credential = credentials[0]
-        }),
-        equals(null)
-      ),
-      
-       */
-      
   }
 }

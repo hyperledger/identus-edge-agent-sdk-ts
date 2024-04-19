@@ -35,6 +35,13 @@
         "${workspaceRoot}/../../node_modules/**/*",
         "<node_internals>/**/*"
       ]
+    },
+    {
+      "command": "yarn test:sdk",
+      "name": "Run test:sdk",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/integration-tests/e2e-tests"
     }
   ]
 }
