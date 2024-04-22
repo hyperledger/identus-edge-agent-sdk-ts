@@ -74,7 +74,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const options = new PresentationOptions({
       jwt: {
-        jwtAlg: ['EdDSA']
+        jwtAlg: ['ES256K']
       },
       challenge: "Sign this text " + uuid(),
       domain: 'N/A'
