@@ -70,7 +70,7 @@ export default class Pollux implements IPollux {
 
       const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
         (inputDescriptor) => {
-          if (!inputDescriptor.format || !inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg) {
+          if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg)) {
             //TODO: Improive error
             throw new Error("Invalid format")
           }
