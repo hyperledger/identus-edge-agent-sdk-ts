@@ -358,7 +358,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       ],
       message.to,
       message.from,
-      message.thid
+      message.thid ?? message.id
     );
     return presentation;
   }
