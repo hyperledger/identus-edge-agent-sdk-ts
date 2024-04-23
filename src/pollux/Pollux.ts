@@ -276,13 +276,7 @@ export default class Pollux implements IPollux {
         if (!nonce || typeof nonce !== "string") {
           throw new InvalidVerifyCredentialError(jws, `Invalid Submission, ${descriptorItem.path} does not contain a nonce in its payload with a valid signature for '${challenge}'`);
         }
-        const signatureHex = nonce as string;
-        const signatureValid = await this.castor.verifySignature(
-          DID.fromString(issuer),
-          Buffer.from(challenge),
-          Buffer.from(signatureHex, 'hex')
-        );
-        if (!signatureValid) {
+        if (nonce !== challenge) {
           throw new InvalidVerifyCredentialError(jws, `Invalid Submission, ${descriptorItem.path} does not contain valid signature for '${challenge}'`);
         }
       }
