@@ -81,7 +81,7 @@ export default class Pollux implements IPollux {
             path_nested: {
               id: inputDescriptor.id,
               format: DescriptorItemFormat.JWT_VC,
-              path: "$.verifiableCredential[0]",
+              path: "$.vp.verifiableCredential[0]",
             }
           }
         });
@@ -134,17 +134,10 @@ export default class Pollux implements IPollux {
 
     const {
       presentation_submission,
-      verifiablePresentation,
     } = data;
 
     //Validate required fields
     if (!presentation_submission || (typeof presentation_submission !== "object")) {
-      return false;
-    }
-
-    if (!verifiablePresentation ||
-      !Array.isArray(verifiablePresentation)
-    ) {
       return false;
     }
 
@@ -293,7 +286,7 @@ export default class Pollux implements IPollux {
       if (!credentialValid) {
         throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
       }
-      const verifiablePresentation = presentation.vp;
+      const verifiablePresentation = presentation;
       const nestedPath = descriptorItem.path_nested;
       if (!nestedPath) {
         throw new InvalidVerifyFormatError(

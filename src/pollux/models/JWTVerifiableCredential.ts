@@ -203,10 +203,13 @@ export class JWTCredential
         throw new InvalidCredentialError("Invalid sub in credential payload should be string");
       }
 
-      if (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'undefined'
-        && typeof payload[JWTVerifiableCredentialProperties.aud] !== 'string') {
-        throw new InvalidCredentialError("Invalid aud in credential payload should be string");
+
+      if (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'undefined' &&
+        (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'string' &&
+          !Array.isArray(payload[JWTVerifiableCredentialProperties.aud]))) {
+        throw new InvalidCredentialError("Invalid aud in presentation payload should be string");
       }
+
 
       if (typeof payload[JWTVerifiableCredentialProperties.revoked] !== 'undefined' &&
         typeof payload[JWTVerifiableCredentialProperties.revoked] !== 'boolean') {
@@ -226,7 +229,8 @@ export class JWTCredential
       }
 
       if (typeof payload[JWTVerifiablePresentationProperties.aud] !== 'undefined' &&
-        typeof payload[JWTVerifiablePresentationProperties.aud] !== 'string') {
+        (typeof payload[JWTVerifiablePresentationProperties.aud] !== 'string' &&
+          !Array.isArray(payload[JWTVerifiablePresentationProperties.aud]))) {
         throw new InvalidCredentialError("Invalid aud in presentation payload should be string");
       }
 
