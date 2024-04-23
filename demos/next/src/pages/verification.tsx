@@ -34,7 +34,7 @@ const Verification: React.FC<{}> = props => {
         setMessages(app.messages)
     }, [app.messages, app.db])
 
-    const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress=javier.ribo@iohk.io")
+    const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress=test@email.com")
     const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:a0209ebd691c5ec20636f206b3e101c726fdc1c22b9b850b4b811ac4a82e28d8")
     const [sendTo, setSendTo] = React.useState<string>("did:peer:2.Ez6LShzJ7Ew7dFka1sfhP5KtXQfCXp8Zj9VU5ay9KxgRoCJ5x.Vz6MkgTWF2hKU4e3cCrTuPwXJV2mUXZrxgBB9tYgAXwFbXeDC");
     const handleMessages = async (
