@@ -1,9 +1,5 @@
 type Task<T> = (signal: AbortSignal) => Promise<T>;
 
-
-
-
-
 export class CancellableTask<T> {
   private period?: number;
   private controller: AbortController;
