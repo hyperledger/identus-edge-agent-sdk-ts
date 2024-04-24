@@ -23,6 +23,8 @@ const agentCredentials: AgentCredentials = null as any;
 
 
 async function createBasicMediationHandler(
+    ConnectionsManager: any,
+    BasicMediatorHandler: any,
     services: Service[],
     options?: AgentOptions
 ): Promise<
@@ -31,6 +33,7 @@ async function createBasicMediationHandler(
         handler: BasicMediatorHandler
     }
 > {
+
     const seed = apollo.createRandomSeed().seed;
     const keypair = apollo.createPrivateKey({
         type: KeyTypes.EC,
@@ -48,16 +51,17 @@ async function createBasicMediationHandler(
         routingDID: mediatorDID,
         mediatorDID: mediatorDID
     }
+    const manager = new ConnectionsManager(
+        castor,
+        mercury,
+        pluto,
+        agentCredentials,
+        handler,
+        [],
+        options
+    )
     return {
-        manager: new ConnectionsManager(
-            castor,
-            mercury,
-            pluto,
-            agentCredentials,
-            handler,
-            [],
-            options
-        ),
+        manager,
         handler
     }
 }
@@ -84,10 +88,14 @@ describe("ConnectionsManager tests", () => {
             new Service(
                 "#didcomm-1",
                 ["DIDCommMessaging"],
-                new ServiceEndpoint("wss://localhost:12346")
+                new ServiceEndpoint("ws://localhost:12346")
             )
         ];
+        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         const { manager, handler } = await createBasicMediationHandler(
+            ConnectionsManager,
+            BasicMediatorHandler,
             services,
             {
                 experiments: {
@@ -99,6 +107,8 @@ describe("ConnectionsManager tests", () => {
         expect(manager).toHaveProperty('withWebsocketsExperiment', true);
         await manager.startFetchingMessages(1)
         expect(listenUnread).toHaveBeenCalled();
+
+        manager.stopFetchingMessages()
     })
 
     it("Should not use websockets even if the mediator's did endpoint uri contains ws or wss if the agent options don't have the opt-in", async () => {
@@ -106,10 +116,14 @@ describe("ConnectionsManager tests", () => {
             new Service(
                 "#didcomm-1",
                 ["DIDCommMessaging"],
-                new ServiceEndpoint("wss://localhost:12346")
+                new ServiceEndpoint("ws://localhost:12346")
             )
         ];
+        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         const { manager, handler } = await createBasicMediationHandler(
+            ConnectionsManager,
+            BasicMediatorHandler,
             services
         );
         const listenUnread = jest.spyOn(handler, 'listenUnreadMessages')
@@ -118,6 +132,7 @@ describe("ConnectionsManager tests", () => {
         await manager.startFetchingMessages(1)
 
         expect(listenUnread).not.toHaveBeenCalled()
+        manager.stopFetchingMessages()
     })
 
     it("Should not use websockets even if the mediator's did endpoint uri contains ws or wss if the agent options don't have the opt-in 1", async () => {
@@ -125,10 +140,14 @@ describe("ConnectionsManager tests", () => {
             new Service(
                 "#didcomm-1",
                 ["DIDCommMessaging"],
-                new ServiceEndpoint("wss://localhost:12346")
+                new ServiceEndpoint("ws://localhost:12346")
             )
         ];
+        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         const { manager, handler } = await createBasicMediationHandler(
+            ConnectionsManager,
+            BasicMediatorHandler,
             services,
             {
                 experiments: {
@@ -142,6 +161,7 @@ describe("ConnectionsManager tests", () => {
         await manager.startFetchingMessages(1)
 
         expect(listenUnread).not.toHaveBeenCalled()
+        manager.stopFetchingMessages()
     })
 
     it("Should not use websockets even if the mediator's did endpoint uri contains ws or wss if the agent options don't have the opt-in 2", async () => {
@@ -149,10 +169,14 @@ describe("ConnectionsManager tests", () => {
             new Service(
                 "#didcomm-1",
                 ["DIDCommMessaging"],
-                new ServiceEndpoint("wss://localhost:12346")
+                new ServiceEndpoint("ws://localhost:12346")
             )
         ];
+        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         const { manager, handler } = await createBasicMediationHandler(
+            ConnectionsManager,
+            BasicMediatorHandler,
             services,
             {
                 experiments: {
@@ -166,6 +190,7 @@ describe("ConnectionsManager tests", () => {
         await manager.startFetchingMessages(1)
 
         expect(listenUnread).not.toHaveBeenCalled()
+        manager.stopFetchingMessages()
     })
 
     it("Should not use websockets if the mediator'd did endpoint uri does not contain ws or wss for more than the agent has opted in", async () => {
@@ -176,7 +201,11 @@ describe("ConnectionsManager tests", () => {
                 new ServiceEndpoint("http://localhost:12346")
             )
         ];
+        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         const { manager, handler } = await createBasicMediationHandler(
+            ConnectionsManager,
+            BasicMediatorHandler,
             services,
             {
                 experiments: {
@@ -190,6 +219,7 @@ describe("ConnectionsManager tests", () => {
         await manager.startFetchingMessages(1)
 
         expect(listenUnread).not.toHaveBeenCalled()
+        manager.stopFetchingMessages()
     })
 
 })

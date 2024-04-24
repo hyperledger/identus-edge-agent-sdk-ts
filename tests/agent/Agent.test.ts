@@ -60,10 +60,7 @@ let pluto: IPluto;
 let pollux: Pollux;
 let castor: Castor;
 let sandbox: sinon.SinonSandbox;
-let store: Pluto.Store
-// jest.mock("../apollo/utils/jwt/JWT", () => () => ({
-//   sign: jest.fn(() => "")
-// }));
+let store: Pluto.Store;
 
 
 describe("Agent Tests", () => {
@@ -76,7 +73,13 @@ describe("Agent Tests", () => {
 
   beforeEach(async () => {
     jest.useFakeTimers();
-
+    jest.mock('isows', () => ({
+      WebSocket: jest.fn(() => ({
+        addEventListener: jest.fn(),
+        send: jest.fn(),
+        close: jest.fn(),
+      })),
+    }));
     sandbox = sinon.createSandbox();
     const apollo: Apollo = new Apollo();
     castor = CastorMock;
@@ -109,7 +112,12 @@ describe("Agent Tests", () => {
       castor,
       mercury,
       pluto,
-      agentCredentials
+      agentCredentials,
+      options: {
+        experiments: {
+          liveMode: false
+        }
+      }
     })
 
 
@@ -118,7 +126,13 @@ describe("Agent Tests", () => {
       castor,
       pluto,
       mercury,
-      connectionsManager
+      connectionsManager,
+      undefined, undefined,
+      {
+        experiments: {
+          liveMode: false
+        }
+      }
     );
 
     await polluxInstance.start();
