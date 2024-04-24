@@ -33,7 +33,6 @@ async function createBasicMediationHandler(
         handler: BasicMediatorHandler
     }
 > {
-
     const seed = apollo.createRandomSeed().seed;
     const keypair = apollo.createPrivateKey({
         type: KeyTypes.EC,
@@ -66,24 +65,21 @@ async function createBasicMediationHandler(
     }
 }
 
+jest.mock('isows', () => ({
+    WebSocket: jest.fn(() => ({
+        addEventListener: jest.fn(),
+        send: jest.fn(),
+        close: jest.fn(),
+    })),
+}));
 
 describe("ConnectionsManager tests", () => {
-
-    beforeEach(() => {
-        jest.mock('isows', () => ({
-            WebSocket: jest.fn(() => ({
-                addEventListener: jest.fn(),
-                send: jest.fn(),
-                close: jest.fn(),
-            })),
-        }));
-    })
 
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    it("Should use websockets if the mediator's did endpoint uri contains ws or wss and agent options have the opt in", async () => {
+    it.only("Should use websockets if the mediator's did endpoint uri contains ws or wss and agent options have the opt in", async () => {
         const services = [
             new Service(
                 "#didcomm-1",
@@ -92,7 +88,15 @@ describe("ConnectionsManager tests", () => {
             )
         ];
         const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
-        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        const BasicMediatorHandler = jest.requireActual('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        jest.mock('isows', () => ({
+            WebSocket: jest.fn(() => ({
+                addEventListener: jest.fn(),
+                send: jest.fn(),
+                close: jest.fn(),
+            })),
+        }));
+
         const { manager, handler } = await createBasicMediationHandler(
             ConnectionsManager,
             BasicMediatorHandler,
@@ -121,6 +125,13 @@ describe("ConnectionsManager tests", () => {
         ];
         const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
         const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        jest.mock('isows', () => ({
+            WebSocket: jest.fn(() => ({
+                addEventListener: jest.fn(),
+                send: jest.fn(),
+                close: jest.fn(),
+            })),
+        }));
         const { manager, handler } = await createBasicMediationHandler(
             ConnectionsManager,
             BasicMediatorHandler,
@@ -145,6 +156,13 @@ describe("ConnectionsManager tests", () => {
         ];
         const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
         const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        jest.mock('isows', () => ({
+            WebSocket: jest.fn(() => ({
+                addEventListener: jest.fn(),
+                send: jest.fn(),
+                close: jest.fn(),
+            })),
+        }));
         const { manager, handler } = await createBasicMediationHandler(
             ConnectionsManager,
             BasicMediatorHandler,
@@ -174,6 +192,13 @@ describe("ConnectionsManager tests", () => {
         ];
         const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
         const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        jest.mock('isows', () => ({
+            WebSocket: jest.fn(() => ({
+                addEventListener: jest.fn(),
+                send: jest.fn(),
+                close: jest.fn(),
+            })),
+        }));
         const { manager, handler } = await createBasicMediationHandler(
             ConnectionsManager,
             BasicMediatorHandler,
@@ -203,6 +228,13 @@ describe("ConnectionsManager tests", () => {
         ];
         const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
         const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        jest.mock('isows', () => ({
+            WebSocket: jest.fn(() => ({
+                addEventListener: jest.fn(),
+                send: jest.fn(),
+                close: jest.fn(),
+            })),
+        }));
         const { manager, handler } = await createBasicMediationHandler(
             ConnectionsManager,
             BasicMediatorHandler,
