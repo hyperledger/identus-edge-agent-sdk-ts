@@ -207,7 +207,7 @@ export class JWTCredential
       if (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'undefined' &&
         (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'string' &&
           !Array.isArray(payload[JWTVerifiableCredentialProperties.aud]))) {
-        throw new InvalidCredentialError("Invalid aud in presentation payload should be string");
+        throw new InvalidCredentialError("Invalid aud in credential payload should be string");
       }
 
 

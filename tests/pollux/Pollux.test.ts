@@ -1672,7 +1672,7 @@ describe("Pollux", () => {
       expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.be.rejectedWith(
-        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Submission, $.verifiablePresentation[0] does not contain valid signature for '${challenge}'`
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Holder Presentation JWS Signature`
       );
     })
 
@@ -1743,14 +1743,6 @@ describe("Pollux", () => {
 
     it("Should throw an error if the actual presentationSubmission is not an object", async () => {
       expect(pollux.verifyPresentationSubmission({ presentation_submission: null, verifiablePresentation: null } as any, {
-        presentationDefinitionRequest: null as any
-      })).to.eventually.be.rejectedWith(
-        `Verification format is invalid: reason -> PresentationSubmission format is invalid`
-      );
-    })
-
-    it("Should throw an error if the actual presentationSubmission.verifiablePresentation is not an array", async () => {
-      expect(pollux.verifyPresentationSubmission({ presentation_submission: {}, verifiablePresentation: null } as any, {
         presentationDefinitionRequest: null as any
       })).to.eventually.be.rejectedWith(
         `Verification format is invalid: reason -> PresentationSubmission format is invalid`

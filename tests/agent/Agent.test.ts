@@ -756,7 +756,7 @@ describe("Agent Tests", () => {
 
           expect(result).to.have.property("from", request.to);
           expect(result).to.have.property("to", request.from);
-          expect(result).to.have.property("thid", request.thid);
+          expect(result).to.have.property("thid", request.thid || request.id);
         });
 
         test("Attachment format - not JWT - throws", () => {

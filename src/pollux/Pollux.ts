@@ -66,6 +66,9 @@ export default class Pollux implements IPollux {
       if (!(privateKey instanceof Secp256k1PrivateKey)) {
         throw new CastorError.InvalidKeyError()
       }
+      if (!presentationDefinitionRequest || !presentationDefinitionRequest.options || !presentationDefinitionRequest.presentation_definition) {
+        throw new Error("Invalid Presentation Definition object")
+      }
       const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
 
       const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
@@ -99,7 +102,7 @@ export default class Pollux implements IPollux {
         iss: subject,
         aud: domain,
         nbf: Date.parse(new Date().toISOString()),
-        nonce: Buffer.from(privateKey.sign(Buffer.from(challenge))).toString('hex'),
+        nonce: challenge,
         vp: credential.presentation(),
       }
 
@@ -226,7 +229,7 @@ export default class Pollux implements IPollux {
   }
 
   private validJWTPresentationSubmissionOptions(options: any): options is IPollux.verifyPresentationSubmission.options.JWT {
-    return options && options.presentationDefinitionRequest !== undefined;
+    return options && options.presentationDefinitionRequest && typeof options.presentationDefinitionRequest === "object" ? true : false;
   }
 
   async verifyPresentationSubmission(
