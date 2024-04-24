@@ -28,6 +28,13 @@ export enum InvitationTypes {
   PRISM_ONBOARD,
 }
 
+
+export type AgentOptions = {
+  experiments?: {
+    liveMode?: boolean
+  }
+}
+
 export type InvitationType = PrismOnboardingInvitation | OutOfBandInvitation;
 
 export class PrismOnboardingInvitation implements InvitationInterface {
@@ -111,6 +118,7 @@ export interface ConnectionsManager {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cancellables: CancellableTask<any>[];
 
+  withWebsocketsExperiment: boolean;
   stopAllEvents(): void;
 
   addConnection(paired: DIDPair): Promise<void>;

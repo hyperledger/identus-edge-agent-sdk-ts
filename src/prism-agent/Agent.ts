@@ -11,6 +11,7 @@ import {
   AgentCredentials as AgentCredentialsClass,
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
   AgentInvitations as AgentInvitationsClass,
+  AgentOptions,
   EventCallback,
   InvitationType,
   ListenerKey,
@@ -86,8 +87,10 @@ export default class Agent
     public readonly mediationHandler: MediatorHandler,
     public readonly connectionManager: ConnectionsManager,
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
-    public readonly api: Domain.Api = new ApiImpl()
+    public readonly api: Domain.Api = new ApiImpl(),
+    options?: AgentOptions
   ) {
+
     this.pollux = new Pollux(castor);
     this.agentCredentials = new AgentCredentials(
       apollo,
@@ -104,7 +107,8 @@ export default class Agent
         pluto,
         this.agentCredentials,
         mediationHandler,
-        []
+        [],
+        options
       );
 
 
@@ -147,6 +151,7 @@ export default class Agent
     castor?: Domain.Castor;
     mercury?: Domain.Mercury;
     seed?: Domain.Seed;
+    options?: AgentOptions
   }): Agent {
     const mediatorDID = Domain.DID.from(params.mediatorDID);
     const pluto = params.pluto;
@@ -170,7 +175,15 @@ export default class Agent
       pollux,
       seed
     );
-    const manager = new ConnectionsManager(castor, mercury, pluto, agentCredentials, handler);
+    const manager = new ConnectionsManager(
+      castor,
+      mercury,
+      pluto,
+      agentCredentials,
+      handler,
+      [],
+      params.options
+    );
 
     const agent = new Agent(
       apollo,
@@ -180,7 +193,8 @@ export default class Agent
       handler,
       manager,
       seed,
-      api
+      api,
+      params.options
     );
 
     return agent;
@@ -217,7 +231,8 @@ export default class Agent
     mercury: Domain.Mercury,
     connectionManager: ConnectionsManager,
     seed?: Domain.Seed,
-    api?: Domain.Api
+    api?: Domain.Api,
+    options?: AgentOptions
   ) {
     return new Agent(
       apollo,
@@ -227,7 +242,8 @@ export default class Agent
       connectionManager.mediationHandler,
       connectionManager,
       seed ? seed : apollo.createRandomSeed().seed,
-      api ? api : new ApiImpl()
+      api ? api : new ApiImpl(),
+      options
     );
   }
 
