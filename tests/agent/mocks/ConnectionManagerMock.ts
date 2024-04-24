@@ -55,6 +55,7 @@ export class ConnectionsManagerMock implements ConnectionsManagerClass {
     this.mediationHandler = this.manager.mediationHandler;
   }
 
+
   static buildMock(params: Partial<ConnectionMockConstructor>): ConnectionsManagerMock {
     const mediationHandler: MediatorHandler = {
       registerMessagesAsRead: async () => { },
