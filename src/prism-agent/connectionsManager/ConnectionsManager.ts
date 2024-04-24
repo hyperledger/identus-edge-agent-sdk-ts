@@ -288,7 +288,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         await this.processMessages(unreadMessages);
       }, timeInterval);
     }
-    await this.cancellable.then().catch((err) => {
+
+    this.cancellable.then().catch((err) => {
       if (err instanceof Error) {
         if (err.message !== "Task was cancelled") throw err;
       } else throw err;
