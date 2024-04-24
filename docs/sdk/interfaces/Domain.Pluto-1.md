@@ -320,7 +320,7 @@ ___
 
 ▸ **start**(): `Promise`\<`void`\>
 
-Pluto initialise function
+Pluto initialize function
 
 #### Returns
 
