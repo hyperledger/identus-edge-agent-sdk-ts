@@ -105,10 +105,14 @@ describe("Agent Tests", () => {
       apollo.createRandomSeed().seed
     )
 
-    const connectionsManager = new ConnectionsManagerMock(
-      castor, mercury, pluto, agentCredentials
+    const connectionsManager = ConnectionsManagerMock.buildMock({
+      castor,
+      mercury,
+      pluto,
+      agentCredentials
+    })
 
-    );
+
     agent = Agent.instanceFromConnectionManager(
       apollo,
       castor,

@@ -1,4 +1,3 @@
-import { uuid } from "@stablelib/uuid";
 import { DID, Message, MessageDirection, Pollux } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
@@ -74,7 +73,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public agentCredentials: AgentCredentials,
     public mediationHandler: MediatorHandler,
     public pairings: DIDPair[] = [],
-    private options?: AgentOptions
+    public options?: AgentOptions
   ) {
     this.events = new AgentMessageEvents();
   }

@@ -118,6 +118,7 @@ export interface ConnectionsManager {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cancellables: CancellableTask<any>[];
 
+  withWebsocketsExperiment: boolean;
   stopAllEvents(): void;
 
   addConnection(paired: DIDPair): Promise<void>;
