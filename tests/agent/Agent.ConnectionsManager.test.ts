@@ -33,7 +33,6 @@ async function createBasicMediationHandler(
         handler: BasicMediatorHandler
     }
 > {
-
     const seed = apollo.createRandomSeed().seed;
     const keypair = apollo.createPrivateKey({
         type: KeyTypes.EC,
