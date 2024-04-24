@@ -28,6 +28,13 @@ export enum InvitationTypes {
   PRISM_ONBOARD,
 }
 
+
+export type AgentOptions = {
+  experiments?: {
+    liveMode?: boolean
+  }
+}
+
 export type InvitationType = PrismOnboardingInvitation | OutOfBandInvitation;
 
 export class PrismOnboardingInvitation implements InvitationInterface {

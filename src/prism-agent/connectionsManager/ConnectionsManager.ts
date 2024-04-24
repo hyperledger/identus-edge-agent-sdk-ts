@@ -10,6 +10,7 @@ import { CancellableTask } from "../helpers/Task";
 import {
   AgentCredentials,
   AgentMessageEvents as AgentMessageEventsClass,
+  AgentOptions,
   ConnectionsManager as ConnectionsManagerClass,
   ListenerKey,
   MediatorHandler,
@@ -72,9 +73,14 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public pluto: Pluto,
     public agentCredentials: AgentCredentials,
     public mediationHandler: MediatorHandler,
-    public pairings: DIDPair[] = []
+    public pairings: DIDPair[] = [],
+    private options?: AgentOptions
   ) {
     this.events = new AgentMessageEvents();
+  }
+
+  get withWebsocketsExperiment() {
+    return this.options?.experiments?.liveMode === true
   }
 
   /**
@@ -263,8 +269,10 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     const currentMediator = this.mediationHandler.mediator.mediatorDID;
     const resolvedMediator = await this.castor.resolveDID(currentMediator.toString());
     const hasWebsocket = resolvedMediator.services.find(({ serviceEndpoint: { uri } }) =>
-      uri.startsWith("ws://") ||
-      uri.startsWith("wss://")
+      (
+        uri.startsWith("ws://") ||
+        uri.startsWith("wss://")
+      ) && this.withWebsocketsExperiment
     );
     if (!hasWebsocket) {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
