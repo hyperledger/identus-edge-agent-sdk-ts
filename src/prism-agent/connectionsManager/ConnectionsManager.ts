@@ -131,7 +131,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   async processMessages(unreadMessages: {
     attachmentId: string;
     message: Message;
-  }[]): Promise<void> {
+  }[] = []): Promise<void> {
     if (!this.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
@@ -268,45 +268,25 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     const currentMediator = this.mediationHandler.mediator.mediatorDID;
     const resolvedMediator = await this.castor.resolveDID(currentMediator.toString());
     const hasWebsocket = resolvedMediator.services.find(({ serviceEndpoint: { uri } }) =>
-      (
-        uri.startsWith("ws://") ||
-        uri.startsWith("wss://")
-      ) && this.withWebsocketsExperiment
+    (
+      uri.startsWith("ws://") ||
+      uri.startsWith("wss://")
+    )
     );
-    if (!hasWebsocket) {
+    if (hasWebsocket && this.withWebsocketsExperiment) {
+      this.cancellable = new CancellableTask(async (signal) => {
+        this.mediationHandler.listenUnreadMessages(
+          signal,
+          hasWebsocket.serviceEndpoint.uri,
+          (messages) => this.processMessages(messages)
+        );
+      });
+    } else {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
       this.cancellable = new CancellableTask(async () => {
         const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
         await this.processMessages(unreadMessages);
       }, timeInterval);
-    } else {
-      //Connecting to websockets, do not repeat the task
-      this.cancellable = new CancellableTask(async (signal) => {
-        this.mediationHandler.listenUnreadMessages(
-          signal,
-          hasWebsocket.serviceEndpoint.uri,
-          async (messages) => {
-            const unreadMessages = messages.reduce<{
-              attachmentId: string;
-              message: Message;
-            }[]>((unreads, message) => {
-              const attachment = message.attachments.at(0);
-              if (!attachment) {
-                return unreads;
-              }
-              return [
-                ...unreads,
-                {
-                  message: message,
-                  attachmentId: attachment.id
-                }
-              ];
-            }, []);
-
-            await this.processMessages(unreadMessages);
-          }
-        );
-      });
     }
 
     this.cancellable.then().catch((err) => {

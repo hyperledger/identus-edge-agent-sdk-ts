@@ -1,9 +1,9 @@
-import {Before, BeforeAll} from "@cucumber/cucumber"
-import {Actor, actorCalled, Cast, engage, TakeNotes} from "@serenity-js/core"
-import {CallAnApi} from "@serenity-js/rest"
-import {Utils} from "../Utils"
-import {WalletSdk} from "../abilities/WalletSdk"
-import {axiosInstance, CloudAgentConfiguration} from "../configuration/CloudAgentConfiguration"
+import { Before, BeforeAll } from "@cucumber/cucumber"
+import { Actor, actorCalled, Cast, engage, TakeNotes } from "@serenity-js/core"
+import { CallAnApi } from "@serenity-js/rest"
+import { Utils } from "../Utils"
+import { WalletSdk } from "../abilities/WalletSdk"
+import { axiosInstance, CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 
 BeforeAll(async () => {
   Utils.prepareNotes()
