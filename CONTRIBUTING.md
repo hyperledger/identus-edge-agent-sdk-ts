@@ -1,13 +1,13 @@
-# Contributing to Atala PRISM TS SDK
+# Contributing to Edge Agent SDK TS
 
 :rocket::tada: First off, thanks for taking the time to contribute! :tada::rocket:
-The following guidelines are for contributing to Atala PRISM TS SDK. These are mostly guidelines. Use your best judgment, and feel free to propose changes to this document in a pull request.
+The following guidelines are for contributing to Edge Agent SDK TS. These are mostly guidelines. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 #### Table Of Contents
 
 [What should I know before I get started?](#what-should-i-know-before-i-get-started)
-  * [Atala PRISM](#atala-prism)
-  * [Atala PRISM TS SDK](#atala-prism-ts)
+  * [Identus](#identus)
+  * [Edge Agent SDK TS](#edge-agent-sdk-ts)
 
 [How Can I Contribute?](#how-can-i-contribute)
   * [Your First Code Contribution](#your-first-code-contribution)
@@ -21,9 +21,9 @@ The following guidelines are for contributing to Atala PRISM TS SDK. These are m
 
 ## What should I know before I get started?
 
-### Atala PRISM
+### Identus
 
-Atala PRISM is a self-sovereign identity (SSI) platform and service suite for verifiable data and digital identity. Built on Cardano, it offers the core infrastructure for issuing DIDs (Decentralized identifiers) and verifiable credentials alongside tools and frameworks to help expand your ecosystem.
+Identus is a self-sovereign identity (SSI) platform and service suite for verifiable data and digital identity. Built on Cardano, it offers the core infrastructure for issuing DIDs (Decentralized identifiers) and verifiable credentials alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated into multiple repositories:
 
 * [Open enterprise agent](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
@@ -31,13 +31,13 @@ The complete platform is separated into multiple repositories:
 * [Prism Wallet SDK KMM](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin version of the SDK.
 * [Prism Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the Prism Mediator.
 
-### Atala PRISM TS SDK
+### Edge Agent SDK TS
 
-Atala PRISM TS software development kit will help adoption within TS platforms (Browser/Node) by providing key functionalities. For more information about the SDK, please have a look at the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md)
+Edge Agent SDK TS software development kit will help adoption within TS platforms (Browser/Node) by providing key functionalities. For more information about the SDK, please have a look at the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md)
 
 ### Your First Code Contribution
 
-Unsure where to begin contributing to Atala PRISM TS SDK? You can start by looking through the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md) that provides all the steps to setup your environment.
+Unsure where to begin contributing to Edge Agent SDK TS? You can start by looking through the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md) that provides all the steps to setup your environment.
 
 ### Pull Requests
 
@@ -58,7 +58,7 @@ While the prerequisites above must be satisfied before your pull request is revi
 
 ### Reporting Bugs
 
-This section guides you through submitting a bug report for Atala PRISM TS SDK. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behaviour:computer: :computer:, and find related reports :mag_right:.
+This section guides you through submitting a bug report for Edge Agent SDK TS. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behaviour:computer: :computer:, and find related reports :mag_right:.
 
 Before creating bug reports, please check [this list](#before-submitting-a-bug-report), as you might not need to create one. When creating a bug report, please [include as many details as possible](#how-do-i-submit-a-good-bug-report). Fill out [the required template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/.github/ISSUE_TEMPLATE/1-bug-report.yaml), the information it asks for helps us resolve issues faster.
 
@@ -110,7 +110,7 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 
 ### Git Commit Messages
 
-Atala PRISM uses [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#specification). Please always provide a commit following these specifications.
+Identus uses [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#specification). Please always provide a commit following these specifications.
 
 #### Commit Message Format
 
