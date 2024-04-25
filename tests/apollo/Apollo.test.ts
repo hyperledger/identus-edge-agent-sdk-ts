@@ -169,7 +169,7 @@ describe("Apollo", () => {
   });
 
   it("Should create and Sign and verify a message using Secp256k1 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const text = Buffer.from("test text");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
 
@@ -193,7 +193,7 @@ describe("Apollo", () => {
   });
 
   it("Should only verify signed message using the correct SECP256K1 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const text = Buffer.from("test text");
     const apollo = new Apollo();
     const seed = apollo.createRandomSeed().seed;
 
@@ -223,7 +223,7 @@ describe("Apollo", () => {
   });
 
   it("Should create and Sign and verify a message using ED25519 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const text = Buffer.from("test text");
     const apollo = new Apollo();
 
     const privateKey = apollo.createPrivateKey({
@@ -242,7 +242,7 @@ describe("Apollo", () => {
   });
 
   it("Should only verify signed message using the correct ED25519 KeyPair", async () => {
-    const text = Buffer.from("AtalaPrism Wallet SDK");
+    const text = Buffer.from("test text");
     const apollo = new Apollo();
 
     const privateKey = apollo.createPrivateKey({
