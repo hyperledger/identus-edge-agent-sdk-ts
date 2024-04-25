@@ -20,6 +20,13 @@
       "type": "node"
     },
     {
+      "command": "yarn test:sdk",
+      "name": "Run test:sdk",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/integration-tests/e2e-tests"
+    },
+    {
       "name": "TESTS",
       "type": "node",
       "request": "launch",

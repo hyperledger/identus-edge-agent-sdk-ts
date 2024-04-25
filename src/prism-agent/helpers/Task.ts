@@ -31,14 +31,16 @@ export class CancellableTask<T> {
   }
 
   private loopOnTaskEvery(task: Task<T>, reject: (reason?: Error) => void, signal: AbortSignal) {
-    task(signal)
-      .then(() => {
-        this.clearTimer();
-        this.timer = setTimeout(() => {
-          this.loopOnTaskEvery(task, reject, signal);
-        }, this.period);
-      })
-      .catch(reject);
+    if (!this.controller.signal.aborted) {
+      task(signal)
+        .then(() => {
+          this.clearTimer();
+          this.timer = setTimeout(() => {
+            this.loopOnTaskEvery(task, reject, signal);
+          }, this.period);
+        })
+        .catch(reject);
+    }
   }
 
   cancel() {
