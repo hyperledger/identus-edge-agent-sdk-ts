@@ -45,3 +45,13 @@ export class InvalidVerifyCredentialError extends Error {
         super(`Verification failed for credential (${credentialId.slice(0, 10)}...): reason -> ${reason}`)
     }
 }
+export class InvalidPresentationError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid Presentation Definition object")
+    }
+}
+export class InvalidDescriptorFormatError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid Descriptor format")
+    }
+}

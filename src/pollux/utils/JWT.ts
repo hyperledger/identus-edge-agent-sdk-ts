@@ -10,6 +10,7 @@ import {
   DID,
   PrivateKey,
   Curve,
+  PolluxError,
 } from "../../domain";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
 
@@ -113,7 +114,6 @@ export class JWT {
   }
 
   private getPrivateKeyAlgo(privateKey: PrivateKey): { alg: string, signer: didJWT.Signer } {
-
     if (privateKey.curve === Curve.SECP256K1) {
       return {
         alg: 'ES256K',
@@ -127,7 +127,7 @@ export class JWT {
       };
     }
     /* istanbul ignore next */
-    throw new Error("Not implemented")
+    throw new PolluxError.InvalidCredentialError(`Unsupported key type ${privateKey.curve}`)
   }
 
   async sign(

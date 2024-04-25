@@ -67,15 +67,14 @@ export default class Pollux implements IPollux {
         throw new CastorError.InvalidKeyError()
       }
       if (!presentationDefinitionRequest || !presentationDefinitionRequest.options || !presentationDefinitionRequest.presentation_definition) {
-        throw new Error("Invalid Presentation Definition object")
+        throw new PolluxError.InvalidPresentationError()
       }
       const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
 
       const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
         (inputDescriptor) => {
           if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg)) {
-            //TODO: Improive error
-            throw new Error("Invalid format")
+            throw new PolluxError.InvalidDescriptorFormatError()
           }
           return {
             id: inputDescriptor.id,
@@ -91,11 +90,11 @@ export default class Pollux implements IPollux {
 
       const subject = credential.subject;
       if (!privateKey.isSignable()) {
-        throw new Error("Cannot sign the proof challenge with this key.")
+        throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.")
       }
 
       if (!credential.isProvable()) {
-        throw new Error("Cannot create proofs with this type of credential.")
+        throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
       }
 
       const payload: JWTPresentationPayload = {
@@ -158,8 +157,7 @@ export default class Pollux implements IPollux {
 
     const jwtOptions = options.jwt;
     if (!jwtOptions) {
-      //TODO: improve erorr handling
-      throw new Error("Required field options jwt is undefined")
+      throw new PolluxError.InvalidJWTPresentationDefinitionError("Required field options jwt is undefined")
     }
 
     if (!jwtOptions.jwtAlg) {

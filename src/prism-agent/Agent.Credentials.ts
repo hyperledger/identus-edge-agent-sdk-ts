@@ -285,21 +285,21 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (message) {
       const attachment = message.attachments.at(0);
       if (!attachment) {
-        throw new Error("Invalid presentation message, attachment missing")
+        throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing")
       }
       const presentationDefinitionRequest = Message.Attachment.extractJSON(attachment);
       return presentationDefinitionRequest
     }
-    throw new Error("Cannot find any message with that threadID");
+    throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
   }
 
   async handlePresentation(presentation: Presentation): Promise<boolean> {
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
-      throw new Error("Invalid presentation message, attachment missing")
+      throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing")
     }
     if (!presentation.thid) {
-      throw new Error("Invalid presentation message, does not contain thid, we can't fetch definition")
+      throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
     }
     const presentationSubmission = Message.Attachment.extractJSON(attachment);
     const presentationDefinitionRequest = await this.getPresentationDefinitionByThid(presentation.thid!)
