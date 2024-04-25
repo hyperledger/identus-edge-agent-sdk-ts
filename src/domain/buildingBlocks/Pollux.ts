@@ -101,7 +101,7 @@ export interface Pollux {
   /**
    * Process a PresentationRequest with Credential to create a Presentation.
    * 
-   * @param {PresentationRequest} presentationRºequest
+   * @param {PresentationRequest} presentationRequest
    * @param {Credential} credential 
    * @param options - object containing necessary metadata
    * @returns dependent on the CredentialType 
