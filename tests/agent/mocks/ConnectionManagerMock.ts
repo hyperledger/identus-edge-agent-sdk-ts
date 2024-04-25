@@ -91,8 +91,8 @@ export class ConnectionsManagerMock implements ConnectionsManagerClass {
       pickupUnreadMessages: function (limit: number): Promise<{ attachmentId: string; message: Message; }[]> {
         throw new Error("Mock pickupUnreadMessages Function not implemented.");
       },
-      listenUnreadMessages: function (signal: AbortSignal, serviceEndpointUri: string, onMessage: EventCallback): void {
-        throw new Error("Mock listenUnreadMessages Function not implemented.");
+      listenUnreadMessages: function (signal: AbortSignal, serviceEndpointUri: string, onMessage: (messages: { attachmentId: string; message: Message; }[]) => void | Promise<void>): void {
+        throw new Error("Function not implemented.");
       }
     };
 
