@@ -81,7 +81,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@hyperledger-labs"
 
-      - name: Pack atala-prism-wallet-sdk
+      - name: Pack sdk
         run: |
           npm install
           npm run build
