@@ -20,9 +20,9 @@ import {
   CredentialMetadata,
   PresentationOptions,
   Mercury,
-  PresentationSubmission,
   PresentationDefinitionRequest,
   PresentationClaims,
+  AttachmentFormats,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -91,7 +91,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       uuid(),
       'application/json',
       undefined,
-      CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS
+      AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS
     )
 
     const requestPresentationBody: RequestPresentationBody = {
@@ -241,7 +241,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     const credentialFormat =
       credentialType === CredentialType.AnonCreds
-        ? CredentialType.ANONCREDS_REQUEST
+        ? AttachmentFormats.ANONCREDS_REQUEST
         : credentialType === CredentialType.JWT
           ? CredentialType.JWT
           : CredentialType.Unknown;
@@ -337,7 +337,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
     const attachmentFormat = attachment.format ?? 'unknown';
     const presentationRequest = this.parseProofRequest(attachment);
-    const proof = attachmentFormat === CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS ?
+    const proof = attachmentFormat === AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS ?
       await this.handlePresentationDefinitionRequest(presentationRequest, credential) :
       await this.handlePresentationRequest(presentationRequest, credential);
 
@@ -346,7 +346,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       uuid(),
       'application/json',
       undefined,
-      CredentialType.PRESENTATION_EXCHANGE_SUBMISSION
+      AttachmentFormats.PRESENTATION_EXCHANGE_SUBMISSION
     )
     const presentation = new Presentation(
       {
@@ -373,14 +373,14 @@ export class AgentCredentials implements AgentCredentialsClass {
    */
   private parseProofRequest(attachment: AttachmentDescriptor): PresentationRequest {
     const data = Message.Attachment.extractJSON(attachment);
-    if (attachment.format === CredentialType.ANONCREDS_PROOF_REQUEST) {
-      return new PresentationRequest(CredentialType.AnonCreds, data);
+    if (attachment.format === AttachmentFormats.ANONCREDS_PROOF_REQUEST) {
+      return new PresentationRequest(AttachmentFormats.AnonCreds, data);
     }
     if (attachment.format === CredentialType.JWT) {
-      return new PresentationRequest(CredentialType.JWT, data);
+      return new PresentationRequest(AttachmentFormats.JWT, data);
     }
-    if (attachment.format === CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS) {
-      return new PresentationRequest(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS, data)
+    if (attachment.format === AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
+      return new PresentationRequest(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS, data)
     }
     throw new Error("Unsupported Proof Request");
   }
@@ -389,13 +389,13 @@ export class AgentCredentials implements AgentCredentialsClass {
     request: PresentationRequest,
     credential: Credential,
   ): Promise<string> {
-    if (request.isType(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS) && (credential instanceof JWTCredential)) {
+    if (request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) && (credential instanceof JWTCredential)) {
       const privateKeys = await this.pluto.getDIDPrivateKeysByDID(DID.fromString(credential.subject));
       const privateKey = privateKeys.at(0);
       if (!privateKey) {
         throw new Error("Undefined privatekey from credential subject.");
       }
-      if (!request.isType(CredentialType.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+      if (!request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
         throw new Error("Undefined privatekey from credential subject.");
       }
       const presentationSubmission = await this.pollux.createPresentationSubmission(
@@ -412,7 +412,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     request: PresentationRequest,
     credential: Credential
   ): Promise<string> {
-    if (credential instanceof AnonCredsCredential && request.isType(CredentialType.AnonCreds)) {
+    if (credential instanceof AnonCredsCredential && request.isType(AttachmentFormats.AnonCreds)) {
       const linkSecret = await this.pluto.getLinkSecret();
       if (!linkSecret) {
         throw new AgentError.CannotFindLinkSecret();
@@ -420,7 +420,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       const presentation = await this.pollux.createPresentationProof(request, credential, { linkSecret });
       return JSON.stringify(presentation);
     }
-    if (credential instanceof JWTCredential && request.isType(CredentialType.JWT)) {
+    if (credential instanceof JWTCredential && request.isType(AttachmentFormats.JWT)) {
       if (!credential.isProvable()) {
         throw new Error("Credential is not Provable");
       }

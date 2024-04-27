@@ -1,9 +1,8 @@
 import { uuid } from "@stablelib/uuid";
 
 import { Castor } from "../domain/buildingBlocks/Castor";
-import { Pollux as IPollux, PresentationOptions } from "../domain/buildingBlocks/Pollux";
-import { InvalidJWTString, InvalidVerifyCredentialError, InvalidVerifyFormatError, } from "../domain/models/errors/Pollux";
-import { base64url, base64 } from "multiformats/bases/base64";
+import { Pollux as IPollux } from "../domain/buildingBlocks/Pollux";
+import { base64 } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 
 import {
@@ -30,6 +29,8 @@ import {
   DescriptorItemFormat,
   JWTVerifiablePresentationProperties,
   JWTPresentationPayload,
+  AttachmentFormats,
+  PresentationOptions,
 } from "../domain";
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
@@ -40,6 +41,7 @@ import { PresentationRequest } from "./models/PresentationRequest";
 import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 import { DescriptorPath } from "./utils/DescriptorPath";
 import { JWT } from "./utils/JWT";
+import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domain/models/errors/Pollux";
 
 /**
  * Implementation of Pollux
@@ -397,10 +399,10 @@ export default class Pollux implements IPollux {
     }
 
     if (
-      attachment.format === CredentialType.ANONCREDS_PROOF_REQUEST ||
-      attachment.format === CredentialType.ANONCREDS_OFFER ||
-      attachment.format === CredentialType.ANONCREDS_ISSUE ||
-      attachment.format === CredentialType.ANONCREDS_REQUEST
+      attachment.format === AttachmentFormats.ANONCREDS_PROOF_REQUEST ||
+      attachment.format === AttachmentFormats.ANONCREDS_OFFER ||
+      attachment.format === AttachmentFormats.ANONCREDS_ISSUE ||
+      attachment.format === AttachmentFormats.ANONCREDS_REQUEST
     ) {
       return CredentialType.AnonCreds;
     }
@@ -636,7 +638,7 @@ export default class Pollux implements IPollux {
   ) {
     if (
       credential instanceof AnonCredsCredential
-      && presentationRequest.isType(CredentialType.AnonCreds)
+      && presentationRequest.isType(AttachmentFormats.AnonCreds)
       && "linkSecret" in options
     ) {
       const schema = await this.fetchSchema(credential.schemaId);
@@ -657,7 +659,7 @@ export default class Pollux implements IPollux {
 
     if (
       credential instanceof JWTCredential
-      && presentationRequest.isType(CredentialType.JWT)
+      && presentationRequest.isType(AttachmentFormats.JWT)
       && "did" in options
       && "privateKey" in options
     ) {

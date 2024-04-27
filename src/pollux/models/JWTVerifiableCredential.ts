@@ -17,7 +17,6 @@ import {
   W3CVerifiableCredentialContext,
   W3CVerifiableCredentialType,
   W3CVerifiablePresentation,
-  W3CVerifiablePresentationProof
 } from "../../domain/models/VerifiableCredential";
 import { decodeJWS } from "../utils/decodeJWS";
 

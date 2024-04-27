@@ -77,3 +77,14 @@ export class AttachmentDescriptor {
     );
   }
 }
+
+export enum AttachmentFormats {
+  ANONCREDS_OFFER = "anoncreds/credential-offer@v1.0",
+  ANONCREDS_REQUEST = "anoncreds/credential-request@v1.0",
+  ANONCREDS_ISSUE = "anoncreds/credential@v1.0",
+  ANONCREDS_PROOF_REQUEST = "anoncreds/proof-request@v1.0",
+  PRESENTATION_EXCHANGE_DEFINITIONS = "dif/presentation-exchange/definitions@v1.0",
+  PRESENTATION_EXCHANGE_SUBMISSION = "dif/presentation-exchange/submission@v1.0",
+  JWT = "prism/jwt",
+  AnonCreds = "AnonCreds",
+}

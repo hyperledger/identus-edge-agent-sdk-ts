@@ -3,14 +3,9 @@ export enum CredentialType {
   JWT = "prism/jwt",
   W3C = "w3c",
   AnonCreds = "AnonCreds",
-  ANONCREDS_OFFER = "anoncreds/credential-offer@v1.0",
-  ANONCREDS_REQUEST = "anoncreds/credential-request@v1.0",
-  ANONCREDS_ISSUE = "anoncreds/credential@v1.0",
-  ANONCREDS_PROOF_REQUEST = "anoncreds/proof-request@v1.0",
-  PRESENTATION_EXCHANGE_DEFINITIONS = "dif/presentation-exchange/definitions@v1.0",
-  PRESENTATION_EXCHANGE_SUBMISSION = "dif/presentation-exchange/submission@v1.0",
   Unknown = "Unknown"
 }
+
 
 export enum InputLimitDisclosure {
   REQUIRED = "required",
@@ -22,9 +17,6 @@ export enum DescriptorItemFormat {
   JWT_VC = 'jwt_vc',
   JWT_VP = 'jwt_vp'
 }
-
-
-
 
 export enum W3CVerifiableCredentialContext {
   credential = "https://www.w3.org/2018/credentials/v1"
@@ -227,3 +219,33 @@ export type W3CVerifiablePresentationProof = {
 
 
 export type JWTPayload = JWTCredentialPayload | JWTPresentationPayload;
+
+export type PresentationJWTOptions = {
+  jwtAlg?: string[],
+}
+
+export class PresentationOptions {
+  public name: string;
+  public purpose: string;
+  public challenge: string;
+  public domain: string;
+  public jwt?: PresentationJWTOptions
+
+  constructor(
+    options: {
+      name?: string,
+      purpose?: string,
+      challenge: string,
+      domain?: string,
+      jwt?: PresentationJWTOptions
+    }
+  ) {
+    this.name = options.name ?? "Presentation";
+    this.purpose = options.purpose ?? "Verifying Credentials";
+    this.challenge = options.challenge;
+    this.domain = options.domain ?? 'N/A';
+    this.jwt = options.jwt ?? {
+      jwtAlg: ['ES256K'],
+    };
+  }
+}

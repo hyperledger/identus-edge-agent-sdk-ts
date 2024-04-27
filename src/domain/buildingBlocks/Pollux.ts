@@ -1,7 +1,7 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationSubmission, PrivateKey, PublicKey } from "../models";
+import { CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
 import { Anoncreds } from "../models/Anoncreds";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
 
@@ -85,34 +85,6 @@ export interface Pollux {
 }
 
 export namespace Pollux {
-  export type PresentationJWTOptions = {
-    jwtAlg?: string[],
-  }
-  export class PresentationOptions {
-    public name: string;
-    public purpose: string;
-    public challenge: string;
-    public domain: string;
-    public jwt?: PresentationJWTOptions
-
-    constructor(
-      options: {
-        name?: string,
-        purpose?: string,
-        challenge: string,
-        domain?: string,
-        jwt?: PresentationJWTOptions
-      }
-    ) {
-      this.name = options.name ?? "Presentation";
-      this.purpose = options.purpose ?? "Verifying Credentials";
-      this.challenge = options.challenge;
-      this.domain = options.domain ?? 'N/A';
-      this.jwt = options.jwt ?? {
-        jwtAlg: ['ES256K'],
-      };
-    }
-  }
   export namespace verifyPresentationSubmission {
     export type options = options.Anoncreds | options.JWT;
     export namespace options {
