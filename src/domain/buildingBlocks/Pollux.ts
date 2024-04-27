@@ -11,35 +11,7 @@ type CredentialRequestTuple<
 > = [T1, T2];
 
 
-export type PresentationJWTOptions = {
-  jwtAlg?: string[],
-}
 
-export class PresentationOptions {
-  public name: string;
-  public purpose: string;
-  public challenge: string;
-  public domain: string;
-  public jwt?: PresentationJWTOptions
-
-  constructor(
-    options: {
-      name?: string,
-      purpose?: string,
-      challenge: string,
-      domain?: string,
-      jwt?: PresentationJWTOptions
-    }
-  ) {
-    this.name = options.name ?? "Presentation";
-    this.purpose = options.purpose ?? "Verifying Credentials";
-    this.challenge = options.challenge;
-    this.domain = options.domain ?? 'N/A';
-    this.jwt = options.jwt ?? {
-      jwtAlg: ['ES256K'],
-    };
-  }
-}
 
 /**
  * Pollux
@@ -113,6 +85,34 @@ export interface Pollux {
 }
 
 export namespace Pollux {
+  export type PresentationJWTOptions = {
+    jwtAlg?: string[],
+  }
+  export class PresentationOptions {
+    public name: string;
+    public purpose: string;
+    public challenge: string;
+    public domain: string;
+    public jwt?: PresentationJWTOptions
+
+    constructor(
+      options: {
+        name?: string,
+        purpose?: string,
+        challenge: string,
+        domain?: string,
+        jwt?: PresentationJWTOptions
+      }
+    ) {
+      this.name = options.name ?? "Presentation";
+      this.purpose = options.purpose ?? "Verifying Credentials";
+      this.challenge = options.challenge;
+      this.domain = options.domain ?? 'N/A';
+      this.jwt = options.jwt ?? {
+        jwtAlg: ['ES256K'],
+      };
+    }
+  }
   export namespace verifyPresentationSubmission {
     export type options = options.Anoncreds | options.JWT;
     export namespace options {
