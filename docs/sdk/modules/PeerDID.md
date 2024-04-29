@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / PeerDID
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / PeerDID
 
 # Namespace: PeerDID
 

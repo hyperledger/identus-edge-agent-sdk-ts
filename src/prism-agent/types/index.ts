@@ -7,6 +7,9 @@ import {
   Signature,
   Credential,
   Pollux,
+  CredentialType,
+  PrivateKey,
+  PresentationClaims,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
@@ -18,6 +21,7 @@ import { RequestCredential } from "../protocols/issueCredential/RequestCredentia
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { RequestPresentation } from "../protocols/proofPresentation/RequestPresentation";
 import { Presentation } from "../protocols/proofPresentation/Presentation";
+
 interface InvitationInterface {
   type: InvitationTypes;
   from?: DID;
@@ -52,17 +56,26 @@ export class PrismOnboardingInvitation implements InvitationInterface {
 }
 
 export interface AgentCredentials {
+
   prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential>;
   processIssuedCredentialMessage(message: IssueCredential): Promise<Credential>;
 
-  ///Not abstracted
   verifiableCredentials(): Promise<Credential[]>;
+
+  initiatePresentationRequest(
+    type: CredentialType,
+    toDID: DID,
+    claims: PresentationClaims
+  ): Promise<RequestPresentation>;
+
   createPresentationForRequestProof(
     request: RequestPresentation,
     credential: Credential
   ): Promise<Presentation>;
+
+  handlePresentation(presentation: Presentation): Promise<boolean>
 }
 
 export interface AgentDIDHigherFunctions {
@@ -93,6 +106,13 @@ export interface AgentInvitations {
 }
 
 export type EventCallback = (messages: Message[]) => void;
+export type EventPickupCallback = (messages: {
+  attachmentId: string;
+  message: Message;
+}[]) => void;
+
+
+
 export enum ListenerKey {
   "MESSAGE" = "message",
   "CONNECTION" = "connection",

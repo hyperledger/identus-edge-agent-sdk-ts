@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / PublicMediatorStore
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / PublicMediatorStore
 
 # Class: PublicMediatorStore
 
@@ -38,7 +38,7 @@ Creates an instance of PublicMediatorStore.
 
 | Name | Type |
 | :------ | :------ |
-| `pluto` | [`Pluto`](../interfaces/Domain.Pluto.md) |
+| `pluto` | [`Pluto`](../interfaces/Domain.Pluto-1.md) |
 
 #### Returns
 
@@ -46,17 +46,17 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Properties
 
 ### pluto
 
-• `Private` **pluto**: [`Pluto`](../interfaces/Domain.Pluto.md)
+• `Private` **pluto**: [`Pluto`](../interfaces/Domain.Pluto-1.md)
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Methods
 
@@ -78,7 +78,7 @@ Asyncronously fetch all the mediators from storage
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/mediator/PlutoMediatorStore.ts#L44)
+[src/prism-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L40)
 
 ___
 
@@ -106,4 +106,4 @@ Stores a mediator asyncronously in pluto
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/mediator/PlutoMediatorStore.ts#L29)
+[src/prism-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L29)

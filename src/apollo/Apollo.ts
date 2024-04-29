@@ -264,7 +264,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     }
 
     const keyType = parameters[KeyProperties.type];
-
     const { curve } = getKeyCurveByNameAndIndex(
       parameters[KeyProperties.curve]
     );

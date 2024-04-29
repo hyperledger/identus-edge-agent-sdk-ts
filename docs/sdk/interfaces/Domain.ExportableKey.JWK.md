@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ExportableKey](../modules/Domain.ExportableKey.md) / JWK
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ExportableKey](../modules/Domain.ExportableKey.md) / JWK
 
 # Interface: JWK
 
@@ -24,4 +24,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/ExportableKey.ts#L34)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L34)

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidIssueCredentialMessageError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidIssueCredentialMessageError
 
 # Class: InvalidIssueCredentialMessageError
 
@@ -45,34 +45,13 @@
 
 [`InvalidIssueCredentialMessageError`](Domain.AgentError.InvalidIssueCredentialMessageError.md)
 
-#### Inherited from
+#### Overrides
 
 Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1059
-
-• **new InvalidIssueCredentialMessageError**(`message?`, `options?`): [`InvalidIssueCredentialMessageError`](Domain.AgentError.InvalidIssueCredentialMessageError.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
-| `options?` | `ErrorOptions` |
-
-#### Returns
-
-[`InvalidIssueCredentialMessageError`](Domain.AgentError.InvalidIssueCredentialMessageError.md)
-
-#### Inherited from
-
-Error.constructor
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es5.d.ts:1059
+[src/domain/models/errors/Agent.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Agent.ts#L99)
 
 ## Properties
 
@@ -169,7 +148,7 @@ Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:11
+node_modules/@types/node/globals.d.ts:27
 
 ___
 
@@ -183,7 +162,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:13
+node_modules/@types/node/globals.d.ts:29
 
 ## Methods
 
@@ -210,4 +189,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:4
+node_modules/@types/node/globals.d.ts:20

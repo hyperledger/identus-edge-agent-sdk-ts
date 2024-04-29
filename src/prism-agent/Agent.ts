@@ -32,6 +32,7 @@ import { RequestPresentation } from "./protocols/proofPresentation/RequestPresen
 import { DIDCommWrapper } from "../mercury/didcomm/Wrapper";
 import { PublicMediatorStore } from "./mediator/PlutoMediatorStore";
 import { BasicMediatorHandler } from "./mediator/BasicMediatorHandler";
+import { ProofTypes } from "./protocols/types";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -66,6 +67,7 @@ export default class Agent
 
   private pollux: Pollux;
 
+
   /**
    * Creates an instance of Agent.
    *
@@ -92,13 +94,24 @@ export default class Agent
   ) {
 
     this.pollux = new Pollux(castor);
+    this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
+      apollo,
+      castor,
+      pluto,
+      mediationHandler,
+      seed
+    );
+
     this.agentCredentials = new AgentCredentials(
       apollo,
       castor,
       pluto,
       this.pollux,
-      seed
+      seed,
+      mercury,
+      this.agentDIDHigherFunctions
     );
+
     this.connectionManager =
       connectionManager ||
       new ConnectionsManager(
@@ -110,16 +123,6 @@ export default class Agent
         [],
         options
       );
-
-
-    this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
-      apollo,
-      castor,
-      pluto,
-      connectionManager,
-      mediationHandler,
-      seed
-    );
 
     this.agentInvitations = new AgentInvitations(
       this.pluto,
@@ -173,17 +176,18 @@ export default class Agent
       castor,
       pluto,
       pollux,
-      seed
-    );
-    const manager = new ConnectionsManager(
-      castor,
+      seed,
       mercury,
-      pluto,
-      agentCredentials,
-      handler,
-      [],
-      params.options
-    );
+      new AgentDIDHigherFunctions(
+        apollo,
+        castor,
+        pluto,
+        handler,
+        seed
+      )
+    )
+
+    const manager = new ConnectionsManager(castor, mercury, pluto, agentCredentials, handler, [], params.options);
 
     const agent = new Agent(
       apollo,
@@ -259,21 +263,29 @@ export default class Agent
     }
     this.state = AgentState.STARTING;
     try {
+
       await this.pluto.start();
+
       await this.pollux.start();
+
       await this.connectionManager.startMediator();
+
     } catch (e) {
       if (e instanceof Domain.AgentError.NoMediatorAvailableError) {
         const hostDID = await this.createNewPeerDID([], false);
+
         await this.connectionManager.registerMediator(hostDID);
+
       } else throw e;
     }
 
     if (this.connectionManager.mediationHandler.mediator !== undefined) {
       await this.connectionManager.startFetchingMessages(5);
       this.state = AgentState.RUNNING;
+
     } else {
       throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
+
     }
 
     const storedLinkSecret = await this.pluto.getLinkSecret();
@@ -514,4 +526,52 @@ export default class Agent
       credential
     );
   }
+
+
+  /**
+   * Initiate a PresentationRequest from the SDK, to create oob Verification Requests
+   * @param {Domain.CredentialType} type 
+   * @param {Domain.DID} toDID 
+   * @param {ProofTypes[]} proofTypes[]
+   * @returns 
+   * 
+   * 1. Example use-case: Send a Presentation Request for a JWT credential issued by a specific issuer
+   * ```ts
+   *  agent.initiatePresentationRequest(
+   *    Domain.CredentialType.JWT,
+   *    toDID,
+   *    { issuer: Domain.DID.fromString("did:peer:12345"), claims: {}}
+   * );
+   * ```
+   * 
+   * 2. Example use-case: Send a Presentation Request for a JWT credential issued by a specific issuer and specific claims
+   * ```ts
+   *  agent.initiatePresentationRequest(
+   *    Domain.CredentialType.JWT,
+   *    toDID,
+   *    { issuer: Domain.DID.fromString("did:peer:12345"), claims: {email: {type: 'string', pattern:'email@email.com'}}}
+   * );
+   * ```
+   */
+  async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims): Promise<RequestPresentation> {
+    const requestPresentation = await this.agentCredentials.initiatePresentationRequest(
+      type,
+      toDID,
+      presentationClaims
+    );
+
+    const requestPresentationMessage = requestPresentation.makeMessage()
+    await this.connectionManager.sendMessage(requestPresentationMessage);
+
+    return requestPresentation
+  }
+
+  /**
+   * Initiate the Presentation and presentationSubmission
+   * @param presentation 
+   */
+  async handlePresentation(presentation: Presentation): Promise<boolean> {
+    return this.agentCredentials.handlePresentation(presentation)
+  }
+
 }

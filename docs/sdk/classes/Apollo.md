@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Apollo
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Apollo
 
 # Class: Apollo
 
@@ -76,6 +76,7 @@ export enum KeyProperties {
 ## Implements
 
 - [`Apollo`](../interfaces/Domain.Apollo.md)
+- [`KeyRestoration`](../interfaces/Domain.KeyRestoration.md)
 
 ## Table of contents
 
@@ -95,6 +96,8 @@ export enum KeyProperties {
 - [createRandomMnemonics](Apollo.md#createrandommnemonics)
 - [createRandomSeed](Apollo.md#createrandomseed)
 - [createSeed](Apollo.md#createseed)
+- [restorePrivateKey](Apollo.md#restoreprivatekey)
+- [restorePublicKey](Apollo.md#restorepublickey)
 
 ## Constructors
 
@@ -114,7 +117,7 @@ export enum KeyProperties {
 
 #### Defined in
 
-[src/apollo/Apollo.ts:102](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L102)
+[src/apollo/Apollo.ts:116](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L116)
 
 ___
 
@@ -124,7 +127,7 @@ ___
 
 #### Defined in
 
-[src/apollo/Apollo.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L101)
+[src/apollo/Apollo.ts:115](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L115)
 
 ___
 
@@ -134,7 +137,7 @@ ___
 
 #### Defined in
 
-[src/apollo/Apollo.ts:103](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L103)
+[src/apollo/Apollo.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L117)
 
 ## Methods
 
@@ -211,7 +214,7 @@ Calling this function just generates a new random privateKey for that curve
 
 #### Defined in
 
-[src/apollo/Apollo.ts:236](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L236)
+[src/apollo/Apollo.ts:250](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L250)
 
 ___
 
@@ -239,7 +242,7 @@ This function creates a random mnemonic phrase whose usage is as a seed for gene
 
 #### Defined in
 
-[src/apollo/Apollo.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L117)
+[src/apollo/Apollo.ts:131](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L131)
 
 ___
 
@@ -273,7 +276,7 @@ This function creates a random mnemonic phrase and seed.
 
 #### Defined in
 
-[src/apollo/Apollo.ts:168](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L168)
+[src/apollo/Apollo.ts:182](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L182)
 
 ___
 
@@ -308,4 +311,68 @@ This function takes mnemonics and passphrases and creates a seed object to gener
 
 #### Defined in
 
-[src/apollo/Apollo.ts:135](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/apollo/Apollo.ts#L135)
+[src/apollo/Apollo.ts:149](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L149)
+
+___
+
+### restorePrivateKey
+
+▸ **restorePrivateKey**(`key`): [`PrivateKey`](Domain.PrivateKey.md)
+
+Restores a PrivateKey from the given StorableKey
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | [`StorableKey`](../interfaces/Domain.StorableKey-1.md) |
+
+#### Returns
+
+[`PrivateKey`](Domain.PrivateKey.md)
+
+PrivateKey instance
+
+**`Throws`**
+
+if the restoration process fails
+
+#### Implementation of
+
+[KeyRestoration](../interfaces/Domain.KeyRestoration.md).[restorePrivateKey](../interfaces/Domain.KeyRestoration.md#restoreprivatekey)
+
+#### Defined in
+
+[src/apollo/Apollo.ts:334](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L334)
+
+___
+
+### restorePublicKey
+
+▸ **restorePublicKey**(`key`): [`PublicKey`](Domain.PublicKey.md)
+
+Restores a PublicKey from the given StorableKey
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | [`StorableKey`](../interfaces/Domain.StorableKey-1.md) |
+
+#### Returns
+
+[`PublicKey`](Domain.PublicKey.md)
+
+PublicKey instance
+
+**`Throws`**
+
+if the restoration process fails, this method throws an error
+
+#### Implementation of
+
+[KeyRestoration](../interfaces/Domain.KeyRestoration.md).[restorePublicKey](../interfaces/Domain.KeyRestoration.md#restorepublickey)
+
+#### Defined in
+
+[src/apollo/Apollo.ts:349](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L349)

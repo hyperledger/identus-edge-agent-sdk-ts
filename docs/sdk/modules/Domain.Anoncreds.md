@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / Anoncreds
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / Anoncreds
 
 # Namespace: Anoncreds
 
@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Anoncreds.ts#L2)
+[src/domain/models/Anoncreds.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L2)

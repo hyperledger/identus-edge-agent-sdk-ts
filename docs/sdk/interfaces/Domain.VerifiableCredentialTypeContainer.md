@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / VerifiableCredentialTypeContainer
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / VerifiableCredentialTypeContainer
 
 # Interface: VerifiableCredentialTypeContainer
 
@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/VerifiableCredential.ts#L13)
+[src/domain/models/VerifiableCredential.ts:67](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L67)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/VerifiableCredential.ts#L14)
+[src/domain/models/VerifiableCredential.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L68)

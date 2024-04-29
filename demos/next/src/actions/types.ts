@@ -11,3 +11,7 @@ export enum DBPreload {
 export enum Message {
     success = "messageSuccess"
 }
+
+export enum Credential {
+    success = "credentialSuccess"
+}

@@ -46,17 +46,45 @@ export class AttachmentDescriptor {
     public readonly lastModTime?: string,
     public readonly byteCount?: number,
     public readonly description?: string
-  ) {}
+  ) { }
 
   static build<T>(
     payload: T,
     id: string = uuid(),
-    mediaType = "application/json"
+    mediaType = "application/json",
+    filename?: Array<string>,
+    format?: string,
+    lastModTime?: string,
+    byteCount?: number,
+    description?: string
+
   ): AttachmentDescriptor {
-    const encoded = base64.baseEncode(Buffer.from(JSON.stringify(payload)));
+    const jsonString = typeof payload === "string" ? payload : JSON.stringify(payload)
+    const encoded = base64.baseEncode(Buffer.from(jsonString));
     const attachment: AttachmentBase64 = {
       base64: encoded,
     };
-    return new AttachmentDescriptor(attachment, mediaType, id);
+
+    return new AttachmentDescriptor(
+      attachment,
+      mediaType,
+      id,
+      filename,
+      format,
+      lastModTime,
+      byteCount,
+      description
+    );
   }
+}
+
+export enum AttachmentFormats {
+  ANONCREDS_OFFER = "anoncreds/credential-offer@v1.0",
+  ANONCREDS_REQUEST = "anoncreds/credential-request@v1.0",
+  ANONCREDS_ISSUE = "anoncreds/credential@v1.0",
+  ANONCREDS_PROOF_REQUEST = "anoncreds/proof-request@v1.0",
+  PRESENTATION_EXCHANGE_DEFINITIONS = "dif/presentation-exchange/definitions@v1.0",
+  PRESENTATION_EXCHANGE_SUBMISSION = "dif/presentation-exchange/submission@v1.0",
+  JWT = "prism/jwt",
+  AnonCreds = "AnonCreds",
 }

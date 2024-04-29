@@ -8,6 +8,7 @@ import SDK from "@atala/prism-wallet-sdk";
 import { sha512 } from '@noble/hashes/sha512'
 import { RootState, reduxActions } from "@/reducers/app";
 import IndexDB from '@pluto-encrypted/indexdb'
+import { PresentationClaims } from "../../../../src/domain";
 
 
 const Agent = SDK.Agent;
@@ -111,7 +112,12 @@ async function handleMessages(
     if (issuedCredentials.length) {
         for (const issuedCredential of issuedCredentials) {
             const issueCredential = IssueCredential.fromMessage(issuedCredential);
-            await agent.processIssuedCredentialMessage(issueCredential);
+            const credential = await agent.processIssuedCredentialMessage(issueCredential);
+            dispatch(
+                reduxActions.credentialSuccess(
+                    credential
+                )
+            )
         }
     }
     dispatch(
@@ -163,11 +169,67 @@ export const startAgent = createAsyncThunk<
 
         try {
             await agent.sendMessage(testMessage);
+            await agent.pluto.storeMessage(testMessage);
+            api.dispatch(
+                reduxActions.messageSuccess(
+                    [testMessage]
+                )
+            )
         } catch (err) {
             console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.");
         }
 
         return api.fulfillWithValue({ agent })
+    } catch (err) {
+        return api.rejectWithValue(err as Error);
+    }
+})
+
+export const sendMessage = createAsyncThunk<
+    { message: SDK.Domain.Message },
+    {
+        agent: SDK.Agent,
+        message: SDK.Domain.Message
+    }
+>('sendMessage', async (options, api) => {
+    try {
+        const { agent, message } = options;
+        await agent.sendMessage(message);
+        await agent.pluto.storeMessage(message);
+
+        api.dispatch(
+            reduxActions.messageSuccess(
+                [message]
+            )
+        )
+        return api.fulfillWithValue({ message });
+    } catch (err) {
+        return api.rejectWithValue(err as Error);
+    }
+})
+
+export const initiatePresentationRequest = createAsyncThunk<
+    any,
+    {
+        agent: SDK.Agent,
+        toDID: SDK.Domain.DID,
+        presentationClaims: PresentationClaims
+    }
+>("initiatePresentationRequest", async (options, api) => {
+    try {
+        const {
+            agent,
+            presentationClaims,
+            toDID
+        } = options;
+
+        await agent.initiatePresentationRequest(
+            SDK.Domain.CredentialType.JWT,
+            toDID,
+            presentationClaims
+        );
+
+        return api.fulfillWithValue(null)
     } catch (err) {
         return api.rejectWithValue(err as Error);
     }

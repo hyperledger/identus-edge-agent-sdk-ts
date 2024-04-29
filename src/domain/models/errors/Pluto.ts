@@ -1,19 +1,89 @@
+export class DatabaseConnectionError extends Error {
+    constructor(message?: string) {
+        super(message || "Database connection error");
+    }
+}
 
-export class DatabaseConnectionError extends Error { }
-export class DatabaseContextError extends Error { }
-export class DatabaseServiceAlreadyRunning extends Error { }
+export class DatabaseContextError extends Error {
+    constructor(message?: string) {
+        super(message || "Database context error");
+    }
+}
 
-export class StoreInsertError extends Error { }
-export class StoreQueryFailed extends Error { }
-export class StoreUpdateError extends Error { }
-export class StoreDeleteError extends Error { }
+export class DatabaseServiceAlreadyRunning extends Error {
+    constructor(message?: string) {
+        super(message || "Database service already running");
+    }
+}
 
-export class CredentialNotStorable extends Error { }
-export class UnknownCredentialTypeError extends Error { }
-export class InvalidCredentialJsonError extends Error { }
-export class PrivateKeyNotStorable extends Error { }
+export class StoreInsertError extends Error {
+    constructor(message?: string) {
+        super(message || "Store insert error");
+    }
+}
 
-export class InvalidHolderDIDNotPersistedError extends Error { }
-export class MessageMissingFromOrToDIDError extends Error { }
-export class DidPairIsNotPersistedError extends Error { }
-export class HolderDIDAlreadyPairingError extends Error { }
+export class StoreQueryFailed extends Error {
+    constructor(message?: string) {
+        super(message || "Store query failed");
+    }
+}
+
+export class StoreUpdateError extends Error {
+    constructor(message?: string) {
+        super(message || "Store update error");
+    }
+}
+
+export class StoreDeleteError extends Error {
+    constructor(message?: string) {
+        super(message || "Store delete error");
+    }
+}
+
+export class CredentialNotStorable extends Error {
+    constructor(message?: string) {
+        super(message || "Credential not storable");
+    }
+}
+
+export class UnknownCredentialTypeError extends Error {
+    constructor(message?: string) {
+        super(message || "Unknown credential type error");
+    }
+}
+
+export class InvalidCredentialJsonError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid credential JSON error");
+    }
+}
+
+export class PrivateKeyNotStorable extends Error {
+    constructor(message?: string) {
+        super(message || "Private key not storable");
+    }
+}
+
+export class InvalidHolderDIDNotPersistedError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid holder DID not persisted error");
+    }
+}
+
+export class MessageMissingFromOrToDIDError extends Error {
+    constructor(message?: string) {
+        super(message || "Message missing from or to DID error");
+    }
+}
+
+export class DidPairIsNotPersistedError extends Error {
+    constructor(message?: string) {
+        super(message || "DID pair is not persisted error");
+    }
+}
+
+export class HolderDIDAlreadyPairingError extends Error {
+    constructor(message?: string) {
+        super(message || "Holder DID already pairing error");
+    }
+}

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / BasicMessage
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / BasicMessage
 
 # Class: BasicMessage
 
@@ -12,6 +12,7 @@
 
 - [body](BasicMessage.md#body)
 - [from](BasicMessage.md#from)
+- [thid](BasicMessage.md#thid)
 - [to](BasicMessage.md#to)
 - [type](BasicMessage.md#type)
 
@@ -24,7 +25,7 @@
 
 ### constructor
 
-• **new BasicMessage**(`body`, `from`, `to`): [`BasicMessage`](BasicMessage.md)
+• **new BasicMessage**(`body`, `from`, `to`, `thid?`): [`BasicMessage`](BasicMessage.md)
 
 #### Parameters
 
@@ -33,6 +34,7 @@
 | `body` | [`BasicMessageBody`](../interfaces/BasicMessageBody.md) |
 | `from` | [`DID`](Domain.DID.md) |
 | `to` | [`DID`](Domain.DID.md) |
+| `thid?` | `string` |
 
 #### Returns
 
@@ -40,7 +42,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L10)
+[src/prism-agent/protocols/other/BasicMessage.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L10)
 
 ## Properties
 
@@ -50,7 +52,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L11)
+[src/prism-agent/protocols/other/BasicMessage.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L11)
 
 ___
 
@@ -60,7 +62,17 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L12)
+[src/prism-agent/protocols/other/BasicMessage.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L12)
+
+___
+
+### thid
+
+• `Optional` **thid**: `string`
+
+#### Defined in
+
+[src/prism-agent/protocols/other/BasicMessage.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L14)
 
 ___
 
@@ -70,7 +82,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L13)
+[src/prism-agent/protocols/other/BasicMessage.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L13)
 
 ___
 
@@ -80,21 +92,21 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L8)
+[src/prism-agent/protocols/other/BasicMessage.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L8)
 
 ## Methods
 
 ### makeMessage
 
-▸ **makeMessage**(): [`Message`](Domain.Message.md)
+▸ **makeMessage**(): [`Message`](Domain.Message-1.md)
 
 #### Returns
 
-[`Message`](Domain.Message.md)
+[`Message`](Domain.Message-1.md)
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L16)
+[src/prism-agent/protocols/other/BasicMessage.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L17)
 
 ___
 
@@ -106,7 +118,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `fromMessage` | [`Message`](Domain.Message.md) |
+| `fromMessage` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -114,4 +126,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/other/BasicMessage.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/other/BasicMessage.ts#L21)
+[src/prism-agent/protocols/other/BasicMessage.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/other/BasicMessage.ts#L30)

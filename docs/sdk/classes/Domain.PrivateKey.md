@@ -1,14 +1,21 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / PrivateKey
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / PrivateKey
 
 # Class: PrivateKey
 
 [Domain](../modules/Domain.md).PrivateKey
+
+Storable
+define properties a Domain object must implement to be compatible with Pluto
 
 ## Hierarchy
 
 - [`Key`](Domain.Key.md)
 
   ↳ **`PrivateKey`**
+
+## Implements
+
+- [`Storable`](../interfaces/Domain.Pluto.Storable.md)
 
 ## Table of contents
 
@@ -23,6 +30,7 @@
 - [size](Domain.PrivateKey.md#size)
 - [to](Domain.PrivateKey.md#to)
 - [type](Domain.PrivateKey.md#type)
+- [uuid](Domain.PrivateKey.md#uuid)
 
 ### Accessors
 
@@ -39,6 +47,7 @@
 - [isDerivable](Domain.PrivateKey.md#isderivable)
 - [isExportable](Domain.PrivateKey.md#isexportable)
 - [isSignable](Domain.PrivateKey.md#issignable)
+- [isStorable](Domain.PrivateKey.md#isstorable)
 - [publicKey](Domain.PrivateKey.md#publickey)
 
 ## Constructors
@@ -67,7 +76,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L30)
+[src/domain/models/keyManagement/Key.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L30)
 
 ___
 
@@ -81,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L32)
+[src/domain/models/keyManagement/Key.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L32)
 
 ___
 
@@ -95,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L31)
+[src/domain/models/keyManagement/Key.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L31)
 
 ___
 
@@ -108,7 +117,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `Buffer` | () => `Buffer` |
-| `String` | (`encoding?`: ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
+| `String` | (`encoding?`: ``"base64"`` \| ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
 
 #### Inherited from
 
@@ -116,7 +125,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L33)
+[src/domain/models/keyManagement/Key.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L33)
 
 ___
 
@@ -130,7 +139,24 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L29)
+[src/domain/models/keyManagement/Key.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L29)
+
+___
+
+### uuid
+
+• `Readonly` **uuid**: `string`
+
+Universally Unique Identifier.
+should be unique across all items.
+
+#### Implementation of
+
+[Storable](../interfaces/Domain.Pluto.Storable.md).[uuid](../interfaces/Domain.Pluto.Storable.md#uuid)
+
+#### Defined in
+
+[src/domain/models/keyManagement/PrivateKey.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/PrivateKey.ts#L9)
 
 ## Accessors
 
@@ -142,13 +168,13 @@ ___
 
 `string`
 
-#### Inherited from
+#### Overrides
 
 Key.curve
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:37](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L37)
+[src/domain/models/keyManagement/PrivateKey.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/PrivateKey.ts#L11)
 
 ___
 
@@ -166,7 +192,7 @@ Only applicable for HD keys
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/PrivateKey.ts#L15)
+[src/domain/models/keyManagement/PrivateKey.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/PrivateKey.ts#L23)
 
 ___
 
@@ -180,7 +206,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/PrivateKey.ts#L22)
+[src/domain/models/keyManagement/PrivateKey.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/PrivateKey.ts#L30)
 
 ## Methods
 
@@ -198,7 +224,7 @@ this is VerifiableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L54)
+[src/domain/models/keyManagement/Key.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L58)
 
 ___
 
@@ -216,7 +242,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L35)
+[src/domain/models/keyManagement/Key.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L35)
 
 ___
 
@@ -240,7 +266,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L58)
+[src/domain/models/keyManagement/Key.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L62)
 
 ___
 
@@ -270,7 +296,7 @@ this is T
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L62)
+[src/domain/models/keyManagement/Key.ts:66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L66)
 
 ___
 
@@ -288,17 +314,17 @@ this is DerivableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L50)
+[src/domain/models/keyManagement/Key.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L42)
 
 ___
 
 ### isExportable
 
-▸ **isExportable**(): this is StorableKey
+▸ **isExportable**(): this is unknown
 
 #### Returns
 
-this is StorableKey
+this is unknown
 
 #### Inherited from
 
@@ -306,7 +332,7 @@ this is StorableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L42)
+[src/domain/models/keyManagement/Key.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L46)
 
 ___
 
@@ -324,7 +350,25 @@ this is SignableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/Key.ts#L46)
+[src/domain/models/keyManagement/Key.ts:50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L50)
+
+___
+
+### isStorable
+
+▸ **isStorable**(): this is StorableKey
+
+#### Returns
+
+this is StorableKey
+
+#### Inherited from
+
+[Key](Domain.Key.md).[isStorable](Domain.Key.md#isstorable)
+
+#### Defined in
+
+[src/domain/models/keyManagement/Key.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L54)
 
 ___
 
@@ -338,4 +382,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/PrivateKey.ts#L6)
+[src/domain/models/keyManagement/PrivateKey.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/PrivateKey.ts#L7)

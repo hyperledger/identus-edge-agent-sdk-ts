@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / VerifiableKey
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / VerifiableKey
 
 # Class: VerifiableKey
 
@@ -43,4 +43,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/VerifiableKey.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/VerifiableKey.ts#L2)
+[src/domain/models/keyManagement/VerifiableKey.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/VerifiableKey.ts#L2)

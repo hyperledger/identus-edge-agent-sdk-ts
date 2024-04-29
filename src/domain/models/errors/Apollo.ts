@@ -2,21 +2,22 @@ import { StorableKey } from "../keyManagement";
 
 export class InvalidMnemonicWord extends Error {
   constructor(message?: string) {
-    super(message);
+    super(message || "Invalid mnemonic word");
   }
 }
 
 export class CouldNotParseMessageString extends Error {
   constructor(message?: string) {
-    super(message);
+    super(message || "Could not parse message string");
   }
 }
 
 export class InvalidPrivateKey extends Error {
   constructor(message?: string) {
-    super(message);
+    super(message || "Invalid private key");
   }
 }
+
 
 export class InvalidKeyCurve extends Error {
   constructor(invalidKeyCurve: string, validKeyCurves: string[]) {
@@ -29,9 +30,10 @@ export class InvalidKeyCurve extends Error {
 
 export class InvalidDerivationPath extends Error {
   constructor(message?: string) {
-    super(message);
+    super(message || "Invalid derivation path");
   }
 }
+
 
 export class ECPublicKeyInitialization extends Error {
   constructor() {
@@ -62,5 +64,15 @@ export class KeyRestoratonFailed extends Error {
   }
 }
 
-export class MissingPrivateKey extends Error {}
-export class MissingChainCode extends Error {}
+export class MissingPrivateKey extends Error {
+  constructor(message?: string) {
+    super(message || "Private key is missing");
+  }
+}
+
+export class MissingChainCode extends Error {
+  constructor(message?: string) {
+    super(message || "Chain code is missing");
+  }
+}
+

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / JWK
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / JWK
 
 # Namespace: JWK
 
@@ -33,7 +33,7 @@ based on https://www.iana.org/assignments/jose/jose.xhtml
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L14)
+[src/domain/models/keyManagement/exportable/JWK.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/JWK.ts#L14)
 
 ## Functions
 
@@ -56,4 +56,4 @@ create a JWK from a given Key
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/exportable/JWK.ts#L101)
+[src/domain/models/keyManagement/exportable/JWK.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/JWK.ts#L101)

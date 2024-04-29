@@ -1,6 +1,12 @@
-@input-output-hk/atala-prism-wallet-sdk / [Exports](modules.md)
-
 # Atala PRISM TypeScript SDK
+
+[![Coverage Status](https://coveralls.io/repos/github/input-output-hk/atala-prism-wallet-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/input-output-hk/atala-prism-wallet-sdk-ts?branch=master)
+
+<p align="center">
+    <img src="atala-logo.png" alt="Atala logo" width="300"/>
+</p>
+
+---
 
 Atala PRISM is a self-sovereign identity (SSI) platform and service suite for
 verifiable data and digital identity. Built on Cardano, it offers core
@@ -18,7 +24,7 @@ The complete platform is separated into multiple repositories:
 
 - Apollo: Provides a suite of necessary cryptographic operations.
 - Castor: Provides a suite of operations to create, manage and resolve decentralized identifiers.
-- Pollux: Provides a suite of operations for handling [verifiable credentials](https://github.com/input-output-hk/atala-prism-docs/blob/main/documentation/docs/concepts/glossary.md#verifiable-credentials).
+- Pollux: Provides a suite of operations for handling [verifiable credentials](https://github.com/input-output-hk/atala-prism-docs/blob/master/documentation/docs/concepts/glossary.md#verifiable-credentials).
 - Mercury: Provides a suite of operations for handling DIDComm V2 messages.
 - Pluto: Provides an interface for storage operations in a portable, storage-agnostic manner.
 - PrismAgent: PrismAgent, a component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
@@ -39,10 +45,6 @@ or with yarn
 ```bash
 yarn add @atala/prism-wallet-sdk
 ```
-
-> **Note for Webpack:**
-> 
-> The application builds code with wasm files for DIDComm and Anoncreds for both browsers and nodejs. When webpack builds public website the wasm files need to be copied manually into the public folder. See examples
 
 ### Running a demo project
 
@@ -66,41 +68,36 @@ npm i
 npm run build
 ```
 
-### For NodeJS CJS
+### Running the sample applications
+We have enabled sample implementations for browsers (React or Next.js) and Node.js.
+To run each demo, ensure the whole SDK builds from the source, then cd into the demo.
 
-After building `prism-wallet-sdk`, cd into `{path}/demos/node-cjs` or use visual studio debugger "CJS DEMO":
-
+Nodejs CommonJS
 ```bash
 cd demos/node-cjs
 npm i
 npm run start
 ```
 
-> **Note:**
-> 
-> The installation in the `{path}/demos/node-cjs` directory requires the `build` folder from the wallet-sdk to be available.
-
-### For NodeJS ESM
-
-After building `prism-wallet-sdk`, cd into `{path}/demos/node-esm` or use visual studio debugger "ESM DEMO":
-
+Nodejs Module
 ```bash
 cd demos/node-esm
 npm i
 npm run start
 ```
 
-> **Note:**
-> 
-> The installation in the `{path}/demos/node-esm` directory requires the `build` folder from the wallet-sdk to be available.
-
-### For browser
-
-After building `prism-wallet-sdk`, cd into the demo directory `{path}/demos/browser`
-
+Browser React
 ```bash
 cd demos/browser
 npm i
+npm run start
+```
+
+Browser NextJS
+```bash
+cd demos/next
+npm i
+npm run build # becuase Error: ENOENT: no such file or directory, open '/.../atala-prism-wallet-sdk-ts/demos/next/.next/BUILD_ID']
 npm run start
 ```
 
@@ -109,4 +106,5 @@ This SDK exposes Pluto, a storage interface that should be implemented by the us
 
 We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
 
-Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production.
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
+
