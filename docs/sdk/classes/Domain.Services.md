@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Services
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Services
 
 # Class: Services
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L61)
+[src/domain/models/DIDDocument.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L61)
 
 ## Properties
 
@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L61)
+[src/domain/models/DIDDocument.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L61)

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PlutoError](../modules/Domain.PlutoError.md) / InvalidHolderDIDNotPersistedError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PlutoError](../modules/Domain.PlutoError.md) / InvalidHolderDIDNotPersistedError
 
 # Class: InvalidHolderDIDNotPersistedError
 
@@ -45,34 +45,13 @@
 
 [`InvalidHolderDIDNotPersistedError`](Domain.PlutoError.InvalidHolderDIDNotPersistedError.md)
 
-#### Inherited from
+#### Overrides
 
 Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1059
-
-• **new InvalidHolderDIDNotPersistedError**(`message?`, `options?`): [`InvalidHolderDIDNotPersistedError`](Domain.PlutoError.InvalidHolderDIDNotPersistedError.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
-| `options?` | `ErrorOptions` |
-
-#### Returns
-
-[`InvalidHolderDIDNotPersistedError`](Domain.PlutoError.InvalidHolderDIDNotPersistedError.md)
-
-#### Inherited from
-
-Error.constructor
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es5.d.ts:1059
+[src/domain/models/errors/Pluto.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pluto.ts#L68)
 
 ## Properties
 
@@ -169,7 +148,7 @@ Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:11
+node_modules/@types/node/globals.d.ts:27
 
 ___
 
@@ -183,7 +162,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:13
+node_modules/@types/node/globals.d.ts:29
 
 ## Methods
 
@@ -210,4 +189,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:4
+node_modules/@types/node/globals.d.ts:20

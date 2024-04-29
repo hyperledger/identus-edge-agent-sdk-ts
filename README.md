@@ -65,8 +65,8 @@ npm run build
 ```
 
 ### Running the sample applications
-We have enabled sample implementations for browser (react or nextjs) and nodejs.
-In order to run each demo, make sure the whole SDK is built from source, then cd into the demo.
+We have enabled sample implementations for browsers (React or Next.js) and Node.js.
+To run each demo, ensure the whole SDK builds from the source, then cd into the demo.
 
 Nodejs CommonJS
 ```bash

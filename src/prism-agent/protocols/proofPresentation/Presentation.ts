@@ -17,7 +17,7 @@ export class Presentation {
     public to: DID,
     public thid?: string,
     public id: string = uuid()
-  ) {}
+  ) { }
 
   makeMessage(): Message {
     const body = JSON.stringify(this.body);

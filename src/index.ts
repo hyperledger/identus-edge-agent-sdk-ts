@@ -10,7 +10,7 @@ export { default as Agent } from "./prism-agent/Agent";
 export * from "./prism-agent/protocols/other/BasicMessage";
 export { IssueCredential } from "./prism-agent/protocols/issueCredential/IssueCredential";
 export { OfferCredential } from "./prism-agent/protocols/issueCredential/OfferCredential";
-export { RequestPresentation } from "./prism-agent/protocols/proofPresentation/RequestPresentation";
+export * from "./prism-agent/protocols/proofPresentation";
 export * from "./prism-agent/connectionsManager/ConnectionsManager";
 export * from "./prism-agent/mediator/BasicMediatorHandler";
 export * from "./prism-agent/mediator/PlutoMediatorStore";
@@ -40,4 +40,5 @@ export * from "./apollo/utils/X25519PublicKey";
 export * from "./apollo/utils/X25519KeyPair";
 export * from "./pollux/models/AnonCredsVerifiableCredential";
 export * from "./pollux/models/JWTVerifiableCredential";
+
 export { KeyProperties } from "./domain/models/KeyProperties";

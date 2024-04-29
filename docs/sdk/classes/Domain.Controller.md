@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Controller
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Controller
 
 # Class: Controller
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L53)
+[src/domain/models/DIDDocument.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L53)
 
 ## Properties
 
@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DIDDocument.ts#L53)
+[src/domain/models/DIDDocument.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L53)

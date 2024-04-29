@@ -151,7 +151,9 @@ export class ProtocolHelpers {
         if (
           !Array.isArray(parsed.proofTypes) ||
           parsed.proofTypes.find((proofType: any) => {
-            if (!proofType.schema || typeof proofType.schema !== "string") {
+            if (
+              proofType.schema &&
+              typeof proofType.schema !== "string") {
               return true;
             }
             if (

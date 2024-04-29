@@ -1,3 +1,4 @@
+import { PredicateType } from "../../domain";
 import { CredentialFormat } from "./issueCredential/CredentialFormat";
 import { CredentialPreview } from "./issueCredential/CredentialPreview";
 
@@ -78,10 +79,11 @@ export interface RequestPresentationBody extends PresentationBody {
 export type ProposePresentationBody = RequestPresentationBody;
 
 export interface ProofTypes {
-  schema: string;
+  schema?: string;
   requiredFields?: string[];
   trustIssuers?: string[];
 }
+
 
 export interface HandshakeRequestBody {
   goalCode?: string;

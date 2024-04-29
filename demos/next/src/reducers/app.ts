@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import SDK from "@atala/prism-wallet-sdk";
 import { v4 as uuidv4 } from "uuid";
-import { DBPreload, Message } from "@/actions/types";
-import { acceptCredentialOffer, acceptPresentationRequest, connectDatabase, initAgent, rejectCredentialOffer, startAgent, stopAgent } from "../actions";
+import { DBPreload, Message, Credential } from "@/actions/types";
+import { acceptCredentialOffer, acceptPresentationRequest, connectDatabase, initAgent, rejectCredentialOffer, sendMessage, startAgent, stopAgent } from "../actions";
 
-const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vbG9jYWxob3N0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19";
+const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHBzOi8vc2l0LXByaXNtLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJhIjpbImRpZGNvbW0vdjIiXX19.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzczovL3NpdC1wcmlzbS1tZWRpYXRvci5hdGFsYXByaXNtLmlvL3dzIiwiYSI6WyJkaWRjb21tL3YyIl19fQ";
 
 class TraceableError extends Error {
 
@@ -39,6 +39,8 @@ export const initialState: RootState = {
         instance: null,
         hasStarted: false,
         isStarting: false,
+        isSendingMessage: false,
+        hasSentMessage: false
     }
 }
 
@@ -59,10 +61,19 @@ export type RootState = {
     agent: {
         instance: SDK.Agent | null,
         isStarting: boolean,
-        hasStarted: boolean
+        hasStarted: boolean,
+        isSendingMessage: boolean,
+        hasSentMessage: boolean
     }
 };
 
+function removeDuplicates(messages: SDK.Domain.Message[] | SDK.Domain.Credential[]) {
+    const uniqueMessages = new Map();
+    messages.forEach(message => {
+        uniqueMessages.set(message.id, message);
+    });
+    return Array.from(uniqueMessages.values());
+}
 
 const appSlice = createSlice({
     name: "app",
@@ -80,11 +91,21 @@ const appSlice = createSlice({
             state.connections = action.payload.connections;
             state.credentials = action.payload.credentials;
         },
+        [Credential.success]: (
+            state,
+            action: PayloadAction<SDK.Domain.Credential>
+        ) => {
+            state.credentials = removeDuplicates([
+                ...state.credentials,
+                action.payload,
+            ]);
+        },
         [Message.success]: (
             state,
             action: PayloadAction<SDK.Domain.Message[]>
         ) => {
-            state.messages = [
+            const nonExisting = action.payload.filter((m) => !state.messages.find((d) => d.id === m.id))
+            state.messages = removeDuplicates([
                 ...action.payload,
                 ...state.messages.map((oldMessage) => {
                     if (action.payload.find((m) => m.thid === oldMessage.thid)) {
@@ -96,11 +117,33 @@ const appSlice = createSlice({
                     }
                     return oldMessage
                 }),
-
-            ] as any;
+                ...nonExisting
+            ]);
         },
     },
     extraReducers: (builder) => {
+
+        builder.addCase(sendMessage.fulfilled, (state, action) => {
+            state.agent.isSendingMessage = false;
+            state.agent.hasSentMessage = true;
+        })
+
+        builder.addCase(sendMessage.pending, (state, action) => {
+            state.agent.isSendingMessage = true;
+            state.agent.hasSentMessage = false;
+            state.messages.push({
+                ...action.meta.arg.message,
+                isAnswering: true,
+                hasAnswered: false,
+                error: null
+            })
+        })
+
+        builder.addCase(sendMessage.rejected, (state, action) => {
+            state.agent.isSendingMessage = false;
+            state.agent.hasSentMessage = false;
+            state.errors.push(TraceableError.fromError(action.payload as Error));
+        })
 
         builder.addCase(stopAgent.fulfilled, (state, action) => {
             state.agent.isStarting = false;

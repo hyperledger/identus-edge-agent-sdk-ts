@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / MediatorStore
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / MediatorStore
 
 # Interface: MediatorStore
 
@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:131](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/types/index.ts#L131)
+[src/prism-agent/types/index.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L158)
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:129](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/types/index.ts#L129)
+[src/prism-agent/types/index.ts:156](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L156)

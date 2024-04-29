@@ -1,8 +1,15 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / DID
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / DID
 
 # Class: DID
 
 [Domain](../modules/Domain.md).DID
+
+Storable
+define properties a Domain object must implement to be compatible with Pluto
+
+## Implements
+
+- [`Storable`](../interfaces/Domain.Pluto.Storable.md)
 
 ## Table of contents
 
@@ -15,6 +22,7 @@
 - [method](Domain.DID.md#method)
 - [methodId](Domain.DID.md#methodid)
 - [schema](Domain.DID.md#schema)
+- [uuid](Domain.DID.md#uuid)
 
 ### Methods
 
@@ -45,7 +53,7 @@
 
 #### Defined in
 
-[src/domain/models/DID.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L8)
+[src/domain/models/DID.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L10)
 
 ## Properties
 
@@ -55,7 +63,7 @@
 
 #### Defined in
 
-[src/domain/models/DID.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L5)
+[src/domain/models/DID.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L7)
 
 ___
 
@@ -65,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L6)
+[src/domain/models/DID.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L8)
 
 ___
 
@@ -75,7 +83,24 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L4)
+[src/domain/models/DID.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L6)
+
+___
+
+### uuid
+
+• `Readonly` **uuid**: `string`
+
+Universally Unique Identifier.
+should be unique across all items.
+
+#### Implementation of
+
+[Storable](../interfaces/Domain.Pluto.Storable.md).[uuid](../interfaces/Domain.Pluto.Storable.md#uuid)
+
+#### Defined in
+
+[src/domain/models/DID.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L5)
 
 ## Methods
 
@@ -89,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L14)
+[src/domain/models/DID.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L17)
 
 ___
 
@@ -103,7 +128,7 @@ parse value into a DID
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `value` | `string` \| [`DID`](Domain.DID.md) | some representation of a DID |
+| `value` | `unknown` | some representation of a DID |
 
 #### Returns
 
@@ -111,7 +136,7 @@ parse value into a DID
 
 #### Defined in
 
-[src/domain/models/DID.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L23)
+[src/domain/models/DID.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L26)
 
 ___
 
@@ -131,7 +156,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L35)
+[src/domain/models/DID.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L47)
 
 ___
 
@@ -151,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L58)
+[src/domain/models/DID.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L70)
 
 ___
 
@@ -171,7 +196,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L63)
+[src/domain/models/DID.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L75)
 
 ___
 
@@ -191,4 +216,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DID.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/DID.ts#L53)
+[src/domain/models/DID.ts:65](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DID.ts#L65)

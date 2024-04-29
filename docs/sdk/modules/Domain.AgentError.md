@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / AgentError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / AgentError
 
 # Namespace: AgentError
 
@@ -10,8 +10,9 @@
 
 - [CannotFindDIDKeyPairIndex](../classes/Domain.AgentError.CannotFindDIDKeyPairIndex.md)
 - [CannotFindDIDPrivateKey](../classes/Domain.AgentError.CannotFindDIDPrivateKey.md)
+- [CannotFindLinkSecret](../classes/Domain.AgentError.CannotFindLinkSecret.md)
 - [FailedToOnboardError](../classes/Domain.AgentError.FailedToOnboardError.md)
-- [InvalidBasicMEssageBodyError](../classes/Domain.AgentError.InvalidBasicMEssageBodyError.md)
+- [InvalidBasicMessageBodyError](../classes/Domain.AgentError.InvalidBasicMessageBodyError.md)
 - [InvalidCredentialBodyError](../classes/Domain.AgentError.InvalidCredentialBodyError.md)
 - [InvalidCredentialFormats](../classes/Domain.AgentError.InvalidCredentialFormats.md)
 - [InvalidIssueCredentialBodyError](../classes/Domain.AgentError.InvalidIssueCredentialBodyError.md)
@@ -42,6 +43,8 @@
 - [NoMediatorAvailableError](../classes/Domain.AgentError.NoMediatorAvailableError.md)
 - [NoValidServiceEndpointError](../classes/Domain.AgentError.NoValidServiceEndpointError.md)
 - [OfferDoesntProvideEnoughInformation](../classes/Domain.AgentError.OfferDoesntProvideEnoughInformation.md)
+- [UnhandledCredential](../classes/Domain.AgentError.UnhandledCredential.md)
+- [UnhandledPresentationRequest](../classes/Domain.AgentError.UnhandledPresentationRequest.md)
 - [UnknownCredentialBodyError](../classes/Domain.AgentError.UnknownCredentialBodyError.md)
 - [UnknownInvitationTypeError](../classes/Domain.AgentError.UnknownInvitationTypeError.md)
 - [UnknownPrismOnboardingTypeError](../classes/Domain.AgentError.UnknownPrismOnboardingTypeError.md)

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / KeyCurve
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / KeyCurve
 
 # Interface: KeyCurve
 
@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyCurve.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/KeyCurve.ts#L4)
+[src/domain/models/keyManagement/KeyCurve.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/KeyCurve.ts#L4)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyCurve.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/KeyCurve.ts#L5)
+[src/domain/models/keyManagement/KeyCurve.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/KeyCurve.ts#L5)

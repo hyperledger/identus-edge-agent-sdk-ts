@@ -44,10 +44,10 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected apollo: Apollo,
     protected castor: Castor,
     protected pluto: Pluto,
-    protected manager: ConnectionsManager,
     protected mediationHandler: MediatorHandler,
     protected seed: Seed
-  ) {}
+  ) { }
+
 
   /**
    * Asyncronously sign with a DID
@@ -96,7 +96,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
 
     publicKeys.push(keyAgreementPrivateKey.publicKey());
     publicKeys.push(authenticationPrivateKey.publicKey());
-    const mediatorDID = this.manager.mediationHandler.mediator?.routingDID;
+    const mediatorDID = this.mediationHandler.mediator?.mediatorDID;
 
     if (
       mediatorDID &&
@@ -113,7 +113,6 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
         )
       );
     }
-
     const did = await this.castor.createPeerDID(publicKeys, services);
 
     if (updateMediator) {

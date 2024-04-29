@@ -27,6 +27,10 @@ export class RequestPresentation {
     };
   }
 
+  get decodedAttachments() {
+    return this.attachments.map(Message.Attachment.extractJSON)
+  }
+
   makeMessage(): Message {
     const body = JSON.stringify(this.body);
     return new Message(

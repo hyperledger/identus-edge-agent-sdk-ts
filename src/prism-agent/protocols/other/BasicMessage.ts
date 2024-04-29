@@ -10,12 +10,21 @@ export class BasicMessage {
   constructor(
     public body: BasicMessageBody,
     public from: DID,
-    public to: DID
-  ) {}
+    public to: DID,
+    public thid?: string,
+  ) { }
 
   makeMessage(): Message {
     const body = JSON.stringify(this.body);
-    return new Message(body, undefined, BasicMessage.type, this.from, this.to);
+    return new Message(
+      body,
+      undefined,
+      BasicMessage.type,
+      this.from,
+      this.to,
+      [],
+      this.thid
+    );
   }
 
   static fromMessage(fromMessage: Message): BasicMessage {

@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / RequestPresentation
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / RequestPresentation
 
 # Class: RequestPresentation
 
@@ -17,6 +17,10 @@
 - [thid](RequestPresentation.md#thid)
 - [to](RequestPresentation.md#to)
 - [type](RequestPresentation.md#type)
+
+### Accessors
+
+- [decodedAttachments](RequestPresentation.md#decodedattachments)
 
 ### Methods
 
@@ -47,7 +51,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
 
 ## Properties
 
@@ -57,7 +61,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
 
 ___
 
@@ -67,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L12)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L12)
 
 ___
 
@@ -77,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L17)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L17)
 
 ___
 
@@ -87,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L20)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L20)
 
 ___
 
@@ -97,7 +101,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L19)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L19)
 
 ___
 
@@ -107,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L18)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L18)
 
 ___
 
@@ -117,21 +121,35 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L11)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L11)
+
+## Accessors
+
+### decodedAttachments
+
+• `get` **decodedAttachments**(): `any`[]
+
+#### Returns
+
+`any`[]
+
+#### Defined in
+
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L30)
 
 ## Methods
 
 ### makeMessage
 
-▸ **makeMessage**(): [`Message`](Domain.Message.md)
+▸ **makeMessage**(): [`Message`](Domain.Message-1.md)
 
 #### Returns
 
-[`Message`](Domain.Message.md)
+[`Message`](Domain.Message-1.md)
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L30)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L34)
 
 ___
 
@@ -143,7 +161,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `fromMessage` | [`Message`](Domain.Message.md) |
+| `fromMessage` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -151,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L43)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L47)
 
 ___
 
@@ -163,7 +181,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](Domain.Message.md) |
+| `message` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -171,4 +189,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L73)
+[src/prism-agent/protocols/proofPresentation/RequestPresentation.ts:77](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/RequestPresentation.ts#L77)

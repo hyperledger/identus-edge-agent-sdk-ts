@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / ProvableCredential
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / ProvableCredential
 
 # Interface: ProvableCredential
 
@@ -13,17 +13,32 @@
 ### Methods
 
 - [presentation](Domain.ProvableCredential.md#presentation)
+- [verifiableCredential](Domain.ProvableCredential.md#verifiablecredential)
 
 ## Methods
 
 ### presentation
 
-▸ **presentation**(): `unknown`
+▸ **presentation**(): [`W3CVerifiablePresentation`](../modules/Domain.md#w3cverifiablepresentation)
 
 #### Returns
 
-`unknown`
+[`W3CVerifiablePresentation`](../modules/Domain.md#w3cverifiablepresentation)
 
 #### Defined in
 
-[src/domain/models/Credential.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Credential.ts#L33)
+[src/domain/models/Credential.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L38)
+
+___
+
+### verifiableCredential
+
+▸ **verifiableCredential**(): [`W3CVerifiableCredential`](../modules/Domain.md#w3cverifiablecredential)
+
+#### Returns
+
+[`W3CVerifiableCredential`](../modules/Domain.md#w3cverifiablecredential)
+
+#### Defined in
+
+[src/domain/models/Credential.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L39)
