@@ -1,3 +1,3 @@
-import * as SDK from './src';
+import * as SDK from './build/typings';
 
 export default SDK
