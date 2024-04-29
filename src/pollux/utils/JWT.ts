@@ -1,7 +1,7 @@
 import * as didJWT from "did-jwt";
-import didResolver from "did-resolver";
+import * as didResolver from "did-resolver";
 
-import { Castor } from "../../../domain/buildingBlocks/Castor";
+import { Castor } from "../../domain/buildingBlocks/Castor";
 import {
   AlsoKnownAs,
   Controller,
@@ -9,7 +9,10 @@ import {
   VerificationMethods,
   DID,
   PrivateKey,
-} from "../../../domain";
+  Curve,
+  PolluxError,
+} from "../../domain";
+import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
 
 export class JWT {
   private castor: Castor;
@@ -18,7 +21,39 @@ export class JWT {
     this.castor = castor;
   }
 
-  private async resolve(did: string): Promise<didResolver.DIDResolutionResult> {
+  async verify(
+    options: {
+      issuerDID: DID,
+      holderDID?: DID,
+      jws: string
+    }
+  ): Promise<boolean> {
+    try {
+      const { issuerDID, jws, holderDID } = options;
+      const resolved = await this.resolve(issuerDID.toString());
+      const verificationMethod = resolved.didDocument?.verificationMethod;
+      if (!verificationMethod) {
+        throw new Error("Invalid did document");
+      }
+
+      const validVerificationMethod = didJWT.verifyJWS(jws, verificationMethod);
+      const jwtObject = JWTCredential.fromJWS(jws);
+
+      if (jwtObject.issuer !== issuerDID.toString()) {
+        throw new Error("Invalid issuer");
+      }
+
+      if (jwtObject.isCredential && holderDID && holderDID.toString() !== jwtObject.subject) {
+        throw new Error("Invalid subject (holder)");
+      }
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  public async resolve(did: string): Promise<didResolver.DIDResolutionResult> {
     const resolved = await this.castor.resolveDID(did);
     const alsoKnownAs = resolved.coreProperties.find(
       (prop): prop is AlsoKnownAs => prop instanceof AlsoKnownAs
@@ -32,7 +67,6 @@ export class JWT {
     const service = resolved.coreProperties.find(
       (prop): prop is Services => prop instanceof Services
     );
-
     return {
       didResolutionMetadata: { contentType: "application/did+ld+json" },
       didDocumentMetadata: {},
@@ -68,9 +102,7 @@ export class JWT {
         service:
           service?.values?.reduce<didResolver.Service[]>((acc, service) => {
             const type = service.type.at(0);
-
             if (type === undefined) return acc;
-
             return acc.concat({
               id: service.id,
               type: type,
@@ -81,18 +113,39 @@ export class JWT {
     };
   }
 
+  private getPrivateKeyAlgo(privateKey: PrivateKey): { alg: string, signer: didJWT.Signer } {
+    if (privateKey.curve === Curve.SECP256K1) {
+      return {
+        alg: 'ES256K',
+        signer: didJWT.ES256KSigner(privateKey.raw)
+      };
+    }
+    if (privateKey.curve === Curve.ED25519) {
+      return {
+        alg: 'EdDSA',
+        signer: didJWT.EdDSASigner(privateKey.raw)
+      };
+    }
+    /* istanbul ignore next */
+    throw new PolluxError.InvalidCredentialError(`Unsupported key type ${privateKey.curve}`)
+  }
+
   async sign(
-    issuer: DID,
-    privateKey: PrivateKey | Uint8Array,
-    payload: Partial<didJWT.JWTPayload>
+    options: {
+      issuerDID: DID,
+      privateKey: PrivateKey,
+      payload: Partial<didJWT.JWTPayload>
+    }
   ): Promise<string> {
-    const raw = privateKey instanceof PrivateKey ? privateKey.raw : privateKey;
-    //TODO: Better check if this method is called with PrismDID and not PeerDID or other
-    const signer = didJWT.ES256KSigner(raw);
+    const { issuerDID, privateKey, payload } = options;
+    if (!privateKey.isSignable()) {
+      throw new Error("Key is not signable");
+    }
+    const { alg, signer } = this.getPrivateKeyAlgo(privateKey);
     const jwt = await didJWT.createJWT(
       payload,
-      { issuer: issuer.toString(), signer },
-      { alg: "ES256K" }
+      { issuer: issuerDID.toString(), signer },
+      { alg }
     );
     return jwt;
   }

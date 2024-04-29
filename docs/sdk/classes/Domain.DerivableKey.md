@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / DerivableKey
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / DerivableKey
 
 # Class: DerivableKey
 
@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/DerivableKey.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/keyManagement/DerivableKey.ts#L5)
+[src/domain/models/keyManagement/DerivableKey.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/DerivableKey.ts#L5)

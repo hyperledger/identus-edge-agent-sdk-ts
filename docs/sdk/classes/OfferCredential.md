@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / OfferCredential
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / OfferCredential
 
 # Class: OfferCredential
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L14)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L14)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L16)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L16)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L15)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L15)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L17)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L17)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L20)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L20)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L19)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L19)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L18)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L18)
 
 ___
 
@@ -118,21 +118,21 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L12)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L12)
 
 ## Methods
 
 ### makeMessage
 
-▸ **makeMessage**(): [`Message`](Domain.Message.md)
+▸ **makeMessage**(): [`Message`](Domain.Message-1.md)
 
 #### Returns
 
-[`Message`](Domain.Message.md)
+[`Message`](Domain.Message-1.md)
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L29)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L29)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:86](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L86)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:86](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L86)
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `fromMessage` | [`Message`](Domain.Message.md) |
+| `fromMessage` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L59)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L59)
 
 ___
 
@@ -202,4 +202,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/issueCredential/OfferCredential.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L42)
+[src/prism-agent/protocols/issueCredential/OfferCredential.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/issueCredential/OfferCredential.ts#L42)

@@ -20,6 +20,7 @@ import {
   CredentialType,
   DID,
   HttpResponse,
+  JWTCredentialPayload,
   LinkSecret,
   Message,
   Service,
@@ -27,7 +28,7 @@ import {
   StorableCredential,
 } from "../../src/domain/models";
 import { DIDCommProtocol } from "../../src/mercury/DIDCommProtocol";
-import { Castor } from "../../src/domain/buildingBlocks/Castor";
+import { Castor as CastorType } from "../../src/domain/buildingBlocks/Castor";
 import { AgentError } from "../../src/domain/models/Errors";
 import { HandshakeRequest } from "../../src/prism-agent/protocols/connection/HandshakeRequest";
 import { OfferCredential } from "../../src/prism-agent/protocols/issueCredential/OfferCredential";
@@ -47,8 +48,10 @@ import { Pluto as IPluto } from "../../src/domain";
 import { Pluto } from "../../src/pluto/Pluto";
 import { RevocationNotification } from "../../src/prism-agent/protocols/revocation/RevocationNotfiication";
 import { AgentCredentials } from "../../src/prism-agent/Agent.Credentials";
-import { Store } from "../../src";
+import { BasicMediatorHandler, Castor, Store } from "../../src";
 import { randomUUID } from "crypto";
+import { AgentDIDHigherFunctions } from "../../src/prism-agent/Agent.DIDHigherFunctions";
+import { JWT } from "../../src/pollux/utils/JWT";
 
 
 chai.use(SinonChai);
@@ -58,7 +61,7 @@ const expect = chai.expect;
 let agent: Agent;
 let pluto: IPluto;
 let pollux: Pollux;
-let castor: Castor;
+let castor: CastorType;
 let sandbox: sinon.SinonSandbox;
 let store: Pluto.Store;
 
@@ -99,13 +102,24 @@ describe("Agent Tests", () => {
     const mercury = new Mercury(castor, didProtocol, httpManager);
 
     const polluxInstance = new Pollux(castor)
+    const handler = new BasicMediatorHandler(DID.fromString("did:peer:123456"), mercury, pluto);
+    const seed = apollo.createRandomSeed().seed
+    const didHigherFunctions = new AgentDIDHigherFunctions(
+      apollo,
+      castor,
+      pluto,
+      handler,
+      seed
+    )
 
     const agentCredentials = new AgentCredentials(
       apollo,
       castor,
       pluto,
       polluxInstance,
-      apollo.createRandomSeed().seed
+      apollo.createRandomSeed().seed,
+      mercury,
+      didHigherFunctions
     )
 
     const connectionsManager = ConnectionsManagerMock.buildMock({
@@ -699,11 +713,25 @@ describe("Agent Tests", () => {
         beforeEach(() => {
           stubGetDIDPrivateKeysByDID = sandbox
             .stub(pluto, "getDIDPrivateKeysByDID")
-            .resolves([Fixtures.Keys.ed25519.privateKey as any]);
+            .resolves([Fixtures.Keys.secp256K1.privateKey as any]);
         });
 
         test("JWTCredential + JWTPresentationRequest - returns Presentation", async () => {
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const jwt = new JWT(CastorMock);
+          const payload: JWTCredentialPayload = {
+            iss: "did:prism:da61cf65fbf04b6b9fe06fa3b577fca3e05895a13902decaad419845a20d2d78:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw",
+            nbf: 23456754321,
+            exp: 2134564321,
+            sub: "did:prism:da61cf65fbf04b6b9fe06fa3b577fca3e05895a13902decaad419845a20d2d78:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw",
+            vc: {} as any
+          }
+          const jwtString = await jwt.sign({
+            issuerDID: DID.fromString("did:prism:da61cf65fbf04b6b9fe06fa3b577fca3e05895a13902decaad419845a20d2d78:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw"),
+            privateKey: Fixtures.Keys.secp256K1.privateKey,
+            payload: payload,
+          })
+
+          const credential = JWTCredential.fromJWS(jwtString);
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
@@ -728,11 +756,11 @@ describe("Agent Tests", () => {
 
           expect(result).to.have.property("from", request.to);
           expect(result).to.have.property("to", request.from);
-          expect(result).to.have.property("thid", request.thid);
+          expect(result).to.have.property("thid", request.thid || request.id);
         });
 
         test("Attachment format - not JWT - throws", () => {
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const credential = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
           const request = new RequestPresentation(
             { proofTypes: [] },
             [{ ...Fixtures.PresentationRequests.JWTAttachment, format: "wrong" }],
@@ -745,8 +773,23 @@ describe("Agent Tests", () => {
           expect(result).to.eventually.be.rejected;
         });
 
-        test("Credential.subjectDID - invalid - throws", () => {
-          const credential = JWTCredential.fromJWT({}, "");
+        test("Credential.subjectDID - invalid - throws", async () => {
+
+          const jwt = new JWT(CastorMock);
+          const payload: JWTCredentialPayload = {
+            iss: "did:test:123",
+            sub: undefined as any,
+            nbf: 23456754321,
+            exp: 2134564321,
+            vc: {} as any
+          }
+          const jwtString = await jwt.sign({
+            issuerDID: DID.fromString("did:issuer:123"),
+            privateKey: Fixtures.Keys.secp256K1.privateKey,
+            payload: payload,
+          })
+
+          const credential = JWTCredential.fromJWS(jwtString);
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
@@ -759,10 +802,24 @@ describe("Agent Tests", () => {
           expect(result).to.eventually.be.rejected;
         });
 
-        test("Credential.subjectDID - doesn't match PrivateKey - throws", () => {
+        test("Credential.subjectDID - doesn't match PrivateKey - throws", async () => {
           stubGetDIDPrivateKeysByDID.resolves([]);
 
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+          const jwt = new JWT(CastorMock);
+          const payload: JWTCredentialPayload = {
+            iss: "did:test:123",
+            nbf: 23456754321,
+            exp: 2134564321,
+            sub: "did:test:123",
+            vc: {} as any
+          }
+          const jwtString = await jwt.sign({
+            issuerDID: DID.fromString("did:issuer:123"),
+            privateKey: Fixtures.Keys.secp256K1.privateKey,
+            payload: payload,
+          })
+
+          const credential = JWTCredential.fromJWS(jwtString);
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
@@ -777,8 +834,22 @@ describe("Agent Tests", () => {
       });
 
       describe("Fail cases", () => {
-        test("RequestPresentation.attachments - empty - throws", () => {
-          const credential = JWTCredential.fromJWT({ sub: "did:test:123" }, "");
+        test("RequestPresentation.attachments - empty - throws", async () => {
+          const jwt = new JWT(CastorMock);
+          const payload: JWTCredentialPayload = {
+            iss: "did:test:123",
+            nbf: 23456754321,
+            exp: 2134564321,
+            sub: "did:test:123",
+            vc: {} as any
+          }
+          const jwtString = await jwt.sign({
+            issuerDID: DID.fromString("did:issuer:123"),
+            privateKey: Fixtures.Keys.secp256K1.privateKey,
+            payload: payload,
+          })
+
+          const credential = JWTCredential.fromJWS(jwtString);
           const request = new RequestPresentation(
             { proofTypes: [] },
             [],
@@ -791,17 +862,31 @@ describe("Agent Tests", () => {
           expect(result).to.eventually.be.rejected;
         });
 
-        test("Credential - not matched - throws", () => {
+        test("Credential - not matched - throws", async () => {
           const request = new RequestPresentation(
             { proofTypes: [] },
             [Fixtures.PresentationRequests.JWTAttachment],
             didFrom,
             didTo
           );
+          const payload: JWTCredentialPayload = {
+            iss: "did:test:123",
+            nbf: 23456754321,
+            exp: 2134564321,
+            sub: Fixtures.DIDs.prismDIDDefault.toString(),
+            vc: {} as any
+          }
+          const jwt = new JWT(CastorMock);
+          const jwtString = await jwt.sign({
+            issuerDID: DID.fromString("did:issuer:123"),
+            privateKey: Fixtures.Keys.secp256K1.privateKey,
+            payload: payload,
+          })
 
-          const result = agent.createPresentationForRequestProof(request, {} as any);
-
+          const credential = JWTCredential.fromJWS(jwtString);
+          const result = agent.createPresentationForRequestProof(request, credential);
           expect(result).to.eventually.be.rejected;
+
         });
       });
     });

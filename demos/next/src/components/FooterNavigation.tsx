@@ -18,6 +18,10 @@ export function FooterNavigation() {
                         Edge Agent
                     </Link>          </li>
                 <li className="w-full">
+                    <Link href="/verification" className="inline-block w-full p-4 bg-white border-0 border-gray-200 dark:border-gray-700 rounded-tr-lg rounded-br-lg hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+                        OOB Verification
+                    </Link>          </li>
+                <li className="w-full">
                     <Link href="/connections" className="inline-block w-full p-4 bg-white border-0 border-gray-200 dark:border-gray-700 rounded-tr-lg rounded-br-lg hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
                         Connenctions
                     </Link>          </li>

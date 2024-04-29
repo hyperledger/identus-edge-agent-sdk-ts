@@ -11,6 +11,7 @@ import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import { Apollo, Store } from "../../src";
 import { Pluto } from "../../src/pluto/Pluto";
 import InMemoryStore from "../fixtures/inmemory";
+import * as Fixtures from "../fixtures";
 
 describe("Pluto", () => {
   let instance: Domain.Pluto;
@@ -31,8 +32,6 @@ describe("Pluto", () => {
     [
       Ed25519PrivateKey,
       X25519PrivateKey,
-      // TODO - can secp256 be a peerDID, it's not handled in PeerDIDCreate.ts?
-      // Secp256k1PrivateKey
     ].forEach((keyClass) => {
       test(`${keyClass.name}`, async () => {
         const peerDid = Domain.DID.fromString("did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjoiaHR0cHM6Ly9iZXRhLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJyIjpbXSwiYSI6WyJkaWRjb21tL3YyIl19");
@@ -69,7 +68,6 @@ describe("Pluto", () => {
           const prismDid = Domain.DID.fromString(
             "did:prism:dadsa:1231321dhsauda23847"
           );
-          const keyPathIndex = 11;
           const privateKey = keyClass.from.String(
             "01011010011101010100011000100010"
           );
@@ -78,11 +76,7 @@ describe("Pluto", () => {
 
           const result = await instance.getDIDPrivateKeysByDID(prismDid);
           const resultKey = result.at(0)!;
-
-          // expect(resultKey).to.be.instanceOf(keyClass);
-          // TODO: we can't test instanceof here because Pluto is now external implementation
-          // We can do something like this, but maybe it's better to remove it altogether:
-          // expect(resultKey.constructor.name).to.be(keyClass.name);
+          expect(resultKey).to.be.instanceOf(keyClass);
           expect(resultKey.raw).to.eql(privateKey.raw);
           expect(resultKey.curve).to.equal(privateKey.curve);
           expect(resultKey.index).to.equal(privateKey.index);
@@ -93,48 +87,10 @@ describe("Pluto", () => {
     );
   });
 
-  /*
-    describe("getDIDPrivateKeyByID", () => {
-      [Ed25519PrivateKey, X25519PrivateKey, Secp256k1PrivateKey].forEach(
-        (keyClass) => {
-          test(`${keyClass.name} returned from DB`, async function () {
-            const prismDid = Domain.DID.fromString(
-              "did:prism:dadsa:1231321dhsauda23847"
-            );
-            const keyPathIndex = 11;
-            const privateKey = keyClass.from.String(
-              "01011010011101010100011000100010"
-            );
-            const privateKeyId = "001";
-  
-            await instance.storePrismDID(
-              prismDid,
-              keyPathIndex,
-              privateKey,
-              privateKeyId
-            );
-  
-            const result = await instance.getDIDPrivateKeyByID(privateKeyId);
-  
-            // expect(result).to.be.instanceOf(keyClass);
-            expect(result?.raw).to.eql(privateKey.raw);
-            expect(result?.curve).to.equal(privateKey.curve);
-            expect(result?.index).to.equal(privateKey.index);
-            expect(result?.size).to.equal(privateKey.size);
-            expect(result?.type).to.equal(privateKey.type);
-          });
-        }
-      );
-    });
-  //*/
-
-  // describe.only("storePrivateKeys", () => {});
-
   it("should store prism DID", async function () {
     const did = Domain.DID.fromString(
       "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
     );
-    const keyPathIndex = 0;
     const alias = "Did test";
     const privateKey: Domain.PrivateKey = new Secp256k1PrivateKey(
       Buffer.from("01011010011101010100011000100010")
@@ -265,26 +221,9 @@ describe("Pluto", () => {
       proof: "proof",
     };
 
-    const jwtPayload: any = {
-      id: "123",
-      iss: "did:peer:2.issuer",
-      nbf: 1680615608435,
-      sub: "did:peer:2.sub",
-      exp: 1680615608435,
-      aud: ["aud-json"],
-      vc: vc,
-    };
-
-    const credential = new JWTCredential(
-      jwtPayload.iss,
-      vc,
-      jwtString,
-      jwtPayload.nbf,
-      jwtPayload.sub,
-      jwtPayload.exp,
-      jwtPayload.aud,
+    const credential = JWTCredential.fromJWS(
       jwtString
-    );
+    )
 
     await instance.storeCredential(credential);
   });
@@ -293,7 +232,6 @@ describe("Pluto", () => {
     const did = Domain.DID.fromString(
       "did:prism:a7bacdc91c264066f5858ae3c2e8a159982e8292dc4bf94e58ef8dd982ea9f38:ChwKGhIYCgdtYXN0ZXIwEAFKCwoJc2VjcDI1Nmsx"
     );
-    const keyPathIndex = 0;
     const alias = "Did test";
 
     const privateKey: Domain.PrivateKey = new X25519PrivateKey(
@@ -423,192 +361,6 @@ describe("Pluto", () => {
     expect(messages).not.empty;
   });
 
-  /*
-    it("should get all messages by DID", async function () {
-      const myDid = Domain.DID.fromString("did:prism:123");
-      const testDid1 = Domain.DID.fromString("did:prism:321");
-      const testDid2 = Domain.DID.fromString("did:prism:abc");
-  
-      const message1 = {
-        id: randomUUID(),
-        thid: "",
-        to: myDid,
-        from: testDid1,
-        direction: MessageDirection.RECEIVED,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message received",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      };
-      const message2 = {
-        id: randomUUID(),
-        thid: "",
-        to: testDid2,
-        from: myDid,
-        direction: MessageDirection.SENT,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message sent",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      };
-      await instance.storeMessage(message1);
-      await instance.storeMessage(message2);
-  
-      const messages = await instance.getAllMessagesByDID(myDid);
-  
-      expect(messages.length).to.equal(2);
-    });
-  
-    it("should get all messages sent", async function () {
-      const message = {
-        id: randomUUID(),
-        thid: "",
-        to: DID.fromString("did:prism:123"),
-        from: DID.fromString("did:prism:321"),
-        direction: MessageDirection.SENT,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      };
-      await instance.storeMessage(message);
-  
-      const messages = await instance.getAllMessagesSent();
-  
-      expect(messages).not.empty;
-    });
-  
-    //
-    it("should get all messages received", async function () {
-      const message = {
-        id: randomUUID(),
-        thid: "",
-        to: DID.fromString("did:prism:123"),
-        from: DID.fromString("did:prism:321"),
-        direction: MessageDirection.RECEIVED,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      };
-      await instance.storeMessage(message);
-      const messages = await instance.getAllMessagesReceived();
-      expect(messages).not.empty;
-    });
-    //
-    it("should get all messages sent to", async function () {
-      const to = DID.fromString("did:prism:123");
-      const from = DID.fromString("did:prism:321");
-      await instance.storeMessage({
-        id: randomUUID(),
-        thid: "",
-        to,
-        from,
-        direction: MessageDirection.SENT,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      });
-      const messages = await instance.getAllMessagesSentTo(to);
-      expect(messages).not.empty;
-    });
-    //
-    it("should get all messages received from", async function () {
-      const to = DID.fromString("did:prism:123");
-      const from = DID.fromString("did:prism:321");
-      await instance.storeMessage({
-        id: randomUUID(),
-        thid: "",
-        to,
-        from,
-        direction: MessageDirection.RECEIVED,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      });
-      const messages = await instance.getAllMessagesReceivedFrom(from);
-  
-      expect(messages).not.empty;
-    });
-    //
-    it("should get all messages of type", async function () {
-      const to = DID.fromString("did:prism:123");
-      const from = DID.fromString("did:prism:321");
-      const message = {
-        id: randomUUID(),
-        thid: "",
-        to,
-        from,
-        direction: MessageDirection.RECEIVED,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "type-example",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      };
-      await instance.storeMessage(message);
-      const messages = await instance.getAllMessagesOfType(message.piuri, to);
-      expect(messages).not.empty;
-    });
-    //
-    it("should get all messages by from to DID", async function () {
-      const to = DID.fromString("did:prism:123");
-      const from = DID.fromString("did:prism:321");
-  
-      const message = {
-        id: randomUUID(),
-        thid: "",
-        to,
-        from,
-        direction: MessageDirection.RECEIVED,
-        fromPrior: "",
-        ack: ["test"],
-        body: "Message",
-        createdTime: new Date().toISOString(),
-        attachments: [],
-        piuri: "type-example",
-        extraHeaders: ["x-extra-header"],
-        expiresTimePlus: new Date().toISOString(),
-      };
-      await instance.storeMessage(message);
-      const result = await instance.getAllMessagesByFromToDID(
-        message.from,
-        message.to
-      );
-  
-      expect(result[0].body).equal(message.body);
-    });
-  //*/
-
   it("should get message", async function () {
     const to = Domain.DID.fromString("did:prism:123");
     const from = Domain.DID.fromString("did:prism:321");
@@ -673,76 +425,8 @@ describe("Pluto", () => {
   });
 
   it("should get all credentials", async function () {
-    const jwtParts = [
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-      "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
-      "18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM",
-    ];
-    const jwtString = jwtParts.join(".");
-    const vc: any = {
-      id: jwtString,
-      credentialType: CredentialType.JWT,
-      type: [CredentialType.JWT],
-      aud: ["aud"],
-      context: ["context"],
-      credentialSubject: { whatever: "credSubject" },
-      evidence: {
-        id: "evidenceId",
-        type: "evidenceType",
-      },
-      expirationDate: new Date().toISOString(),
-      issuanceDate: new Date().toISOString(),
-      issuer: new Domain.DID(
-        "did",
-        "peer",
-        "2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0"
-      ),
-      refreshService: {
-        id: "refreshServiceId",
-        type: "refreshServiceType",
-      },
-      termsOfUse: {
-        id: "termsOfUseId",
-        type: "termsOfUseType",
-      },
-      validFrom: {
-        id: "validFromId",
-        type: "validFromType",
-      },
-      validUntil: {
-        id: "validUntilId",
-        type: "validUntilType",
-      },
-      credentialSchema: {
-        id: "credentialSchemaId",
-        type: "credentialSchemaType",
-      },
-      credentialStatus: {
-        id: "credentialStatusId",
-        type: "credentialStatusType",
-      },
-      proof: "proof",
-    };
-
-    const jwtPayload: any = {
-      id: "123",
-      iss: "did:peer:2.issuer",
-      nbf: 1680615608435,
-      sub: "did:peer:2.sub",
-      exp: 1680615608435,
-      aud: ["aud-json"],
-      vc: vc,
-    };
-
     const credentialIn = new JWTCredential(
-      jwtPayload.iss,
-      vc,
-      jwtString,
-      jwtPayload.nbf,
-      jwtPayload.sub,
-      jwtPayload.exp,
-      jwtPayload.aud,
-      jwtString
+      Fixtures.Credentials.JWT.credentialPayloadEncoded
     );
     await instance.storeCredential(credentialIn);
 
@@ -757,37 +441,4 @@ describe("Pluto", () => {
     expect(credentialOut.recoveryId).to.eq(credentialIn.recoveryId);
     expect(credentialOut.subject).to.eq(credentialIn.subject);
   });
-
-  /*
-    test(`Calling storePrismDID twice with the same did [reported bug]`, async function () {
-      const prismDid = Domain.DID.fromString("did:prism:dadsa:1231321dhsauda23847");
-      const keyPathIndex = 11;
-      const privateKey = Secp256k1PrivateKey.from.String(
-        "01011010011101010100011000100010"
-      );
-      const privateKeyId = "001";
-  
-      await instance.storePrismDID(
-        prismDid,
-        keyPathIndex,
-        privateKey,
-        privateKeyId
-      );
-      // second call
-      await instance.storePrismDID(
-        prismDid,
-        keyPathIndex,
-        privateKey,
-        privateKeyId
-      );
-  
-      const result = await instance.getDIDPrivateKeyByID(privateKeyId);
-  
-      expect(result?.raw).to.eql(privateKey.raw);
-      expect(result?.curve).to.equal(privateKey.curve);
-      expect(result?.index).to.equal(privateKey.index);
-      expect(result?.size).to.equal(privateKey.size);
-      expect(result?.type).to.equal(privateKey.type);
-    });
-  //*/
 });

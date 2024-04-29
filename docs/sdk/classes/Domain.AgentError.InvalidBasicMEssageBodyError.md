@@ -1,39 +1,39 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidBasicMEssageBodyError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidBasicMessageBodyError
 
-# Class: InvalidBasicMEssageBodyError
+# Class: InvalidBasicMessageBodyError
 
-[Domain](../modules/Domain.md).[AgentError](../modules/Domain.AgentError.md).InvalidBasicMEssageBodyError
+[Domain](../modules/Domain.md).[AgentError](../modules/Domain.AgentError.md).InvalidBasicMessageBodyError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`InvalidBasicMEssageBodyError`**
+  ↳ **`InvalidBasicMessageBodyError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.AgentError.InvalidBasicMEssageBodyError.md#constructor)
+- [constructor](Domain.AgentError.InvalidBasicMessageBodyError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.AgentError.InvalidBasicMEssageBodyError.md#cause)
-- [message](Domain.AgentError.InvalidBasicMEssageBodyError.md#message)
-- [name](Domain.AgentError.InvalidBasicMEssageBodyError.md#name)
-- [stack](Domain.AgentError.InvalidBasicMEssageBodyError.md#stack)
-- [prepareStackTrace](Domain.AgentError.InvalidBasicMEssageBodyError.md#preparestacktrace)
-- [stackTraceLimit](Domain.AgentError.InvalidBasicMEssageBodyError.md#stacktracelimit)
+- [cause](Domain.AgentError.InvalidBasicMessageBodyError.md#cause)
+- [message](Domain.AgentError.InvalidBasicMessageBodyError.md#message)
+- [name](Domain.AgentError.InvalidBasicMessageBodyError.md#name)
+- [stack](Domain.AgentError.InvalidBasicMessageBodyError.md#stack)
+- [prepareStackTrace](Domain.AgentError.InvalidBasicMessageBodyError.md#preparestacktrace)
+- [stackTraceLimit](Domain.AgentError.InvalidBasicMessageBodyError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.AgentError.InvalidBasicMEssageBodyError.md#capturestacktrace)
+- [captureStackTrace](Domain.AgentError.InvalidBasicMessageBodyError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new InvalidBasicMEssageBodyError**(`message?`): [`InvalidBasicMEssageBodyError`](Domain.AgentError.InvalidBasicMEssageBodyError.md)
+• **new InvalidBasicMessageBodyError**(`message?`): [`InvalidBasicMessageBodyError`](Domain.AgentError.InvalidBasicMessageBodyError.md)
 
 #### Parameters
 
@@ -43,7 +43,7 @@
 
 #### Returns
 
-[`InvalidBasicMEssageBodyError`](Domain.AgentError.InvalidBasicMEssageBodyError.md)
+[`InvalidBasicMessageBodyError`](Domain.AgentError.InvalidBasicMessageBodyError.md)
 
 #### Overrides
 
@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Agent.ts:64](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/errors/Agent.ts#L64)
+[src/domain/models/errors/Agent.ts:155](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Agent.ts#L155)
 
 ## Properties
 
@@ -148,7 +148,7 @@ Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:11
+node_modules/@types/node/globals.d.ts:27
 
 ___
 
@@ -162,7 +162,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:13
+node_modules/@types/node/globals.d.ts:29
 
 ## Methods
 
@@ -189,4 +189,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/@types/node/globals.d.ts:4
+node_modules/@types/node/globals.d.ts:20

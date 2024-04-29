@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / CredentialRequestOptions
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / CredentialRequestOptions
 
 # Interface: CredentialRequestOptions
 
@@ -15,7 +15,6 @@
 - [did](Domain.CredentialRequestOptions.md#did)
 - [keyPair](Domain.CredentialRequestOptions.md#keypair)
 - [linkSecret](Domain.CredentialRequestOptions.md#linksecret)
-- [linkSecretName](Domain.CredentialRequestOptions.md#linksecretname)
 
 ## Properties
 
@@ -25,7 +24,7 @@
 
 #### Defined in
 
-[src/domain/models/Credential.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Credential.ts#L54)
+[src/domain/models/Credential.ts:60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L60)
 
 ___
 
@@ -35,24 +34,14 @@ ___
 
 #### Defined in
 
-[src/domain/models/Credential.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Credential.ts#L53)
+[src/domain/models/Credential.ts:59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L59)
 
 ___
 
 ### linkSecret
 
-• `Optional` **linkSecret**: `string`
+• `Optional` **linkSecret**: [`LinkSecret`](../classes/Domain.LinkSecret.md)
 
 #### Defined in
 
-[src/domain/models/Credential.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Credential.ts#L55)
-
-___
-
-### linkSecretName
-
-• `Optional` **linkSecretName**: `string`
-
-#### Defined in
-
-[src/domain/models/Credential.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/models/Credential.ts#L56)
+[src/domain/models/Credential.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L61)

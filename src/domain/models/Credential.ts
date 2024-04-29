@@ -6,6 +6,7 @@ import { KeyPair } from "./KeyPair";
 type Claim = Record<string, any>;
 
 export abstract class Credential implements Pluto.Storable {
+  abstract credentialType: CredentialType;
   abstract recoveryId: string;
   abstract id: string;
   abstract issuer: string;
@@ -35,6 +36,7 @@ export abstract class Credential implements Pluto.Storable {
 
 export interface ProvableCredential {
   presentation(): unknown;
+  verifiableCredential(): unknown
 }
 
 export interface StorableCredential {

@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SHA256 } from "@stablelib/sha256";
-import { base64url } from "multiformats/bases/base64";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
-
 import { Apollo } from "../domain/buildingBlocks/Apollo";
 import { Castor as CastorInterface } from "../domain/buildingBlocks/Castor";
 import {
@@ -40,16 +38,17 @@ import {
   VerificationMethodTypeAgreement,
   VerificationMethodTypeAuthentication,
 } from "../peer-did/types";
+
 import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
 import { PublicKey, Curve } from "../domain/models";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 
+type ExtraResolver = new (apollo: Apollo) => DIDResolver
 /**
  * Castor is a powerful and flexible library for working with DIDs. Whether you are building a decentralised application
  * or a more traditional system requiring secure and private identity management, Castor provides the tools and features
  * you need to easily create, manage, and resolve DIDs.
- *
  *
  * @class Castor
  * @typedef {Castor}
@@ -63,12 +62,14 @@ export default class Castor implements CastorInterface {
    *
    * @constructor
    * @param {Apollo} apollo
+   * @param {ExtraResolver[]} extraResolvers
    */
-  constructor(apollo: Apollo) {
+  constructor(apollo: Apollo, extraResolvers: ExtraResolver[] = []) {
     this.apollo = apollo;
     this.resolvers = [
       new PeerDIDResolver(),
       new LongFormPrismDIDResolver(this.apollo),
+      ...extraResolvers.map((Resolver) => new Resolver(apollo))
     ];
   }
 
@@ -303,7 +304,6 @@ export default class Castor implements CastorInterface {
             "PrismDID VerificationMethod does not have multibase Key in it"
           );
         }
-
         const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromBytes(
           Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
         ).getEncoded();

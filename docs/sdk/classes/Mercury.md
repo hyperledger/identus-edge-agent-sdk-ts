@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Mercury
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Mercury
 
 # Class: Mercury
 
@@ -60,7 +60,7 @@ Creates an instance of Mercury.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L29)
+[src/mercury/Mercury.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L29)
 
 ## Properties
 
@@ -70,7 +70,7 @@ Creates an instance of Mercury.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L32)
+[src/mercury/Mercury.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L32)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L30)
+[src/mercury/Mercury.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L30)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L31)
+[src/mercury/Mercury.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L31)
 
 ## Methods
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:170](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L170)
+[src/mercury/Mercury.ts:182](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L182)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:161](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L161)
+[src/mercury/Mercury.ts:173](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L173)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L101)
+[src/mercury/Mercury.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L101)
 
 ___
 
@@ -177,7 +177,7 @@ did is undefined
 
 #### Defined in
 
-[src/mercury/Mercury.ts:138](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L138)
+[src/mercury/Mercury.ts:138](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L138)
 
 ___
 
@@ -192,7 +192,7 @@ message object is invalid.
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](Domain.Message.md) |
+| `message` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -204,7 +204,7 @@ message object is invalid.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L42)
+[src/mercury/Mercury.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L42)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `msg` | [`Message`](Domain.Message.md) |
+| `msg` | [`Message`](Domain.Message-1.md) |
 | `encrypted` | `string` |
 | `mediatorDID` | [`DID`](Domain.DID.md) |
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L142)
+[src/mercury/Mercury.ts:154](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L154)
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:183](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L183)
+[src/mercury/Mercury.ts:195](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L195)
 
 ___
 
@@ -266,7 +266,7 @@ Asynchronously sends a given message and returns the response data.
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](Domain.Message.md) |
+| `message` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -280,13 +280,13 @@ Asynchronously sends a given message and returns the response data.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L70)
+[src/mercury/Mercury.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L70)
 
 ___
 
 ### sendMessageParseMessage
 
-▸ **sendMessageParseMessage**(`message`): `Promise`\<[`Message`](Domain.Message.md)\>
+▸ **sendMessageParseMessage**(`message`): `Promise`\<[`Message`](Domain.Message-1.md)\>
 
 Asynchronously sends a given message and returns the response message object.
 
@@ -294,11 +294,11 @@ Asynchronously sends a given message and returns the response message object.
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](Domain.Message.md) |
+| `message` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
-`Promise`\<[`Message`](Domain.Message.md)\>
+`Promise`\<[`Message`](Domain.Message-1.md)\>
 
 **`Async`**
 
@@ -308,13 +308,13 @@ Asynchronously sends a given message and returns the response message object.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:130](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L130)
+[src/mercury/Mercury.ts:130](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L130)
 
 ___
 
 ### unpackMessage
 
-▸ **unpackMessage**(`message`): `Promise`\<[`Message`](Domain.Message.md)\>
+▸ **unpackMessage**(`message`): `Promise`\<[`Message`](Domain.Message-1.md)\>
 
 Asynchronously unpacks a given string representation of a message into a message object. This
 function may throw an error if the string is not a valid message representation.
@@ -327,7 +327,7 @@ function may throw an error if the string is not a valid message representation.
 
 #### Returns
 
-`Promise`\<[`Message`](Domain.Message.md)\>
+`Promise`\<[`Message`](Domain.Message-1.md)\>
 
 #### Implementation of
 
@@ -335,4 +335,4 @@ function may throw an error if the string is not a valid message representation.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/mercury/Mercury.ts#L58)
+[src/mercury/Mercury.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/mercury/Mercury.ts#L58)

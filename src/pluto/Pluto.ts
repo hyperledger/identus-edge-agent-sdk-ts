@@ -159,7 +159,7 @@ export class Pluto implements Domain.Pluto {
   /** LinkSecret **/
 
   async storeLinkSecret(linkSecret: Domain.LinkSecret): Promise<void> {
-    await this.Repositories.LinkSecrets.save(linkSecret);
+    return await this.Repositories.LinkSecrets.save(linkSecret);
   }
 
   async getLinkSecret(name: string = Domain.LinkSecret.defaultName): Promise<Domain.LinkSecret | null> {
@@ -180,7 +180,6 @@ export class Pluto implements Domain.Pluto {
 
     return keys;
   }
-
 
   /** DIDs **/
   /** Prism DIDs **/

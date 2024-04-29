@@ -4,159 +4,425 @@ import {
   ProvableCredential,
   StorableCredential,
 } from "../../domain/models/Credential";
-import { CredentialType } from "../../domain/models/VerifiableCredential";
-
-export enum JWTVerifiableCredentialProperties {
-  iss = "iss",
-  vc = "vc",
-  jti = "jti",
-  nbf = "nbf",
-  sub = "sub",
-  exp = "exp",
-  aud = "aud",
-  type = "type",
-  revoked = "revoked"
-}
+import { InvalidCredentialError } from "../../domain/models/errors/Pollux";
+import {
+  CredentialType,
+  JWTCredentialPayload,
+  JWTPresentationPayload,
+  JWTVerifiableCredentialProperties,
+  JWTVerifiablePresentationProperties,
+  JWTVerifiableCredentialProperties as JWT_VC_PROPS,
+  JWTVerifiablePresentationProperties as JWT_VP_PROPS,
+  W3CVerifiableCredential,
+  W3CVerifiableCredentialContext,
+  W3CVerifiableCredentialType,
+  W3CVerifiablePresentation,
+} from "../../domain/models/VerifiableCredential";
+import { decodeJWS } from "../utils/decodeJWS";
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
+
 
 export class JWTCredential
   extends Credential
   implements ProvableCredential, StorableCredential, Pluto.Storable {
+
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
-  public properties = new Map<JWTVerifiableCredentialProperties, any>();
+  public properties = new Map<JWT_VC_PROPS | JWT_VP_PROPS, any>();
 
+  constructor(payload: string, revoked?: boolean)
+  constructor(payload: JWTCredentialPayload | JWTPresentationPayload, revoked?: boolean)
   constructor(
-    public readonly iss: string,
-    public readonly verifiableCredential: Record<string, any>,
-    public readonly jti: string,
-    public readonly nbf: number,
-    public readonly sub: string,
-    public readonly exp?: number,
-    public readonly aud: Array<string> = [],
-    public readonly originalJWTString?: string,
-    isRevoked = false
+    payload: any,
+    revoked = false
   ) {
     super();
 
-    this.properties.set(JWTVerifiableCredentialProperties.revoked, isRevoked);
-    this.properties.set(JWTVerifiableCredentialProperties.jti, jti);
-    this.properties.set(JWTVerifiableCredentialProperties.iss, iss);
-    this.properties.set(JWTVerifiableCredentialProperties.sub, sub);
-    this.properties.set(JWTVerifiableCredentialProperties.nbf, nbf);
-    this.properties.set(JWTVerifiableCredentialProperties.aud, aud);
+    let originalString: string | undefined;
+    if (typeof payload === 'string') {
+      const jsonString = decodeJWS(payload)
+      originalString = payload;
+      payload = JSON.parse(jsonString);
+    }
 
-    this.properties.set(
-      JWTVerifiableCredentialProperties.vc,
-      verifiableCredential
-    );
+    if (this.isCredentialPayload(payload)) {
 
-    if (exp) {
-      this.properties.set(JWTVerifiableCredentialProperties.exp, exp);
+      if (typeof payload[JWT_VC_PROPS.revoked] === "boolean") {
+        this.properties.set(
+          JWT_VC_PROPS.revoked,
+          payload[JWT_VC_PROPS.revoked]
+        );
+      } else if (typeof revoked === 'boolean') {
+        this.properties.set(
+          JWT_VC_PROPS.revoked,
+          revoked
+        );
+      } else {
+        this.properties.set(
+          JWT_VC_PROPS.revoked,
+          false
+        );
+      }
+
+      if (payload[JWT_VC_PROPS.vc]) {
+        this.properties.set(
+          JWT_VC_PROPS.vc,
+          payload[JWT_VC_PROPS.vc]
+        );
+      }
+
+      if (payload[JWT_VC_PROPS.aud]) {
+        this.properties.set(
+          JWT_VC_PROPS.aud,
+          payload[JWT_VC_PROPS.aud]
+        );
+      }
+
+      if (payload[JWT_VC_PROPS.exp]) {
+        this.properties.set(
+          JWT_VC_PROPS.exp,
+          payload[JWT_VC_PROPS.exp]
+        )
+      }
+
+      if (originalString) {
+        this.properties.set(
+          JWT_VC_PROPS.jti,
+          originalString
+        )
+      }
+
+      if (payload[JWT_VC_PROPS.iss]) {
+        this.properties.set(
+          JWT_VC_PROPS.iss,
+          payload[JWT_VC_PROPS.iss]
+        )
+      }
+
+      if (payload[JWT_VC_PROPS.sub]) {
+        this.properties.set(
+          JWT_VC_PROPS.sub,
+          payload[JWT_VC_PROPS.sub]
+        )
+      }
+
+      if (payload[JWT_VC_PROPS.nbf]) {
+        this.properties.set(
+          JWT_VC_PROPS.nbf,
+          payload[JWT_VC_PROPS.nbf]
+        )
+      }
+    } else {
+      //Set properties for a JWTCredential Presentation
+      if (payload[JWT_VP_PROPS.iss]) {
+        this.properties.set(
+          JWT_VP_PROPS.iss,
+          payload[JWT_VP_PROPS.iss]
+        )
+      }
+
+      if (originalString) {
+        this.properties.set(
+          JWT_VC_PROPS.jti,
+          originalString
+        )
+      }
+
+      if (payload[JWT_VP_PROPS.aud]) {
+        this.properties.set(
+          JWT_VP_PROPS.aud,
+          payload[JWT_VP_PROPS.aud]
+        )
+      }
+
+      if (payload[JWT_VP_PROPS.nbf]) {
+        this.properties.set(
+          JWT_VP_PROPS.nbf,
+          payload[JWT_VP_PROPS.nbf]
+        )
+      }
+
+      if (payload[JWT_VP_PROPS.exp]) {
+        this.properties.set(
+          JWT_VP_PROPS.exp,
+          payload[JWT_VP_PROPS.exp]
+        )
+      }
+
+      if (payload[JWT_VP_PROPS.nonce]) {
+        this.properties.set(
+          JWT_VP_PROPS.nonce,
+          payload[JWT_VP_PROPS.nonce]
+        )
+      }
+
+      if (payload[JWT_VP_PROPS.nbf]) {
+        this.properties.set(
+          JWT_VP_PROPS.nbf,
+          payload[JWT_VP_PROPS.nbf]
+        )
+      }
+
+      if (payload[JWT_VP_PROPS.vp]) {
+        this.properties.set(
+          JWT_VP_PROPS.vp,
+          payload[JWT_VP_PROPS.vp]
+        )
+      }
     }
   }
 
-  // TODO - Types and validation
-  static fromJWT(jwtObj: any, jwtString: string, isRevoked = false) {
-    return new JWTCredential(
-      jwtObj.iss,
-      jwtObj.vc,
-      jwtString,
-      jwtObj.nbf,
-      jwtObj.sub,
-      jwtObj.exp,
-      jwtObj.aud,
-      jwtString,
-      isRevoked
-    );
+  static fromJWS(jws: string, revoked?: boolean): JWTCredential {
+    return new JWTCredential(jws, revoked)
+  }
+
+  private isCredentialPayload(payload: any): payload is JWTCredentialPayload {
+    const hasJWTCredentialRequiredProperties = typeof payload.vc !== 'undefined';
+
+    if (hasJWTCredentialRequiredProperties) {
+
+      if (typeof payload[JWTVerifiableCredentialProperties.iss] !== 'undefined' &&
+        typeof payload[JWTVerifiableCredentialProperties.iss] !== 'string') {
+        throw new InvalidCredentialError("Invalid iss in credential payload should be string");
+      }
+
+      if (typeof payload[JWTVerifiableCredentialProperties.nbf] !== 'undefined' &&
+        typeof payload[JWTVerifiableCredentialProperties.nbf] !== 'number') {
+        throw new InvalidCredentialError("Invalid nbf in credential payload should be number");
+      }
+
+      if (typeof payload[JWTVerifiableCredentialProperties.exp] !== 'undefined' &&
+        typeof payload[JWTVerifiableCredentialProperties.exp] !== 'number') {
+        throw new InvalidCredentialError("Invalid exp in credential payload should be number");
+      }
+
+      if (typeof payload[JWTVerifiableCredentialProperties.sub] !== 'undefined' &&
+        typeof payload[JWTVerifiableCredentialProperties.sub] !== 'string') {
+        throw new InvalidCredentialError("Invalid sub in credential payload should be string");
+      }
+
+
+      if (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'undefined' &&
+        (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'string' &&
+          !Array.isArray(payload[JWTVerifiableCredentialProperties.aud]))) {
+        throw new InvalidCredentialError("Invalid aud in credential payload should be string");
+      }
+
+
+      if (typeof payload[JWTVerifiableCredentialProperties.revoked] !== 'undefined' &&
+        typeof payload[JWTVerifiableCredentialProperties.revoked] !== 'boolean') {
+        throw new InvalidCredentialError("Invalid revoked in credential payload should be boolean");
+      }
+
+      //TODO: Improve validation of VC
+      if (typeof payload[JWTVerifiableCredentialProperties.vc] !== 'undefined' &&
+        typeof payload[JWTVerifiableCredentialProperties.vc] !== 'object') {
+        throw new InvalidCredentialError("Invalid vc in credential payload should be an object");
+      }
+
+    } else {
+      if (typeof payload[JWTVerifiablePresentationProperties.iss] !== 'undefined' &&
+        typeof payload[JWTVerifiablePresentationProperties.iss] !== 'string') {
+        throw new InvalidCredentialError("Invalid iss in presentation payload should be string");
+      }
+
+      if (typeof payload[JWTVerifiablePresentationProperties.aud] !== 'undefined' &&
+        (typeof payload[JWTVerifiablePresentationProperties.aud] !== 'string' &&
+          !Array.isArray(payload[JWTVerifiablePresentationProperties.aud]))) {
+        throw new InvalidCredentialError("Invalid aud in presentation payload should be string");
+      }
+
+      if (typeof payload[JWTVerifiablePresentationProperties.nonce] !== 'undefined' &&
+        typeof payload[JWTVerifiablePresentationProperties.nonce] !== 'string') {
+        throw new InvalidCredentialError("Invalid nonce in presentation payload should be string");
+      }
+
+      if (typeof payload[JWTVerifiablePresentationProperties.nbf] !== 'undefined' &&
+        typeof payload[JWTVerifiablePresentationProperties.nbf] !== 'number') {
+        throw new InvalidCredentialError("Invalid nbf in presentation payload should be number");
+      }
+
+      if (typeof payload[JWTVerifiablePresentationProperties.exp] !== 'undefined' &&
+        typeof payload[JWTVerifiablePresentationProperties.exp] !== 'number') {
+        throw new InvalidCredentialError("Invalid exp in presentation payload should be number");
+      }
+
+      //TODO: Improve validation of VP
+      if (typeof payload[JWTVerifiablePresentationProperties.vp] !== 'undefined' &&
+        typeof payload[JWTVerifiablePresentationProperties.vp] !== 'object') {
+        throw new InvalidCredentialError("Invalid vp in presentation payload should be an object");
+      }
+
+    }
+
+    return payload.vc !== undefined;
+  }
+
+  get isCredential() {
+    return this.isCredentialPayload(Object.fromEntries(this.properties))
   }
 
   get id() {
-    return this.jti;
+    if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      return this.properties.get(JWT_VC_PROPS.jti);
+    } else {
+      return this.properties.get(JWT_VP_PROPS.jti);
+    }
   }
 
-  get vc() {
-    return this.properties.get(JWTVerifiableCredentialProperties.vc);
+  get vc(): W3CVerifiableCredential | undefined {
+    if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      return this.properties.get(JWT_VC_PROPS.vc);
+    } else {
+      return undefined;
+    }
   }
 
-  get claims() {
-    return [this.credentialSubject];
+  get vp(): W3CVerifiablePresentation | undefined {
+    if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      return undefined;
+    } else {
+      return this.properties.get(JWT_VP_PROPS.vp);
+    }
+  }
+
+  get claims(): Record<string, any>[] {
+    if (this.credentialSubject) {
+      return [
+        this.credentialSubject
+      ];
+    }
+    return []
   }
 
   get context() {
-    return this.vc.context;
+    return this.vc?.["@context"] ?? this.vp?.["@context"];
   }
 
   get credentialSchema() {
-    return this.vc.credentialSchema;
+    return this.vc?.credentialSchema;
   }
 
   get credentialStatus() {
-    return this.vc.credentialStatus;
+    return this.vc?.credentialStatus;
   }
 
   get credentialSubject() {
-    return this.vc.credentialSubject;
+    return this.vc?.credentialSubject;
   }
 
   get evidence() {
-    return this.vc.evidence;
+    return this.vc?.evidence;
   }
 
   get expirationDate() {
-    return this.exp ? new Date(this.exp).toISOString() : undefined;
+    const exp = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
+      this.properties.get(JWT_VC_PROPS.exp) :
+      this.properties.get(JWT_VP_PROPS.exp);
+    return exp ? new Date(exp).toISOString() : undefined;
   }
 
   get issuanceDate() {
-    return new Date(this.nbf).toISOString();
+    const nbf = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
+      this.properties.get(JWT_VC_PROPS.nbf) :
+      this.properties.get(JWT_VP_PROPS.nbf);
+    return new Date(nbf).toISOString();
+  }
+
+  get audience() {
+    const aud = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
+      this.properties.get(JWT_VC_PROPS.aud) :
+      this.properties.get(JWT_VP_PROPS.aud);
+    return aud
   }
 
   get issuer() {
-    return this.properties.get(JWTVerifiableCredentialProperties.iss);
+    const iss = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
+      this.properties.get(JWT_VC_PROPS.iss) :
+      this.properties.get(JWT_VP_PROPS.iss);
+    return iss;
   }
 
   get refreshService() {
-    return this.vc.refreshService;
+    return this.vc?.refreshService;
   }
 
-  get subject() {
-    return this.properties.get(JWTVerifiableCredentialProperties.sub);
+  get subject(): string {
+    if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      return this.properties.get(JWT_VC_PROPS.sub);
+    } else {
+      throw new InvalidCredentialError("Subject is only available in a VC")
+    }
   }
 
-  get revoked() {
-    return this.properties.get(JWTVerifiableCredentialProperties.revoked);
+  get revoked(): boolean | undefined {
+    if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      return this.properties.get(JWT_VC_PROPS.revoked);
+    } else {
+      return undefined;
+    }
   }
 
   get termsOfUse() {
-    return this.vc.termsOfUse;
+    return this.vc?.termsOfUse;
   }
 
   get type() {
-    return this.vc.type;
+    return this.vc?.type ?? this.vp?.type;
   }
 
-  presentation() {
-    // TODO - Type information
+  presentation(): W3CVerifiablePresentation {
+    if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      throw new InvalidCredentialError("Invalid payload is not VC")
+    }
     return {
-      "@context": ["https://www.w3.org/2018/presentations/v1"],
-      type: ["VerifiablePresentation"],
-      verifiableCredential: [this.jti],
+      "@context": [
+        W3CVerifiableCredentialContext.credential
+      ],
+      type: [
+        W3CVerifiableCredentialType.presentation
+      ],
+      verifiableCredential: [
+        this.id
+      ],
+    };
+  }
+
+  verifiableCredential(): W3CVerifiableCredential {
+    if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
+      throw new InvalidCredentialError("Invalid payload is not VC")
+    }
+    return {
+      "@context": [
+        W3CVerifiableCredentialContext.credential
+      ],
+      type: [
+        W3CVerifiableCredentialType.credential
+      ],
+      issuer: this.issuer,
+      issuanceDate: this.issuanceDate,
+      expirationDate: this.expirationDate,
+      credentialSubject: this.credentialSubject ?? {},
     };
   }
 
   toStorable() {
-    const id = this.jti || this.getProperty(JWTVerifiableCredentialProperties.jti);
+    const id = this.id;
     const data = { id, ...Object.fromEntries(this.properties) };
-
+    const claims = this.claims.map((claim) => typeof claim !== 'string' ? JSON.stringify(claim) : claim)
     return {
       id,
       recoveryId: this.recoveryId,
       credentialData: JSON.stringify(data),
-      issuer: this.getProperty(JWTVerifiableCredentialProperties.iss),
-      subject: this.getProperty(JWTVerifiableCredentialProperties.sub),
-      validUntil: this.getProperty(JWTVerifiableCredentialProperties.exp),
-      availableClaims: this.claims,
+      issuer: this.issuer,
+      subject: this.properties.get(JWT_VC_PROPS.sub),
+      validUntil: this.isCredentialPayload(Object.fromEntries(this.properties)) ?
+        this.getProperty(JWT_VC_PROPS.exp) :
+        this.getProperty(JWT_VP_PROPS.exp),
+      availableClaims: claims,
+      revoked: this.revoked
     };
   }
 }
+

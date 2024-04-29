@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Mercury
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Mercury
 
 # Interface: Mercury
 
@@ -27,7 +27,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](../classes/Domain.Message.md) |
+| `message` | [`Message`](../classes/Domain.Message-1.md) |
 
 #### Returns
 
@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Mercury.ts#L4)
+[src/domain/buildingBlocks/Mercury.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Mercury.ts#L4)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](../classes/Domain.Message.md) |
+| `message` | [`Message`](../classes/Domain.Message-1.md) |
 
 #### Returns
 
@@ -55,33 +55,33 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Mercury.ts#L6)
+[src/domain/buildingBlocks/Mercury.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Mercury.ts#L6)
 
 ___
 
 ### sendMessageParseMessage
 
-▸ **sendMessageParseMessage**(`message`): `Promise`\<`undefined` \| [`Message`](../classes/Domain.Message.md)\>
+▸ **sendMessageParseMessage**(`message`): `Promise`\<`undefined` \| [`Message`](../classes/Domain.Message-1.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](../classes/Domain.Message.md) |
+| `message` | [`Message`](../classes/Domain.Message-1.md) |
 
 #### Returns
 
-`Promise`\<`undefined` \| [`Message`](../classes/Domain.Message.md)\>
+`Promise`\<`undefined` \| [`Message`](../classes/Domain.Message-1.md)\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Mercury.ts#L7)
+[src/domain/buildingBlocks/Mercury.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Mercury.ts#L7)
 
 ___
 
 ### unpackMessage
 
-▸ **unpackMessage**(`message`): `Promise`\<[`Message`](../classes/Domain.Message.md)\>
+▸ **unpackMessage**(`message`): `Promise`\<[`Message`](../classes/Domain.Message-1.md)\>
 
 #### Parameters
 
@@ -91,8 +91,8 @@ ___
 
 #### Returns
 
-`Promise`\<[`Message`](../classes/Domain.Message.md)\>
+`Promise`\<[`Message`](../classes/Domain.Message-1.md)\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/domain/buildingBlocks/Mercury.ts#L5)
+[src/domain/buildingBlocks/Mercury.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Mercury.ts#L5)

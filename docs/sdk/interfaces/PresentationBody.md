@@ -1,4 +1,4 @@
-[@input-output-hk/atala-prism-wallet-sdk](../README.md) / [Exports](../modules.md) / PresentationBody
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / PresentationBody
 
 # Interface: PresentationBody
 
@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/types.ts#L61)
+[src/prism-agent/protocols/types.ts:67](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L67)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/3f28060/src/prism-agent/protocols/types.ts#L60)
+[src/prism-agent/protocols/types.ts:66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L66)
