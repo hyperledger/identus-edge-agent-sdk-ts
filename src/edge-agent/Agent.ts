@@ -32,7 +32,6 @@ import { RequestPresentation } from "./protocols/proofPresentation/RequestPresen
 import { DIDCommWrapper } from "../mercury/didcomm/Wrapper";
 import { PublicMediatorStore } from "./mediator/PlutoMediatorStore";
 import { BasicMediatorHandler } from "./mediator/BasicMediatorHandler";
-import { ProofTypes } from "./protocols/types";
 
 enum AgentState {
   STOPPED = "stopped",

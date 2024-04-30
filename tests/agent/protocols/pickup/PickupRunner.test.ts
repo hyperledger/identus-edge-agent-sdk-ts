@@ -11,7 +11,7 @@ import {
   AttachmentDescriptor,
   Message,
 } from "../../../../src/domain";
-import { PickupRunner } from "../../../../src/prism-agent/protocols/pickup/PickupRunner";
+import { PickupRunner } from "../../../../src/edge-agent/protocols/pickup/PickupRunner";
 
 chai.use(chaiAsPromised);
 

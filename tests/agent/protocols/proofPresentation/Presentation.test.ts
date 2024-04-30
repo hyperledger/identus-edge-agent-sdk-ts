@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { Message } from "../../../../src/domain";
 import { AgentError } from "../../../../src/domain/models/Errors";
-import { ProtocolHelpers } from "../../../../src/prism-agent/helpers/ProtocolHelpers";
-import { Presentation } from "../../../../src/prism-agent/protocols/proofPresentation/Presentation";
-import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
-import { PresentationBody } from "../../../../src/prism-agent/protocols/types";
+import { ProtocolHelpers } from "../../../../src/edge-agent/helpers/ProtocolHelpers";
+import { Presentation } from "../../../../src/edge-agent/protocols/proofPresentation/Presentation";
+import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
+import { PresentationBody } from "../../../../src/edge-agent/protocols/types";
 import { DIDTest } from "../../helpers/DID";
 
 describe("ProofPresentation->Presentation Tests", () => {

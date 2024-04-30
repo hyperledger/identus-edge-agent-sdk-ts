@@ -1,6 +1,6 @@
 import { Anoncreds, AttachmentDescriptor, LinkSecret } from "../../../src/domain";
-import { ProtocolType } from "../../../src/prism-agent/protocols/ProtocolTypes";
-import { OfferCredential } from "../../../src/prism-agent/protocols/issueCredential/OfferCredential";
+import { ProtocolType } from "../../../src/edge-agent/protocols/ProtocolTypes";
+import { OfferCredential } from "../../../src/edge-agent/protocols/issueCredential/OfferCredential";
 import { list } from "../dids";
 
 export const linkSecret = new LinkSecret("11713282333014162675185775227133916651856831195832037281552411830422122210216");
