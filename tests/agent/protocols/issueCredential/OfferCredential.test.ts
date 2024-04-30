@@ -4,8 +4,8 @@ import { AgentError } from "../../../../src/domain/models/Errors";
 import {
   createOfferCredentialBody,
   OfferCredential,
-} from "../../../../src/prism-agent/protocols/issueCredential/OfferCredential";
-import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
+} from "../../../../src/edge-agent/protocols/issueCredential/OfferCredential";
+import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
 
 describe("OfferCredential", () => {

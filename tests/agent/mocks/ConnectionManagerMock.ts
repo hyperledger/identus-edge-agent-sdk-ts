@@ -4,14 +4,14 @@ import {
   ConnectionsManager as ConnectionsManagerClass,
   EventCallback,
   MediatorHandler,
-} from "../../../src/prism-agent/types";
+} from "../../../src/edge-agent/types";
 import { Castor } from "../../../src/domain/buildingBlocks/Castor";
 import { Mercury } from "../../../src/domain/buildingBlocks/Mercury";
 import { Pluto } from "../../../src/domain/buildingBlocks/Pluto";
 import { DIDPair } from "../../../src/domain/models/DIDPair";
-import { CancellableTask } from "../../../src/prism-agent/helpers/Task";
+import { CancellableTask } from "../../../src/edge-agent/helpers/Task";
 import { DID, Mediator, Message, Pollux } from "../../../src/domain";
-import { AgentMessageEvents } from "../../../src/prism-agent/Agent.MessageEvents";
+import { AgentMessageEvents } from "../../../src/edge-agent/Agent.MessageEvents";
 import { ConnectionsManager } from "../../../src";
 
 

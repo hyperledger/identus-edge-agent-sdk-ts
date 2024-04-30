@@ -6,17 +6,17 @@ export * as Domain from "./domain";
 export { default as Mercury } from "./mercury/Mercury";
 export * from "./pluto";
 export { default as Pollux } from "./pollux/Pollux";
-export { default as Agent } from "./prism-agent/Agent";
-export * from "./prism-agent/protocols/other/BasicMessage";
-export { IssueCredential } from "./prism-agent/protocols/issueCredential/IssueCredential";
-export { OfferCredential } from "./prism-agent/protocols/issueCredential/OfferCredential";
-export * from "./prism-agent/protocols/proofPresentation";
-export * from "./prism-agent/connectionsManager/ConnectionsManager";
-export * from "./prism-agent/mediator/BasicMediatorHandler";
-export * from "./prism-agent/mediator/PlutoMediatorStore";
+export { default as Agent } from "./edge-agent/Agent";
+export * from "./edge-agent/protocols/other/BasicMessage";
+export { IssueCredential } from "./edge-agent/protocols/issueCredential/IssueCredential";
+export { OfferCredential } from "./edge-agent/protocols/issueCredential/OfferCredential";
+export * from "./edge-agent/protocols/proofPresentation";
+export * from "./edge-agent/connectionsManager/ConnectionsManager";
+export * from "./edge-agent/mediator/BasicMediatorHandler";
+export * from "./edge-agent/mediator/PlutoMediatorStore";
 export * from "./mercury/didcomm/Wrapper";
-export * from "./prism-agent/helpers/ApiImpl";
-export { ListenerKey } from "./prism-agent/types";
+export * from "./edge-agent/helpers/ApiImpl";
+export { ListenerKey } from "./edge-agent/types";
 export * from './peer-did/PeerDID';
 export type {
   MediatorHandler,
@@ -26,9 +26,9 @@ export type {
   AgentInvitations,
   AgentDIDHigherFunctions,
   AgentMessageEvents,
-} from "./prism-agent/types";
+} from "./edge-agent/types";
 export type { DIDCommProtocol } from "./mercury/DIDCommProtocol";
-export * from "./prism-agent/protocols/types";
+export * from "./edge-agent/protocols/types";
 export * from "./apollo/utils/Secp256k1PrivateKey";
 export * from "./apollo/utils/Secp256k1PublicKey";
 export * from "./apollo/utils/Secp256k1KeyPair";

@@ -14,7 +14,7 @@ import { DIDCommSecretsResolver } from "./SecretsResolver";
 import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
-import { ProtocolType } from "../../prism-agent/protocols/ProtocolTypes";
+import { ProtocolType } from "../../edge-agent/protocols/ProtocolTypes";
 
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm-node");

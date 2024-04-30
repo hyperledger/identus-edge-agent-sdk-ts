@@ -7,8 +7,8 @@ import SinonChai from "sinon-chai";
 import { Apollo, BasicMediatorHandler, Castor, ConnectionsManager, MediatorStore, Pluto } from "../../src";
 import { Curve, KeyTypes, Mercury, Service, ServiceEndpoint } from "../../src/domain";
 import { MercuryStub } from "./mocks/MercuryMock";
-import { AgentCredentials } from "../../src/prism-agent/Agent.Credentials";
-import { AgentOptions } from "../../src/prism-agent/types";
+import { AgentCredentials } from "../../src/edge-agent/Agent.Credentials";
+import { AgentOptions } from "../../src/edge-agent/types";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -87,8 +87,8 @@ describe("ConnectionsManager tests", () => {
                 new ServiceEndpoint("ws://localhost:12346")
             )
         ];
-        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
-        const BasicMediatorHandler = jest.requireActual('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        const ConnectionsManager = jest.requireActual('../../src/edge-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireActual('../../src/edge-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         jest.mock('isows', () => ({
             WebSocket: jest.fn(() => ({
                 addEventListener: jest.fn(),
@@ -123,8 +123,8 @@ describe("ConnectionsManager tests", () => {
                 new ServiceEndpoint("ws://localhost:12346")
             )
         ];
-        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
-        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        const ConnectionsManager = jest.requireActual('../../src/edge-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/edge-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         jest.mock('isows', () => ({
             WebSocket: jest.fn(() => ({
                 addEventListener: jest.fn(),
@@ -154,8 +154,8 @@ describe("ConnectionsManager tests", () => {
                 new ServiceEndpoint("ws://localhost:12346")
             )
         ];
-        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
-        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        const ConnectionsManager = jest.requireActual('../../src/edge-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/edge-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         jest.mock('isows', () => ({
             WebSocket: jest.fn(() => ({
                 addEventListener: jest.fn(),
@@ -190,8 +190,8 @@ describe("ConnectionsManager tests", () => {
                 new ServiceEndpoint("ws://localhost:12346")
             )
         ];
-        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
-        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        const ConnectionsManager = jest.requireActual('../../src/edge-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/edge-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         jest.mock('isows', () => ({
             WebSocket: jest.fn(() => ({
                 addEventListener: jest.fn(),
@@ -226,8 +226,8 @@ describe("ConnectionsManager tests", () => {
                 new ServiceEndpoint("http://localhost:12346")
             )
         ];
-        const ConnectionsManager = jest.requireActual('../../src/prism-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
-        const BasicMediatorHandler = jest.requireMock('../../src/prism-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
+        const ConnectionsManager = jest.requireActual('../../src/edge-agent/connectionsManager/ConnectionsManager').ConnectionsManager;
+        const BasicMediatorHandler = jest.requireMock('../../src/edge-agent/mediator/BasicMediatorHandler').BasicMediatorHandler;
         jest.mock('isows', () => ({
             WebSocket: jest.fn(() => ({
                 addEventListener: jest.fn(),
