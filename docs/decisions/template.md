@@ -1,6 +1,6 @@
 # [short title of solved problem and solution]
 
-- Status: [ accepted | deprecated | superseded by [xxx](yyyymmdd-xxx.md)] <!-- optional -->
+- Status: [ accepted | deprecated | superseded by ] <!-- [xxx](#yyyymmdd-xxx.md) optional -->
 - Deciders: [list everyone involved in the decision] <!-- optional -->
 - Date: [YYYY-MM-DD when the decision was last updated] <!-- optional. To customize the ordering without relying on Git creation dates and filenames -->
 - Tags: [space and/or comma separated list of tags] <!-- optional -->
