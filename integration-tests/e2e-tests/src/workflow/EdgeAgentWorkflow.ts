@@ -1,6 +1,6 @@
 import SDK from "@atala/prism-wallet-sdk"
 import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
-import { equals } from "@serenity-js/assertions"
+import { Ensure, equals, isGreaterThan } from "@serenity-js/assertions"
 import { WalletSdk } from "../abilities/WalletSdk"
 import { Utils } from "../Utils"
 
@@ -90,6 +90,24 @@ export class EdgeAgentWorkflow {
         }
       }
       )
+    )
+  }
+
+  static async waitUntilCredentialIsRevoked(edgeAgent: Actor) {
+    await edgeAgent.attemptsTo(
+      Wait.upTo(Duration.ofMinutes(2)).until(
+        WalletSdk.revocationStackSize(),
+        isGreaterThan(0)
+      )
+    )
+    await edgeAgent.attemptsTo(
+      WalletSdk.execute(async (sdk, messages) => {
+        const credentials = await sdk.verifiableCredentials()
+        const credential = credentials[0]
+        await edgeAgent.attemptsTo(
+          Ensure.that(credential.isRevoked(), equals(true))
+        )
+      })
     )
   }
 }

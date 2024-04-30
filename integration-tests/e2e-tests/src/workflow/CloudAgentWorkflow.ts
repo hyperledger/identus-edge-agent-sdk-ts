@@ -1,5 +1,5 @@
-import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
-import { LastResponse, PostRequest, Send } from "@serenity-js/rest"
+import { Actor, Duration, Interaction, Notepad, Wait } from "@serenity-js/core"
+import { GetRequest, LastResponse, PatchRequest, PostRequest, Send } from "@serenity-js/rest"
 import { Ensure, equals } from "@serenity-js/assertions"
 import { HttpStatusCode } from "axios"
 import { Expectations } from "../screenplay/Expectations"
@@ -92,7 +92,10 @@ export class CloudAgentWorkflow {
     )
     await cloudAgent.attemptsTo(
       Notepad.notes().set("recordId", LastResponse.body().recordId)
-    )
+    ),
+    Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+    Notepad.notes().set("recordId", LastResponse.body().recordId), //Todor: Are we sure this notepad instance is the same as in EdgeAgent?
+    Notepad.notes().set("revocationRecordId", LastResponse.body().recordId) //...
   }
 
   static async offerAnonymousCredential(cloudAgent: Actor) {
@@ -181,6 +184,28 @@ export class CloudAgentWorkflow {
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("present-proof/presentations").with(presentationRequest)),
       Notepad.notes().set("presentationId", LastResponse.body().presentationId)
+    )
+  }
+
+  static async revokeCredential(cloudAgent: Actor) {
+
+    await cloudAgent.attemptsTo(
+
+      Interaction.where("#actor logs the last response body for revocation", async actor => {
+        await cloudAgent.attemptsTo(
+          Send.a(
+            GetRequest.to("issue-credentials/records")
+          )
+        )
+        const body = await actor.answer(LastResponse.body())
+        const records = body.contents;
+
+        for (let record of records) { //Todor: Not sure why we are revoking all creds from the begining of time?
+          await cloudAgent.attemptsTo(
+            Send.a(PatchRequest.to(`credential-status/revoke-credential/${record.recordId}`)),
+          );
+        }
+      }),
     )
   }
 }

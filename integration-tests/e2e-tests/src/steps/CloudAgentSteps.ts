@@ -38,6 +38,10 @@ When("{actor} asks for presentation of AnonCred proof", async function (cloudAge
   await CloudAgentWorkflow.askForPresentProofAnonCreds(cloudAgent)
 })
 
+When("{actor} revokes the credential", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.revokeCredential(cloudAgent)
+})
+
 Then("{actor} should have the connection status updated to '{}'", async (cloudAgent: Actor, expectedStatus: string) => {
   await CloudAgentWorkflow.waitForConnectionState(cloudAgent, expectedStatus)
 })
