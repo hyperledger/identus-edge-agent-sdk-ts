@@ -393,10 +393,10 @@ describe("Pollux", () => {
             credential.credentialSubject
           );
           expect(jwtCred.expirationDate).to.be.equal(
-            new Date(jwtPayload[JWTVerifiableCredentialProperties.exp]).toISOString()
+            new Date(jwtPayload[JWTVerifiableCredentialProperties.exp] * 1000).toISOString()
           );
           expect(jwtCred.issuanceDate).to.be.equal(
-            new Date(jwtPayload[JWTVerifiableCredentialProperties.nbf]).toISOString()
+            new Date(jwtPayload[JWTVerifiableCredentialProperties.nbf] * 1000).toISOString()
           );
 
           expect(jwtCred.type).to.be.deep.equal(credential.type);
@@ -428,8 +428,8 @@ describe("Pollux", () => {
           }
         ) as JWTCredential;
 
-        const issuanceDate = new Date(nbf).toISOString();
-        const expirationDate = new Date(exp).toISOString();
+        const issuanceDate = new Date(nbf * 1000).toISOString();
+        const expirationDate = new Date(exp * 1000).toISOString();
 
         expect(result.issuanceDate).to.equal(issuanceDate);
         expect(result.expirationDate).to.equal(expirationDate);
