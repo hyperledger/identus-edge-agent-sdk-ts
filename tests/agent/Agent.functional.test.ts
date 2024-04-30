@@ -5,7 +5,7 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import Agent from "../../src/prism-agent/Agent";
+import Agent from "../../src/edge-agent/Agent";
 import { Pluto } from "../../src";
 import { mockPluto } from "../fixtures/inmemory/factory";
 import * as Fixtures from "../fixtures";

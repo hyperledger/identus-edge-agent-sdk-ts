@@ -4,9 +4,9 @@ import { AgentError } from "../../../../src/domain/models/Errors";
 import {
   createIssueCredentialBody,
   IssueCredential,
-} from "../../../../src/prism-agent/protocols/issueCredential/IssueCredential";
-import { RequestCredential } from "../../../../src/prism-agent/protocols/issueCredential/RequestCredential";
-import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
+} from "../../../../src/edge-agent/protocols/issueCredential/IssueCredential";
+import { RequestCredential } from "../../../../src/edge-agent/protocols/issueCredential/RequestCredential";
+import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
 
 describe("IssueCredential", () => {
