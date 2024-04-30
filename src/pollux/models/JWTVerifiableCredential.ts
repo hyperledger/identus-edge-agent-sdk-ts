@@ -320,14 +320,14 @@ export class JWTCredential
     const exp = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
       this.properties.get(JWT_VC_PROPS.exp) :
       this.properties.get(JWT_VP_PROPS.exp);
-    return exp ? new Date(exp).toISOString() : undefined;
+    return exp ? new Date(exp * 1000).toISOString() : undefined;
   }
 
   get issuanceDate() {
     const nbf = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
       this.properties.get(JWT_VC_PROPS.nbf) :
       this.properties.get(JWT_VP_PROPS.nbf);
-    return new Date(nbf).toISOString();
+    return new Date(nbf * 1000).toISOString();
   }
 
   get audience() {
