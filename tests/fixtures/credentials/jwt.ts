@@ -1,6 +1,6 @@
 import Apollo from "../../../src/apollo";
 import { AttachmentDescriptor, JWTCredentialPayload, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
-import { OfferCredential } from "../../../src/prism-agent/protocols/issueCredential/OfferCredential";
+import { OfferCredential } from "../../../src/edge-agent/protocols/issueCredential/OfferCredential";
 import { list } from "../dids";
 
 const apollo = new Apollo();

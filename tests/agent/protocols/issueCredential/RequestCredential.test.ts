@@ -5,7 +5,7 @@ import { AgentError } from "../../../../src/domain/models/Errors";
 import {
   createRequestCredentialBody,
   RequestCredential,
-} from "../../../../src/prism-agent/protocols/issueCredential/RequestCredential";
+} from "../../../../src/edge-agent/protocols/issueCredential/RequestCredential";
 import { DIDTest } from "../../helpers/DID";
 
 describe("RequestCredential", () => {

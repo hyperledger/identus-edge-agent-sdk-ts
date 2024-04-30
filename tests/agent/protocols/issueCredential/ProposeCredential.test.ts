@@ -5,8 +5,8 @@ import { AgentError } from "../../../../src/domain/models/Errors";
 import {
   createProposeCredentialBody,
   ProposeCredential,
-} from "../../../../src/prism-agent/protocols/issueCredential/ProposeCredential";
-import { ProtocolType } from "../../../../src/prism-agent/protocols/ProtocolTypes";
+} from "../../../../src/edge-agent/protocols/issueCredential/ProposeCredential";
+import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
 
 describe("ProposeCredential", () => {
