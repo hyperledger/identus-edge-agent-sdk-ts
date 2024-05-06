@@ -2,6 +2,11 @@ import { appendFile, writeFileSync } from "fs"
 import crypto from "crypto"
 
 export class Utils {
+  static async asyncFilter<T>(arr: T[], predicate: (value: T, index: number, array: T[]) => Promise<boolean>) {
+    const results = await Promise.all(arr.map(predicate))
+    return arr.filter((_v, index) => results[index])
+  }
+
   static prepareNotes() {
     writeFileSync("notes", "### End-to-end notes:\n\n")
   }
