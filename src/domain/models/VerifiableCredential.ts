@@ -21,12 +21,14 @@ export enum DescriptorItemFormat {
 }
 
 export enum W3CVerifiableCredentialContext {
-  credential = "https://www.w3.org/2018/credentials/v1"
+  credential = "https://www.w3.org/2018/credentials/v1",
+  revocation = "https://w3id.org/vc/status-list/2021/v1"
 }
 
 export enum W3CVerifiableCredentialType {
   presentation = "VerifiablePresentation",
-  credential = "VerifiableCredential"
+  credential = "VerifiableCredential",
+  revocation = "StatusList2021Credential"
 }
 
 export enum SDJWTVerifiableCredentialProperties {
@@ -259,9 +261,57 @@ export type W3CVerifiableCredential = {
     id: string,
     type: string
   },
-  credentialStatus?: {
+  credentialStatus?: JWTRevocationStatus | unknown
+}
+
+export interface W3CVerifiableCredentialData {
+  id: string,
+  type: string
+}
+
+
+export enum JWTRevocationStatusPurpose {
+  Revocation = "Revocation",
+  Suspension = 'Suspension'
+}
+
+export enum RevocationType {
+  StatusList2021Entry = 'StatusList2021Entry'
+}
+
+export interface JWTRevocationStatus extends W3CVerifiableCredentialData {
+  statusPurpose: JWTRevocationStatusPurpose,
+  statusListIndex: number,
+  id: string,
+  type: RevocationType,
+  statusListCredential: string
+}
+
+export interface JWTStatusListResponse {
+  "@context": [
+    W3CVerifiableCredentialContext.credential,
+    W3CVerifiableCredentialContext.revocation
+  ],
+  type: [
+    W3CVerifiableCredentialType.credential,
+    W3CVerifiableCredentialType.revocation
+  ],
+  issuer: string,
+  id: string,
+  issuanceDate: string,
+  credentialSubject: {
     id: string,
-    type: string
+    type: string,
+    statusPurpose: string,
+    encodedList: string
+  },
+  proof: {
+    type: string,
+    proofPurpose: string,
+    verificationMethod: string,
+    created: string,
+    proofValue: string,
+    cryptoSuite: string
   }
 }
 

@@ -16,6 +16,12 @@ export class InvalidPresentationProofArgs extends Error {
     }
 }
 
+export class CredentialRevocationTypeInvalid extends Error {
+    constructor(message?: string) {
+        super(message || "CredentialStatus revocation type not supported");
+    }
+}
+
 export class CredentialTypeNotSupported extends Error {
     constructor(message?: string) {
         super(message || "Credential type not supported");

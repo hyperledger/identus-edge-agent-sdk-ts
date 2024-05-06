@@ -4,6 +4,7 @@ import type * as Anoncreds from "anoncreds-browser";
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { CredentialOfferPayloads, CredentialOfferTypes, Pollux as IPollux, ProcessedCredentialOfferPayloads } from "../domain/buildingBlocks/Pollux";
 import { AnoncredsLoader } from "./AnoncredsLoader";
+import pako from 'pako';
 
 import {
   CredentialRequestOptions,
@@ -34,6 +35,10 @@ import {
   JWTPresentationSubmission,
   AnoncredsPresentationSubmission,
   Apollo,
+  PresentationOptions,
+  JWTRevocationStatus,
+  RevocationType,
+  JWTStatusListResponse,
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
@@ -45,6 +50,7 @@ import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domai
 import { isPresentationDefinitionRequestType, parsePresentationSubmission, validatePresentationClaims } from "./utils/claims";
 import { SDJWT as SDJWTClass } from "./utils/SDJWT";
 import { SDJWTCredential } from "./models/SDJWTVerifiableCredential";
+import { HttpStatusCode } from "axios";
 
 /**
  * Implementation of Pollux
@@ -132,6 +138,43 @@ export default class Pollux implements IPollux {
     }
   }
 
+  extractVerificationStatus(credentialStatus: any): credentialStatus is JWTRevocationStatus {
+    const type = credentialStatus.type;
+    if (typeof type === "string" && credentialStatus.type === RevocationType.StatusList2021Entry) {
+      return true;
+    }
+    return false;
+  }
+
+  extractEncodedList(body: JWTStatusListResponse): Uint8Array {
+    const encodedList = Buffer.from(body.credentialSubject.encodedList, 'base64');
+    return pako.ungzip(encodedList);
+  }
+
+  async isCredentialRevoked(credential: Credential): Promise<boolean> {
+    if (credential instanceof JWTCredential) {
+      if (!this.extractVerificationStatus(credential.credentialStatus)) {
+        throw new PolluxError.CredentialRevocationTypeInvalid()
+      }
+      const revocationStatus = credential.credentialStatus;
+      const response = await this.api.request<JWTStatusListResponse>(
+        "GET",
+        revocationStatus.statusListCredential,
+        new Map(),
+        new Map(),
+        null
+      )
+      if (response.httpStatus !== HttpStatusCode.Ok) {
+        throw new PolluxError.CredentialRevocationTypeInvalid()
+      }
+      const list = this.extractEncodedList(response.body);
+      if (list[revocationStatus.statusListIndex] === 1) {
+        return true;
+      }
+      return false
+    }
+    throw new PolluxError.CredentialTypeNotSupported()
+  }
 
 
   private isPresentationDefinitionRequestType
