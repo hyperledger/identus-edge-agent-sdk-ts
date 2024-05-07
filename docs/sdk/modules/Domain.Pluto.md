@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L23)
+[src/domain/buildingBlocks/Pluto.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L23)

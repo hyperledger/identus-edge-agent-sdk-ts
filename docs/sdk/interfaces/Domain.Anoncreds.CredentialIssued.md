@@ -32,7 +32,7 @@ Omit.cred\_def\_id
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L61)
+[src/domain/models/Anoncreds.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Anoncreds.ts#L61)
 
 ___
 
@@ -46,7 +46,7 @@ Omit.schema\_id
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L60)
+[src/domain/models/Anoncreds.ts:60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Anoncreds.ts#L60)
 
 ___
 
@@ -60,7 +60,7 @@ Omit.signature
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L62)
+[src/domain/models/Anoncreds.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Anoncreds.ts#L62)
 
 ___
 
@@ -74,7 +74,7 @@ Omit.signature\_correctness\_proof
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L63)
+[src/domain/models/Anoncreds.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Anoncreds.ts#L63)
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/Anoncreds.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Anoncreds.ts#L68)
+[src/domain/models/Anoncreds.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Anoncreds.ts#L68)

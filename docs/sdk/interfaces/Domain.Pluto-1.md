@@ -4,9 +4,9 @@
 
 [Domain](../modules/Domain.md).Pluto
 
-Pluto is a storage interface describing the storage requirements of the Edge Agents 
-implemented in this SDK. Implement this interface using your 
-preferred underlying storage technology most appropriate for your use case.
+Pluto is a storage interface describing storage requirements of the edge agents
+which will be implemented using this SDK. Implement this interface using your
+preferred underlying storage technology, most appropriate for your use case.
 
 ## Implemented by
 
@@ -62,7 +62,7 @@ Delete a previously stored messages
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L158)
+[src/domain/buildingBlocks/Pluto.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L158)
 
 ___
 
@@ -78,7 +78,7 @@ Retrieve all the stored credentials
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:138](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L138)
+[src/domain/buildingBlocks/Pluto.ts:138](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L138)
 
 ___
 
@@ -94,7 +94,7 @@ Retrieve all stored DID pairs (DIDComm connections).
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:108](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L108)
+[src/domain/buildingBlocks/Pluto.ts:108](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L108)
 
 ___
 
@@ -110,7 +110,7 @@ Retrieve all stored mediators.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L133)
+[src/domain/buildingBlocks/Pluto.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L133)
 
 ___
 
@@ -126,7 +126,7 @@ Retrieve all stored DIDComm messages.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:123](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L123)
+[src/domain/buildingBlocks/Pluto.ts:123](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L123)
 
 ___
 
@@ -142,7 +142,7 @@ Retrieve all stored Peer DIDs.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:98](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L98)
+[src/domain/buildingBlocks/Pluto.ts:98](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L98)
 
 ___
 
@@ -158,7 +158,7 @@ Retrieve all stored PRISM DIDs.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L93)
+[src/domain/buildingBlocks/Pluto.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L93)
 
 ___
 
@@ -180,7 +180,7 @@ Fetch the Credential Metadata by its name
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L48)
+[src/domain/buildingBlocks/Pluto.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L48)
 
 ___
 
@@ -202,7 +202,7 @@ Retrieve available private keys for a given DID.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:103](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L103)
+[src/domain/buildingBlocks/Pluto.ts:103](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L103)
 
 ___
 
@@ -224,7 +224,7 @@ Retrieve the stored link secret by its name
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:143](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L143)
+[src/domain/buildingBlocks/Pluto.ts:143](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L143)
 
 ___
 
@@ -246,7 +246,7 @@ Retrieve a DIDComm message by ID.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:128](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L128)
+[src/domain/buildingBlocks/Pluto.ts:128](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L128)
 
 ___
 
@@ -268,7 +268,7 @@ Retrieve a DID pair containing a given DID as either host or receiver.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:113](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L113)
+[src/domain/buildingBlocks/Pluto.ts:113](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L113)
 
 ___
 
@@ -290,7 +290,7 @@ Retrieve a DID pair by a given pair name.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:118](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L118)
+[src/domain/buildingBlocks/Pluto.ts:118](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L118)
 
 ___
 
@@ -312,7 +312,7 @@ Revoke a Credential
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:153](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L153)
+[src/domain/buildingBlocks/Pluto.ts:153](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L153)
 
 ___
 
@@ -320,7 +320,7 @@ ___
 
 ▸ **start**(): `Promise`\<`void`\>
 
-Pluto initialize function
+Pluto initialise function
 
 #### Returns
 
@@ -328,7 +328,7 @@ Pluto initialize function
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:37](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L37)
+[src/domain/buildingBlocks/Pluto.ts:37](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L37)
 
 ___
 
@@ -350,7 +350,7 @@ Store a Credential into the Database
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:88](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L88)
+[src/domain/buildingBlocks/Pluto.ts:88](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L88)
 
 ___
 
@@ -372,7 +372,7 @@ Store the Credential Metadata
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L42)
+[src/domain/buildingBlocks/Pluto.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L42)
 
 ___
 
@@ -396,7 +396,7 @@ Store a named pair of DIDs representing a DIDComm connection.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L63)
+[src/domain/buildingBlocks/Pluto.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L63)
 
 ___
 
@@ -418,7 +418,7 @@ Store a new linkSecret
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:148](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L148)
+[src/domain/buildingBlocks/Pluto.ts:148](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L148)
 
 ___
 
@@ -440,7 +440,7 @@ Store a mediator information.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L83)
+[src/domain/buildingBlocks/Pluto.ts:83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L83)
 
 ___
 
@@ -462,7 +462,7 @@ Store a DIDComm message.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L68)
+[src/domain/buildingBlocks/Pluto.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L68)
 
 ___
 
@@ -484,7 +484,7 @@ Store an array of DIDComm messages
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L73)
+[src/domain/buildingBlocks/Pluto.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L73)
 
 ___
 
@@ -507,7 +507,7 @@ Store a Peer DID and an array of its privateKeys.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L58)
+[src/domain/buildingBlocks/Pluto.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L58)
 
 ___
 
@@ -531,7 +531,7 @@ Store a PRISM DID and its private key with given metadata.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L53)
+[src/domain/buildingBlocks/Pluto.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L53)
 
 ___
 
@@ -553,4 +553,4 @@ Store a list of private keys with its metadata and a reference to the DID it bel
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pluto.ts#L78)
+[src/domain/buildingBlocks/Pluto.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L78)

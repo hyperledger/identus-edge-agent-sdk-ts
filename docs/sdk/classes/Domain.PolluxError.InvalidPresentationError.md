@@ -1,39 +1,39 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [MercuryError](../modules/Domain.MercuryError.md) / NoSenderDIDSetError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidPresentationError
 
-# Class: NoSenderDIDSetError
+# Class: InvalidPresentationError
 
-[Domain](../modules/Domain.md).[MercuryError](../modules/Domain.MercuryError.md).NoSenderDIDSetError
+[Domain](../modules/Domain.md).[PolluxError](../modules/Domain.PolluxError.md).InvalidPresentationError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`NoSenderDIDSetError`**
+  ↳ **`InvalidPresentationError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.MercuryError.NoSenderDIDSetError.md#constructor)
+- [constructor](Domain.PolluxError.InvalidPresentationError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.MercuryError.NoSenderDIDSetError.md#cause)
-- [message](Domain.MercuryError.NoSenderDIDSetError.md#message)
-- [name](Domain.MercuryError.NoSenderDIDSetError.md#name)
-- [stack](Domain.MercuryError.NoSenderDIDSetError.md#stack)
-- [prepareStackTrace](Domain.MercuryError.NoSenderDIDSetError.md#preparestacktrace)
-- [stackTraceLimit](Domain.MercuryError.NoSenderDIDSetError.md#stacktracelimit)
+- [cause](Domain.PolluxError.InvalidPresentationError.md#cause)
+- [message](Domain.PolluxError.InvalidPresentationError.md#message)
+- [name](Domain.PolluxError.InvalidPresentationError.md#name)
+- [stack](Domain.PolluxError.InvalidPresentationError.md#stack)
+- [prepareStackTrace](Domain.PolluxError.InvalidPresentationError.md#preparestacktrace)
+- [stackTraceLimit](Domain.PolluxError.InvalidPresentationError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.MercuryError.NoSenderDIDSetError.md#capturestacktrace)
+- [captureStackTrace](Domain.PolluxError.InvalidPresentationError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new NoSenderDIDSetError**(`message?`): [`NoSenderDIDSetError`](Domain.MercuryError.NoSenderDIDSetError.md)
+• **new InvalidPresentationError**(`message?`): [`InvalidPresentationError`](Domain.PolluxError.InvalidPresentationError.md)
 
 #### Parameters
 
@@ -43,7 +43,7 @@
 
 #### Returns
 
-[`NoSenderDIDSetError`](Domain.MercuryError.NoSenderDIDSetError.md)
+[`InvalidPresentationError`](Domain.PolluxError.InvalidPresentationError.md)
 
 #### Overrides
 
@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Mercury.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Mercury.ts#L8)
+[src/domain/models/errors/Pollux.ts:49](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Pollux.ts#L49)
 
 ## Properties
 

@@ -51,7 +51,7 @@ handle Credential related tasks
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:49](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L49)
+[src/domain/buildingBlocks/Pollux.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L21)
 
 ## Methods
 
@@ -75,7 +75,7 @@ Creates a PresentationDefinitionRequest object for oob Verifications
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L69)
+[src/domain/buildingBlocks/Pollux.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L41)
 
 ___
 
@@ -89,7 +89,7 @@ Process a PresentationRequest with Credential to create a Presentation.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `presentationRequest` | `PresentationRequest`\<`unknown`\> | - |
+| `presentationRequest` | `PresentationRequest`\<`unknown`\> |  |
 | `credential` | [`AnonCredsCredential`](../classes/AnonCredsCredential.md) |  |
 | `options` | [`Anoncreds`](Domain.Pollux.createPresentationProof.options.Anoncreds.md) | object containing necessary metadata |
 
@@ -103,7 +103,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L110)
+[src/domain/buildingBlocks/Pollux.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L82)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
 
@@ -121,7 +121,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L111)
+[src/domain/buildingBlocks/Pollux.ts:83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L83)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options?`): `Promise`\<`any`\>
 
@@ -139,7 +139,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:112](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L112)
+[src/domain/buildingBlocks/Pollux.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L84)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L75)
+[src/domain/buildingBlocks/Pollux.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L47)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L61)
+[src/domain/buildingBlocks/Pollux.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L33)
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L57)
+[src/domain/buildingBlocks/Pollux.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L29)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L53)
+[src/domain/buildingBlocks/Pollux.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L25)
 
 ___
 
@@ -248,7 +248,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:89](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L89)
+[src/domain/buildingBlocks/Pollux.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L61)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options?`): `Promise`\<`boolean`\>
 
@@ -265,7 +265,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L93)
+[src/domain/buildingBlocks/Pollux.ts:65](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L65)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options?`): `Promise`\<`boolean`\>
 
@@ -282,4 +282,4 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:97](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L97)
+[src/domain/buildingBlocks/Pollux.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L69)

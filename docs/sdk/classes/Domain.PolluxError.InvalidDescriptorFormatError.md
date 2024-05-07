@@ -1,39 +1,39 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [MercuryError](../modules/Domain.MercuryError.md) / NoSenderDIDSetError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidDescriptorFormatError
 
-# Class: NoSenderDIDSetError
+# Class: InvalidDescriptorFormatError
 
-[Domain](../modules/Domain.md).[MercuryError](../modules/Domain.MercuryError.md).NoSenderDIDSetError
+[Domain](../modules/Domain.md).[PolluxError](../modules/Domain.PolluxError.md).InvalidDescriptorFormatError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`NoSenderDIDSetError`**
+  ↳ **`InvalidDescriptorFormatError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.MercuryError.NoSenderDIDSetError.md#constructor)
+- [constructor](Domain.PolluxError.InvalidDescriptorFormatError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.MercuryError.NoSenderDIDSetError.md#cause)
-- [message](Domain.MercuryError.NoSenderDIDSetError.md#message)
-- [name](Domain.MercuryError.NoSenderDIDSetError.md#name)
-- [stack](Domain.MercuryError.NoSenderDIDSetError.md#stack)
-- [prepareStackTrace](Domain.MercuryError.NoSenderDIDSetError.md#preparestacktrace)
-- [stackTraceLimit](Domain.MercuryError.NoSenderDIDSetError.md#stacktracelimit)
+- [cause](Domain.PolluxError.InvalidDescriptorFormatError.md#cause)
+- [message](Domain.PolluxError.InvalidDescriptorFormatError.md#message)
+- [name](Domain.PolluxError.InvalidDescriptorFormatError.md#name)
+- [stack](Domain.PolluxError.InvalidDescriptorFormatError.md#stack)
+- [prepareStackTrace](Domain.PolluxError.InvalidDescriptorFormatError.md#preparestacktrace)
+- [stackTraceLimit](Domain.PolluxError.InvalidDescriptorFormatError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.MercuryError.NoSenderDIDSetError.md#capturestacktrace)
+- [captureStackTrace](Domain.PolluxError.InvalidDescriptorFormatError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new NoSenderDIDSetError**(`message?`): [`NoSenderDIDSetError`](Domain.MercuryError.NoSenderDIDSetError.md)
+• **new InvalidDescriptorFormatError**(`message?`): [`InvalidDescriptorFormatError`](Domain.PolluxError.InvalidDescriptorFormatError.md)
 
 #### Parameters
 
@@ -43,7 +43,7 @@
 
 #### Returns
 
-[`NoSenderDIDSetError`](Domain.MercuryError.NoSenderDIDSetError.md)
+[`InvalidDescriptorFormatError`](Domain.PolluxError.InvalidDescriptorFormatError.md)
 
 #### Overrides
 
@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Mercury.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Mercury.ts#L8)
+[src/domain/models/errors/Pollux.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Pollux.ts#L54)
 
 ## Properties
 

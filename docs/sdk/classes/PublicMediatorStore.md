@@ -46,7 +46,7 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Properties
 
@@ -56,7 +56,7 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Methods
 
@@ -78,7 +78,7 @@ Asyncronously fetch all the mediators from storage
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L40)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/PlutoMediatorStore.ts#L40)
 
 ___
 
@@ -106,4 +106,4 @@ Stores a mediator asyncronously in pluto
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L29)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/PlutoMediatorStore.ts#L29)

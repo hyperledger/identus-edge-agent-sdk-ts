@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDResolver.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDResolver.ts#L4)
+[src/domain/models/DIDResolver.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/DIDResolver.ts#L4)
 
 ## Methods
 
@@ -56,4 +56,4 @@
 
 #### Defined in
 
-[src/domain/models/DIDResolver.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDResolver.ts#L5)
+[src/domain/models/DIDResolver.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/DIDResolver.ts#L5)

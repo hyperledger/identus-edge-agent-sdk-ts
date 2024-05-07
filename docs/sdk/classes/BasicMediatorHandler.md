@@ -54,7 +54,7 @@ Creates an instance of BasicMediatorHandler.
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L41)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L41)
 
 ## Properties
 
@@ -71,7 +71,7 @@ established and recorded we don't need to mediate again with the same mediator
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L31)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L31)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L42)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L42)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L43)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L43)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L44)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L44)
 
 ## Methods
 
@@ -134,7 +134,7 @@ exchange the mediation protocol messages between the user and the mediator until
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:96](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L96)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:96](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L96)
 
 ___
 
@@ -156,7 +156,7 @@ Will asyncronously fetch the first mediator stored in database and set it as def
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:77](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L77)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:77](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L77)
 
 ___
 
@@ -174,7 +174,7 @@ and also listen for incomming unread messages with existing protocols.
 | :------ | :------ |
 | `signal` | `AbortSignal` |
 | `serviceEndpointUri` | `string` |
-| `onMessage` | `EventPickupCallback` |
+| `onMessage` | (`messages`: \{ `attachmentId`: `string` ; `message`: [`Message`](Domain.Message-1.md)  }[]) => `void` \| `Promise`\<`void`\> |
 
 #### Returns
 
@@ -188,7 +188,7 @@ and also listen for incomming unread messages with existing protocols.
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:196](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L196)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:196](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L196)
 
 ___
 
@@ -218,7 +218,7 @@ we need to parse those and return the user a list of messages it can read and de
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:166](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L166)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:166](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L166)
 
 ___
 
@@ -246,7 +246,7 @@ Asyncronously notify the current mediator that one or multiple message ID's have
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:246](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L246)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:251](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L251)
 
 ___
 
@@ -274,7 +274,7 @@ Asyncronously update the mediator with the new keyList, used during the mediatio
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:145](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L145)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:145](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L145)
 
 ___
 
@@ -301,4 +301,4 @@ instance.
 
 #### Defined in
 
-[src/prism-agent/mediator/BasicMediatorHandler.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/BasicMediatorHandler.ts#L57)
+[src/edge-agent/mediator/BasicMediatorHandler.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/mediator/BasicMediatorHandler.ts#L57)

@@ -22,6 +22,6 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L117)
+[src/domain/buildingBlocks/Pollux.ts:89](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L89)
 
-[src/domain/buildingBlocks/Pollux.ts:118](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L118)
+[src/domain/buildingBlocks/Pollux.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pollux.ts#L90)

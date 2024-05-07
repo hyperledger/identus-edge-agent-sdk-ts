@@ -1,3 +1,29 @@
+# [5.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.0.0...v5.1.0) (2024-05-07)
+
+
+### Bug Fixes
+
+*  Rename the documentation file accordingly. ([#204](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/204)) ([b77230f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/b77230f5d9de271e254f107a8f1d92164630b80c))
+* add compliant dates not in ms, but in seconds. ([#206](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/206)) ([a3fc2aa](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a3fc2aa49bf664d89c47d7b1ef1346d8d00d39dc))
+* Agent.createNewPrismDID to use derivationPath ([#158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/158)) ([18cd084](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/18cd0841f68c592ca84a7bb00fda70eaa0a2f7f5))
+* ConnectionManager emit Messages ([#190](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/190)) ([08097b6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/08097b63dc131522da1b6efba31515e6b8aff821))
+* db cannot be created twice with the same name which crashes demos ([#193](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/193)) ([e39193e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/e39193efca587d84929f254555bf3d27ba0b2970))
+* e2e issues with latest websocket changes ([#200](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/200)) ([70e885b](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/70e885b7cc2b0db8ea1ac782958b8b86557ec39d))
+* issue with build script not replacing some files that have been … ([#191](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/191)) ([94a37cf](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/94a37cf8c2503d11dd9cb4ed369eb16ee8545abc))
+* optin to websockets for the mediator live mode as an experiment,… ([#199](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/199)) ([2bf406c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/2bf406c8ba7a792cceed19c6bf87bbe945ae4324))
+* prevent broken links to exist in order for docs site to build pr… ([#205](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/205)) ([74ee7a1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/74ee7a1a107dd62fc0d9ab0743f0f78f0717628a))
+* Removing the if condition in CI pipeline for release branches ([#179](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/179)) ([a7bb2e8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a7bb2e89be95ac9008633889a4887c2456178ee8))
+* rename prism-agent into edge-agent ([#203](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/203)) ([ac1d162](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/ac1d162db5aea0c488228891fe9a7e8dc52c2b23))
+* type references are lost in the package. ([#202](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/202)) ([6c0e5fc](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/6c0e5fcb6b4944bb0292d19440067e869154494b))
+* updating references to Identus ([#197](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/197)) ([63d6703](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/63d67033869b6a9a686f49c8408a789d80e1c9fa))
+* wasm build folder change ([#186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/186)) ([f59f6c6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/f59f6c635bcb0386831ad5e4e4e926925bce745a))
+
+
+### Features
+
+* Implementing JWT Credential revocation notification ([#184](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/184)) ([09cd573](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/09cd573e533b5a5685eca30c52919f4d05df5490))
+* updating Anoncreds to io fork ([#157](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/157)) ([06b50c9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/06b50c9c3f753e5f16dac11a595a535c90cec390))
+
 # [4.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.1.0...v4.0.0) (2024-02-02)
 
 * fix: removing terser to allow an unminified build that is easier to d… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/127

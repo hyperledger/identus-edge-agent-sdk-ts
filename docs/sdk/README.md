@@ -1,24 +1,22 @@
-# Atala PRISM TypeScript SDK
+@atala/prism-wallet-sdk / [Exports](modules.md)
+
+# Identus TypeScript SDK
 
 [![Coverage Status](https://coveralls.io/repos/github/input-output-hk/atala-prism-wallet-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/input-output-hk/atala-prism-wallet-sdk-ts?branch=master)
 
-<p align="center">
-    <img src="atala-logo.png" alt="Atala logo" width="300"/>
-</p>
-
 ---
 
-Atala PRISM is a self-sovereign identity (SSI) platform and service suite for
+Identus is a self-sovereign identity (SSI) platform and service suite for
 verifiable data and digital identity. Built on Cardano, it offers core
 infrastructure for issuing DIDs (Decentralized identifiers) and verifiable
 credentials, alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated into multiple repositories:
 
-- [atala-prism-wallet-sdk-swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo that implements Atala PRISM for Apple platforms in Swift.
-- [atala-prism-wallet-sdk-kmm](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo that implements Atala PRISM for Apple platforms in KMM, JVM.
-- [atala-prism-wallet-sdk-ts](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo that implements Atala PRISM for Browser and NodeJS platforms in TypeScript.
-- [atala-prism-building-blocks](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
-- [atala-prism-mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for DIDComm V2 Mediator
+- [edge-agent-sdk-swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo that implements Atala PRISM for Apple platforms in Swift.
+- [edge-agent-sdk-kmm](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo that implements Atala PRISM for Apple platforms in KMM, JVM.
+- [edge-agent-sdk-ts](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo that implements Atala PRISM for Browser and NodeJS platforms in TypeScript.
+- [edge-agent-building-blocks](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
+- [edge-agent-mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for DIDComm V2 Mediator
 
 ## SDK Overview
 
@@ -106,5 +104,4 @@ This SDK exposes Pluto, a storage interface that should be implemented by the us
 
 We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
 
-Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
-
+Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production.

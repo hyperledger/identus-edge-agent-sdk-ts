@@ -30,7 +30,7 @@ Declaration merge to contain key conversion functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
 
 ## Functions
 
@@ -64,4 +64,4 @@ object with exportable functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)

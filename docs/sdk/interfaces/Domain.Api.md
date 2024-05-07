@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/domain/models/Api.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Api.ts#L8)
+[src/domain/models/Api.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Api.ts#L8)
 
 ## Methods
 
@@ -52,4 +52,4 @@
 
 #### Defined in
 
-[src/domain/models/Api.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Api.ts#L10)
+[src/domain/models/Api.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Api.ts#L10)

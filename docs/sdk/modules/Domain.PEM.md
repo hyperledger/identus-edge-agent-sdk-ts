@@ -32,7 +32,7 @@ create a PEM from a Key
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/PEM.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/PEM.ts#L41)
+[src/domain/models/keyManagement/exportable/PEM.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/PEM.ts#L41)
 
 ___
 
@@ -55,4 +55,4 @@ create a Uint8Array from a PEM
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/PEM.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/PEM.ts#L17)
+[src/domain/models/keyManagement/exportable/PEM.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/PEM.ts#L17)

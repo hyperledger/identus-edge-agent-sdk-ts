@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L30)
+[src/domain/models/VerifiableCredential.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L22)

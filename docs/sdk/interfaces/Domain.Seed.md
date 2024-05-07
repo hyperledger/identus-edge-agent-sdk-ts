@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[src/domain/models/Seed.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Seed.ts#L2)
+[src/domain/models/Seed.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/Seed.ts#L2)

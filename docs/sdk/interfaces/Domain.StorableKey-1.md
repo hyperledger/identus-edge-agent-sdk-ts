@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/StorableKey.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/StorableKey.ts#L5)
+[src/domain/models/keyManagement/StorableKey.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/StorableKey.ts#L5)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/StorableKey.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/StorableKey.ts#L4)
+[src/domain/models/keyManagement/StorableKey.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/StorableKey.ts#L4)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/StorableKey.ts:3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/StorableKey.ts#L3)
+[src/domain/models/keyManagement/StorableKey.ts:3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/StorableKey.ts#L3)

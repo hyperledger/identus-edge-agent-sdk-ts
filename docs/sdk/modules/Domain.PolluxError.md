@@ -10,8 +10,10 @@
 
 - [CredentialTypeNotSupported](../classes/Domain.PolluxError.CredentialTypeNotSupported.md)
 - [InvalidCredentialError](../classes/Domain.PolluxError.InvalidCredentialError.md)
+- [InvalidDescriptorFormatError](../classes/Domain.PolluxError.InvalidDescriptorFormatError.md)
 - [InvalidJWTPresentationDefinitionError](../classes/Domain.PolluxError.InvalidJWTPresentationDefinitionError.md)
 - [InvalidJWTString](../classes/Domain.PolluxError.InvalidJWTString.md)
+- [InvalidPresentationError](../classes/Domain.PolluxError.InvalidPresentationError.md)
 - [InvalidPresentationProofArgs](../classes/Domain.PolluxError.InvalidPresentationProofArgs.md)
 - [InvalidVerifyCredentialError](../classes/Domain.PolluxError.InvalidVerifyCredentialError.md)
 - [InvalidVerifyFormatError](../classes/Domain.PolluxError.InvalidVerifyFormatError.md)

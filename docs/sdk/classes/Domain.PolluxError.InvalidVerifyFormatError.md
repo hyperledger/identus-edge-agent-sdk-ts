@@ -52,7 +52,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pollux.ts#L39)
+[src/domain/models/errors/Pollux.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Pollux.ts#L39)
 
 ## Properties
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pollux.ts#L39)
+[src/domain/models/errors/Pollux.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Pollux.ts#L39)
 
 ___
 

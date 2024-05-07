@@ -43,7 +43,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/protocols/KeyRestoration.ts#L14)
+[src/domain/protocols/KeyRestoration.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/protocols/KeyRestoration.ts#L14)
 
 ___
 
@@ -71,4 +71,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/protocols/KeyRestoration.ts#L23)
+[src/domain/protocols/KeyRestoration.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/protocols/KeyRestoration.ts#L23)

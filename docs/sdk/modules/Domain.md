@@ -26,6 +26,7 @@
 
 ### Enumerations
 
+- [AttachmentFormats](../enums/Domain.AttachmentFormats.md)
 - [CredentialType](../enums/Domain.CredentialType.md)
 - [Curve](../enums/Domain.Curve.md)
 - [DescriptorItemFormat](../enums/Domain.DescriptorItemFormat.md)
@@ -141,7 +142,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/MessageAttachment.ts#L31)
+[src/domain/models/MessageAttachment.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L31)
 
 ___
 
@@ -155,7 +156,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L73)
+[src/domain/models/VerifiableCredential.ts:65](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L65)
 
 ___
 
@@ -165,7 +166,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/DIDDocument.ts#L99)
+[src/domain/models/DIDDocument.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/DIDDocument.ts#L99)
 
 ___
 
@@ -182,7 +183,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:114](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L114)
+[src/domain/models/VerifiableCredential.ts:106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L106)
 
 ___
 
@@ -201,7 +202,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L133)
+[src/domain/models/VerifiableCredential.ts:125](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L125)
 
 ___
 
@@ -214,9 +215,9 @@ Default is all
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L11)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/ExportableKey.ts#L11)
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L23)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/ExportableKey.ts#L23)
 
 ___
 
@@ -233,7 +234,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L101)
+[src/domain/models/VerifiableCredential.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L93)
 
 ___
 
@@ -253,7 +254,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L106)
+[src/domain/models/VerifiableCredential.ts:98](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L98)
 
 ___
 
@@ -274,7 +275,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L90)
+[src/domain/models/VerifiableCredential.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L82)
 
 ___
 
@@ -294,7 +295,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L82)
+[src/domain/models/VerifiableCredential.ts:74](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L74)
 
 ___
 
@@ -306,9 +307,9 @@ JWK
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/JWK.ts#L7)
+[src/domain/models/keyManagement/exportable/JWK.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/JWK.ts#L7)
 
-[src/domain/models/keyManagement/exportable/JWK.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/JWK.ts#L13)
+[src/domain/models/keyManagement/exportable/JWK.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/JWK.ts#L13)
 
 ___
 
@@ -331,7 +332,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:189](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L189)
+[src/domain/models/VerifiableCredential.ts:181](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L181)
 
 ___
 
@@ -341,7 +342,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:229](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L229)
+[src/domain/models/VerifiableCredential.ts:221](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L221)
 
 ___
 
@@ -363,7 +364,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:201](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L201)
+[src/domain/models/VerifiableCredential.ts:193](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L193)
 
 ___
 
@@ -373,7 +374,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/index.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/index.ts#L24)
+[src/domain/models/index.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/index.ts#L24)
 
 ___
 
@@ -383,7 +384,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/WordList.ts:1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/WordList.ts#L1)
+[src/domain/models/WordList.ts:1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/WordList.ts#L1)
 
 ___
 
@@ -393,7 +394,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:71](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L71)
+[src/domain/models/VerifiableCredential.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L63)
 
 ___
 
@@ -415,7 +416,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:120](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L120)
+[src/domain/models/VerifiableCredential.ts:112](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L112)
 
 ___
 
@@ -431,7 +432,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L14)
+[src/domain/models/VerifiableCredential.ts:223](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L223)
 
 ___
 
@@ -451,7 +452,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:140](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L140)
+[src/domain/models/VerifiableCredential.ts:132](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L132)
 
 ___
 
@@ -494,7 +495,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:150](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L150)
+[src/domain/models/VerifiableCredential.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L142)
 
 ___
 
@@ -513,7 +514,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:212](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L212)
+[src/domain/models/VerifiableCredential.ts:204](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L204)
 
 ___
 
@@ -530,7 +531,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:223](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L223)
+[src/domain/models/VerifiableCredential.ts:215](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/VerifiableCredential.ts#L215)
 
 ## Functions
 
@@ -551,4 +552,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/Key.ts#L12)
+[src/domain/models/keyManagement/Key.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/Key.ts#L12)
