@@ -19,10 +19,21 @@ import { JWTInstanceType } from "../../src/pollux/utils/jwt/types";
 import { SDJWT } from "../../src/pollux/utils/SDJWT";
 import { JWT } from "../../src/pollux/utils/JWT";
 import { SDJWTCredential } from "../../src/pollux/models/SDJWTVerifiableCredential";
+import axios from "axios";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 let sandbox: sinon.SinonSandbox;
+
+jest.mock("axios");
+
+
+jest.mock("../../src/pollux/utils/JWT", () => ({
+  JWT: jest.fn(() => ({
+    sign: jest.fn(() => "JWT.sign.result"),
+    verify: jest.fn(() => true)
+  }))
+}));
 
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
@@ -515,6 +526,22 @@ describe("Pollux", () => {
       });
     });
 
+    describe("JWT", () => {
+      test("ok", async () => {
+
+        const pr = new PresentationRequest(AttachmentFormats.JWT, Fixtures.Credentials.JWT.presentationRequest);
+        const cred = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
+        const did = Fixtures.DIDs.peerDID1;
+        const privateKey = Fixtures.Keys.secp256K1.privateKey;
+
+        const result = await pollux.createPresentationProof(pr, cred, {
+          did,
+          privateKey
+        });
+
+        expect(result).not.to.be.null;
+      });
+    });
   });
 
   describe("Anoncreds", () => {
@@ -2221,4 +2248,55 @@ describe("Pollux", () => {
     );
 
   })
+
+  it("Should correctly determine that a Credential is revoked when calling the credentialStatus list endpoints", async () => {
+    const revocableJWTCredential = `eyJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6cHJpc206YmM5ZGFhZWFmMGFkNjczZjVkNTViM2I2NjEyYTE2NTNiYzcyYWMxNjU5Y2VmYTgxYzZlZWY0NWMxZjcyMTYzOTpDcmtCQ3JZQkVqb0tCbUYxZEdndE1SQUVTaTRLQ1hObFkzQXlOVFpyTVJJaEFqRDNnM3ctcHNnRXZQcUJxUDJmVjhPQXAwQ0l3WjVYU3FhMU9OWU1HOGRQRWpzS0IybHpjM1ZsTFRFUUFrb3VDZ2x6WldOd01qVTJhekVTSVFQRGNPbm9BV25YODBhZnA2aVVEZUl6ZUViMXMySFVPUEo5TEpRRTd1RzdYeEk3Q2dkdFlYTjBaWEl3RUFGS0xnb0pjMlZqY0RJMU5tc3hFaUVDc3luYTRsbkw3anhfSnctTXUtUjd3UUppSnhCNGpnMWUwODN1Q252amNhSSIsInN1YiI6ImRpZDpwcmlzbTozZjBiNDQ5NjI3NmI3NGEzMTU3ZmRiOTEwODU5MDExYjhjZWQwNjU1ZGYyNWU3ZjgwNTAyZjE0OGU2NmM1NGU4OkN0OEJDdHdCRW5RS0gyRjFkR2hsYm5ScFkyRjBhVzl1WVhWMGFHVnVkR2xqWVhScGIyNUxaWGtRQkVKUENnbHpaV053TWpVMmF6RVNJS0ZpZjRlcnNMOFF2SFF2VmxXUEFNaHFPNmwzbXZSbUp5ZlRFRTYzZzI2MEdpRG9PNS1KRzR3Z1JkZk1LcXlqZnp2ek9sSXRsNDNsdDQ0Z21TMWxtaFpKZUJKa0NnOXRZWE4wWlhKdFlYTjBaWEpMWlhrUUFVSlBDZ2x6WldOd01qVTJhekVTSUtGaWY0ZXJzTDhRdkhRdlZsV1BBTWhxTzZsM212Um1KeWZURUU2M2cyNjBHaURvTzUtSkc0d2dSZGZNS3F5amZ6dnpPbEl0bDQzbHQ0NGdtUzFsbWhaSmVBIiwibmJmIjoxNzE1MDA2OTY4LCJ2YyI6eyJjcmVkZW50aWFsU3ViamVjdCI6eyJlbWFpbEFkZHJlc3MiOiJjb3Jwb3JhdGVAZG9tYWluLmNvbSIsImRyaXZpbmdDbGFzcyI6MSwiZHJpdmluZ0xpY2Vuc2VJRCI6IkVTLTEyMzQ1Njc4OTAiLCJpZCI6ImRpZDpwcmlzbTozZjBiNDQ5NjI3NmI3NGEzMTU3ZmRiOTEwODU5MDExYjhjZWQwNjU1ZGYyNWU3ZjgwNTAyZjE0OGU2NmM1NGU4OkN0OEJDdHdCRW5RS0gyRjFkR2hsYm5ScFkyRjBhVzl1WVhWMGFHVnVkR2xqWVhScGIyNUxaWGtRQkVKUENnbHpaV053TWpVMmF6RVNJS0ZpZjRlcnNMOFF2SFF2VmxXUEFNaHFPNmwzbXZSbUp5ZlRFRTYzZzI2MEdpRG9PNS1KRzR3Z1JkZk1LcXlqZnp2ek9sSXRsNDNsdDQ0Z21TMWxtaFpKZUJKa0NnOXRZWE4wWlhKdFlYTjBaWEpMWlhrUUFVSlBDZ2x6WldOd01qVTJhekVTSUtGaWY0ZXJzTDhRdkhRdlZsV1BBTWhxTzZsM212Um1KeWZURUU2M2cyNjBHaURvTzUtSkc0d2dSZGZNS3F5amZ6dnpPbEl0bDQzbHQ0NGdtUzFsbWhaSmVBIiwiZGF0ZU9mSXNzdWFuY2UiOiIyMDIzLTAxLTAxVDAyOjAyOjAyWiJ9LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sIkBjb250ZXh0IjpbImh0dHBzOlwvXC93d3cudzMub3JnXC8yMDE4XC9jcmVkZW50aWFsc1wvdjEiXSwiY3JlZGVudGlhbFN0YXR1cyI6eyJzdGF0dXNQdXJwb3NlIjoiUmV2b2NhdGlvbiIsInN0YXR1c0xpc3RJbmRleCI6MSwiaWQiOiJodHRwOlwvXC8xOTIuMTY4LjE1NC4yMDU6ODAwMFwvcHJpc20tYWdlbnRcL2NyZWRlbnRpYWwtc3RhdHVzXC8xYzE1Yjk2My1kYzRkLTQ3NjUtYjc1Mi01M2EzZmQxZjE4MzMjMSIsInR5cGUiOiJTdGF0dXNMaXN0MjAyMUVudHJ5Iiwic3RhdHVzTGlzdENyZWRlbnRpYWwiOiJodHRwOlwvXC8xOTIuMTY4LjE1NC4yMDU6ODAwMFwvcHJpc20tYWdlbnRcL2NyZWRlbnRpYWwtc3RhdHVzXC8xYzE1Yjk2My1kYzRkLTQ3NjUtYjc1Mi01M2EzZmQxZjE4MzMifX19.NxuJoiEgSnGs7suM5cxDq3tZ6ZYVDAscnKBuAXghW0KD9MhSr1vBUo9F6y0YkjhHBY4Y_gTGnIMBwgLYjcNVKw`;
+
+
+
+    (axios.request as any).mockResolvedValue({
+      data: {
+        "@context": [
+          "https://www.w3.org/2018/credentials/v1",
+          "https://w3id.org/vc/status-list/2021/v1"
+        ],
+        "type": [
+          "VerifiableCredential",
+          "StatusList2021Credential"
+        ],
+        "issuer": "did:prism:195e1bb3b7bd885afbc717e8248f49ddeaf363cb164f744b5ff44b71d88d3c4f",
+        "id": "http://192.168.1.44:8000/prism-agent/credential-status/eb1e5358-90a8-4891-bc14-b25598efcb3f",
+        "issuanceDate": 1714044272,
+        "credentialSubject": {
+          "id": "",
+          "type": "StatusList2021",
+          "statusPurpose": "Revocation",
+          "encodedList": "H4sIAAAAAAAA_-3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAIC3AYbSVKsAQAAA"
+        },
+        "proof": {
+          "type": "DataIntegrityProof",
+          "proofPurpose": "assertionMethod",
+          "verificationMethod": "data:application/json;base64,eyJAY29udGV4dCI6WyJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L211bHRpa2V5L3YxIl0sInR5cGUiOiJNdWx0aWtleSIsInB1YmxpY0tleU11bHRpYmFzZSI6InVNRll3RUFZSEtvWkl6ajBDQVFZRks0RUVBQW9EUWdBRXJhU2JoT08yZUs4WnNGS3FnQjU3bGpfdndobDJHMG1ScXMyb1lQa2xSNHhycG5VT1JRVm83RVdMNE5fR01IZEhUcEJmNVgwcThocUZnaFRUVUc2eTRRPT0ifQ==",
+          "created": "2024-04-25T11:24:32.206466379Z",
+          "proofValue": "z381yXYoaicLEPfb1XmvcsabdNgUSQe1dvGKxa1PaexcdbEmUtzRKsD4VmQH3GtBH2D99TTDgZFnCu3yznXVFrXaMN83wqRgx",
+          "cryptoSuite": "eddsa-jcs-2022"
+        }
+      }, status: 200
+    });
+
+
+    const credential = JWTCredential.fromJWS(revocableJWTCredential)
+    const revoked = await pollux.isCredentialRevoked(credential)
+    debugger;
+
+
+
+
+
+
+  })
+
+
+
+
 });

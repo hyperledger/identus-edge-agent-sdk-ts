@@ -287,6 +287,14 @@ export interface JWTRevocationStatus extends W3CVerifiableCredentialData {
   statusListCredential: string
 }
 
+export enum JWTProofType {
+  DataIntegrityProof = 'DataIntegrityProof'
+}
+
+export enum JWTProofPurpose {
+  ProofPurpose = 'assertionMethod'
+}
+
 export interface JWTStatusListResponse {
   "@context": [
     W3CVerifiableCredentialContext.credential,
@@ -306,8 +314,8 @@ export interface JWTStatusListResponse {
     encodedList: string
   },
   proof: {
-    type: string,
-    proofPurpose: string,
+    type: JWTProofType,
+    proofPurpose: JWTProofPurpose,
     verificationMethod: string,
     created: string,
     proofValue: string,

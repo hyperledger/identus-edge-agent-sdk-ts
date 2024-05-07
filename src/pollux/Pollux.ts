@@ -3,6 +3,7 @@ import type * as Anoncreds from "anoncreds-browser";
 
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { CredentialOfferPayloads, CredentialOfferTypes, Pollux as IPollux, ProcessedCredentialOfferPayloads } from "../domain/buildingBlocks/Pollux";
+import { base64, base64url } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import pako from 'pako';
 
@@ -51,6 +52,7 @@ import { isPresentationDefinitionRequestType, parsePresentationSubmission, valid
 import { SDJWT as SDJWTClass } from "./utils/SDJWT";
 import { SDJWTCredential } from "./models/SDJWTVerifiableCredential";
 import { HttpStatusCode } from "axios";
+import { base58btc } from "multiformats/bases/base58";
 
 /**
  * Implementation of Pollux
@@ -138,20 +140,46 @@ export default class Pollux implements IPollux {
     }
   }
 
-  extractVerificationStatus(credentialStatus: any): credentialStatus is JWTRevocationStatus {
-    const type = credentialStatus.type;
-    if (typeof type === "string" && credentialStatus.type === RevocationType.StatusList2021Entry) {
-      return true;
+  private extractVerificationStatus(credentialStatus: any): credentialStatus is JWTRevocationStatus {
+    try {
+      const type = credentialStatus.type;
+      if (typeof type === "string" && credentialStatus.type === RevocationType.StatusList2021Entry) {
+        return true;
+      }
+      return false;
+    } catch (err) {
+      throw new PolluxError.InvalidCredentialStatus()
     }
-    return false;
   }
 
-  extractEncodedList(body: JWTStatusListResponse): Uint8Array {
-    const encodedList = Buffer.from(body.credentialSubject.encodedList, 'base64');
-    return pako.ungzip(encodedList);
+  private extractEncodedList(body: JWTStatusListResponse): Uint8Array {
+    try {
+      const encodedList = Buffer.from(body.credentialSubject.encodedList, 'base64');
+      return pako.ungzip(encodedList);
+    } catch (err) {
+      throw new PolluxError.InvalidRevocationStatusResponse()
+    }
+  }
+
+  private async verifyRevocationProof(proof: JWTStatusListResponse['proof']): Promise<boolean> {
+    const verificationMethod = proof.verificationMethod;
+    const base64VerificationMethod = verificationMethod.split(",").at(1);
+    if (!base64VerificationMethod) {
+      throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof invalid verificationMethod`);
+    }
+    const decodedVerificationMethod = JSON.parse(Buffer.from(base64.baseDecode(base64VerificationMethod)).toString());
+    const multibaseKey = decodedVerificationMethod.publicKeyMultibase;
+    try {
+      const decodedKey = base64url.decode(multibaseKey)
+      return true
+    } catch (err) {
+      throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof invalid public key multibase base64Url`);
+
+    }
   }
 
   async isCredentialRevoked(credential: Credential): Promise<boolean> {
+
     if (credential instanceof JWTCredential) {
       if (!this.extractVerificationStatus(credential.credentialStatus)) {
         throw new PolluxError.CredentialRevocationTypeInvalid()
@@ -165,10 +193,12 @@ export default class Pollux implements IPollux {
         null
       )
       if (response.httpStatus !== HttpStatusCode.Ok) {
-        throw new PolluxError.CredentialRevocationTypeInvalid()
+        throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus response status code ${response.httpStatus}`)
       }
-      const list = this.extractEncodedList(response.body);
-      if (list[revocationStatus.statusListIndex] === 1) {
+      if (
+        (await this.verifyRevocationProof(response.body.proof)) &&
+        this.extractEncodedList(response.body)[revocationStatus.statusListIndex] === 1
+      ) {
         return true;
       }
       return false
