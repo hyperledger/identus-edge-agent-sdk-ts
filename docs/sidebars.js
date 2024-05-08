@@ -7,7 +7,7 @@ const sidebars = {
         {
             label: 'Introduction',
             type: "doc",
-            id: "sdk/README"
+            id: "README"
         },
         {
             type: 'category',
