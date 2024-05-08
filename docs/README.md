@@ -1,5 +1,3 @@
-@atala/prism-wallet-sdk / [Exports](modules.md)
-
 # Identus TypeScript SDK
 
 [![Coverage Status](https://coveralls.io/repos/github/input-output-hk/atala-prism-wallet-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/input-output-hk/atala-prism-wallet-sdk-ts?branch=master)
