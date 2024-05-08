@@ -7,7 +7,7 @@ const sidebars = {
         {
             label: 'Introduction',
             type: "doc",
-            id: "README"
+            id: "sdk/README"
         },
         {
             type: 'category',
@@ -59,9 +59,8 @@ const sidebars = {
                                     ...files.map((filename) => {
 
                                         const fixFile = `sdk/${currentFolder}/${filename.replace(".md", "")}`
-                                        console.log(fixFile)
                                         return {
-                                            label: fixFile.replace(`${currentFolder}/Domain.`, ""),
+                                            label: fixFile.replace(`sdk/${currentFolder}/Domain.`, ""),
                                             type: "doc",
                                             id: fixFile
                                         }
@@ -94,7 +93,7 @@ const sidebars = {
                                     ...files.map((filename) => {
                                         const fixFile = `sdk/${currentFolder}/${filename.replace(".md", "")}`
                                         return {
-                                            label: fixFile.replace(`${currentFolder}/`, ""),
+                                            label: fixFile.replace(`sdk/${currentFolder}/`, ""),
                                             type: "doc",
                                             id: fixFile
                                         }
