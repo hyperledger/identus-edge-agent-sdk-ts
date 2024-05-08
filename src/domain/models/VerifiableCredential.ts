@@ -1,3 +1,4 @@
+import type { Anoncreds } from "./Anoncreds";
 
 export enum CredentialType {
   JWT = "prism/jwt",
@@ -109,7 +110,9 @@ export type DefinitionFormat = {
   },
 };
 
-export type PresentationDefinitionRequest = {
+export type PresentationAnoncredsRequest = Anoncreds.PresentationRequest
+
+export type PresentationExchangeDefinitionRequest = {
   presentation_definition: {
     id: string,
     input_descriptors: InputDescriptor[],
@@ -121,6 +124,14 @@ export type PresentationDefinitionRequest = {
   }
 }
 
+export type AllData = {
+  [CredentialType.AnonCreds]: PresentationAnoncredsRequest;
+  [CredentialType.JWT]: PresentationExchangeDefinitionRequest;
+  [CredentialType.Unknown]: unknown;
+  [CredentialType.W3C]: unknown;
+};
+
+export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> = AllData[Type]
 
 export type DescriptorItem = {
   id: string,
