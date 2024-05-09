@@ -104,4 +104,4 @@ This SDK exposes Pluto, a storage interface that should be implemented by the us
 
 We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
 
-Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production.
+Provided demo implementations are intentionally oversimplified and **should not** be used in production.
