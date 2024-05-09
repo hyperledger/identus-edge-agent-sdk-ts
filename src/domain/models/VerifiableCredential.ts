@@ -124,14 +124,14 @@ export type PresentationExchangeDefinitionRequest = {
   }
 }
 
-export type AllData = {
+export type PresentationDefinitionData = {
   [CredentialType.AnonCreds]: PresentationAnoncredsRequest;
   [CredentialType.JWT]: PresentationExchangeDefinitionRequest;
-  [CredentialType.Unknown]: unknown;
-  [CredentialType.W3C]: unknown;
+  [CredentialType.Unknown]: any;
+  [CredentialType.W3C]: any;
 };
 
-export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> = AllData[Type]
+export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> = PresentationDefinitionData[Type]
 
 export type DescriptorItem = {
   id: string,

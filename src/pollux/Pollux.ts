@@ -148,11 +148,11 @@ export default class Pollux implements IPollux {
     return true;
   }
 
-  async createPresentationDefinitionRequest(
-    type: CredentialType,
+  async createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
+    type: Type,
     presentationClaims: PresentationClaims,
     options: PresentationOptions
-  ): Promise<PresentationDefinitionRequest> {
+  ): Promise<PresentationDefinitionRequest<Type>> {
     if (type !== CredentialType.JWT) {
       throw new PolluxError.CredentialTypeNotSupported()
     }
@@ -211,7 +211,7 @@ export default class Pollux implements IPollux {
       format: format
     }
 
-    const presentationDefinitionRequest: PresentationDefinitionRequest = {
+    const presentationDefinitionRequest: PresentationDefinitionRequest<Type> = {
       presentation_definition: {
         id: uuid(),
         input_descriptors: [
