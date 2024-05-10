@@ -38,9 +38,7 @@
     "test": "jest",
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
-    "docs": "npm run docs:readme; npm run docs:typedoc",
-    "docs:typedoc": "npx typedoc --options typedoc.js --hideGenerator",
-    "docs:readme": "cp README.md docs/README.md"
+    "docs": "npx typedoc --options typedoc.js"
   },
   "author": "IOHK",
   "repository": {
