@@ -10,7 +10,6 @@ interface JWTJson {
   };
 }
 
-
 /**
  * Wrapper for Presentation Requests for different Credential Types
  * 

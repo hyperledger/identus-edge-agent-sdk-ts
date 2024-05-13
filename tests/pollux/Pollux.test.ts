@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { expect, assert } from "chai";
 
-import { AttachmentDescriptor, AttachmentFormats, Claims, CredentialRequestOptions, CredentialType, Curve, DID, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
+import { AttachmentDescriptor, AttachmentFormats, Claims, CredentialRequestOptions, CredentialType, Curve, DID, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import { Apollo } from "../../src/domain/buildingBlocks/Apollo";
@@ -48,6 +48,37 @@ type VerificationTestCase = {
   claims: Claims
 }
 
+
+type AnoncredsVerificationTestCase = {
+  challenge?: string,
+  apollo: Apollo,
+  castor: Castor,
+  pollux: Pollux,
+  claims: PresentationClaims<CredentialType.AnonCreds>
+}
+
+
+async function createAnoncredsVerificationTestCase(options: AnoncredsVerificationTestCase) {
+  const {
+    pollux,
+    claims,
+  } = options;
+  const presentationDefinition = await pollux.createPresentationDefinitionRequest(
+    CredentialType.AnonCreds,
+    claims,
+    new PresentationOptions<CredentialType.AnonCreds>({}, CredentialType.AnonCreds)
+  );
+  const anoncredsCredential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+  const presentationSubmissionJSON = await pollux.createPresentationSubmission<CredentialType.AnonCreds>(
+    presentationDefinition,
+    anoncredsCredential,
+    Fixtures.Credentials.Anoncreds.linkSecret
+  );
+  return {
+    presentationDefinition,
+    presentationSubmissionJSON,
+  }
+}
 
 async function createVerificationTestCase(options: VerificationTestCase) {
   const {
@@ -1423,8 +1454,8 @@ describe("Pollux", () => {
     })
 
 
-    it("Should be able to create a presentationDefinitionRequest for a JWT Credential", async () => {
 
+    it("Should be able to create a presentationDefinitionRequest for a JWT Credential", async () => {
 
       const presentationDefinitionRequest = await pollux.createPresentationDefinitionRequest(
         CredentialType.JWT,
@@ -1586,7 +1617,6 @@ describe("Pollux", () => {
         castor,
         jwt,
         pollux,
-        //Play with this data in order to build tests
         issuer: issuerDID,
         holder: holderDID,
         holderPrv: holderPrv,
@@ -1609,6 +1639,63 @@ describe("Pollux", () => {
       );
 
 
+    })
+
+    it("Should reject creating a PresentationDefinitionRequest is no AnoncredsPresentationOptions instance is sent", async () => {
+      expect(
+        pollux.createPresentationDefinitionRequest(
+          CredentialType.AnonCreds,
+          {
+            attributes: {
+              name: {
+                name: 'name',
+                restrictions: {
+                  cred_def_id: "2345"
+                }
+              }
+            },
+            predicates: {},
+          },
+          {} as any
+        )
+      ).to.eventually.be.rejectedWith(
+        "Required field options is undefined, should be AnoncredsPresentationOptions"
+      );
+    });
+
+    it("Should create a PresentationDefinitionRequest for anoncreds Credential with no disclosed fields", async () => {
+      const presentation = await pollux.createPresentationDefinitionRequest(
+        CredentialType.AnonCreds,
+        {
+          predicates: {
+            age: {
+              $gte: 18,
+              type: "number"
+            }
+          },
+        },
+        new PresentationOptions<CredentialType.AnonCreds>({}, CredentialType.AnonCreds)
+      );
+
+      expect(presentation).to.haveOwnProperty("name");
+      expect(presentation).to.haveOwnProperty("nonce");
+      expect(presentation).to.haveOwnProperty("version");
+
+      expect(presentation).to.haveOwnProperty("requested_attributes");
+      expect(presentation).to.haveOwnProperty("requested_predicates");
+
+      expect(presentation.name).to.equal("anoncreds_presentation_request");
+      expect(presentation.version).to.equal("0.1");
+
+      expect(presentation.requested_predicates).to.haveOwnProperty("p_age0");
+
+      expect(presentation.requested_predicates.p_age0).to.haveOwnProperty("name");
+      expect(presentation.requested_predicates.p_age0).to.haveOwnProperty("p_type");
+      expect(presentation.requested_predicates.p_age0).to.haveOwnProperty("p_value");
+
+      expect(presentation.requested_predicates.p_age0.name).to.equal("age");
+      expect(presentation.requested_predicates.p_age0.p_type).to.equal(">=");
+      expect(presentation.requested_predicates.p_age0.p_value).to.equal(18);
     })
 
     it("Should Verify false when the presentation is signed with holder keys that don't match", async () => {
@@ -1710,7 +1797,6 @@ describe("Pollux", () => {
         castor,
         jwt,
         pollux,
-        //Play with this data in order to build tests
         issuer: issuerDID,
         holder: holderDID,
         holderPrv: holderPrv,
@@ -1794,7 +1880,6 @@ describe("Pollux", () => {
         castor,
         jwt,
         pollux,
-        //Play with this data in order to build tests
         issuer: issuerDID,
         holder: holderDID,
         holderPrv: holderPrv,
@@ -1868,6 +1953,35 @@ describe("Pollux", () => {
       expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.equal(true)
+    })
+
+    it("Should Verify true when the Anoncreds presentation and the proof are completely valid", async () => {
+
+      const {
+        presentationDefinition,
+        presentationSubmissionJSON,
+      } = await createAnoncredsVerificationTestCase({
+        apollo,
+        castor,
+        pollux,
+        claims: {
+          predicates: {
+            age: {
+              type: 'string',
+              $gt: 25
+            }
+          },
+          attributes: {
+            name: {
+              name: "name",
+              restrictions: {
+                cred_def_id: '12345'
+              }
+            }
+          }
+        }
+      });
+
     })
   })
 });

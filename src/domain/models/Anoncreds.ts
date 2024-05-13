@@ -95,7 +95,7 @@ export namespace Anoncreds {
     requested_predicates: PresentationRequest_RequestedPredicates;
   }
 
-  type PresentationRequest_RequestedAttributes = Record<
+  export type PresentationRequest_RequestedAttributes = Record<
     string,
     {
       name: string;
@@ -103,7 +103,7 @@ export namespace Anoncreds {
     }
   >;
 
-  type PresentationRequest_RequestedPredicates = Record<
+  export type PresentationRequest_RequestedPredicates = Record<
     string,
     {
       name: string;

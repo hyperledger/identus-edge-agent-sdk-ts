@@ -63,13 +63,39 @@ export interface VerifiableCredentialTypeContainer {
 
 export type PredicateType = string | number
 
-export type Claims = {
-  [name: string]: InputFieldFilter
-}
-export interface PresentationClaims {
+export type Claims<Type extends CredentialType = CredentialType.JWT> =
+  Type extends CredentialType.JWT ?
+  {
+    [name: string]: InputFieldFilter
+  } :
+  {
+    [name: string]: AnoncredsInputFieldFilter
+  }
+
+
+export type JWTPresentationClaims = {
   schema?: string;
   issuer?: string;
-  claims: Claims
+  claims: Claims<CredentialType.JWT>
+}
+
+export type AnoncredsPresentationClaims = {
+  predicates?: Claims<CredentialType.AnonCreds>,
+  attributes?: Anoncreds.PresentationRequest_RequestedAttributes
+}
+
+export type PresentationClaims<Type extends CredentialType = CredentialType.JWT> =
+  Type extends CredentialType.JWT ?
+  JWTPresentationClaims :
+  AnoncredsPresentationClaims;
+
+
+export type AnoncredsInputFieldFilter = {
+  type: string,
+  $gt?: PredicateType,
+  $gte?: PredicateType,
+  $lt?: PredicateType,
+  $lte?: PredicateType
 }
 
 export type InputFieldFilter = {
@@ -77,7 +103,8 @@ export type InputFieldFilter = {
   pattern?: string,
   enum?: PredicateType[],
   const?: PredicateType[],
-  value?: PredicateType
+  value?: PredicateType,
+
 }
 
 export type InputField = {
@@ -88,8 +115,6 @@ export type InputField = {
   filter?: InputFieldFilter,
   optional?: boolean
 }
-
-
 
 export type InputConstraints = {
   fields: InputField[],
@@ -131,7 +156,9 @@ export type PresentationDefinitionData = {
   [CredentialType.W3C]: any;
 };
 
-export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> = PresentationDefinitionData[Type]
+export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> =
+  PresentationDefinitionData[Type]
+
 
 export type DescriptorItem = {
   id: string,
@@ -140,7 +167,8 @@ export type DescriptorItem = {
   path_nested?: DescriptorItem
 }
 
-export type PresentationSubmission = {
+
+export type JWTPresentationSubmission = {
   presentation_submission: {
     id: string,
     definition_id: string,
@@ -148,6 +176,21 @@ export type PresentationSubmission = {
   },
   verifiablePresentation: string[],
 }
+
+export type AnoncredsPresentationSubmission = Anoncreds.Presentation;
+
+
+
+export type PresentationSubmissionData = {
+  [CredentialType.AnonCreds]: AnoncredsPresentationSubmission;
+  [CredentialType.JWT]: JWTPresentationSubmission;
+  [CredentialType.Unknown]: any;
+  [CredentialType.W3C]: any;
+}
+
+
+export type PresentationSubmission<Type extends CredentialType = CredentialType.JWT> =
+  PresentationSubmissionData[Type]
 
 
 export type W3CVerifiableCredential = {
@@ -235,7 +278,45 @@ export type PresentationJWTOptions = {
   jwtAlg?: string[],
 }
 
-export class PresentationOptions {
+export type PresentationRequestOptions = {
+  [CredentialType.AnonCreds]: ConstructorParameters<typeof AnoncredsPresentationOptions>['0'];
+  [CredentialType.JWT]: ConstructorParameters<typeof JWTPresentationOptions>['0'];
+  [CredentialType.Unknown]: any;
+  [CredentialType.W3C]: any;
+}
+
+export type PresentationOptionsSS<Type extends CredentialType = CredentialType.JWT> =
+  PresentationRequestOptions[Type]
+
+
+
+export class PresentationOptions<Type extends CredentialType = CredentialType.JWT> {
+
+  constructor(
+    private data: PresentationRequestOptions[Type],
+    private type: Type = CredentialType.JWT as Type
+  ) {
+
+  }
+
+  get options() {
+    if (this.type === CredentialType.AnonCreds) {
+      return new AnoncredsPresentationOptions(this.data)
+    }
+    if (this.type === CredentialType.JWT) {
+      return new JWTPresentationOptions(this.data)
+    }
+    throw new Error("Not supported" + this.type)
+  }
+}
+
+
+
+export class AnoncredsPresentationOptions {
+  constructor(data: any) { }
+}
+
+export class JWTPresentationOptions {
   public name: string;
   public purpose: string;
   public challenge: string;

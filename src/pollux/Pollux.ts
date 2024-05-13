@@ -30,7 +30,12 @@ import {
   JWTVerifiablePresentationProperties,
   JWTPresentationPayload,
   AttachmentFormats,
+  PresentationOptions as PresentationOptionsType,
   PresentationOptions,
+  AnoncredsPresentationOptions,
+  JWTPresentationOptions,
+  AnoncredsPresentationClaims,
+  LinkSecret,
 } from "../domain";
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
@@ -59,75 +64,146 @@ export default class Pollux implements IPollux {
     private jwt = new JWT(castor)
   ) { }
 
-  async createPresentationSubmission(
-    presentationDefinitionRequest: PresentationDefinitionRequest,
-    credential: Credential,
-    privateKey: PrivateKey
-  ): Promise<PresentationSubmission> {
-    if (credential instanceof JWTCredential) {
-      if (!(privateKey instanceof Secp256k1PrivateKey)) {
-        throw new CastorError.InvalidKeyError()
-      }
-      if (!presentationDefinitionRequest || !presentationDefinitionRequest.options || !presentationDefinitionRequest.presentation_definition) {
-        throw new PolluxError.InvalidPresentationError()
-      }
-      const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
 
-      const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
-        (inputDescriptor) => {
-          if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg)) {
-            throw new PolluxError.InvalidDescriptorFormatError()
-          }
-          return {
+  private isPresentationDefinitionRequestType
+    <Type extends CredentialType = CredentialType.JWT>(
+      request: PresentationDefinitionRequest<Type>,
+      type: Type,
+    ): request is PresentationDefinitionRequest<Type> {
+
+    if (type === CredentialType.JWT) {
+      if (!request ||
+        !request.options ||
+        !request.presentation_definition) {
+        return false
+      }
+      return true;
+    }
+    return true;
+  }
+
+  private async createJWTPresentationSubmission(
+    presentationDefinitionRequest: any,
+    credential: JWTCredential,
+    privateKey: any
+  ): Promise<PresentationSubmission<CredentialType.JWT>> {
+    if (!(privateKey instanceof Secp256k1PrivateKey)) {
+      throw new CastorError.InvalidKeyError("Required Secp256k1PrivateKey key")
+    }
+    if (!this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.JWT)) {
+      throw new Error("PresentationDefinition didn't match credential type")
+    }
+    const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
+
+    const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
+      (inputDescriptor) => {
+        if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg)) {
+          throw new PolluxError.InvalidDescriptorFormatError()
+        }
+        return {
+          id: inputDescriptor.id,
+          format: DescriptorItemFormat.JWT_VP,
+          path: "$.verifiablePresentation[0]",
+          path_nested: {
             id: inputDescriptor.id,
-            format: DescriptorItemFormat.JWT_VP,
-            path: "$.verifiablePresentation[0]",
-            path_nested: {
-              id: inputDescriptor.id,
-              format: DescriptorItemFormat.JWT_VC,
-              path: "$.vp.verifiableCredential[0]",
-            }
+            format: DescriptorItemFormat.JWT_VC,
+            path: "$.vp.verifiableCredential[0]",
           }
-        });
-
-      const subject = credential.subject;
-      if (!privateKey.isSignable()) {
-        throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.")
-      }
-
-      if (!credential.isProvable()) {
-        throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
-      }
-
-      const payload: JWTPresentationPayload = {
-        iss: subject,
-        aud: domain,
-        nbf: Date.parse(new Date().toISOString()),
-        nonce: challenge,
-        vp: credential.presentation(),
-      }
-
-      const jws = await this.jwt.sign({
-        issuerDID: DID.fromString(subject),
-        privateKey,
-        payload
+        }
       });
 
-      const presentationSubmission: PresentationSubmission = {
-        presentation_submission: {
-          id: uuid(),
-          definition_id: presentation_definition.id,
-          descriptor_map: descriptorItems
-        },
-        verifiablePresentation: [
-          jws
-        ]
-      }
-
-      return presentationSubmission
-    } else {
-      throw new PolluxError.CredentialTypeNotSupported()
+    const subject = credential.subject;
+    if (!privateKey.isSignable()) {
+      throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.")
     }
+
+    if (!credential.isProvable()) {
+      throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
+    }
+
+
+    const payload: JWTPresentationPayload = {
+      iss: subject,
+      aud: domain,
+      nbf: Date.parse(new Date().toISOString()),
+      nonce: challenge,
+      vp: credential.presentation(),
+    }
+
+    const jws = await this.jwt.sign({
+      issuerDID: DID.fromString(subject),
+      privateKey,
+      payload
+    });
+
+    const presentationSubmission: PresentationSubmission = {
+      presentation_submission: {
+        id: uuid(),
+        definition_id: presentation_definition.id,
+        descriptor_map: descriptorItems
+      },
+      verifiablePresentation: [
+        jws
+      ]
+    }
+
+    return presentationSubmission
+  }
+
+  private async createAnoncredsPresentationSubmission(
+    presentationDefinitionRequest: any,
+    credential: AnonCredsCredential,
+    linkSecret: any
+  ): Promise<PresentationSubmission<CredentialType.AnonCreds>> {
+    if (!(linkSecret instanceof LinkSecret)) {
+      throw new CastorError.InvalidKeyError("Required linksecret key")
+    }
+    if (!this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.AnonCreds)) {
+      throw new Error("PresentationDefinition didn't match credential type")
+    }
+    const credentialSchema = await this.fetchSchema(credential.schemaId);
+    const credentialDefinition = await this.fetchCredentialDefinition(credential.credentialDefinitionId);
+    const schemas = { [credential.schemaId]: credentialSchema };
+    const credDefs = { [credential.credentialDefinitionId]: credentialDefinition };
+    return this.anoncreds.createPresentation(
+      presentationDefinitionRequest,
+      schemas,
+      credDefs,
+      credential.toJSON(),
+      linkSecret.secret
+    );
+  }
+
+
+
+  async createPresentationSubmission<
+    Type extends CredentialType = CredentialType.JWT
+  >(
+    presentationDefinitionRequest: PresentationDefinitionRequest<Type>,
+    credential: Credential,
+    privateKey?: PrivateKey | LinkSecret
+  ): Promise<PresentationSubmission<Type>> {
+
+    if (credential instanceof JWTCredential) {
+      if (!privateKey) {
+        throw new CastorError.InvalidKeyError("Required Secp256k1PrivateKey key")
+      }
+      return this.createJWTPresentationSubmission(
+        presentationDefinitionRequest,
+        credential,
+        privateKey
+      )
+    }
+
+    if (credential instanceof AnonCredsCredential) {
+      return this.createAnoncredsPresentationSubmission(
+        presentationDefinitionRequest,
+        credential,
+        privateKey
+      )
+    }
+
+    throw new PolluxError.CredentialTypeNotSupported();
   }
 
   parsePresentationSubmission(data: any): data is PresentationSubmission {
@@ -148,84 +224,160 @@ export default class Pollux implements IPollux {
     return true;
   }
 
+  private validJWTPresentationClaims(presentationClaims: any): presentationClaims is PresentationClaims<CredentialType.JWT> {
+    if (presentationClaims.schema && typeof presentationClaims.schema !== "string") {
+      return false
+    }
+    if (presentationClaims.issuer && typeof presentationClaims.issuer !== "string") {
+      return false
+    }
+    return true
+  }
+
   async createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
     type: Type,
-    presentationClaims: PresentationClaims,
-    options: PresentationOptions
+    presentationClaims: PresentationClaims<Type>,
+    presentationOptions: PresentationOptionsType<Type>
   ): Promise<PresentationDefinitionRequest<Type>> {
-    if (type !== CredentialType.JWT) {
-      throw new PolluxError.CredentialTypeNotSupported()
-    }
+    const options = presentationOptions.options;
+    if (type === CredentialType.JWT) {
 
-    const jwtOptions = options.jwt;
-    if (!jwtOptions) {
-      throw new PolluxError.InvalidJWTPresentationDefinitionError("Required field options jwt is undefined")
-    }
+      if (!(options instanceof JWTPresentationOptions)) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt is undefined")
+      }
 
-    if (!jwtOptions.jwtAlg) {
-      throw new PolluxError.InvalidJWTPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
-    }
+      const jwtOptions = options.jwt;
+      if (!jwtOptions) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt is undefined")
+      }
 
-    const paths = Object.keys(presentationClaims.claims);
-    const constaints: InputConstraints = {
-      fields: paths.map((path) => {
-        const inputField: InputField = {
-          path: [
-            `$.vc.credentialSubject.${path}`,
-            `$.credentialSubject.${path}`
-          ],
+      if (!jwtOptions.jwtAlg) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
+      }
+
+      if (!this.validJWTPresentationClaims(presentationClaims)) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid.")
+      }
+
+      const paths = Object.keys(presentationClaims.claims);
+      const constaints: InputConstraints = {
+        fields: paths.map((path) => {
+          const inputField: InputField = {
+            path: [
+              `$.vc.credentialSubject.${path}`,
+              `$.credentialSubject.${path}`
+            ],
+            id: uuid(),
+            optional: false,
+            filter: presentationClaims.claims[path],
+            name: path
+          }
+          return inputField
+        }),
+        limit_disclosure: InputLimitDisclosure.REQUIRED
+      };
+
+
+      if (presentationClaims.issuer) {
+        constaints.fields.push({
+          path: ["$.vc.issuer", "$.issuer", "$.iss", "$.vc.iss"],
           id: uuid(),
           optional: false,
-          filter: presentationClaims.claims[path],
-          name: path
-        }
-        return inputField
-      }),
-      limit_disclosure: InputLimitDisclosure.REQUIRED
-    };
-
-    if (presentationClaims.issuer) {
-      constaints.fields.push({
-        path: ["$.vc.issuer", "$.issuer", "$.iss", "$.vc.iss"],
-        id: uuid(),
-        optional: false,
-        name: "issuer",
-        filter: {
-          type: "string",
-          pattern: presentationClaims.issuer
-        }
-      })
-    }
-
-    const format: DefinitionFormat = {
-      jwt: {
-        alg: jwtOptions.jwtAlg ?? []
-      },
-    }
-
-    const inputDescriptor: InputDescriptor = {
-      id: uuid(),
-      name: options.name,
-      purpose: options.purpose,
-      constraints: constaints,
-      format: format
-    }
-
-    const presentationDefinitionRequest: PresentationDefinitionRequest<Type> = {
-      presentation_definition: {
-        id: uuid(),
-        input_descriptors: [
-          inputDescriptor
-        ],
-        format: format,
-      },
-      options: {
-        challenge: options.challenge,
-        domain: options.domain
+          name: "issuer",
+          filter: {
+            type: "string",
+            pattern: presentationClaims.issuer
+          }
+        })
       }
+
+      const format: DefinitionFormat = {
+        jwt: {
+          alg: jwtOptions.jwtAlg ?? []
+        },
+      }
+
+      const inputDescriptor: InputDescriptor = {
+        id: uuid(),
+        name: options.name,
+        purpose: options.purpose,
+        constraints: constaints,
+        format: format
+      }
+
+      const presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.JWT> = {
+        presentation_definition: {
+          id: uuid(),
+          input_descriptors: [
+            inputDescriptor
+          ],
+          format: format,
+        },
+        options: {
+          challenge: options.challenge,
+          domain: options.domain
+        }
+      }
+      return presentationDefinitionRequest
     }
 
-    return presentationDefinitionRequest
+
+    if (type === CredentialType.AnonCreds) {
+      if (!(options instanceof AnoncredsPresentationOptions)) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options is undefined, should be AnoncredsPresentationOptions")
+      }
+
+      //TODO Validate presentation claims
+      const claims = presentationClaims as AnoncredsPresentationClaims
+
+      const predicatePaths = Object.keys(claims.predicates ?? {});
+
+      const requestedPredicates: Anoncreds.PresentationRequest_RequestedPredicates =
+        predicatePaths.reduce<Anoncreds.PresentationRequest_RequestedPredicates>((all, predicateName, i) => {
+          const claimPredicate = (claims.predicates ?? {})[predicateName];
+
+          const pType = claimPredicate.$gt ? '>' :
+            claimPredicate.$gte ? '>=' :
+              claimPredicate.$lt ? '<' :
+                claimPredicate.$lte ? '<=' :
+                  undefined;
+
+          const pValue = claimPredicate.$gt ? claimPredicate.$gt :
+            claimPredicate.$gte ? claimPredicate.$gte :
+              claimPredicate.$lt ? claimPredicate.$lt :
+                claimPredicate.$lte ? claimPredicate.$lte :
+                  undefined;
+
+          if (!pType || !pValue) {
+            throw new Error("TODO improve, should return valid ptype")
+          }
+
+          const predicate: Anoncreds.PresentationRequest_RequestedPredicates[
+            keyof Anoncreds.PresentationRequest_RequestedPredicates
+          ] = {
+            name: predicateName,
+            p_type: pType,
+            p_value: pValue
+          }
+          return {
+            ...all,
+            [`p_${predicateName}${i}`]: predicate
+          }
+        }, {});
+
+      const presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.AnonCreds> = {
+        nonce: uuid(),
+        name: "anoncreds_presentation_request",
+        version: "0.1",
+        requested_attributes: claims.attributes ?? {},
+        requested_predicates: requestedPredicates
+      }
+
+      return presentationDefinitionRequest
+    }
+
+    throw new PolluxError.CredentialTypeNotSupported()
+
   }
 
   private validJWTPresentationSubmissionOptions(options: any): options is IPollux.verifyPresentationSubmission.options.JWT {

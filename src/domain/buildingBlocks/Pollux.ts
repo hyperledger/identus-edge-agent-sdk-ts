@@ -32,20 +32,12 @@ export interface Pollux {
   ): Promise<CredentialRequestTuple>;
   extractCredentialFormatFromMessage(message: Message): CredentialType;
 
-  /**
-   * Creates a PresentationDefinitionRequest object for oob Verifications
-   * @param {CredentialType} type 
-   * @param {ProofTypes} proofs 
-   * @param {PresentationOptions} options 
-   */
-  createPresentationDefinitionRequest(
-    type: CredentialType,
-    claims: PresentationClaims,
-    options: PresentationOptions
-  ): Promise<PresentationDefinitionRequest>
 
-  createPresentationSubmission(
-    presentationDefinition: PresentationDefinitionRequest,
+
+
+
+  createPresentationSubmission<Type extends CredentialType = CredentialType.JWT>(
+    presentationDefinition: PresentationDefinitionRequest<Type>,
     credential: Credential,
     privateKey: PrivateKey
   ): Promise<PresentationSubmission>
@@ -70,6 +62,21 @@ export interface Pollux {
     presentationSubmission: PresentationSubmission,
     options?: Pollux.verifyPresentationSubmission.options.JWT | Pollux.verifyPresentationSubmission.options.Anoncreds
   ): Promise<boolean>
+
+  /**
+   * Creates a PresentationDefinitionRequest object for oob Verifications
+   * @param {CredentialType} type 
+   * @param {ProofTypes} proofs 
+   * @param {PresentationOptions} options 
+   */
+  createPresentationDefinitionRequest(
+    type: CredentialType,
+    claims: PresentationClaims,
+    options: PresentationOptions
+  ): Promise<PresentationDefinitionRequest>
+
+
+
   /**
    * Process a PresentationRequest with Credential to create a Presentation.
    * 
