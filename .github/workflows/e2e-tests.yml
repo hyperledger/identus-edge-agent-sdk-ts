@@ -13,9 +13,9 @@ on:
         required: true
         description: Mediator out-of-band url
         default: https://sit-prism-mediator.atalaprism.io/invitationOOB
-      prismAgentUrl:
+      agentUrl:
         required: true
-        description: Prism-agent server url
+        description: Agent url
         default: https://sit-prism-agent-issuer.atalaprism.io/prism-agent
       publishedDid:
         required: false
@@ -101,7 +101,7 @@ jobs:
       - name: Run tests
         env:
           MEDIATOR_OOB_URL: ${{ inputs.mediatorOobUrl || vars.MEDIATOR_OOB_URL }}
-          PRISM_AGENT_URL: ${{ inputs.prismAgentUrl || vars.PRISM_AGENT_URL }}
+          AGENT_URL: ${{ inputs.agentUrl || vars.AGENT_URL }}
           PUBLISHED_DID: ${{ inputs.publishedDid || vars.PUBLISHED_DID }}
           JWT_SCHEMA_GUID: ${{ inputs.jwtSchemaGuid || vars.JWT_SCHEMA_GUID }}
           ANONCRED_DEFINITION_GUID: ${{ inputs.anoncredDefinitionGuid || vars.ANONCRED_DEFINITION_GUID }}
