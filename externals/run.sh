@@ -23,6 +23,9 @@ anoncredsNewCommit=$(git submodule | grep $AnonCreds | awk '{print $1}')
 anoncredsOldCommit=$(cat "${ExternalsDir}/${AnonCreds}.commit" 2>/dev/null)
 anoncredsRequired=$?
 
+is_mac() {
+  [[ "$OSTYPE" == "darwin"* ]]
+}
 
 buildDIDComm() {
   echo "Build DIDComm"
@@ -39,7 +42,11 @@ buildDIDComm() {
   #This code fails on browser when wasm is first loaded, it can just be ignored
   #The code will fully work
   cd "${GenDIDComm}-wasm-browser"
-  sed -i '' "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+  if is_mac; then
+    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+  else
+    sed -i "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+  fi
 
   cd $ExternalsDir
   git submodule | grep $DIDComm | awk '{print $1}' > "./${DIDComm}.commit"
@@ -64,8 +71,11 @@ buildAnonCreds() {
   #This code fails on browser when wasm is first loaded, it can just be ignored
   #The code will fully work
   cd "${GenAnonCreds}-wasm-browser"
-  sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
-
+  if is_mac; then
+    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
+  else
+    sed -i "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
+  fi
   cd $ExternalsDir
   git submodule | grep $AnonCreds | awk '{print $1}' > "./${AnonCreds}.commit"
 }
