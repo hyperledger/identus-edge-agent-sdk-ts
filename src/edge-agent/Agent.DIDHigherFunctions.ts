@@ -46,7 +46,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected pluto: Pluto,
     protected mediationHandler: MediatorHandler,
     protected seed: Seed
-  ) { }
+  ) {}
 
 
   /**
@@ -119,7 +119,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       await this.mediationHandler.updateKeyListWithDIDs([did]);
     }
 
-    await this.pluto.storePeerDID(did, [
+    await this.pluto.storeDID(did, [
       keyAgreementPrivateKey,
       authenticationPrivateKey,
     ]);
@@ -155,7 +155,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     // TODO tmp fix as index not set on key currently (PR open)
     privateKey.keySpecification.set(KeyProperties.index, index.toString());
 
-    await this.pluto.storePrismDID(did, privateKey, alias);
+    await this.pluto.storeDID(did, privateKey, alias);
     return did;
   }
 

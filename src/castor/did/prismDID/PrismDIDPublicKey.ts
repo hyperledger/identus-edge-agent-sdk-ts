@@ -3,8 +3,9 @@ import * as ECConfig from "../../../config/ECConfig";
 import { Apollo } from "../../../domain/buildingBlocks/Apollo";
 import { Curve } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
-import * as ApolloPKG from "@atala/apollo";
 import * as Protos from "../../protos/node_models";
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 export enum Usage {
   MASTER_KEY = "masterKey",
@@ -124,7 +125,7 @@ export class PrismDIDPublicKey {
       case "compressed_ec_key_data":
         keyData = new Secp256k1PublicKey(
           Uint8Array.from(
-            ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+            ApolloSDK.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
               Int8Array.from(proto.compressed_ec_key_data.data)
             ).raw
           )
@@ -133,7 +134,7 @@ export class PrismDIDPublicKey {
       case "ec_key_data":
         keyData = new Secp256k1PublicKey(
           Uint8Array.from(
-            ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
+            ApolloSDK.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
               Int8Array.from(proto.ec_key_data.x),
               Int8Array.from(proto.ec_key_data.y)
             ).raw

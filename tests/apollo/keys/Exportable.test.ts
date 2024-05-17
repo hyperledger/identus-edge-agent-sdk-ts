@@ -141,11 +141,12 @@ describe("Keys", () => {
   describe("Secp256k1PrivateKey", () => {
     const raw = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
     const pem = `-----BEGIN EC PRIVATE KEY-----\n${raw.toString("base64")}\n-----END EC PRIVATE KEY-----`;
-    const jwk: JWK.OKP = {
-      kty: 'OKP',
-      crv: 'Secp256k1',
+    const jwk: JWK.EC = {
+      kty: 'EC',
+      crv: 'secp256k1',
       d: raw.toString("base64url"),
-      x: "BHm-Zn753LusVaBilc6HCwcCm_zbLc4o2VnygVsW-BeYSDradyajxGVdpPv8DhEIqP0XtEimhVQZnEfQj_sQ1Lg",
+      x: "eb5mfvncu6xVoGKVzocLBwKb_NstzijZWfKBWxb4F5g",
+      y: "SDradyajxGVdpPv8DhEIqP0XtEimhVQZnEfQj_sQ1Lg",
     };
 
     describe("Exportable", () => {
@@ -166,6 +167,7 @@ describe("Keys", () => {
         expect(result).to.have.property("crv", jwk.crv);
         expect(result).to.have.property("d", jwk.d);
         expect(result).to.have.property("x", jwk.x);
+        expect(result).to.have.property("y", jwk.y);
       });
 
       test("PEM", () => {
@@ -186,10 +188,11 @@ describe("Keys", () => {
   describe("Secp256k1PublicKey", () => {
     const raw = Buffer.from([4, 49, 167, 173, 103, 15, 188, 85, 154, 102, 229, 108, 189, 122, 78, 227, 245, 99, 79, 55, 81, 220, 201, 4, 16, 89, 24, 121, 177, 48, 51, 1, 184, 41, 196, 54, 243, 176, 147, 60, 249, 136, 0, 13, 183, 1, 111, 60, 2, 85, 245, 209, 131, 187, 123, 221, 142, 111, 153, 145, 21, 106, 13, 19, 244]);
     const pem = `-----BEGIN EC PUBLIC KEY-----\n${raw.toString("base64")}\n-----END EC PUBLIC KEY-----`;
-    const jwk: JWK.OKP = {
-      kty: 'OKP',
-      crv: 'Secp256k1',
-      x: raw.toString("base64url"),
+    const jwk: JWK.EC = {
+      kty: 'EC',
+      crv: 'secp256k1',
+      x: "MaetZw-8VZpm5Wy9ek7j9WNPN1HcyQQQWRh5sTAzAbg",
+      y: "KcQ287CTPPmIAA23AW88AlX10YO7e92Ob5mRFWoNE_Q",
     };
 
     describe("Exportable", () => {

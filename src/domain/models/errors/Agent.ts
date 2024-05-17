@@ -224,3 +224,15 @@ export class UnhandledPresentationRequest extends Error {
     super(message || "Invalid Presentation request format");
   }
 }
+
+export class KeyNotExportableError extends Error {
+  constructor() {
+    super("Invalid Key found - not exportable");
+  }
+}
+
+export class BackupVersionError extends Error {
+  constructor() {
+    super("Invalid Backup version");
+  }
+}

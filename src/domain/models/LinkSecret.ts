@@ -1,4 +1,4 @@
-import { Pluto } from "..";
+import { Pluto } from "../buildingBlocks/Pluto";
 
 export class LinkSecret implements Pluto.Storable {
   static defaultName = "default";

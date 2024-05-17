@@ -8,7 +8,7 @@ import { ECPublicKeyInitialization } from "../../../src/domain/models/errors/Apo
 import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
 
 import ApolloPKG from "@atala/apollo";
-const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 
@@ -117,8 +117,8 @@ describe("Keys", () => {
         });
       });
 
-      test("isExportable - not implemented", () => {
-        expect(privateKey.isExportable()).to.be.false;
+      test("isExportable - implemented", () => {
+        expect(privateKey.isExportable()).to.be.true;
       });
 
       test("isSignable - implemented", () => {
@@ -248,8 +248,8 @@ describe("Keys", () => {
         expect(publicKey.isDerivable()).to.be.false;
       });
 
-      test("isExportable - not implemented", () => {
-        expect(publicKey.isExportable()).to.be.false;
+      test("isExportable - implemented", () => {
+        expect(publicKey.isExportable()).to.be.true;
       });
 
       test("isSignable - not implemented", () => {

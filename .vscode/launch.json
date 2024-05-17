@@ -32,13 +32,30 @@
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
-        "${fileBasenameNoExtension}",
         "--colors",
         "--workerThreads",
         "--detectOpenHandles",
         "--maxWorkers",
         "1",
         "./tests"
+      ],
+      "skipFiles": [
+        "${workspaceRoot}/../../node_modules/**/*",
+        "<node_internals>/**/*"
+      ]
+    },
+    {
+      "name": "TEST:file",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--colors",
+        "--workerThreads",
+        "--detectOpenHandles",
+        "--maxWorkers",
+        "1",
+        "${fileBasenameNoExtension}",
       ],
       "skipFiles": [
         "${workspaceRoot}/../../node_modules/**/*",

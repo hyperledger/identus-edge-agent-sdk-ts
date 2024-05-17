@@ -1,4 +1,3 @@
-import ApolloPkg from "@atala/apollo";
 import {
   Curve,
   ExportableKey,
@@ -9,6 +8,9 @@ import {
   StorableKey,
   VerifiableKey
 } from "../../domain";
+
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**
  * @ignore
@@ -46,13 +48,10 @@ export class Ed25519PublicKey extends PublicKey implements ExportableKey, Storab
 
   private getInstance(
     value?: Int8Array | Uint8Array
-  ): ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey {
+  ) {
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
-    const instance =
-      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey(
-        Int8Array.from(bytes)
-      );
+    const instance = new ApolloSDK.utils.KMMEdPublicKey(Int8Array.from(bytes));
 
     return instance;
   }

@@ -1,3 +1,6 @@
+import { notEmptyString } from "../../../../utils";
+import { KeyProperties } from "../../KeyProperties";
+import { Curve } from "../Curve";
 import { PrivateKey } from "../PrivateKey";
 import { PublicKey } from "../PublicKey";
 
@@ -26,7 +29,7 @@ export namespace JWK {
     // Algorithm
     alg?: string;
     // Extractable
-    ext?: string;
+    ext?: boolean;
     // Key operations
     key_ops?: key_ops[];
     // Key ID
@@ -36,13 +39,15 @@ export namespace JWK {
     // Public key use
     use?: "sig" | "enc";
     // X.509 Certificate chain
-    x5c?: string;
+    x5c?: string[];
     // X.509 Certificate SHA-1 Thumbprint
     x5t?: string;
     // X.509 Certificate SHA-256 Thumbprint
     'x5t#S256'?: string;
     // X.509 URL
     x5u?: string;
+    // unknown properties
+    [propName: string]: unknown;
   }
 
   // Elliptic Curve (DSS) key type 
@@ -51,11 +56,11 @@ export namespace JWK {
     // curve
     crv: string;
     // ECC private key
-    d: string;
+    d?: string;
     // X coord
-    x: string;
+    x?: string;
     // Y coord
-    y: string;
+    y?: string;
   }
 
   // Octet sequence key type
@@ -84,7 +89,11 @@ export namespace JWK {
     dq: string;
     e: string;
     n: string;
-    oth: string;
+    oth: Array<{
+      d?: string;
+      r?: string;
+      t?: string;
+    }>;
     p: string;
     q: string;
     qi: string;
@@ -100,16 +109,47 @@ export namespace JWK {
    */
   export const fromKey = (key: PublicKey | PrivateKey, base: Base = {}): JWK => {
     const prototype = Object.getPrototypeOf(key);
+    const privateFn = key.curve === Curve.SECP256K1 ? privateKeyToEC : privateKeyToOKP;
+    const publicFn = key.curve === Curve.SECP256K1 ? publicKeyToEC : publicKeyToOKP;
 
     if (prototype instanceof PublicKey) {
-      return Object.assign(base, publicKeyToJWK(key as PublicKey));
+      return Object.assign({}, base, publicFn(key as PublicKey));
     }
 
     if (prototype instanceof PrivateKey) {
-      return Object.assign(base, privateKeyToJWK(key as PrivateKey));
+      return Object.assign({}, base, privateFn(key as PrivateKey));
     }
 
     throw new Error("invalid Key given");
+  };
+
+  /**
+   * create a JWK EC from a PrivateKey
+   * 
+   * @param key 
+   * @returns 
+   */
+  const privateKeyToEC = (key: PrivateKey): JWK.EC => ({
+    ...publicKeyToEC(key.publicKey()),
+    d: key.to.String("base64url"),
+  });
+
+  /**
+   * create a JWK EC from a PublicKey
+   * 
+   * @param key 
+   * @returns 
+   */
+  const publicKeyToEC = (key: PublicKey): JWK.EC => {
+    const curvePointX = key.getProperty(KeyProperties.curvePointX);
+    const curvePointY = key.getProperty(KeyProperties.curvePointY);
+
+    return {
+      kty: "EC",
+      crv: key.curve.toLowerCase(),
+      x: notEmptyString(curvePointX) ? Buffer.from(curvePointX, "hex").toString("base64url") : undefined,
+      y: notEmptyString(curvePointY) ? Buffer.from(curvePointY, "hex").toString("base64url") : undefined,
+    };
   };
 
   /**
@@ -118,11 +158,9 @@ export namespace JWK {
    * @param key 
    * @returns 
    */
-  const privateKeyToJWK = (key: PrivateKey): JWK => ({
-    kty: "OKP",
-    crv: key.curve,
+  const privateKeyToOKP = (key: PrivateKey): JWK.OKP => ({
+    ...publicKeyToOKP(key.publicKey()),
     d: key.to.String("base64url"),
-    x: key.publicKey().to.String("base64url")
   });
 
   /**
@@ -131,7 +169,7 @@ export namespace JWK {
    * @param key 
    * @returns 
    */
-  const publicKeyToJWK = (key: PublicKey): JWK => ({
+  const publicKeyToOKP = (key: PublicKey): JWK.OKP => ({
     kty: "OKP",
     crv: key.curve,
     x: key.to.String("base64url")
