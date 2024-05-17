@@ -96,7 +96,7 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/protocols/types.ts#L94)
+[src/edge-agent/protocols/types.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/edge-agent/protocols/types.ts#L94)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/protocols/types.ts#L79)
+[src/edge-agent/protocols/types.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/edge-agent/protocols/types.ts#L79)
 
 ## Variables
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/models/AnonCredsVerifiableCredential.ts#L19)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/models/AnonCredsVerifiableCredential.ts#L19)
 
 ___
 
@@ -126,4 +126,4 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/models/JWTVerifiableCredential.ts#L23)
+[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/models/JWTVerifiableCredential.ts#L23)

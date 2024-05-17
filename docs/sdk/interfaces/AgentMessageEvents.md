@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:123](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/types/index.ts#L123)
+[src/edge-agent/types/index.ts:123](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/edge-agent/types/index.ts#L123)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:125](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/types/index.ts#L125)
+[src/edge-agent/types/index.ts:125](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/edge-agent/types/index.ts#L125)
 
 ___
 
@@ -71,4 +71,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/edge-agent/types/index.ts#L124)
+[src/edge-agent/types/index.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/edge-agent/types/index.ts#L124)

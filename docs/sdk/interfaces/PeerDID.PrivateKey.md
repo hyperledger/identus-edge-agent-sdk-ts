@@ -21,7 +21,7 @@ Instance of a KeyCurve
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/peer-did/PeerDID.ts#L11)
+[src/peer-did/PeerDID.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/peer-did/PeerDID.ts#L11)
 
 ___
 
@@ -33,4 +33,4 @@ Value as Uint8Array, buffer like
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/peer-did/PeerDID.ts#L17)
+[src/peer-did/PeerDID.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/peer-did/PeerDID.ts#L17)

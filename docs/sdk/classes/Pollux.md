@@ -66,7 +66,7 @@ Implementation of Pollux
 
 #### Defined in
 
-[src/pollux/Pollux.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L56)
+[src/pollux/Pollux.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L56)
 
 ## Properties
 
@@ -76,7 +76,7 @@ Implementation of Pollux
 
 #### Defined in
 
-[src/pollux/Pollux.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L54)
+[src/pollux/Pollux.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L54)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L58)
+[src/pollux/Pollux.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L58)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L57)
+[src/pollux/Pollux.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L57)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L59)
+[src/pollux/Pollux.ts:59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L59)
 
 ## Accessors
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:386](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L386)
+[src/pollux/Pollux.ts:386](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L386)
 
 ## Methods
 
@@ -148,7 +148,7 @@ Creates a PresentationDefinitionRequest object for oob Verifications
 
 #### Defined in
 
-[src/pollux/Pollux.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L151)
+[src/pollux/Pollux.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L151)
 
 ___
 
@@ -180,7 +180,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/pollux/Pollux.ts:632](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L632)
+[src/pollux/Pollux.ts:632](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L632)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
 
@@ -202,7 +202,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/pollux/Pollux.ts:633](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L633)
+[src/pollux/Pollux.ts:633](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L633)
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L62)
+[src/pollux/Pollux.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L62)
 
 ___
 
@@ -249,7 +249,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:490](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L490)
+[src/pollux/Pollux.ts:490](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L490)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:395](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L395)
+[src/pollux/Pollux.ts:395](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L395)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:619](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L619)
+[src/pollux/Pollux.ts:619](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L619)
 
 ___
 
@@ -320,7 +320,7 @@ handle the retrieval of a Credential Definition
 
 #### Defined in
 
-[src/pollux/Pollux.ts:458](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L458)
+[src/pollux/Pollux.ts:458](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L458)
 
 ___
 
@@ -342,7 +342,7 @@ handle the retrieval of a Schema definition
 
 #### Defined in
 
-[src/pollux/Pollux.ts:478](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L478)
+[src/pollux/Pollux.ts:478](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L478)
 
 ___
 
@@ -362,7 +362,7 @@ body is CredentialOffer
 
 #### Defined in
 
-[src/pollux/Pollux.ts:503](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L503)
+[src/pollux/Pollux.ts:503](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L503)
 
 ___
 
@@ -390,7 +390,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:571](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L571)
+[src/pollux/Pollux.ts:571](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L571)
 
 ___
 
@@ -410,7 +410,7 @@ data is PresentationSubmission
 
 #### Defined in
 
-[src/pollux/Pollux.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L133)
+[src/pollux/Pollux.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L133)
 
 ___
 
@@ -435,7 +435,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:541](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L541)
+[src/pollux/Pollux.ts:541](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L541)
 
 ___
 
@@ -460,7 +460,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:417](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L417)
+[src/pollux/Pollux.ts:417](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L417)
 
 ___
 
@@ -474,7 +474,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:381](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L381)
+[src/pollux/Pollux.ts:381](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L381)
 
 ___
 
@@ -494,7 +494,7 @@ options is JWT
 
 #### Defined in
 
-[src/pollux/Pollux.ts:231](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L231)
+[src/pollux/Pollux.ts:231](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L231)
 
 ___
 
@@ -523,4 +523,4 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/pollux/Pollux.ts:235](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pollux/Pollux.ts#L235)
+[src/pollux/Pollux.ts:235](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pollux/Pollux.ts#L235)

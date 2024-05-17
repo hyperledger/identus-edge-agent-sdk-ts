@@ -45,7 +45,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Agent.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/errors/Agent.ts#L68)
+[src/domain/models/errors/Agent.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/errors/Agent.ts#L68)
 
 ## Properties
 

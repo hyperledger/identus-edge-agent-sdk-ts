@@ -24,4 +24,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/exportable/ExportableKey.ts#L34)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/keyManagement/exportable/ExportableKey.ts#L34)

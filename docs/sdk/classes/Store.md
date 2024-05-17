@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L14)
+[src/pluto/rxdb/Store.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L14)
 
 ## Properties
 
@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L12)
+[src/pluto/rxdb/Store.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L12)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L16)
+[src/pluto/rxdb/Store.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L16)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L15)
+[src/pluto/rxdb/Store.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L15)
 
 ## Accessors
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L25)
+[src/pluto/rxdb/Store.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L25)
 
 ## Methods
 
@@ -112,7 +112,7 @@ and then destroy the database itself.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L99)
+[src/pluto/rxdb/Store.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L99)
 
 ___
 
@@ -139,7 +139,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L61)
+[src/pluto/rxdb/Store.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L61)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L73)
+[src/pluto/rxdb/Store.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L73)
 
 ___
 
@@ -186,7 +186,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L90)
+[src/pluto/rxdb/Store.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L90)
 
 ___
 
@@ -242,7 +242,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L82)
+[src/pluto/rxdb/Store.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L82)
 
 ___
 
@@ -262,7 +262,7 @@ Start the database and build collections
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:36](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L36)
+[src/pluto/rxdb/Store.ts:36](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L36)
 
 ___
 
@@ -295,4 +295,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/pluto/rxdb/Store.ts#L47)
+[src/pluto/rxdb/Store.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/pluto/rxdb/Store.ts#L47)

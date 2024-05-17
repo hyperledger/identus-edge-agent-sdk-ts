@@ -1,6 +1,6 @@
 {
   "name": "@atala/prism-wallet-sdk",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
   "module": "./index.mjs",

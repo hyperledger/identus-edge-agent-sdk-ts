@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.1.0...v5.1.1) (2024-05-17)
+
+
+### Bug Fixes
+
+* Compatibility issues with osx and unix platforms around the sed ([#217](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/217)) ([47ec1c8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/47ec1c854dc419f126d426a44d238568f53ff3eb))
+
 # [5.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.0.0...v5.1.0) (2024-05-07)
 
 

@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L40)
+[src/domain/models/MessageAttachment.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L40)
 
 ## Properties
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L47)
+[src/domain/models/MessageAttachment.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L47)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L41)
+[src/domain/models/MessageAttachment.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L41)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L48)
+[src/domain/models/MessageAttachment.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L48)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L44)
+[src/domain/models/MessageAttachment.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L44)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:45](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L45)
+[src/domain/models/MessageAttachment.ts:45](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L45)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L43)
+[src/domain/models/MessageAttachment.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L43)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L46)
+[src/domain/models/MessageAttachment.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L46)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L42)
+[src/domain/models/MessageAttachment.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L42)
 
 ## Methods
 
@@ -163,4 +163,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:51](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/MessageAttachment.ts#L51)
+[src/domain/models/MessageAttachment.ts:51](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/MessageAttachment.ts#L51)

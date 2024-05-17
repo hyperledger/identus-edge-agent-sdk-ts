@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyTypes.ts:3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/KeyTypes.ts#L3)
+[src/domain/models/keyManagement/KeyTypes.ts:3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/keyManagement/KeyTypes.ts#L3)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyTypes.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/keyManagement/KeyTypes.ts#L2)
+[src/domain/models/keyManagement/KeyTypes.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/keyManagement/KeyTypes.ts#L2)

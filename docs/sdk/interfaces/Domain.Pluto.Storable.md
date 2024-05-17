@@ -34,4 +34,4 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/buildingBlocks/Pluto.ts#L20)
+[src/domain/buildingBlocks/Pluto.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/buildingBlocks/Pluto.ts#L20)

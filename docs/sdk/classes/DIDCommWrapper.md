@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L24)
+[src/mercury/didcomm/Wrapper.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L24)
 
 ## Properties
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L25)
+[src/mercury/didcomm/Wrapper.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L25)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L26)
+[src/mercury/didcomm/Wrapper.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L26)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L21)
+[src/mercury/didcomm/Wrapper.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L21)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L27)
+[src/mercury/didcomm/Wrapper.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L27)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L22)
+[src/mercury/didcomm/Wrapper.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L22)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L20)
+[src/mercury/didcomm/Wrapper.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L20)
 
 ## Methods
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L55)
+[src/mercury/didcomm/Wrapper.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L55)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:71](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L71)
+[src/mercury/didcomm/Wrapper.ts:71](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L71)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:233](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L233)
+[src/mercury/didcomm/Wrapper.ts:233](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L233)
 
 ___
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:249](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L249)
+[src/mercury/didcomm/Wrapper.ts:249](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L249)
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:189](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L189)
+[src/mercury/didcomm/Wrapper.ts:189](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L189)
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:171](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L171)
+[src/mercury/didcomm/Wrapper.ts:171](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L171)
 
 ___
 
@@ -260,7 +260,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:220](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L220)
+[src/mercury/didcomm/Wrapper.ts:220](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L220)
 
 ___
 
@@ -280,7 +280,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:155](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L155)
+[src/mercury/didcomm/Wrapper.ts:155](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L155)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L117)
+[src/mercury/didcomm/Wrapper.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L117)
 
 ___
 
@@ -318,4 +318,4 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/mercury/didcomm/Wrapper.ts#L33)
+[src/mercury/didcomm/Wrapper.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/mercury/didcomm/Wrapper.ts#L33)

@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/KeyPair.ts#L10)
+[src/domain/models/KeyPair.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/KeyPair.ts#L10)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/KeyPair.ts#L9)
+[src/domain/models/KeyPair.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/KeyPair.ts#L9)
 
 ## Accessors
 
@@ -61,4 +61,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/a3fc2aa/src/domain/models/KeyPair.ts#L5)
+[src/domain/models/KeyPair.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/47ec1c8/src/domain/models/KeyPair.ts#L5)
