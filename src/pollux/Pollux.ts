@@ -1,4 +1,5 @@
 import { uuid } from "@stablelib/uuid";
+import type * as Anoncreds from "anoncreds-browser";
 
 import { Castor } from "../domain/buildingBlocks/Castor";
 import { Pollux as IPollux } from "../domain/buildingBlocks/Pollux";
@@ -40,7 +41,6 @@ import {
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
-import { Anoncreds } from "../domain/models/Anoncreds";
 import { ApiImpl } from "../edge-agent/helpers/ApiImpl";
 import { PresentationRequest } from "./models/PresentationRequest";
 import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
@@ -332,8 +332,8 @@ export default class Pollux implements IPollux {
 
       const predicatePaths = Object.keys(claims.predicates ?? {});
 
-      const requestedPredicates: Anoncreds.PresentationRequest_RequestedPredicates =
-        predicatePaths.reduce<Anoncreds.PresentationRequest_RequestedPredicates>((all, predicateName, i) => {
+      const requestedPredicates: Anoncreds.RequestedPredicates =
+        predicatePaths.reduce<Anoncreds.RequestedPredicates>((all, predicateName, i) => {
           const claimPredicate = (claims.predicates ?? {})[predicateName];
 
           const pType = claimPredicate.$gt ? '>' :
@@ -352,21 +352,21 @@ export default class Pollux implements IPollux {
             throw new Error("TODO improve, should return valid ptype")
           }
 
-          const predicate: Anoncreds.PresentationRequest_RequestedPredicates[
-            keyof Anoncreds.PresentationRequest_RequestedPredicates
+          const predicate: Anoncreds.RequestedPredicates[
+            keyof Anoncreds.RequestedPredicates
           ] = {
-            name: predicateName,
+            name: claimPredicate.name,
             p_type: pType,
             p_value: pValue
           }
           return {
             ...all,
-            [`p_${predicateName}${i}`]: predicate
+            [`${claimPredicate.name}${i > 0 ? '_' + i : ''}`]: predicate
           }
         }, {});
 
       const presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.AnonCreds> = {
-        nonce: uuid(),
+        nonce: this.anoncreds.createNonce(),
         name: "anoncreds_presentation_request",
         version: "0.1",
         requested_attributes: claims.attributes ?? {},
@@ -628,7 +628,7 @@ export default class Pollux implements IPollux {
    * @returns 
    */
   private async fetchSchema(schemaURI: string): Promise<any> {
-    const response = await this.api.request<Anoncreds.Schema>(
+    const response = await this.api.request<Anoncreds.CredentialSchemaType>(
       "get",
       schemaURI,
       new Map(),
@@ -725,7 +725,7 @@ export default class Pollux implements IPollux {
     options?: {
       type: CredentialType;
       linkSecret?: string;
-      credentialMetadata?: Anoncreds.CredentialRequestMeta;
+      credentialMetadata?: Anoncreds.CredentialRequestMetadataType;
       [name: string]: any;
     }
   ) {
@@ -749,7 +749,7 @@ export default class Pollux implements IPollux {
 
       const credentialIssued = JSON.parse(
         credentialString
-      ) as Anoncreds.CredentialIssued;
+      ) as Anoncreds.CredentialType;
 
       const credentialDefinition = await this.fetchCredentialDefinition(
         credentialIssued.cred_def_id

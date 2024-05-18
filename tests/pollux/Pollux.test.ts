@@ -723,21 +723,11 @@ describe("Pollux", () => {
           createCredentialRequest: stubCreateCredentialRequest
         }));
 
-        const credDef = { b: 2 };
+        const credDef = Fixtures.Credentials.Anoncreds.credentialDefinition;
         const stubFetchCredentialDefinition = sandbox.stub(pollux as any, "fetchCredentialDefinition")
           .resolves(credDef);
 
-        const anonCredsBody = {
-          cred_def_id: "cred_def_id",
-          schema_id: "schema_id",
-          nonce: "nonce",
-          key_correctness_proof: {
-            c: "c",
-            xr_cap: [["first", "second"]],
-            xz_cap: "xz_cap",
-          },
-          method_name: "method_name"
-        };
+        const anonCredsBody = Fixtures.Credentials.Anoncreds.credentialOffer;
         const attach_id = "13";
         const body = { formats: [{ format: CredentialType.AnonCreds, attach_id }] };
         const msg = new Message(JSON.stringify(body), undefined, "piuri");
@@ -901,12 +891,12 @@ describe("Pollux", () => {
           expect(geProof).to.have.property("predicate").to.be.an("object");
           expect(geProof.predicate).to.have.property(
             "attr_name",
-            Fixtures.Credentials.Anoncreds.presentationRequest.requested_predicates.predicate1_referent.name
+            Fixtures.Credentials.Anoncreds.presentationRequest.requested_predicates.age1.name
           );
           expect(geProof.predicate).to.have.property("p_type", "GE");
           expect(geProof.predicate).to.have.property(
             "value",
-            Fixtures.Credentials.Anoncreds.presentationRequest.requested_predicates.predicate1_referent.p_value
+            Fixtures.Credentials.Anoncreds.presentationRequest.requested_predicates.age1.p_value
           );
         });
       });
@@ -949,11 +939,14 @@ describe("Pollux", () => {
       expect(result).to.have.property("signature");
       expect(result).to.have.property("signature_correctness_proof");
 
-      Fixtures.Credentials.Anoncreds.credentialIssued.values.forEach((value) => {
-        expect(result.values)
-          .to.have.property(value[0])
-          .to.deep.equal(value[1]);
-      });
+      expect(result.values)
+        .to.have.property("age")
+        .to.deep.equal(Fixtures.Credentials.Anoncreds.credentialIssued.values.age)
+
+      expect(result.values)
+        .to.have.property("name")
+        .to.deep.equal(Fixtures.Credentials.Anoncreds.credentialIssued.values.name)
+
     });
   });
 
@@ -1664,11 +1657,13 @@ describe("Pollux", () => {
     });
 
     it("Should create a PresentationDefinitionRequest for anoncreds Credential with no disclosed fields", async () => {
+      await pollux.start()
       const presentation = await pollux.createPresentationDefinitionRequest(
         CredentialType.AnonCreds,
         {
           predicates: {
             age: {
+              name: "age",
               $gte: 18,
               type: "number"
             }
@@ -1687,15 +1682,15 @@ describe("Pollux", () => {
       expect(presentation.name).to.equal("anoncreds_presentation_request");
       expect(presentation.version).to.equal("0.1");
 
-      expect(presentation.requested_predicates).to.haveOwnProperty("p_age0");
+      expect(presentation.requested_predicates).to.haveOwnProperty("age");
 
-      expect(presentation.requested_predicates.p_age0).to.haveOwnProperty("name");
-      expect(presentation.requested_predicates.p_age0).to.haveOwnProperty("p_type");
-      expect(presentation.requested_predicates.p_age0).to.haveOwnProperty("p_value");
+      expect(presentation.requested_predicates.age).to.haveOwnProperty("name");
+      expect(presentation.requested_predicates.age).to.haveOwnProperty("p_type");
+      expect(presentation.requested_predicates.age).to.haveOwnProperty("p_value");
 
-      expect(presentation.requested_predicates.p_age0.name).to.equal("age");
-      expect(presentation.requested_predicates.p_age0.p_type).to.equal(">=");
-      expect(presentation.requested_predicates.p_age0.p_value).to.equal(18);
+      expect(presentation.requested_predicates.age.name).to.equal("age");
+      expect(presentation.requested_predicates.age.p_type).to.equal(">=");
+      expect(presentation.requested_predicates.age.p_value).to.equal(18);
     })
 
     it("Should Verify false when the presentation is signed with holder keys that don't match", async () => {
@@ -1949,14 +1944,18 @@ describe("Pollux", () => {
           }
         }
       });
-
       expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.equal(true)
     })
 
     it("Should Verify true when the Anoncreds presentation and the proof are completely valid", async () => {
+      sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
+      sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
 
+      const issuerDID = DID.fromString('did:web:xyz')
+
+      await pollux.start()
       const {
         presentationDefinition,
         presentationSubmissionJSON,
@@ -1966,18 +1965,19 @@ describe("Pollux", () => {
         pollux,
         claims: {
           predicates: {
-            age: {
+            age1: {
+              name: "age",
               type: 'string',
-              $gt: 25
+              $gte: 5
             }
           },
           attributes: {
-            name: {
+            name1: {
               name: "name",
               restrictions: {
-                cred_def_id: '12345'
-              }
-            }
+                cred_def_id: `${issuerDID.toString()}/resource/definition`,
+              },
+            },
           }
         }
       });

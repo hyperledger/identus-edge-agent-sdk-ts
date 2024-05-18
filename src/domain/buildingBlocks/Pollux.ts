@@ -2,15 +2,13 @@ import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCred
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
 import { CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
-import { Anoncreds } from "../models/Anoncreds";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
+import type * as Anoncreds from "anoncreds-browser";
 
 type CredentialRequestTuple<
   T1 = Anoncreds.CredentialRequest,
-  T2 = Anoncreds.CredentialRequestMeta
+  T2 = Anoncreds.CredentialRequestMetadata
 > = [T1, T2];
-
-
 
 
 /**

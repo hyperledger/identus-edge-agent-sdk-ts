@@ -1,5 +1,5 @@
+import type * as Anoncreds from "anoncreds-browser";
 import * as sha256 from '@stablelib/sha256';
-import { Anoncreds } from "../../domain/models/Anoncreds";
 import { Credential, StorableCredential } from "../../domain/models/Credential";
 import { CredentialType } from "../../domain/models/VerifiableCredential";
 
@@ -25,7 +25,7 @@ export class AnonCredsCredential
   public recoveryId = AnonCredsRecoveryId;
   public properties = new Map<AnonCredsCredentialProperties, any>();
 
-  constructor(credential: Anoncreds.Credential, isRevoked = false) {
+  constructor(credential: Anoncreds.CredentialType, isRevoked = false) {
     super();
 
     const {
@@ -45,7 +45,7 @@ export class AnonCredsCredential
   }
 
   get id() {
-    const credential: Anoncreds.Credential = {
+    const credential: Anoncreds.CredentialType = {
       schema_id: this.properties.get(AnonCredsCredentialProperties.schemaId),
       cred_def_id: this.properties.get(AnonCredsCredentialProperties.credentialDefinitionId),
       values: this.properties.get(AnonCredsCredentialProperties.values),
@@ -100,7 +100,7 @@ export class AnonCredsCredential
     };
   }
 
-  toJSON(): Anoncreds.Credential {
+  toJSON(): Anoncreds.CredentialType {
     return {
       cred_def_id: this.credentialDefinitionId,
       schema_id: this.schemaId,

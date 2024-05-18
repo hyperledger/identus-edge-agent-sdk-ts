@@ -291,7 +291,6 @@ export default class Agent
     if (storedLinkSecret == null) {
       const secret = this.pollux.anoncreds.createLinksecret();
       const linkSecret = new Domain.LinkSecret(secret);
-
       await this.pluto.storeLinkSecret(linkSecret);
     }
 

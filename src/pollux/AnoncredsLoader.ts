@@ -1,5 +1,5 @@
-import { Anoncreds } from "../domain/models/Anoncreds";
-import type * as anoncredsTypes from "anoncreds-browser";
+// import { Anoncreds } from "../domain/models/Anoncreds";
+import type * as Anoncreds from "anoncreds-browser";
 
 /**
  * @class AnoncredsLoader
@@ -9,7 +9,7 @@ import type * as anoncredsTypes from "anoncreds-browser";
 export class AnoncredsLoader {
   private static instance: AnoncredsLoader;
   private loaded = false;
-  private pkg: typeof anoncredsTypes | undefined;
+  private pkg: typeof Anoncreds | undefined;
 
   static async getInstance() {
     if (AnoncredsLoader.instance === undefined) {
@@ -23,6 +23,7 @@ export class AnoncredsLoader {
     /*START.BROWSER_ONLY*/
     if (typeof window !== "undefined" && !this.loaded) {
       this.pkg = await import("anoncreds-browser");
+      /** @ts-ignore */
       const pkgWasm = await import("anoncreds-browser/anoncreds_bg.wasm");
       await (this.pkg as any).default(await (pkgWasm as any).default());
       this.loaded = true;
@@ -44,103 +45,82 @@ export class AnoncredsLoader {
     return this.pkg;
   }
 
-  createLinksecret(): Anoncreds.LinkSecret {
-    return this.wasm.proverCreateLinkSecret();
+  createLinksecret(): string {
+    return this.wasm.Prover.createLinkSecret().toString();
   }
 
   createCredentialRequest(
-    credentialOffer: Anoncreds.CredentialOffer,
-    credentialDefinition: Anoncreds.CredentialDefinition,
-    linkSecret: Anoncreds.LinkSecret,
+    credentialOffer: Anoncreds.CredentialOfferType,
+    credentialDefinition: Anoncreds.CredentialDefinitionType,
+    linkSecret: string,
     linkSecretId: string
-  ): [Anoncreds.CredentialRequest, Anoncreds.CredentialRequestMeta] {
-    const result = this.wasm.proverCreateCredentialRequest(
-      credentialOffer,
-      credentialDefinition,
-      linkSecret,
-      linkSecretId
+  ): [Anoncreds.CredentialRequest, Anoncreds.CredentialRequestMetadata] {
+    const result = this.wasm.Prover.createCredentialRequest(
+      this.wasm.CredentialDefinition.from(credentialDefinition),
+      this.wasm.LinkSecret.fromString(linkSecret),
+      linkSecretId,
+      this.wasm.CredentialOffer.from(credentialOffer),
     );
-
-    const credentialRequest = result[0];
-    credentialRequest.blinded_ms_correctness_proof.m_caps = this.mapToObj(
-      credentialRequest.blinded_ms_correctness_proof.m_caps
-    );
-
-    return [credentialRequest, result[1]];
+    return [result.request, result.metadata]
   }
 
   processCredential(
-    credentialDefinition: Anoncreds.CredentialDefinition,
-    credential: Anoncreds.CredentialIssued,
-    credentialRequestMeta: Anoncreds.CredentialRequestMeta,
-    linkSecret: Anoncreds.LinkSecret
+    credentialDefinition: Anoncreds.CredentialDefinitionType,
+    credential: Anoncreds.CredentialType,
+    credentialRequestMeta: Anoncreds.CredentialRequestMetadataType,
+    linkSecret: string
   ): Anoncreds.Credential {
-    const result = this.wasm.proverProcessCredential(
-      credentialDefinition,
-      credential,
-      credentialRequestMeta,
-      linkSecret
+    const result = this.wasm.Prover.processCredential(
+      this.wasm.Credential.from(credential),
+      this.wasm.CredentialRequestMetadata.from(credentialRequestMeta),
+      this.wasm.LinkSecret.fromString(linkSecret),
+      this.wasm.CredentialDefinition.from(credentialDefinition),
     );
-
-    result.values = this.mapToObj(result.values);
-
     return result;
   }
+
+
+  private loadAnoncredsSchemas(
+    schemas: Record<string, Anoncreds.CredentialSchemaType>,
+  ): Record<string, Anoncreds.CredentialSchema> {
+    return Object.keys(schemas).reduce<Record<string, Anoncreds.CredentialSchema>>((all, current) => {
+      return {
+        ...all,
+        [current]: this.wasm.CredentialSchema.from(schemas[current])
+      }
+    }, {})
+  }
+
+  private loadAnoncredsDefinitions(
+    definitions: Record<string, Anoncreds.CredentialDefinitionType>,
+  ): Record<string, Anoncreds.CredentialDefinition> {
+    return Object.keys(definitions).reduce<Record<string, Anoncreds.CredentialDefinition>>((all, current) => {
+      return {
+        ...all,
+        [current]: this.wasm.CredentialDefinition.from(definitions[current])
+      }
+    }, {})
+  }
+
 
   createPresentation(
-    presentationRequest: Anoncreds.PresentationRequest,
-    schemas: Record<string, Anoncreds.Schema>,
-    credentialDefinitions: Record<string, Anoncreds.CredentialDefinition>,
-    credential: Anoncreds.Credential,
-    linkSecret: Anoncreds.LinkSecret
+    presentationRequest: Anoncreds.PresentationRequestType,
+    schemas: Record<string, Anoncreds.CredentialSchemaType>,
+    credentialDefinitions: Record<string, Anoncreds.CredentialDefinitionType>,
+    credential: Anoncreds.CredentialType,
+    linkSecret: string
   ): Anoncreds.Presentation {
-    const result = this.wasm.proverCreatePresentation(
-      presentationRequest,
-      schemas,
-      credentialDefinitions,
-      credential,
-      linkSecret
+    const result = this.wasm.Prover.createPresentation(
+      this.wasm.PresentationRequest.from(presentationRequest),
+      this.wasm.Credential.from(credential),
+      this.wasm.LinkSecret.fromString(linkSecret),
+      this.loadAnoncredsSchemas(schemas),
+      this.loadAnoncredsDefinitions(credentialDefinitions),
     );
-
-    result.proof.proofs = result.proof.proofs.map((proof: any) => {
-      proof.primary_proof.eq_proof.revealed_attrs = this.mapToObj(
-        proof.primary_proof.eq_proof.revealed_attrs
-      );
-      proof.primary_proof.eq_proof.m = this.mapToObj(
-        proof.primary_proof.eq_proof.m
-      );
-
-      proof.primary_proof.ge_proofs = proof.primary_proof.ge_proofs.map(
-        (ge: any) => {
-          ge.r = this.mapToObj(ge.r);
-          ge.t = this.mapToObj(ge.t);
-          ge.u = this.mapToObj(ge.u);
-          ge.predicate = this.mapToObj(ge.predicate);
-
-          return ge;
-        }
-      );
-
-      return proof;
-    });
-
-    result.requested_proof.revealed_attrs = this.mapToObj(
-      result.requested_proof.revealed_attrs
-    );
-    result.requested_proof.self_attested_attrs = this.mapToObj(
-      result.requested_proof.self_attested_attrs
-    );
-    result.requested_proof.unrevealed_attrs = this.mapToObj(
-      result.requested_proof.unrevealed_attrs
-    );
-    result.requested_proof.predicates = this.mapToObj(
-      result.requested_proof.predicates
-    );
-
     return result;
   }
 
-  private mapToObj<V>(value: Map<string, V>): Record<string, V> {
-    return value instanceof Map ? Object.fromEntries(value) : value;
+  createNonce(): string {
+    return this.wasm.Verifier.createNonce()
   }
 }

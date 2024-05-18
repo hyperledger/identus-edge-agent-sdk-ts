@@ -1,4 +1,4 @@
-import type { Anoncreds } from "./Anoncreds";
+import type * as Anoncreds from "anoncreds-browser";
 
 export enum CredentialType {
   JWT = "prism/jwt",
@@ -81,7 +81,7 @@ export type JWTPresentationClaims = {
 
 export type AnoncredsPresentationClaims = {
   predicates?: Claims<CredentialType.AnonCreds>,
-  attributes?: Anoncreds.PresentationRequest_RequestedAttributes
+  attributes?: Anoncreds.RequestedAttributes
 }
 
 export type PresentationClaims<Type extends CredentialType = CredentialType.JWT> =
@@ -92,6 +92,7 @@ export type PresentationClaims<Type extends CredentialType = CredentialType.JWT>
 
 export type AnoncredsInputFieldFilter = {
   type: string,
+  name: string,
   $gt?: PredicateType,
   $gte?: PredicateType,
   $lt?: PredicateType,
@@ -135,7 +136,7 @@ export type DefinitionFormat = {
   },
 };
 
-export type PresentationAnoncredsRequest = Anoncreds.PresentationRequest
+export type PresentationAnoncredsRequest = Anoncreds.PresentationRequestType
 
 export type PresentationExchangeDefinitionRequest = {
   presentation_definition: {
