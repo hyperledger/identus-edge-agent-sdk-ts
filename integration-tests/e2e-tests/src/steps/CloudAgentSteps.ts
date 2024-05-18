@@ -2,6 +2,8 @@ import {Given, Then, When} from "@cucumber/cucumber"
 import {Actor, Notepad} from "@serenity-js/core"
 import {CloudAgentWorkflow} from "../workflow/CloudAgentWorkflow"
 import {EdgeAgentWorkflow} from "../workflow/EdgeAgentWorkflow"
+import { Utils } from "../Utils"
+import { WalletSdk } from "../abilities/WalletSdk"
 
 Given("{actor} has a connection invitation with '{}', '{}' and '{}' parameters", 
   async function (cloudAgent: Actor, rawLabel: string, rawGoalCode: string, rawGoal: string) {
@@ -22,12 +24,26 @@ Given("{actor} shares invitation to {actor}", async function (cloudAgent: Actor,
   await CloudAgentWorkflow.shareInvitation(cloudAgent, edgeAgent)
 })
 
-When("{actor} offers a credential", async function (cloudAgent: Actor) {
-  await CloudAgentWorkflow.offerCredential(cloudAgent)
+When("{actor} offers '{int}' jwt credentials", async function (cloudAgent: Actor, numberOfCredentials: number) {
+  const recordIdList = []
+  await Utils.repeat(numberOfCredentials, async () => {
+    await CloudAgentWorkflow.offerCredential(cloudAgent)
+    recordIdList.push(await cloudAgent.answer(Notepad.notes().get("recordId")))
+  })
+  await cloudAgent.attemptsTo(
+    Notepad.notes().set("recordIdList", recordIdList)
+  )
 })
 
-When("{actor} offers an anonymous credential", async function(cloudAgent: Actor) {
-  await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
+When("{actor} offers '{int}' anonymous credential", async function(cloudAgent: Actor, numberOfAnoncreds: number) {
+  const recordIdList = []
+  await Utils.repeat(numberOfAnoncreds, async () => {
+    await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
+    recordIdList.push(await cloudAgent.answer(Notepad.notes().get("recordId")))
+  })
+  await cloudAgent.attemptsTo(
+    Notepad.notes().set("recordIdList", recordIdList)
+  )
 })
 
 When("{actor} asks for present-proof", async function (cloudAgent: Actor) {
@@ -38,13 +54,12 @@ When("{actor} asks for presentation of AnonCred proof", async function (cloudAge
   await CloudAgentWorkflow.askForPresentProofAnonCreds(cloudAgent)
 })
 
-Then("{actor} should have the connection status updated to '{}'", async (cloudAgent: Actor, expectedStatus: string) => {
-  await CloudAgentWorkflow.waitForConnectionState(cloudAgent, expectedStatus)
+When("{actor} revokes '{int}' credentials", async function (cloudAgent: Actor, numberOfRevokedCredentials: number) {
+  await CloudAgentWorkflow.revokeCredential(cloudAgent, numberOfRevokedCredentials)
 })
 
-Then("{actor} should see the credential was accepted", async (cloudAgent: Actor) => {
-  const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
-  await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
+Then("{actor} should have the connection status updated to '{}'", async (cloudAgent: Actor, expectedStatus: string) => {
+  await CloudAgentWorkflow.waitForConnectionState(cloudAgent, expectedStatus)
 })
 
 Then("{actor} should see the present-proof is verified", async (cloudAgent: Actor) => {
