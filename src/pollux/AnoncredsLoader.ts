@@ -23,8 +23,7 @@ export class AnoncredsLoader {
     /*START.BROWSER_ONLY*/
     if (typeof window !== "undefined" && !this.loaded) {
       this.pkg = await import("anoncreds-browser");
-      /** @ts-ignore */
-      const pkgWasm = await import("anoncreds-browser/anoncreds_bg.wasm");
+      const pkgWasm = await import("anoncreds-browser/anoncreds_wasm_bg.wasm");
       await (this.pkg as any).default(await (pkgWasm as any).default());
       this.loaded = true;
     }

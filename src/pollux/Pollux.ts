@@ -552,8 +552,8 @@ export default class Pollux implements IPollux {
       await this.fetchSchema(schema_id);
 
 
-    const schemas_dict = new Map<String, Anoncreds.CredentialSchemaType>()
-    const definitions_dict = new Map<String, Anoncreds.CredentialDefinitionType>()
+    const schemas_dict = new Map<string, Anoncreds.CredentialSchemaType>()
+    const definitions_dict = new Map<string, Anoncreds.CredentialDefinitionType>()
 
     definitions_dict.set(cred_def_id, credentialDefinition);
     schemas_dict.set(schema_id, credentialSchema);

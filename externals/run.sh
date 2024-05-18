@@ -68,9 +68,9 @@ buildAnonCreds() {
   #The code will fully work
   cd "${GenAnonCreds}-wasm-browser"
   if is_mac; then
-    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
+    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
   else
-    sed -i "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
+    sed -i "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
   fi
   cd $ExternalsDir
   git submodule | grep $AnonCreds | awk '{print $1}' > "./${AnonCreds}.commit"
