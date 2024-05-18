@@ -6,7 +6,7 @@ import { Credential, CredentialRequestOptions } from "../models/Credential";
 import type * as Anoncreds from "anoncreds-browser";
 
 type CredentialRequestTuple<
-  T1 = Anoncreds.CredentialRequest,
+  T1 = Anoncreds.CredentialRequestType,
   T2 = Anoncreds.CredentialRequestMetadata
 > = [T1, T2];
 
