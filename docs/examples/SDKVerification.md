@@ -44,6 +44,7 @@
 ## Code Reference
 * toDID is the peer did of holder A, which has the credential that we aim to verify
 * claims contain an object with all the claims we aim to validate; setting claims is internally used to help Holder A choose the proper credential and correctly verify the fields when Holder B receives the presentation.
+
 Example 
 ```javascript
 const claims: Claims = {
@@ -62,6 +63,18 @@ agent.initiatePresentationRequest(
     options
 );
 ```
+
+* The Edge Agent Verifier (SDK) will then send the Presentation Request to the desired holder
+* The Edge Agent Holder will be asked to choose what credential wants to be used for that Presentation Request
+* The Edge Agent Verifier (SDK) will then receive and validate the Credential as follows
+
+Example
+```javascript
+//Presentation is the message sent by the holder back to the verifier
+const message = SDK.Presentation.fromMessage(message);
+agent.handlePresentation(message)
+```
+
 
 
 
