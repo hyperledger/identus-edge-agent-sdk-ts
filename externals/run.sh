@@ -58,10 +58,10 @@ buildAnonCreds() {
   GenAnonCreds="${GeneratedDir}/${AnonCreds}"
   rm -rfv "${GenAnonCreds}*"
 
-  cd $AnonCredsDir
+  cd $AnonCredsDir/wasm
 
-  wasm-pack build --target=web --no-default-features --features=wasm --out-dir "${GenAnonCreds}-wasm-browser"
-  wasm-pack build --target=nodejs --no-default-features --features=wasm --out-dir "${GenAnonCreds}-wasm-node"
+  wasm-pack build --target=web --out-dir="${GenAnonCreds}-wasm-browser"
+  wasm-pack build --target=nodejs --out-dir="${GenAnonCreds}-wasm-node"
   
   #TODO: find better way to approach this
   #This code fails on browser when wasm is first loaded, it can just be ignored
