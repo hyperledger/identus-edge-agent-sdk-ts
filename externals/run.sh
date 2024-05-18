@@ -60,12 +60,8 @@ buildAnonCreds() {
 
   cd $AnonCredsDir
 
-  # cant use --out-dir
-  wasm-pack build --target=web --no-default-features --features=wasm
-  mv pkg "${GenAnonCreds}-wasm-browser"
-
-  wasm-pack build --target=nodejs --no-default-features --features=wasm
-  mv pkg "${GenAnonCreds}-wasm-node"
+  wasm-pack build --target=web --no-default-features --features=wasm --out-dir "${GenAnonCreds}-wasm-browser"
+  wasm-pack build --target=nodejs --no-default-features --features=wasm --out-dir "${GenAnonCreds}-wasm-node"
   
   #TODO: find better way to approach this
   #This code fails on browser when wasm is first loaded, it can just be ignored
