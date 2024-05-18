@@ -188,7 +188,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       const [credentialRequest, credentialRequestMetadata] =
         await this.pollux.processAnonCredsCredential(message, { linkSecret });
 
-      debugger;
       credRequestBuffer = JSON.stringify(credentialRequest);
 
       // TODO can we fallback here? would need another identifier
