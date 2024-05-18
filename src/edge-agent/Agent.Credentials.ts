@@ -278,7 +278,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     return requestCredential;
   }
 
-  private async getPresentationDefinitionByThid(thid: string): Promise<PresentationDefinitionRequest> {
+  private async getPresentationDefinitionByThid<Type extends CredentialType = CredentialType.JWT>(thid: string): Promise<PresentationDefinitionRequest<Type>> {
     const allMessages = (await this.pluto.getAllMessages())
     const message = allMessages.find((message) => {
       return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation
@@ -294,7 +294,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
   }
 
-  async handlePresentation(presentation: Presentation): Promise<boolean> {
+  async handlePresentation<Type extends CredentialType = CredentialType.JWT>(presentation: Presentation): Promise<boolean> {
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
       throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing")
@@ -303,7 +303,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
     }
     const presentationSubmission = Message.Attachment.extractJSON(attachment);
-    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid(presentation.thid!)
+    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid!)
     const options = {
       presentationDefinitionRequest
     }

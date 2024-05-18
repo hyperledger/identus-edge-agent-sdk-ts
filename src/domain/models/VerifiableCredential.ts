@@ -178,7 +178,7 @@ export type JWTPresentationSubmission = {
   verifiablePresentation: string[],
 }
 
-export type AnoncredsPresentationSubmission = Anoncreds.Presentation;
+export type AnoncredsPresentationSubmission = Anoncreds.PresentationType;
 
 
 

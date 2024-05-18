@@ -6,8 +6,8 @@ import { Credential, CredentialRequestOptions } from "../models/Credential";
 import type * as Anoncreds from "anoncreds-browser";
 
 type CredentialRequestTuple<
-  T1 = Anoncreds.CredentialRequest,
-  T2 = Anoncreds.CredentialRequestMetadata
+  T1 = Anoncreds.CredentialRequestType,
+  T2 = Anoncreds.CredentialRequestMetadataType
 > = [T1, T2];
 
 
@@ -49,11 +49,11 @@ export interface Pollux {
    * @returns {boolean} true if the submission is valid or false if it is not
    */
   verifyPresentationSubmission(
-    presentationSubmission: PresentationSubmission,
+    presentationSubmission: PresentationSubmission<CredentialType.JWT>,
     options?: Pollux.verifyPresentationSubmission.options.JWT
   ): Promise<boolean>
   verifyPresentationSubmission(
-    presentationSubmission: PresentationSubmission,
+    presentationSubmission: PresentationSubmission<CredentialType.AnonCreds>,
     options?: Pollux.verifyPresentationSubmission.options.Anoncreds
   ): Promise<boolean>
   verifyPresentationSubmission(
@@ -94,10 +94,11 @@ export namespace Pollux {
     export type options = options.Anoncreds | options.JWT;
     export namespace options {
       export interface Anoncreds {
-        [name: string | number | symbol]: any
+        [name: string | number | symbol]: any;
+        presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.AnonCreds>,
       }
       export interface JWT {
-        presentationDefinitionRequest: PresentationDefinitionRequest,
+        presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.JWT>,
       }
     }
   }

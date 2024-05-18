@@ -37,6 +37,8 @@ import {
   JWTPresentationOptions,
   AnoncredsPresentationClaims,
   LinkSecret,
+  JWTPresentationSubmission,
+  AnoncredsPresentationSubmission,
 } from "../domain";
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
@@ -151,16 +153,10 @@ export default class Pollux implements IPollux {
   }
 
   private async createAnoncredsPresentationSubmission(
-    presentationDefinitionRequest: any,
+    presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.AnonCreds>,
     credential: AnonCredsCredential,
-    linkSecret: any
+    linkSecret: LinkSecret
   ): Promise<PresentationSubmission<CredentialType.AnonCreds>> {
-    if (!(linkSecret instanceof LinkSecret)) {
-      throw new CastorError.InvalidKeyError("Required linksecret key")
-    }
-    if (!this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.AnonCreds)) {
-      throw new Error("PresentationDefinition didn't match credential type")
-    }
     const credentialSchema = await this.fetchSchema(credential.schemaId);
     const credentialDefinition = await this.fetchCredentialDefinition(credential.credentialDefinitionId);
     const schemas = { [credential.schemaId]: credentialSchema };
@@ -184,9 +180,14 @@ export default class Pollux implements IPollux {
     privateKey?: PrivateKey | LinkSecret
   ): Promise<PresentationSubmission<Type>> {
 
-    if (credential instanceof JWTCredential) {
-      if (!privateKey) {
-        throw new CastorError.InvalidKeyError("Required Secp256k1PrivateKey key")
+    if (this.isPresentationDefinitionRequestType<CredentialType.JWT>(
+      presentationDefinitionRequest, CredentialType.JWT)
+    ) {
+      if (!(credential instanceof JWTCredential)) {
+        throw new CastorError.InvalidKeyError("Required a JWT Credential for JWT Presentation submission")
+      }
+      if (!privateKey || !(privateKey instanceof PrivateKey)) {
+        throw new CastorError.InvalidKeyError("Required a valid private key for a JWT Presentation submission")
       }
       return this.createJWTPresentationSubmission(
         presentationDefinitionRequest,
@@ -195,7 +196,17 @@ export default class Pollux implements IPollux {
       )
     }
 
-    if (credential instanceof AnonCredsCredential) {
+    if (this.isPresentationDefinitionRequestType<CredentialType.AnonCreds>(
+      presentationDefinitionRequest, CredentialType.AnonCreds)
+    ) {
+
+      if (!(credential instanceof AnonCredsCredential)) {
+        throw new CastorError.InvalidKeyError("Required a valid Anoncreds Credential for Anoncreds Presentation submission")
+      }
+      if (!privateKey || !(privateKey instanceof LinkSecret)) {
+        throw new CastorError.InvalidKeyError("Required a valid link secret for a Anoncreds Presentation submission")
+      }
+
       return this.createAnoncredsPresentationSubmission(
         presentationDefinitionRequest,
         credential,
@@ -206,22 +217,25 @@ export default class Pollux implements IPollux {
     throw new PolluxError.CredentialTypeNotSupported();
   }
 
-  parsePresentationSubmission(data: any): data is PresentationSubmission {
-    //Validate object
-    if (!data || (data && typeof data !== "object")) {
-      return false;
+  private parsePresentationSubmission<
+    Type extends CredentialType = CredentialType.JWT
+  >(data: any, type: Type): data is PresentationSubmission<Type> {
+    if (type === CredentialType.JWT) {
+      if (!data || (data && typeof data !== "object")) {
+        return false;
+      }
+      const {
+        presentation_submission,
+      } = data;
+      if (!presentation_submission || (typeof presentation_submission !== "object")) {
+        return false;
+      }
+      return true;
     }
-
-    const {
-      presentation_submission,
-    } = data;
-
-    //Validate required fields
-    if (!presentation_submission || (typeof presentation_submission !== "object")) {
-      return false;
+    if (type === CredentialType.AnonCreds) {
+      return this.anoncreds.isValidPresentation(data)
     }
-
-    return true;
+    return false;
   }
 
   private validJWTPresentationClaims(presentationClaims: any): presentationClaims is PresentationClaims<CredentialType.JWT> {
@@ -380,23 +394,17 @@ export default class Pollux implements IPollux {
 
   }
 
-  private validJWTPresentationSubmissionOptions(options: any): options is IPollux.verifyPresentationSubmission.options.JWT {
-    return options && options.presentationDefinitionRequest && typeof options.presentationDefinitionRequest === "object" ? true : false;
+  private validPresentationSubmissionOptions<Response extends IPollux.verifyPresentationSubmission.options, Type extends CredentialType = CredentialType.JWT>(options: any, type: Type): options is Response {
+    if (type === CredentialType.JWT) {
+      return options && options.presentationDefinitionRequest && typeof options.presentationDefinitionRequest === "object" ? true : false;
+    }
+    if (type === CredentialType.AnonCreds) {
+      return true;
+    }
+    return false
   }
 
-  async verifyPresentationSubmission(
-    presentationSubmission: any,
-    options?: IPollux.verifyPresentationSubmission.options.JWT | IPollux.verifyPresentationSubmission.options.Anoncreds
-  ): Promise<boolean> {
-    const isValidPresentationSubmission = this.parsePresentationSubmission(presentationSubmission);
-    if (!isValidPresentationSubmission) {
-      throw new InvalidVerifyFormatError('PresentationSubmission format is invalid')
-    }
-    const validJWTPresentationSubmissionOptions = this.validJWTPresentationSubmissionOptions(options)
-    if (!validJWTPresentationSubmissionOptions) {
-      throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid')
-    }
-
+  private async verifyPresentationSubmissionJWT(presentationSubmission: JWTPresentationSubmission, options: IPollux.verifyPresentationSubmission.options.JWT): Promise<boolean> {
     const presentationDefinitionRequest = options.presentationDefinitionRequest;
     const inputDescriptors = presentationDefinitionRequest.presentation_definition.input_descriptors;
     const presentationSubmissionMapper = new DescriptorPath(presentationSubmission);
@@ -530,6 +538,70 @@ export default class Pollux implements IPollux {
     return false;
   }
 
+  private async verifyPresentationSubmissionAnoncreds(
+    presentationSubmission: AnoncredsPresentationSubmission,
+    options: IPollux.verifyPresentationSubmission.options.Anoncreds
+  ): Promise<boolean> {
+    const [identifier] = presentationSubmission.identifiers;
+    const { schema_id, cred_def_id } = identifier;
+
+    const credentialDefinition =
+      await this.fetchCredentialDefinition(cred_def_id);
+
+    const credentialSchema =
+      await this.fetchSchema(schema_id);
+
+
+    const schemas_dict = new Map<String, Anoncreds.CredentialSchemaType>()
+    const definitions_dict = new Map<String, Anoncreds.CredentialDefinitionType>()
+
+    definitions_dict.set(cred_def_id, credentialDefinition);
+    schemas_dict.set(schema_id, credentialSchema);
+
+
+    return this.anoncreds.verifyPresentation(
+      presentationSubmission,
+      options.presentationDefinitionRequest,
+      Object.fromEntries(schemas_dict),
+      Object.fromEntries(definitions_dict)
+    )
+  }
+
+  verifyPresentationSubmission<Type extends CredentialType = CredentialType.AnonCreds>(presentationSubmission: PresentationSubmission<CredentialType.AnonCreds>, options: IPollux.verifyPresentationSubmission.options.Anoncreds): Promise<boolean>;
+  verifyPresentationSubmission<Type extends CredentialType = CredentialType.JWT>(presentationSubmission: PresentationSubmission<CredentialType.JWT>, options: IPollux.verifyPresentationSubmission.options.JWT): Promise<boolean>;
+  async verifyPresentationSubmission(
+    presentationSubmission: any,
+    options?: IPollux.verifyPresentationSubmission.options
+  ): Promise<boolean> {
+
+    const isValidPresentationJWTSubmission = this.parsePresentationSubmission<CredentialType.JWT>(presentationSubmission, CredentialType.JWT);
+    if (isValidPresentationJWTSubmission) {
+      const validJWTPresentationSubmissionOptions = this.validPresentationSubmissionOptions<
+        IPollux.verifyPresentationSubmission.options.JWT,
+        CredentialType.JWT
+      >(options, CredentialType.JWT)
+      if (!validJWTPresentationSubmissionOptions) {
+        throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid')
+      }
+      return this.verifyPresentationSubmissionJWT(presentationSubmission, options)
+    }
+
+    const isValidPresentationAnoncredsSubmission = this.parsePresentationSubmission<CredentialType.AnonCreds>(presentationSubmission, CredentialType.AnonCreds);
+    if (isValidPresentationAnoncredsSubmission) {
+      const validAnoncredsPresentationSubmissionOptions = this.validPresentationSubmissionOptions<
+        IPollux.verifyPresentationSubmission.options.Anoncreds,
+        CredentialType.AnonCreds
+      >(options, CredentialType.AnonCreds)
+      if (!validAnoncredsPresentationSubmissionOptions) {
+        throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid')
+      }
+      return this.verifyPresentationSubmissionAnoncreds(presentationSubmission, options)
+    }
+    throw new InvalidVerifyFormatError(
+      `Invalid Submission, only JWT or Anoncreds are supported`
+    );
+  }
+
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
   }
@@ -609,8 +681,8 @@ export default class Pollux implements IPollux {
    */
   private async fetchCredentialDefinition(
     credentialDefinitionId: string
-  ): Promise<Anoncreds.CredentialDefinition> {
-    const response = await this.api.request<Anoncreds.CredentialDefinition>(
+  ): Promise<Anoncreds.CredentialDefinitionType> {
+    const response = await this.api.request<Anoncreds.CredentialDefinitionType>(
       "get",
       credentialDefinitionId,
       new Map(),
@@ -627,7 +699,7 @@ export default class Pollux implements IPollux {
    * @param {string} schemaURI - URI used to retrieve the Schema definition
    * @returns 
    */
-  private async fetchSchema(schemaURI: string): Promise<any> {
+  private async fetchSchema(schemaURI: string): Promise<Anoncreds.CredentialSchemaType> {
     const response = await this.api.request<Anoncreds.CredentialSchemaType>(
       "get",
       schemaURI,

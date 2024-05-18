@@ -54,14 +54,14 @@ export class AnoncredsLoader {
     credentialDefinition: Anoncreds.CredentialDefinitionType,
     linkSecret: string,
     linkSecretId: string
-  ): [Anoncreds.CredentialRequest, Anoncreds.CredentialRequestMetadata] {
+  ): [Anoncreds.CredentialRequestType, Anoncreds.CredentialRequestMetadataType] {
     const result = this.wasm.Prover.createCredentialRequest(
       this.wasm.CredentialDefinition.from(credentialDefinition),
       this.wasm.LinkSecret.fromString(linkSecret),
       linkSecretId,
       this.wasm.CredentialOffer.from(credentialOffer),
     );
-    return [result.request, result.metadata]
+    return [result.request.toJSON(), result.metadata.toJSON()]
   }
 
   processCredential(
@@ -69,14 +69,14 @@ export class AnoncredsLoader {
     credential: Anoncreds.CredentialType,
     credentialRequestMeta: Anoncreds.CredentialRequestMetadataType,
     linkSecret: string
-  ): Anoncreds.Credential {
+  ): Anoncreds.CredentialType {
     const result = this.wasm.Prover.processCredential(
       this.wasm.Credential.from(credential),
       this.wasm.CredentialRequestMetadata.from(credentialRequestMeta),
       this.wasm.LinkSecret.fromString(linkSecret),
       this.wasm.CredentialDefinition.from(credentialDefinition),
     );
-    return result;
+    return result.toJSON();
   }
 
 
@@ -102,25 +102,46 @@ export class AnoncredsLoader {
     }, {})
   }
 
-
   createPresentation(
     presentationRequest: Anoncreds.PresentationRequestType,
     schemas: Record<string, Anoncreds.CredentialSchemaType>,
     credentialDefinitions: Record<string, Anoncreds.CredentialDefinitionType>,
     credential: Anoncreds.CredentialType,
     linkSecret: string
-  ): Anoncreds.Presentation {
-    const result = this.wasm.Prover.createPresentation(
+  ): Anoncreds.PresentationType {
+    return this.wasm.Prover.createPresentation(
       this.wasm.PresentationRequest.from(presentationRequest),
       this.wasm.Credential.from(credential),
       this.wasm.LinkSecret.fromString(linkSecret),
       this.loadAnoncredsSchemas(schemas),
       this.loadAnoncredsDefinitions(credentialDefinitions),
+    ).toJSON();
+  }
+
+  verifyPresentation(
+    presentation: Anoncreds.PresentationType,
+    presentationRequest: Anoncreds.PresentationRequestType,
+    schemas: Record<string, Anoncreds.CredentialSchemaType>,
+    credentialDefinitions: Record<string, Anoncreds.CredentialDefinitionType>,
+  ): boolean {
+    return this.wasm.Verifier.verifyPresentation(
+      this.wasm.Presentation.from(presentation),
+      this.wasm.PresentationRequest.from(presentationRequest),
+      this.loadAnoncredsSchemas(schemas),
+      this.loadAnoncredsDefinitions(credentialDefinitions),
     );
-    return result;
   }
 
   createNonce(): string {
     return this.wasm.Verifier.createNonce()
+  }
+
+  isValidPresentation(presentation: Anoncreds.PresentationType) {
+    try {
+      this.wasm.Presentation.from(presentation)
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }
