@@ -1,21 +1,24 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
+import { AttributeType, CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
 import type * as Anoncreds from "anoncreds-browser";
 
-type CredentialRequestTuple<
+export type CredentialRequestTuple<
   T1 = Anoncreds.CredentialRequestType,
   T2 = Anoncreds.CredentialRequestMetadataType
 > = [T1, T2];
-
 
 /**
  * Pollux
  * handle Credential related tasks
  */
 export interface Pollux {
+  revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
+    [name: string]: any
+  }>;
+
   parseCredential: (
     credentialBuffer: Uint8Array,
     options?: { type: CredentialType;[name: string]: any; }

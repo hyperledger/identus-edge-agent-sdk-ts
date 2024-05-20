@@ -61,7 +61,9 @@ export interface VerifiableCredentialTypeContainer {
   type: string;
 }
 
-export type PredicateType = string | number
+export type PredicateType = string | number;
+export type AttributeType = string | number;
+
 
 export type Claims<Type extends CredentialType = CredentialType.JWT> =
   Type extends CredentialType.JWT ?

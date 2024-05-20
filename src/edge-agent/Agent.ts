@@ -251,6 +251,23 @@ export default class Agent
   }
 
   /**
+   * This method can be used by holders in order to disclose the value of a Credential
+   * JWT are just encoded plainText
+   * Anoncreds will really need to be disclosed as the fields are encoded.
+   *
+   * @param {Credential} credential
+   * @returns {AttributeType}
+   */
+  async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
+    return this.agentCredentials.revealCredentialFields(
+      credential,
+      fields,
+      linkSecret
+    )
+  }
+
+
+  /**
    * Asyncronously start the agent
    *
    * @async

@@ -131,6 +131,20 @@ export class AnoncredsLoader {
     );
   }
 
+  createPresentationRequest(
+    name: string,
+    version: string,
+    requested_attributes: Anoncreds.RequestedPredicates,
+    requested_predicates: Anoncreds.RequestedAttributes
+  ): Anoncreds.PresentationRequest {
+    return this.wasm.Verifier.createPresentationRequest(
+      name,
+      version,
+      requested_attributes,
+      requested_predicates
+    )
+  }
+
   createNonce(): string {
     return this.wasm.Verifier.createNonce()
   }

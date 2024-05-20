@@ -10,6 +10,8 @@ import {
   CredentialType,
   PrivateKey,
   PresentationClaims,
+  PredicateType,
+  AttributeType,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
@@ -55,8 +57,11 @@ export class PrismOnboardingInvitation implements InvitationInterface {
   }
 }
 
-export interface AgentCredentials {
 
+export interface AgentCredentials {
+  revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
+    [name: string]: any
+  }>;
   prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential>;

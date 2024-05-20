@@ -32,7 +32,6 @@ import {
   JWTPresentationPayload,
   AttachmentFormats,
   PresentationOptions as PresentationOptionsType,
-  PresentationOptions,
   AnoncredsPresentationOptions,
   JWTPresentationOptions,
   AnoncredsPresentationClaims,
@@ -66,6 +65,60 @@ export default class Pollux implements IPollux {
     private jwt = new JWT(castor)
   ) { }
 
+  async revealCredentialFields
+    (credential: Credential, fields: string[], linkSecret: string) {
+
+    const type = credential.credentialType;
+    if (type === CredentialType.AnonCreds) {
+      if (!(credential instanceof AnonCredsCredential)) {
+        throw new PolluxError.InvalidCredentialError("Only Anoncreds credentials can be disclosed for now")
+      }
+      const disclosedFields: { [K in keyof Credential['claims'][number]]: any } = {};
+
+      const availableFields = fields.filter((field) =>
+        credential.claims.find((claim) =>
+          Object.keys(claim).includes(field)) !== undefined
+      )
+
+      for (let field of availableFields) {
+        disclosedFields[field] = {
+          name: field,
+          restrictions: {
+            cred_def_id: credential.credentialDefinitionId
+          }
+        }
+      }
+
+      const credentialDefinitionUrl = credential.credentialDefinitionId.replace("host.docker.internal", "localhost");
+      const schemaUrl = credential.schemaId.replace("host.docker.internal", "localhost");
+      const presentationRequest = this.anoncreds.createPresentationRequest(
+        "self-disclose",
+        "1.0.0",
+        disclosedFields,
+        {}
+      );
+      const presentation = this.anoncreds.createPresentation(
+        presentationRequest,
+        {
+          [credential.schemaId]: await this.fetchSchema(schemaUrl)
+        },
+        {
+          [credential.credentialDefinitionId]: await this.fetchCredentialDefinition(credentialDefinitionUrl)
+        },
+        credential.toJSON(),
+        linkSecret
+      )
+      const revealedFields: { [K in keyof Credential['claims'][number]]: any } = {};
+      for (let field of Object.keys(presentation.requested_proof.revealed_attrs)) {
+        revealedFields[field] = presentation.requested_proof.revealed_attrs[field].raw;
+      }
+      return revealedFields;
+    }
+
+    throw new PolluxError.InvalidCredentialError("Only Anoncreds credentials can be disclosed for now")
+  }
+
+
 
   private isPresentationDefinitionRequestType
     <Type extends CredentialType = CredentialType.JWT>(
@@ -95,8 +148,8 @@ export default class Pollux implements IPollux {
     if (!this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.JWT)) {
       throw new Error("PresentationDefinition didn't match credential type")
     }
-    const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
 
+    const { presentation_definition, options: { challenge, domain } } = presentationDefinitionRequest;
     const descriptorItems: DescriptorItem[] = presentation_definition.input_descriptors.map(
       (inputDescriptor) => {
         if (inputDescriptor.format && (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg)) {

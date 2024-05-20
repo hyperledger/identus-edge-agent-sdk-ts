@@ -1,15 +1,18 @@
 
 import React, { useState } from "react";
+import SDK from "@atala/prism-wallet-sdk";
+
 import '../app/index.css'
 import { FooterNavigation } from "@/components/FooterNavigation";
 import { Box } from "@/app/Box";
 import { useMountedApp } from "@/reducers/store";
 import { DBConnect } from "@/components/DBConnect";
 import { PageHeader } from "@/components/PageHeader";
+import { AgentRequire } from "@/components/AgentRequire";
 
-function protect(claims) {
+function protect(credential: SDK.Domain.Credential) {
     const newClaims: any[] = []
-    claims.forEach((claim) => {
+    credential.claims.forEach((claim) => {
         const newClaim = {}
         Object.keys(claim).forEach((key) => {
             newClaim[key] = "******"
@@ -19,21 +22,44 @@ function protect(claims) {
     return newClaims
 }
 
-function Credential({ credential }) {
+function Credential(props) {
+    const { credential } = props;
     const app = useMountedApp();
-    const [claims, setClaims] = useState(protect(credential.claims));
+    const [claims, setClaims] = useState(protect(credential));
 
-    function disclose(claimIndex, field) {
-        const disclosed = claims.map((claim, index) => {
-            if (claimIndex === index) {
-                return {
-                    ...claim,
-                    [field]: credential.claims[index][field]
+    function revealAttributes(credential: SDK.Domain.Credential, claimIndex: number, field: string) {
+        if (credential.credentialType === SDK.Domain.CredentialType.JWT) {
+            const revealed = claims.map((claim, index) => {
+                if (claimIndex === index) {
+                    return {
+                        ...claim,
+                        [field]: credential.claims[index][field]
+                    }
                 }
-            }
-            return claim
-        })
-        setClaims(disclosed)
+                return claim
+            })
+            setClaims(revealed)
+        } else {
+            app.agent.instance?.pluto.getLinkSecret()
+                .then((linkSecret) => {
+                    app.agent.instance?.revealCredentialFields(
+                        credential,
+                        [field],
+                        linkSecret!.secret
+                    ).then((revealedFields) => {
+                        const revealed = claims.map((claim, index) => {
+                            if (claimIndex === index) {
+                                return {
+                                    ...claim,
+                                    [field]: revealedFields[field]
+                                }
+                            }
+                            return claim
+                        })
+                        setClaims(revealed)
+                    })
+                })
+        }
     }
 
     return <div className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -59,18 +85,20 @@ function Credential({ credential }) {
                         className="text-md font-normal text-gray-500 dark:text-gray-400"
                     >
                         {field}
-                        {claim[field] === "******" ? (
-                            <button
-                                onClick={() => {
-                                    disclose(claimIndex, field);
-                                }}
-                                className="m-3 px-3 py-2 text-md font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                Disclose
-                            </button>
-                        ) : (
-                            <>: {claim[field]}</>
-                        )}
+                        <AgentRequire text="Revealing attributes requires agent running">
+                            {claim[field] === "******" ? (
+                                <button
+                                    onClick={() => {
+                                        revealAttributes(credential, claimIndex, field);
+                                    }}
+                                    className="m-3 px-3 py-2 text-md font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                >
+                                    Reveal
+                                </button>
+                            ) : (
+                                <>: {claim[field]}</>
+                            )}
+                        </AgentRequire>
                     </p>
                 ))
         )}
@@ -98,7 +126,9 @@ export default function App() {
                                     No credentials.
                                 </p>
                                 :
-                                app.credentials.map((credential, i) => <Credential credential={credential} key={`credential${i}`} />)
+                                app.credentials.map((credential, i) => {
+                                    return <Credential credential={credential} key={`credential${i}`} />
+                                })
                         }
                     </Box>
                 </DBConnect>

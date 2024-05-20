@@ -23,6 +23,7 @@ import {
   PresentationDefinitionRequest,
   PresentationClaims,
   AttachmentFormats,
+  AttributeType,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -364,6 +365,20 @@ export class AgentCredentials implements AgentCredentialsClass {
     return presentation;
   }
 
+
+  /**
+   * This method can be used by holders in order to disclose the value of a Credential
+   * JWT are just encoded plainText
+   * Anoncreds will really need to be disclosed as the fields are encoded.
+   *
+   * @param {Credential} credential
+   * @returns {AttributeType}
+   */
+  async revealCredentialFields(credential: Credential, fields: string[], linkSecret: string) {
+    return this.pollux.revealCredentialFields(credential, fields, linkSecret)
+  }
+
+
   /**
    * match the Proof request to return relevant PresentationRequest.
    * Proof Request comes from a Message Attachment.
@@ -439,5 +454,6 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
     throw new AgentError.UnhandledPresentationRequest();
   }
+
 
 }
