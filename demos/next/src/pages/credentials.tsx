@@ -127,7 +127,7 @@ export default function App() {
                                 </p>
                                 :
                                 app.credentials.map((credential, i) => {
-                                    return <Credential credential={credential} key={`credential${i}`} />
+                                    return <Credential credential={credential} key={`credential${credential.id}${i}`} />
                                 })
                         }
                     </Box>

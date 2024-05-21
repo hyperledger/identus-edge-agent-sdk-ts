@@ -15,6 +15,8 @@ export type CredentialRequestTuple<
  * handle Credential related tasks
  */
 export interface Pollux {
+
+
   revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
     [name: string]: any
   }>;
@@ -33,15 +35,11 @@ export interface Pollux {
   ): Promise<CredentialRequestTuple>;
   extractCredentialFormatFromMessage(message: Message): CredentialType;
 
-
-
-
-
   createPresentationSubmission<Type extends CredentialType = CredentialType.JWT>(
     presentationDefinition: PresentationDefinitionRequest<Type>,
     credential: Credential,
-    privateKey: PrivateKey
-  ): Promise<PresentationSubmission>
+    privateKey: PrivateKey | LinkSecret
+  ): Promise<PresentationSubmission<Type>>
 
 
   /**
@@ -70,11 +68,11 @@ export interface Pollux {
    * @param {ProofTypes} proofs 
    * @param {PresentationOptions} options 
    */
-  createPresentationDefinitionRequest(
-    type: CredentialType,
-    claims: PresentationClaims,
+  createPresentationDefinitionRequest<T extends CredentialType = CredentialType.JWT>(
+    type: T,
+    claims: PresentationClaims<T>,
     options: PresentationOptions
-  ): Promise<PresentationDefinitionRequest>
+  ): Promise<PresentationDefinitionRequest<T>>
 
 
 

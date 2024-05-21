@@ -62,6 +62,8 @@ export interface AgentCredentials {
   revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
     [name: string]: any
   }>;
+
+
   prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential>;
@@ -69,11 +71,10 @@ export interface AgentCredentials {
 
   verifiableCredentials(): Promise<Credential[]>;
 
-  initiatePresentationRequest(
-    type: CredentialType,
-    toDID: DID,
-    claims: PresentationClaims
-  ): Promise<RequestPresentation>;
+  initiatePresentationRequest(type: CredentialType.JWT, toDID: DID, claims: PresentationClaims): Promise<RequestPresentation>;
+
+  initiatePresentationRequest(type: CredentialType.AnonCreds, toDID: DID, claims: PresentationClaims<CredentialType.AnonCreds>): Promise<RequestPresentation>;
+
 
   createPresentationForRequestProof(
     request: RequestPresentation,
@@ -99,11 +100,11 @@ export interface AgentDIDHigherFunctions {
 }
 
 export interface AgentInvitations {
-  acceptDIDCommInvitation(invitation: OutOfBandInvitation): Promise<void>;
+  acceptDIDCommInvitation(invitation: OutOfBandInvitation, optionalAlias?: string): Promise<void>;
 
   parseInvitation(str: string): Promise<InvitationType>;
 
-  acceptInvitation(invitation: PrismOnboardingInvitation): Promise<void>;
+  acceptInvitation(invitation: PrismOnboardingInvitation, optionalAlias?: string): Promise<void>;
 
   parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation>;
 
@@ -145,26 +146,17 @@ export interface ConnectionsManager {
   pairings: DIDPair[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cancellables: CancellableTask<any>[];
-
   withWebsocketsExperiment: boolean;
   stopAllEvents(): void;
-
   addConnection(paired: DIDPair): Promise<void>;
-
   removeConnection(pair: DIDPair): Promise<void>;
-
-
   awaitMessageResponse(id: string): Promise<Message | undefined>;
-
   processMessages(messages: {
     attachmentId: string;
     message: Message;
   }[]): Promise<void>;
-
   sendMessage(message: Message): Promise<Message | undefined>;
-
   startMediator(): Promise<void>;
-
   registerMediator(hostDID: DID): Promise<void>;
 }
 

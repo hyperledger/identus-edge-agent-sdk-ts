@@ -73,7 +73,7 @@ const Agent: React.FC<{}> = props => {
               {state === "running" && (
                 <>
                   {messages.reverse().map((message, i) => {
-                    return <Message message={message} key={`responseField${i}`} />
+                    return <Message message={message} key={`index_message${message.id}_${i}`} />
                   })}
                 </>
               )}

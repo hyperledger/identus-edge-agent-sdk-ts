@@ -30,6 +30,7 @@ export default function App() {
                 </PageHeader>
                 <DBConnect>
                     <Box>
+                        <OOB agent={app.agent.instance!} pluto={app.db.instance!} />
                         {
                             connections.length <= 0 ?
                                 <p className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
@@ -39,11 +40,10 @@ export default function App() {
                                 :
                                 null
                         }
-                        <OOB agent={app.agent.instance!} pluto={app.db.instance!} />
                         {
                             connections.map((connection, i) => {
                                 return <p key={`connection${i}`} className="my-5 overflow-x-auto h-auto text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-                                    {connection.name} with {connection.receiver.toString()}
+                                    {connection.name}
                                 </p>
                             })
                         }

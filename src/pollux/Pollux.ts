@@ -38,6 +38,7 @@ import {
   LinkSecret,
   JWTPresentationSubmission,
   AnoncredsPresentationSubmission,
+  InputFieldFilter,
 } from "../domain";
 
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
@@ -48,6 +49,7 @@ import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 import { DescriptorPath } from "./utils/DescriptorPath";
 import { JWT } from "./utils/JWT";
 import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domain/models/errors/Pollux";
+import { isPresentationDefinitionRequestType, parsePresentationSubmission, validatePresentationClaims } from "./utils/claims";
 
 /**
  * Implementation of Pollux
@@ -125,16 +127,7 @@ export default class Pollux implements IPollux {
       request: PresentationDefinitionRequest<Type>,
       type: Type,
     ): request is PresentationDefinitionRequest<Type> {
-
-    if (type === CredentialType.JWT) {
-      if (!request ||
-        !request.options ||
-        !request.presentation_definition) {
-        return false
-      }
-      return true;
-    }
-    return true;
+    return isPresentationDefinitionRequestType(request, type)
   }
 
   private async createJWTPresentationSubmission(
@@ -210,8 +203,10 @@ export default class Pollux implements IPollux {
     credential: AnonCredsCredential,
     linkSecret: LinkSecret
   ): Promise<PresentationSubmission<CredentialType.AnonCreds>> {
-    const credentialSchema = await this.fetchSchema(credential.schemaId);
-    const credentialDefinition = await this.fetchCredentialDefinition(credential.credentialDefinitionId);
+    const credentialDefinitionUrl = credential.credentialDefinitionId.replace("host.docker.internal", "localhost");
+    const schemaUrl = credential.schemaId.replace("host.docker.internal", "localhost");
+    const credentialSchema = await this.fetchSchema(schemaUrl);
+    const credentialDefinition = await this.fetchCredentialDefinition(credentialDefinitionUrl);
     const schemas = { [credential.schemaId]: credentialSchema };
     const credDefs = { [credential.credentialDefinitionId]: credentialDefinition };
     return this.anoncreds.createPresentation(
@@ -273,38 +268,13 @@ export default class Pollux implements IPollux {
   private parsePresentationSubmission<
     Type extends CredentialType = CredentialType.JWT
   >(data: any, type: Type): data is PresentationSubmission<Type> {
-    if (type === CredentialType.JWT) {
-      if (!data || (data && typeof data !== "object")) {
-        return false;
-      }
-      const {
-        presentation_submission,
-      } = data;
-      if (!presentation_submission || (typeof presentation_submission !== "object")) {
-        return false;
-      }
-      return true;
-    }
-    if (type === CredentialType.AnonCreds) {
-      return this.anoncreds.isValidPresentation(data)
-    }
-    return false;
-  }
-
-  private validJWTPresentationClaims(presentationClaims: any): presentationClaims is PresentationClaims<CredentialType.JWT> {
-    if (presentationClaims.schema && typeof presentationClaims.schema !== "string") {
-      return false
-    }
-    if (presentationClaims.issuer && typeof presentationClaims.issuer !== "string") {
-      return false
-    }
-    return true
+    return parsePresentationSubmission(this.anoncreds, data, type)
   }
 
   async createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
     type: Type,
     presentationClaims: PresentationClaims<Type>,
-    presentationOptions: PresentationOptionsType<Type>
+    presentationOptions: PresentationOptionsType
   ): Promise<PresentationDefinitionRequest<Type>> {
     const options = presentationOptions.options;
     if (type === CredentialType.JWT) {
@@ -322,7 +292,7 @@ export default class Pollux implements IPollux {
         throw new PolluxError.InvalidPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
       }
 
-      if (!this.validJWTPresentationClaims(presentationClaims)) {
+      if (!validatePresentationClaims(presentationClaims, CredentialType.JWT)) {
         throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid.")
       }
 
@@ -388,15 +358,15 @@ export default class Pollux implements IPollux {
       return presentationDefinitionRequest
     }
 
-
     if (type === CredentialType.AnonCreds) {
       if (!(options instanceof AnoncredsPresentationOptions)) {
         throw new PolluxError.InvalidPresentationDefinitionError("Required field options is undefined, should be AnoncredsPresentationOptions")
       }
+      if (!validatePresentationClaims(presentationClaims, CredentialType.AnonCreds)) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid for anoncreds.")
+      }
 
-      //TODO Validate presentation claims
-      const claims = presentationClaims as AnoncredsPresentationClaims
-
+      const claims = presentationClaims;
       const predicatePaths = Object.keys(claims.predicates ?? {});
 
       const requestedPredicates: Anoncreds.RequestedPredicates =
@@ -598,12 +568,14 @@ export default class Pollux implements IPollux {
     const [identifier] = presentationSubmission.identifiers;
     const { schema_id, cred_def_id } = identifier;
 
+    const credentialDefinitionUrl = cred_def_id.replace("host.docker.internal", "localhost");
+    const schemaUrl = schema_id.replace("host.docker.internal", "localhost");
+
     const credentialDefinition =
-      await this.fetchCredentialDefinition(cred_def_id);
+      await this.fetchCredentialDefinition(credentialDefinitionUrl);
 
     const credentialSchema =
-      await this.fetchSchema(schema_id);
-
+      await this.fetchSchema(schemaUrl);
 
     const schemas_dict = new Map<string, Anoncreds.CredentialSchemaType>()
     const definitions_dict = new Map<string, Anoncreds.CredentialDefinitionType>()

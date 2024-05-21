@@ -387,8 +387,8 @@ export default class Agent
    * @param {InvitationType} invitation - an OOB or PrismOnboarding invitation
    * @returns {Promise<void>}
    */
-  async acceptInvitation(invitation: InvitationType): Promise<void> {
-    return this.agentInvitations.acceptInvitation(invitation);
+  async acceptInvitation(invitation: InvitationType, optionalAlias?: string): Promise<void> {
+    return this.agentInvitations.acceptInvitation(invitation, optionalAlias);
   }
 
   /**
@@ -435,9 +435,9 @@ export default class Agent
    * @returns {*}
    */
   async acceptDIDCommInvitation(
-    invitation: OutOfBandInvitation
+    invitation: OutOfBandInvitation, optionalAlias?: string
   ): Promise<void> {
-    return this.agentInvitations.acceptDIDCommInvitation(invitation);
+    return this.agentInvitations.acceptDIDCommInvitation(invitation, optionalAlias);
   }
 
   /**
@@ -568,7 +568,7 @@ export default class Agent
    * );
    * ```
    */
-  async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims): Promise<RequestPresentation> {
+  async initiatePresentationRequest<T extends Domain.CredentialType = Domain.CredentialType.JWT>(type: T, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims<T>): Promise<RequestPresentation> {
     const requestPresentation = await this.agentCredentials.initiatePresentationRequest(
       type,
       toDID,
@@ -577,7 +577,6 @@ export default class Agent
 
     const requestPresentationMessage = requestPresentation.makeMessage()
     await this.connectionManager.sendMessage(requestPresentationMessage);
-
     return requestPresentation
   }
 

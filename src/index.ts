@@ -10,6 +10,8 @@ export { default as Agent } from "./edge-agent/Agent";
 export * from "./edge-agent/protocols/other/BasicMessage";
 export { IssueCredential } from "./edge-agent/protocols/issueCredential/IssueCredential";
 export { OfferCredential } from "./edge-agent/protocols/issueCredential/OfferCredential";
+export { HandshakeRequest } from './edge-agent/protocols/connection/HandshakeRequest';
+export { OutOfBandInvitation } from './edge-agent/protocols/invitation/v2/OutOfBandInvitation';
 export * from "./edge-agent/protocols/proofPresentation";
 export * from "./edge-agent/connectionsManager/ConnectionsManager";
 export * from "./edge-agent/mediator/BasicMediatorHandler";
@@ -40,5 +42,6 @@ export * from "./apollo/utils/X25519PublicKey";
 export * from "./apollo/utils/X25519KeyPair";
 export * from "./pollux/models/AnonCredsVerifiableCredential";
 export * from "./pollux/models/JWTVerifiableCredential";
+export { isPresentationDefinitionRequestType } from './pollux/utils/claims';
 
 export { KeyProperties } from "./domain/models/KeyProperties";

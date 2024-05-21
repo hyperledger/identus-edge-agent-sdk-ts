@@ -66,9 +66,9 @@ export class AgentInvitations implements AgentInvitationsClass {
     throw new AgentError.UnknownInvitationTypeError();
   }
 
-  async acceptInvitation(invitation: InvitationType): Promise<void> {
+  async acceptInvitation(invitation: InvitationType, optionalAlias?: string): Promise<void> {
     if (invitation.type === ProtocolType.Didcomminvitation) {
-      return this.acceptDIDCommInvitation(invitation);
+      return this.acceptDIDCommInvitation(invitation, optionalAlias);
     }
 
     if (invitation instanceof PrismOnboardingInvitation) {
@@ -86,7 +86,7 @@ export class AgentInvitations implements AgentInvitationsClass {
    * @param {OutOfBandInvitation} invitation
    * @returns {*}
    */
-  async acceptDIDCommInvitation(invitation: OutOfBandInvitation) {
+  async acceptDIDCommInvitation(invitation: OutOfBandInvitation, optionalAlias?: string) {
     if (!this.connection.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
@@ -100,7 +100,8 @@ export class AgentInvitations implements AgentInvitationsClass {
       invitation,
       this.pluto,
       ownDID,
-      this.connection
+      this.connection,
+      optionalAlias
     ).run();
 
     await this.connection.addConnection(pair);

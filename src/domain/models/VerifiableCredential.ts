@@ -159,6 +159,19 @@ export type PresentationDefinitionData = {
   [CredentialType.W3C]: any;
 };
 
+
+
+export class PresentationDefinitionRequestType<Type extends CredentialType> {
+  constructor(public data: PresentationDefinitionData[Type]) { }
+
+  static fromData(
+    data: PresentationDefinitionData[CredentialType]
+  ): PresentationDefinitionRequestType<CredentialType> {
+    return new PresentationDefinitionRequestType<CredentialType>(data)
+  }
+
+}
+
 export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> =
   PresentationDefinitionData[Type]
 
@@ -293,11 +306,11 @@ export type PresentationOptionsSS<Type extends CredentialType = CredentialType.J
 
 
 
-export class PresentationOptions<Type extends CredentialType = CredentialType.JWT> {
+export class PresentationOptions {
 
   constructor(
-    private data: PresentationRequestOptions[Type],
-    private type: Type = CredentialType.JWT as Type
+    private data: PresentationRequestOptions[CredentialType] = {},
+    private type: CredentialType = CredentialType.JWT
   ) {
 
   }

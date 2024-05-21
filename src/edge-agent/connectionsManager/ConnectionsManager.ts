@@ -1,4 +1,4 @@
-import { DID, Message, MessageDirection, Pollux } from "../../domain";
+import { DID, Message, MessageDirection } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { Pluto } from "../../domain/buildingBlocks/Pluto";
@@ -185,10 +185,9 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    * @returns {Promise<void>}
    */
   async addConnection(paired: DIDPair): Promise<void> {
-    // TODO: what is the desired functionality here?
-    // can/should we re-use connections?
-    // seems always false as `paired.name` is always unique so will never match?
+
     if (this.findIndex(paired) !== -1) {
+      //It is an automatically accepted key keypair
       return;
     }
 
@@ -254,7 +253,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   async sendMessage(message: Message): Promise<Message | undefined> {
     message.direction = MessageDirection.SENT;
     await this.pluto.storeMessage(message);
-    return this.mercury.sendMessageParseMessage(message);
+    await this.mercury.sendMessageParseMessage(message);
+    return message;
   }
 
   /**
