@@ -82,13 +82,6 @@ npm i
 npm run start
 ```
 
-Browser React
-```bash
-cd demos/browser
-npm i
-npm run start
-```
-
 Browser NextJS
 ```bash
 cd demos/next
