@@ -11,10 +11,10 @@ verifiable credentials, alongside tools and frameworks to help expand your ecosy
 The complete platform is separated into multiple repositories:
 
 * [Cloud Agent](https://github.com/hyperledger/identus-cloud-agent) - Repo that contains the cloud agent that provides self-sovereign identity services to build products and solutions.
-* [Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the Prism Mediator.
+* [Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the DIDComm V2 Mediator.
 * [Edge Agent SDK TS](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo for the Typescript version of the SDK.
 * [Edge Agent SDK Swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
-* [Edge Agent SDK KMM](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin version of the SDK.
+* [Edge Agent SDK KMP](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin Multi-Platform version of the SDK.
 * 
 ## SDK Overview
 
