@@ -5,17 +5,17 @@
 ---
 
 Identus is a self-sovereign identity (SSI) platform and service suite for
-verifiable data and digital identity. Built on Cardano, it offers core
-infrastructure for issuing DIDs (Decentralized identifiers) and verifiable
-credentials, alongside tools and frameworks to help expand your ecosystem.
+verifiable data and digital identity. Built on Cardano, as a distributed ledger, 
+it offers core infrastructure for issuing DIDs (Decentralized identifiers) and 
+verifiable credentials, alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated into multiple repositories:
 
-- [edge-agent-sdk-swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo that implements Atala PRISM for Apple platforms in Swift.
-- [edge-agent-sdk-kmm](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo that implements Atala PRISM for Apple platforms in KMM, JVM.
-- [edge-agent-sdk-ts](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo that implements Atala PRISM for Browser and NodeJS platforms in TypeScript.
-- [edge-agent-building-blocks](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
-- [edge-agent-mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for DIDComm V2 Mediator
-
+* [Cloud Agent](https://github.com/hyperledger/identus-cloud-agent) - Repo that contains the cloud agent that provides self-sovereign identity services to build products and solutions.
+* [Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the DIDComm V2 Mediator.
+* [Edge Agent SDK TS](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo for the Typescript version of the SDK.
+* [Edge Agent SDK Swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
+* [Edge Agent SDK KMP](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin Multi-Platform version of the SDK.
+* 
 ## SDK Overview
 
 - Apollo: Provides a suite of necessary cryptographic operations.
@@ -23,7 +23,7 @@ The complete platform is separated into multiple repositories:
 - Pollux: Provides a suite of operations for handling [verifiable credentials](https://github.com/input-output-hk/atala-prism-docs/blob/master/documentation/docs/concepts/glossary.md#verifiable-credentials).
 - Mercury: Provides a suite of operations for handling DIDComm V2 messages.
 - Pluto: Provides an interface for storage operations in a portable, storage-agnostic manner.
-- PrismAgent: PrismAgent, a component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
+- Agent: A component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
 
 ## Getting started
 

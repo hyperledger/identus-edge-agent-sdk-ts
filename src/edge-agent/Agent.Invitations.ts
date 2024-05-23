@@ -22,7 +22,7 @@ import { DIDCommInvitationRunner } from "./protocols/invitation/v2/DIDCommInvita
 
 /**
  * An extension for the Edge agent that groups the functionality to parse, manage and
- *  respond to prism agent onboarding and didcomm v2 invitations
+ *  respond to Cloud Agent onboarding and didcomm v2 invitations
  *
  * @export
  * @class AgentInvitations
@@ -43,7 +43,7 @@ export class AgentInvitations implements AgentInvitationsClass {
     private api: Api,
     private agentDIDHigherFunctions: AgentDIDHigherFunctions,
     private connection: ConnectionsManager
-  ) {}
+  ) { }
 
   /**
    * Asyncronously parse an invitation from a valid json string
@@ -107,7 +107,7 @@ export class AgentInvitations implements AgentInvitationsClass {
   }
 
   /**
-   * Asyncronously accept a prism onboarding invitation, used to onboard the current did in a prism agent.
+   * Asyncronously accept an onboarding invitation, used to onboard the current DID in the Cloud Agent.
    *
    * @async
    * @param {PrismOnboardingInvitation} invitation

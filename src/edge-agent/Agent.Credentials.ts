@@ -39,6 +39,7 @@ import { AgentCredentials as AgentCredentialsClass, AgentDIDHigherFunctions } fr
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
 import { ProofTypes, RequestPresentationBody } from "./protocols/types";
 import { uuid } from "@stablelib/uuid";
+import { ProtocolType } from "./protocols/ProtocolTypes";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -280,7 +281,7 @@ export class AgentCredentials implements AgentCredentialsClass {
   private async getPresentationDefinitionByThid(thid: string): Promise<PresentationDefinitionRequest> {
     const allMessages = (await this.pluto.getAllMessages())
     const message = allMessages.find((message) => {
-      return message.thid === thid && message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation"
+      return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation
     });
     if (message) {
       const attachment = message.attachments.at(0);

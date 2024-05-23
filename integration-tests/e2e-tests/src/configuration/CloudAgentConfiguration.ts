@@ -6,22 +6,22 @@ import {
   ManagedDIDKeyTemplate,
   Purpose
 } from "@hyperledger-labs/open-enterprise-agent-ts-client"
-import {Utils} from "../Utils"
-import {randomUUID} from "crypto"
+import { Utils } from "../Utils"
+import { randomUUID } from "crypto"
 import * as fs from "fs"
 import axios from "axios"
-import {configDotenv} from "dotenv"
+import { configDotenv } from "dotenv"
 import assert from "assert"
 
 configDotenv()
 
 export class CloudAgentConfiguration {
   public static mediatorOobUrl: string = process.env.MEDIATOR_OOB_URL!
-  public static agentUrl: string = process.env.PRISM_AGENT_URL!
+  public static agentUrl: string = process.env.AGENT_URL!
   public static publishedDid: string = process.env.PUBLISHED_DID!
   public static jwtSchemaGuid: string = process.env.JWT_SCHEMA_GUID!
   public static anoncredDefinitionGuid: string = process.env.ANONCRED_DEFINITION_GUID!
-  public static apiKey: string | undefined  = process.env.APIKEY
+  public static apiKey: string | undefined = process.env.APIKEY
 
   private static isInitialized: boolean = false
 
@@ -51,7 +51,7 @@ export class CloudAgentConfiguration {
   }
 
   /**
-   * Checks if the environment PUBLISHED_DID variable exists in prism-agent, otherwise it creates a new one.
+   * Checks if the environment PUBLISHED_DID variable exists in Cloud Agent, otherwise it creates a new one.
    */
   static async preparePublishedDid() {
     try {
@@ -110,7 +110,7 @@ export class CloudAgentConfiguration {
   }
 
   /**
-   * Checks if the environment JWT_SCHEMA_GUID variable exists in prism-agent, otherwise it creates a new one.
+   * Checks if the environment JWT_SCHEMA_GUID variable exists in Cloud Agent, otherwise it creates a new one.
    */
   static async prepareJwtSchema() {
     try {
@@ -159,7 +159,7 @@ export class CloudAgentConfiguration {
   }
 
   /**
-   * Checks if the environment ANONCRED_DEFINITION_GUID variable exists in prism-agent, otherwise it creates a new one.
+   * Checks if the environment ANONCRED_DEFINITION_GUID variable exists in Cloud Agent, otherwise it creates a new one.
    */
   static async prepareAnoncredDefinition() {
     try {
@@ -176,7 +176,7 @@ export class CloudAgentConfiguration {
     const schema = {
       name: "Automation Anoncred",
       version: "1.0",
-      issuerId : this.publishedDid,
+      issuerId: this.publishedDid,
       attrNames: ["name", "age", "gender"]
     }
 
