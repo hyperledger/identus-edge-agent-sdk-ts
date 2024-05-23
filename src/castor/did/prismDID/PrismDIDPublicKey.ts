@@ -1,10 +1,11 @@
 import { Secp256k1PublicKey } from "../../../apollo/utils/Secp256k1PublicKey";
 import * as ECConfig from "../../../config/ECConfig";
 import { Apollo } from "../../../domain/buildingBlocks/Apollo";
-import { Curve } from "../../../domain/models";
+import { Curve, PublicKey } from "../../../domain/models";
 import { CastorError } from "../../../domain/models/Errors";
 import * as ApolloPKG from "@atala/apollo";
 import * as Protos from "../../protos/node_models";
+import { Ed25519PublicKey } from "../../../apollo/utils/Ed25519PublicKey";
 
 export enum Usage {
   MASTER_KEY = "masterKey",
@@ -104,9 +105,9 @@ export function getUsage(
 export class PrismDIDPublicKey {
   id: string;
   usage: Usage;
-  keyData: Secp256k1PublicKey;
+  keyData: PublicKey;
 
-  constructor(id: string, usage: Usage, keyData: Secp256k1PublicKey) {
+  constructor(id: string, usage: Usage, keyData: PublicKey) {
     this.id = id;
     this.usage = usage;
     this.keyData = keyData;
@@ -118,33 +119,44 @@ export class PrismDIDPublicKey {
   ): PrismDIDPublicKey {
     const id = proto.id;
     const usage = proto.usage;
-    let keyData: Secp256k1PublicKey;
+    const curve = proto.ec_key_data.curve;
 
     switch (proto.key_data) {
       case "compressed_ec_key_data":
-        keyData = new Secp256k1PublicKey(
-          Uint8Array.from(
-            ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
-              Int8Array.from(proto.compressed_ec_key_data.data)
-            ).raw
-          )
-        );
+        if (curve === Curve.ED25519) {
+          return new PrismDIDPublicKey(
+            id,
+            getUsage(usage),
+            new Ed25519PublicKey(
+              Buffer.from(proto.compressed_ec_key_data.data)
+            )
+          );
+        } else if (curve === Curve.SECP256K1) {
+          return new PrismDIDPublicKey(
+            id,
+            getUsage(usage),
+            new Secp256k1PublicKey(
+              Uint8Array.from(
+                ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+                  Int8Array.from(proto.compressed_ec_key_data.data)
+                ).raw
+              )
+            )
+          );
+        }
         break;
       case "ec_key_data":
-        keyData = new Secp256k1PublicKey(
+        return new PrismDIDPublicKey(id, getUsage(usage), new Secp256k1PublicKey(
           Uint8Array.from(
             ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
               Int8Array.from(proto.ec_key_data.x),
               Int8Array.from(proto.ec_key_data.y)
             ).raw
           )
-        );
-        break;
-      default:
-        throw new CastorError.InvalidPublicKeyEncoding();
+        ));
     }
 
-    return new PrismDIDPublicKey(id, getUsage(usage), keyData);
+    throw new CastorError.InvalidPublicKeyEncoding();
   }
 
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
@@ -155,7 +167,7 @@ export class PrismDIDPublicKey {
       encoded.length
     );
     const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
-      curve: Curve.SECP256K1.toLocaleLowerCase(),
+      curve: this.keyData.curve.toLocaleLowerCase(),
       x: xBytes,
       y: yBytes,
     });

@@ -14,6 +14,7 @@ import {
   DID,
   DIDUrl,
   DIDDocumentCoreProperty,
+  Curve,
 } from "../../domain/models";
 
 import * as DIDParser from "../parser/DIDParser";
@@ -27,11 +28,13 @@ import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
 import { Secp256k1PublicKey } from "../../apollo/utils/Secp256k1PublicKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
+import { Ed25519PrivateKey } from "../../apollo/utils/Ed25519PrivateKey";
+import { Ed25519PublicKey } from "../../apollo/utils/Ed25519PublicKey";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo) { }
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DIDParser.parse(didString);
@@ -84,20 +87,31 @@ export class LongFormPrismDIDResolver implements DIDResolver {
       const publicKeys: PrismDIDPublicKey[] =
         operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
-            const publicKey = key.has_compressed_ec_key_data
-              ? Secp256k1PublicKey.secp256k1FromBytes(
-                  key.compressed_ec_key_data.data
-                )
-              : Secp256k1PublicKey.secp256k1FromByteCoordinates(
-                  key.ec_key_data.x,
-                  key.ec_key_data.y
-                );
-
-            return new PrismDIDPublicKey(
-              getUsageId(getUsage(key.usage)),
-              getUsage(key.usage),
-              publicKey
-            );
+            const curve = key.ec_key_data.curve;
+            const usageId = getUsageId(getUsage(key.usage));
+            const usage = getUsage(key.usage)
+            if (curve === Curve.ED25519) {
+              return new PrismDIDPublicKey(
+                usageId,
+                usage,
+                new Ed25519PublicKey(key.compressed_ec_key_data.data)
+              );
+            }
+            if (curve === Curve.SECP256K1) {
+              return new PrismDIDPublicKey(
+                usageId,
+                usage,
+                key.has_compressed_ec_key_data
+                  ? Secp256k1PublicKey.secp256k1FromBytes(
+                    key.compressed_ec_key_data.data
+                  )
+                  : Secp256k1PublicKey.secp256k1FromByteCoordinates(
+                    key.ec_key_data.x,
+                    key.ec_key_data.y
+                  )
+              );
+            }
+            throw new CastorError.InvalidKeyError(`Curve ${curve} is not supported`)
           }
         ) || [];
 
