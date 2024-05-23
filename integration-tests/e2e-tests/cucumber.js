@@ -6,7 +6,7 @@ module.exports = {
     ],
     formatOptions: {
       junit: {
-        suiteName: "E2E: Prism Wallet SDK - TS"
+        suiteName: "E2E: Edge Agent SDK TS"
       }
     },
     requireModule: ["ts-node/register"],

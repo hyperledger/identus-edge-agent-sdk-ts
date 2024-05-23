@@ -23,13 +23,13 @@ The following guidelines are for contributing to Edge Agent SDK TS. These are mo
 
 ### Identus
 
-Identus is a self-sovereign identity (SSI) platform and service suite for verifiable data and digital identity. Built on Cardano, it offers the core infrastructure for issuing DIDs (Decentralized identifiers) and verifiable credentials alongside tools and frameworks to help expand your ecosystem.
+Identus is a self-sovereign identity (SSI) platform and service suite for verifiable data and digital identity. Built on Cardano, as a distributed ledger, it offers the core infrastructure for issuing DIDs (Decentralized identifiers) and verifiable credentials alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated into multiple repositories:
 
-* [Open enterprise agent](https://github.com/hyperledger-labs/open-enterprise-agent) - Repo that contains the servers Building Blocks.
-* [Prism Wallet SDK SWIFT](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
-* [Prism Wallet SDK KMM](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin version of the SDK.
-* [Prism Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the Prism Mediator.
+* [Cloud Agent](https://github.com/hyperledger/identus-cloud-agent) - Repo that contains the cloud agent that provides self-sovereign identity services to build products and solutions.
+* [Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the DIDComm V2 Mediator.
+* [Edge Agent SDK Swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
+* [Edge Agent SDK KMP](https://github.com/input-output-hk/atala-prism-wallet-sdk-kmm) - Repo for the Kotlin Multi-Platform version of the SDK.
 
 ### Edge Agent SDK TS
 

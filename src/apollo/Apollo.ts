@@ -38,7 +38,7 @@ const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 /**
- * Apollo defines the set of cryptographic operations that are used in the Atala PRISM.
+ * Apollo defines the set of cryptographic operations.
  *
  * @Abstraction
  * We by default are implementing Secp256k1, Ed25519 and X25519 Private and Public key from our generic abstractions.
