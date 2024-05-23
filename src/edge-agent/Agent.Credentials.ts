@@ -65,10 +65,15 @@ export class AgentCredentials implements AgentCredentialsClass {
 
 
   private createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
+    type: Type,
     definition: PresentationDefinitionRequest<Type>,
     from: DID,
     to: DID
   ) {
+    const attachmentFormat = type === CredentialType.JWT ?
+      AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS :
+      AttachmentFormats.ANONCREDS_PROOF_REQUEST;
+
     return new RequestPresentation(
       {
         proofTypes: [],
@@ -79,7 +84,7 @@ export class AgentCredentials implements AgentCredentialsClass {
           uuid(),
           'application/json',
           undefined,
-          AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS
+          attachmentFormat
         )
       ],
       from,
@@ -109,6 +114,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         new PresentationOptions({}, CredentialType.AnonCreds)
       )
       return this.createPresentationDefinitionRequest<CredentialType.AnonCreds>(
+        type,
         presentationDefinitionRequest,
         newPeerDID,
         toDID
@@ -131,6 +137,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         })
       );
       return this.createPresentationDefinitionRequest<CredentialType.JWT>(
+        type,
         presentationDefinitionRequest,
         newPeerDID,
         toDID
@@ -373,7 +380,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       uuid(),
       'application/json',
       undefined,
-      AttachmentFormats.PRESENTATION_EXCHANGE_SUBMISSION
+      AttachmentFormats.ANONCREDS_PROOF
     )
     const presentation = new Presentation(
       {
