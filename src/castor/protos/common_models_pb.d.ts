@@ -8,8 +8,8 @@ export class HealthCheckRequest extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): HealthCheckRequest.AsObject;
   static toObject(includeInstance: boolean, msg: HealthCheckRequest): HealthCheckRequest.AsObject;
-  static extensions: { [key: number]: jspb.ExtensionFieldInfo<jspb.Message> };
-  static extensionsBinary: { [key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message> };
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
   static serializeBinaryToWriter(message: HealthCheckRequest, writer: jspb.BinaryWriter): void;
   static deserializeBinary(bytes: Uint8Array): HealthCheckRequest;
   static deserializeBinaryFromReader(message: HealthCheckRequest, reader: jspb.BinaryReader): HealthCheckRequest;
@@ -24,8 +24,8 @@ export class HealthCheckResponse extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): HealthCheckResponse.AsObject;
   static toObject(includeInstance: boolean, msg: HealthCheckResponse): HealthCheckResponse.AsObject;
-  static extensions: { [key: number]: jspb.ExtensionFieldInfo<jspb.Message> };
-  static extensionsBinary: { [key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message> };
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
   static serializeBinaryToWriter(message: HealthCheckResponse, writer: jspb.BinaryWriter): void;
   static deserializeBinary(bytes: Uint8Array): HealthCheckResponse;
   static deserializeBinaryFromReader(message: HealthCheckResponse, reader: jspb.BinaryReader): HealthCheckResponse;
@@ -49,8 +49,8 @@ export class Date extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Date.AsObject;
   static toObject(includeInstance: boolean, msg: Date): Date.AsObject;
-  static extensions: { [key: number]: jspb.ExtensionFieldInfo<jspb.Message> };
-  static extensionsBinary: { [key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message> };
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
   static serializeBinaryToWriter(message: Date, writer: jspb.BinaryWriter): void;
   static deserializeBinary(bytes: Uint8Array): Date;
   static deserializeBinaryFromReader(message: Date, reader: jspb.BinaryReader): Date;
@@ -78,8 +78,8 @@ export class TimeInterval extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TimeInterval.AsObject;
   static toObject(includeInstance: boolean, msg: TimeInterval): TimeInterval.AsObject;
-  static extensions: { [key: number]: jspb.ExtensionFieldInfo<jspb.Message> };
-  static extensionsBinary: { [key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message> };
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
   static serializeBinaryToWriter(message: TimeInterval, writer: jspb.BinaryWriter): void;
   static deserializeBinary(bytes: Uint8Array): TimeInterval;
   static deserializeBinaryFromReader(message: TimeInterval, reader: jspb.BinaryReader): TimeInterval;
@@ -107,8 +107,8 @@ export class BlockInfo extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BlockInfo.AsObject;
   static toObject(includeInstance: boolean, msg: BlockInfo): BlockInfo.AsObject;
-  static extensions: { [key: number]: jspb.ExtensionFieldInfo<jspb.Message> };
-  static extensionsBinary: { [key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message> };
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
   static serializeBinaryToWriter(message: BlockInfo, writer: jspb.BinaryWriter): void;
   static deserializeBinary(bytes: Uint8Array): BlockInfo;
   static deserializeBinaryFromReader(message: BlockInfo, reader: jspb.BinaryReader): BlockInfo;
@@ -137,8 +137,8 @@ export class TransactionInfo extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TransactionInfo.AsObject;
   static toObject(includeInstance: boolean, msg: TransactionInfo): TransactionInfo.AsObject;
-  static extensions: { [key: number]: jspb.ExtensionFieldInfo<jspb.Message> };
-  static extensionsBinary: { [key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message> };
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
   static serializeBinaryToWriter(message: TransactionInfo, writer: jspb.BinaryWriter): void;
   static deserializeBinary(bytes: Uint8Array): TransactionInfo;
   static deserializeBinaryFromReader(message: TransactionInfo, reader: jspb.BinaryReader): TransactionInfo;
