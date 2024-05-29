@@ -253,8 +253,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   async sendMessage(message: Message): Promise<Message | undefined> {
     message.direction = MessageDirection.SENT;
     await this.pluto.storeMessage(message);
-    await this.mercury.sendMessageParseMessage(message);
-    return message;
+    return this.mercury.sendMessageParseMessage(message);
   }
 
   /**
