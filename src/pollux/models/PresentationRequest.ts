@@ -1,4 +1,5 @@
-import { Anoncreds, AttachmentFormats, CredentialType, PresentationDefinitionRequest } from "../../domain";
+import { AttachmentFormats, CredentialType, PresentationDefinitionRequest } from "../../domain";
+import type * as Anoncreds from "anoncreds-browser";
 
 interface JWTJson {
   options: {
@@ -9,7 +10,6 @@ interface JWTJson {
     id: string;
   };
 }
-
 
 /**
  * Wrapper for Presentation Requests for different Credential Types
@@ -24,7 +24,7 @@ export class PresentationRequest<T = unknown> {
    * @param json - the raw value
    */
   constructor(type: AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS, json: PresentationDefinitionRequest);
-  constructor(type: AttachmentFormats.AnonCreds, json: Anoncreds.PresentationRequest);
+  constructor(type: AttachmentFormats.AnonCreds, json: Anoncreds.PresentationRequestType);
   constructor(type: AttachmentFormats.JWT, json: JWTJson);
   constructor(
     private readonly type: AttachmentFormats,
@@ -37,8 +37,8 @@ export class PresentationRequest<T = unknown> {
    * @param type 
    * @returns {boolean}
    */
-  isType(type: AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS): this is PresentationRequest<PresentationDefinitionRequest>;
-  isType(type: AttachmentFormats.AnonCreds): this is PresentationRequest<Anoncreds.PresentationRequest>;
+  isType<T extends CredentialType = CredentialType.JWT>(type: AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS): this is PresentationRequest<PresentationDefinitionRequest<T>>;
+  isType(type: AttachmentFormats.AnonCreds): this is PresentationRequest<Anoncreds.PresentationRequestType>;
   isType(type: AttachmentFormats.JWT): this is PresentationRequest<JWTJson>;
   isType(target: AttachmentFormats) {
     return this.type === target;

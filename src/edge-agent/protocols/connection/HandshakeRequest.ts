@@ -8,13 +8,14 @@ import { HandshakeRequestBody } from "../types";
 
 export class HandshakeRequest {
   public static type = ProtocolType.DidcommconnectionRequest;
+
   constructor(
     public body: HandshakeRequestBody,
     public from: DID,
     public to: DID,
     public thid?: string,
     public id: string = uuid()
-  ) {}
+  ) { }
 
   makeMessage(): Message {
     const body = JSON.stringify(this.body);

@@ -40,11 +40,12 @@ export const initialState: RootState = {
         hasStarted: false,
         isStarting: false,
         isSendingMessage: false,
-        hasSentMessage: false
+        hasSentMessage: false,
+        selfDID: null
     }
 }
 
-type ExtendedMessage = SDK.Domain.Message & { isAnswering: boolean; hasAnswered: boolean, error: TraceableError | null }
+export type ExtendedMessage = SDK.Domain.Message & { isAnswering: boolean; hasAnswered: boolean, error: TraceableError | null }
 
 export type RootState = {
     errors: TraceableError[];
@@ -60,6 +61,7 @@ export type RootState = {
     mediatorDID: SDK.Domain.DID,
     agent: {
         instance: SDK.Agent | null,
+        selfDID: SDK.Domain.DID | null,
         isStarting: boolean,
         hasStarted: boolean,
         isSendingMessage: boolean,
@@ -164,7 +166,8 @@ const appSlice = createSlice({
         builder.addCase(startAgent.fulfilled, (state, action) => {
             state.agent.isStarting = false;
             state.agent.hasStarted = true;
-            state.agent.instance = action.payload.agent
+            state.agent.instance = action.payload.agent;
+            state.agent.selfDID = action.payload.selfDID;
         });
 
         builder.addCase(startAgent.rejected, (state, action) => {

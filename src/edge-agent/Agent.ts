@@ -251,6 +251,23 @@ export default class Agent
   }
 
   /**
+   * This method can be used by holders in order to disclose the value of a Credential
+   * JWT are just encoded plainText
+   * Anoncreds will really need to be disclosed as the fields are encoded.
+   *
+   * @param {Credential} credential
+   * @returns {AttributeType}
+   */
+  async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
+    return this.agentCredentials.revealCredentialFields(
+      credential,
+      fields,
+      linkSecret
+    )
+  }
+
+
+  /**
    * Asyncronously start the agent
    *
    * @async
@@ -291,7 +308,6 @@ export default class Agent
     if (storedLinkSecret == null) {
       const secret = this.pollux.anoncreds.createLinksecret();
       const linkSecret = new Domain.LinkSecret(secret);
-
       await this.pluto.storeLinkSecret(linkSecret);
     }
 
@@ -371,8 +387,8 @@ export default class Agent
    * @param {InvitationType} invitation - an OOB or PrismOnboarding invitation
    * @returns {Promise<void>}
    */
-  async acceptInvitation(invitation: InvitationType): Promise<void> {
-    return this.agentInvitations.acceptInvitation(invitation);
+  async acceptInvitation(invitation: InvitationType, optionalAlias?: string): Promise<void> {
+    return this.agentInvitations.acceptInvitation(invitation, optionalAlias);
   }
 
   /**
@@ -419,9 +435,9 @@ export default class Agent
    * @returns {*}
    */
   async acceptDIDCommInvitation(
-    invitation: OutOfBandInvitation
+    invitation: OutOfBandInvitation, optionalAlias?: string
   ): Promise<void> {
-    return this.agentInvitations.acceptDIDCommInvitation(invitation);
+    return this.agentInvitations.acceptDIDCommInvitation(invitation, optionalAlias);
   }
 
   /**
@@ -552,7 +568,7 @@ export default class Agent
    * );
    * ```
    */
-  async initiatePresentationRequest(type: Domain.CredentialType, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims): Promise<RequestPresentation> {
+  async initiatePresentationRequest<T extends Domain.CredentialType = Domain.CredentialType.JWT>(type: T, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims<T>): Promise<RequestPresentation> {
     const requestPresentation = await this.agentCredentials.initiatePresentationRequest(
       type,
       toDID,
@@ -561,7 +577,6 @@ export default class Agent
 
     const requestPresentationMessage = requestPresentation.makeMessage()
     await this.connectionManager.sendMessage(requestPresentationMessage);
-
     return requestPresentation
   }
 
@@ -569,8 +584,8 @@ export default class Agent
    * Initiate the Presentation and presentationSubmission
    * @param presentation 
    */
-  async handlePresentation(presentation: Presentation): Promise<boolean> {
-    return this.agentCredentials.handlePresentation(presentation)
+  async handlePresentation<Type extends Domain.CredentialType = Domain.CredentialType.JWT>(presentation: Presentation): Promise<boolean> {
+    return this.agentCredentials.handlePresentation<Type>(presentation)
   }
 
 }

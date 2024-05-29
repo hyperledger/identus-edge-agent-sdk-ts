@@ -58,23 +58,19 @@ buildAnonCreds() {
   GenAnonCreds="${GeneratedDir}/${AnonCreds}"
   rm -rfv "${GenAnonCreds}*"
 
-  cd $AnonCredsDir
+  cd $AnonCredsDir/wasm
 
-  # cant use --out-dir
-  wasm-pack build --target=web --no-default-features --features=wasm
-  mv pkg "${GenAnonCreds}-wasm-browser"
-
-  wasm-pack build --target=nodejs --no-default-features --features=wasm
-  mv pkg "${GenAnonCreds}-wasm-node"
+  wasm-pack build --target=web --out-dir="${GenAnonCreds}-wasm-browser"
+  wasm-pack build --target=nodejs --out-dir="${GenAnonCreds}-wasm-node"
   
   #TODO: find better way to approach this
   #This code fails on browser when wasm is first loaded, it can just be ignored
   #The code will fully work
   cd "${GenAnonCreds}-wasm-browser"
   if is_mac; then
-    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
+    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
   else
-    sed -i "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}.js"
+    sed -i "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
   fi
   cd $ExternalsDir
   git submodule | grep $AnonCreds | awk '{print $1}' > "./${AnonCreds}.commit"

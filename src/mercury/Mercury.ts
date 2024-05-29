@@ -129,10 +129,14 @@ export default class Mercury implements MercuryInterface {
    */
   async sendMessageParseMessage(
     message: Domain.Message
-  ): Promise<Domain.Message> {
+  ): Promise<Domain.Message | undefined> {
     const responseBody = await this.sendMessage<any>(message);
-    const responseJSON = JSON.stringify(responseBody);
-    return this.unpackMessage(responseJSON);
+    try {
+      const responseJSON = JSON.stringify(responseBody);
+      return await this.unpackMessage(responseJSON);
+    } catch (err) {
+      return undefined
+    }
   }
 
   private notDid(did: Domain.DID | undefined): did is undefined {

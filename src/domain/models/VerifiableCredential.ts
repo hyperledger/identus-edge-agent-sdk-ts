@@ -1,3 +1,4 @@
+import type * as Anoncreds from "anoncreds-browser";
 
 export enum CredentialType {
   JWT = "prism/jwt",
@@ -60,15 +61,44 @@ export interface VerifiableCredentialTypeContainer {
   type: string;
 }
 
-export type PredicateType = string | number
+export type PredicateType = string | number;
+export type AttributeType = string | number;
 
-export type Claims = {
-  [name: string]: InputFieldFilter
-}
-export interface PresentationClaims {
+
+export type Claims<Type extends CredentialType = CredentialType.JWT> =
+  Type extends CredentialType.JWT ?
+  {
+    [name: string]: InputFieldFilter
+  } :
+  {
+    [name: string]: AnoncredsInputFieldFilter
+  }
+
+
+export type JWTPresentationClaims = {
   schema?: string;
   issuer?: string;
-  claims: Claims
+  claims: Claims<CredentialType.JWT>
+}
+
+export type AnoncredsPresentationClaims = {
+  predicates?: Claims<CredentialType.AnonCreds>,
+  attributes?: Anoncreds.RequestedAttributes
+}
+
+export type PresentationClaims<Type extends CredentialType = CredentialType.JWT> =
+  Type extends CredentialType.JWT ?
+  JWTPresentationClaims :
+  AnoncredsPresentationClaims;
+
+
+export type AnoncredsInputFieldFilter = {
+  type: string,
+  name: string,
+  $gt?: PredicateType,
+  $gte?: PredicateType,
+  $lt?: PredicateType,
+  $lte?: PredicateType
 }
 
 export type InputFieldFilter = {
@@ -76,7 +106,8 @@ export type InputFieldFilter = {
   pattern?: string,
   enum?: PredicateType[],
   const?: PredicateType[],
-  value?: PredicateType
+  value?: PredicateType,
+
 }
 
 export type InputField = {
@@ -87,8 +118,6 @@ export type InputField = {
   filter?: InputFieldFilter,
   optional?: boolean
 }
-
-
 
 export type InputConstraints = {
   fields: InputField[],
@@ -109,7 +138,9 @@ export type DefinitionFormat = {
   },
 };
 
-export type PresentationDefinitionRequest = {
+export type PresentationAnoncredsRequest = Anoncreds.PresentationRequestType
+
+export type PresentationExchangeDefinitionRequest = {
   presentation_definition: {
     id: string,
     input_descriptors: InputDescriptor[],
@@ -121,6 +152,29 @@ export type PresentationDefinitionRequest = {
   }
 }
 
+export type PresentationDefinitionData = {
+  [CredentialType.AnonCreds]: PresentationAnoncredsRequest;
+  [CredentialType.JWT]: PresentationExchangeDefinitionRequest;
+  [CredentialType.Unknown]: any;
+  [CredentialType.W3C]: any;
+};
+
+
+
+export class PresentationDefinitionRequestType<Type extends CredentialType> {
+  constructor(public data: PresentationDefinitionData[Type]) { }
+
+  static fromData(
+    data: PresentationDefinitionData[CredentialType]
+  ): PresentationDefinitionRequestType<CredentialType> {
+    return new PresentationDefinitionRequestType<CredentialType>(data)
+  }
+
+}
+
+export type PresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT> =
+  PresentationDefinitionData[Type]
+
 
 export type DescriptorItem = {
   id: string,
@@ -129,7 +183,8 @@ export type DescriptorItem = {
   path_nested?: DescriptorItem
 }
 
-export type PresentationSubmission = {
+
+export type JWTPresentationSubmission = {
   presentation_submission: {
     id: string,
     definition_id: string,
@@ -137,6 +192,21 @@ export type PresentationSubmission = {
   },
   verifiablePresentation: string[],
 }
+
+export type AnoncredsPresentationSubmission = Anoncreds.PresentationType;
+
+
+
+export type PresentationSubmissionData = {
+  [CredentialType.AnonCreds]: AnoncredsPresentationSubmission;
+  [CredentialType.JWT]: JWTPresentationSubmission;
+  [CredentialType.Unknown]: any;
+  [CredentialType.W3C]: any;
+}
+
+
+export type PresentationSubmission<Type extends CredentialType = CredentialType.JWT> =
+  PresentationSubmissionData[Type]
 
 
 export type W3CVerifiableCredential = {
@@ -224,7 +294,45 @@ export type PresentationJWTOptions = {
   jwtAlg?: string[],
 }
 
+export type PresentationRequestOptions = {
+  [CredentialType.AnonCreds]: ConstructorParameters<typeof AnoncredsPresentationOptions>['0'];
+  [CredentialType.JWT]: ConstructorParameters<typeof JWTPresentationOptions>['0'];
+  [CredentialType.Unknown]: any;
+  [CredentialType.W3C]: any;
+}
+
+export type PresentationOptionsSS<Type extends CredentialType = CredentialType.JWT> =
+  PresentationRequestOptions[Type]
+
+
+
 export class PresentationOptions {
+
+  constructor(
+    private data: PresentationRequestOptions[CredentialType] = {},
+    private type: CredentialType = CredentialType.JWT
+  ) {
+
+  }
+
+  get options() {
+    if (this.type === CredentialType.AnonCreds) {
+      return new AnoncredsPresentationOptions(this.data)
+    }
+    if (this.type === CredentialType.JWT) {
+      return new JWTPresentationOptions(this.data)
+    }
+    throw new Error("Not supported" + this.type)
+  }
+}
+
+
+
+export class AnoncredsPresentationOptions {
+  constructor(data: any) { }
+}
+
+export class JWTPresentationOptions {
   public name: string;
   public purpose: string;
   public challenge: string;
