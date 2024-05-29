@@ -39,7 +39,7 @@ export class X25519PublicKey extends PublicKey implements ExportableKey, Storabl
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
-      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMX25519PublicKey(
+      new ApolloPkg.org.hyperledger.identus.apollo.utils.KMMX25519PublicKey(
         Int8Array.from(bytes)
       );
 

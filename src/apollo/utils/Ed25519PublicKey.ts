@@ -46,11 +46,11 @@ export class Ed25519PublicKey extends PublicKey implements ExportableKey, Storab
 
   private getInstance(
     value?: Int8Array | Uint8Array
-  ): ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey {
+  ): ApolloPkg.org.hyperledger.identus.apollo.utils.KMMEdPublicKey {
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
-      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPublicKey(
+      new ApolloPkg.org.hyperledger.identus.apollo.utils.KMMEdPublicKey(
         Int8Array.from(bytes)
       );
 

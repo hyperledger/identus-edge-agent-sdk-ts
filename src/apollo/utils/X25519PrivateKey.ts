@@ -44,7 +44,7 @@ export class X25519PrivateKey extends PrivateKey implements ExportableKey, Stora
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
-      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMX25519PrivateKey(
+      new ApolloPkg.org.hyperledger.identus.apollo.utils.KMMX25519PrivateKey(
         Int8Array.from(bytes)
       );
 

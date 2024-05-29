@@ -19,28 +19,28 @@ export enum Usage {
 
 export function getProtosUsage(
   usage: Usage
-): Protos.io.iohk.atala.prism.protos.KeyUsage {
+): Protos.org.hyperledger.identus.protos.KeyUsage {
   switch (usage) {
     case Usage.UNKNOWN_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.UNKNOWN_KEY;
     case Usage.MASTER_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.MASTER_KEY;
     case Usage.ISSUING_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.ISSUING_KEY;
     case Usage.KEY_AGREEMENT_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.KEY_AGREEMENT_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.KEY_AGREEMENT_KEY;
     case Usage.AUTHENTICATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.AUTHENTICATION_KEY;
     case Usage.REVOCATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.REVOCATION_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.REVOCATION_KEY;
     case Usage.CAPABILITY_INVOCATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage
+      return Protos.org.hyperledger.identus.protos.KeyUsage
         .CAPABILITY_INVOCATION_KEY;
     case Usage.CAPABILITY_DELEGATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage
+      return Protos.org.hyperledger.identus.protos.KeyUsage
         .CAPABILITY_DELEGATION_KEY;
     default:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
+      return Protos.org.hyperledger.identus.protos.KeyUsage.UNKNOWN_KEY;
   }
 }
 
@@ -66,7 +66,7 @@ export function getUsageId(index: Usage): string {
 }
 
 export function getUsage(
-  protosUsage: Protos.io.iohk.atala.prism.protos.KeyUsage
+  protosUsage: Protos.org.hyperledger.identus.protos.KeyUsage
 ): Usage {
   let usage: Usage;
   switch (protosUsage) {
@@ -114,7 +114,7 @@ export class PrismDIDPublicKey {
 
   static fromProto(
     apollo: Apollo,
-    proto: Protos.io.iohk.atala.prism.protos.PublicKey
+    proto: Protos.org.hyperledger.identus.protos.PublicKey
   ): PrismDIDPublicKey {
     const id = proto.id;
     const usage = proto.usage;
@@ -124,7 +124,7 @@ export class PrismDIDPublicKey {
       case "compressed_ec_key_data":
         keyData = new Secp256k1PublicKey(
           Uint8Array.from(
-            ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+            ApolloPKG.org.hyperledger.identus.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
               Int8Array.from(proto.compressed_ec_key_data.data)
             ).raw
           )
@@ -133,7 +133,7 @@ export class PrismDIDPublicKey {
       case "ec_key_data":
         keyData = new Secp256k1PublicKey(
           Uint8Array.from(
-            ApolloPKG.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
+            ApolloPKG.org.hyperledger.identus.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
               Int8Array.from(proto.ec_key_data.x),
               Int8Array.from(proto.ec_key_data.y)
             ).raw
@@ -147,20 +147,20 @@ export class PrismDIDPublicKey {
     return new PrismDIDPublicKey(id, getUsage(usage), keyData);
   }
 
-  toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
+  toProto(): Protos.org.hyperledger.identus.protos.PublicKey {
     const encoded = this.keyData.getEncoded();
     const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
     const yBytes = encoded.slice(
       1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
       encoded.length
     );
-    const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
+    const ecKeyData = new Protos.org.hyperledger.identus.protos.ECKeyData({
       curve: Curve.SECP256K1.toLocaleLowerCase(),
       x: xBytes,
       y: yBytes,
     });
     const usage = getProtosUsage(this.usage);
-    const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({
+    const publicKey = new Protos.org.hyperledger.identus.protos.PublicKey({
       id: this.id,
       usage: usage,
       ec_key_data: ecKeyData,

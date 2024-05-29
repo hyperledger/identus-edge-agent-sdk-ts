@@ -14,7 +14,7 @@ import {
   StorableKey,
 } from "../../domain/models/keyManagement";
 
-const Apollo = ApolloPkg.io.iohk.atala.prism.apollo;
+const Apollo = ApolloPkg.org.hyperledger.identus.apollo;
 const HDKey = Apollo.derivation.HDKey;
 const BigIntegerWrapper = Apollo.derivation.BigIntegerWrapper;
 
@@ -23,8 +23,7 @@ const BigIntegerWrapper = Apollo.derivation.BigIntegerWrapper;
  */
 export class Secp256k1PrivateKey
   extends PrivateKey
-  implements DerivableKey, ExportableKey, SignableKey, StorableKey
-{
+  implements DerivableKey, ExportableKey, SignableKey, StorableKey {
   public readonly recoveryId = StorableKey.recoveryId("secp256k1", "priv");
 
   public keySpecification: Map<string, string> = new Map();

@@ -31,7 +31,7 @@ import { KeyProperties } from "../../domain/models/KeyProperties";
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo) { }
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DIDParser.parse(didString);
@@ -77,21 +77,21 @@ export class LongFormPrismDIDResolver implements DIDResolver {
         throw new CastorError.InitialStateOfDIDChanged();
       }
       const operation =
-        Protos.io.iohk.atala.prism.protos.AtalaOperation.deserializeBinary(
+        Protos.org.hyperledger.identus.protos.AtalaOperation.deserializeBinary(
           encodedData
         );
 
       const publicKeys: PrismDIDPublicKey[] =
         operation.create_did?.did_data?.public_keys?.map(
-          (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
+          (key: Protos.org.hyperledger.identus.protos.PublicKey) => {
             const publicKey = key.has_compressed_ec_key_data
               ? Secp256k1PublicKey.secp256k1FromBytes(
-                  key.compressed_ec_key_data.data
-                )
+                key.compressed_ec_key_data.data
+              )
               : Secp256k1PublicKey.secp256k1FromByteCoordinates(
-                  key.ec_key_data.x,
-                  key.ec_key_data.y
-                );
+                key.ec_key_data.x,
+                key.ec_key_data.y
+              );
 
             return new PrismDIDPublicKey(
               getUsageId(getUsage(key.usage)),

@@ -5,7 +5,7 @@
  * git: https://github.com/thesayyn/protoc-gen-ts */
 import * as dependency_1 from "./google/protobuf/timestamp";
 import * as pb_1 from "google-protobuf";
-export namespace io.iohk.atala.prism.protos {
+export namespace org.hyperledger.identus.protos {
     export enum SortByDirection {
         SORT_BY_DIRECTION_UNKNOWN = 0,
         SORT_BY_DIRECTION_ASCENDING = 1,

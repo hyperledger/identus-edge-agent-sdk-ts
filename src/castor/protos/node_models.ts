@@ -6,7 +6,7 @@
 import * as dependency_1 from "./common_models";
 import * as dependency_2 from "./google/protobuf/timestamp";
 import * as pb_1 from "google-protobuf";
-export namespace io.iohk.atala.prism.protos {
+export namespace org.hyperledger.identus.protos {
     export enum KeyUsage {
         UNKNOWN_KEY = 0,
         MASTER_KEY = 1,
@@ -2561,7 +2561,7 @@ export namespace io.iohk.atala.prism.protos {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             transaction_id?: string;
-            ledger?: dependency_1.io.iohk.atala.prism.protos.Ledger;
+            ledger?: dependency_1.org.hyperledger.identus.protos.Ledger;
             timestamp_info?: TimestampInfo;
         }) {
             super();
@@ -2585,9 +2585,9 @@ export namespace io.iohk.atala.prism.protos {
             pb_1.Message.setField(this, 1, value);
         }
         get ledger() {
-            return pb_1.Message.getFieldWithDefault(this, 2, dependency_1.io.iohk.atala.prism.protos.Ledger.UNKNOWN_LEDGER) as dependency_1.io.iohk.atala.prism.protos.Ledger;
+            return pb_1.Message.getFieldWithDefault(this, 2, dependency_1.org.hyperledger.identus.protos.Ledger.UNKNOWN_LEDGER) as dependency_1.org.hyperledger.identus.protos.Ledger;
         }
-        set ledger(value: dependency_1.io.iohk.atala.prism.protos.Ledger) {
+        set ledger(value: dependency_1.org.hyperledger.identus.protos.Ledger) {
             pb_1.Message.setField(this, 2, value);
         }
         get timestamp_info() {
@@ -2601,7 +2601,7 @@ export namespace io.iohk.atala.prism.protos {
         }
         static fromObject(data: {
             transaction_id?: string;
-            ledger?: dependency_1.io.iohk.atala.prism.protos.Ledger;
+            ledger?: dependency_1.org.hyperledger.identus.protos.Ledger;
             timestamp_info?: ReturnType<typeof TimestampInfo.prototype.toObject>;
         }): LedgerData {
             const message = new LedgerData({});
@@ -2619,7 +2619,7 @@ export namespace io.iohk.atala.prism.protos {
         toObject() {
             const data: {
                 transaction_id?: string;
-                ledger?: dependency_1.io.iohk.atala.prism.protos.Ledger;
+                ledger?: dependency_1.org.hyperledger.identus.protos.Ledger;
                 timestamp_info?: ReturnType<typeof TimestampInfo.prototype.toObject>;
             } = {};
             if (this.transaction_id != null) {
@@ -2639,7 +2639,7 @@ export namespace io.iohk.atala.prism.protos {
             const writer = w || new pb_1.BinaryWriter();
             if (this.transaction_id.length)
                 writer.writeString(1, this.transaction_id);
-            if (this.ledger != dependency_1.io.iohk.atala.prism.protos.Ledger.UNKNOWN_LEDGER)
+            if (this.ledger != dependency_1.org.hyperledger.identus.protos.Ledger.UNKNOWN_LEDGER)
                 writer.writeEnum(2, this.ledger);
             if (this.has_timestamp_info)
                 writer.writeMessage(3, this.timestamp_info, () => this.timestamp_info.serialize(writer));

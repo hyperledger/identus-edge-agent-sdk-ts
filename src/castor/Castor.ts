@@ -141,10 +141,10 @@ export default class Castor implements CastorInterface {
     );
 
     const didCreationData =
-      new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
+      new Protos.org.hyperledger.identus.protos.CreateDIDOperation.DIDCreationData({
         public_keys: [authenticateKey.toProto(), publicKey.toProto()],
         services: services?.map((service) => {
-          return new Protos.io.iohk.atala.prism.protos.Service({
+          return new Protos.org.hyperledger.identus.protos.Service({
             service_endpoint: [service.serviceEndpoint.uri],
             id: service.id,
             type: service.type.at(0),
@@ -153,11 +153,11 @@ export default class Castor implements CastorInterface {
       });
 
     const didOperation =
-      new Protos.io.iohk.atala.prism.protos.CreateDIDOperation({
+      new Protos.org.hyperledger.identus.protos.CreateDIDOperation({
         did_data: didCreationData,
       });
 
-    const operation = new Protos.io.iohk.atala.prism.protos.AtalaOperation({
+    const operation = new Protos.org.hyperledger.identus.protos.AtalaOperation({
       create_did: didOperation,
     });
 

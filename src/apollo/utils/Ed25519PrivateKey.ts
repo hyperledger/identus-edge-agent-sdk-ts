@@ -50,11 +50,11 @@ export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, Sign
 
   private getInstance(
     value?: Int8Array | Uint8Array
-  ): ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey {
+  ): ApolloPkg.org.hyperledger.identus.apollo.utils.KMMEdPrivateKey {
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
     const instance =
-      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey(
+      new ApolloPkg.org.hyperledger.identus.apollo.utils.KMMEdPrivateKey(
         Int8Array.from(bytes)
       );
 
