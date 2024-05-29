@@ -461,7 +461,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         if (!storedLinkSecret) {
           throw new Error("Link secret not found.");
         }
-        const presentationSubmission = await this.pollux.createPresentationSubmission<CredentialType.AnonCreds>(
+        const presentationSubmission = await this.pollux.createPresentationSubmission(
           request.toJSON(),
           credential,
           storedLinkSecret

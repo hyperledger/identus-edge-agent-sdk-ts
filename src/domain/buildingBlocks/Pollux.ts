@@ -35,12 +35,16 @@ export interface Pollux {
   ): Promise<CredentialRequestTuple>;
   extractCredentialFormatFromMessage(message: Message): CredentialType;
 
-  createPresentationSubmission<Type extends CredentialType = CredentialType.JWT>(
-    presentationDefinition: PresentationDefinitionRequest<Type>,
+  createPresentationSubmission(
+    presentationDefinition: PresentationDefinitionRequest<CredentialType.JWT>,
     credential: Credential,
-    privateKey: PrivateKey | LinkSecret
-  ): Promise<PresentationSubmission<Type>>
-
+    privateKey: PrivateKey
+  ): Promise<PresentationSubmission<CredentialType.JWT>>
+  createPresentationSubmission(
+    presentationDefinition: PresentationDefinitionRequest<CredentialType.AnonCreds>,
+    credential: Credential,
+    privateKey: LinkSecret
+  ): Promise<PresentationSubmission<CredentialType.AnonCreds>>
 
   /**
    * Process a PresentationSubmission, resolve the issuer did and verify the credential and the holder signature
