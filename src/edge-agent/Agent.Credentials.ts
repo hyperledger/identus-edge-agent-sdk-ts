@@ -23,6 +23,7 @@ import {
   PresentationDefinitionRequest,
   PresentationClaims,
   AttachmentFormats,
+  PolluxError,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -37,9 +38,9 @@ import { RequestPresentation } from "./protocols/proofPresentation/RequestPresen
 
 import { AgentCredentials as AgentCredentialsClass, AgentDIDHigherFunctions } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
-import { ProofTypes, RequestPresentationBody } from "./protocols/types";
 import { uuid } from "@stablelib/uuid";
 import { ProtocolType } from "./protocols/ProtocolTypes";
+import { validatePresentationClaims } from "../pollux/utils/claims";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -62,52 +63,88 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected agentDIDHigherFunctions: AgentDIDHigherFunctions
   ) { }
 
+
+  private createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
+    type: Type,
+    definition: PresentationDefinitionRequest<Type>,
+    from: DID,
+    to: DID
+  ) {
+    const attachmentFormat = type === CredentialType.JWT ?
+      AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS :
+      AttachmentFormats.ANONCREDS_PROOF_REQUEST;
+
+    return new RequestPresentation(
+      {
+        proofTypes: [],
+      },
+      [
+        AttachmentDescriptor.build(
+          definition,
+          uuid(),
+          'application/json',
+          undefined,
+          attachmentFormat
+        )
+      ],
+      from,
+      to,
+      uuid()
+    );
+  }
+
   async initiatePresentationRequest(
     type: CredentialType,
     toDID: DID,
-    claims: PresentationClaims): Promise<RequestPresentation> {
-
+    claims: PresentationClaims<CredentialType>
+  ): Promise<RequestPresentation> {
     const didDocument = await this.castor.resolveDID(toDID.toString());
     const newPeerDID = await this.agentDIDHigherFunctions.createNewPeerDID(
       didDocument.services,
       true
     );
 
-    const options = new PresentationOptions({
-      jwt: {
-        jwtAlg: ['ES256K']
-      },
-      challenge: "Sign this text " + uuid(),
-      domain: 'N/A'
-    });
-
-    const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest(
-      type,
-      claims,
-      options
-    );
-
-    const attachment = AttachmentDescriptor.build(
-      presentationDefinitionRequest,
-      uuid(),
-      'application/json',
-      undefined,
-      AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS
-    )
-
-    const requestPresentationBody: RequestPresentationBody = {
-      proofTypes: [],
+    if (type === CredentialType.AnonCreds) {
+      if (!validatePresentationClaims(claims, CredentialType.AnonCreds)) {
+        throw new PolluxError.InvalidPresentationDefinitionError("Anoncreds Claims are invalid")
+      }
+      const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest(
+        type,
+        claims,
+        new PresentationOptions({}, CredentialType.AnonCreds)
+      )
+      return this.createPresentationDefinitionRequest<CredentialType.AnonCreds>(
+        type,
+        presentationDefinitionRequest,
+        newPeerDID,
+        toDID
+      )
     }
 
-    const presentationRequest = new RequestPresentation(
-      requestPresentationBody,
-      [attachment],
-      newPeerDID,
-      toDID,
-      uuid()
-    );
+    if (type === CredentialType.JWT) {
+      if (!validatePresentationClaims(claims, CredentialType.JWT)) {
+        throw new PolluxError.InvalidPresentationDefinitionError("JWT Claims are invalid")
+      }
+      const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest<CredentialType.JWT>(
+        type,
+        claims,
+        new PresentationOptions({
+          jwt: {
+            jwtAlg: ['ES256K']
+          },
+          challenge: "Sign this text " + uuid(),
+          domain: 'N/A'
+        })
+      );
+      return this.createPresentationDefinitionRequest<CredentialType.JWT>(
+        type,
+        presentationDefinitionRequest,
+        newPeerDID,
+        toDID
+      )
+    }
 
-    return presentationRequest
+    throw new PolluxError.CredentialTypeNotSupported()
   }
 
   async verifiableCredentials(): Promise<Credential[]> {
@@ -278,7 +315,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     return requestCredential;
   }
 
-  private async getPresentationDefinitionByThid(thid: string): Promise<PresentationDefinitionRequest> {
+  private async getPresentationDefinitionByThid<Type extends CredentialType = CredentialType.JWT>(thid: string): Promise<PresentationDefinitionRequest<Type>> {
     const allMessages = (await this.pluto.getAllMessages())
     const message = allMessages.find((message) => {
       return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation
@@ -294,7 +331,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
   }
 
-  async handlePresentation(presentation: Presentation): Promise<boolean> {
+  async handlePresentation<Type extends CredentialType = CredentialType.JWT>(presentation: Presentation): Promise<boolean> {
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
       throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing")
@@ -303,7 +340,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
     }
     const presentationSubmission = Message.Attachment.extractJSON(attachment);
-    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid(presentation.thid!)
+    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid!)
     const options = {
       presentationDefinitionRequest
     }
@@ -328,10 +365,6 @@ export class AgentCredentials implements AgentCredentialsClass {
     message: RequestPresentation,
     credential: Credential
   ): Promise<Presentation> {
-
-    // ?? is this technically correct?, could there be multiple attachments requiring proof?
-    // if so could need multiple Credentials...
-    // validation: there needs to be at least one...
     const attachment = message.attachments.at(0);
     if (!attachment) {
       throw new AgentError.OfferDoesntProvideEnoughInformation();
@@ -347,7 +380,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       uuid(),
       'application/json',
       undefined,
-      AttachmentFormats.PRESENTATION_EXCHANGE_SUBMISSION
+      AttachmentFormats.ANONCREDS_PROOF
     )
     const presentation = new Presentation(
       {
@@ -363,6 +396,20 @@ export class AgentCredentials implements AgentCredentialsClass {
     );
     return presentation;
   }
+
+
+  /**
+   * This method can be used by holders in order to disclose the value of a Credential
+   * JWT are just encoded plainText
+   * Anoncreds will really need to be disclosed as the fields are encoded.
+   *
+   * @param {Credential} credential
+   * @returns {AttributeType}
+   */
+  async revealCredentialFields(credential: Credential, fields: string[], linkSecret: string) {
+    return this.pollux.revealCredentialFields(credential, fields, linkSecret)
+  }
+
 
   /**
    * match the Proof request to return relevant PresentationRequest.
@@ -390,22 +437,39 @@ export class AgentCredentials implements AgentCredentialsClass {
     request: PresentationRequest,
     credential: Credential,
   ): Promise<string> {
-    if (request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) && (credential instanceof JWTCredential)) {
-      const privateKeys = await this.pluto.getDIDPrivateKeysByDID(DID.fromString(credential.subject));
-      const privateKey = privateKeys.at(0);
-      if (!privateKey) {
-        throw new Error("Undefined privatekey from credential subject.");
+    if (request.isType<CredentialType.JWT>(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+      if (credential instanceof JWTCredential) {
+        const privateKeys = await this.pluto.getDIDPrivateKeysByDID(DID.fromString(credential.subject));
+        const privateKey = privateKeys.at(0);
+        if (!privateKey) {
+          throw new Error("Undefined privatekey from credential subject.");
+        }
+        if (!request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+          throw new Error("Undefined privatekey from credential subject.");
+        }
+        const presentationSubmission = await this.pollux.createPresentationSubmission(
+          request.toJSON(),
+          credential,
+          privateKey
+        )
+        return JSON.stringify(presentationSubmission)
       }
-      if (!request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
-        throw new Error("Undefined privatekey from credential subject.");
-      }
-      const presentationSubmission = await this.pollux.createPresentationSubmission(
-        request.toJSON(),
-        credential,
-        privateKey
-      )
-      return JSON.stringify(presentationSubmission)
     }
+    if (request.isType<CredentialType.AnonCreds>(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+      if (credential instanceof AnonCredsCredential) {
+        const storedLinkSecret = await this.pluto.getLinkSecret();
+        if (!storedLinkSecret) {
+          throw new Error("Link secret not found.");
+        }
+        const presentationSubmission = await this.pollux.createPresentationSubmission(
+          request.toJSON(),
+          credential,
+          storedLinkSecret
+        )
+        return JSON.stringify(presentationSubmission)
+      }
+    }
+
     throw new Error("Not implemented")
   }
 
@@ -439,5 +503,6 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
     throw new AgentError.UnhandledPresentationRequest();
   }
+
 
 }

@@ -143,7 +143,7 @@ export const stopAgent = createAsyncThunk<
 
 
 export const startAgent = createAsyncThunk<
-    { agent: SDK.Agent },
+    { agent: SDK.Agent, selfDID: SDK.Domain.DID },
     { agent: SDK.Agent }
 >("startAgent", async (options, api) => {
     try {
@@ -151,35 +151,7 @@ export const startAgent = createAsyncThunk<
         agent.addListener(ListenerKey.MESSAGE, handleMessages.bind({}, { dispatch: api.dispatch, agent }));
         await agent.start()
 
-        const mediator = agent.currentMediatorDID;
-        if (!mediator) {
-            throw new Error("Mediator not available");
-        }
-
-        const secondaryDID = await agent.createNewPeerDID(
-            [],
-            true
-        );
-
-        const testMessage = new BasicMessage(
-            { content: "Test Message" },
-            secondaryDID,
-            secondaryDID
-        ).makeMessage();
-
-        try {
-            await agent.sendMessage(testMessage);
-            await agent.pluto.storeMessage(testMessage);
-            api.dispatch(
-                reduxActions.messageSuccess(
-                    [testMessage]
-                )
-            )
-        } catch (err) {
-            console.log("Safe to ignore, mediator returns null on successfully receiving the message, unpack fails.");
-        }
-
-        return api.fulfillWithValue({ agent })
+        return api.fulfillWithValue({ agent, selfDID: await agent.createNewPeerDID([], true) })
     } catch (err) {
         return api.rejectWithValue(err as Error);
     }
@@ -213,21 +185,33 @@ export const initiatePresentationRequest = createAsyncThunk<
     {
         agent: SDK.Agent,
         toDID: SDK.Domain.DID,
-        presentationClaims: PresentationClaims
+        presentationClaims: PresentationClaims<SDK.Domain.CredentialType>,
+        type: SDK.Domain.CredentialType
     }
 >("initiatePresentationRequest", async (options, api) => {
     try {
         const {
             agent,
             presentationClaims,
-            toDID
+            toDID,
+            type
         } = options;
 
-        await agent.initiatePresentationRequest(
-            SDK.Domain.CredentialType.JWT,
-            toDID,
-            presentationClaims
-        );
+        if (type === SDK.Domain.CredentialType.JWT) {
+            await agent.initiatePresentationRequest<SDK.Domain.CredentialType>(
+                SDK.Domain.CredentialType.JWT,
+                toDID,
+                presentationClaims
+            );
+        }
+
+        if (type === SDK.Domain.CredentialType.AnonCreds) {
+            await agent.initiatePresentationRequest<SDK.Domain.CredentialType>(
+                SDK.Domain.CredentialType.AnonCreds,
+                toDID,
+                presentationClaims
+            );
+        }
 
         return api.fulfillWithValue(null)
     } catch (err) {
@@ -245,7 +229,9 @@ export const initAgent = createAsyncThunk<
     try {
         const { mediatorDID, pluto } = options;
         const agent = await Agent.initialize({ mediatorDID, pluto });
-        return api.fulfillWithValue({ agent })
+        return api.fulfillWithValue({
+            agent,
+        })
     } catch (err) {
         return api.rejectWithValue(err as Error);
     }

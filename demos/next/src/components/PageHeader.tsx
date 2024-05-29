@@ -1,4 +1,5 @@
 import { useMountedApp } from "@/reducers/store";
+import React from "react";
 import { useEffect } from "react";
 
 export function PageHeader({ children }) {
@@ -28,6 +29,7 @@ export function PageHeader({ children }) {
         (app.db.connected && !app.agent.instance?.state) ||
         app.agent.instance?.state === "stopped";
 
+    const [isClicked, setIsClicked] = React.useState(false);
 
     return <>
 
@@ -37,9 +39,24 @@ export function PageHeader({ children }) {
                 {children}
             </div>
 
-            <p className="mx-2 my-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white">
-                <b>Status:</b>&nbsp; {app.agent.instance?.state ?? 'stopped'}
-            </p>
+            <div className="mx-2 mt-10 items-center justify-center px-5 py-3 text-center text-white">
+                <p className="text-base font-medium ">
+                    <b>Status:</b>&nbsp; {app.agent.instance?.state ?? 'stopped'}
+                </p>
+                {app.agent.instance?.state === "running" && app.agent.selfDID &&
+                    <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(app.agent.selfDID!.toString()).then(() => {
+                                setIsClicked(true);
+                                setTimeout(() => setIsClicked(false), 300);
+                            })
+                        }}
+                        className={`text-sm text-blue-500 font-xs transition-transform duration-300 ${isClicked ? 'scale-110' : ''}`}
+                    >
+                        copy did
+                    </button>}
+            </div>
+
 
 
             {canStart && (

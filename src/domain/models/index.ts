@@ -20,5 +20,4 @@ export * from "./WordList";
 export * from "./VerifiableCredential";
 export * from "./Credential";
 export * from "./CredentialMetadata";
-export * from "./Anoncreds";
 export type JsonString = string;

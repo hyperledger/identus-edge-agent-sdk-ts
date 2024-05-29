@@ -10,21 +10,16 @@ export class DIDCommConnectionRunner {
     public invitationMessage: OutOfBandInvitation,
     public pluto: Pluto,
     public ownDID: DID,
-    public connection: ConnectionsManager
-  ) {}
+    public connection: ConnectionsManager,
+    public alias: string = "OOBConn"
+  ) { }
 
   async run(): Promise<DIDPair> {
     const request = HandshakeRequest.fromOutOfBand(
       this.invitationMessage,
       this.ownDID
     );
-
-    try {
-      await this.connection.sendMessage(request.makeMessage());
-      return new DIDPair(this.ownDID, request.to, `Connection${request.id}`);
-    } catch (err) {
-      // TODO: this looks wrong?
-      return new DIDPair(this.ownDID, request.to, `Connection${request.id}`);
-    }
+    await this.connection.sendMessage(request.makeMessage());
+    return new DIDPair(this.ownDID, request.to, this.alias);
   }
 }

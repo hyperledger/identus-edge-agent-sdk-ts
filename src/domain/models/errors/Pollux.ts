@@ -22,9 +22,9 @@ export class CredentialTypeNotSupported extends Error {
     }
 }
 
-export class InvalidJWTPresentationDefinitionError extends Error {
+export class InvalidPresentationDefinitionError extends Error {
     constructor(message?: string) {
-        super(message || "Invalid JWT presentation definition error");
+        super(message || "Invalid Presentation definition error");
     }
 }
 
@@ -34,22 +34,24 @@ export class NoDomainOrChallengeFound extends Error {
     }
 }
 
-
 export class InvalidVerifyFormatError extends Error {
     constructor(public reason: string) {
         super(`Verification format is invalid: reason -> ${reason}`)
     }
 }
+
 export class InvalidVerifyCredentialError extends Error {
     constructor(credentialId: string, public reason: string) {
         super(`Verification failed for credential (${credentialId.slice(0, 10)}...): reason -> ${reason}`)
     }
 }
+
 export class InvalidPresentationError extends Error {
     constructor(message?: string) {
         super(message || "Invalid Presentation Definition object")
     }
 }
+
 export class InvalidDescriptorFormatError extends Error {
     constructor(message?: string) {
         super(message || "Invalid Descriptor format")
