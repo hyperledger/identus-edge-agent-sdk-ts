@@ -35,7 +35,7 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
   }
 
   private get native() {
-    return ApolloPkg.org.hyperledger.identus.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+    return ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
       Int8Array.from(this.raw)
     );
   }
@@ -143,7 +143,7 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
   static secp256k1FromBytes(encoded: Uint8Array): Secp256k1PublicKey {
     return new Secp256k1PublicKey(
       Uint8Array.from(
-        ApolloPkg.org.hyperledger.identus.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
+        ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
           Int8Array.from(encoded)
         ).raw
       )
@@ -178,7 +178,7 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
     const xCoord = Buffer.from(x.toArray());
     const yCoord = Buffer.from(y.toArray());
     const publicKey =
-      ApolloPkg.org.hyperledger.identus.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
+      ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
         Int8Array.from(xCoord),
         Int8Array.from(yCoord)
       );

@@ -18,10 +18,10 @@ export class Secp256k1KeyPair extends KeyPair {
 
   static generateKeyPair() {
     const {
-      org: {
-        hyperledger: {
-          identus: {
-            apollo
+      io: {
+        iohk: {
+          atala: {
+            prism: { apollo },
           },
         },
       },

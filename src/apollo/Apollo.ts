@@ -33,7 +33,7 @@ import { X25519PublicKey } from "./utils/X25519PublicKey";
 import ApolloPKG from "@atala/apollo";
 import { DerivationPath } from "./utils/derivation/DerivationPath";
 
-const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
+const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;

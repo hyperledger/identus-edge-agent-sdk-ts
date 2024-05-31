@@ -16,7 +16,7 @@ export class Ed25519KeyPair extends KeyPair {
 
   static generateKeyPair() {
     const keyPair =
-      ApolloBaseAsymmetricEncryption.org.hyperledger.identus.apollo.utils.KMMEdKeyPair.Companion.generateKeyPair();
+      ApolloBaseAsymmetricEncryption.io.iohk.atala.prism.apollo.utils.KMMEdKeyPair.Companion.generateKeyPair();
 
     return new Ed25519KeyPair(
       new Ed25519PrivateKey(keyPair.privateKey.raw),

@@ -1,4 +1,4 @@
-// package: org.hyperledger.identus.protos
+// package: io.iohk.atala.prism.protos
 // file: node_models.proto
 
 import * as jspb from "google-protobuf";
