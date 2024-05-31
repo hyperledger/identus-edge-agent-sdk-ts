@@ -8,7 +8,7 @@ import { ECPublicKeyInitialization } from "../../../src/domain/models/errors/Apo
 import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
 
 import ApolloPKG from "@atala/apollo";
-const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
+const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 
