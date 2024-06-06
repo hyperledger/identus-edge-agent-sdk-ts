@@ -48,12 +48,12 @@ yarn add @atala/prism-wallet-sdk
 This repository contains compiles typescript code and some rust dependencies for DIDComm and AnonCreds, so in order to build the code from source you will need the following:
 
 * Bash
-* Have Rust (cargo) and wasm-pack installed.
+* Have Rust ([cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)) and [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/) installed.
 * Node JS Version (20/LTS Recommended)
 
 Clone the repository
 ```
-git clone git@github.com:input-output-hk/atala-prism-wallet-sdk-ts.git
+git clone git@github.com:input-output-hk/atala-prism-wallet-sdk-ts.git --recruse-submodules
 ```
 
 To be able to run the demos, we have to build `prism-wallet-sdk`.
