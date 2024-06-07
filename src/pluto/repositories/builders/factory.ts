@@ -28,3 +28,5 @@ export const repositoryFactory = (store: Pluto.Store, keyRestoration: Domain.Key
   DIDKeyLinks: new DIDKeyLinkRepository(store),
   DIDLinks: new DIDLinkRepository(store),
 });
+
+export type PlutoRepositories = ReturnType<typeof repositoryFactory>;

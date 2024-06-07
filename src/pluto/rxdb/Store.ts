@@ -54,7 +54,7 @@ export class RxdbStore implements Pluto.Store {
     if (row) {
 
       //Improve error handling when not found
-      await row.patch(model)
+      await row.patch(model);
     }
   }
 
@@ -64,14 +64,14 @@ export class RxdbStore implements Pluto.Store {
       selector: {
         uuid: uuid
       }
-    })
+    });
     //TODO: Improve error handling, specially when not found
     await row?.remove();
   }
 
 
   getCollection(name: string) {
-    const safeName = name.replace(/([A-Z])/g, "-$1").toLowerCase()
+    const safeName = name.replace(/([A-Z])/g, "-$1").toLowerCase();
     if (!this.db.collections[safeName]) {
       throw new Error("Collection does not exist");
     }
@@ -94,15 +94,21 @@ export class RxdbStore implements Pluto.Store {
 
   /**
    * Use with caution, this will remove all entries from database
-   * and then destroy the database itself.
    */
-  async clear() {
+  async cleanup() {
     const storages = Array.from(this.db.storageInstances.values());
 
     for (const storage of storages) {
       await storage.cleanup(Infinity);
     }
+  }
 
+  /**
+   * Use with caution, this will remove all entries from database
+   * and then destroy the database itself.
+   */
+  async clear() {
+    await this.cleanup();
     await removeRxDatabase(this.options.name, this.db.storage);
   }
 }

@@ -1,5 +1,5 @@
-import ApolloPkg from "@atala/apollo";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
+import { X25519PrivateKey } from "./X25519PrivateKey";
 import {
   Curve,
   ExportableKey,
@@ -11,6 +11,8 @@ import {
   SignableKey
 } from "../../domain";
 
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**
  * @ignore
@@ -48,15 +50,17 @@ export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, Sign
     return Buffer.from(signature);
   }
 
+  x25519() {
+    const key = this.getInstance().x25519PrivateKey();
+    return X25519PrivateKey.from.Buffer(key.raw);
+  }
+
   private getInstance(
     value?: Int8Array | Uint8Array
-  ): ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey {
+  ) {
     // eslint-disable-next-line no-extra-boolean-cast
     const bytes = !!value ? Buffer.from(value) : this.raw;
-    const instance =
-      new ApolloPkg.io.iohk.atala.prism.apollo.utils.KMMEdPrivateKey(
-        Int8Array.from(bytes)
-      );
+    const instance = new ApolloSDK.utils.KMMEdPrivateKey(Int8Array.from(bytes));
 
     return instance;
   }

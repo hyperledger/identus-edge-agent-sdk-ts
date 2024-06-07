@@ -1,4 +1,3 @@
-import ApolloPkg from "@atala/apollo";
 import BN from "bn.js";
 
 import * as ECConfig from "../../config/ECConfig";
@@ -14,9 +13,10 @@ import {
   StorableKey,
 } from "../../domain/models/keyManagement";
 
-const Apollo = ApolloPkg.io.iohk.atala.prism.apollo;
-const HDKey = Apollo.derivation.HDKey;
-const BigIntegerWrapper = Apollo.derivation.BigIntegerWrapper;
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
+const HDKey = ApolloSDK.derivation.HDKey;
+const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
 
 /**
  * @ignore
@@ -36,7 +36,7 @@ export class Secp256k1PrivateKey
   static from = ImportableKey.factory(Secp256k1PrivateKey, { pemLabel: "EC PRIVATE KEY" });
 
   private get native() {
-    return Apollo.utils.KMMECSecp256k1PrivateKey.Companion.secp256k1FromByteArray(
+    return ApolloSDK.utils.KMMECSecp256k1PrivateKey.Companion.secp256k1FromByteArray(
       Int8Array.from(this.raw)
     );
   }
