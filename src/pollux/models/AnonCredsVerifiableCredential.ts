@@ -1,7 +1,9 @@
+import * as TB from "@sinclair/typebox";
 import type * as Anoncreds from "anoncreds-browser";
 import * as sha256 from '@stablelib/sha256';
 import { Credential, StorableCredential } from "../../domain/models/Credential";
 import { CredentialType } from "../../domain/models/VerifiableCredential";
+import { isString, validate } from "../../utils";
 
 export enum AnonCredsCredentialProperties {
   iss = "iss",
@@ -51,12 +53,12 @@ export class AnonCredsCredential
       values: this.properties.get(AnonCredsCredentialProperties.values),
       signature: this.properties.get(AnonCredsCredentialProperties.signature),
       signature_correctness_proof: this.properties.get(AnonCredsCredentialProperties.signatureCorrectnessProof),
-    }
+    };
     const anoncredsObject = JSON.stringify(
       credential
-    )
+    );
     const hash = sha256.hash(Buffer.from(anoncredsObject));
-    return Buffer.from(hash).toString('hex')
+    return Buffer.from(hash).toString('hex');
   }
 
   get claims() {
@@ -109,4 +111,28 @@ export class AnonCredsCredential
       values: this.getProperty(AnonCredsCredentialProperties.values),
     };
   }
+
+  static fromJson(value: Anoncreds.CredentialType | string | unknown) {
+    const json = isString(value) ? JSON.parse(value) : value;
+    validate(json, AnoncredsCredentialSchema);
+    return new AnonCredsCredential(json);
+  }
 }
+
+const AnoncredsCredentialSchema = TB.Object({
+  [AnonCredsCredentialProperties.credentialDefinitionId]: TB.String(),
+  [AnonCredsCredentialProperties.schemaId]: TB.String(),
+  [AnonCredsCredentialProperties.signature]: TB.Object({
+    p_credential: TB.Object({
+      m_2: TB.String(),
+      a: TB.String(),
+      e: TB.String(),
+      v: TB.String(),
+    })
+  }),
+  [AnonCredsCredentialProperties.signatureCorrectnessProof]: TB.Object({
+    c: TB.String(),
+    se: TB.String(),
+  }),
+  [AnonCredsCredentialProperties.values]: TB.Record(TB.String(), TB.Any()),
+});

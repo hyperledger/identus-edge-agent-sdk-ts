@@ -1,3 +1,4 @@
+export * as Backup from "./backup";
 export * from "./models";
 export * from "./protocols";
 export * from "./buildingBlocks/Apollo";

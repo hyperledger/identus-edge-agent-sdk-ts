@@ -2,7 +2,10 @@ import type { MangoQuery } from "rxdb";
 import * as Domain from "../domain";
 import * as Models from "./models";
 import { PeerDID } from "../peer-did/PeerDID";
-import { repositoryFactory } from "./repositories";
+import { BackupManager } from "./backup/BackupManager";
+import { PlutoRepositories, repositoryFactory } from "./repositories";
+import { Arrayable, asArray } from "../utils";
+
 
 /**
  * Pluto implementation
@@ -100,27 +103,37 @@ export namespace Pluto {
 }
 
 export class Pluto implements Domain.Pluto {
-  private Repositories: ReturnType<typeof repositoryFactory>;
+  public BackupMgr: BackupManager;
+  private Repositories: PlutoRepositories;
 
   constructor(
     private readonly store: Pluto.Store,
     private readonly keyRestoration: Domain.KeyRestoration
   ) {
     this.Repositories = repositoryFactory(store, keyRestoration);
+    this.BackupMgr = new BackupManager(this, this.Repositories);
+  }
+
+  async start(): Promise<void> {
+    if (this.store.start !== undefined) {
+      await this.store.start();
+    }
+  }
+
+  /** Backups **/
+  backup() {
+    return this.BackupMgr.backup();
+  }
+
+  restore(backup: Domain.Backup.Schema) {
+    return this.BackupMgr.restore(backup);
   }
 
   async deleteMessage(id: string): Promise<void> {
     const message = await this.Repositories.Messages.findOne({ id });
     //TODO: Improve error handling
     if (message) {
-      await this.Repositories.Messages.delete(message.uuid)
-    }
-  }
-
-
-  async start(): Promise<void> {
-    if (this.store.start !== undefined) {
-      await this.store.start();
+      await this.Repositories.Messages.delete(message.uuid);
     }
   }
 
@@ -137,11 +150,11 @@ export class Pluto implements Domain.Pluto {
 
   async revokeCredential(credential: Domain.Credential): Promise<void> {
     if (!credential || !credential.isStorable()) {
-      throw new Error("Credential not found or invalid")
+      throw new Error("Credential not found or invalid");
     }
     credential.properties.set("revoked", true);
-    const credentialModel = await this.Repositories.Credentials.toModel(credential)
-    await this.Repositories.Credentials.update(credentialModel)
+    const credentialModel = await this.Repositories.Credentials.toModel(credential);
+    await this.Repositories.Credentials.update(credentialModel);
   }
 
 
@@ -182,6 +195,23 @@ export class Pluto implements Domain.Pluto {
   }
 
   /** DIDs **/
+
+  async storeDID(did: Domain.DID, keys?: Arrayable<Domain.PrivateKey>, alias?: string): Promise<void> {
+    await this.Repositories.DIDs.save(did, alias);
+
+    await Promise.all(
+      asArray(keys).map(async key => {
+        await this.Repositories.Keys.save(key);
+
+        await this.Repositories.DIDKeyLinks.insert({
+          alias,
+          didId: did.uuid,
+          keyId: key.uuid
+        });
+      })
+    );
+  }
+
   /** Prism DIDs **/
 
   async storePrismDID(did: Domain.DID, privateKey: Domain.PrivateKey, alias?: string): Promise<void> {

@@ -1,5 +1,4 @@
 import * as Domain from "../domain";
-
 import Apollo from "../apollo";
 import Castor from "../castor";
 import Mercury from "../mercury";
@@ -19,6 +18,7 @@ import {
   PrismOnboardingInvitation,
 } from "./types";
 
+import { AgentBackup } from "./Agent.Backup";
 import { AgentCredentials } from "./Agent.Credentials";
 import { AgentDIDHigherFunctions } from "./Agent.DIDHigherFunctions";
 import { AgentInvitations } from "./Agent.Invitations";
@@ -59,6 +59,7 @@ export default class Agent
    * @type {AgentState}
    */
   public state: AgentState = AgentState.STOPPED;
+  public backup: AgentBackup;
 
   private agentCredentials: AgentCredentials;
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
@@ -129,6 +130,8 @@ export default class Agent
       this.agentDIDHigherFunctions,
       this.connectionManager
     );
+
+    this.backup = new AgentBackup(this);
   }
 
   /**
@@ -153,7 +156,7 @@ export default class Agent
     castor?: Domain.Castor;
     mercury?: Domain.Mercury;
     seed?: Domain.Seed;
-    options?: AgentOptions
+    options?: AgentOptions;
   }): Agent {
     const mediatorDID = Domain.DID.from(params.mediatorDID);
     const pluto = params.pluto;
@@ -184,7 +187,7 @@ export default class Agent
         handler,
         seed
       )
-    )
+    );
 
     const manager = new ConnectionsManager(castor, mercury, pluto, agentCredentials, handler, [], params.options);
 
@@ -263,7 +266,7 @@ export default class Agent
       credential,
       fields,
       linkSecret
-    )
+    );
   }
 
 
@@ -575,9 +578,9 @@ export default class Agent
       presentationClaims
     );
 
-    const requestPresentationMessage = requestPresentation.makeMessage()
+    const requestPresentationMessage = requestPresentation.makeMessage();
     await this.connectionManager.sendMessage(requestPresentationMessage);
-    return requestPresentation
+    return requestPresentation;
   }
 
   /**
@@ -585,7 +588,7 @@ export default class Agent
    * @param presentation 
    */
   async handlePresentation<Type extends Domain.CredentialType = Domain.CredentialType.JWT>(presentation: Presentation): Promise<boolean> {
-    return this.agentCredentials.handlePresentation<Type>(presentation)
+    return this.agentCredentials.handlePresentation<Type>(presentation);
   }
 
 }

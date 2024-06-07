@@ -61,7 +61,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected seed: Seed,
     protected mercury: Mercury,
     protected agentDIDHigherFunctions: AgentDIDHigherFunctions
-  ) { }
+  ) {}
 
 
   private createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
@@ -106,24 +106,26 @@ export class AgentCredentials implements AgentCredentialsClass {
 
     if (type === CredentialType.AnonCreds) {
       if (!validatePresentationClaims(claims, CredentialType.AnonCreds)) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Anoncreds Claims are invalid")
+        throw new PolluxError.InvalidPresentationDefinitionError("Anoncreds Claims are invalid");
       }
+
       const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest(
         type,
         claims,
         new PresentationOptions({}, CredentialType.AnonCreds)
-      )
+      );
+
       return this.createPresentationDefinitionRequest<CredentialType.AnonCreds>(
         type,
         presentationDefinitionRequest,
         newPeerDID,
         toDID
-      )
+      );
     }
 
     if (type === CredentialType.JWT) {
       if (!validatePresentationClaims(claims, CredentialType.JWT)) {
-        throw new PolluxError.InvalidPresentationDefinitionError("JWT Claims are invalid")
+        throw new PolluxError.InvalidPresentationDefinitionError("JWT Claims are invalid");
       }
       const presentationDefinitionRequest = await this.pollux.createPresentationDefinitionRequest<CredentialType.JWT>(
         type,
@@ -141,10 +143,10 @@ export class AgentCredentials implements AgentCredentialsClass {
         presentationDefinitionRequest,
         newPeerDID,
         toDID
-      )
+      );
     }
 
-    throw new PolluxError.CredentialTypeNotSupported()
+    throw new PolluxError.CredentialTypeNotSupported();
   }
 
   async verifiableCredentials(): Promise<Credential[]> {
@@ -250,7 +252,7 @@ export class AgentCredentials implements AgentCredentialsClass {
 
       const did = await this.castor.createPrismDID(privateKey.publicKey());
 
-      await this.pluto.storePrismDID(did, privateKey);
+      await this.pluto.storeDID(did, privateKey);
 
       credRequestBuffer = await this.pollux.processJWTCredential(message, {
         did: did,
@@ -316,39 +318,39 @@ export class AgentCredentials implements AgentCredentialsClass {
   }
 
   private async getPresentationDefinitionByThid<Type extends CredentialType = CredentialType.JWT>(thid: string): Promise<PresentationDefinitionRequest<Type>> {
-    const allMessages = (await this.pluto.getAllMessages())
+    const allMessages = (await this.pluto.getAllMessages());
     const message = allMessages.find((message) => {
-      return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation
+      return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation;
     });
     if (message) {
       const attachment = message.attachments.at(0);
       if (!attachment) {
-        throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing")
+        throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing");
       }
       const presentationDefinitionRequest = Message.Attachment.extractJSON(attachment);
-      return presentationDefinitionRequest
+      return presentationDefinitionRequest;
     }
-    throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
+    throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");
   }
 
   async handlePresentation<Type extends CredentialType = CredentialType.JWT>(presentation: Presentation): Promise<boolean> {
     const attachment = presentation.attachments.at(0);
     if (!attachment) {
-      throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing")
+      throw new AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing");
     }
     if (!presentation.thid) {
-      throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID")
+      throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");
     }
     const presentationSubmission = Message.Attachment.extractJSON(attachment);
-    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid!)
+    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid!);
     const options = {
       presentationDefinitionRequest
-    }
+    };
     const verified = await this.pollux.verifyPresentationSubmission(
       presentationSubmission,
       options
-    )
-    return verified
+    );
+    return verified;
   }
 
   /**
@@ -381,7 +383,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       'application/json',
       undefined,
       AttachmentFormats.ANONCREDS_PROOF
-    )
+    );
     const presentation = new Presentation(
       {
         comment: message.body.comment,
@@ -407,7 +409,7 @@ export class AgentCredentials implements AgentCredentialsClass {
    * @returns {AttributeType}
    */
   async revealCredentialFields(credential: Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret)
+    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
   }
 
 
@@ -428,7 +430,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       return new PresentationRequest(AttachmentFormats.JWT, data);
     }
     if (attachment.format === AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
-      return new PresentationRequest(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS, data)
+      return new PresentationRequest(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS, data);
     }
     throw new Error("Unsupported Proof Request");
   }
@@ -451,8 +453,8 @@ export class AgentCredentials implements AgentCredentialsClass {
           request.toJSON(),
           credential,
           privateKey
-        )
-        return JSON.stringify(presentationSubmission)
+        );
+        return JSON.stringify(presentationSubmission);
       }
     }
     if (request.isType<CredentialType.AnonCreds>(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
@@ -465,12 +467,12 @@ export class AgentCredentials implements AgentCredentialsClass {
           request.toJSON(),
           credential,
           storedLinkSecret
-        )
-        return JSON.stringify(presentationSubmission)
+        );
+        return JSON.stringify(presentationSubmission);
       }
     }
 
-    throw new Error("Not implemented")
+    throw new Error("Not implemented");
   }
 
   private async handlePresentationRequest(
@@ -503,6 +505,4 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
     throw new AgentError.UnhandledPresentationRequest();
   }
-
-
 }

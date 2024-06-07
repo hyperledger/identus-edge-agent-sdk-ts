@@ -10,6 +10,7 @@ import {
 import { AgentError } from "./Errors";
 import { JsonString } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
+import { isObject } from "../../utils";
 
 export enum MessageDirection {
   SENT = 0,
@@ -27,10 +28,9 @@ export class Message implements Pluto.Storable {
     public readonly to?: DID,
     public readonly attachments: AttachmentDescriptor[] = [],
     public readonly thid?: string,
-    public readonly extraHeaders: string[] = [],
+    public readonly extraHeaders: Record<string, any> = {},
     // Q: why is this a string?
     public readonly createdTime: string = Date.now().toString(),
-    // TODO: deprecate this name, also what is this math?
     public readonly expiresTimePlus: string = (
       createdTime +
       1 * 24 * 60 * 60
@@ -39,7 +39,7 @@ export class Message implements Pluto.Storable {
     public direction: MessageDirection = MessageDirection.RECEIVED,
     public readonly fromPrior?: string,
     public readonly pthid?: string
-  ) { }
+  ) {}
 
   static fromJson(jsonString: JsonString): Message {
     const messageObj = JSON.parse(jsonString);
@@ -52,14 +52,7 @@ export class Message implements Pluto.Storable {
     if (messageObj.attachments && !Array.isArray(messageObj.attachments)) {
       throw new AgentError.InvalidMessageError("undefined or wrong piuri");
     }
-    if (
-      (messageObj.extraHeaders && !Array.isArray(messageObj.extraHeaders)) ||
-      messageObj.extraHeaders.find((header: any) => typeof header !== "string")
-    ) {
-      throw new AgentError.InvalidMessageError(
-        "undefined or wrong extraHeaders"
-      );
-    }
+
     if (
       (messageObj.ack && !Array.isArray(messageObj.ack)) ||
       messageObj.ack.find((val: any) => typeof val !== "string")
@@ -101,7 +94,7 @@ export class Message implements Pluto.Storable {
     const id = messageObj.id || undefined;
     const piuri = messageObj.piuri;
     const thid = messageObj.thid;
-    const extraHeaders = messageObj.extraHeaders;
+    const extraHeaders = isObject(messageObj.extraHeaders) ? messageObj.extraHeaders : {};
     // ??? update this when no longer strings
     const createdTime = messageObj.createdTime?.toString();
     const expiredTimePlus = messageObj.expiredTimePlus?.toString();

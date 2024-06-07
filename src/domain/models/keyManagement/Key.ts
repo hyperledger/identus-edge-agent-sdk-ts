@@ -43,8 +43,8 @@ export abstract class Key {
     return "derive" in this;
   }
 
-  isExportable(): this is unknown {
-    return "export" in this;
+  isExportable(): this is ExportableKey {
+    return "JWK" in this.to && "PEM" in this.to;
   }
 
   isSignable(): this is SignableKey {

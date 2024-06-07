@@ -30,13 +30,14 @@ import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
 import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
 import { X25519PublicKey } from "./utils/X25519PublicKey";
 
-import ApolloPKG from "@atala/apollo";
 import { DerivationPath } from "./utils/derivation/DerivationPath";
-
-const ApolloSDK = ApolloPKG.io.iohk.atala.prism.apollo;
+import { notEmptyString } from "../utils";
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
+
 /**
  * Apollo defines the set of cryptographic operations.
  *
@@ -274,6 +275,18 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         if (keyData) {
           return new Ed25519PrivateKey(keyData);
         }
+
+        const seedHex = parameters[KeyProperties.seed];
+        if (notEmptyString(seedHex)) {
+          const derivationParam = parameters[KeyProperties.derivationPath] ?? "m/0'/0'/0'";
+          const derivationPath = DerivationPath.from(derivationParam);
+          const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
+          const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed).derive(derivationPath.toString());
+          const edKey = Ed25519PrivateKey.from.Buffer(Buffer.from(hdKey.privateKey));
+
+          return edKey;
+        }
+
         const keyPair = Ed25519KeyPair.generateKeyPair();
         return keyPair.privateKey;
       }
@@ -322,6 +335,19 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         if (keyData) {
           return new X25519PrivateKey(keyData);
         }
+
+        const seedHex = parameters[KeyProperties.seed];
+        if (notEmptyString(seedHex)) {
+          const derivationParam = parameters[KeyProperties.derivationPath] ?? "m/0'/0'/0'";
+          const derivationPath = DerivationPath.from(derivationParam);
+          const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
+          const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed).derive(derivationPath.toString());
+          const edKey = Ed25519PrivateKey.from.Buffer(Buffer.from(hdKey.privateKey));
+          const xKey = edKey.x25519();
+
+          return xKey;
+        }
+
         const keyPair = X25519KeyPair.generateKeyPair();
         return keyPair.privateKey;
       }

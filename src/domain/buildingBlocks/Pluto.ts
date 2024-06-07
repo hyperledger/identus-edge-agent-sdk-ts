@@ -6,6 +6,8 @@ import { Message } from "../models/Message";
 import { Credential } from "../models/Credential";
 import { PeerDID } from "../../peer-did/PeerDID";
 import { uuid } from "@stablelib/uuid";
+import { Arrayable } from "../../utils";
+import * as Backup from "../backup";
 
 export namespace Pluto {
   /**
@@ -37,6 +39,17 @@ export interface Pluto {
   start(): Promise<void>;
 
   /**
+   * create a Backup object from the stored data
+   */
+  backup(): Promise<Backup.Schema>;
+
+  /**
+   * load the given data into the store
+   * @param backup 
+   */
+  restore(backup: Backup.Schema): Promise<void>;
+
+  /**
    * Store the Credential Metadata
    */
   storeCredentialMetadata(metadata: CredentialMetadata): Promise<void>;
@@ -48,12 +61,20 @@ export interface Pluto {
   getCredentialMetadata(name: string): Promise<CredentialMetadata | null>;
 
   /**
+   * Store a DID
+   * with optional private key(s) and alias
+   */
+  storeDID(did: DID, keys?: Arrayable<PrivateKey>, alias?: string): Promise<void>;
+
+  /**
    * Store a PRISM DID and its private key with given metadata.
+   * @deprecated use storeDID instead
    */
   storePrismDID(did: DID, privateKey: PrivateKey, alias?: string): Promise<void>;
 
   /**
    * Store a Peer DID and an array of its privateKeys.
+   * @deprecated use storeDID instead
    */
   storePeerDID(did: DID, privateKeys: Array<PrivateKey>): Promise<void>;
 
