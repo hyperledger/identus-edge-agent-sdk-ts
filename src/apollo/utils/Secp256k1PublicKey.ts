@@ -13,7 +13,7 @@ import {
 } from "../../domain/models/keyManagement";
 
 import ApolloPKG from "@atala/apollo";
-import { rawToDER } from "../../domain/utils/der";
+import { rawToDER } from "../../domain/utils/DER";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**
