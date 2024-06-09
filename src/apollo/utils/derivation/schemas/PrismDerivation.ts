@@ -1,8 +1,9 @@
-import { ApolloError, Usage } from "../../../../domain"
+import { ApolloError } from "../../../../domain"
 import { BaseSchema, DerivationPathBase, AxesArray } from "../core"
 import { DerivationAxis } from "../DerivationAxis"
+import * as Protos from "../../../../domain/models/protos/node_models";
 
-interface IdentusDerivationSchema extends BaseSchema {
+interface PrismDerivationSchema extends BaseSchema {
     walletPurpose: number
     didMethod: number
     didIndex: number
@@ -10,16 +11,17 @@ interface IdentusDerivationSchema extends BaseSchema {
     keyIndex: number
 }
 
+export const PRISM_IDENTIFIER = 0x1D;
 
-export const IDENTUS_WALLET_PURPOSE = 29//0x1D;
-export const IDENTUS_DID_METHOD = 29;
-export const AUTHENTICATION_KEY = 4;
-export const MASTER_KEY = 1;
-export const ISSUING_KEY = 2;
+export const IDENTUS_WALLET_PURPOSE = PRISM_IDENTIFIER;
+export const IDENTUS_DID_METHOD = PRISM_IDENTIFIER;
+export const AUTHENTICATION_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
+export const MASTER_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
+export const ISSUING_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
 
+export class PrismDerivationPath extends DerivationPathBase<PrismDerivationSchema> {
+    schema = "identus"
 
-
-export class IdentusDerivationPath extends DerivationPathBase<IdentusDerivationSchema> {
     constructor(paths: number[]) {
         if (paths.length !== 5) {
             throw new ApolloError.InvalidDerivationPath("Incorrect Derivation Schema")
@@ -56,8 +58,8 @@ export class IdentusDerivationPath extends DerivationPathBase<IdentusDerivationS
         return DerivationAxis.hardened(this.variables.keyIndex)
     }
 
-    static init(didIndex: number, keyPurpose: number = AUTHENTICATION_KEY, keyIndex: number = 0): IdentusDerivationPath {
-        return new IdentusDerivationPath([
+    static init(didIndex: number, keyPurpose: number = AUTHENTICATION_KEY, keyIndex: number = 0): PrismDerivationPath {
+        return new PrismDerivationPath([
             IDENTUS_WALLET_PURPOSE,
             IDENTUS_DID_METHOD,
             didIndex,

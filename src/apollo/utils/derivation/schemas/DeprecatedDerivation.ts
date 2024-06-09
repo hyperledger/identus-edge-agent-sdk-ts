@@ -9,6 +9,7 @@ interface DeprecatedDerivationSchema extends BaseSchema {
 }
 
 export class DeprecatedDerivationPath extends DerivationPathBase<DeprecatedDerivationSchema> {
+    schema = "deprecated"
 
     constructor(paths: number[]) {
         if (paths.length !== 3) {

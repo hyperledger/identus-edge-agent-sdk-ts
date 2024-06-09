@@ -15,4 +15,5 @@ export abstract class DerivationPathBase<T extends BaseSchema> {
     constructor(protected variables: T) { }
     abstract toString(): string;
     abstract axes: AxesArray;
+    abstract schema: string;
 }

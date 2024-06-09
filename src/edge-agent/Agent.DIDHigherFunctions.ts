@@ -18,7 +18,7 @@ import {
   MediatorHandler,
 } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
-import { IdentusDerivationPath, IDENTUS_WALLET_PURPOSE, IDENTUS_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY } from "../apollo/utils/derivation/schemas/IdentusDerivation";
+import { IDENTUS_WALLET_PURPOSE, IDENTUS_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY, PrismDerivationPath } from "../apollo/utils/derivation/schemas/PrismDerivation";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -142,14 +142,14 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
   ): Promise<DID> {
     const index = keyPathIndex ?? await this.getNextKeyPathIndex();
     const didRotation = 0;
-    const authenticationDerivation = new IdentusDerivationPath([
+    const authenticationDerivation = new PrismDerivationPath([
       IDENTUS_WALLET_PURPOSE,
       IDENTUS_DID_METHOD,
       index,
       AUTHENTICATION_KEY,
       didRotation
     ]);
-    const issuingDerivation = new IdentusDerivationPath([
+    const issuingDerivation = new PrismDerivationPath([
       IDENTUS_WALLET_PURPOSE,
       IDENTUS_DID_METHOD,
       index,

@@ -1,17 +1,40 @@
 import { ApolloError } from "../../../domain";
+import { DerivationPathBase } from "./core";
 import { DerivationAxis } from "./DerivationAxis";
 import { DeprecatedDerivationPath } from "./schemas/DeprecatedDerivation";
-import { IdentusDerivationPath } from "./schemas/IdentusDerivation";
+import { PrismDerivationPath } from "./schemas/PrismDerivation";
+
+const SCHEMAS = [
+  PrismDerivationPath,
+  DeprecatedDerivationPath,
+];
+
+type DerivationClass = typeof SCHEMAS extends Array<infer T> ? T : never;
 
 export class DerivationPath {
-  static resolvers = [
-    IdentusDerivationPath,
-    DeprecatedDerivationPath,
-  ]
 
-  constructor(
-    private paths: number[]
+  private static create(DerivationClass: DerivationClass, paths: number[]): DerivationPathBase<any> | undefined {
+    try {
+      const path = new DerivationClass(paths);
+      return path;
+    } catch (err) {
+      if (!(err instanceof ApolloError.InvalidDerivationPath)) {
+        throw err
+      }
+    }
+  }
+
+  private static callBackOrThrow(
+    paths: number[],
+    cb: (path: DerivationPathBase<any>) => any
   ) {
+    for (let DerivationClass of SCHEMAS) {
+      const path = this.create(DerivationClass, paths);
+      if (path) {
+        return cb(path);
+      }
+    }
+    throw new ApolloError.InvalidDerivationPath("DerivationPathErr Incompatible Derivation schema");
   }
 
   get axes(): DerivationAxis[] {
@@ -22,6 +45,18 @@ export class DerivationPath {
     const first = this.axes.at(0);
     const index = first?.number ?? 0;
     return index;
+  }
+
+  get schema() {
+    return DerivationPath.callBackOrThrow(
+      this.paths,
+      (path) => path.schema
+    )
+  }
+
+  constructor(
+    private paths: number[]
+  ) {
   }
 
   derive(axis: DerivationAxis): DerivationPath {
@@ -39,17 +74,10 @@ export class DerivationPath {
     if (!this.axes.length) {
       throw new ApolloError.InvalidDerivationPath("DerivationPathErr Derivation path is empty");
     }
-
-    let axes: DerivationAxis[] | undefined = [];
-    for (let resolver of DerivationPath.resolvers) {
-      try {
-        const path = new resolver(this.paths);
-        axes.push(...path.axes)
-        return `m/${axes.map((axis) => axis.toString()).join("/")}`
-      } catch (err) {
-      }
-    }
-    throw new ApolloError.InvalidDerivationPath("DerivationPathErr Incompatible Derivation schema");
+    return DerivationPath.callBackOrThrow(
+      this.paths,
+      (path) => `m/${path.axes.map((axis) => axis.toString()).join("/")}`
+    )
   }
 
   /**
@@ -66,19 +94,10 @@ export class DerivationPath {
           throw new ApolloError.InvalidDerivationPath("Path needs to start with m or M");
         }
         const paths = splitPath.slice(1).map(DerivationPath.parseAxis).map((a) => a.number);
-        for (let resolver of DerivationPath.resolvers) {
-          try {
-            const resolved = new resolver(paths);
-            return new DerivationPath(
-              resolved.axes.map((a) => a.number)
-            );
-          } catch (err) {
-            if (!(err instanceof ApolloError.InvalidDerivationPath)) {
-              throw err
-            }
-          }
-        }
-        throw new ApolloError.InvalidDerivationPath(`Incompatible Derivation schema`)
+        return DerivationPath.callBackOrThrow(
+          paths,
+          (path) => new DerivationPath(path.axes.map((a) => a.number))
+        )
       }
       throw new ApolloError.InvalidDerivationPath(`Derivation path should be string`)
     } catch (err) {

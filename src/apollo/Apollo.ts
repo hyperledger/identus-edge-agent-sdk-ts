@@ -35,8 +35,8 @@ import { X25519PublicKey } from "./utils/X25519PublicKey";
 import { DerivationPath } from "./utils/derivation/DerivationPath";
 import { notEmptyString } from "../utils";
 import ApolloPKG from "@atala/apollo";
-import { IdentusDerivationPath } from "./utils/derivation/schemas/IdentusDerivation";
 import { PrismDIDPublicKey } from "./utils/PrismDIDPublicKey";
+import { PrismDerivationPath } from "./utils/derivation/schemas/PrismDerivation";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
@@ -360,7 +360,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
 
           const derivationIndex = parameters[KeyProperties.index] ?? "0";
           const derivationParam = parameters[KeyProperties.derivationPath]
-          const defaultPath: string = derivationParam ?? IdentusDerivationPath.init(derivationIndex).toString()
+          const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString()
           const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
 
           const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed);
@@ -396,7 +396,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
 
         const derivationIndex = parameters[KeyProperties.index] ?? "0";
         const derivationParam = parameters[KeyProperties.derivationPath];
-        const defaultPath: string = derivationParam ?? IdentusDerivationPath.init(derivationIndex).toString()
+        const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString()
 
         const hdKey = HDKey.InitFromSeed(
           Int8Array.from(seed),
@@ -437,7 +437,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         const seedHex = parameters[KeyProperties.seed];
         if (notEmptyString(seedHex)) {
           const derivationIndex = parameters[KeyProperties.index] ?? "0";
-          const derivationParam: string = parameters[KeyProperties.derivationPath] ?? IdentusDerivationPath.init(derivationIndex).toString();
+          const derivationParam: string = parameters[KeyProperties.derivationPath] ?? PrismDerivationPath.init(derivationIndex).toString();
 
           const derivationPath = DerivationPath.fromPath(derivationParam);
 
