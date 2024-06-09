@@ -484,7 +484,7 @@ export function Message({ message }) {
         if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.AnonCreds)) {
             const credentials = app.credentials;
             const fields =
-                Object.keys(requestPresentation.requested_attributes).reduce(
+                Object.keys(requestPresentation.requested_attributes || []).reduce(
                     (_, key) => ([
                         ..._,
                         {

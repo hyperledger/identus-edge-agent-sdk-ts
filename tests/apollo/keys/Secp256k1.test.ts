@@ -40,14 +40,16 @@ describe("Keys", () => {
 
         test("keySpecification.chainCode missing - throws", () => {
           const key = new Secp256k1PrivateKey(baseRaw);
-          const derivationPath = DerivationPath.from(0);
 
-          expect(() => key.derive(derivationPath)).to.throw;
+          expect(() => {
+            const derivationPath = DerivationPath.fromPath(0 as any);
+            key.derive(derivationPath)
+          }).to.throw;
         });
 
         test("DerivationPath - m/0'/0'/0'", () => {
           const key = new Secp256k1PrivateKey(raw);
-          const derivationPath = DerivationPath.from(`m/0'/0'/0'`);
+          const derivationPath = DerivationPath.fromPath(`m/0'/0'/0'`);
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
 
           const result = key.derive(derivationPath);
@@ -69,7 +71,7 @@ describe("Keys", () => {
 
         test("DerivationPath - m/1'/0'/0'", () => {
           const key = new Secp256k1PrivateKey(raw);
-          const derivationPath = DerivationPath.from("m/1'/0'/0'");
+          const derivationPath = DerivationPath.fromPath("m/1'/0'/0'");
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
 
           const result = key.derive(derivationPath);
@@ -84,7 +86,7 @@ describe("Keys", () => {
 
         test("DerivationPath - m/2'/0'/0'", () => {
           const key = new Secp256k1PrivateKey(raw);
-          const derivationPath = DerivationPath.from("m/2'/0'/0'");
+          const derivationPath = DerivationPath.fromPath("m/2'/0'/0'");
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
 
           const result = key.derive(derivationPath);
@@ -109,7 +111,7 @@ describe("Keys", () => {
 
           const secp = new Secp256k1PrivateKey(baseRaw);
           secp.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
-          const secpChild = secp.derive(DerivationPath.from(path));
+          const secpChild = secp.derive(DerivationPath.fromPath(path));
 
           const hdResult = Buffer.from(hdChild.privateKey!).toString("hex");
           const spResult = Buffer.from(secpChild.raw).toString("hex");

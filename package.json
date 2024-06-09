@@ -157,7 +157,7 @@
       "tests",
       "externals",
       "generated",
-      "src/castor/protos",
+      "src/domain/models/protos",
       "src/domain/models/errors",
       "build"
     ],
@@ -184,6 +184,7 @@
     "@scure/bip32": "^1.3.0",
     "@scure/bip39": "^1.1.1",
     "@sinclair/typebox": "^0.32.31",
+    "@sd-jwt/sd-jwt-vc": "^0.7.1",
     "@stablelib/base64": "^1.0.1",
     "@stablelib/sha256": "^1.0.1",
     "@stablelib/uuid": "^1.0.2",

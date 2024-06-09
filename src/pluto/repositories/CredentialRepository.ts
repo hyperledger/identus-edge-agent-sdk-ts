@@ -4,6 +4,7 @@ import type { Pluto } from "../Pluto";
 import { MapperRepository } from "./builders/MapperRepository";
 import { AnonCredsCredential, AnonCredsRecoveryId } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { JWTCredential, JWTVerifiableCredentialRecoveryId } from "../../pollux/models/JWTVerifiableCredential";
+import { SDJWTCredential, SDJWTVerifiableCredentialRecoveryId } from "../../pollux/models/SDJWTVerifiableCredential";
 
 export class CredentialRepository extends MapperRepository<Models.Credential, Domain.Credential> {
   constructor(store: Pluto.Store) {
@@ -12,6 +13,17 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
 
   toDomain(model: Models.Credential): Domain.Credential {
     switch (model.recoveryId) {
+      case SDJWTVerifiableCredentialRecoveryId: {
+        const jwtModel = JSON.parse(model.dataJson);
+        const jws = jwtModel.id;
+        const disclosures: string[] = jwtModel.disclosures.map((disclosure: any) => disclosure._encoded);
+        const credential = SDJWTCredential.fromJWS(
+          jws,
+          jwtModel.revoked ?? false,
+          disclosures
+        );
+        return this.withId(credential, model.uuid);
+      }
       case JWTVerifiableCredentialRecoveryId: {
         const jwtModel = JSON.parse(model.dataJson);
         const credential = JWTCredential.fromJWS(

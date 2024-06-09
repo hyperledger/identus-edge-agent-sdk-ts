@@ -1,5 +1,7 @@
+import { ApolloError } from "../../../domain";
+
 export class DerivationAxis {
-  constructor(private readonly i: number) {}
+  constructor(private readonly i: number) { }
 
   /**
    * Represents if the axis is hardened
@@ -22,21 +24,33 @@ export class DerivationAxis {
     return this.hardened ? `${this.number}'` : `${this.i}`;
   }
 
-  static normal(num: number): DerivationAxis {
-    if (num < 0) {
-      throw new Error(
-        "number corresponding to the axis should be a positive number"
+  private static safeCast(num: any): number {
+    const safeNum = parseInt(num)
+    if (Number.isNaN(safeNum)) {
+      throw new ApolloError.InvalidDerivationPath(
+        "Invalid axis, not a number"
       );
     }
-    return new DerivationAxis(num);
+    return safeNum
+  }
+
+  static normal(num: number): DerivationAxis {
+    const safeNum = this.safeCast(num)
+    if (safeNum < 0) {
+      throw new ApolloError.InvalidDerivationPath(
+        "Number corresponding to the axis should be a positive number"
+      );
+    }
+    return new DerivationAxis(safeNum);
   }
 
   static hardened(num: number): DerivationAxis {
-    if (num < 0) {
-      throw new Error(
-        "number corresponding to the axis should be a positive number"
+    const safeNum = this.safeCast(num)
+    if (safeNum < 0) {
+      throw new ApolloError.InvalidDerivationPath(
+        "Number corresponding to the axis should be a positive number"
       );
     }
-    return new DerivationAxis(num | (1 << 31));
+    return new DerivationAxis(safeNum | (1 << 31));
   }
 }

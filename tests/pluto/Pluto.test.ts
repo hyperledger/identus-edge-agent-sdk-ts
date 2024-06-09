@@ -100,7 +100,7 @@ describe("Pluto", () => {
 
   it("should store message", async function () {
     const messageId = randomUUID();
-    const message = {
+    const message = Domain.Message.fromJson({
       uuid: "abc-123",
       piuri: "test a",
       from: Domain.DID.fromString("did:prism:100"),
@@ -115,18 +115,18 @@ describe("Pluto", () => {
       direction: MessageDirection.RECEIVED,
       fromPrior: "sdomasd",
       extraHeaders: ["askdpaks"],
-    };
+    });
 
     await instance.storeMessage(message);
     const values = await instance.getAllMessages();
     const value = await instance.getMessage(values[0].id);
-    expect(value?.from?.toString()).equal(message.from.toString());
+    expect(value?.from?.toString()).equal(message.from!.toString());
   });
 
   it("should store messages", async function () {
     const messageId = randomUUID();
 
-    const message = {
+    const message = Domain.Message.fromJson({
       uuid: "abc-123",
       piuri: "test a",
       from: Domain.DID.fromString("did:prism:100"),
@@ -141,11 +141,15 @@ describe("Pluto", () => {
       direction: MessageDirection.RECEIVED,
       fromPrior: "sdomasd",
       extraHeaders: ["askdpaks"],
-    };
+    });
+
+    const messages = Array(10)
+      .fill("_")
+      .map((x, i) => (Domain.Message.fromJson({ ...message, id: `${message.uuid}-${i}` })));
+
+
     await instance.storeMessages(
-      Array(10)
-        .fill("_")
-        .map((x, i) => ({ ...message, uuid: `${message.uuid}-${i}` }))
+      messages
     );
     const values = await instance.getAllMessages();
 
@@ -341,7 +345,7 @@ describe("Pluto", () => {
   });
   //
   it("should get all messages", async function () {
-    await instance.storeMessage({
+    await instance.storeMessage(Domain.Message.fromJson({
       uuid: randomUUID(),
       id: randomUUID(),
       thid: "",
@@ -356,7 +360,7 @@ describe("Pluto", () => {
       piuri: "qwerty",
       extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toISOString(),
-    });
+    }));
     const messages = await instance.getAllMessages();
     expect(messages).not.empty;
   });
@@ -365,7 +369,7 @@ describe("Pluto", () => {
     const to = Domain.DID.fromString("did:prism:123");
     const from = Domain.DID.fromString("did:prism:321");
 
-    const message = {
+    const message = Domain.Message.fromJson({
       uuid: randomUUID(),
       id: randomUUID(),
       thid: "",
@@ -380,7 +384,7 @@ describe("Pluto", () => {
       piuri: "type-example",
       extraHeaders: ["x-extra-header"],
       expiresTimePlus: new Date().toISOString(),
-    };
+    });
     await instance.storeMessage(message);
     const messages = await instance.getAllMessages();
 

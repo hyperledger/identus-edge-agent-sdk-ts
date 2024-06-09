@@ -1,6 +1,6 @@
 import BN from "bn.js";
 
-import * as ECConfig from "../../config/ECConfig";
+import * as ECConfig from "./ec/ECConfig";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
 import { DerivationPath } from "./derivation/DerivationPath";
 import { ApolloError, Curve, KeyTypes, KeyProperties, } from "../../domain";
@@ -14,6 +14,7 @@ import {
 } from "../../domain/models/keyManagement";
 
 import ApolloPKG from "@atala/apollo";
+import { normaliseDER } from "../../domain/utils/der";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
@@ -23,8 +24,7 @@ const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
  */
 export class Secp256k1PrivateKey
   extends PrivateKey
-  implements DerivableKey, ExportableKey, SignableKey, StorableKey
-{
+  implements DerivableKey, ExportableKey, SignableKey, StorableKey {
   public readonly recoveryId = StorableKey.recoveryId("secp256k1", "priv");
 
   public keySpecification: Map<string, string> = new Map();
@@ -66,7 +66,7 @@ export class Secp256k1PrivateKey
       Int8Array.from(this.raw),
       null,
       Int8Array.from(chaincode),
-      0,
+      derivationPathStr.split("/").slice(1).length,
       BigIntegerWrapper.initFromInt(this.index ?? 0)
     );
 
@@ -77,14 +77,11 @@ export class Secp256k1PrivateKey
     }
 
     const privateKey = new Secp256k1PrivateKey(Buffer.from(derivedKey.privateKey));
-    // TODO(BR) dont keep derivationPath as hex 
     privateKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationPathStr).toString("hex"));
     privateKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
-
     if (derivedKey.chainCode) {
       privateKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(derivedKey.chainCode).toString("hex"));
     }
-
     return privateKey;
   }
 
@@ -102,9 +99,8 @@ export class Secp256k1PrivateKey
   }
 
   sign(message: Buffer) {
-    return Buffer.from(
-      Uint8Array.from(this.native.sign(Int8Array.from(message)))
-    );
+    const normalised = normaliseDER(Buffer.from(Uint8Array.from(this.native.sign(Int8Array.from(message)))))
+    return normalised;
   }
 
   // ?? move to `from` property

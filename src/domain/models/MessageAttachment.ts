@@ -1,5 +1,7 @@
 import { uuid } from "@stablelib/uuid";
-import { base64 } from "multiformats/bases/base64";
+import { base64, base64url } from "multiformats/bases/base64";
+import { CredentialType } from "./VerifiableCredential";
+import { Message } from "..";
 export interface AttachmentHeader {
   children: string;
 }
@@ -48,6 +50,10 @@ export class AttachmentDescriptor {
     public readonly description?: string
   ) { }
 
+  get payload() {
+    return Message.Attachment.extractJSON(this)
+  }
+
   static build<T>(
     payload: T,
     id: string = uuid(),
@@ -86,6 +92,11 @@ export enum AttachmentFormats {
   ANONCREDS_PROOF = "anoncreds/proof@v1.0",
   PRESENTATION_EXCHANGE_DEFINITIONS = "dif/presentation-exchange/definitions@v1.0",
   PRESENTATION_EXCHANGE_SUBMISSION = "dif/presentation-exchange/submission@v1.0",
-  JWT = "prism/jwt",
-  AnonCreds = "AnonCreds",
+  // @ts-ignore
+  JWT = CredentialType.JWT,
+  // @ts-ignore
+  SDJWT = CredentialType.SDJWT,
+  // @ts-ignore
+  AnonCreds = CredentialType.AnonCreds,
 }
+

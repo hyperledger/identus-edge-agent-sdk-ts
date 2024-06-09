@@ -14,24 +14,25 @@ import {
   DID,
   DIDUrl,
   DIDDocumentCoreProperty,
+  PublicKey,
+  Curve,
+  getUsage,
+  PrismDIDPublicKeyType,
 } from "../../domain/models";
 
 import * as DIDParser from "../parser/DIDParser";
-import * as Protos from "../../castor/protos/node_models";
-import {
-  getUsage,
-  getUsageId,
-  PrismDIDPublicKey,
-} from "../../castor/did/prismDID/PrismDIDPublicKey";
+import * as Protos from "../../domain/models/protos/node_models";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
 import { Secp256k1PublicKey } from "../../apollo/utils/Secp256k1PublicKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
+import { Ed25519PublicKey } from "../../apollo/utils/Ed25519PublicKey";
+import { X25519PublicKey } from "../../apollo/utils/X25519PublicKey";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo) { }
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DIDParser.parse(didString);
@@ -61,6 +62,11 @@ export class LongFormPrismDIDResolver implements DIDResolver {
     return new DIDDocument(did, coreProperties);
   }
 
+  private getProtoCurve(proto: Protos.io.iohk.atala.prism.protos.PublicKey) {
+    return proto.compressed_ec_key_data?.curve ?? proto.ec_key_data.curve
+  }
+
+
   private decodeState(
     did: DID,
     stateHash: string,
@@ -81,23 +87,41 @@ export class LongFormPrismDIDResolver implements DIDResolver {
           encodedData
         );
 
-      const publicKeys: PrismDIDPublicKey[] =
+      const publicKeys: PrismDIDPublicKeyType[] =
         operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
-            const publicKey = key.has_compressed_ec_key_data
-              ? Secp256k1PublicKey.secp256k1FromBytes(
+            let curve = this.getProtoCurve(key).toLocaleLowerCase()
+            let pk: PublicKey;
+            if (curve === Curve.SECP256K1.toLocaleLowerCase()) {
+              pk = key.has_compressed_ec_key_data
+                ? Secp256k1PublicKey.secp256k1FromBytes(
                   key.compressed_ec_key_data.data
                 )
-              : Secp256k1PublicKey.secp256k1FromByteCoordinates(
+                : Secp256k1PublicKey.secp256k1FromByteCoordinates(
                   key.ec_key_data.x,
                   key.ec_key_data.y
                 );
-
-            return new PrismDIDPublicKey(
-              getUsageId(getUsage(key.usage)),
-              getUsage(key.usage),
-              publicKey
-            );
+            } else if (curve === Curve.ED25519.toLocaleLowerCase()) {
+              if (!key.has_compressed_ec_key_data) {
+                throw new Error("Expected compressed compressed key")
+              }
+              pk = Ed25519PublicKey.from.Buffer(
+                Buffer.from(key.compressed_ec_key_data.data)
+              )
+            } else if (curve === Curve.X25519.toLocaleLowerCase()) {
+              if (!key.has_compressed_ec_key_data) {
+                throw new Error("Expected compressed compressed key")
+              }
+              pk = X25519PublicKey.from.Buffer(
+                Buffer.from(key.compressed_ec_key_data.data)
+              )
+            } else {
+              throw new Error("Unsupported key type")
+            }
+            return this.apollo.createPrismDIDPublicKey(
+              pk,
+              getUsage(key.usage)
+            )
           }
         ) || [];
 

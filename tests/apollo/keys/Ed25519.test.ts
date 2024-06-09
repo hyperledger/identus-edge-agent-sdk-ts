@@ -1,19 +1,28 @@
 import { expect } from "chai";
-import { Curve, KeyTypes } from "../../../src/domain";
+import { Curve, KeyProperties, KeyTypes, PrivateKey } from "../../../src/domain";
 import { Ed25519PrivateKey } from "../../../src/apollo/utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "../../../src/apollo/utils/Ed25519PublicKey";
 import { Ed25519KeyPair } from "../../../src/apollo/utils/Ed25519KeyPair";
+import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
+import Apollo from "../../../src/apollo/Apollo";
 
+import ApolloPKG from "@atala/apollo";
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
+const EdHDKey = ApolloSDK.derivation.EdHDKey;
+
+let apollo: Apollo = new Apollo();
 describe("Keys", () => {
   describe("Ed25519", () => {
     describe("PrivateKey", () => {
+      const seedHex = "a4dd58542e9959eccb56832a953c0e54b3321036b6165ec2f3c1ef533cd1d6da5fae8010c587535404534c192397483c765505f67e62b26026392f8a0cf8ba51";
+
       const raw = Buffer.from([234, 155, 38, 115, 124, 211, 171, 185, 149, 186, 77, 255, 240, 94, 209, 65, 63, 214, 168, 213, 146, 68, 68, 196, 167, 211, 183, 80, 14, 166, 239, 217]);
       const encoded = Buffer.from([54, 112, 115, 109, 99, 51, 122, 84, 113, 55, 109, 86, 117, 107, 51, 95, 56, 70, 55, 82, 81, 84, 95, 87, 113, 78, 87, 83, 82, 69, 84, 69, 112, 57, 79, 51, 85, 65, 54, 109, 55, 57, 107]);
       const privateKey = new Ed25519PrivateKey(encoded);
+      const chainCodeHex = "7e9952eb18d135283fd633180e31b202a5ec87e3e37cc66c6836f18bdf9684b2";
 
-      // implementations
-      test("isDerivable - not implemented", () => {
-        expect(privateKey.isDerivable()).to.be.false;
+      test("isDerivable", () => {
+        expect(privateKey.isDerivable()).to.be.true;
       });
 
       test("isExportable - implemented", () => {
@@ -101,6 +110,59 @@ describe("Keys", () => {
           expect(privateKey.to.Hex()).to.be.a.string;
         });
       });
+
+      describe("derive", () => {
+        test("keySpecification.chainCode missing - throws", () => {
+          expect(() => {
+            const derivationPath = DerivationPath.fromPath(0 as any);
+            privateKey.derive(derivationPath)
+          }).to.throw;
+        });
+        test("DerivationPath - m/0'/0'/0'", () => {
+          const path = DerivationPath.fromPath(`m/0'/0'/1'`);
+          const createKeyArgs = {
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: seedHex,
+          };
+          const privateKey = apollo.createPrivateKey(createKeyArgs);
+          const derived = privateKey.isDerivable() && privateKey.derive(path);
+          expect(derived).to.not.equal(false);
+
+          const withDerivationPath = apollo.createPrivateKey({
+            ...createKeyArgs,
+            derivationPath: path.toString()
+          });
+
+          const raw1 = (derived as PrivateKey).getEncoded().toString();
+          const raw2 = withDerivationPath.getEncoded().toString();
+          const raw3 = privateKey.getEncoded().toString();
+          expect(raw1).to.equal(raw2);
+          expect(raw1).to.not.equal(raw3);
+        });
+        test("DerivationPath - m/1'/0'/1'", () => {
+          const path = DerivationPath.fromPath(`m/1'/0'/1'`);
+          const createKeyArgs = {
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: seedHex,
+          };
+          const privateKey = apollo.createPrivateKey(createKeyArgs);
+          const derived = privateKey.isDerivable() && privateKey.derive(path);
+          expect(derived).to.not.equal(false);
+
+          const withDerivationPath = apollo.createPrivateKey({
+            ...createKeyArgs,
+            derivationPath: path.toString()
+          });
+
+          const raw1 = (derived as PrivateKey).getEncoded().toString();
+          const raw2 = withDerivationPath.getEncoded().toString();
+          const raw3 = privateKey.getEncoded().toString();
+          expect(raw1).to.equal(raw2);
+          expect(raw1).to.not.equal(raw3);
+        });
+      })
 
       // validation?
       describe("from", () => {

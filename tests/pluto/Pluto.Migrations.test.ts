@@ -35,7 +35,7 @@ describe("Pluto", () => {
     describe("Migrations", () => {
 
         test("Should migrate old anoncreds v0Credentials into v1 credentials", async () => {
-            const pollux = new Pollux(castor);
+            const pollux = new Pollux(apollo, castor);
             const encodeToBuffer = (cred: object) => {
                 const json = JSON.stringify(cred);
                 return Buffer.from(json);
@@ -115,7 +115,7 @@ describe("Pluto", () => {
         });
 
         test("Should migrate old jwt v0Credentials into v1 credentials", async () => {
-            const pollux = new Pollux(castor);
+            const pollux = new Pollux(apollo, castor);
             const jwtParts = [
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
                 "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",

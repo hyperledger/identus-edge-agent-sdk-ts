@@ -32,8 +32,8 @@ describe("Apollo", () => {
         expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
         expect(result.getProperty(KeyProperties.chainCode)).to.eq("7e9952eb18d135283fd633180e31b202a5ec87e3e37cc66c6836f18bdf9684b2");
 
-        // no derivationPath provided, defaults to `m/0'/0'/0'` hexed
-        expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f30272f30272f3027");
+        // no derivationPath provided, defaults to `m/29'/29'/0'/4'/0'` hexed
+        expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f3239272f3239272f30272f34272f3027");
 
         // no index provided, defaults to 0
         expect(result.getProperty(KeyProperties.index)).to.eq("0");
@@ -100,7 +100,7 @@ describe("Apollo", () => {
           });
 
           const child = master.isDerivable()
-            ? master.derive(DerivationPath.from(fixture.path))
+            ? master.derive(DerivationPath.fromPath(fixture.path))
             : null;
 
           const derived = apollo.createPrivateKey({

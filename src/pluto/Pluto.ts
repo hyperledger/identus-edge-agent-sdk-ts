@@ -198,7 +198,6 @@ export class Pluto implements Domain.Pluto {
 
   async storeDID(did: Domain.DID, keys?: Arrayable<Domain.PrivateKey>, alias?: string): Promise<void> {
     await this.Repositories.DIDs.save(did, alias);
-
     await Promise.all(
       asArray(keys).map(async key => {
         await this.Repositories.Keys.save(key);
@@ -210,6 +209,8 @@ export class Pluto implements Domain.Pluto {
         });
       })
     );
+
+
   }
 
   /** Prism DIDs **/
@@ -434,7 +435,7 @@ export class Pluto implements Domain.Pluto {
 
   private onlyOne<T>(arr: T[]): T {
     const item = arr.at(0);
-    if (!item || arr.length !== 1) throw new Error("something wrong");
+    if (!item || arr.length < 1) throw new Error("something wrong");
 
     return item;
   }

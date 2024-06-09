@@ -93,7 +93,7 @@ export default class Agent
     options?: AgentOptions
   ) {
 
-    this.pollux = new Pollux(castor);
+    this.pollux = new Pollux(apollo, castor);
     this.agentDIDHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
       castor,
@@ -170,7 +170,7 @@ export default class Agent
 
     const store = new PublicMediatorStore(pluto);
     const handler = new BasicMediatorHandler(mediatorDID, mercury, store);
-    const pollux = new Pollux(castor);
+    const pollux = new Pollux(apollo, castor);
     const seed = params.seed ?? apollo.createRandomSeed().seed;
 
     const agentCredentials = new AgentCredentials(

@@ -1,7 +1,7 @@
 import BN from "bn.js";
 import BigInteger from "bn.js";
 
-import * as ECConfig from "../../config/ECConfig";
+import * as ECConfig from "./ec/ECConfig";
 import { ECPoint } from "./ec/ECPoint";
 import { ApolloError, Curve, KeyProperties, KeyTypes, } from "../../domain";
 import {
@@ -13,6 +13,7 @@ import {
 } from "../../domain/models/keyManagement";
 
 import ApolloPKG from "@atala/apollo";
+import { rawToDER } from "../../domain/utils/der";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**
@@ -93,7 +94,6 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
           `Compressed byte array's expected length is ${ECConfig.PUBLIC_KEY_COMPRESSED_BYTE_SIZE}, but got ${this.raw.length}`
         );
       }
-      return Uint8Array.from(this.native.raw);
     }
 
     return this.raw;
@@ -188,8 +188,9 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
   }
 
   verify(message: Buffer, signature: Buffer) {
+    const normalised = rawToDER(signature)
     return this.native.verify(
-      Int8Array.from(signature),
+      Int8Array.from(normalised),
       Int8Array.from(message)
     );
   }

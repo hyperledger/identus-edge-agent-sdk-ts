@@ -1,0 +1,204 @@
+import { uuid } from "@stablelib/uuid";
+import { SDJwt, Jwt, KBJwt } from "@sd-jwt/core";
+import { SDJwtVcInstance } from '@sd-jwt/sd-jwt-vc';
+import { Disclosure } from '@sd-jwt/utils';
+import { decodeSdJwtSync, getClaimsSync } from '@sd-jwt/decode';
+
+import {
+    Pluto,
+    StorableCredential,
+    Credential,
+    CredentialType,
+    SDJWTVerifiableCredentialProperties as SDJWT_VP_PROPS,
+    ProvableCredential,
+    W3CVerifiablePresentation,
+    W3CVerifiableCredentialContext,
+    W3CVerifiableCredentialType
+} from "../../domain";
+import { defaultHashConfig } from "../utils/jwt/config";
+
+export const SDJWTVerifiableCredentialRecoveryId = "sd+jwt+credential";
+
+export class SDJWTCredential extends Credential implements ProvableCredential, StorableCredential, Pluto.Storable {
+    credentialType: CredentialType = CredentialType.SDJWT
+    public recoveryId = SDJWTVerifiableCredentialRecoveryId;
+
+    get id() {
+        return this.properties.get(SDJWT_VP_PROPS.jti);
+    }
+
+    get issuer() {
+        return this.claims.at(0)?.iss ?? this.properties.get(SDJWT_VP_PROPS.iss);;
+    }
+
+    get subject() {
+        return this.claims.at(0)?.sub ?? this.properties.get(SDJWT_VP_PROPS.sub);
+    }
+
+    public uuid: string = uuid();
+    public properties: Map<SDJWT_VP_PROPS, any> = new Map();
+    public claims: Record<string, any>[] = [];
+    public core: SDJwt;
+
+    constructor(
+        object: SDJwt,
+        claims: Record<string, any>[],
+        revoked?: boolean
+    ) {
+        super()
+
+        const { jwt } = object;
+
+        this.claims = claims;
+        this.core = object;
+
+        if (!jwt) {
+            throw new Error("TBD");
+        }
+
+        const payload = jwt.payload!
+        if (typeof payload[SDJWT_VP_PROPS.revoked] === "boolean") {
+            this.properties.set(
+                SDJWT_VP_PROPS.revoked,
+                payload[SDJWT_VP_PROPS.revoked]
+            );
+        } else if (typeof revoked === 'boolean') {
+            this.properties.set(
+                SDJWT_VP_PROPS.revoked,
+                revoked
+            );
+        } else {
+            this.properties.set(
+                SDJWT_VP_PROPS.revoked,
+                false
+            );
+        }
+
+        if (payload.iss) {
+            this.properties.set(
+                SDJWT_VP_PROPS.iss,
+                payload.iss
+            );
+        }
+
+        if (payload.sub) {
+            this.properties.set(
+                SDJWT_VP_PROPS.sub,
+                payload.sub
+            );
+        }
+
+        this.properties.set(
+            SDJWT_VP_PROPS.jti,
+            jwt.encodeJwt()
+        );
+
+        if (payload.nbf) {
+            this.properties.set(
+                SDJWT_VP_PROPS.nbf,
+                payload.nbf
+            );
+        }
+
+        if (payload.exp) {
+            this.properties.set(
+                SDJWT_VP_PROPS.exp,
+                payload.exp
+            );
+        }
+
+        if (payload.aud) {
+            this.properties.set(
+                SDJWT_VP_PROPS.aud,
+                payload.aud
+            );
+        }
+
+        if (payload.vct) {
+            this.properties.set(
+                SDJWT_VP_PROPS.vct,
+                payload.vct
+            );
+        }
+
+        if (payload._sd) {
+            this.properties.set(
+                SDJWT_VP_PROPS._sd,
+                payload._sd
+            );
+        }
+
+        if (payload._sd_alg) {
+            this.properties.set(
+                SDJWT_VP_PROPS._sd_alg,
+                payload._sd_alg
+            );
+        }
+
+        this.properties.set(
+            SDJWT_VP_PROPS.disclosures,
+            object.disclosures
+        );
+    }
+
+    verifiableCredential(): unknown {
+        throw new Error("Method not implemented.");
+    }
+
+    presentation(): W3CVerifiablePresentation {
+        return {
+            "@context": [
+                W3CVerifiableCredentialContext.credential
+            ],
+            type: [
+                W3CVerifiableCredentialType.presentation
+            ],
+            verifiableCredential: [
+                this.id
+            ],
+        };
+    }
+
+    get revoked(): boolean | undefined {
+        return this.properties.get(SDJWT_VP_PROPS.revoked);
+    }
+
+    toStorable(): { id: string; recoveryId: string; credentialData: string; issuer?: string | undefined; subject?: string | undefined; credentialCreated?: string | undefined; credentialUpdated?: string | undefined; credentialSchema?: string | undefined; validUntil?: string | undefined; revoked?: boolean | undefined; availableClaims?: string[] | undefined; } {
+        const id = this.id;
+        const data = { id, ...Object.fromEntries(this.properties) };
+        const claims = this.claims.map((claim) => typeof claim !== 'string' ? JSON.stringify(claim) : claim)
+        return {
+            id,
+            recoveryId: this.recoveryId,
+            credentialData: JSON.stringify(data),
+            issuer: this.issuer,
+            subject: this.properties.get(SDJWT_VP_PROPS.sub),
+            validUntil: this.getProperty(SDJWT_VP_PROPS.exp),
+            availableClaims: claims,
+            revoked: this.revoked
+        };
+    }
+
+    static fromJWS<E extends Record<string, any> = Record<string, any>>(
+        jws: string,
+        revoked?: boolean,
+        disclosures: string[] = []
+    ): SDJWTCredential {
+        const { hasherSync, hasherAlg } = defaultHashConfig;
+        const jwt = new Jwt(Jwt.decodeJWT(jws))
+        const decoded = decodeSdJwtSync(jws, hasherSync);
+        const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync(disclosure, {
+            hasher: hasherSync,
+            alg: hasherAlg
+        }))
+        const claims = getClaimsSync<E>(decoded.jwt.payload, computed, hasherSync)
+        const loaded = new SDJwt(
+            {
+                jwt: jwt,
+                disclosures: computed
+            }
+        )
+        return new SDJWTCredential(loaded, [claims], revoked);
+    }
+
+} 

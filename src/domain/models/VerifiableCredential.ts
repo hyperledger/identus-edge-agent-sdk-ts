@@ -2,6 +2,7 @@ import type * as Anoncreds from "anoncreds-browser";
 
 export enum CredentialType {
   JWT = "prism/jwt",
+  SDJWT = "vc+sd-jwt",
   W3C = "w3c",
   AnonCreds = "AnonCreds",
   Unknown = "Unknown"
@@ -28,6 +29,19 @@ export enum W3CVerifiableCredentialType {
   credential = "VerifiableCredential"
 }
 
+export enum SDJWTVerifiableCredentialProperties {
+  iss = "iss",
+  sub = "sub",
+  jti = "jti",
+  nbf = "nbf",
+  exp = "exp",
+  aud = "aud",
+  vct = "vct",
+  revoked = "revoked",
+  _sd_alg = "_sd_alg",
+  _sd = "_sd",
+  disclosures = "disclosures"
+}
 
 export enum JWTVerifiableCredentialProperties {
   iss = "iss",
@@ -152,9 +166,12 @@ export type PresentationExchangeDefinitionRequest = {
   }
 }
 
+
+
 export type PresentationDefinitionData = {
   [CredentialType.AnonCreds]: PresentationAnoncredsRequest;
   [CredentialType.JWT]: PresentationExchangeDefinitionRequest;
+  [CredentialType.SDJWT]: any;
   [CredentialType.Unknown]: any;
   [CredentialType.W3C]: any;
 };
@@ -164,10 +181,10 @@ export type PresentationDefinitionData = {
 export class PresentationDefinitionRequestType<Type extends CredentialType> {
   constructor(public data: PresentationDefinitionData[Type]) { }
 
-  static fromData(
-    data: PresentationDefinitionData[CredentialType]
-  ): PresentationDefinitionRequestType<CredentialType> {
-    return new PresentationDefinitionRequestType<CredentialType>(data)
+  static fromData<Type extends CredentialType>(
+    data: PresentationDefinitionData
+  ): PresentationDefinitionRequestType<Type> {
+    return new PresentationDefinitionRequestType<Type>(data)
   }
 
 }
@@ -200,6 +217,7 @@ export type AnoncredsPresentationSubmission = Anoncreds.PresentationType;
 export type PresentationSubmissionData = {
   [CredentialType.AnonCreds]: AnoncredsPresentationSubmission;
   [CredentialType.JWT]: JWTPresentationSubmission;
+  [CredentialType.SDJWT]: any;
   [CredentialType.Unknown]: any;
   [CredentialType.W3C]: any;
 }
@@ -286,9 +304,24 @@ export type W3CVerifiablePresentationProof = {
   challenge: string,
   domain: string
 }
+export type Hasher = (data: string, alg: string) => Promise<Uint8Array>;
+export type Signer = (data: string | Uint8Array) => Promise<string>;
+export type Verifier = (data: string, sig: string) => Promise<boolean>;
 
+export type JWTHeader = {
+  typ: 'JWT'
+  alg: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any
+}
 
 export type JWTPayload = JWTCredentialPayload | JWTPresentationPayload;
+export type JWTObject = {
+  header: JWTHeader
+  payload: JWTPayload
+  signature: string
+  data: string
+}
 
 export type PresentationJWTOptions = {
   jwtAlg?: string[],
@@ -301,15 +334,12 @@ export type PresentationRequestOptions = {
   [CredentialType.W3C]: any;
 }
 
-export type PresentationOptionsSS<Type extends CredentialType = CredentialType.JWT> =
-  PresentationRequestOptions[Type]
-
 
 
 export class PresentationOptions {
 
   constructor(
-    private data: PresentationRequestOptions[CredentialType] = {},
+    private data: any = {},
     private type: CredentialType = CredentialType.JWT
   ) {
 
@@ -353,7 +383,13 @@ export class JWTPresentationOptions {
     this.challenge = options.challenge;
     this.domain = options.domain ?? 'N/A';
     this.jwt = options.jwt ?? {
-      jwtAlg: ['ES256K'],
+      jwtAlg: [JWT_ALG.ES256K],
     };
   }
+}
+
+export enum JWT_ALG {
+  ES256K = "ES256K",
+  EdDSA = "EdDSA",
+  unknown = 'unknown'
 }

@@ -1,21 +1,53 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { AttributeType, CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
+import { AttachmentFormats, AttributeType, CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
 import type * as Anoncreds from "anoncreds-browser";
+import { SDJWTCredential } from "../../pollux/models/SDJWTVerifiableCredential";
 
 export type CredentialRequestTuple<
   T1 = Anoncreds.CredentialRequestType,
   T2 = Anoncreds.CredentialRequestMetadataType
 > = [T1, T2];
 
+
+
+export type CredentialOfferJWTBasePayload = {
+  options: {
+    challenge: string;
+    domain: string;
+  }
+}
+
+export type CredentialOfferPayloads = {
+  [CredentialType.AnonCreds]: Anoncreds.CredentialOfferType;
+  [CredentialType.JWT]: CredentialOfferJWTBasePayload;
+  [CredentialType.SDJWT]: CredentialOfferJWTBasePayload;
+
+  [CredentialType.Unknown]: unknown;
+  [CredentialType.W3C]: unknown;
+};
+
+export type CredentialOfferTypes =
+  CredentialType.AnonCreds |
+  CredentialType.JWT |
+  CredentialType.SDJWT;
+
+export type ProcessedCredentialOfferPayloads = {
+  [CredentialType.AnonCreds]: CredentialRequestTuple;
+  [CredentialType.JWT]: string;
+  [CredentialType.SDJWT]: string;
+  [CredentialType.Unknown]: unknown;
+  [CredentialType.W3C]: unknown;
+};
+
+
 /**
  * Pollux
  * handle Credential related tasks
  */
 export interface Pollux {
-
 
   revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
     [name: string]: any
@@ -25,15 +57,13 @@ export interface Pollux {
     credentialBuffer: Uint8Array,
     options?: { type: CredentialType;[name: string]: any; }
   ) => Promise<Credential>;
-  processJWTCredential(
-    offer: Message,
+
+  processCredentialOffer<
+    Types extends CredentialOfferTypes
+  >(
+    offer: CredentialOfferPayloads[Types],
     options: CredentialRequestOptions
-  ): Promise<string>;
-  processAnonCredsCredential(
-    offer: Message,
-    options: CredentialRequestOptions
-  ): Promise<CredentialRequestTuple>;
-  extractCredentialFormatFromMessage(message: Message): CredentialType;
+  ): Promise<ProcessedCredentialOfferPayloads[Types]>;
 
   createPresentationSubmission(
     presentationDefinition: PresentationDefinitionRequest<CredentialType.JWT>,
@@ -89,14 +119,15 @@ export interface Pollux {
    * @returns dependent on the CredentialType 
    * @throws
    */
-  createPresentationProof(presentationRequest: PresentationRequest, credential: AnonCredsCredential, options: Pollux.createPresentationProof.options.Anoncreds): Promise<Anoncreds.Presentation>;
-  createPresentationProof(presentationRequest: PresentationRequest, credential: JWTCredential, options: Pollux.createPresentationProof.options.JWT): Promise<string>;
-  createPresentationProof(presentationRequest: PresentationRequest, credential: Credential, options?: Record<string, any>): Promise<any>;
+  createPresentationProof(presentationRequest: PresentationRequest<AttachmentFormats.AnonCreds>, credential: AnonCredsCredential, options: Pollux.createPresentationProof.options.Anoncreds): Promise<string>;
+  createPresentationProof(presentationRequest: PresentationRequest<AttachmentFormats.JWT>, credential: JWTCredential, options: Pollux.createPresentationProof.options.JWT): Promise<string>;
+  createPresentationProof(presentationRequest: PresentationRequest<AttachmentFormats.SDJWT>, credential: SDJWTCredential, options: Pollux.createPresentationProof.options.SDJWT): Promise<string>;
+  createPresentationProof(presentationRequest: PresentationRequest<any>, credential: Credential, options?: Record<string, any>): Promise<any>;
 }
 
 export namespace Pollux {
   export namespace verifyPresentationSubmission {
-    export type options = options.Anoncreds | options.JWT;
+    export type options = options.Anoncreds | options.JWT | options.SDJWT;
     export namespace options {
       export interface Anoncreds {
         [name: string | number | symbol]: any;
@@ -105,10 +136,13 @@ export namespace Pollux {
       export interface JWT {
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.JWT>,
       }
+      export interface SDJWT {
+        presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.SDJWT>,
+      }
     }
   }
   export namespace createPresentationProof {
-    export type options = options.Anoncreds | options.JWT;
+    export type options = options.Anoncreds | options.JWT | options.SDJWT;
     export namespace options {
       export interface Anoncreds {
         linkSecret: LinkSecret;
@@ -116,6 +150,11 @@ export namespace Pollux {
       export interface JWT {
         did: DID;
         privateKey: PrivateKey;
+      }
+      export interface SDJWT {
+        did: DID;
+        privateKey: PrivateKey;
+
       }
     }
   }

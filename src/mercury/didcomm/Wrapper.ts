@@ -174,16 +174,16 @@ export class DIDCommWrapper implements DIDCommProtocol {
     if (typeof attachment.id !== "string" || attachment.id.length === 0)
       throw new MercuryError.MessageAttachmentWithoutIDError();
 
-    return {
-      id: attachment.id,
-      data: this.parseAttachmentDataToDomain(attachment.data),
-      byteCount: attachment.byte_count,
-      description: attachment.description,
-      filename: attachment.filename?.split("/"),
-      format: attachment.format,
-      lastModTime: attachment.lastmod_time?.toString(),
-      mediaType: attachment.media_type,
-    };
+    return new Domain.AttachmentDescriptor(
+      this.parseAttachmentDataToDomain(attachment.data),
+      attachment.id,
+      attachment.media_type,
+      attachment.filename?.split("/"),
+      attachment.format,
+      attachment.lastmod_time?.toString(),
+      attachment.byte_count,
+      attachment.description,
+    );
   }
 
   private parseAttachmentDataToDomain(

@@ -5,12 +5,14 @@ import {
   AttachmentBase64,
   AttachmentData,
   AttachmentDescriptor,
+  AttachmentFormats,
   AttachmentJsonData,
 } from "./MessageAttachment";
 import { AgentError } from "./Errors";
-import { JsonString } from ".";
+import { CredentialType, JsonString } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
 import { isObject } from "../../utils";
+import { base64url, base64 } from "multiformats/bases/base64";
 
 export enum MessageDirection {
   SENT = 0,
@@ -18,11 +20,11 @@ export enum MessageDirection {
 }
 
 export class Message implements Pluto.Storable {
-  public readonly uuid = Pluto.makeUUID();
+  public uuid: string;
 
   constructor(
     public readonly body: string,
-    public readonly id: string = uuidv4(),
+    public readonly id: string = Pluto.makeUUID(),
     public readonly piuri: string,
     public readonly from?: DID,
     public readonly to?: DID,
@@ -39,10 +41,46 @@ export class Message implements Pluto.Storable {
     public direction: MessageDirection = MessageDirection.RECEIVED,
     public readonly fromPrior?: string,
     public readonly pthid?: string
-  ) {}
+  ) {
+    this.uuid = id;
+  }
 
-  static fromJson(jsonString: JsonString): Message {
-    const messageObj = JSON.parse(jsonString);
+  get safeBody() {
+    try {
+      return JSON.parse(this.body)
+    } catch (err) {
+      return {}
+    }
+  }
+
+  get credentialFormat() {
+    const [attachment] = this.attachments;
+    if (!attachment) {
+      throw new Error("Required Attachment");
+    }
+    const body = this.safeBody;
+    const format = body.formats?.find((format: any) => format.attach_id === attachment.id)?.format ?? attachment.format;
+    if (
+      format === AttachmentFormats.AnonCreds ||
+      format === AttachmentFormats.ANONCREDS_PROOF_REQUEST ||
+      format === AttachmentFormats.ANONCREDS_OFFER ||
+      format === AttachmentFormats.ANONCREDS_ISSUE ||
+      format === AttachmentFormats.ANONCREDS_REQUEST
+    ) {
+      return CredentialType.AnonCreds;
+    }
+    if (format === CredentialType.JWT) {
+      return CredentialType.JWT;
+    }
+    if (format === CredentialType.SDJWT) {
+      return CredentialType.SDJWT;
+    }
+    return CredentialType.Unknown;
+  }
+
+  static fromJson(jsonString: JsonString | any): Message {
+    const messageObj = typeof jsonString === "object" ? jsonString : JSON.parse(jsonString);
+
     if (!messageObj.body || typeof messageObj.body !== "string") {
       throw new AgentError.InvalidMessageError("undefined or wrong body");
     }
@@ -103,10 +141,13 @@ export class Message implements Pluto.Storable {
     const fromPrior = messageObj.fromPrior;
     const pthid = messageObj.pthid;
 
-    const fromDID = messageObj.from
-      ? DID.fromString(messageObj.from)
-      : undefined;
-    const toDID = messageObj.to ? DID.fromString(messageObj.to) : undefined;
+    const fromDID = messageObj.from ?
+      messageObj.from instanceof DID ? messageObj.from :
+        DID.fromString(messageObj.from) : undefined;
+
+    const toDID = messageObj.to ?
+      messageObj.to instanceof DID ? messageObj.to :
+        DID.fromString(messageObj.to) : undefined;
 
     return new Message(
       body,
@@ -145,17 +186,19 @@ export namespace Message {
      */
     export const extractJSON = (attachment: AttachmentDescriptor) => {
       if (isBase64(attachment.data)) {
-        const decoded = Buffer.from(attachment.data.base64, "base64").toString();
-        const json = JSON.parse(decoded);
-
-        return json;
+        const decoded = Buffer.from(base64.baseDecode(attachment.data.base64)).toString();
+        try {
+          return JSON.parse(decoded)
+        } catch (err) {
+          return decoded
+        }
       }
 
       if (isJson(attachment.data)) {
-        // TODO wrong Types - attachment has already been parsed from string to json (by didcomm lib?)
-        return typeof attachment.data.data === "object"
-          ? attachment.data.data
-          : JSON.parse(attachment.data.data);
+        const decoded = attachment.data.data
+        return typeof decoded === "object"
+          ? decoded
+          : JSON.parse(decoded);
       }
 
       // TODO better error

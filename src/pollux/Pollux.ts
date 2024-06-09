@@ -2,16 +2,12 @@ import { uuid } from "@stablelib/uuid";
 import type * as Anoncreds from "anoncreds-browser";
 
 import { Castor } from "../domain/buildingBlocks/Castor";
-import { Pollux as IPollux } from "../domain/buildingBlocks/Pollux";
-import { base64 } from "multiformats/bases/base64";
+import { CredentialOfferPayloads, CredentialOfferTypes, Pollux as IPollux, ProcessedCredentialOfferPayloads } from "../domain/buildingBlocks/Pollux";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 
 import {
-  AttachmentDescriptor,
   CredentialRequestOptions,
   CredentialType,
-  Message,
-  AttachmentBase64,
   Api,
   PolluxError,
   Credential,
@@ -34,22 +30,29 @@ import {
   PresentationOptions as PresentationOptionsType,
   AnoncredsPresentationOptions,
   JWTPresentationOptions,
-  AnoncredsPresentationClaims,
   LinkSecret,
   JWTPresentationSubmission,
   AnoncredsPresentationSubmission,
-  InputFieldFilter,
+  W3CVerifiableCredentialContext,
+  W3CVerifiableCredentialType,
+  Apollo,
 } from "../domain";
-
+import ApolloImpl from '../apollo/index'
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
 import { ApiImpl } from "../edge-agent/helpers/ApiImpl";
-import { PresentationRequest } from "./models/PresentationRequest";
+import { JWTJson, PresentationRequest, SDJWTJson } from "./models/PresentationRequest";
 import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 import { DescriptorPath } from "./utils/DescriptorPath";
-import { JWT } from "./utils/JWT";
+import { JWT as JWTClass } from "./utils/JWT";
 import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domain/models/errors/Pollux";
 import { isPresentationDefinitionRequestType, parsePresentationSubmission, validatePresentationClaims } from "./utils/claims";
+import { JWTCore } from "./utils/jwt/JWTCore";
+import { SDJWT as SDJWTClass } from "./utils/SDJWT";
+import { JWTInstanceType } from "./utils/jwt/types";
+import { SDJWTCredential } from "./models/SDJWTVerifiableCredential";
+import { SDJwtVcInstance } from "@sd-jwt/sd-jwt-vc";
+import { defaultHashConfig, defaultSaltGen } from "./utils/jwt/config";
 
 /**
  * Implementation of Pollux
@@ -62,16 +65,29 @@ export default class Pollux implements IPollux {
   private _anoncreds: AnoncredsLoader | undefined;
 
   constructor(
+    private apollo: Apollo = new ApolloImpl(),
     private castor: Castor,
     private api: Api = new ApiImpl(),
-    private jwt = new JWT(castor)
-  ) { }
+    private JWT = new JWTClass(apollo, castor),
+    private SDJWT = new SDJWTClass(apollo, castor)
+  ) {
+  }
+
+  get anoncreds() {
+    if (this._anoncreds === undefined) {
+      throw new Error("Pollux - Anoncreds not loaded");
+    }
+    return this._anoncreds;
+  }
 
   async revealCredentialFields
-    (credential: Credential, fields: string[], linkSecret: string) {
+    (credential: Credential, fields: string[], linkSecret?: string) {
 
     const type = credential.credentialType;
     if (type === CredentialType.AnonCreds) {
+      if (!linkSecret) {
+        throw new PolluxError.InvalidCredentialError("Link secret is required when revealing anoncreds fields")
+      }
       if (!(credential instanceof AnonCredsCredential)) {
         throw new PolluxError.InvalidCredentialError("Only Anoncreds credentials can be disclosed for now")
       }
@@ -115,9 +131,13 @@ export default class Pollux implements IPollux {
         revealedFields[field] = presentation.requested_proof.revealed_attrs[field].raw;
       }
       return revealedFields;
+    } else {
+      const claim = credential.claims.at(0);
+      if (!claim) {
+        throw new PolluxError.InvalidCredentialError("Invalid claims")
+      }
+      return credential.claims.at(0)!
     }
-
-    throw new PolluxError.InvalidCredentialError("Only Anoncreds credentials can be disclosed for now")
   }
 
 
@@ -178,7 +198,7 @@ export default class Pollux implements IPollux {
       vp: credential.presentation(),
     }
 
-    const jws = await this.jwt.sign({
+    const jws = await this.JWT.sign({
       issuerDID: DID.fromString(subject),
       privateKey,
       payload
@@ -217,8 +237,6 @@ export default class Pollux implements IPollux {
       linkSecret.secret
     );
   }
-
-
 
   async createPresentationSubmission<
     Type extends CredentialType = CredentialType.JWT
@@ -465,7 +483,7 @@ export default class Pollux implements IPollux {
       if (!isPrismJWTCredentialType) {
         throw new InvalidVerifyCredentialError(jws, "Invalid JWT Credential only prism/jwt is supported for jwt");
       }
-      const credentialValid = await this.jwt.verify({
+      const credentialValid = await this.JWT.verify({
         issuerDID: issuer,
         jws
       });
@@ -490,7 +508,7 @@ export default class Pollux implements IPollux {
         throw new InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation payload, the credential has been issued to another holder");
       }
 
-      const verifiableCredentialValid = await this.jwt.verify({
+      const verifiableCredentialValid = await this.JWT.verify({
         holderDID: verifiableCredential.subject ? DID.fromString(verifiableCredential.subject) : undefined,
         issuerDID: verifiableCredential.issuer,
         jws: verifiableCredential.id
@@ -631,71 +649,127 @@ export default class Pollux implements IPollux {
     this._anoncreds = await AnoncredsLoader.getInstance();
   }
 
-  // TODO: should anoncreds hidden through abstraction
-  get anoncreds() {
-    if (this._anoncreds === undefined) {
-      throw new Error("Pollux - Anoncreds not loaded");
-    }
-
-    return this._anoncreds;
-  }
-
-  // TODO: does this function belong in Pollux, can we move to Message?
-  public extractCredentialFormatFromMessage(message: Message) {
-    const [attachment] = message.attachments;
-    if (!attachment) {
-      throw new Error("Required Attachment");
-    }
-
-    if (
-      attachment.format === AttachmentFormats.ANONCREDS_PROOF_REQUEST ||
-      attachment.format === AttachmentFormats.ANONCREDS_OFFER ||
-      attachment.format === AttachmentFormats.ANONCREDS_ISSUE ||
-      attachment.format === AttachmentFormats.ANONCREDS_REQUEST
-    ) {
-      return CredentialType.AnonCreds;
-    }
-
-    if (attachment.format === CredentialType.JWT) {
-      return CredentialType.JWT;
-    }
-
-    return CredentialType.Unknown;
-  }
-
-  async processJWTCredential(
-    offer: Message,
-    options: CredentialRequestOptions = {}
-  ) {
-    const { did, keyPair } = options;
-    if (!did) {
-      throw new Error("Required did ");
-    }
-
-    if (!keyPair) {
-      throw new Error("Required keyPair ");
-    }
-
-    const domainChallenge = this.extractDomainChallenge(offer.attachments);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const challenge = domainChallenge.challenge!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const domain = domainChallenge.domain!;
-
-    const signedJWT = await this.jwt.sign({
-      issuerDID: did,
-      privateKey: keyPair.privateKey,
-      payload: {
-        aud: domain,
-        nonce: challenge,
-        vp: {
-          "@context": ["https://www.w3.org/2018/presentations/v1"],
-          type: ["VerifiablePresentation"],
-        },
+  private isOfferPayload<Type extends CredentialType>(offer: any, type: Type): offer is CredentialOfferPayloads[CredentialType.JWT] {
+    if (type === CredentialType.JWT) {
+      if (!offer || !offer.options) {
+        return false
       }
-    });
+      const options = offer.options
+      if (!options.challenge || typeof options.challenge !== "string") {
+        return false
+      }
+      if (!options.domain || typeof options.domain !== "string") {
+        return false
+      }
+      return true
+    }
+    if (type === CredentialType.SDJWT) {
+      if (!offer.options) {
+        return false
+      }
+      const options = offer.options
+      if (!options.challenge || typeof options.challenge !== "string") {
+        return false
+      }
+      if (!options.domain || typeof options.domain !== "string") {
+        return false
+      }
+      return true
+    }
+    if (type === CredentialType.AnonCreds) {
+      if (!offer.cred_def_id || typeof offer.cred_def_id !== 'string') {
+        return false;
+      }
+      if (!offer.nonce || typeof offer.nonce !== 'string') {
+        return false;
+      }
+      if (!offer.schema_id || typeof offer.schema_id !== 'string') {
+        return false;
+      }
+      if (!offer.key_correctness_proof ||
+        !offer.key_correctness_proof.c || typeof offer.key_correctness_proof.c !== 'string' ||
+        !offer.key_correctness_proof.xz_cap || typeof offer.key_correctness_proof.xz_cap !== 'string' ||
+        !offer.key_correctness_proof.xr_cap || !Array.isArray(offer.key_correctness_proof.xr_cap)) {
+        return false
+      }
+      return true
+    }
+    return true
+  }
 
-    return signedJWT;
+  async processCredentialOffer<
+    Types extends CredentialOfferTypes
+  >(
+    offer: CredentialOfferPayloads[Types],
+    options: CredentialRequestOptions
+  ): Promise<ProcessedCredentialOfferPayloads[Types]> {
+    if (this.isOfferPayload<CredentialType.SDJWT>(offer, CredentialType.SDJWT) && options.sdJWT) {
+      const { did, keyPair } = options;
+      if (!did) {
+        throw new Error("Required did ");
+      }
+      if (!keyPair) {
+        throw new Error("Required keyPair ");
+      }
+      const challenge = offer.options.challenge;
+      const domain = offer.options.domain;
+
+      const signedJWT = await this.JWT.sign({
+        issuerDID: did,
+        privateKey: keyPair.privateKey,
+        payload: {
+          aud: domain,
+          nonce: challenge,
+          vp: {
+            "@context": ["https://www.w3.org/2018/presentations/v1"],
+            type: ["VerifiablePresentation"],
+          },
+        }
+      });
+      return signedJWT as ProcessedCredentialOfferPayloads[Types];
+    }
+    if (this.isOfferPayload<CredentialType.JWT>(offer, CredentialType.JWT)) {
+      const { did, keyPair } = options;
+      if (!did) {
+        throw new Error("Required did ");
+      }
+      if (!keyPair) {
+        throw new Error("Required keyPair ");
+      }
+      const challenge = offer.options.challenge;
+      const domain = offer.options.domain;
+      const signedJWT = await this.JWT.sign({
+        issuerDID: did,
+        privateKey: keyPair.privateKey,
+        payload: {
+          aud: domain,
+          nonce: challenge,
+          vp: {
+            "@context": ["https://www.w3.org/2018/presentations/v1"],
+            type: ["VerifiablePresentation"],
+          },
+        }
+      });
+      return signedJWT as ProcessedCredentialOfferPayloads[Types];
+    }
+
+    if (this.isOfferPayload<CredentialType.AnonCreds>(offer, CredentialType.AnonCreds)) {
+      const linkSecret = options.linkSecret;
+      if (!linkSecret) {
+        throw new Error("Link Secret is not available.");
+      }
+      const { cred_def_id } = offer;
+      const credentialDefinition =
+        await this.fetchCredentialDefinition(cred_def_id);
+      return this.anoncreds.createCredentialRequest(
+        offer,
+        credentialDefinition,
+        linkSecret.secret,
+        linkSecret.name
+      ) as ProcessedCredentialOfferPayloads[Types];
+    }
+
+    throw new Error("Not implemented")
   }
 
   /**
@@ -736,87 +810,6 @@ export default class Pollux implements IPollux {
     return response.body;
   }
 
-  private extractAttachment(body: any, attachments: AttachmentDescriptor[]) {
-    const [attachment] = attachments;
-    if (!attachment) {
-      throw new Error("Attachment not found");
-    }
-
-    return JSON.parse(
-      Buffer.from(
-        base64.baseDecode((attachment.data as AttachmentBase64).base64)
-      ).toString()
-    );
-  }
-
-  private isAnonCredsBody(body: any): body is Anoncreds.CredentialOffer {
-    const {
-      cred_def_id,
-      schema_id,
-      key_correctness_proof,
-      nonce,
-      method_name,
-    } = body;
-
-    if (!cred_def_id || typeof cred_def_id !== "string") return false;
-    if (!schema_id || typeof schema_id !== "string") return false;
-    if (!nonce || typeof nonce !== "string") return false;
-    if (!key_correctness_proof) return false;
-
-    const { c, xr_cap, xz_cap } = key_correctness_proof;
-
-    if (!c || !xr_cap || !xz_cap) return false;
-    if (
-      typeof c !== "string" ||
-      !Array.isArray(xr_cap) ||
-      typeof xz_cap !== "string"
-    )
-      return false;
-
-    if (
-      xr_cap.length <= 0 ||
-      xr_cap.find(
-        ([first, second]) =>
-          typeof first !== "string" || typeof second !== "string"
-      )
-    )
-      return false;
-
-    if (method_name && typeof method_name !== "string") return false;
-
-    return true;
-  }
-
-  async processAnonCredsCredential(
-    offer: Message,
-    options: CredentialRequestOptions
-  ) {
-    const linkSecret = options.linkSecret;
-    if (!linkSecret) {
-      throw new Error("Link Secret is not available.");
-    }
-
-    const body = JSON.parse(offer.body);
-
-    const credentialOfferBody = this.extractAttachment(body, offer.attachments);
-
-    const isAnonCredsBody = this.isAnonCredsBody(credentialOfferBody);
-    if (!isAnonCredsBody) {
-      throw new Error("Invalid AnonCreds offer body");
-    }
-
-    const { cred_def_id } = credentialOfferBody;
-    const credentialDefinition =
-      await this.fetchCredentialDefinition(cred_def_id);
-
-    return this.anoncreds.createCredentialRequest(
-      credentialOfferBody,
-      credentialDefinition,
-      linkSecret.secret,
-      linkSecret.name
-    );
-  }
-
   async parseCredential(
     credentialBuffer: Uint8Array,
     options?: {
@@ -831,6 +824,12 @@ export default class Pollux implements IPollux {
 
     if (credentialType === CredentialType.JWT) {
       return JWTCredential.fromJWS(credentialString);
+    }
+
+    if (credentialType === CredentialType.SDJWT) {
+      const sdJWTPayload = JSON.parse(credentialString);
+      const jwsString = `${sdJWTPayload.protected}.${sdJWTPayload.payload}.${sdJWTPayload.signature},${sdJWTPayload.disclosures}`;
+      return SDJWTCredential.fromJWS(jwsString, false, sdJWTPayload.disclosures);
     }
 
     if (credentialType === CredentialType.AnonCreds) {
@@ -865,23 +864,8 @@ export default class Pollux implements IPollux {
     throw new Error("Not implemented");
   }
 
-  private extractDomainChallenge(attachments: AttachmentDescriptor[]) {
-    return attachments.reduce(
-      (_, attachment: any) => ({
-        challenge: attachment?.data?.data?.options?.challenge,
-        domain: attachment?.data?.data?.options?.domain,
-      }),
-      { challenge: undefined, domain: undefined } as {
-        challenge?: string;
-        domain?: string;
-      }
-    );
-  }
-
-  createPresentationProof(presentationRequest: PresentationRequest, credential: AnonCredsCredential, options: IPollux.createPresentationProof.options.Anoncreds): Promise<Anoncreds.Presentation>;
-  createPresentationProof(presentationRequest: PresentationRequest, credential: JWTCredential, options: IPollux.createPresentationProof.options.JWT): Promise<string>;
   async createPresentationProof(
-    presentationRequest: PresentationRequest,
+    presentationRequest: PresentationRequest<any>,
     credential: Credential,
     options: IPollux.createPresentationProof.options
   ) {
@@ -903,7 +887,7 @@ export default class Pollux implements IPollux {
         options.linkSecret.secret
       );
 
-      return result;
+      return JSON.stringify(result);
     }
 
     if (
@@ -912,19 +896,50 @@ export default class Pollux implements IPollux {
       && "did" in options
       && "privateKey" in options
     ) {
-      const presReqJson = presentationRequest.toJSON();
-      const signedJWT = await this.jwt.sign({
+      //For some reason I can't find out rollup is unable to understand the type is correct
+      const jwtPresentationRequest = presentationRequest
+      const presReqJson: JWTJson = jwtPresentationRequest.toJSON() as any;
+      const presReqOptions = presReqJson.options;
+      const signedJWT = await this.JWT.sign({
         issuerDID: options.did,
         privateKey: options.privateKey,
         payload: {
           iss: options.did.toString(),
-          aud: presReqJson.options.domain,
-          nonce: presReqJson.options.challenge,
+          aud: presReqOptions.domain,
+          nonce: presReqOptions.challenge,
           vp: credential.presentation()
         }
       });
 
       return signedJWT;
+    }
+
+    if (
+      credential instanceof SDJWTCredential
+      && presentationRequest.isType(AttachmentFormats.SDJWT)
+      && "did" in options
+      && "privateKey" in options
+    ) {
+      const jwtPresentationRequest = presentationRequest
+      const presReqJson: SDJWTJson = jwtPresentationRequest.toJSON() as any
+      const presentationJWS = await this.SDJWT.createPresentationFor<any>(
+        {
+          jws: credential.id,
+          frame: Object.keys(presReqJson.claims).reduce((all, claimName) => ({
+            ...all,
+            [claimName]: presReqJson.claims[claimName]
+          }), {}),
+          privateKey: options.privateKey
+        }
+      )
+      const pSplit = presentationJWS.replace("~", "").split(".");
+      const [signature, ...disclosures] = pSplit.at(2)!.split(",")
+      return JSON.stringify({
+        protected: pSplit.at(0),
+        payload: pSplit.at(1),
+        signature: signature,
+        disclosures: disclosures
+      });
     }
 
     throw new PolluxError.InvalidPresentationProofArgs();
