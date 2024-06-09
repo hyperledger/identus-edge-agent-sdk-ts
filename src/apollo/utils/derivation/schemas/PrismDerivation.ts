@@ -63,7 +63,7 @@ export class PrismDerivationPath extends DerivationPathBase<PrismDerivationSchem
         return DerivationAxis.hardened(this.variables.keyIndex)
     }
 
-    static init(keyIndex: number = 0, didIndex: number = 0, keyPurpose: number = AUTHENTICATION_KEY): PrismDerivationPath {
+    static init(keyIndex = 0, didIndex = 0, keyPurpose: number = AUTHENTICATION_KEY): PrismDerivationPath {
         return new PrismDerivationPath([
             PRISM_WALLET_PURPOSE,
             PRISM_DID_METHOD,

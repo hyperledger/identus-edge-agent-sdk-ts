@@ -31,8 +31,8 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
         throw new Error("Invalid subject (holder)");
       }
       const { signature, data } = await this.decode(jws);
-      for (let verificationMethod of verificationMethods) {
-        let pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
+      for (const verificationMethod of verificationMethods) {
+        const pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
         if (!pk) {
           throw new Error("Invalid key verification method type found")
         }

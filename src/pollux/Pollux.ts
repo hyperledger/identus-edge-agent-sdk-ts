@@ -33,8 +33,6 @@ import {
   LinkSecret,
   JWTPresentationSubmission,
   AnoncredsPresentationSubmission,
-  W3CVerifiableCredentialContext,
-  W3CVerifiableCredentialType,
   Apollo,
 } from "../domain";
 import ApolloImpl from '../apollo/index'
@@ -47,12 +45,8 @@ import { DescriptorPath } from "./utils/DescriptorPath";
 import { JWT as JWTClass } from "./utils/JWT";
 import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domain/models/errors/Pollux";
 import { isPresentationDefinitionRequestType, parsePresentationSubmission, validatePresentationClaims } from "./utils/claims";
-import { JWTCore } from "./utils/jwt/JWTCore";
 import { SDJWT as SDJWTClass } from "./utils/SDJWT";
-import { JWTInstanceType } from "./utils/jwt/types";
 import { SDJWTCredential } from "./models/SDJWTVerifiableCredential";
-import { SDJwtVcInstance } from "@sd-jwt/sd-jwt-vc";
-import { defaultHashConfig, defaultSaltGen } from "./utils/jwt/config";
 
 /**
  * Implementation of Pollux
@@ -98,7 +92,7 @@ export default class Pollux implements IPollux {
           Object.keys(claim).includes(field)) !== undefined
       )
 
-      for (let field of availableFields) {
+      for (const field of availableFields) {
         disclosedFields[field] = {
           name: field,
           restrictions: {
@@ -127,7 +121,7 @@ export default class Pollux implements IPollux {
         linkSecret
       )
       const revealedFields: { [K in keyof Credential['claims'][number]]: any } = {};
-      for (let field of Object.keys(presentation.requested_proof.revealed_attrs)) {
+      for (const field of Object.keys(presentation.requested_proof.revealed_attrs)) {
         revealedFields[field] = presentation.requested_proof.revealed_attrs[field].raw;
       }
       return revealedFields;
@@ -451,7 +445,7 @@ export default class Pollux implements IPollux {
     const presentationSubmissionMapper = new DescriptorPath(presentationSubmission);
     const descriptorMaps = presentationSubmission.presentation_submission.descriptor_map;
 
-    for (let descriptorItem of descriptorMaps) {
+    for (const descriptorItem of descriptorMaps) {
       if (descriptorItem.format !== DescriptorItemFormat.JWT_VP) {
         throw new InvalidVerifyFormatError(
           `Invalid Submission, ${descriptorItem.path} expected to have format ${DescriptorItemFormat.JWT_VP}`
@@ -522,7 +516,7 @@ export default class Pollux implements IPollux {
         const constraints = inputDescriptor.constraints;
         const fields = constraints.fields;
         if (constraints.limit_disclosure === InputLimitDisclosure.REQUIRED) {
-          for (let field of fields) {
+          for (const field of fields) {
             const paths = [
               ...field.path
             ];

@@ -1,7 +1,7 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { AttachmentFormats, AttributeType, CredentialType, DID, LinkSecret, Message, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey, PublicKey } from "../models";
+import { AttachmentFormats, CredentialType, DID, LinkSecret, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey } from "../models";
 import { Credential, CredentialRequestOptions } from "../models/Credential";
 import type * as Anoncreds from "anoncreds-browser";
 import { SDJWTCredential } from "../../pollux/models/SDJWTVerifiableCredential";

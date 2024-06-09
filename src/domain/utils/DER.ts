@@ -23,7 +23,7 @@ export function normaliseDER(derSignature: Buffer): Buffer {
         throw new Error('Invalid DER signature: expected integer for r');
     }
 
-    let rLength = derSignature[offset++];
+    const rLength = derSignature[offset++];
     let r = derSignature.slice(offset, offset + rLength);
     offset += rLength;
 
@@ -31,7 +31,7 @@ export function normaliseDER(derSignature: Buffer): Buffer {
     if (derSignature[offset++] !== 0x02) {
         throw new Error('Invalid DER signature: expected integer for s');
     }
-    let sLength = derSignature[offset++];
+    const sLength = derSignature[offset++];
     let s = derSignature.slice(offset, offset + sLength);
 
     // Normalize r and s to 32 bytes

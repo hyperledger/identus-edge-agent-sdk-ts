@@ -229,9 +229,9 @@ export class Pluto implements Domain.Pluto {
   async getAllPrismDIDs(): Promise<Domain.PrismDID[]> {
     const dids = await this.Repositories.DIDs.find({ method: "prism" });
     const prismDIDS: Domain.PrismDID[] = [];
-    for (let did of dids) {
+    for (const did of dids) {
       const dbDids = await this.getPrismDIDS(did.uuid);
-      for (let prismDID of dbDids) {
+      for (const prismDID of dbDids) {
         prismDIDS.push(prismDID)
       }
     }

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { v4 as uuidv4 } from "uuid";
 import { DID } from "./DID";
 import {
   AttachmentBase64,
@@ -12,7 +11,7 @@ import { AgentError } from "./Errors";
 import { CredentialType, JsonString } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
 import { isObject } from "../../utils";
-import { base64url, base64 } from "multiformats/bases/base64";
+import { base64 } from "multiformats/bases/base64";
 
 export enum MessageDirection {
   SENT = 0,

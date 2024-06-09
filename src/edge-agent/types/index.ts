@@ -6,12 +6,8 @@ import {
   Service as DIDDocumentService,
   Signature,
   Credential,
-  Pollux,
   CredentialType,
-  PrivateKey,
   PresentationClaims,
-  PredicateType,
-  AttributeType,
   KeyPair,
   PublicKey,
 } from "../../domain";

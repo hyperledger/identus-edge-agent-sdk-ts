@@ -333,7 +333,7 @@ export default class Castor implements CastorInterface {
             }
           }
         } catch (err) {
-
+          console.debug("checking next key for verification")
         }
       }
     } else if (did.method == "peer") {

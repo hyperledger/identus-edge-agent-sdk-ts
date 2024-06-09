@@ -28,7 +28,7 @@ export class DerivationPath {
     paths: number[],
     cb: (path: DerivationPathBase<any>) => any
   ) {
-    for (let DerivationClass of SCHEMAS) {
+    for (const DerivationClass of SCHEMAS) {
       const path = this.create(DerivationClass, paths);
       if (path) {
         return cb(path);

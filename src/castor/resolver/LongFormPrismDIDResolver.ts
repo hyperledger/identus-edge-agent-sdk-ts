@@ -90,7 +90,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
       const publicKeys: PrismDIDPublicKeyType[] =
         operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
-            let curve = this.getProtoCurve(key).toLocaleLowerCase()
+            const curve = this.getProtoCurve(key).toLocaleLowerCase()
             let pk: PublicKey;
             if (curve === Curve.SECP256K1.toLocaleLowerCase()) {
               pk = key.has_compressed_ec_key_data

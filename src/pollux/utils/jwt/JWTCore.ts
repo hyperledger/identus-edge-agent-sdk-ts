@@ -105,7 +105,7 @@ export abstract class JWTCore<T extends JWTInstanceType> {
                 if (!privateKey.isSignable()) {
                     throw new Error("Cannot sign with this key");
                 }
-                let signature = privateKey.sign(Buffer.from(data));
+                const signature = privateKey.sign(Buffer.from(data));
                 const signatureEncoded = base64url.baseEncode(signature)
                 return signatureEncoded
             },

@@ -1,6 +1,5 @@
 import { uuid } from "@stablelib/uuid";
-import { SDJwt, Jwt, KBJwt } from "@sd-jwt/core";
-import { SDJwtVcInstance } from '@sd-jwt/sd-jwt-vc';
+import { SDJwt, Jwt } from "@sd-jwt/core";
 import { Disclosure } from '@sd-jwt/utils';
 import { decodeSdJwtSync, getClaimsSync } from '@sd-jwt/decode';
 
@@ -28,7 +27,7 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
     }
 
     get issuer() {
-        return this.claims.at(0)?.iss ?? this.properties.get(SDJWT_VP_PROPS.iss);;
+        return this.claims.at(0)?.iss ?? this.properties.get(SDJWT_VP_PROPS.iss);
     }
 
     get subject() {

@@ -10,7 +10,7 @@ import { MediationRequest } from "../protocols/mediation/MediationRequest";
 import { PickupReceived } from "../protocols/pickup/PickupReceived";
 import { PickupRequest } from "../protocols/pickup/PickupRequest";
 import { PickupRunner } from "../protocols/pickup/PickupRunner";
-import { EventPickupCallback, MediatorHandler, MediatorStore } from "../types";
+import { MediatorHandler, MediatorStore } from "../types";
 import { ProtocolType } from '../protocols/ProtocolTypes';
 
 /**

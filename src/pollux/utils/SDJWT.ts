@@ -2,14 +2,9 @@ import { SDJwtVcInstance, } from '@sd-jwt/sd-jwt-vc';
 import type { DisclosureFrame, Extensible, PresentationFrame } from '@sd-jwt/types';
 import { JWTCore } from "./jwt/JWTCore";
 import { JWTInstanceType, JWTSignOptions, JWTVerifyOptions } from "./jwt/types";
-import { JWTObject, Castor, PublicKey, PrivateKey, Apollo } from '../../domain';
+import { JWTObject, PublicKey, PrivateKey } from '../../domain';
 import { decodeJWS } from './decodeJWS';
 import { SDJWTCredential } from '../models/SDJWTVerifiableCredential';
-import { base58btc } from 'multiformats/bases/base58';
-import { Secp256k1PublicKey } from '../../apollo/utils/Secp256k1PublicKey';
-import { Ed25519PublicKey } from '../../apollo/utils/Ed25519PublicKey';
-import { X25519PublicKey } from '../../apollo/utils/X25519PublicKey';
-import { VerificationKeyType } from '../../castor/types';
 
 
 export class SDJWT extends JWTCore<JWTInstanceType.SDJWT> {
@@ -34,8 +29,8 @@ export class SDJWT extends JWTCore<JWTInstanceType.SDJWT> {
         if (jwtObject.issuer !== issuerDID.toString()) {
             throw new Error("Invalid issuer");
         }
-        for (let verificationMethod of verificationMethods) {
-            let pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
+        for (const verificationMethod of verificationMethods) {
+            const pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
             if (pk && pk.canVerify()) {
                 const sdjwt = new SDJwtVcInstance(this.getPKConfig(pk));
                 try {

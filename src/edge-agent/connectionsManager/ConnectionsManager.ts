@@ -148,7 +148,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
       const revokeMessages = messages.filter(x => x.piuri === ProtocolType.PrismRevocation);
       const allMessages = await this.pluto.getAllMessages();
 
-      for (let message of revokeMessages) {
+      for (const message of revokeMessages) {
         const revokeMessage = RevocationNotification.fromMessage(message);
         const threadId = revokeMessage.body.issueCredentialProtocolThreadId;
 
@@ -158,7 +158,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         );
 
         if (matchingMessages.length > 0) {
-          for (let message of matchingMessages) {
+          for (const message of matchingMessages) {
             const issueMessage = IssueCredential.fromMessage(message);
             const credential = await this.agentCredentials.processIssuedCredentialMessage(
               issueMessage
