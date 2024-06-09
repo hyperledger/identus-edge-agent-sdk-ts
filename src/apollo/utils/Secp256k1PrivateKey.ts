@@ -14,7 +14,7 @@ import {
 } from "../../domain/models/keyManagement";
 
 import ApolloPKG from "@atala/apollo";
-import { normaliseDER } from "../../domain/utils/der";
+import { normaliseDER } from "../../domain/utils/DER";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
