@@ -13,6 +13,10 @@ export abstract class PrivateKey extends Key implements Pluto.Storable {
     return this.getProperty(KeyProperties.curve)!;
   }
 
+  get derivationSchema() {
+    return this.getProperty(KeyProperties.derivationSchema);
+  }
+
   /**
    * Derivation index.
    * The index of the key in the derivation path.

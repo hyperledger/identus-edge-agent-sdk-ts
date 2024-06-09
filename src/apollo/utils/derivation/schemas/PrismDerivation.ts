@@ -19,8 +19,9 @@ export const AUTHENTICATION_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.AUT
 export const MASTER_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
 export const ISSUING_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
 
+export const PrismDerivationPathSchema = "prism";
 export class PrismDerivationPath extends DerivationPathBase<PrismDerivationSchema> {
-    schema = "identus"
+    schema = PrismDerivationPathSchema
 
     constructor(paths: number[]) {
         if (paths.length !== 5) {

@@ -15,6 +15,11 @@ export enum KeyProperties {
   seed = "seed",
 
   /**
+   * The 'derivationSchema' corresponds to derivationSchema used.
+   */
+  derivationSchema = "derivationSchema",
+
+  /**
    * The 'chainCode' used for key derivation.
    * hex encoded value.
    * 

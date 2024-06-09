@@ -2,12 +2,11 @@
 export interface StorableKey {
   recoveryId: string;
   raw: Uint8Array;
+  keySpecification: Map<string, string>,
   index?: number;
 }
 
 export namespace StorableKey {
-  // export type RecoveryId = `${RecoveryId.algorithm}+${RecoveryId.privacy}`;
-
   namespace RecoveryId {
     export type algorithm = "secp256k1" | "x25519" | "ed25519";
     export type suffix = privacy;

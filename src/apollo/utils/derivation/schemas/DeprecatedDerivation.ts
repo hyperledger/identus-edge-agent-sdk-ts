@@ -7,9 +7,10 @@ interface DeprecatedDerivationSchema extends BaseSchema {
     didIndex: number
     keyIndex: number
 }
-
+export const DeprecatedDerivationPathSchema = "deprecated";
 export class DeprecatedDerivationPath extends DerivationPathBase<DeprecatedDerivationSchema> {
-    schema = "deprecated"
+
+    schema = DeprecatedDerivationPathSchema
 
     constructor(paths: number[]) {
         if (paths.length !== 3) {
