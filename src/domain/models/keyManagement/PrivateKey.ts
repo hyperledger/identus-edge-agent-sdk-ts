@@ -2,6 +2,7 @@ import { Key } from "./Key";
 import { KeyProperties } from "../KeyProperties";
 import { PublicKey } from "./PublicKey";
 import { Pluto } from "../../buildingBlocks/Pluto";
+import { DeprecatedDerivationPathSchema } from "../../../apollo/utils/derivation/schemas/DeprecatedDerivation";
 
 export abstract class PrivateKey extends Key implements Pluto.Storable {
   abstract publicKey(): PublicKey;
@@ -14,7 +15,7 @@ export abstract class PrivateKey extends Key implements Pluto.Storable {
   }
 
   get derivationSchema() {
-    return this.getProperty(KeyProperties.derivationSchema);
+    return this.getProperty(KeyProperties.derivationSchema) ?? DeprecatedDerivationPathSchema;
   }
 
   /**

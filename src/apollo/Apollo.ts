@@ -362,13 +362,14 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
           const derivationParam = parameters[KeyProperties.derivationPath]
           const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString()
           const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
+          const derivationPath = DerivationPath.fromPath(defaultPath);
 
           const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed);
           const baseKey = new Ed25519PrivateKey(Uint8Array.from(hdKey.privateKey))
 
           baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
           baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
-          baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
+          baseKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
 
           if (derivationParam) {
             const derivationPath = DerivationPath.fromPath(defaultPath);
@@ -396,7 +397,10 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
 
         const derivationIndex = parameters[KeyProperties.index] ?? "0";
         const derivationParam = parameters[KeyProperties.derivationPath];
-        const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString()
+        const defaultPath: string = derivationParam ?? PrismDerivationPath.init(
+          derivationIndex
+        ).toString()
+        const derivationPath = DerivationPath.fromPath(defaultPath);
 
         const hdKey = HDKey.InitFromSeed(
           Int8Array.from(seed),
@@ -415,7 +419,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         const baseKey = new Secp256k1PrivateKey(Uint8Array.from(hdKey.privateKey));
         baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
         baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
-        baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
+        baseKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
 
         if (derivationParam) {
           const derivationPath = DerivationPath.fromPath(defaultPath);
@@ -448,7 +452,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
 
           xKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(hdKey.chainCode).toString("hex"));
           xKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationParam).toString("hex"));
-          xKey.keySpecification.set(KeyProperties.index, derivationIndex);
+          xKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
 
           return xKey;
         }
@@ -463,17 +467,31 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     throw new ApolloError.InvalidKeyType(keyType, Object.values(KeyTypes));
   }
 
+  private moveKeySpecification(storable: StorableKey, key: PrivateKey): PrivateKey {
+    key.keySpecification = storable.keySpecification;
+    return key
+  }
 
   restorePrivateKey(key: StorableKey): PrivateKey {
+    let instance: PrivateKey;
     switch (key.recoveryId) {
       case "secp256k1+priv":
-        return new Secp256k1PrivateKey(key.raw);
+        instance = new Secp256k1PrivateKey(key.raw);
+        return this.moveKeySpecification(
+          key, instance
+        )
 
       case "ed25519+priv":
-        return new Ed25519PrivateKey(key.raw);
+        instance = new Ed25519PrivateKey(key.raw);
+        return this.moveKeySpecification(
+          key, instance
+        )
 
       case "x25519+priv":
-        return new X25519PrivateKey(key.raw);
+        instance = new X25519PrivateKey(key.raw);
+        return this.moveKeySpecification(
+          key, instance
+        )
     }
 
     throw new ApolloError.KeyRestoratonFailed(key);

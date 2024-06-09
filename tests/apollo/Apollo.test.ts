@@ -389,7 +389,8 @@ describe("Apollo", () => {
       test("recoveryId ed25519+priv - matches - returns Ed25519PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("ed25519", "priv"),
-          raw: Fixtures.Keys.ed25519.privateKey.raw
+          raw: Fixtures.Keys.ed25519.privateKey.raw,
+          keySpecification: new Map()
         };
 
         const result = apollo.restorePrivateKey(key);
@@ -400,7 +401,8 @@ describe("Apollo", () => {
       test("recoveryId x25519+priv - matches - returns X25519PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("x25519", "priv"),
-          raw: Fixtures.Keys.x25519.privateKey.raw
+          raw: Fixtures.Keys.x25519.privateKey.raw,
+          keySpecification: new Map()
         };
 
         const result = apollo.restorePrivateKey(key);
@@ -411,7 +413,8 @@ describe("Apollo", () => {
       test("recoveryId secp256k1+priv - matches - returns Secp256k1PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("secp256k1", "priv"),
-          raw: Fixtures.Keys.secp256K1.privateKey.raw
+          raw: Fixtures.Keys.secp256K1.privateKey.raw,
+          keySpecification: new Map()
         };
 
         const result = apollo.restorePrivateKey(key);
@@ -433,7 +436,8 @@ describe("Apollo", () => {
       test("recoveryId ed25519+pub - matches - returns Ed25519PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("ed25519", "pub"),
-          raw: Fixtures.Keys.ed25519.publicKey.raw
+          raw: Fixtures.Keys.ed25519.publicKey.raw,
+          keySpecification: new Map()
         };
 
         const result = apollo.restorePublicKey(key);
@@ -444,7 +448,8 @@ describe("Apollo", () => {
       test("recoveryId x25519+pub - matches - returns X25519PublicKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("x25519", "pub"),
-          raw: Fixtures.Keys.x25519.publicKey.raw
+          raw: Fixtures.Keys.x25519.publicKey.raw,
+          keySpecification: new Map()
         };
 
         const result = apollo.restorePublicKey(key);
@@ -455,7 +460,8 @@ describe("Apollo", () => {
       test("recoveryId secp256k1+pub - matches - returns Secp256k1PublicKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("secp256k1", "pub"),
-          raw: Fixtures.Keys.secp256K1.publicKey.raw
+          raw: Fixtures.Keys.secp256K1.publicKey.raw,
+          keySpecification: new Map()
         };
 
         const result = apollo.restorePublicKey(key);

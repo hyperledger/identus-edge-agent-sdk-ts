@@ -67,7 +67,7 @@ export class Secp256k1PrivateKey
       null,
       Int8Array.from(chaincode),
       derivationPathStr.split("/").slice(1).length,
-      BigIntegerWrapper.initFromInt(this.index ?? 0)
+      BigIntegerWrapper.initFromInt(derivationPath.index)
     );
 
     const derivedKey = hdKey.derive(derivationPathStr);

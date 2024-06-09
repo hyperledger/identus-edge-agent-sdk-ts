@@ -62,7 +62,7 @@ describe("Keys", () => {
           expect(result.getProperty(KeyProperties.chainCode)).to.not.eq(chainCodeHex);
           expect(result.getProperty(KeyProperties.chainCode)).to.eq("55c577fab08382958dcdfcfd6c34e4c45d9ec467c20abb81ce627991ac9e7863");
           expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
-          expect(result.getProperty(KeyProperties.index)).to.eq("0");
+          expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
 
           // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(derivationPath.toString());
           expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f30272f30272f3027");
@@ -78,7 +78,7 @@ describe("Keys", () => {
 
           expect(result.raw).to.eql(Uint8Array.from([220, 223, 118, 183, 102, 141, 198, 60, 221, 162, 132, 68, 233, 188, 169, 39, 128, 174, 202, 114, 4, 203, 31, 40, 35, 85, 166, 164, 178, 17, 158, 150]));
           expect(result.getProperty(KeyProperties.chainCode)).to.eq("f22fdc4dd573ce17243983faa6492fc33fab35ecfa3f8ad09aa958044a2752f7");
-          expect(result.getProperty(KeyProperties.index)).to.eq("1");
+          expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
           // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(`m/1'/0'/0'`);
           expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f31272f30272f3027");
         });
@@ -92,7 +92,7 @@ describe("Keys", () => {
 
           expect(result.raw).to.eql(Uint8Array.from([58, 84, 10, 170, 72, 91, 146, 143, 203, 60, 169, 120, 33, 226, 221, 43, 96, 150, 44, 108, 105, 33, 243, 19, 115, 162, 33, 142, 129, 22, 122, 221]));
           expect(result.getProperty(KeyProperties.chainCode)).to.eq("e56cd109bae854dcf3fc0b766067f9e825901bf1bcfc67dc4f5eaee74cf9c8ea");
-          expect(result.getProperty(KeyProperties.index)).to.eq("2");
+          expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
           // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(`m/1'/0'/0'`);
           expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f32272f30272f3027");
         });

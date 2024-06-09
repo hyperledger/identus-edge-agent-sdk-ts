@@ -26,6 +26,10 @@ export class DeprecatedDerivationPath extends DerivationPathBase<DeprecatedDeriv
         super({ keyType, didIndex, keyIndex })
     }
 
+    get index(): number {
+        return this.keyIndex.number
+    }
+
     get keyType() {
         return DerivationAxis.hardened(this.variables.keyType)
     }

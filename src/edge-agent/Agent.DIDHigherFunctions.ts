@@ -18,7 +18,7 @@ import {
   MediatorHandler,
 } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
-import { IDENTUS_WALLET_PURPOSE, IDENTUS_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY, PrismDerivationPath } from "../apollo/utils/derivation/schemas/PrismDerivation";
+import { PRISM_WALLET_PURPOSE, PRISM_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY, PrismDerivationPath, PrismDerivationPathSchema } from "../apollo/utils/derivation/schemas/PrismDerivation";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -140,21 +140,36 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     keyPathIndex?: number
   ): Promise<DID> {
-    const index = keyPathIndex ?? await this.getNextKeyPathIndex();
     const didRotation = 0;
-    const authenticationDerivation = new PrismDerivationPath([
-      IDENTUS_WALLET_PURPOSE,
-      IDENTUS_DID_METHOD,
-      index,
+
+    const nextAuthenticationIndex = await this.getNextKeyPathIndex(
+      PRISM_WALLET_PURPOSE,
+      PRISM_DID_METHOD,
+      didRotation,
       AUTHENTICATION_KEY,
-      didRotation
+      keyPathIndex
+    );
+    const nextIssuanceIndex = await this.getNextKeyPathIndex(
+      PRISM_WALLET_PURPOSE,
+      PRISM_DID_METHOD,
+      didRotation,
+      ISSUING_KEY,
+      keyPathIndex
+    );
+
+    const authenticationDerivation = new PrismDerivationPath([
+      PRISM_WALLET_PURPOSE,
+      PRISM_DID_METHOD,
+      didRotation,
+      AUTHENTICATION_KEY,
+      nextAuthenticationIndex + 1
     ]);
     const issuingDerivation = new PrismDerivationPath([
-      IDENTUS_WALLET_PURPOSE,
-      IDENTUS_DID_METHOD,
-      index,
+      PRISM_WALLET_PURPOSE,
+      PRISM_DID_METHOD,
+      didRotation,
       ISSUING_KEY,
-      didRotation
+      nextIssuanceIndex + 1
     ]);
 
     const sk = this.apollo.createPrivateKey({
@@ -162,12 +177,14 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
       [KeyProperties.curve]: Curve.SECP256K1,
       [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
       [KeyProperties.derivationPath]: authenticationDerivation.toString(),
+      [KeyProperties.derivationSchema]: PrismDerivationPathSchema
     });
     const edSk = this.apollo.createPrivateKey({
       [KeyProperties.type]: KeyTypes.EC,
       [KeyProperties.curve]: Curve.ED25519,
       [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
       [KeyProperties.derivationPath]: issuingDerivation.toString(),
+      [KeyProperties.derivationSchema]: PrismDerivationPathSchema
     });
 
     const publicKey = sk.publicKey();
@@ -188,9 +205,21 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
    * 
    * @returns {number}
    */
-  private async getNextKeyPathIndex(): Promise<number> {
+  private async getNextKeyPathIndex(
+    walletPurpose: number,
+    didMethod: number,
+    didIndex: number,
+    keyPurpose: number,
+    optionalKeyIndex?: number
+  ): Promise<number> {
     const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
-    const index = await getIndexTask.run();
+    const index = await getIndexTask.run(
+      walletPurpose,
+      didMethod,
+      didIndex,
+      keyPurpose,
+      optionalKeyIndex
+    );
     const next = index;
     return next;
   }

@@ -41,10 +41,19 @@ export class DerivationPath {
     return this.paths.map((path) => new DerivationAxis(path))
   }
 
-  get index(): number {
-    const first = this.axes.at(0);
-    const index = first?.number ?? 0;
-    return index;
+  get index() {
+    return DerivationPath.callBackOrThrow(
+      this.paths,
+      (path) => path.index
+    )
+  }
+
+  at(index: number): number {
+    const num = this.paths.at(index);
+    if (num !== undefined) {
+      return num
+    }
+    throw new ApolloError.InvalidDerivationPath("DerivationPathErr Incompatible Derivation schema");
   }
 
   get schema() {

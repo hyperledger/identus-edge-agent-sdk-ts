@@ -853,7 +853,7 @@ describe("Agent Tests", () => {
         });
 
         test("JWTCredential + JWTPresentationRequest - returns Presentation", async () => {
-          const jwt = new JWT(CastorMock);
+          const jwt = new JWT(new Apollo(), CastorMock);
           const payload: JWTCredentialPayload = {
             iss: "did:prism:da61cf65fbf04b6b9fe06fa3b577fca3e05895a13902decaad419845a20d2d78:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw",
             nbf: 23456754321,
@@ -911,7 +911,7 @@ describe("Agent Tests", () => {
 
         test("Credential.subjectDID - invalid - throws", async () => {
 
-          const jwt = new JWT(CastorMock);
+          const jwt = new JWT(new Apollo(), CastorMock);
           const payload: JWTCredentialPayload = {
             iss: "did:test:123",
             sub: undefined as any,
@@ -941,7 +941,7 @@ describe("Agent Tests", () => {
         test("Credential.subjectDID - doesn't match PrivateKey - throws", async () => {
           stubGetDIDPrivateKeysByDID.resolves([]);
 
-          const jwt = new JWT(CastorMock);
+          const jwt = new JWT(new Apollo(), CastorMock);
           const payload: JWTCredentialPayload = {
             iss: "did:test:123",
             nbf: 23456754321,
@@ -971,7 +971,7 @@ describe("Agent Tests", () => {
 
       describe("Fail cases", () => {
         test("RequestPresentation.attachments - empty - throws", async () => {
-          const jwt = new JWT(CastorMock);
+          const jwt = new JWT(new Apollo(), CastorMock);
           const payload: JWTCredentialPayload = {
             iss: "did:test:123",
             nbf: 23456754321,
@@ -1012,7 +1012,7 @@ describe("Agent Tests", () => {
             sub: Fixtures.DIDs.prismDIDDefault.toString(),
             vc: {} as any
           };
-          const jwt = new JWT(CastorMock);
+          const jwt = new JWT(new Apollo(), CastorMock);
           const jwtString = await jwt.sign({
             issuerDID: DID.fromString("did:issuer:123"),
             privateKey: Fixtures.Keys.secp256K1.privateKey,

@@ -16,4 +16,5 @@ export abstract class DerivationPathBase<T extends BaseSchema> {
     abstract toString(): string;
     abstract axes: AxesArray;
     abstract schema: string;
+    abstract index: number;
 }

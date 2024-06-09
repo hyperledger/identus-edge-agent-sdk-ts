@@ -27,7 +27,7 @@ export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.Li
       alias: domain.name,
       derivationSchema: "unknown",
       keySpecification: Buffer.from(
-        JSON.stringify(Object.entries(new Map()))
+        JSON.stringify(Object.fromEntries(new Map()))
       ).toString('base64')
     };
   }

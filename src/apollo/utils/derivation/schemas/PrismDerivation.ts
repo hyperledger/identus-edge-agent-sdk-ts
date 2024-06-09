@@ -13,8 +13,8 @@ interface PrismDerivationSchema extends BaseSchema {
 
 export const PRISM_IDENTIFIER = 0x1D;
 
-export const IDENTUS_WALLET_PURPOSE = PRISM_IDENTIFIER;
-export const IDENTUS_DID_METHOD = PRISM_IDENTIFIER;
+export const PRISM_WALLET_PURPOSE = PRISM_IDENTIFIER;
+export const PRISM_DID_METHOD = PRISM_IDENTIFIER;
 export const AUTHENTICATION_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
 export const MASTER_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
 export const ISSUING_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
@@ -32,11 +32,15 @@ export class PrismDerivationPath extends DerivationPathBase<PrismDerivationSchem
             typeof didMethod === 'undefined' ||
             typeof didIndex === 'undefined' ||
             typeof keyPurpose === 'undefined' ||
-            typeof didIndex === 'undefined'
+            typeof keyIndex === 'undefined'
         ) {
             throw new ApolloError.InvalidDerivationPath("Incorrect Derivation Schema")
         }
         super({ walletPurpose, didMethod, didIndex, keyPurpose, keyIndex })
+    }
+
+    get index(): number {
+        return this.keyIndex.number
     }
 
     get walletPurpose() {
@@ -59,10 +63,10 @@ export class PrismDerivationPath extends DerivationPathBase<PrismDerivationSchem
         return DerivationAxis.hardened(this.variables.keyIndex)
     }
 
-    static init(didIndex: number, keyPurpose: number = AUTHENTICATION_KEY, keyIndex: number = 0): PrismDerivationPath {
+    static init(keyIndex: number = 0, didIndex: number = 0, keyPurpose: number = AUTHENTICATION_KEY): PrismDerivationPath {
         return new PrismDerivationPath([
-            IDENTUS_WALLET_PURPOSE,
-            IDENTUS_DID_METHOD,
+            PRISM_WALLET_PURPOSE,
+            PRISM_DID_METHOD,
             didIndex,
             keyPurpose,
             keyIndex

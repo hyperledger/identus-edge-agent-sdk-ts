@@ -50,7 +50,7 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
       rawHex: domain.to.String("hex"),
       index: domain.index,
       keySpecification: Buffer.from(
-        JSON.stringify(Object.entries(domain.keySpecification))
+        JSON.stringify(Object.fromEntries(domain.keySpecification))
       ).toString('base64'),
       derivationSchema: domain.derivationSchema ?? DeprecatedDerivationPathSchema
     };
