@@ -38,7 +38,8 @@
     "test": "jest",
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
-    "docs": "npx typedoc --options typedoc.js"
+    "docs": "npx typedoc --options typedoc.js",
+    "prepare": "husky"
   },
   "author": "IOHK",
   "repository": {
