@@ -359,7 +359,7 @@ export class PresentationOptions {
 
 
 export class AnoncredsPresentationOptions {
-  constructor(data: any) { }
+  constructor(_data: any) { }
 }
 
 export class JWTPresentationOptions {

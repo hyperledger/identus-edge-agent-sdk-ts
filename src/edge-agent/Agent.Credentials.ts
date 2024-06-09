@@ -173,11 +173,15 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("No attachment");
     }
 
+    if (!issueCredential.thid) {
+      throw new Error("No thid");
+    }
+
     const parseOpts: CredentialIssueOptions = {
       type: credentialType,
     };
 
-    let credential: Credential;
+
     const payload = typeof attachment.payload === 'string' ? attachment.payload : JSON.stringify(attachment.payload);
     const credData = Uint8Array.from(Buffer.from(payload));
 
@@ -187,7 +191,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       parseOpts.linkSecret = linkSecret?.secret;
 
       const credentialMetadata = await this.pluto.getCredentialMetadata(
-        issueCredential.thid!
+        issueCredential.thid
       );
 
       if (!credentialMetadata || !credentialMetadata.isType(CredentialType.AnonCreds)) {
@@ -197,7 +201,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       parseOpts.credentialMetadata = credentialMetadata.toJSON();
     }
 
-    credential = await this.pollux.parseCredential(credData, parseOpts);
+    const credential: Credential = await this.pollux.parseCredential(credData, parseOpts);
 
     await this.pluto.storeCredential(credential);
 
@@ -402,7 +406,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");
     }
     const presentationSubmission = JSON.parse(attachment.payload)
-    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid!);
+    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid);
     const options = {
       presentationDefinitionRequest
     };

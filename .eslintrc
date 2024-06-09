@@ -36,9 +36,6 @@
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-unused-vars": [
-      "warn"
-    ],
-    "no-unused-vars": [
       "warn",
       {
         "vars": "all",
@@ -47,16 +44,9 @@
         "argsIgnorePattern": "^_"
       }
     ],
+    "no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
-    "unused-imports/no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "varsIgnorePattern": "^_",
-        "args": "after-used",
-        "argsIgnorePattern": "^_"
-      }
-    ]
+    "unused-imports/no-unused-vars": "off"
   },
   "settings": {
     "react": {

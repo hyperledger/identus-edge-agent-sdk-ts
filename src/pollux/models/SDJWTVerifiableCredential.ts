@@ -12,7 +12,8 @@ import {
     ProvableCredential,
     W3CVerifiablePresentation,
     W3CVerifiableCredentialContext,
-    W3CVerifiableCredentialType
+    W3CVerifiableCredentialType,
+    PolluxError
 } from "../../domain";
 import { defaultHashConfig } from "../utils/jwt/config";
 
@@ -51,11 +52,11 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
         this.claims = claims;
         this.core = object;
 
-        if (!jwt) {
-            throw new Error("TBD");
+        if (!jwt || !jwt.payload) {
+            throw new PolluxError.InvalidJWTString("Cannot decode SDJWT properly")
         }
 
-        const payload = jwt.payload!
+        const payload = jwt.payload;
         if (typeof payload[SDJWT_VP_PROPS.revoked] === "boolean") {
             this.properties.set(
                 SDJWT_VP_PROPS.revoked,

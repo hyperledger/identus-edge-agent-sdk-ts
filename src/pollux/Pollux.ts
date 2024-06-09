@@ -130,7 +130,7 @@ export default class Pollux implements IPollux {
       if (!claim) {
         throw new PolluxError.InvalidCredentialError("Invalid claims")
       }
-      return credential.claims.at(0)!
+      return claim
     }
   }
 
@@ -604,8 +604,8 @@ export default class Pollux implements IPollux {
     )
   }
 
-  verifyPresentationSubmission<Type extends CredentialType = CredentialType.AnonCreds>(presentationSubmission: PresentationSubmission<CredentialType.AnonCreds>, options: IPollux.verifyPresentationSubmission.options.Anoncreds): Promise<boolean>;
-  verifyPresentationSubmission<Type extends CredentialType = CredentialType.JWT>(presentationSubmission: PresentationSubmission<CredentialType.JWT>, options: IPollux.verifyPresentationSubmission.options.JWT): Promise<boolean>;
+  verifyPresentationSubmission(presentationSubmission: PresentationSubmission<CredentialType.AnonCreds>, options: IPollux.verifyPresentationSubmission.options.Anoncreds): Promise<boolean>;
+  verifyPresentationSubmission(presentationSubmission: PresentationSubmission<CredentialType.JWT>, options: IPollux.verifyPresentationSubmission.options.JWT): Promise<boolean>;
   async verifyPresentationSubmission(
     presentationSubmission: any,
     options?: IPollux.verifyPresentationSubmission.options
@@ -926,14 +926,22 @@ export default class Pollux implements IPollux {
           privateKey: options.privateKey
         }
       )
-      const pSplit = presentationJWS.replace("~", "").split(".");
-      const [signature, ...disclosures] = pSplit.at(2)!.split(",")
-      return JSON.stringify({
-        protected: pSplit.at(0),
-        payload: pSplit.at(1),
-        signature: signature,
-        disclosures: disclosures
-      });
+      const [header, payload, signature] = presentationJWS.replace("~", "").split(".");
+
+      if (typeof header !== "undefined" &&
+        typeof payload !== "undefined" &&
+        typeof signature !== "undefined") {
+
+        const [onlySignature, ...disclosures] = signature.split(",");
+
+        return JSON.stringify({
+          protected: header,
+          payload: payload,
+          signature: onlySignature,
+          disclosures: disclosures
+        });
+      }
+
     }
 
     throw new PolluxError.InvalidPresentationProofArgs();
