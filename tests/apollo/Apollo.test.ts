@@ -1,5 +1,5 @@
-import { expect, assert } from "chai";
-
+import chai, { assert } from "chai";
+import chaiAsPromised from "chai-as-promised";
 import Apollo from "../../src/apollo/Apollo";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
 import * as ECConfig from "../../src/domain/models/ECConfig";
@@ -27,6 +27,14 @@ import * as Fixtures from "../fixtures";
 import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/PrismDerivation";
 import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
 import { DerivationAxis } from "../../src/domain/models/derivation/DerivationAxis";
+import ApolloPKG from "@atala/apollo";
+import { normaliseDER } from "../../src/domain/utils/DER";
+import { hash, hashSync, SupportedHashingAlg } from '../../src/domain/utils/hash'
+import { randomBytes } from "../../src/domain/utils/randomBytes";
+
+const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
+chai.use(chaiAsPromised);
+const expect = chai.expect;
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -195,6 +203,46 @@ describe("Apollo", () => {
         publicKey.canVerify() && publicKey.verify(text, Buffer.from(signature));
       expect(verified).to.be.equal(true);
     }
+  });
+
+  it("Should test our hashing libraries", async () => {
+    const text = "test";
+    const validHashing = [SupportedHashingAlg.SHA256, SupportedHashingAlg.SHA512];
+    validHashing.forEach((alg) => {
+      expect(() => hashSync(text, alg)).to.not.be.undefined
+      expect(hash(text, alg)).to.eventually.not.be.undefined
+    })
+  })
+
+  it("Should generate random bytes", async () => {
+    const initValue = new Uint8Array(64);
+    const initHex = Buffer.from(initValue).toString('hex')
+    const random = randomBytes(initValue)
+    expect(initHex).to.not.deep.eq(Buffer.from(random).toString('hex'))
+  })
+
+  it("Should should normalise SECP256K1 der signature from apollo", async () => {
+    const text = Buffer.from("test text");
+    const seed = apollo.createRandomSeed()
+    const sk = apollo.createPrivateKey({
+      type: KeyTypes.EC,
+      curve: Curve.SECP256K1,
+      seed: Buffer.from(seed.seed.value).toString('hex'),
+    });
+    const pk = sk.publicKey();
+    const nativeSk = ApolloSDK.utils.KMMECSecp256k1PrivateKey.Companion.secp256k1FromByteArray(
+      Int8Array.from(sk.raw)
+    );
+    const signed = Buffer.from(
+      nativeSk.sign(
+        Int8Array.from(text)
+      )
+    )
+    const normalisedRaw = normaliseDER(signed)
+    const signature = pk.canVerify() && pk.verify(text, signed)
+    expect(signature).to.eq(true)
+    const normalisedSignature = pk.canVerify() && pk.verify(text, normalisedRaw)
+    expect(normalisedSignature).to.eq(true)
   });
 
   it("Should only verify signed message using the correct SECP256K1 KeyPair", async () => {

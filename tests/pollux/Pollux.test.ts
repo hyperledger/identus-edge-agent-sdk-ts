@@ -18,6 +18,7 @@ import { JWTCore } from "../../src/pollux/utils/jwt/JWTCore";
 import { JWTInstanceType } from "../../src/pollux/utils/jwt/types";
 import { SDJWT } from "../../src/pollux/utils/SDJWT";
 import { JWT } from "../../src/pollux/utils/JWT";
+import { SDJWTCredential } from "../../src/pollux/models/SDJWTVerifiableCredential";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -128,6 +129,11 @@ async function createJWTVerificationTestCase(options: JWTVerificationTestCase) {
     })
   );
 
+  const disclosed = await pollux.revealCredentialFields(jwtCredential, ['course'])
+
+  expect(disclosed).to.not.be.undefined;
+  expect(Object.keys(disclosed).length).to.gte(1)
+
   const presentationSubmissionJSON = await pollux.createPresentationSubmission(
     presentationDefinition,
     jwtCredential,
@@ -218,6 +224,16 @@ describe("Pollux", () => {
   });
 
   describe("parseCredential", () => {
+    it("Should throw an error if the credential unknown type is parsed", async () => {
+      expect(
+        pollux.parseCredential(Buffer.from(JSON.stringify({ claims: { name: 'any' } })), { type: CredentialType.Unknown })
+      ).to.eventually.be.rejected;
+    })
+    it("Should throw an error if the credential unknown type is undefined", async () => {
+      expect(
+        pollux.parseCredential(Buffer.from(JSON.stringify({ claims: { name: 'any' } })))
+      ).to.eventually.be.rejected;
+    })
     describe("AnonCreds", () => {
       const encodeToBuffer = (cred: object) => {
         const json = JSON.stringify(cred);
@@ -785,7 +801,8 @@ describe("Pollux", () => {
             sk.publicKey()
           ]
         )
-        expect(sdjwt.sign<typeof claims>({
+
+        const payload = {
           issuerDID: issuerDID,
           payload: {
             iss: issuerDID.toString(),
@@ -795,7 +812,10 @@ describe("Pollux", () => {
           },
           disclosureFrame: {},
           privateKey: sk
-        })).to.eventually.be.rejectedWith("Cannot sign with this key")
+        }
+        expect(sdjwt.sign<typeof claims>(payload)).to.eventually.be.rejectedWith("Cannot sign with this key")
+
+
       })
 
       test("Ed25519 ok", async () => {
@@ -838,6 +858,24 @@ describe("Pollux", () => {
           privateKey: sk
         });
 
+        const [header, payload, signature] = credential.replace("~", "").split(".");
+        const [onlySignature, ...disclosures] = signature.split(",");
+
+        const parseCredential = await pollux.parseCredential(
+          Buffer.from(JSON.stringify({
+            protected: header,
+            payload: payload,
+            signature: onlySignature,
+            disclosures: disclosures
+          })),
+          {
+            type: CredentialType.SDJWT
+          }
+        )
+
+        const isCorrectCredential = parseCredential instanceof SDJWTCredential
+        expect(isCorrectCredential).to.eq(true)
+
         const presentation = await sdjwt.createPresentationFor<typeof claims>(
           {
             jws: credential,
@@ -845,6 +883,7 @@ describe("Pollux", () => {
             privateKey: sk
           }
         )
+
         const verified = await sdjwt.verify({
           issuerDID: issuerDID,
           jws: presentation,
@@ -903,6 +942,27 @@ describe("Pollux", () => {
 
         expect(verified).to.equal(true)
 
+        const pr = new PresentationRequest(
+          AttachmentFormats.SDJWT, Fixtures.Credentials.SDJWT.presentationRequest
+        );
+        const [header, payload, signature] = credential.replace("~", "").split(".");
+        const [onlySignature, ...disclosures] = signature.split(",");
+        const parseCredential = await pollux.parseCredential(
+          Buffer.from(JSON.stringify({
+            protected: header,
+            payload: payload,
+            signature: onlySignature,
+            disclosures: disclosures
+          })),
+          {
+            type: CredentialType.SDJWT
+          }
+        )
+        const result = await pollux.createPresentationProof(pr, parseCredential, {
+          did: issuerDID,
+          privateKey: sk
+        });
+        expect(result).not.to.be.null;
       })
 
 
@@ -2037,11 +2097,19 @@ describe("Pollux", () => {
 
   it("Should Verify to true when an Anoncreds Presentation submission with all valid attributes and predicates are used", async () => {
     const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+    const wrong = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
 
     sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
     sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
 
     const issuerDID = DID.fromString('did:web:xyz')
+
+    const disclosed = await pollux.revealCredentialFields(credential, ['name'], Fixtures.Credentials.Anoncreds.linkSecret.secret)
+    expect(disclosed).to.not.be.undefined;
+    expect(disclosed).to.haveOwnProperty("name");
+    expect(disclosed.name).to.eq("test");
+
+    expect(pollux.revealCredentialFields(credential, ['name'])).to.eventually.be.rejected
 
 
     const {

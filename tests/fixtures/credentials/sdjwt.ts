@@ -54,3 +54,9 @@ export const credentialOfferMessage = new OfferCredential(
     "e0670d7d-933f-4408-9dfb-340cd6230584",
     "f8fe3752-710a-4d76-8d9b-87d7d045c85e"
 );
+
+export const presentationRequest = {
+    "claims": {
+        firstname: {}
+    }
+}

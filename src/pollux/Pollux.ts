@@ -35,12 +35,10 @@ import {
   AnoncredsPresentationSubmission,
   Apollo,
 } from "../domain";
-import ApolloImpl from '../apollo/index'
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
 import { ApiImpl } from "../edge-agent/helpers/ApiImpl";
 import { JWTJson, PresentationRequest, SDJWTJson } from "./models/PresentationRequest";
-import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 import { DescriptorPath } from "./utils/DescriptorPath";
 import { JWT as JWTClass } from "./utils/JWT";
 import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domain/models/errors/Pollux";
@@ -59,7 +57,7 @@ export default class Pollux implements IPollux {
   private _anoncreds: AnoncredsLoader | undefined;
 
   constructor(
-    private apollo: Apollo = new ApolloImpl(),
+    private apollo: Apollo,
     private castor: Castor,
     private api: Api = new ApiImpl(),
     private JWT = new JWTClass(apollo, castor),
@@ -82,9 +80,7 @@ export default class Pollux implements IPollux {
       if (!linkSecret) {
         throw new PolluxError.InvalidCredentialError("Link secret is required when revealing anoncreds fields")
       }
-      if (!(credential instanceof AnonCredsCredential)) {
-        throw new PolluxError.InvalidCredentialError("Only Anoncreds credentials can be disclosed for now")
-      }
+
       const disclosedFields: { [K in keyof Credential['claims'][number]]: any } = {};
 
       const availableFields = fields.filter((field) =>
@@ -147,11 +143,8 @@ export default class Pollux implements IPollux {
   private async createJWTPresentationSubmission(
     presentationDefinitionRequest: any,
     credential: JWTCredential,
-    privateKey: any
+    privateKey: PrivateKey
   ): Promise<PresentationSubmission<CredentialType.JWT>> {
-    if (!(privateKey instanceof Secp256k1PrivateKey)) {
-      throw new CastorError.InvalidKeyError("Required Secp256k1PrivateKey key")
-    }
     if (!this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.JWT)) {
       throw new Error("PresentationDefinition didn't match credential type")
     }
@@ -182,7 +175,6 @@ export default class Pollux implements IPollux {
     if (!credential.isProvable()) {
       throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
     }
-
 
     const payload: JWTPresentationPayload = {
       iss: subject,

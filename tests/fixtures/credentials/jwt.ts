@@ -89,12 +89,5 @@ export const presentationRequest = {
   "options": {
     "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf",
     "domain": "http://localhost:8000/prism-agent"
-  },
-  "presentation_definition": {
-    "format": null,
-    "id": "b2a49475-f8ba-4952-a719-a28e909858fa",
-    "input_descriptors": [],
-    "name": null,
-    "purpose": null
   }
 };

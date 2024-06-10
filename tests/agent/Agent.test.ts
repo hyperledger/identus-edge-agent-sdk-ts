@@ -351,6 +351,11 @@ describe("Agent Tests", () => {
           );
         } else if (credType === CredentialType.AnonCreds) {
           credentialMap.set(credType, Fixtures.Credentials.Anoncreds.credentialOffer);
+        } else if (credType === CredentialType.SDJWT) {
+          credentialMap.set(
+            CredentialType.SDJWT,
+            Fixtures.Credentials.SDJWT.credentialPayloadEncoded
+          );
         }
 
         return OfferCredential.build(

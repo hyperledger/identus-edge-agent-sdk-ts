@@ -150,7 +150,8 @@
     "coverageReporters": [
       "json-summary",
       "lcov",
-      "text"
+      "text",
+      "html"
     ],
     "reporters": [
       "default",
@@ -161,7 +162,7 @@
       "externals",
       "generated",
       "src/castor/protos",
-      "src/domain/errors",
+      "src/domain/models/errors",
       "build"
     ],
     "testPathIgnorePatterns": [
