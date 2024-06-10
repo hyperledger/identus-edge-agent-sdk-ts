@@ -161,7 +161,7 @@
       "externals",
       "generated",
       "src/castor/protos",
-      "src/castor/errors",
+      "src/domain/errors",
       "build"
     ],
     "testPathIgnorePatterns": [
