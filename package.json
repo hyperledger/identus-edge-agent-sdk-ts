@@ -150,8 +150,7 @@
     "coverageReporters": [
       "json-summary",
       "lcov",
-      "text",
-      "html"
+      "text"
     ],
     "reporters": [
       "default",
