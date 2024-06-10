@@ -29,7 +29,6 @@ interface SchemaGenerator<T> {
   addProperty(type: PropertyTypes, key: string, opts?: any): void;
   setEncrypted(...keys: StringKeys<T>[]): void;
   setRequired(...keys: StringKeys<T>[]): void;
-  setRequired(...keys: StringKeys<T>[]): void;
   setVersion(version: number): void;
 }
 

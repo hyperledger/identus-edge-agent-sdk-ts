@@ -41,7 +41,7 @@ export class Message implements Pluto.Storable {
     public readonly fromPrior?: string,
     public readonly pthid?: string
   ) {
-    this.uuid = id;
+    this.uuid = Pluto.makeUUID();
   }
 
   get safeBody() {
