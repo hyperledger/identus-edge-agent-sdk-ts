@@ -18,7 +18,7 @@ import {
   MediatorHandler,
 } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
-import { PRISM_WALLET_PURPOSE, PRISM_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY, PrismDerivationPath, PrismDerivationPathSchema } from "../apollo/utils/derivation/schemas/PrismDerivation";
+import { PrismDerivationPath, PRISM_WALLET_PURPOSE, PRISM_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY, PrismDerivationPathSchema } from "../domain/models/derivation/schemas/PrismDerivation";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -140,36 +140,19 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     keyPathIndex?: number
   ): Promise<DID> {
-    const didRotation = 0;
-
-    const nextAuthenticationIndex = await this.getNextKeyPathIndex(
-      PRISM_WALLET_PURPOSE,
-      PRISM_DID_METHOD,
-      didRotation,
-      AUTHENTICATION_KEY,
-      keyPathIndex
-    );
-    const nextIssuanceIndex = await this.getNextKeyPathIndex(
-      PRISM_WALLET_PURPOSE,
-      PRISM_DID_METHOD,
-      didRotation,
-      ISSUING_KEY,
-      keyPathIndex
-    );
-
     const authenticationDerivation = new PrismDerivationPath([
       PRISM_WALLET_PURPOSE,
       PRISM_DID_METHOD,
-      didRotation,
+      0,
       AUTHENTICATION_KEY,
-      nextAuthenticationIndex + 1
+      await this.getNextKeyPathIndex(keyPathIndex)
     ]);
     const issuingDerivation = new PrismDerivationPath([
       PRISM_WALLET_PURPOSE,
       PRISM_DID_METHOD,
-      didRotation,
+      0,
       ISSUING_KEY,
-      nextIssuanceIndex + 1
+      await this.getNextKeyPathIndex(keyPathIndex)
     ]);
 
     const sk = this.apollo.createPrivateKey({
@@ -206,18 +189,10 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
    * @returns {number}
    */
   private async getNextKeyPathIndex(
-    walletPurpose: number,
-    didMethod: number,
-    didIndex: number,
-    keyPurpose: number,
     optionalKeyIndex?: number
   ): Promise<number> {
     const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
     const index = await getIndexTask.run(
-      walletPurpose,
-      didMethod,
-      didIndex,
-      keyPurpose,
       optionalKeyIndex
     );
     const next = index;

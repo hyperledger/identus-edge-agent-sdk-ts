@@ -9,42 +9,45 @@ import { Curve } from "./Curve";
 import { KeyTypes } from "./KeyTypes";
 import { ExportableKey } from "./exportable";
 import { JWT_ALG } from "../VerifiableCredential";
-import * as Protos from '../protos/node_models';
-import { PublicKey } from "./PublicKey";
+
+export enum KeyUsage {
+  UNKNOWN_KEY = 0,
+  MASTER_KEY = 1,
+  ISSUING_KEY = 2,
+  KEY_AGREEMENT_KEY = 3,
+  AUTHENTICATION_KEY = 4,
+  REVOCATION_KEY = 5,
+  CAPABILITY_INVOCATION_KEY = 6,
+  CAPABILITY_DELEGATION_KEY = 7
+}
 
 export function getProtosUsage(
   usage: Usage
-): Protos.io.iohk.atala.prism.protos.KeyUsage {
+): KeyUsage {
   switch (usage) {
     case Usage.UNKNOWN_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
+      return KeyUsage.UNKNOWN_KEY;
     case Usage.MASTER_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
+      return KeyUsage.MASTER_KEY;
     case Usage.ISSUING_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
+      return KeyUsage.ISSUING_KEY;
     case Usage.KEY_AGREEMENT_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.KEY_AGREEMENT_KEY;
+      return KeyUsage.KEY_AGREEMENT_KEY;
     case Usage.AUTHENTICATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
+      return KeyUsage.AUTHENTICATION_KEY;
     case Usage.REVOCATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.REVOCATION_KEY;
+      return KeyUsage.REVOCATION_KEY;
     case Usage.CAPABILITY_INVOCATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage
+      return KeyUsage
         .CAPABILITY_INVOCATION_KEY;
     case Usage.CAPABILITY_DELEGATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage
+      return KeyUsage
         .CAPABILITY_DELEGATION_KEY;
     default:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
+      return KeyUsage.UNKNOWN_KEY;
   }
 }
 
-export abstract class PrismDIDPublicKeyType {
-  abstract id: string;
-  abstract usage: Usage;
-  abstract keyData: PublicKey;
-  abstract toProto(): Protos.io.iohk.atala.prism.protos.PublicKey
-}
 
 export function getUsageId(index: Usage): string {
   switch (index) {
@@ -68,7 +71,7 @@ export function getUsageId(index: Usage): string {
 }
 
 export function getUsage(
-  protosUsage: Protos.io.iohk.atala.prism.protos.KeyUsage
+  protosUsage: KeyUsage
 ): Usage {
   let usage: Usage;
   switch (protosUsage) {

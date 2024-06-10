@@ -10,7 +10,7 @@ export const makeCollections: MakeCollections = (additional: CollectionList = {}
   "didkey-link": { schema: Models.DIDKeyLinkSchema },
   "did-link": { schema: Models.DIDLinkSchema },
   "dids": { schema: Models.DIDSchema },
-  "keys": { schema: Models.KeySchema, migrationStrategies: Models.KeyMigration },
+  "keys": { schema: Models.KeySchema },
   "messages": { schema: Models.MessageSchema },
   ...(additional),
 });

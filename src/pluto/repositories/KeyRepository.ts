@@ -3,7 +3,6 @@ import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";
 import { MapperRepository } from "./builders/MapperRepository";
-import { DeprecatedDerivationPathSchema } from "../../apollo/utils/derivation/schemas/DeprecatedDerivation";
 
 export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKey> {
   constructor(
@@ -24,13 +23,6 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
     const domain = this.keyRestoration.restorePrivateKey({
       ...model,
       raw: Buffer.from(model.rawHex, "hex"),
-      keySpecification: new Map(
-        Object.entries(
-          JSON.parse(
-            Buffer.from(model.keySpecification, 'base64').toString()
-          )
-        )
-      )
     });
 
     if (model.index != undefined) {
@@ -49,10 +41,7 @@ export class KeyRepository extends MapperRepository<Models.Key, Domain.PrivateKe
       recoveryId: domain.recoveryId,
       rawHex: domain.to.String("hex"),
       index: domain.index,
-      keySpecification: Buffer.from(
-        JSON.stringify(Object.fromEntries(domain.keySpecification))
-      ).toString('base64'),
-      derivationSchema: domain.derivationSchema ?? DeprecatedDerivationPathSchema
+
     };
   }
 }

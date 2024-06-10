@@ -42,7 +42,6 @@ import { uuid } from "@stablelib/uuid";
 import { ProtocolType } from "./protocols/ProtocolTypes";
 import { validatePresentationClaims } from "../pollux/utils/claims";
 import { SDJWTCredential } from "../pollux/models/SDJWTVerifiableCredential";
-import { PRISM_WALLET_PURPOSE, PRISM_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY } from "../apollo/utils/derivation/schemas/PrismDerivation";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -244,7 +243,6 @@ export class AgentCredentials implements AgentCredentialsClass {
       throw new Error("Missing to");
     }
     const thid = offer.thid;
-    const didRotation = 0;
     const credentialFormat =
       credentialType === CredentialType.AnonCreds ? AttachmentFormats.ANONCREDS_REQUEST :
         credentialType === CredentialType.JWT ? CredentialType.JWT :
@@ -272,15 +270,9 @@ export class AgentCredentials implements AgentCredentialsClass {
       await this.pluto.storeCredentialMetadata(metadata);
     } else if (credentialType === CredentialType.JWT) {
       const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
-      const keyIndex = await getIndexTask.run(
-        PRISM_WALLET_PURPOSE,
-        PRISM_DID_METHOD,
-        didRotation,
-        AUTHENTICATION_KEY,
-      );
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
-        [KeyProperties.index]: keyIndex,
+        [KeyProperties.index]: await getIndexTask.run(),
         [KeyProperties.type]: KeyTypes.EC,
         [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
       });
@@ -300,28 +292,16 @@ export class AgentCredentials implements AgentCredentialsClass {
     } else if (credentialType === CredentialType.SDJWT) {
 
       const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
-      const nextAuthenticationIndex = await getIndexTask.run(
-        PRISM_WALLET_PURPOSE,
-        PRISM_DID_METHOD,
-        didRotation,
-        AUTHENTICATION_KEY,
-      );
-      const nextIssuanceIndex = await getIndexTask.run(
-        PRISM_WALLET_PURPOSE,
-        PRISM_DID_METHOD,
-        didRotation,
-        ISSUING_KEY,
-      );
       const masterSk = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
-        [KeyProperties.index]: nextAuthenticationIndex,
+        [KeyProperties.index]: await getIndexTask.run(),
         [KeyProperties.type]: KeyTypes.EC,
         [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
       });
 
       const issSK = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.ED25519,
-        [KeyProperties.index]: nextIssuanceIndex,
+        [KeyProperties.index]: await getIndexTask.run(),
         [KeyProperties.type]: KeyTypes.EC,
         [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
       });

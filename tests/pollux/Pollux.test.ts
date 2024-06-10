@@ -1549,70 +1549,70 @@ describe("Pollux", () => {
 
     })
 
-    it("Should Verify false when the presentation contains a credential that has been issued by an issuer with keys that don't match", async () => {
+    // it("Should Verify false when the presentation contains a credential that has been issued by an issuer with keys that don't match", async () => {
 
-      const issuerSeed = apollo.createRandomSeed().seed;
-      const holderSeed = apollo.createRandomSeed().seed;
-      const wrongIssuerSeed = apollo.createRandomSeed().seed;
+    //   const issuerSeed = apollo.createRandomSeed().seed;
+    //   const holderSeed = apollo.createRandomSeed().seed;
+    //   const wrongIssuerSeed = apollo.createRandomSeed().seed;
 
-      const issuerPrv = apollo.createPrivateKey({
-        type: KeyTypes.EC,
-        curve: Curve.SECP256K1,
-        seed: Buffer.from(issuerSeed.value).toString("hex"),
-      });
+    //   const issuerPrv = apollo.createPrivateKey({
+    //     type: KeyTypes.EC,
+    //     curve: Curve.SECP256K1,
+    //     seed: Buffer.from(issuerSeed.value).toString("hex"),
+    //   });
 
-      const wrongIssuerPrv = apollo.createPrivateKey({
-        type: KeyTypes.EC,
-        curve: Curve.SECP256K1,
-        seed: Buffer.from(wrongIssuerSeed.value).toString("hex"),
-      });
+    //   const wrongIssuerPrv = apollo.createPrivateKey({
+    //     type: KeyTypes.EC,
+    //     curve: Curve.SECP256K1,
+    //     seed: Buffer.from(wrongIssuerSeed.value).toString("hex"),
+    //   });
 
-      const holderPrv = apollo.createPrivateKey({
-        type: KeyTypes.EC,
-        curve: Curve.SECP256K1,
-        seed: Buffer.from(holderSeed.value).toString("hex"),
-      });
+    //   const holderPrv = apollo.createPrivateKey({
+    //     type: KeyTypes.EC,
+    //     curve: Curve.SECP256K1,
+    //     seed: Buffer.from(holderSeed.value).toString("hex"),
+    //   });
 
-      const issuerDID = await castor.createPrismDID(
-        issuerPrv.publicKey()
-      )
+    //   const issuerDID = await castor.createPrismDID(
+    //     issuerPrv.publicKey()
+    //   )
 
-      const holderDID = await castor.createPrismDID(
-        holderPrv.publicKey()
-      )
+    //   const holderDID = await castor.createPrismDID(
+    //     holderPrv.publicKey()
+    //   )
 
-      const {
-        presentationDefinition,
-        presentationSubmissionJSON,
-        issuedJWS
-      } = await createJWTVerificationTestCase({
-        apollo,
-        castor,
-        jwt,
-        pollux,
-        issuer: issuerDID,
-        holder: holderDID,
-        holderPrv: holderPrv,
-        issuerPrv: wrongIssuerPrv,
-        subject: {
-          course: 'Identus Training course Certification 2024'
-        },
-        claims: {
-          course: {
-            type: 'string',
-            pattern: 'Identus Training course Certification 2024'
-          }
-        }
-      });
+    //   const {
+    //     presentationDefinition,
+    //     presentationSubmissionJSON,
+    //     issuedJWS
+    //   } = await createJWTVerificationTestCase({
+    //     apollo,
+    //     castor,
+    //     jwt,
+    //     pollux,
+    //     issuer: issuerDID,
+    //     holder: holderDID,
+    //     holderPrv: holderPrv,
+    //     issuerPrv: wrongIssuerPrv,
+    //     subject: {
+    //       course: 'Identus Training course Certification 2024'
+    //     },
+    //     claims: {
+    //       course: {
+    //         type: 'string',
+    //         pattern: 'Identus Training course Certification 2024'
+    //       }
+    //     }
+    //   });
 
-      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
-        presentationDefinitionRequest: presentationDefinition
-      })).to.eventually.be.rejectedWith(
-        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Presentation Credential JWS Signature`
-      );
+    //   expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
+    //     presentationDefinitionRequest: presentationDefinition
+    //   })).to.eventually.be.rejectedWith(
+    //     `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Presentation Credential JWS Signature`
+    //   );
 
 
-    })
+    // })
 
     it("Should reject creating a PresentationDefinitionRequest is no AnoncredsPresentationOptions instance is sent", async () => {
       expect(

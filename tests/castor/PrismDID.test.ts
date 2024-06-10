@@ -4,11 +4,11 @@ import { base58btc } from "multiformats/bases/base58";
 import { Curve, getProtosUsage, getUsageId, JWT_ALG, KeyTypes, PublicKey, Usage, VerificationMethods } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 import Castor from "../../src/castor/Castor";
-import * as ECConfig from "../../src/apollo/utils/ec/ECConfig";
+import * as ECConfig from "../../src/domain/models/ECConfig";
 import { Secp256k1PublicKey } from "../../src/apollo/utils/Secp256k1PublicKey";
 import * as Fixtures from "../fixtures";
-import * as Protos from "../../src/domain/models/protos/node_models";
-import { PrismDIDPublicKey } from "../../src/apollo/utils/PrismDIDPublicKey";
+import * as Protos from "../../src/castor/protos/node_models";
+import { PrismDIDPublicKey } from "../../src/castor/did/prismDID/PrismDIDPublicKey";
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -58,7 +58,7 @@ describe("PRISMDID", () => {
           key
         );
         const masterPkProto = masterPk.toProto()
-        const recoveredPk = PrismDIDPublicKey.fromProto(masterPkProto)
+        const recoveredPk = PrismDIDPublicKey.fromProto(apollo, masterPkProto)
         expect(masterPk.keyData.raw).to.deep.eq(recoveredPk.keyData.raw)
         expect(masterPk.usage).to.eq(recoveredPk.usage)
         expect(masterPk.id).to.eq(recoveredPk.id)
@@ -71,7 +71,7 @@ describe("PRISMDID", () => {
       );
       const masterPkProto = masterPk.toProto()
 
-      expect(() => PrismDIDPublicKey.fromProto(masterPkProto)).to.throw(`Invalid key curve: ${unsupportedCurve}. Valid options are: X25519,Ed25519,Secp256k1`)
+      expect(() => PrismDIDPublicKey.fromProto(apollo, masterPkProto)).to.throw(`Invalid key curve: ${unsupportedCurve}. Valid options are: X25519,Ed25519,Secp256k1`)
 
     })
   })

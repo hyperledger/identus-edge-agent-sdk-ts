@@ -1,19 +1,17 @@
-import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
-import * as ECConfig from "./ec/ECConfig";
-import { Curve, getProtosUsage, getUsage, PrismDIDPublicKeyType, PublicKey, Usage } from "../../domain/models";
-import { ApolloError, CastorError } from "../../domain/models/Errors";
-import * as Protos from "../../domain/models/protos/node_models";
-import { Ed25519PublicKey } from "./Ed25519PublicKey";
-import { X25519PublicKey } from "./X25519PublicKey";
+import * as ECConfig from "../../../domain/models/ECConfig";
+import { Curve, getProtosUsage, getUsage, PublicKey, Usage } from "../../../domain/models";
+import { ApolloError, CastorError } from "../../../domain/models/Errors";
+import * as Protos from "../../protos/node_models";
 
+import { Apollo, KeyProperties, KeyTypes } from "../../../domain";
 
+export class PrismDIDPublicKey {
 
-export class PrismDIDPublicKey implements PrismDIDPublicKeyType {
-  id: string;
-  usage: Usage;
-  keyData: PublicKey;
-
-  constructor(id: string, usage: Usage, keyData: PublicKey) {
+  constructor(
+    public id: string,
+    public usage: Usage,
+    public keyData: PublicKey
+  ) {
     this.id = id;
     this.usage = usage;
     this.keyData = keyData;
@@ -23,40 +21,56 @@ export class PrismDIDPublicKey implements PrismDIDPublicKeyType {
     return proto.compressed_ec_key_data?.curve ?? proto.ec_key_data.curve
   }
 
-  private static fromSecp256k1Proto(proto: Protos.io.iohk.atala.prism.protos.PublicKey) {
+  private static fromSecp256k1Proto(
+    apollo: Apollo,
+    proto: Protos.io.iohk.atala.prism.protos.PublicKey
+  ) {
     switch (proto.key_data) {
       case "compressed_ec_key_data":
-        return new Secp256k1PublicKey(
-          proto.compressed_ec_key_data.data
-        );
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: Curve.SECP256K1,
+          [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
+        })
       case "ec_key_data":
-        return Secp256k1PublicKey.secp256k1FromByteCoordinates(
-          proto.ec_key_data.x,
-          proto.ec_key_data.y
-        );
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: Curve.SECP256K1,
+          [KeyProperties.curvePointX]: proto.ec_key_data.x,
+          [KeyProperties.curvePointY]: proto.ec_key_data.y,
+        })
       default:
         throw new CastorError.InvalidPublicKeyEncoding();
     }
   }
 
-  private static fromEd25519ORX25519Proto(proto: Protos.io.iohk.atala.prism.protos.PublicKey) {
+  private static fromEd25519ORX25519Proto(
+    apollo: Apollo,
+    proto: Protos.io.iohk.atala.prism.protos.PublicKey
+  ) {
     const curve = this.getProtoCurve(proto);
     if (proto.has_compressed_ec_key_data) {
       if (curve === Curve.ED25519) {
-        return new Ed25519PublicKey(
-          proto.compressed_ec_key_data.data
-        );
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: Curve.ED25519,
+          [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
+        })
+
       }
       if (curve === Curve.X25519) {
-        return new X25519PublicKey(
-          proto.compressed_ec_key_data.data
-        );
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.Curve25519,
+          [KeyProperties.curve]: Curve.X25519,
+          [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
+        })
       }
     }
     throw new CastorError.InvalidPublicKeyEncoding();
   }
 
   static fromProto(
+    apollo: Apollo,
     proto: Protos.io.iohk.atala.prism.protos.PublicKey
   ): PrismDIDPublicKey {
     const id = proto.id;
@@ -66,13 +80,13 @@ export class PrismDIDPublicKey implements PrismDIDPublicKeyType {
       return new PrismDIDPublicKey(
         id,
         usage,
-        this.fromSecp256k1Proto(proto)
+        this.fromSecp256k1Proto(apollo, proto)
       );
     } else if (curve === Curve.ED25519 || curve === Curve.X25519) {
       return new PrismDIDPublicKey(
         id,
         usage,
-        this.fromEd25519ORX25519Proto(proto)
+        this.fromEd25519ORX25519Proto(apollo, proto)
       );
     } else {
       throw new ApolloError.InvalidKeyCurve(curve, Object.values(Curve))

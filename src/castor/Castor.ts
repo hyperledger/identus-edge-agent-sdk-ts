@@ -15,7 +15,7 @@ import {
 } from "../domain/models";
 
 import * as DIDParser from "./parser/DIDParser";
-import * as Protos from "../domain/models/protos/node_models";
+import * as Protos from "./protos/node_models";
 
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
@@ -24,6 +24,7 @@ import { CastorError } from "../domain/models/Errors";
 import {
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
+  getUsageId,
   Usage,
 } from "../domain";
 
@@ -40,6 +41,7 @@ import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
 import { PublicKey, Curve } from "../domain/models";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
+import { PrismDIDPublicKey } from "./did/prismDID/PrismDIDPublicKey";
 
 type ExtraResolver = new (apollo: Apollo) => DIDResolver
 /**
@@ -123,20 +125,26 @@ export default class Castor implements CastorInterface {
   ): Promise<DID> {
     const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
     const masterPublicKey = "publicKey" in key ? key.publicKey : key;
-    const masterPk = this.apollo.createPrismDIDPublicKey(
+
+    const masterPk = new PrismDIDPublicKey(
+      getUsageId(Usage.MASTER_KEY),
+      Usage.MASTER_KEY,
       masterPublicKey,
-      Usage.MASTER_KEY
     ).toProto();
 
-    const authenticationPk = this.apollo.createPrismDIDPublicKey(
+    const authenticationPk = new PrismDIDPublicKey(
+      getUsageId(Usage.AUTHENTICATION_KEY),
+      Usage.AUTHENTICATION_KEY,
       masterPublicKey,
-      Usage.AUTHENTICATION_KEY
+
     ).toProto();
 
     if (issuingKeys.length) {
-      didPublicKeys.push(...issuingKeys.map((issuingKey) => this.apollo.createPrismDIDPublicKey(
+      didPublicKeys.push(...issuingKeys.map((issuingKey) => new PrismDIDPublicKey(
+        getUsageId(Usage.ISSUING_KEY),
+        Usage.ISSUING_KEY,
         "publicKey" in issuingKey ? issuingKey.publicKey : issuingKey,
-        Usage.ISSUING_KEY
+
       ).toProto()))
     }
 

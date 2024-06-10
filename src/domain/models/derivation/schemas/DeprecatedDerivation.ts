@@ -1,6 +1,7 @@
-import { ApolloError } from "../../../../domain";
-import { DerivationPathBase, AxesArray, BaseSchema } from "../core";
+import { BaseSchema, DerivationPathBase, AxesArray } from "..";
+import { ApolloError } from "../../Errors";
 import { DerivationAxis } from "../DerivationAxis";
+
 
 interface DeprecatedDerivationSchema extends BaseSchema {
     keyType: number

@@ -13,7 +13,6 @@ import * as Fixtures from "../fixtures";
 import { schemaFactory } from "../../src/pluto/models/Schema";
 import { Credential } from "../../src/pluto/models";
 import { CredentialRepository, KeyRepository } from "../../src/pluto/repositories";
-import { DeprecatedDerivationPathSchema } from "../../src/apollo/utils/derivation/schemas/DeprecatedDerivation";
 
 addRxPlugin(RxDBDevModePlugin);
 
@@ -80,7 +79,6 @@ describe("Pluto", () => {
             const keys = await currentStore.query("keys")
             expect(keys).not.toBe(undefined);
             expect(keys.length).toBe(1);
-            expect(keys[0].derivationSchema).toBe(DeprecatedDerivationPathSchema)
         });
 
         test("Should migrate old anoncreds v0Credentials into v1 credentials", async () => {

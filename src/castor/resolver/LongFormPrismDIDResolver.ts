@@ -17,17 +17,18 @@ import {
   PublicKey,
   Curve,
   getUsage,
-  PrismDIDPublicKeyType,
+  getUsageId,
 } from "../../domain/models";
 
 import * as DIDParser from "../parser/DIDParser";
-import * as Protos from "../../domain/models/protos/node_models";
+import * as Protos from "../protos/node_models";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
 import { Secp256k1PublicKey } from "../../apollo/utils/Secp256k1PublicKey";
 import { KeyProperties } from "../../domain/models/KeyProperties";
 import { Ed25519PublicKey } from "../../apollo/utils/Ed25519PublicKey";
 import { X25519PublicKey } from "../../apollo/utils/X25519PublicKey";
+import { PrismDIDPublicKey } from "../did/prismDID/PrismDIDPublicKey";
 
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
@@ -87,7 +88,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
           encodedData
         );
 
-      const publicKeys: PrismDIDPublicKeyType[] =
+      const publicKeys: PrismDIDPublicKey[] =
         operation.create_did?.did_data?.public_keys?.map(
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
             const curve = this.getProtoCurve(key).toLocaleLowerCase()
@@ -118,9 +119,11 @@ export class LongFormPrismDIDResolver implements DIDResolver {
             } else {
               throw new Error("Unsupported key type")
             }
-            return this.apollo.createPrismDIDPublicKey(
+            const usage = getUsage(key.usage)
+            return new PrismDIDPublicKey(
+              getUsageId(usage),
+              usage,
               pk,
-              getUsage(key.usage)
             )
           }
         ) || [];

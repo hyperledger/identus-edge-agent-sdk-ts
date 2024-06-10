@@ -1,7 +1,7 @@
-import { ApolloError } from "../../../../domain"
-import { BaseSchema, DerivationPathBase, AxesArray } from "../core"
+import { AxesArray, BaseSchema, DerivationPathBase } from ".."
+import { ApolloError } from "../../Errors"
+import { KeyUsage } from "../../keyManagement"
 import { DerivationAxis } from "../DerivationAxis"
-import * as Protos from "../../../../domain/models/protos/node_models";
 
 interface PrismDerivationSchema extends BaseSchema {
     walletPurpose: number
@@ -12,14 +12,13 @@ interface PrismDerivationSchema extends BaseSchema {
 }
 
 export const PRISM_IDENTIFIER = 0x1D;
-
 export const PRISM_WALLET_PURPOSE = PRISM_IDENTIFIER;
 export const PRISM_DID_METHOD = PRISM_IDENTIFIER;
-export const AUTHENTICATION_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
-export const MASTER_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
-export const ISSUING_KEY = Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
-
+export const AUTHENTICATION_KEY = KeyUsage.AUTHENTICATION_KEY;
+export const MASTER_KEY = KeyUsage.MASTER_KEY;
+export const ISSUING_KEY = KeyUsage.ISSUING_KEY;
 export const PrismDerivationPathSchema = "prism";
+
 export class PrismDerivationPath extends DerivationPathBase<PrismDerivationSchema> {
     schema = PrismDerivationPathSchema
 

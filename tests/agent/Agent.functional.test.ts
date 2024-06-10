@@ -42,13 +42,6 @@ describe("Agent", () => {
         const second = await agent.createNewPrismDID("a");
         expect(first).to.not.deep.eq(second);
       });
-
-      it("Should throw a new error if we attempt to create a did on an existing index", async () => {
-        const services = [];
-        const keyPathIndex = 1;
-        await agent.createNewPrismDID("first", services, keyPathIndex);
-        expect(agent.createNewPrismDID("second", services, keyPathIndex)).to.eventually.be.rejectedWith(ApolloError.InvalidDerivationPath);
-      });
     });
   });
 });

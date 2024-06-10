@@ -2,7 +2,6 @@
 export interface StorableKey {
   recoveryId: string;
   raw: Uint8Array;
-  keySpecification: Map<string, string>,
   index?: number;
 }
 

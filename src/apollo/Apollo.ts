@@ -15,8 +15,6 @@ import {
   SeedWords,
   StorableKey,
   KeyRestoration,
-  Usage,
-  getUsageId,
 } from "../domain";
 import {
   MnemonicLengthException,
@@ -32,11 +30,10 @@ import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
 import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
 import { X25519PublicKey } from "./utils/X25519PublicKey";
 
-import { DerivationPath } from "./utils/derivation/DerivationPath";
 import { notEmptyString } from "../utils";
 import ApolloPKG from "@atala/apollo";
-import { PrismDIDPublicKey } from "./utils/PrismDIDPublicKey";
-import { PrismDerivationPath } from "./utils/derivation/schemas/PrismDerivation";
+import { PrismDerivationPath } from "../domain/models/derivation/schemas/PrismDerivation";
+
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
@@ -122,6 +119,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   static Ed25519PrivateKey = Ed25519PrivateKey;
   static X25519PrivateKey = X25519PrivateKey;
 
+
   /**
    * Creates a random set of mnemonic phrases that can be used as a seed for generating a private key.
    *
@@ -196,14 +194,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     };
   }
 
-  createPrismDIDPublicKey(pk: PublicKey, usage: Usage): PrismDIDPublicKey {
-    return new PrismDIDPublicKey(
-      getUsageId(usage),
-      usage,
-      pk
-    )
-  }
-
   /**
   * Creates a public key based on the current cryptographic abstraction
   *
@@ -253,8 +243,17 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
       if (curve === Curve.SECP256K1) {
         if (keyData) {
           return new Secp256k1PublicKey(keyData);
+        } else {
+          const xData = parameters[KeyProperties.curvePointX];
+          const yData = parameters[KeyProperties.curvePointY];
+          if (xData && yData) {
+            return Secp256k1PublicKey.secp256k1FromByteCoordinates(
+              xData,
+              yData
+            )
+          }
         }
-        throw new ApolloError.InvalidPrivateKey("Missing raw bytes")
+        throw new ApolloError.InvalidPrivateKey("Missing raw bytes or coordinates")
       }
     }
 
@@ -361,19 +360,19 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
           const derivationIndex = parameters[KeyProperties.index] ?? "0";
           const derivationParam = parameters[KeyProperties.derivationPath]
           const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString()
+
+
           const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
-          const derivationPath = DerivationPath.fromPath(defaultPath);
 
           const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed);
           const baseKey = new Ed25519PrivateKey(Uint8Array.from(hdKey.privateKey))
 
           baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
           baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
-          baseKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
+          baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
 
           if (derivationParam) {
-            const derivationPath = DerivationPath.fromPath(defaultPath);
-            const privateKey = baseKey.derive(derivationPath);
+            const privateKey = baseKey.derive(defaultPath);
             return privateKey;
           }
           return baseKey;
@@ -400,7 +399,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         const defaultPath: string = derivationParam ?? PrismDerivationPath.init(
           derivationIndex
         ).toString()
-        const derivationPath = DerivationPath.fromPath(defaultPath);
 
         const hdKey = HDKey.InitFromSeed(
           Int8Array.from(seed),
@@ -419,11 +417,10 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         const baseKey = new Secp256k1PrivateKey(Uint8Array.from(hdKey.privateKey));
         baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
         baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
-        baseKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
+        baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
 
         if (derivationParam) {
-          const derivationPath = DerivationPath.fromPath(defaultPath);
-          const privateKey = baseKey.derive(derivationPath);
+          const privateKey = baseKey.derive(defaultPath);
           return privateKey;
         }
 
@@ -443,16 +440,14 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
           const derivationIndex = parameters[KeyProperties.index] ?? "0";
           const derivationParam: string = parameters[KeyProperties.derivationPath] ?? PrismDerivationPath.init(derivationIndex).toString();
 
-          const derivationPath = DerivationPath.fromPath(derivationParam);
-
           const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
-          const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed).derive(derivationPath.toString());
+          const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed).derive(derivationParam);
           const edKey = Ed25519PrivateKey.from.Buffer(Buffer.from(hdKey.privateKey));
           const xKey = edKey.x25519();
 
           xKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(hdKey.chainCode).toString("hex"));
           xKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationParam).toString("hex"));
-          xKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
+          xKey.keySpecification.set(KeyProperties.index, derivationIndex);
 
           return xKey;
         }
@@ -467,31 +462,16 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     throw new ApolloError.InvalidKeyType(keyType, Object.values(KeyTypes));
   }
 
-  private moveKeySpecification(storable: StorableKey, key: PrivateKey): PrivateKey {
-    key.keySpecification = storable.keySpecification;
-    return key
-  }
-
   restorePrivateKey(key: StorableKey): PrivateKey {
-    let instance: PrivateKey;
     switch (key.recoveryId) {
       case "secp256k1+priv":
-        instance = new Secp256k1PrivateKey(key.raw);
-        return this.moveKeySpecification(
-          key, instance
-        )
+        return new Secp256k1PrivateKey(key.raw);
 
       case "ed25519+priv":
-        instance = new Ed25519PrivateKey(key.raw);
-        return this.moveKeySpecification(
-          key, instance
-        )
+        return new Ed25519PrivateKey(key.raw);
 
       case "x25519+priv":
-        instance = new X25519PrivateKey(key.raw);
-        return this.moveKeySpecification(
-          key, instance
-        )
+        return new X25519PrivateKey(key.raw);
     }
 
     throw new ApolloError.KeyRestoratonFailed(key);

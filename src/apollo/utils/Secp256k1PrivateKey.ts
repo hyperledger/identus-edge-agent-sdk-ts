@@ -1,8 +1,7 @@
 import BN from "bn.js";
 
-import * as ECConfig from "./ec/ECConfig";
+import * as ECConfig from "../../domain/models/ECConfig";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
-import { DerivationPath } from "./derivation/DerivationPath";
 import { ApolloError, Curve, KeyTypes, KeyProperties, } from "../../domain";
 import {
   PrivateKey,
@@ -52,36 +51,31 @@ export class Secp256k1PrivateKey
     this.size = this.raw.length;
   }
 
-  derive(derivationPath: DerivationPath): Secp256k1PrivateKey {
+  derive(derivationPath: string): Secp256k1PrivateKey {
     const chainCodeHex = this.getProperty(KeyProperties.chainCode);
-
     if (!chainCodeHex) {
       throw new ApolloError.MissingKeyParameters([KeyProperties.chainCode]);
     }
-
     const chaincode = Buffer.from(chainCodeHex, "hex");
     const derivationPathStr = derivationPath.toString();
-
     const hdKey = new HDKey(
       Int8Array.from(this.raw),
       null,
       Int8Array.from(chaincode),
       derivationPathStr.split("/").slice(1).length,
-      BigIntegerWrapper.initFromInt(derivationPath.index)
+      BigIntegerWrapper.initFromInt(0)
     );
-
     const derivedKey = hdKey.derive(derivationPathStr);
-
     if (derivedKey.privateKey == null) {
       throw new ApolloError.MissingPrivateKey();
     }
-
     const privateKey = new Secp256k1PrivateKey(Buffer.from(derivedKey.privateKey));
     privateKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationPathStr).toString("hex"));
-    privateKey.keySpecification.set(KeyProperties.index, `${derivationPath.index}`);
+    privateKey.keySpecification.set(KeyProperties.index, `${this.index ?? 0}`);
     if (derivedKey.chainCode) {
       privateKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(derivedKey.chainCode).toString("hex"));
     }
+
     return privateKey;
   }
 

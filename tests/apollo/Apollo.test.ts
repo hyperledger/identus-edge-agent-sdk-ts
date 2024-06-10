@@ -2,7 +2,7 @@ import { expect, assert } from "chai";
 
 import Apollo from "../../src/apollo/Apollo";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
-import * as ECConfig from "../../src/apollo/utils/ec/ECConfig";
+import * as ECConfig from "../../src/domain/models/ECConfig";
 
 import { bip39Vectors } from "./derivation/BipVectors";
 import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
@@ -24,7 +24,9 @@ import {
   JWT_ALG
 } from "../../src/domain/models";
 import * as Fixtures from "../fixtures";
-import { DerivationAxis } from "../../src/apollo/utils/derivation/DerivationAxis";
+import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/PrismDerivation";
+import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
+import { DerivationAxis } from "../../src/domain/models/derivation/DerivationAxis";
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -303,7 +305,7 @@ describe("Apollo", () => {
   });
 
   it("Should derive secp256k1 privateKey the same way as if we create a new key in Apollo.", async () => {
-    const path = DerivationPath.fromPath(`m/0'/0'/1'`);
+    const path = DerivationPath.fromPath(`m/0'/0'/1'`, [DeprecatedDerivationPath, PrismDerivationPath]);
     const createKeyArgs = {
       type: KeyTypes.EC,
       curve: Curve.SECP256K1,
@@ -311,7 +313,7 @@ describe("Apollo", () => {
     };
 
     const privateKey = apollo.createPrivateKey(createKeyArgs);
-    const derived = privateKey.isDerivable() && privateKey.derive(path);
+    const derived = privateKey.isDerivable() && privateKey.derive(path.toString());
     expect(derived).to.not.equal(false);
 
     const withDerivationPath = apollo.createPrivateKey({
@@ -341,21 +343,21 @@ describe("Apollo", () => {
       expect(() => DerivationAxis.hardened(-1)).to.throws("Number corresponding to the axis should be a positive number")
     })
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationPath.fromPath("m/x")).to.throws("DerivationPathErr Invalid axis, not a number")
+      expect(() => DerivationPath.fromPath("m/x", [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Invalid axis, not a number")
     })
 
     it("Should throw an error when invalid (non string) path is used", async () => {
-      expect(() => DerivationPath.fromPath(null as any)).to.throws("DerivationPathErr Derivation path should be string")
+      expect(() => DerivationPath.fromPath(null as any, [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Derivation path should be string")
     })
     it("Should throw an error when empty derivation schema is used", async () => {
-      const path = DerivationPath.empty()
+      const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath])
       expect(() => path.toString()).to.throws("DerivationPathErr Derivation path is empty")
     })
     it("Should throw an error when wrong path not starting with m or M", async () => {
-      expect(() => DerivationPath.fromPath("d/0").toString()).to.throws("DerivationPathErr Path needs to start with m or M")
+      expect(() => DerivationPath.fromPath("d/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Path needs to start with m or M")
     })
     it("Should throw an error when invalid derivation schema is used", async () => {
-      const path = DerivationPath.empty()
+      const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath])
       const derived = path
         .derive(DerivationAxis.hardened(1))
         .derive(DerivationAxis.normal(1))
@@ -366,7 +368,7 @@ describe("Apollo", () => {
     })
 
     it("Should throw an error when invalid derivation schema is used", async () => {
-      expect(() => DerivationPath.fromPath("m/0").toString()).to.throws("DerivationPathErr Incompatible Derivation schema")
+      expect(() => DerivationPath.fromPath("m/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Incompatible Derivation schema")
     })
   })
 
@@ -389,8 +391,7 @@ describe("Apollo", () => {
       test("recoveryId ed25519+priv - matches - returns Ed25519PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("ed25519", "priv"),
-          raw: Fixtures.Keys.ed25519.privateKey.raw,
-          keySpecification: new Map()
+          raw: Fixtures.Keys.ed25519.privateKey.raw
         };
 
         const result = apollo.restorePrivateKey(key);
@@ -401,8 +402,7 @@ describe("Apollo", () => {
       test("recoveryId x25519+priv - matches - returns X25519PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("x25519", "priv"),
-          raw: Fixtures.Keys.x25519.privateKey.raw,
-          keySpecification: new Map()
+          raw: Fixtures.Keys.x25519.privateKey.raw
         };
 
         const result = apollo.restorePrivateKey(key);
@@ -413,8 +413,7 @@ describe("Apollo", () => {
       test("recoveryId secp256k1+priv - matches - returns Secp256k1PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("secp256k1", "priv"),
-          raw: Fixtures.Keys.secp256K1.privateKey.raw,
-          keySpecification: new Map()
+          raw: Fixtures.Keys.secp256K1.privateKey.raw
         };
 
         const result = apollo.restorePrivateKey(key);
@@ -436,8 +435,7 @@ describe("Apollo", () => {
       test("recoveryId ed25519+pub - matches - returns Ed25519PrivateKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("ed25519", "pub"),
-          raw: Fixtures.Keys.ed25519.publicKey.raw,
-          keySpecification: new Map()
+          raw: Fixtures.Keys.ed25519.publicKey.raw
         };
 
         const result = apollo.restorePublicKey(key);
@@ -448,8 +446,7 @@ describe("Apollo", () => {
       test("recoveryId x25519+pub - matches - returns X25519PublicKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("x25519", "pub"),
-          raw: Fixtures.Keys.x25519.publicKey.raw,
-          keySpecification: new Map()
+          raw: Fixtures.Keys.x25519.publicKey.raw
         };
 
         const result = apollo.restorePublicKey(key);
@@ -460,8 +457,7 @@ describe("Apollo", () => {
       test("recoveryId secp256k1+pub - matches - returns Secp256k1PublicKey instance", () => {
         const key: StorableKey = {
           recoveryId: StorableKey.recoveryId("secp256k1", "pub"),
-          raw: Fixtures.Keys.secp256K1.publicKey.raw,
-          keySpecification: new Map()
+          raw: Fixtures.Keys.secp256K1.publicKey.raw
         };
 
         const result = apollo.restorePublicKey(key);

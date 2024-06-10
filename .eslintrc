@@ -9,7 +9,7 @@
   },
   "ignorePatterns": [
     "src/castor/parser",
-    "src/domain/models/protos",
+    "src/castor/protos",
     "scripts",
     "tests",
     "demos",

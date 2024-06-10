@@ -1,40 +1,12 @@
 import { ApolloError } from "../../../domain";
-import { DerivationPathBase } from "./core";
-import { DerivationAxis } from "./DerivationAxis";
-import { DeprecatedDerivationPath } from "./schemas/DeprecatedDerivation";
-import { PrismDerivationPath } from "./schemas/PrismDerivation";
-
-const SCHEMAS = [
-  PrismDerivationPath,
-  DeprecatedDerivationPath,
-];
-
-type DerivationClass = typeof SCHEMAS extends Array<infer T> ? T : never;
+import { DerivationClass, DerivationPathBase } from "../../../domain/models/derivation";
+import { DerivationAxis } from "../../../domain/models/derivation/DerivationAxis";
 
 export class DerivationPath {
-
-  private static create(DerivationClass: DerivationClass, paths: number[]): DerivationPathBase<any> | undefined {
-    try {
-      const path = new DerivationClass(paths);
-      return path;
-    } catch (err) {
-      if (!(err instanceof ApolloError.InvalidDerivationPath)) {
-        throw err
-      }
-    }
-  }
-
-  private static callBackOrThrow(
-    paths: number[],
-    cb: (path: DerivationPathBase<any>) => any
+  constructor(
+    private paths: number[],
+    private derivations: DerivationClass[]
   ) {
-    for (const DerivationClass of SCHEMAS) {
-      const path = this.create(DerivationClass, paths);
-      if (path) {
-        return cb(path);
-      }
-    }
-    throw new ApolloError.InvalidDerivationPath("DerivationPathErr Incompatible Derivation schema");
   }
 
   get axes(): DerivationAxis[] {
@@ -43,6 +15,7 @@ export class DerivationPath {
 
   get index() {
     return DerivationPath.callBackOrThrow(
+      this.derivations,
       this.paths,
       (path) => path.index
     )
@@ -58,25 +31,21 @@ export class DerivationPath {
 
   get schema() {
     return DerivationPath.callBackOrThrow(
+      this.derivations,
       this.paths,
       (path) => path.schema
     )
-  }
-
-  constructor(
-    private paths: number[]
-  ) {
   }
 
   derive(axis: DerivationAxis): DerivationPath {
     return new DerivationPath([
       ...this.paths,
       axis.number
-    ]);
+    ], this.derivations);
   }
 
-  static empty(): DerivationPath {
-    return new DerivationPath([]);
+  static empty(derivations: DerivationClass[]): DerivationPath {
+    return new DerivationPath([], derivations);
   }
 
   toString(): string {
@@ -84,6 +53,7 @@ export class DerivationPath {
       throw new ApolloError.InvalidDerivationPath("DerivationPathErr Derivation path is empty");
     }
     return DerivationPath.callBackOrThrow(
+      this.derivations,
       this.paths,
       (path) => `m/${path.axes.map((axis) => axis.toString()).join("/")}`
     )
@@ -95,7 +65,7 @@ export class DerivationPath {
    * @param path Path to parse in format m/axis1/axis2/.../axisn where all axes are number between 0 and 2^31^ - 1 and
    * optionally a ' added after to mark hardened axis e.g. m/21/37'/0
    */
-  static fromPath(path: string): DerivationPath {
+  static fromPath(path: string, derivations: DerivationClass[]): DerivationPath {
     try {
       if (typeof path === "string") {
         const splitPath = path.split("/");
@@ -104,8 +74,9 @@ export class DerivationPath {
         }
         const paths = splitPath.slice(1).map(DerivationPath.parseAxis).map((a) => a.number);
         return DerivationPath.callBackOrThrow(
+          derivations,
           paths,
-          (path) => new DerivationPath(path.axes.map((a) => a.number))
+          (path) => new DerivationPath(path.axes.map((a) => a.number), derivations)
         )
       }
       throw new ApolloError.InvalidDerivationPath(`Derivation path should be string`)
@@ -121,6 +92,35 @@ export class DerivationPath {
     return hardened
       ? DerivationAxis.hardened(axisNum)
       : DerivationAxis.normal(axisNum);
+  }
+
+
+  private static create(
+    DerivationClass: DerivationClass,
+    paths: number[]
+  ): DerivationPathBase<any> | undefined {
+    try {
+      const path = new DerivationClass(paths);
+      return path;
+    } catch (err) {
+      if (!(err instanceof ApolloError.InvalidDerivationPath)) {
+        throw err
+      }
+    }
+  }
+
+  private static callBackOrThrow(
+    derivations: DerivationClass[],
+    paths: number[],
+    cb: (path: DerivationPathBase<any>) => any
+  ) {
+    for (const DerivationClass of derivations) {
+      const path = this.create(DerivationClass, paths);
+      if (path) {
+        return cb(path);
+      }
+    }
+    throw new ApolloError.InvalidDerivationPath("DerivationPathErr Incompatible Derivation schema");
   }
 
 }

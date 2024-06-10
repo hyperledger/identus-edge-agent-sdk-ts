@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Curve, KeyProperties, KeyTypes, PrivateKey } from "../../../src/domain";
+import { Curve, KeyTypes, PrivateKey } from "../../../src/domain";
 import { Ed25519PrivateKey } from "../../../src/apollo/utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "../../../src/apollo/utils/Ed25519PublicKey";
 import { Ed25519KeyPair } from "../../../src/apollo/utils/Ed25519KeyPair";
@@ -7,6 +7,9 @@ import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationP
 import Apollo from "../../../src/apollo/Apollo";
 
 import ApolloPKG from "@atala/apollo";
+import { PrismDerivationPath } from "../../../src/domain/models/derivation/schemas/PrismDerivation";
+import { DeprecatedDerivationPath } from "../../../src/domain/models/derivation/schemas/DeprecatedDerivation";
+
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const EdHDKey = ApolloSDK.derivation.EdHDKey;
 
@@ -114,19 +117,19 @@ describe("Keys", () => {
       describe("derive", () => {
         test("keySpecification.chainCode missing - throws", () => {
           expect(() => {
-            const derivationPath = DerivationPath.fromPath(0 as any);
-            privateKey.derive(derivationPath)
+            const derivationPath = DerivationPath.fromPath(0 as any, [DeprecatedDerivationPath, PrismDerivationPath]);
+            privateKey.derive(derivationPath.toString())
           }).to.throw;
         });
         test("DerivationPath - m/0'/0'/0'", () => {
-          const path = DerivationPath.fromPath(`m/0'/0'/1'`);
+          const path = DerivationPath.fromPath(`m/0'/0'/1'`, [DeprecatedDerivationPath, PrismDerivationPath]);
           const createKeyArgs = {
             type: KeyTypes.EC,
             curve: Curve.ED25519,
             seed: seedHex,
           };
           const privateKey = apollo.createPrivateKey(createKeyArgs);
-          const derived = privateKey.isDerivable() && privateKey.derive(path);
+          const derived = privateKey.isDerivable() && privateKey.derive(path.toString());
           expect(derived).to.not.equal(false);
 
           const withDerivationPath = apollo.createPrivateKey({
@@ -141,14 +144,14 @@ describe("Keys", () => {
           expect(raw1).to.not.equal(raw3);
         });
         test("DerivationPath - m/1'/0'/1'", () => {
-          const path = DerivationPath.fromPath(`m/1'/0'/1'`);
+          const path = DerivationPath.fromPath(`m/1'/0'/1'`, [DeprecatedDerivationPath, PrismDerivationPath]);
           const createKeyArgs = {
             type: KeyTypes.EC,
             curve: Curve.ED25519,
             seed: seedHex,
           };
           const privateKey = apollo.createPrivateKey(createKeyArgs);
-          const derived = privateKey.isDerivable() && privateKey.derive(path);
+          const derived = privateKey.isDerivable() && privateKey.derive(path.toString());
           expect(derived).to.not.equal(false);
 
           const withDerivationPath = apollo.createPrivateKey({

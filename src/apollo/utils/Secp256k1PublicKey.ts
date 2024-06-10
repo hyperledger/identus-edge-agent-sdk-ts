@@ -1,7 +1,7 @@
 import BN from "bn.js";
 import BigInteger from "bn.js";
 
-import * as ECConfig from "./ec/ECConfig";
+import * as ECConfig from "../../domain/models/ECConfig";
 import { ECPoint } from "./ec/ECPoint";
 import { ApolloError, Curve, KeyProperties, KeyTypes, } from "../../domain";
 import {

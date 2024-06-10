@@ -5,6 +5,8 @@ import { ApolloError, Curve, KeyProperties, KeyTypes } from "../../src/domain/mo
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
 import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
 import * as Fixtures from "../fixtures";
+import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
+import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/PrismDerivation";
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -99,8 +101,9 @@ describe("Apollo", () => {
             [KeyProperties.seed]: fixture.seed,
           });
 
+          const derivationPath = DerivationPath.fromPath(fixture.path.toString(), [DeprecatedDerivationPath, PrismDerivationPath])
           const child = master.isDerivable()
-            ? master.derive(DerivationPath.fromPath(fixture.path))
+            ? master.derive(derivationPath.toString())
             : null;
 
           const derived = apollo.createPrivateKey({
@@ -153,7 +156,7 @@ describe("Apollo", () => {
       });
 
       it("KeyProperties.derivationPath - `m/2'/0'/0'` - returns key", () => {
-        const derivationPath = DerivationPath.fromPath(`m/2'/0'/0'`);
+        const derivationPath = DerivationPath.fromPath(`m/2'/0'/0'`, [DeprecatedDerivationPath, PrismDerivationPath]);
 
         const result = apollo.createPrivateKey({
           [KeyProperties.type]: KeyTypes.EC,
