@@ -80,7 +80,9 @@ export default class Pollux implements IPollux {
       if (!linkSecret) {
         throw new PolluxError.InvalidCredentialError("Link secret is required when revealing anoncreds fields")
       }
-
+      if (!(credential instanceof AnonCredsCredential)) {
+        throw new PolluxError.InvalidCredentialError("Only Anoncreds credentials can be disclosed for now")
+      }
       const disclosedFields: { [K in keyof Credential['claims'][number]]: any } = {};
 
       const availableFields = fields.filter((field) =>
