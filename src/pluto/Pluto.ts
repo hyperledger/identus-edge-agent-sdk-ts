@@ -435,7 +435,7 @@ export class Pluto implements Domain.Pluto {
 
   private onlyOne<T>(arr: T[]): T {
     const item = arr.at(0);
-    if (!item || arr.length < 1) throw new Error("something wrong");
+    if (!item || arr.length !== 1) throw new Error("something wrong");
 
     return item;
   }
