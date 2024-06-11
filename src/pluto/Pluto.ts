@@ -198,7 +198,6 @@ export class Pluto implements Domain.Pluto {
 
   async storeDID(did: Domain.DID, keys?: Arrayable<Domain.PrivateKey>, alias?: string): Promise<void> {
     await this.Repositories.DIDs.save(did, alias);
-
     await Promise.all(
       asArray(keys).map(async key => {
         await this.Repositories.Keys.save(key);
@@ -210,6 +209,8 @@ export class Pluto implements Domain.Pluto {
         });
       })
     );
+
+
   }
 
   /** Prism DIDs **/
@@ -227,29 +228,29 @@ export class Pluto implements Domain.Pluto {
 
   async getAllPrismDIDs(): Promise<Domain.PrismDID[]> {
     const dids = await this.Repositories.DIDs.find({ method: "prism" });
-    const results = await Promise.all(dids.map(x => this.getPrismDID(x.uuid)));
-    const filtered = results.filter((x): x is Domain.PrismDID => x != null);
-
-    return filtered;
+    const prismDIDS: Domain.PrismDID[] = [];
+    for (const did of dids) {
+      const dbDids = await this.getPrismDIDS(did.uuid);
+      for (const prismDID of dbDids) {
+        prismDIDS.push(prismDID)
+      }
+    }
+    return prismDIDS;
   }
 
-  private async getPrismDID(didId: string): Promise<Domain.PrismDID | null> {
-    try {
-      const links = await this.Repositories.DIDKeyLinks.getModels({ selector: { didId } });
-      const link = this.onlyOne(links);
-      const did = await this.Repositories.DIDs.byUUID(link.didId);
-      const key = await this.Repositories.Keys.byUUID(link.keyId);
-
-      if (!did || !key) {
-        throw new Error("PrismDID not found");
-      }
-
-      const prismDID = new Domain.PrismDID(did, key, link.alias);
-      return prismDID;
-    }
-    catch (e) {
-      return null;
-    }
+  private async getPrismDIDS(didId: string): Promise<Domain.PrismDID[]> {
+    const links = await this.Repositories.DIDKeyLinks.getModels({ selector: { didId } });
+    return Promise.all(
+      links.map(async (link) => {
+        const did = await this.Repositories.DIDs.byUUID(link.didId);
+        const key = await this.Repositories.Keys.byUUID(link.keyId);
+        if (!did || !key) {
+          throw new Error("PrismDID not found");
+        }
+        const prismDID = new Domain.PrismDID(did, key, link.alias);
+        return prismDID;
+      })
+    )
   }
 
 

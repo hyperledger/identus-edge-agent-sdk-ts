@@ -6,12 +6,10 @@ import {
   Service as DIDDocumentService,
   Signature,
   Credential,
-  Pollux,
   CredentialType,
-  PrivateKey,
   PresentationClaims,
-  PredicateType,
-  AttributeType,
+  KeyPair,
+  PublicKey,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
@@ -95,7 +93,8 @@ export interface AgentDIDHigherFunctions {
   createNewPrismDID(
     alias: string,
     services: DIDDocumentService[],
-    keyPathIndex?: number
+    keyPathIndex?: number,
+    issuingKeys?: (PublicKey | KeyPair)[]
   ): Promise<DID>;
 }
 

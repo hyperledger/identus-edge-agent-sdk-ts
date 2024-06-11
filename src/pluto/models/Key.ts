@@ -23,10 +23,11 @@ export interface Key extends Model {
 }
 
 export const KeySchema = schemaFactory<Key>(schema => {
-  schema.setRequired("recoveryId", "rawHex");
   schema.addProperty("string", "recoveryId");
   schema.addProperty("string", "rawHex");
   schema.addProperty("string", "alias");
   schema.addProperty("number", "index");
   schema.setEncrypted("rawHex");
+  schema.setRequired("recoveryId", "rawHex");
+  schema.setVersion(0);
 });

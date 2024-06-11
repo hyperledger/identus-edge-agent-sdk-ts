@@ -1,11 +1,12 @@
-import { DID, DIDDocument, Service as DIDDocumentService } from "../models";
+import { DID, DIDDocument, Service as DIDDocumentService, KeyPair } from "../models";
 import { PublicKey } from "../models";
 
 export interface Castor {
   parseDID(did: string): DID;
   createPrismDID(
     masterPublicKey: PublicKey,
-    services?: DIDDocumentService[]
+    services?: DIDDocumentService[],
+    authenticationKeys?: (PublicKey | KeyPair)[]
   ): Promise<DID>;
   createPeerDID(
     publicKeys: PublicKey[],

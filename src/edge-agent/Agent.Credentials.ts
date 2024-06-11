@@ -3,7 +3,6 @@ import { base64 } from "multiformats/bases/base64";
 import {
   AgentError,
   Apollo,
-  AttachmentBase64,
   AttachmentDescriptor,
   Castor,
   Credential,
@@ -24,6 +23,7 @@ import {
   PresentationClaims,
   AttachmentFormats,
   PolluxError,
+  curveToAlg,
 } from "../domain";
 
 import { AnonCredsCredential } from "../pollux/models/AnonCredsVerifiableCredential";
@@ -41,6 +41,7 @@ import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
 import { uuid } from "@stablelib/uuid";
 import { ProtocolType } from "./protocols/ProtocolTypes";
 import { validatePresentationClaims } from "../pollux/utils/claims";
+import { SDJWTCredential } from "../pollux/models/SDJWTVerifiableCredential";
 
 export class AgentCredentials implements AgentCredentialsClass {
   /**
@@ -61,7 +62,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     protected seed: Seed,
     protected mercury: Mercury,
     protected agentDIDHigherFunctions: AgentDIDHigherFunctions
-  ) {}
+  ) { }
 
 
   private createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
@@ -132,7 +133,7 @@ export class AgentCredentials implements AgentCredentialsClass {
         claims,
         new PresentationOptions({
           jwt: {
-            jwtAlg: ['ES256K']
+            jwtAlg: [curveToAlg(Curve.SECP256K1)]
           },
           challenge: "Sign this text " + uuid(),
           domain: 'N/A'
@@ -163,20 +164,25 @@ export class AgentCredentials implements AgentCredentialsClass {
   async processIssuedCredentialMessage(
     issueCredential: IssueCredential
   ): Promise<Credential> {
-    const credentialType = this.pollux.extractCredentialFormatFromMessage(
-      issueCredential.makeMessage()
-    );
-    const attachment = issueCredential.attachments.at(0)?.data;
+    const message = issueCredential.makeMessage()
+    const credentialType = message.credentialFormat;
+    const attachment = message.attachments.at(0);
 
     if (!attachment) {
       throw new Error("No attachment");
     }
 
-    const credData = base64.baseDecode((attachment as AttachmentBase64).base64);
+    if (!issueCredential.thid) {
+      throw new Error("No thid");
+    }
 
     const parseOpts: CredentialIssueOptions = {
       type: credentialType,
     };
+
+
+    const payload = typeof attachment.payload === 'string' ? attachment.payload : JSON.stringify(attachment.payload);
+    const credData = Uint8Array.from(Buffer.from(payload));
 
     if (credentialType === CredentialType.AnonCreds) {
       const linkSecret = await this.pluto.getLinkSecret();
@@ -184,8 +190,7 @@ export class AgentCredentials implements AgentCredentialsClass {
       parseOpts.linkSecret = linkSecret?.secret;
 
       const credentialMetadata = await this.pluto.getCredentialMetadata(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        issueCredential.thid!
+        issueCredential.thid
       );
 
       if (!credentialMetadata || !credentialMetadata.isType(CredentialType.AnonCreds)) {
@@ -195,12 +200,14 @@ export class AgentCredentials implements AgentCredentialsClass {
       parseOpts.credentialMetadata = credentialMetadata.toJSON();
     }
 
-    const credential = await this.pollux.parseCredential(credData, parseOpts);
+    const credential: Credential = await this.pollux.parseCredential(credData, parseOpts);
 
     await this.pluto.storeCredential(credential);
 
     return credential;
   }
+
+
 
   /**
    * Asyncronously prepare a request credential message from a valid offerCredential for now supporting w3c verifiable credentials offers.
@@ -212,49 +219,69 @@ export class AgentCredentials implements AgentCredentialsClass {
   async prepareRequestCredentialWithIssuer(
     offer: OfferCredential
   ): Promise<RequestCredential> {
-    const message = offer.makeMessage();
-    const credentialType =
-      this.pollux.extractCredentialFormatFromMessage(message);
+    const attachment = offer.attachments.at(0);
+    if (!attachment) {
+      throw new Error("Invalid attachment")
+    }
 
+    const credentialType = offer.makeMessage().credentialFormat;
+    const payload = attachment.payload
     let credRequestBuffer: string;
 
+    const requestCredentialBody = createRequestCredentialBody(
+      [],
+      offer.body.goalCode,
+      offer.body.comment
+    );
+
+    const from = offer.to;
+    const to = offer.from;
+    if (!from) {
+      throw new Error("Missing from");
+    }
+    if (!to) {
+      throw new Error("Missing to");
+    }
+    const thid = offer.thid;
+    const credentialFormat =
+      credentialType === CredentialType.AnonCreds ? AttachmentFormats.ANONCREDS_REQUEST :
+        credentialType === CredentialType.JWT ? CredentialType.JWT :
+          credentialType === CredentialType.SDJWT ? CredentialType.SDJWT :
+            CredentialType.Unknown;
+
     if (credentialType === CredentialType.AnonCreds) {
+      const metaname = offer.thid;
+      if (!metaname) {
+        throw new Error("Missing offer.thid");
+      }
+
       const linkSecret = await this.pluto.getLinkSecret();
       if (!linkSecret) {
         throw new Error("No linkSecret available.");
       }
 
       const [credentialRequest, credentialRequestMetadata] =
-        await this.pollux.processAnonCredsCredential(message, { linkSecret });
+        await this.pollux.processCredentialOffer<CredentialType.AnonCreds>(payload, { linkSecret });
 
       credRequestBuffer = JSON.stringify(credentialRequest);
-
-      // TODO can we fallback here? would need another identifier
-      const metaname = offer.thid;
-
-      if (!metaname) {
-        throw new Error("Missing offer.thid");
-      }
 
       const metadata = new CredentialMetadata(CredentialType.AnonCreds, metaname, credentialRequestMetadata);
 
       await this.pluto.storeCredentialMetadata(metadata);
     } else if (credentialType === CredentialType.JWT) {
-      // ?? duplicated Agent.DIDHigherFunctions.createNewPrismDID
       const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
-      const keyIndex = await getIndexTask.run();
       const privateKey = await this.apollo.createPrivateKey({
         [KeyProperties.curve]: Curve.SECP256K1,
-        [KeyProperties.index]: keyIndex,
+        [KeyProperties.index]: await getIndexTask.run(),
         [KeyProperties.type]: KeyTypes.EC,
-        [KeyProperties.seed]: this.seed.value,
+        [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
       });
 
       const did = await this.castor.createPrismDID(privateKey.publicKey());
 
       await this.pluto.storeDID(did, privateKey);
 
-      credRequestBuffer = await this.pollux.processJWTCredential(message, {
+      credRequestBuffer = await this.pollux.processCredentialOffer<CredentialType.JWT>(payload, {
         did: did,
         keyPair: {
           curve: Curve.SECP256K1,
@@ -262,29 +289,46 @@ export class AgentCredentials implements AgentCredentialsClass {
           publicKey: privateKey.publicKey(),
         },
       });
+    } else if (credentialType === CredentialType.SDJWT) {
+
+      const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
+      const masterSk = await this.apollo.createPrivateKey({
+        [KeyProperties.curve]: Curve.SECP256K1,
+        [KeyProperties.index]: await getIndexTask.run(),
+        [KeyProperties.type]: KeyTypes.EC,
+        [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
+      });
+
+      const issSK = await this.apollo.createPrivateKey({
+        [KeyProperties.curve]: Curve.ED25519,
+        [KeyProperties.index]: await getIndexTask.run(),
+        [KeyProperties.type]: KeyTypes.EC,
+        [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
+      });
+
+      const did = await this.castor.createPrismDID(
+        masterSk.publicKey(),
+        [],
+        [
+          issSK.publicKey()
+        ]
+      );
+
+      await this.pluto.storeDID(did, [masterSk, issSK]);
+
+      credRequestBuffer = await this.pollux.processCredentialOffer<CredentialType.SDJWT>(payload, {
+        did: did,
+        sdJWT: true,
+        keyPair: {
+          curve: Curve.SECP256K1,
+          privateKey: masterSk,
+          publicKey: masterSk.publicKey(),
+        },
+      });
     } else {
       throw new AgentError.InvalidCredentialFormats();
     }
 
-    const requestCredentialBody = createRequestCredentialBody(
-      offer.body.formats,
-      offer.body.goalCode,
-      offer.body.comment
-    );
-
-    // TODO: remove assertions
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const from = offer.to!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const to = offer.from!;
-    const thid = offer.thid;
-
-    const credentialFormat =
-      credentialType === CredentialType.AnonCreds
-        ? AttachmentFormats.ANONCREDS_REQUEST
-        : credentialType === CredentialType.JWT
-          ? CredentialType.JWT
-          : CredentialType.Unknown;
 
     const attachments = [
       new AttachmentDescriptor(
@@ -310,7 +354,7 @@ export class AgentCredentials implements AgentCredentialsClass {
     attachments.forEach((attachment) => {
       requestCredential.body.formats.push({
         attach_id: attachment.id,
-        format: credentialFormat,
+        format: `${credentialFormat}`,
       });
     });
 
@@ -341,8 +385,8 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (!presentation.thid) {
       throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");
     }
-    const presentationSubmission = Message.Attachment.extractJSON(attachment);
-    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid!);
+    const presentationSubmission = JSON.parse(attachment.payload)
+    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid);
     const options = {
       presentationDefinitionRequest
     };
@@ -421,13 +465,16 @@ export class AgentCredentials implements AgentCredentialsClass {
    * @returns {PresentationRequest}
    * @throws
    */
-  private parseProofRequest(attachment: AttachmentDescriptor): PresentationRequest {
+  private parseProofRequest(attachment: AttachmentDescriptor) {
     const data = Message.Attachment.extractJSON(attachment);
     if (attachment.format === AttachmentFormats.ANONCREDS_PROOF_REQUEST) {
       return new PresentationRequest(AttachmentFormats.AnonCreds, data);
     }
     if (attachment.format === CredentialType.JWT) {
       return new PresentationRequest(AttachmentFormats.JWT, data);
+    }
+    if (attachment.format === CredentialType.SDJWT) {
+      return new PresentationRequest(AttachmentFormats.SDJWT, data);
     }
     if (attachment.format === AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
       return new PresentationRequest(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS, data);
@@ -436,10 +483,10 @@ export class AgentCredentials implements AgentCredentialsClass {
   }
 
   private async handlePresentationDefinitionRequest(
-    request: PresentationRequest,
+    request: PresentationRequest<any>,
     credential: Credential,
   ): Promise<string> {
-    if (request.isType<CredentialType.JWT>(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+    if (request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
       if (credential instanceof JWTCredential) {
         const privateKeys = await this.pluto.getDIDPrivateKeysByDID(DID.fromString(credential.subject));
         const privateKey = privateKeys.at(0);
@@ -457,14 +504,16 @@ export class AgentCredentials implements AgentCredentialsClass {
         return JSON.stringify(presentationSubmission);
       }
     }
-    if (request.isType<CredentialType.AnonCreds>(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+    if (request.isType(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
       if (credential instanceof AnonCredsCredential) {
         const storedLinkSecret = await this.pluto.getLinkSecret();
         if (!storedLinkSecret) {
           throw new Error("Link secret not found.");
         }
+
+        const req = request.toJSON()
         const presentationSubmission = await this.pollux.createPresentationSubmission(
-          request.toJSON(),
+          req as any,
           credential,
           storedLinkSecret
         );
@@ -476,24 +525,16 @@ export class AgentCredentials implements AgentCredentialsClass {
   }
 
   private async handlePresentationRequest(
-    request: PresentationRequest,
+    request: PresentationRequest<any>,
     credential: Credential
   ): Promise<string> {
-    if (credential instanceof AnonCredsCredential && request.isType(AttachmentFormats.AnonCreds)) {
-      const linkSecret = await this.pluto.getLinkSecret();
-      if (!linkSecret) {
-        throw new AgentError.CannotFindLinkSecret();
-      }
-      const presentation = await this.pollux.createPresentationProof(request, credential, { linkSecret });
-      return JSON.stringify(presentation);
-    }
-    if (credential instanceof JWTCredential && request.isType(AttachmentFormats.JWT)) {
+    if (credential instanceof SDJWTCredential && request.isType(AttachmentFormats.SDJWT)) {
       if (!credential.isProvable()) {
         throw new Error("Credential is not Provable");
       }
       const subjectDID = DID.from(credential.subject);
       const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
-      const prismPrivateKey = prismPrivateKeys.at(0);
+      const prismPrivateKey = prismPrivateKeys.find((key) => key.curve === Curve.ED25519)
       if (prismPrivateKey === undefined) {
         throw new AgentError.CannotFindDIDPrivateKey();
       }
@@ -503,6 +544,32 @@ export class AgentCredentials implements AgentCredentialsClass {
       });
       return signedJWT;
     }
+    if (credential instanceof AnonCredsCredential && request.isType(AttachmentFormats.AnonCreds)) {
+      const linkSecret = await this.pluto.getLinkSecret();
+      if (!linkSecret) {
+        throw new AgentError.CannotFindLinkSecret();
+      }
+      const presentation = await this.pollux.createPresentationProof(request, credential, { linkSecret });
+      return presentation;
+    }
+    if (credential instanceof JWTCredential && request.isType(AttachmentFormats.JWT)) {
+      if (!credential.isProvable()) {
+        throw new Error("Credential is not Provable");
+      }
+      const subjectDID = DID.from(credential.subject);
+      const prismPrivateKeys = await this.pluto.getDIDPrivateKeysByDID(subjectDID);
+      const prismPrivateKey = prismPrivateKeys.find((key) => key.curve === Curve.SECP256K1)
+      if (prismPrivateKey === undefined) {
+        throw new AgentError.CannotFindDIDPrivateKey();
+      }
+      const signedJWT = await this.pollux.createPresentationProof(request, credential, {
+        did: subjectDID,
+        privateKey: prismPrivateKey
+      });
+      return signedJWT;
+    }
+
     throw new AgentError.UnhandledPresentationRequest();
   }
+
 }

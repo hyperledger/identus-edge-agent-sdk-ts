@@ -17,8 +17,6 @@ const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
  */
 export class Ed25519PublicKey extends PublicKey implements ExportableKey, StorableKey, VerifiableKey {
   public readonly recoveryId = StorableKey.recoveryId("ed25519", "pub");
-
-
   public keySpecification: Map<string, string> = new Map();
   public raw: Buffer;
   public size: number;

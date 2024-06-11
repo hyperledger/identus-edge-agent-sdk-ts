@@ -29,8 +29,8 @@ export class RevocationNotification {
         }
         return new RevocationNotification(
             JSON.parse(message.body),
-            message.from!,
-            message.to!
+            message.from,
+            message.to
         )
     }
 }

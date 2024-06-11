@@ -24,7 +24,7 @@ export class LinkSecretRepository extends MapperRepository<Models.Key, Domain.Li
       ...this.baseModel,
       uuid: domain.uuid,
       rawHex: Buffer.from(domain.secret).toString("hex"),
-      alias: domain.name,
+      alias: domain.name
     };
   }
 }

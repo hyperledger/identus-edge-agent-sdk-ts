@@ -6,8 +6,6 @@ export interface StorableKey {
 }
 
 export namespace StorableKey {
-  // export type RecoveryId = `${RecoveryId.algorithm}+${RecoveryId.privacy}`;
-
   namespace RecoveryId {
     export type algorithm = "secp256k1" | "x25519" | "ed25519";
     export type suffix = privacy;

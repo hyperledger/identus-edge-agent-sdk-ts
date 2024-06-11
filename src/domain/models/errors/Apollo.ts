@@ -1,3 +1,4 @@
+import { SupportedHashingAlg } from "../../utils/hash";
 import { StorableKey } from "../keyManagement";
 
 export class InvalidMnemonicWord extends Error {
@@ -15,6 +16,13 @@ export class CouldNotParseMessageString extends Error {
 export class InvalidPrivateKey extends Error {
   constructor(message?: string) {
     super(message || "Invalid private key");
+  }
+}
+
+export class InvalidHashingAlgorithm extends Error {
+  constructor(message?: string) {
+    const supported = Object.keys(Object.fromEntries(Object.entries(SupportedHashingAlg)))
+    super(message || `Invalid Hashing Algorithm, supported ${supported.join(", ")}`);
   }
 }
 

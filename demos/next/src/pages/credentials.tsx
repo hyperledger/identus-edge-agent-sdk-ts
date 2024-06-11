@@ -28,38 +28,25 @@ function Credential(props) {
     const [claims, setClaims] = useState(protect(credential));
 
     function revealAttributes(credential: SDK.Domain.Credential, claimIndex: number, field: string) {
-        if (credential.credentialType === SDK.Domain.CredentialType.JWT) {
-            const revealed = claims.map((claim, index) => {
-                if (claimIndex === index) {
-                    return {
-                        ...claim,
-                        [field]: credential.claims[index][field]
-                    }
-                }
-                return claim
-            })
-            setClaims(revealed)
-        } else {
-            app.agent.instance?.pluto.getLinkSecret()
-                .then((linkSecret) => {
-                    app.agent.instance?.revealCredentialFields(
-                        credential,
-                        [field],
-                        linkSecret!.secret
-                    ).then((revealedFields) => {
-                        const revealed = claims.map((claim, index) => {
-                            if (claimIndex === index) {
-                                return {
-                                    ...claim,
-                                    [field]: revealedFields[field]
-                                }
+        app.agent.instance?.pluto.getLinkSecret()
+            .then((linkSecret) => {
+                app.agent.instance?.revealCredentialFields(
+                    credential,
+                    [field],
+                    linkSecret!.secret
+                ).then((revealedFields) => {
+                    const revealed = claims.map((claim, index) => {
+                        if (claimIndex === index) {
+                            return {
+                                ...claim,
+                                [field]: revealedFields[field]
                             }
-                            return claim
-                        })
-                        setClaims(revealed)
+                        }
+                        return claim
                     })
+                    setClaims(revealed)
                 })
-        }
+            })
     }
 
     return <div className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

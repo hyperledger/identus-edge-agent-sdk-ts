@@ -1,13 +1,15 @@
-import Apollo from "../../../src/apollo";
-import { AttachmentDescriptor, JWTCredentialPayload, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
+import { AttachmentDescriptor, CredentialType, JWT_ALG, JWTCredentialPayload, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
 import { OfferCredential } from "../../../src/edge-agent/protocols/issueCredential/OfferCredential";
 import { list } from "../dids";
 
-const apollo = new Apollo();
-
 export const credentialOfferMessage = new OfferCredential(
   {
-    "formats": [],
+    "formats": [
+      {
+        attach_id: "321905d1-5f01-42b0-b0ba-39b09645eeaa",
+        format: CredentialType.JWT
+      }
+    ],
     "credential_preview": {
       "body": {
         "attributes": [
@@ -31,33 +33,16 @@ export const credentialOfferMessage = new OfferCredential(
   [
     new AttachmentDescriptor({
       data: JSON.stringify({
-        "data": {
-          "options": {
-            "challenge": "fedac0c2-3250-4fb1-bfcb-b5e904058e1f",
-            "domain": "domain"
-          },
-          "presentation_definition": {
-            "format": {
-              "jwt": {
-                "alg": [
-                  "ES256K"
-                ],
-                "proof_type": []
-              },
-              "ldp": null
-            },
-            "id": "b8945a8a-c8e3-44af-9506-4a49c0096b31",
-            "input_descriptors": [],
-            "name": null,
-            "purpose": null
-          }
+        "options": {
+          "challenge": "fedac0c2-3250-4fb1-bfcb-b5e904058e1f",
+          "domain": "domain"
         }
       })
     },
       undefined,
       "321905d1-5f01-42b0-b0ba-39b09645eeaa",
       undefined,
-      "prism/jwt"
+      CredentialType.JWT
     )
   ],
   list[2],
@@ -104,12 +89,5 @@ export const presentationRequest = {
   "options": {
     "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf",
     "domain": "http://localhost:8000/prism-agent"
-  },
-  "presentation_definition": {
-    "format": null,
-    "id": "b2a49475-f8ba-4952-a719-a28e909858fa",
-    "input_descriptors": [],
-    "name": null,
-    "purpose": null
   }
 };
