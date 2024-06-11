@@ -1,116 +1,72 @@
-import { Secp256k1PublicKey } from "../../../apollo/utils/Secp256k1PublicKey";
-import * as ECConfig from "../../../config/ECConfig";
-import { Apollo } from "../../../domain/buildingBlocks/Apollo";
-import { Curve } from "../../../domain/models";
-import { CastorError } from "../../../domain/models/Errors";
+import * as ECConfig from "../../../domain/models/ECConfig";
+import { Curve, getProtosUsage, getUsage, PublicKey, Usage } from "../../../domain/models";
+import { ApolloError, CastorError } from "../../../domain/models/Errors";
 import * as Protos from "../../protos/node_models";
-import ApolloPKG from "@atala/apollo";
-const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
-export enum Usage {
-  MASTER_KEY = "masterKey",
-  ISSUING_KEY = "issuingKey",
-  AUTHENTICATION_KEY = "authenticationKey",
-  REVOCATION_KEY = "revocationKey",
-  CAPABILITY_DELEGATION_KEY = "capabilityDelegationKey",
-  CAPABILITY_INVOCATION_KEY = "capabilityInvocationKey",
-  KEY_AGREEMENT_KEY = "keyAgreementKey",
-  UNKNOWN_KEY = "unknownKey",
-}
-
-export function getProtosUsage(
-  usage: Usage
-): Protos.io.iohk.atala.prism.protos.KeyUsage {
-  switch (usage) {
-    case Usage.UNKNOWN_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
-    case Usage.MASTER_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.MASTER_KEY;
-    case Usage.ISSUING_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.ISSUING_KEY;
-    case Usage.KEY_AGREEMENT_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.KEY_AGREEMENT_KEY;
-    case Usage.AUTHENTICATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.AUTHENTICATION_KEY;
-    case Usage.REVOCATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.REVOCATION_KEY;
-    case Usage.CAPABILITY_INVOCATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage
-        .CAPABILITY_INVOCATION_KEY;
-    case Usage.CAPABILITY_DELEGATION_KEY:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage
-        .CAPABILITY_DELEGATION_KEY;
-    default:
-      return Protos.io.iohk.atala.prism.protos.KeyUsage.UNKNOWN_KEY;
-  }
-}
-
-export function getUsageId(index: Usage): string {
-  switch (index) {
-    case Usage.MASTER_KEY:
-      return `master${index}`;
-    case Usage.ISSUING_KEY:
-      return `issuing${index}`;
-    case Usage.KEY_AGREEMENT_KEY:
-      return `agreement${index}`;
-    case Usage.AUTHENTICATION_KEY:
-      return `authentication${index}`;
-    case Usage.REVOCATION_KEY:
-      return `revocation${index}`;
-    case Usage.CAPABILITY_DELEGATION_KEY:
-      return `delegation${index}`;
-    case Usage.CAPABILITY_INVOCATION_KEY:
-      return `invocation${index}`;
-    default:
-      return `unknown${index}`;
-  }
-}
-
-export function getUsage(
-  protosUsage: Protos.io.iohk.atala.prism.protos.KeyUsage
-): Usage {
-  let usage: Usage;
-  switch (protosUsage) {
-    case 0:
-      usage = Usage.UNKNOWN_KEY;
-      break;
-    case 1:
-      usage = Usage.MASTER_KEY;
-      break;
-    case 2:
-      usage = Usage.ISSUING_KEY;
-      break;
-    case 3:
-      usage = Usage.KEY_AGREEMENT_KEY;
-      break;
-    case 4:
-      usage = Usage.AUTHENTICATION_KEY;
-      break;
-    case 5:
-      usage = Usage.REVOCATION_KEY;
-      break;
-    case 6:
-      usage = Usage.CAPABILITY_INVOCATION_KEY;
-      break;
-    case 7:
-      usage = Usage.CAPABILITY_DELEGATION_KEY;
-      break;
-    default:
-      usage = Usage.UNKNOWN_KEY;
-      break;
-  }
-  return usage;
-}
+import { Apollo, KeyProperties, KeyTypes } from "../../../domain";
 
 export class PrismDIDPublicKey {
-  id: string;
-  usage: Usage;
-  keyData: Secp256k1PublicKey;
 
-  constructor(id: string, usage: Usage, keyData: Secp256k1PublicKey) {
+  constructor(
+    public id: string,
+    public usage: Usage,
+    public keyData: PublicKey
+  ) {
     this.id = id;
     this.usage = usage;
     this.keyData = keyData;
+  }
+
+  private static getProtoCurve(proto: Protos.io.iohk.atala.prism.protos.PublicKey) {
+    return proto.compressed_ec_key_data?.curve ?? proto.ec_key_data.curve
+  }
+
+  private static fromSecp256k1Proto(
+    apollo: Apollo,
+    proto: Protos.io.iohk.atala.prism.protos.PublicKey
+  ) {
+    switch (proto.key_data) {
+      case "compressed_ec_key_data":
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: Curve.SECP256K1,
+          [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
+        })
+      case "ec_key_data":
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: Curve.SECP256K1,
+          [KeyProperties.curvePointX]: proto.ec_key_data.x,
+          [KeyProperties.curvePointY]: proto.ec_key_data.y,
+        })
+      default:
+        throw new CastorError.InvalidPublicKeyEncoding();
+    }
+  }
+
+  private static fromEd25519ORX25519Proto(
+    apollo: Apollo,
+    proto: Protos.io.iohk.atala.prism.protos.PublicKey
+  ) {
+    const curve = this.getProtoCurve(proto);
+    if (proto.has_compressed_ec_key_data) {
+      if (curve === Curve.ED25519) {
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: Curve.ED25519,
+          [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
+        })
+
+      }
+      if (curve === Curve.X25519) {
+        return apollo.createPublicKey({
+          [KeyProperties.type]: KeyTypes.Curve25519,
+          [KeyProperties.curve]: Curve.X25519,
+          [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
+        })
+      }
+    }
+    throw new CastorError.InvalidPublicKeyEncoding();
   }
 
   static fromProto(
@@ -118,54 +74,52 @@ export class PrismDIDPublicKey {
     proto: Protos.io.iohk.atala.prism.protos.PublicKey
   ): PrismDIDPublicKey {
     const id = proto.id;
-    const usage = proto.usage;
-    let keyData: Secp256k1PublicKey;
-
-    switch (proto.key_data) {
-      case "compressed_ec_key_data":
-        keyData = new Secp256k1PublicKey(
-          Uint8Array.from(
-            ApolloSDK.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
-              Int8Array.from(proto.compressed_ec_key_data.data)
-            ).raw
-          )
-        );
-        break;
-      case "ec_key_data":
-        keyData = new Secp256k1PublicKey(
-          Uint8Array.from(
-            ApolloSDK.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromByteCoordinates(
-              Int8Array.from(proto.ec_key_data.x),
-              Int8Array.from(proto.ec_key_data.y)
-            ).raw
-          )
-        );
-        break;
-      default:
-        throw new CastorError.InvalidPublicKeyEncoding();
+    const usage = getUsage(proto.usage);
+    const curve = this.getProtoCurve(proto);
+    if (curve === Curve.SECP256K1.toLocaleLowerCase()) {
+      return new PrismDIDPublicKey(
+        id,
+        usage,
+        this.fromSecp256k1Proto(apollo, proto)
+      );
+    } else if (curve === Curve.ED25519 || curve === Curve.X25519) {
+      return new PrismDIDPublicKey(
+        id,
+        usage,
+        this.fromEd25519ORX25519Proto(apollo, proto)
+      );
+    } else {
+      throw new ApolloError.InvalidKeyCurve(curve, Object.values(Curve))
     }
-
-    return new PrismDIDPublicKey(id, getUsage(usage), keyData);
   }
 
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
-    const encoded = this.keyData.getEncoded();
-    const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
-    const yBytes = encoded.slice(
-      1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
-      encoded.length
-    );
-    const ecKeyData = new Protos.io.iohk.atala.prism.protos.ECKeyData({
-      curve: Curve.SECP256K1.toLocaleLowerCase(),
-      x: xBytes,
-      y: yBytes,
-    });
+    const curve = this.keyData.curve;
     const usage = getProtosUsage(this.usage);
-    const publicKey = new Protos.io.iohk.atala.prism.protos.PublicKey({
+    const encoded = this.keyData.getEncoded()
+    if (curve === Curve.SECP256K1) {
+      const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
+      const yBytes = encoded.slice(
+        1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
+        encoded.length
+      );
+      return new Protos.io.iohk.atala.prism.protos.PublicKey({
+        id: this.id,
+        usage: usage,
+        ec_key_data: new Protos.io.iohk.atala.prism.protos.ECKeyData({
+          curve: this.keyData.curve.toLocaleLowerCase(),
+          x: xBytes,
+          y: yBytes,
+        }),
+      });
+    }
+    return new Protos.io.iohk.atala.prism.protos.PublicKey({
       id: this.id,
       usage: usage,
-      ec_key_data: ecKeyData,
+      compressed_ec_key_data: new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
+        curve: this.keyData.curve,
+        data: encoded,
+      }),
     });
-    return publicKey;
   }
 }

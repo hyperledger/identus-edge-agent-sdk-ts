@@ -1,8 +1,4 @@
 
-
-
-
-
 export class DescriptorPath {
 
     constructor(private obj: any) { }

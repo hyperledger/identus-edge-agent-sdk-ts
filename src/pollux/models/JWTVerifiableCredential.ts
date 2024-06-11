@@ -41,9 +41,11 @@ export class JWTCredential
 
     let originalString: string | undefined;
     if (typeof payload === 'string') {
-      const jsonString = decodeJWS(payload)
+      const jwtObject = decodeJWS(payload)
       originalString = payload;
-      payload = JSON.parse(jsonString);
+      payload = jwtObject.payload
+    } else {
+      originalString = payload.jti;
     }
 
     if (this.isCredentialPayload(payload)) {

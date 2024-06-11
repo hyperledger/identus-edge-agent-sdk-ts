@@ -8,16 +8,19 @@ import {
   KeyTypes,
   PrivateKey,
   StorableKey,
-  SignableKey
+  SignableKey,
+  DerivableKey,
+  ApolloError
 } from "../../domain";
 
 import ApolloPKG from "@atala/apollo";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
-
+const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
+const EdHDKey = ApolloSDK.derivation.EdHDKey
 /**
  * @ignore
  */
-export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, SignableKey, StorableKey {
+export class Ed25519PrivateKey extends PrivateKey implements DerivableKey, ExportableKey, SignableKey, StorableKey {
   public readonly recoveryId = StorableKey.recoveryId("ed25519", "priv");
 
 
@@ -35,6 +38,31 @@ export class Ed25519PrivateKey extends PrivateKey implements ExportableKey, Sign
     this.raw = this.getInstance(bytes).raw;
     this.size = this.raw.length;
     this.keySpecification.set(KeyProperties.curve, Curve.ED25519);
+  }
+
+  derive(derivationPath: string): PrivateKey {
+    const chainCodeHex = this.getProperty(KeyProperties.chainCode);
+    if (!chainCodeHex) {
+      throw new ApolloError.MissingKeyParameters([KeyProperties.chainCode]);
+    }
+    const derivationPathStr = derivationPath.toString();
+    const skRaw = Int8Array.from(this.raw);
+    const chaincode = Int8Array.from(Buffer.from(chainCodeHex, "hex"));
+    const hdKey = new EdHDKey(
+      skRaw,
+      chaincode,
+      derivationPathStr.split("/").slice(1).length,
+      BigIntegerWrapper.initFromInt(0)
+    );
+    const derived = hdKey.derive(derivationPathStr)
+    const sk = new Ed25519PrivateKey(Uint8Array.from(derived.privateKey))
+    sk.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationPathStr).toString("hex"));
+    sk.keySpecification.set(KeyProperties.index, `${this.index ?? 0}`);
+    if (derived.chainCode) {
+      sk.keySpecification.set(KeyProperties.chainCode, Buffer.from(derived.chainCode).toString("hex"));
+    }
+
+    return sk
   }
 
   publicKey() {

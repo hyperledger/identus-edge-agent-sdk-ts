@@ -5,6 +5,8 @@ import { ApolloError, Curve, KeyProperties, KeyTypes } from "../../src/domain/mo
 import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey";
 import { DerivationPath } from "../../src/apollo/utils/derivation/DerivationPath";
 import * as Fixtures from "../fixtures";
+import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
+import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/PrismDerivation";
 
 describe("Apollo", () => {
   let apollo: Apollo;
@@ -32,8 +34,8 @@ describe("Apollo", () => {
         expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
         expect(result.getProperty(KeyProperties.chainCode)).to.eq("7e9952eb18d135283fd633180e31b202a5ec87e3e37cc66c6836f18bdf9684b2");
 
-        // no derivationPath provided, defaults to `m/0'/0'/0'` hexed
-        expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f30272f30272f3027");
+        // no derivationPath provided, defaults to `m/29'/29'/0'/4'/0'` hexed
+        expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f3239272f3239272f30272f34272f3027");
 
         // no index provided, defaults to 0
         expect(result.getProperty(KeyProperties.index)).to.eq("0");
@@ -99,8 +101,9 @@ describe("Apollo", () => {
             [KeyProperties.seed]: fixture.seed,
           });
 
+          const derivationPath = DerivationPath.fromPath(fixture.path.toString(), [DeprecatedDerivationPath, PrismDerivationPath])
           const child = master.isDerivable()
-            ? master.derive(DerivationPath.from(fixture.path))
+            ? master.derive(derivationPath.toString())
             : null;
 
           const derived = apollo.createPrivateKey({
@@ -149,15 +152,17 @@ describe("Apollo", () => {
         expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
         expect(result.getProperty(KeyProperties.chainCode)).to.eq("fee48c5a862316d1ea59b77258850f64de2a316796db043a4ebca1616c1c0d24");
         expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f31272f30272f3027");
-        expect(result.getProperty(KeyProperties.index)).to.eq("1");
+        expect(result.getProperty(KeyProperties.index)).to.eq("0");
       });
 
       it("KeyProperties.derivationPath - `m/2'/0'/0'` - returns key", () => {
+        const derivationPath = DerivationPath.fromPath(`m/2'/0'/0'`, [DeprecatedDerivationPath, PrismDerivationPath]);
+
         const result = apollo.createPrivateKey({
           [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.seed]: seedHex,
-          [KeyProperties.derivationPath]: `m/2'/0'/0'`
+          [KeyProperties.derivationPath]: derivationPath.toString()
         });
 
         expect(result).to.be.an.instanceOf(Secp256k1PrivateKey);
@@ -167,7 +172,7 @@ describe("Apollo", () => {
         expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
         expect(result.getProperty(KeyProperties.chainCode)).to.eq("6bfbb6d7bee48110dd0dd1437caa9e88dba86e4bc28585e8e8ab052c96414a48");
         expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f32272f30272f3027");
-        expect(result.getProperty(KeyProperties.index)).to.eq("2");
+        expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
       });
 
       // ? what behaviour do we expect in these cases

@@ -1,5 +1,6 @@
 import { uuid } from "@stablelib/uuid";
 import { base64 } from "multiformats/bases/base64";
+import { Message } from "..";
 export interface AttachmentHeader {
   children: string;
 }
@@ -48,6 +49,10 @@ export class AttachmentDescriptor {
     public readonly description?: string
   ) { }
 
+  get payload() {
+    return Message.Attachment.extractJSON(this)
+  }
+
   static build<T>(
     payload: T,
     id: string = uuid(),
@@ -87,5 +92,7 @@ export enum AttachmentFormats {
   PRESENTATION_EXCHANGE_DEFINITIONS = "dif/presentation-exchange/definitions@v1.0",
   PRESENTATION_EXCHANGE_SUBMISSION = "dif/presentation-exchange/submission@v1.0",
   JWT = "prism/jwt",
+  SDJWT = "vc+sd-jwt",
   AnonCreds = "AnonCreds",
 }
+

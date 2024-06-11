@@ -13,11 +13,7 @@ import {
   DIDResolver,
   KeyPair,
 } from "../domain/models";
-import {
-  getUsageId,
-  PrismDIDPublicKey,
-  Usage,
-} from "./did/prismDID/PrismDIDPublicKey";
+
 import * as DIDParser from "./parser/DIDParser";
 import * as Protos from "./protos/node_models";
 
@@ -28,6 +24,8 @@ import { CastorError } from "../domain/models/Errors";
 import {
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
+  getUsageId,
+  Usage,
 } from "../domain";
 
 import { JWKHelper } from "../peer-did/helpers/JWKHelper";
@@ -43,6 +41,7 @@ import { Secp256k1PublicKey } from "../apollo/utils/Secp256k1PublicKey";
 import { PublicKey, Curve } from "../domain/models";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
+import { PrismDIDPublicKey } from "./did/prismDID/PrismDIDPublicKey";
 
 type ExtraResolver = new (apollo: Apollo) => DIDResolver
 /**
@@ -121,28 +120,40 @@ export default class Castor implements CastorInterface {
    */
   async createPrismDID(
     key: PublicKey | KeyPair,
-    services?: Service[] | undefined
+    services?: Service[] | undefined,
+    issuingKeys: (PublicKey | KeyPair)[] = []
   ): Promise<DID> {
+    const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
     const masterPublicKey = "publicKey" in key ? key.publicKey : key;
 
-    if (!masterPublicKey.isCurve<Secp256k1PublicKey>(Curve.SECP256K1)) {
-      throw new CastorError.InvalidKeyError();
-    }
-
-    const publicKey = new PrismDIDPublicKey(
+    const masterPk = new PrismDIDPublicKey(
       getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
-      masterPublicKey
-    );
-    const authenticateKey = new PrismDIDPublicKey(
+      masterPublicKey,
+    ).toProto();
+
+    const authenticationPk = new PrismDIDPublicKey(
       getUsageId(Usage.AUTHENTICATION_KEY),
       Usage.AUTHENTICATION_KEY,
-      masterPublicKey
-    );
+      masterPublicKey,
+
+    ).toProto();
+
+    if (issuingKeys.length) {
+      didPublicKeys.push(...issuingKeys.map((issuingKey) => new PrismDIDPublicKey(
+        getUsageId(Usage.ISSUING_KEY),
+        Usage.ISSUING_KEY,
+        "publicKey" in issuingKey ? issuingKey.publicKey : issuingKey,
+
+      ).toProto()))
+    }
+
+    didPublicKeys.push(authenticationPk)
+    didPublicKeys.push(masterPk)
 
     const didCreationData =
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
-        public_keys: [authenticateKey.toProto(), publicKey.toProto()],
+        public_keys: didPublicKeys,
         services: services?.map((service) => {
           return new Protos.io.iohk.atala.prism.protos.Service({
             service_endpoint: [service.serviceEndpoint.uri],
@@ -293,27 +304,44 @@ export default class Castor implements CastorInterface {
 
     if (did.method == "prism") {
       const methods = verificationMethods.filter(
-        (method) => method.type == Curve.SECP256K1
+        (method) => method.type == Curve.SECP256K1 || method.type === Curve.ED25519
       );
       if (methods.length <= 0) {
         throw new Error("No verification methods for Prism DID");
       }
       for (const method of methods) {
-        if (!method.publicKeyMultibase) {
-          throw new Error(
-            "PrismDID VerificationMethod does not have multibase Key in it"
-          );
-        }
-        const publicKeyEncoded = Secp256k1PublicKey.secp256k1FromBytes(
-          Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
-        ).getEncoded();
+        try {
+          if (!method.publicKeyMultibase) {
+            throw new Error(
+              "PrismDID VerificationMethod does not have multibase Key in it"
+            );
+          }
+          if (method.type === Curve.SECP256K1) {
+            const publicKey = Secp256k1PublicKey.secp256k1FromBytes(
+              Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
+            );
 
-        publicKey = new Secp256k1PublicKey(publicKeyEncoded);
-        if (
-          publicKey.canVerify() &&
-          publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
-        ) {
-          return true;
+            if (
+              publicKey.canVerify() &&
+              publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
+            ) {
+              return true;
+            }
+
+          }
+          if (method.type === Curve.ED25519) {
+            const publicKey = new Ed25519PublicKey(
+              Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
+            )
+            if (
+              publicKey.canVerify() &&
+              publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
+            ) {
+              return true;
+            }
+          }
+        } catch (err) {
+          console.debug("checking next key for verification")
         }
       }
     } else if (did.method == "peer") {

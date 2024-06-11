@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { BN } from "bn.js";
 import { Curve, KeyProperties, KeyTypes } from "../../../src/domain";
 import { Secp256k1PrivateKey } from "../../../src/apollo/utils/Secp256k1PrivateKey";
 import { Secp256k1PublicKey } from "../../../src/apollo/utils/Secp256k1PublicKey";
@@ -8,6 +7,8 @@ import { ECPublicKeyInitialization } from "../../../src/domain/models/errors/Apo
 import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
 
 import ApolloPKG from "@atala/apollo";
+import { DeprecatedDerivationPath } from "../../../src/domain/models/derivation/schemas/DeprecatedDerivation";
+import { PrismDerivationPath } from "../../../src/domain/models/derivation/schemas/PrismDerivation";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const HDKey = ApolloSDK.derivation.HDKey;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
@@ -40,17 +41,19 @@ describe("Keys", () => {
 
         test("keySpecification.chainCode missing - throws", () => {
           const key = new Secp256k1PrivateKey(baseRaw);
-          const derivationPath = DerivationPath.from(0);
 
-          expect(() => key.derive(derivationPath)).to.throw;
+          expect(() => {
+            const derivationPath = DerivationPath.fromPath(0 as any, [DeprecatedDerivationPath, PrismDerivationPath]);
+            key.derive(derivationPath.toString())
+          }).to.throw;
         });
 
         test("DerivationPath - m/0'/0'/0'", () => {
           const key = new Secp256k1PrivateKey(raw);
-          const derivationPath = DerivationPath.from(`m/0'/0'/0'`);
+          const derivationPath = DerivationPath.fromPath(`m/0'/0'/0'`, [DeprecatedDerivationPath, PrismDerivationPath]);
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
 
-          const result = key.derive(derivationPath);
+          const result = key.derive(derivationPath.toString());
 
           expect(result).to.be.an.instanceOf(Secp256k1PrivateKey);
           expect(result.raw).to.eql(Uint8Array.from([12, 175, 213, 208, 150, 154, 3, 194, 3, 156, 49, 33, 35, 255, 156, 238, 125, 190, 36, 208, 31, 209, 82, 108, 171, 255, 50, 80, 236, 226, 166, 255]));
@@ -61,7 +64,7 @@ describe("Keys", () => {
           expect(result.getProperty(KeyProperties.chainCode)).to.not.eq(chainCodeHex);
           expect(result.getProperty(KeyProperties.chainCode)).to.eq("55c577fab08382958dcdfcfd6c34e4c45d9ec467c20abb81ce627991ac9e7863");
           expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
-          expect(result.getProperty(KeyProperties.index)).to.eq("0");
+          expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
 
           // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(derivationPath.toString());
           expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f30272f30272f3027");
@@ -69,29 +72,29 @@ describe("Keys", () => {
 
         test("DerivationPath - m/1'/0'/0'", () => {
           const key = new Secp256k1PrivateKey(raw);
-          const derivationPath = DerivationPath.from("m/1'/0'/0'");
+          const derivationPath = DerivationPath.fromPath("m/1'/0'/0'", [DeprecatedDerivationPath, PrismDerivationPath]);
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
 
-          const result = key.derive(derivationPath);
+          const result = key.derive(derivationPath.toString());
 
 
           expect(result.raw).to.eql(Uint8Array.from([220, 223, 118, 183, 102, 141, 198, 60, 221, 162, 132, 68, 233, 188, 169, 39, 128, 174, 202, 114, 4, 203, 31, 40, 35, 85, 166, 164, 178, 17, 158, 150]));
           expect(result.getProperty(KeyProperties.chainCode)).to.eq("f22fdc4dd573ce17243983faa6492fc33fab35ecfa3f8ad09aa958044a2752f7");
-          expect(result.getProperty(KeyProperties.index)).to.eq("1");
+          expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
           // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(`m/1'/0'/0'`);
           expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f31272f30272f3027");
         });
 
         test("DerivationPath - m/2'/0'/0'", () => {
           const key = new Secp256k1PrivateKey(raw);
-          const derivationPath = DerivationPath.from("m/2'/0'/0'");
+          const derivationPath = DerivationPath.fromPath("m/2'/0'/0'", [DeprecatedDerivationPath, PrismDerivationPath]);
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
 
-          const result = key.derive(derivationPath);
+          const result = key.derive(derivationPath.toString());
 
           expect(result.raw).to.eql(Uint8Array.from([58, 84, 10, 170, 72, 91, 146, 143, 203, 60, 169, 120, 33, 226, 221, 43, 96, 150, 44, 108, 105, 33, 243, 19, 115, 162, 33, 142, 129, 22, 122, 221]));
           expect(result.getProperty(KeyProperties.chainCode)).to.eq("e56cd109bae854dcf3fc0b766067f9e825901bf1bcfc67dc4f5eaee74cf9c8ea");
-          expect(result.getProperty(KeyProperties.index)).to.eq("2");
+          expect(result.getProperty(KeyProperties.index)).to.eq(`${derivationPath.index}`);
           // expect(result.getProperty(KeyProperties.derivationPath)).to.eq(`m/1'/0'/0'`);
           expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f32272f30272f3027");
         });
@@ -109,7 +112,8 @@ describe("Keys", () => {
 
           const secp = new Secp256k1PrivateKey(baseRaw);
           secp.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
-          const secpChild = secp.derive(DerivationPath.from(path));
+          const derivationPath = DerivationPath.fromPath(path, [DeprecatedDerivationPath, PrismDerivationPath])
+          const secpChild = secp.derive(derivationPath.toString());
 
           const hdResult = Buffer.from(hdChild.privateKey!).toString("hex");
           const spResult = Buffer.from(secpChild.raw).toString("hex");
@@ -172,10 +176,10 @@ describe("Keys", () => {
         });
 
         test("instantiated through `derive` - index set", () => {
-          const path = DerivationPath.fromPath(`m/0'/0'/0'`);
+          const path = DerivationPath.fromPath(`m/0'/0'/0'`, [DeprecatedDerivationPath, PrismDerivationPath]);
           const key = new Secp256k1PrivateKey(privateKey.raw);
           key.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
-          const derived = key.derive(path);
+          const derived = key.derive(path.toString());
 
           expect(derived.index).to.equal(0);
         });

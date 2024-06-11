@@ -1,4 +1,4 @@
-import { CredentialType, PresentationClaims, PolluxError, InputFieldFilter, PresentationSubmission, PresentationDefinitionRequest } from "../../domain";
+import { CredentialType, PresentationClaims, InputFieldFilter, PresentationSubmission, PresentationDefinitionRequest } from "../../domain";
 import { AnoncredsLoader } from "../AnoncredsLoader";
 
 export function validatePresentationClaims<Type extends CredentialType = CredentialType.JWT>(

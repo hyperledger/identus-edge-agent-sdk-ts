@@ -12,7 +12,7 @@ import { makeCollections } from "../../src/pluto/rxdb/collections";
 import * as Fixtures from "../fixtures";
 import { schemaFactory } from "../../src/pluto/models/Schema";
 import { Credential } from "../../src/pluto/models";
-import { CredentialRepository } from "../../src/pluto/repositories";
+import { CredentialRepository, KeyRepository } from "../../src/pluto/repositories";
 
 addRxPlugin(RxDBDevModePlugin);
 
@@ -34,8 +34,55 @@ describe("Pluto", () => {
 
     describe("Migrations", () => {
 
+        test("Should migrate old keys to new keys to add the derivationSchema", async () => {
+            const store = new Store({
+                name: "randomdb",
+                storage: InMemory,
+                password: 'random12434',
+                ignoreDuplicate: true
+            }, {
+                keys: {
+                    schema: schemaFactory<Models.Key>(schema => {
+                        schema.setRequired("recoveryId", "rawHex");
+                        schema.addProperty("string", "recoveryId");
+                        schema.addProperty("string", "rawHex");
+                        schema.addProperty("string", "alias");
+                        schema.addProperty("number", "index");
+                        schema.setEncrypted("rawHex");
+                        schema.setVersion(0);
+                    })
+                }
+            });
+
+            const keyRepository = new KeyRepository(store, apollo);
+            const key = keyRepository.toModel(Fixtures.Keys.secp256K1.privateKey)
+
+            delete (key as any).derivationSchema;
+            delete (key as any).derivationSchema
+
+            await store.start();
+
+            await store.insert("keys", key);
+            const oldKeys = await store.query("keys")
+
+            expect(oldKeys).not.toBe(undefined);
+
+            const currentStore = new Store({
+                name: "randomdb",
+                storage: InMemory,
+                password: 'random12434',
+                ignoreDuplicate: true
+            });
+
+            await currentStore.start();
+
+            const keys = await currentStore.query("keys")
+            expect(keys).not.toBe(undefined);
+            expect(keys.length).toBe(1);
+        });
+
         test("Should migrate old anoncreds v0Credentials into v1 credentials", async () => {
-            const pollux = new Pollux(castor);
+            const pollux = new Pollux(apollo, castor);
             const encodeToBuffer = (cred: object) => {
                 const json = JSON.stringify(cred);
                 return Buffer.from(json);
@@ -115,7 +162,7 @@ describe("Pluto", () => {
         });
 
         test("Should migrate old jwt v0Credentials into v1 credentials", async () => {
-            const pollux = new Pollux(castor);
+            const pollux = new Pollux(apollo, castor);
             const jwtParts = [
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
                 "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",

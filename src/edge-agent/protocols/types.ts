@@ -1,4 +1,3 @@
-import { PredicateType } from "../../domain";
 import { CredentialFormat } from "./issueCredential/CredentialFormat";
 import { CredentialPreview } from "./issueCredential/CredentialPreview";
 

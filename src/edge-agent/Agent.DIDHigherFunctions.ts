@@ -15,11 +15,10 @@ import { Pluto } from "../domain/buildingBlocks/Pluto";
 import { AgentError } from "../domain/models/Errors";
 import {
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
-  ConnectionsManager,
   MediatorHandler,
 } from "./types";
 import { PrismKeyPathIndexTask } from "./Agent.PrismKeyPathIndexTask";
-import { DerivationPath } from "../apollo/utils/derivation/DerivationPath";
+import { PrismDerivationPath, PRISM_WALLET_PURPOSE, PRISM_DID_METHOD, AUTHENTICATION_KEY, ISSUING_KEY, PrismDerivationPathSchema } from "../domain/models/derivation/schemas/PrismDerivation";
 
 /**
  * An extension for the Edge agent that groups some DID related operations mainly used to expose the create did functionality
@@ -46,7 +45,7 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     protected pluto: Pluto,
     protected mediationHandler: MediatorHandler,
     protected seed: Seed
-  ) {}
+  ) { }
 
 
   /**
@@ -141,21 +140,46 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
     services: Service[],
     keyPathIndex?: number
   ): Promise<DID> {
-    const index = keyPathIndex ?? await this.getNextKeyPathIndex();
-    const derivationPath = DerivationPath.fromIndex(index);
-    const privateKey = this.apollo.createPrivateKey({
+    const authenticationDerivation = new PrismDerivationPath([
+      PRISM_WALLET_PURPOSE,
+      PRISM_DID_METHOD,
+      0,
+      AUTHENTICATION_KEY,
+      await this.getNextKeyPathIndex(keyPathIndex)
+    ]);
+    const issuingDerivation = new PrismDerivationPath([
+      PRISM_WALLET_PURPOSE,
+      PRISM_DID_METHOD,
+      0,
+      ISSUING_KEY,
+      await this.getNextKeyPathIndex(keyPathIndex)
+    ]);
+
+    const sk = this.apollo.createPrivateKey({
       [KeyProperties.type]: KeyTypes.EC,
       [KeyProperties.curve]: Curve.SECP256K1,
       [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
-      [KeyProperties.derivationPath]: derivationPath,
+      [KeyProperties.derivationPath]: authenticationDerivation.toString(),
+      [KeyProperties.derivationSchema]: PrismDerivationPathSchema
+    });
+    const edSk = this.apollo.createPrivateKey({
+      [KeyProperties.type]: KeyTypes.EC,
+      [KeyProperties.curve]: Curve.ED25519,
+      [KeyProperties.seed]: Buffer.from(this.seed.value).toString("hex"),
+      [KeyProperties.derivationPath]: issuingDerivation.toString(),
+      [KeyProperties.derivationSchema]: PrismDerivationPathSchema
     });
 
-    const publicKey = privateKey.publicKey();
-    const did = await this.castor.createPrismDID(publicKey, services);
-    // TODO tmp fix as index not set on key currently (PR open)
-    privateKey.keySpecification.set(KeyProperties.index, index.toString());
+    const publicKey = sk.publicKey();
+    const did = await this.castor.createPrismDID(
+      publicKey,
+      services,
+      [
+        edSk.publicKey()
+      ]
+    );
+    await this.pluto.storeDID(did, [sk, edSk], alias);
 
-    await this.pluto.storeDID(did, privateKey, alias);
     return did;
   }
 
@@ -164,11 +188,14 @@ export class AgentDIDHigherFunctions implements AgentDIDHigherFunctionsClass {
    * 
    * @returns {number}
    */
-  private async getNextKeyPathIndex(): Promise<number> {
+  private async getNextKeyPathIndex(
+    optionalKeyIndex?: number
+  ): Promise<number> {
     const getIndexTask = new PrismKeyPathIndexTask(this.pluto);
-    const index = await getIndexTask.run();
-    const next = index + 1;
-
+    const index = await getIndexTask.run(
+      optionalKeyIndex
+    );
+    const next = index;
     return next;
   }
 }

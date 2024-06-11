@@ -28,7 +28,7 @@ export class RequestPresentation {
   }
 
   get decodedAttachments() {
-    return this.attachments.map(Message.Attachment.extractJSON)
+    return this.attachments.map((attachment) => attachment.payload)
   }
 
   makeMessage(): Message {
