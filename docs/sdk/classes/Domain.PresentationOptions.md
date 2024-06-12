@@ -12,28 +12,25 @@
 
 ### Properties
 
-- [challenge](Domain.PresentationOptions.md#challenge)
-- [domain](Domain.PresentationOptions.md#domain)
-- [jwt](Domain.PresentationOptions.md#jwt)
-- [name](Domain.PresentationOptions.md#name)
-- [purpose](Domain.PresentationOptions.md#purpose)
+- [data](Domain.PresentationOptions.md#data)
+- [type](Domain.PresentationOptions.md#type)
+
+### Accessors
+
+- [options](Domain.PresentationOptions.md#options)
 
 ## Constructors
 
 ### constructor
 
-• **new PresentationOptions**(`options`): [`PresentationOptions`](Domain.PresentationOptions.md)
+• **new PresentationOptions**(`data?`, `type?`): [`PresentationOptions`](Domain.PresentationOptions.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `options` | `Object` |
-| `options.challenge` | `string` |
-| `options.domain?` | `string` |
-| `options.jwt?` | [`PresentationJWTOptions`](../modules/Domain.md#presentationjwtoptions) |
-| `options.name?` | `string` |
-| `options.purpose?` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `data` | `any` | `{}` |
+| `type` | [`CredentialType`](../enums/Domain.CredentialType.md) | `CredentialType.JWT` |
 
 #### Returns
 
@@ -41,54 +38,38 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L25)
+[src/domain/models/VerifiableCredential.ts:407](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L407)
 
 ## Properties
 
-### challenge
+### data
 
-• **challenge**: `string`
+• `Private` **data**: `any` = `{}`
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L21)
+[src/domain/models/VerifiableCredential.ts:408](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L408)
 
 ___
 
-### domain
+### type
 
-• **domain**: `string`
-
-#### Defined in
-
-[src/domain/buildingBlocks/Pollux.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L22)
-
-___
-
-### jwt
-
-• `Optional` **jwt**: [`PresentationJWTOptions`](../modules/Domain.md#presentationjwtoptions)
+• `Private` **type**: [`CredentialType`](../enums/Domain.CredentialType.md) = `CredentialType.JWT`
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L23)
+[src/domain/models/VerifiableCredential.ts:409](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L409)
 
-___
+## Accessors
 
-### name
+### options
 
-• **name**: `string`
+• `get` **options**(): [`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md)
 
-#### Defined in
+#### Returns
 
-[src/domain/buildingBlocks/Pollux.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L19)
-
-___
-
-### purpose
-
-• **purpose**: `string`
+[`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md)
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L20)
+[src/domain/models/VerifiableCredential.ts:414](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L414)

@@ -30,7 +30,7 @@ Declaration merge to contain key conversion functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
 
 ## Functions
 
@@ -45,7 +45,7 @@ which allow converting the Key raw into different formats
 
 | Name | Type |
 | :------ | :------ |
-| `key` | [`PublicKey`](../classes/Domain.PublicKey.md) \| [`PrivateKey`](../classes/Domain.PrivateKey.md) |
+| `key` | [`PrivateKey`](../classes/Domain.PrivateKey.md) \| [`PublicKey`](../classes/Domain.PublicKey.md) |
 | `opts` | `Options` |
 
 #### Returns
@@ -60,8 +60,8 @@ object with exportable functions
 | `Hex` | () => `string` |
 | `JWK` | (`base?`: [`Base`](../interfaces/Domain.JWK.Base.md)) => [`JWK`](Domain.md#jwk) |
 | `PEM` | () => `string` |
-| `String` | (`encoding?`: ``"base64"`` \| ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
+| `String` | (`encoding?`: `BufferEncoding`) => `string` |
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)

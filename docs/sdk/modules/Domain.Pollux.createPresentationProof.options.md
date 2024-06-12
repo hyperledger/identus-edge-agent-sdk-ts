@@ -10,3 +10,4 @@
 
 - [Anoncreds](../interfaces/Domain.Pollux.createPresentationProof.options.Anoncreds.md)
 - [JWT](../interfaces/Domain.Pollux.createPresentationProof.options.JWT.md)
+- [SDJWT](../interfaces/Domain.Pollux.createPresentationProof.options.SDJWT.md)

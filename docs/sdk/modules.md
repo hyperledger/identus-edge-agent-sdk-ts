@@ -29,11 +29,13 @@
 - [Castor](classes/Castor.md)
 - [ConnectionsManager](classes/ConnectionsManager.md)
 - [DIDCommWrapper](classes/DIDCommWrapper.md)
+- [HandshakeRequest](classes/HandshakeRequest.md)
 - [IssueCredential](classes/IssueCredential.md)
 - [JWTCredential](classes/JWTCredential.md)
 - [MediatorHandler](classes/MediatorHandler.md)
 - [Mercury](classes/Mercury.md)
 - [OfferCredential](classes/OfferCredential.md)
+- [OutOfBandInvitation](classes/OutOfBandInvitation.md)
 - [PeerDID](classes/PeerDID-1.md)
 - [PeerDIDService](classes/PeerDIDService.md)
 - [Pluto](classes/Pluto-1.md)
@@ -82,6 +84,10 @@
 - [AnonCredsRecoveryId](modules.md#anoncredsrecoveryid)
 - [JWTVerifiableCredentialRecoveryId](modules.md#jwtverifiablecredentialrecoveryid)
 
+### Functions
+
+- [isPresentationDefinitionRequestType](modules.md#ispresentationdefinitionrequesttype)
+
 ## References
 
 ### KeyProperties
@@ -96,7 +102,7 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L94)
+[src/edge-agent/protocols/types.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L93)
 
 ___
 
@@ -106,7 +112,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/types.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/types.ts#L79)
+[src/edge-agent/protocols/types.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L78)
 
 ## Variables
 
@@ -116,7 +122,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pollux/models/AnonCredsVerifiableCredential.ts#L19)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -126,4 +132,31 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pollux/models/JWTVerifiableCredential.ts#L24)
+[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/JWTVerifiableCredential.ts#L23)
+
+## Functions
+
+### isPresentationDefinitionRequestType
+
+▸ **isPresentationDefinitionRequestType**\<`Type`\>(`request`, `type`): request is PresentationDefinitionRequest\<Type\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Type` | extends [`CredentialType`](enums/Domain.CredentialType.md) = [`JWT`](enums/Domain.CredentialType.md#jwt) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `request` | [`PresentationDefinitionRequest`](modules/Domain.md#presentationdefinitionrequest)\<`Type`\> |
+| `type` | `Type` |
+
+#### Returns
+
+request is PresentationDefinitionRequest\<Type\>
+
+#### Defined in
+
+[src/pollux/utils/claims.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/utils/claims.ts#L69)

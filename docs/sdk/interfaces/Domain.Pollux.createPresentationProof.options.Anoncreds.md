@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:131](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L131)
+[src/domain/buildingBlocks/Pollux.ts:150](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L150)

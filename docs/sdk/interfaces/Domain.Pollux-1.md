@@ -15,19 +15,43 @@ handle Credential related tasks
 
 ### Properties
 
+- [isCredentialRevoked](Domain.Pollux-1.md#iscredentialrevoked)
 - [parseCredential](Domain.Pollux-1.md#parsecredential)
+- [revealCredentialFields](Domain.Pollux-1.md#revealcredentialfields)
 
 ### Methods
 
 - [createPresentationDefinitionRequest](Domain.Pollux-1.md#createpresentationdefinitionrequest)
 - [createPresentationProof](Domain.Pollux-1.md#createpresentationproof)
 - [createPresentationSubmission](Domain.Pollux-1.md#createpresentationsubmission)
-- [extractCredentialFormatFromMessage](Domain.Pollux-1.md#extractcredentialformatfrommessage)
-- [processAnonCredsCredential](Domain.Pollux-1.md#processanoncredscredential)
-- [processJWTCredential](Domain.Pollux-1.md#processjwtcredential)
+- [processCredentialOffer](Domain.Pollux-1.md#processcredentialoffer)
 - [verifyPresentationSubmission](Domain.Pollux-1.md#verifypresentationsubmission)
 
 ## Properties
+
+### isCredentialRevoked
+
+• **isCredentialRevoked**: (`credential`: [`Credential`](../classes/Domain.Credential.md)) => `Promise`\<`boolean`\>
+
+#### Type declaration
+
+▸ (`credential`): `Promise`\<`boolean`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `credential` | [`Credential`](../classes/Domain.Credential.md) |
+
+##### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L56)
+
+___
 
 ### parseCredential
 
@@ -51,37 +75,69 @@ handle Credential related tasks
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:49](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L49)
+[src/domain/buildingBlocks/Pollux.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L58)
+
+___
+
+### revealCredentialFields
+
+• **revealCredentialFields**: (`credential`: [`Credential`](../classes/Domain.Credential.md), `fields`: `string`[], `linkSecret`: `string`) => `Promise`\<\{ `[name: string]`: `any`;  }\>
+
+#### Type declaration
+
+▸ (`credential`, `fields`, `linkSecret`): `Promise`\<\{ `[name: string]`: `any`;  }\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `credential` | [`Credential`](../classes/Domain.Credential.md) |
+| `fields` | `string`[] |
+| `linkSecret` | `string` |
+
+##### Returns
+
+`Promise`\<\{ `[name: string]`: `any`;  }\>
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L52)
 
 ## Methods
 
 ### createPresentationDefinitionRequest
 
-▸ **createPresentationDefinitionRequest**(`type`, `claims`, `options`): `Promise`\<[`PresentationDefinitionRequest`](../modules/Domain.md#presentationdefinitionrequest)\>
+▸ **createPresentationDefinitionRequest**\<`T`\>(`type`, `claims`, `options`): `Promise`\<[`PresentationDefinitionRequest`](../modules/Domain.md#presentationdefinitionrequest)\<`T`\>\>
 
 Creates a PresentationDefinitionRequest object for oob Verifications
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`CredentialType`](../enums/Domain.CredentialType.md) = [`JWT`](../enums/Domain.CredentialType.md#jwt) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`CredentialType`](../enums/Domain.CredentialType.md) |
-| `claims` | [`PresentationClaims`](Domain.PresentationClaims.md) |
+| `type` | `T` |
+| `claims` | [`PresentationClaims`](../modules/Domain.md#presentationclaims)\<`T`\> |
 | `options` | [`PresentationOptions`](../classes/Domain.PresentationOptions.md) |
 
 #### Returns
 
-`Promise`\<[`PresentationDefinitionRequest`](../modules/Domain.md#presentationdefinitionrequest)\>
+`Promise`\<[`PresentationDefinitionRequest`](../modules/Domain.md#presentationdefinitionrequest)\<`T`\>\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L69)
+[src/domain/buildingBlocks/Pollux.ts:107](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L107)
 
 ___
 
 ### createPresentationProof
 
-▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<[`Presentation`](Domain.Anoncreds.Presentation.md)\>
+▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
 
 Process a PresentationRequest with Credential to create a Presentation.
 
@@ -89,13 +145,13 @@ Process a PresentationRequest with Credential to create a Presentation.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `presentationRequest` | `PresentationRequest`\<`unknown`\> | - |
+| `presentationRequest` | `PresentationRequest`\<[`AnonCreds`](../enums/Domain.AttachmentFormats.md#anoncreds), `PresentationRequestType`\> |  |
 | `credential` | [`AnonCredsCredential`](../classes/AnonCredsCredential.md) |  |
 | `options` | [`Anoncreds`](Domain.Pollux.createPresentationProof.options.Anoncreds.md) | object containing necessary metadata |
 
 #### Returns
 
-`Promise`\<[`Presentation`](Domain.Anoncreds.Presentation.md)\>
+`Promise`\<`string`\>
 
 dependent on the CredentialType
 
@@ -103,7 +159,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L110)
+[src/domain/buildingBlocks/Pollux.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L124)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
 
@@ -111,7 +167,7 @@ dependent on the CredentialType
 
 | Name | Type |
 | :------ | :------ |
-| `presentationRequest` | `PresentationRequest`\<`unknown`\> |
+| `presentationRequest` | `PresentationRequest`\<[`JWT`](../enums/Domain.AttachmentFormats.md#jwt), `JWTJson`\> |
 | `credential` | [`JWTCredential`](../classes/JWTCredential.md) |
 | `options` | [`JWT`](Domain.Pollux.createPresentationProof.options.JWT.md) |
 
@@ -121,7 +177,25 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L111)
+[src/domain/buildingBlocks/Pollux.ts:125](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L125)
+
+▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `presentationRequest` | `PresentationRequest`\<[`SDJWT`](../enums/Domain.AttachmentFormats.md#sdjwt), `SDJWTJson`\> |
+| `credential` | `SDJWTCredential` |
+| `options` | [`SDJWT`](Domain.Pollux.createPresentationProof.options.SDJWT.md) |
+
+#### Returns
+
+`Promise`\<`string`\>
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:126](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L126)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options?`): `Promise`\<`any`\>
 
@@ -129,7 +203,7 @@ dependent on the CredentialType
 
 | Name | Type |
 | :------ | :------ |
-| `presentationRequest` | `PresentationRequest`\<`unknown`\> |
+| `presentationRequest` | `PresentationRequest`\<`any`, `unknown`\> |
 | `credential` | [`Credential`](../classes/Domain.Credential.md) |
 | `options?` | `Record`\<`string`, `any`\> |
 
@@ -139,91 +213,74 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:112](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L112)
+[src/domain/buildingBlocks/Pollux.ts:127](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L127)
 
 ___
 
 ### createPresentationSubmission
 
-▸ **createPresentationSubmission**(`presentationDefinition`, `credential`, `privateKey`): `Promise`\<[`PresentationSubmission`](../modules/Domain.md#presentationsubmission)\>
+▸ **createPresentationSubmission**(`presentationDefinition`, `credential`, `privateKey`): `Promise`\<[`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `presentationDefinition` | [`PresentationDefinitionRequest`](../modules/Domain.md#presentationdefinitionrequest) |
+| `presentationDefinition` | [`PresentationExchangeDefinitionRequest`](../modules/Domain.md#presentationexchangedefinitionrequest) |
 | `credential` | [`Credential`](../classes/Domain.Credential.md) |
 | `privateKey` | [`PrivateKey`](../classes/Domain.PrivateKey.md) |
 
 #### Returns
 
-`Promise`\<[`PresentationSubmission`](../modules/Domain.md#presentationsubmission)\>
+`Promise`\<[`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission)\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L75)
+[src/domain/buildingBlocks/Pollux.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L70)
 
-___
-
-### extractCredentialFormatFromMessage
-
-▸ **extractCredentialFormatFromMessage**(`message`): [`CredentialType`](../enums/Domain.CredentialType.md)
+▸ **createPresentationSubmission**(`presentationDefinition`, `credential`, `privateKey`): `Promise`\<`PresentationType`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](../classes/Domain.Message-1.md) |
+| `presentationDefinition` | `PresentationRequestType` |
+| `credential` | [`Credential`](../classes/Domain.Credential.md) |
+| `privateKey` | [`LinkSecret`](../classes/Domain.LinkSecret.md) |
 
 #### Returns
 
-[`CredentialType`](../enums/Domain.CredentialType.md)
+`Promise`\<`PresentationType`\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L61)
+[src/domain/buildingBlocks/Pollux.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L75)
 
 ___
 
-### processAnonCredsCredential
+### processCredentialOffer
 
-▸ **processAnonCredsCredential**(`offer`, `options`): `Promise`\<`CredentialRequestTuple`\<[`CredentialRequest`](Domain.Anoncreds.CredentialRequest.md), [`CredentialRequestMeta`](Domain.Anoncreds.CredentialRequestMeta.md)\>\>
+▸ **processCredentialOffer**\<`Types`\>(`offer`, `options`): `Promise`\<[`ProcessedCredentialOfferPayloads`](../modules/Domain.md#processedcredentialofferpayloads)[`Types`]\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Types` | extends [`CredentialOfferTypes`](../modules/Domain.md#credentialoffertypes) |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `offer` | [`Message`](../classes/Domain.Message-1.md) |
+| `offer` | [`CredentialOfferPayloads`](../modules/Domain.md#credentialofferpayloads)[`Types`] |
 | `options` | [`CredentialRequestOptions`](Domain.CredentialRequestOptions.md) |
 
 #### Returns
 
-`Promise`\<`CredentialRequestTuple`\<[`CredentialRequest`](Domain.Anoncreds.CredentialRequest.md), [`CredentialRequestMeta`](Domain.Anoncreds.CredentialRequestMeta.md)\>\>
+`Promise`\<[`ProcessedCredentialOfferPayloads`](../modules/Domain.md#processedcredentialofferpayloads)[`Types`]\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L57)
-
-___
-
-### processJWTCredential
-
-▸ **processJWTCredential**(`offer`, `options`): `Promise`\<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `offer` | [`Message`](../classes/Domain.Message-1.md) |
-| `options` | [`CredentialRequestOptions`](Domain.CredentialRequestOptions.md) |
-
-#### Returns
-
-`Promise`\<`string`\>
-
-#### Defined in
-
-[src/domain/buildingBlocks/Pollux.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L53)
+[src/domain/buildingBlocks/Pollux.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L63)
 
 ___
 
@@ -237,7 +294,7 @@ Process a PresentationSubmission, resolve the issuer did and verify the credenti
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `presentationSubmission` | [`PresentationSubmission`](../modules/Domain.md#presentationsubmission) | - |
+| `presentationSubmission` | [`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission) | - |
 | `options?` | [`JWT`](Domain.Pollux.verifyPresentationSubmission.options.JWT.md) | object containing necessary metadata |
 
 #### Returns
@@ -248,7 +305,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:89](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L89)
+[src/domain/buildingBlocks/Pollux.ts:88](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L88)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options?`): `Promise`\<`boolean`\>
 
@@ -256,7 +313,7 @@ true if the submission is valid or false if it is not
 
 | Name | Type |
 | :------ | :------ |
-| `presentationSubmission` | [`PresentationSubmission`](../modules/Domain.md#presentationsubmission) |
+| `presentationSubmission` | `PresentationType` |
 | `options?` | [`Anoncreds`](Domain.Pollux.verifyPresentationSubmission.options.Anoncreds.md) |
 
 #### Returns
@@ -265,7 +322,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L93)
+[src/domain/buildingBlocks/Pollux.ts:92](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L92)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options?`): `Promise`\<`boolean`\>
 
@@ -273,7 +330,7 @@ true if the submission is valid or false if it is not
 
 | Name | Type |
 | :------ | :------ |
-| `presentationSubmission` | [`PresentationSubmission`](../modules/Domain.md#presentationsubmission) |
+| `presentationSubmission` | [`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission) |
 | `options?` | [`JWT`](Domain.Pollux.verifyPresentationSubmission.options.JWT.md) \| [`Anoncreds`](Domain.Pollux.verifyPresentationSubmission.options.Anoncreds.md) |
 
 #### Returns
@@ -282,4 +339,4 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:97](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Pollux.ts#L97)
+[src/domain/buildingBlocks/Pollux.ts:96](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L96)

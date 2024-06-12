@@ -20,13 +20,14 @@
 
 ### acceptDIDCommInvitation
 
-▸ **acceptDIDCommInvitation**(`invitation`): `Promise`\<`void`\>
+▸ **acceptDIDCommInvitation**(`invitation`, `optionalAlias?`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `invitation` | `OutOfBandInvitation` |
+| `invitation` | [`OutOfBandInvitation`](../classes/OutOfBandInvitation.md) |
+| `optionalAlias?` | `string` |
 
 #### Returns
 
@@ -34,19 +35,20 @@
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L90)
+[src/edge-agent/types/index.ts:104](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L104)
 
 ___
 
 ### acceptInvitation
 
-▸ **acceptInvitation**(`invitation`): `Promise`\<`void`\>
+▸ **acceptInvitation**(`invitation`, `optionalAlias?`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `invitation` | `PrismOnboardingInvitation` |
+| `optionalAlias?` | `string` |
 
 #### Returns
 
@@ -54,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L94)
+[src/edge-agent/types/index.ts:108](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L108)
 
 ___
 
@@ -74,13 +76,13 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:92](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L92)
+[src/edge-agent/types/index.ts:106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L106)
 
 ___
 
 ### parseOOBInvitation
 
-▸ **parseOOBInvitation**(`str`): `Promise`\<`OutOfBandInvitation`\>
+▸ **parseOOBInvitation**(`str`): `Promise`\<[`OutOfBandInvitation`](../classes/OutOfBandInvitation.md)\>
 
 #### Parameters
 
@@ -90,11 +92,11 @@ ___
 
 #### Returns
 
-`Promise`\<`OutOfBandInvitation`\>
+`Promise`\<[`OutOfBandInvitation`](../classes/OutOfBandInvitation.md)\>
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:98](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L98)
+[src/edge-agent/types/index.ts:112](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L112)
 
 ___
 
@@ -114,4 +116,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:96](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L96)
+[src/edge-agent/types/index.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L110)

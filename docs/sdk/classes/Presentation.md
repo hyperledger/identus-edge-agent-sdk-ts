@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L13)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L13)
 
 ## Properties
 
@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L15)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L15)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L14)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L14)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L16)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L16)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L19)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L19)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L18)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L18)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L17)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L17)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L11)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L11)
 
 ## Methods
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L22)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L22)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L35)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L35)
 
 ___
 
@@ -171,4 +171,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/protocols/proofPresentation/Presentation.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/protocols/proofPresentation/Presentation.ts#L63)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/Presentation.ts#L63)

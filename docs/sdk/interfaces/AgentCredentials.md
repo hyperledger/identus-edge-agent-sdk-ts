@@ -8,6 +8,11 @@
 
 ## Table of contents
 
+### Properties
+
+- [isCredentialRevoked](AgentCredentials.md#iscredentialrevoked)
+- [revealCredentialFields](AgentCredentials.md#revealcredentialfields)
+
 ### Methods
 
 - [createPresentationForRequestProof](AgentCredentials.md#createpresentationforrequestproof)
@@ -16,6 +21,56 @@
 - [prepareRequestCredentialWithIssuer](AgentCredentials.md#preparerequestcredentialwithissuer)
 - [processIssuedCredentialMessage](AgentCredentials.md#processissuedcredentialmessage)
 - [verifiableCredentials](AgentCredentials.md#verifiablecredentials)
+
+## Properties
+
+### isCredentialRevoked
+
+• **isCredentialRevoked**: (`credential`: [`Credential`](../classes/Domain.Credential.md)) => `Promise`\<`boolean`\>
+
+#### Type declaration
+
+▸ (`credential`): `Promise`\<`boolean`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `credential` | [`Credential`](../classes/Domain.Credential.md) |
+
+##### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L63)
+
+___
+
+### revealCredentialFields
+
+• **revealCredentialFields**: (`credential`: [`Credential`](../classes/Domain.Credential.md), `fields`: `string`[], `linkSecret`: `string`) => `Promise`\<\{ `[name: string]`: `any`;  }\>
+
+#### Type declaration
+
+▸ (`credential`, `fields`, `linkSecret`): `Promise`\<\{ `[name: string]`: `any`;  }\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `credential` | [`Credential`](../classes/Domain.Credential.md) |
+| `fields` | `string`[] |
+| `linkSecret` | `string` |
+
+##### Returns
+
+`Promise`\<\{ `[name: string]`: `any`;  }\>
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L60)
 
 ## Methods
 
@@ -36,7 +91,7 @@
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L66)
+[src/edge-agent/types/index.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L79)
 
 ___
 
@@ -56,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:71](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L71)
+[src/edge-agent/types/index.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L84)
 
 ___
 
@@ -68,9 +123,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`CredentialType`](../enums/Domain.CredentialType.md) |
+| `type` | [`JWT`](../enums/Domain.CredentialType.md#jwt) |
 | `toDID` | [`DID`](../classes/Domain.DID.md) |
-| `claims` | [`PresentationClaims`](Domain.PresentationClaims.md) |
+| `claims` | [`JWTPresentationClaims`](../modules/Domain.md#jwtpresentationclaims) |
 
 #### Returns
 
@@ -78,7 +133,25 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:60](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L60)
+[src/edge-agent/types/index.ts:74](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L74)
+
+▸ **initiatePresentationRequest**(`type`, `toDID`, `claims`): `Promise`\<[`RequestPresentation`](../classes/RequestPresentation.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | [`AnonCreds`](../enums/Domain.CredentialType.md#anoncreds) |
+| `toDID` | [`DID`](../classes/Domain.DID.md) |
+| `claims` | [`AnoncredsPresentationClaims`](../modules/Domain.md#anoncredspresentationclaims) |
+
+#### Returns
+
+`Promise`\<[`RequestPresentation`](../classes/RequestPresentation.md)\>
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L76)
 
 ___
 
@@ -98,7 +171,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L53)
+[src/edge-agent/types/index.ts:67](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L67)
 
 ___
 
@@ -118,7 +191,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L56)
+[src/edge-agent/types/index.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L70)
 
 ___
 
@@ -132,4 +205,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L58)
+[src/edge-agent/types/index.ts:72](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L72)

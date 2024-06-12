@@ -33,7 +33,7 @@ based on https://www.iana.org/assignments/jose/jose.xhtml
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/JWK.ts#L14)
+[src/domain/models/keyManagement/exportable/JWK.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/JWK.ts#L17)
 
 ## Functions
 
@@ -47,7 +47,7 @@ create a JWK from a given Key
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | [`PublicKey`](../classes/Domain.PublicKey.md) \| [`PrivateKey`](../classes/Domain.PrivateKey.md) |  |
+| `key` | [`PrivateKey`](../classes/Domain.PrivateKey.md) \| [`PublicKey`](../classes/Domain.PublicKey.md) |  |
 | `base` | [`Base`](../interfaces/Domain.JWK.Base.md) | set of JWK properties to be added |
 
 #### Returns
@@ -56,4 +56,4 @@ create a JWK from a given Key
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/JWK.ts#L101)
+[src/domain/models/keyManagement/exportable/JWK.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/JWK.ts#L110)

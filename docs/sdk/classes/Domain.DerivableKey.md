@@ -34,7 +34,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `derivationPath` | `DerivationPath` |
+| `derivationPath` | `string` |
 
 #### Returns
 
@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/DerivableKey.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/DerivableKey.ts#L5)
+[src/domain/models/keyManagement/DerivableKey.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/DerivableKey.ts#L4)

@@ -8,58 +8,13 @@
 
 ### Enumeration Members
 
-- [ANONCREDS\_ISSUE](Domain.CredentialType.md#anoncreds_issue)
-- [ANONCREDS\_OFFER](Domain.CredentialType.md#anoncreds_offer)
-- [ANONCREDS\_PROOF\_REQUEST](Domain.CredentialType.md#anoncreds_proof_request)
-- [ANONCREDS\_REQUEST](Domain.CredentialType.md#anoncreds_request)
 - [AnonCreds](Domain.CredentialType.md#anoncreds)
 - [JWT](Domain.CredentialType.md#jwt)
-- [PRESENTATION\_EXCHANGE\_DEFINITIONS](Domain.CredentialType.md#presentation_exchange_definitions)
-- [PRESENTATION\_EXCHANGE\_SUBMISSION](Domain.CredentialType.md#presentation_exchange_submission)
+- [SDJWT](Domain.CredentialType.md#sdjwt)
 - [Unknown](Domain.CredentialType.md#unknown)
 - [W3C](Domain.CredentialType.md#w3c)
 
 ## Enumeration Members
-
-### ANONCREDS\_ISSUE
-
-• **ANONCREDS\_ISSUE** = ``"anoncreds/credential@v1.0"``
-
-#### Defined in
-
-[src/domain/models/VerifiableCredential.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L8)
-
-___
-
-### ANONCREDS\_OFFER
-
-• **ANONCREDS\_OFFER** = ``"anoncreds/credential-offer@v1.0"``
-
-#### Defined in
-
-[src/domain/models/VerifiableCredential.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L6)
-
-___
-
-### ANONCREDS\_PROOF\_REQUEST
-
-• **ANONCREDS\_PROOF\_REQUEST** = ``"anoncreds/proof-request@v1.0"``
-
-#### Defined in
-
-[src/domain/models/VerifiableCredential.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L9)
-
-___
-
-### ANONCREDS\_REQUEST
-
-• **ANONCREDS\_REQUEST** = ``"anoncreds/credential-request@v1.0"``
-
-#### Defined in
-
-[src/domain/models/VerifiableCredential.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L7)
-
-___
 
 ### AnonCreds
 
@@ -67,7 +22,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L5)
+[src/domain/models/VerifiableCredential.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L7)
 
 ___
 
@@ -77,27 +32,17 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L3)
+[src/domain/models/VerifiableCredential.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L4)
 
 ___
 
-### PRESENTATION\_EXCHANGE\_DEFINITIONS
+### SDJWT
 
-• **PRESENTATION\_EXCHANGE\_DEFINITIONS** = ``"dif/presentation-exchange/definitions@v1.0"``
-
-#### Defined in
-
-[src/domain/models/VerifiableCredential.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L10)
-
-___
-
-### PRESENTATION\_EXCHANGE\_SUBMISSION
-
-• **PRESENTATION\_EXCHANGE\_SUBMISSION** = ``"dif/presentation-exchange/submission@v1.0"``
+• **SDJWT** = ``"vc+sd-jwt"``
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L11)
+[src/domain/models/VerifiableCredential.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L5)
 
 ___
 
@@ -107,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L12)
+[src/domain/models/VerifiableCredential.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L8)
 
 ___
 
@@ -117,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L4)
+[src/domain/models/VerifiableCredential.ts:6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L6)

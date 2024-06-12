@@ -13,6 +13,7 @@
 ### Methods
 
 - [createPrivateKey](Domain.Apollo.md#createprivatekey)
+- [createPublicKey](Domain.Apollo.md#createpublickey)
 - [createRandomMnemonics](Domain.Apollo.md#createrandommnemonics)
 - [createRandomSeed](Domain.Apollo.md#createrandomseed)
 - [createSeed](Domain.Apollo.md#createseed)
@@ -35,7 +36,27 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Apollo.ts#L10)
+[src/domain/buildingBlocks/Apollo.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Apollo.ts#L10)
+
+___
+
+### createPublicKey
+
+▸ **createPublicKey**(`parameters`): [`PublicKey`](../classes/Domain.PublicKey.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `parameters` | `Object` |
+
+#### Returns
+
+[`PublicKey`](../classes/Domain.PublicKey.md)
+
+#### Defined in
+
+[src/domain/buildingBlocks/Apollo.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Apollo.ts#L13)
 
 ___
 
@@ -49,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Apollo.ts#L7)
+[src/domain/buildingBlocks/Apollo.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Apollo.ts#L7)
 
 ___
 
@@ -69,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Apollo.ts#L9)
+[src/domain/buildingBlocks/Apollo.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Apollo.ts#L9)
 
 ___
 
@@ -90,4 +111,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/buildingBlocks/Apollo.ts#L8)
+[src/domain/buildingBlocks/Apollo.ts:8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Apollo.ts#L8)

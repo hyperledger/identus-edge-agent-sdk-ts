@@ -2,7 +2,7 @@
 
 # Class: Apollo
 
-Apollo defines the set of cryptographic operations that are used in the Atala PRISM.
+Apollo defines the set of cryptographic operations.
 
 **`Abstraction`**
 
@@ -73,6 +73,8 @@ export enum KeyProperties {
 }
 ```
 
+ Apollo
+
 ## Implements
 
 - [`Apollo`](../interfaces/Domain.Apollo.md)
@@ -93,6 +95,7 @@ export enum KeyProperties {
 ### Methods
 
 - [createPrivateKey](Apollo.md#createprivatekey)
+- [createPublicKey](Apollo.md#createpublickey)
 - [createRandomMnemonics](Apollo.md#createrandommnemonics)
 - [createRandomSeed](Apollo.md#createrandomseed)
 - [createSeed](Apollo.md#createseed)
@@ -117,7 +120,7 @@ export enum KeyProperties {
 
 #### Defined in
 
-[src/apollo/Apollo.ts:116](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L116)
+[src/apollo/Apollo.ts:119](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L119)
 
 ___
 
@@ -127,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/apollo/Apollo.ts:115](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L115)
+[src/apollo/Apollo.ts:118](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L118)
 
 ___
 
@@ -137,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/apollo/Apollo.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L117)
+[src/apollo/Apollo.ts:120](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L120)
 
 ## Methods
 
@@ -214,7 +217,45 @@ Calling this function just generates a new random privateKey for that curve
 
 #### Defined in
 
-[src/apollo/Apollo.ts:250](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L250)
+[src/apollo/Apollo.ts:329](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L329)
+
+___
+
+### createPublicKey
+
+▸ **createPublicKey**(`parameters`): [`PublicKey`](Domain.PublicKey.md)
+
+Creates a public key based on the current cryptographic abstraction
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `parameters` | `Object` |
+
+#### Returns
+
+[`PublicKey`](Domain.PublicKey.md)
+
+**`Example`**
+
+Create an EC Key with secp256k1 curve
+
+```ts
+ const privateKey = apollo.createPublicKey({
+   type: KeyTypes.EC,
+   curve: Curve.SECP256K1,
+   raw: Buffer.from(new Arra(64).fill(1)),
+ });
+```
+
+#### Implementation of
+
+[Apollo](../interfaces/Domain.Apollo.md).[createPublicKey](../interfaces/Domain.Apollo.md#createpublickey)
+
+#### Defined in
+
+[src/apollo/Apollo.ts:215](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L215)
 
 ___
 
@@ -242,7 +283,7 @@ This function creates a random mnemonic phrase whose usage is as a seed for gene
 
 #### Defined in
 
-[src/apollo/Apollo.ts:131](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L131)
+[src/apollo/Apollo.ts:135](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L135)
 
 ___
 
@@ -276,7 +317,7 @@ This function creates a random mnemonic phrase and seed.
 
 #### Defined in
 
-[src/apollo/Apollo.ts:182](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L182)
+[src/apollo/Apollo.ts:186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L186)
 
 ___
 
@@ -311,7 +352,7 @@ This function takes mnemonics and passphrases and creates a seed object to gener
 
 #### Defined in
 
-[src/apollo/Apollo.ts:149](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L149)
+[src/apollo/Apollo.ts:153](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L153)
 
 ___
 
@@ -343,7 +384,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/apollo/Apollo.ts:334](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L334)
+[src/apollo/Apollo.ts:465](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L465)
 
 ___
 
@@ -375,4 +416,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/apollo/Apollo.ts:349](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/apollo/Apollo.ts#L349)
+[src/apollo/Apollo.ts:480](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L480)
