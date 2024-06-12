@@ -288,7 +288,9 @@ export interface JWTRevocationStatus extends W3CVerifiableCredentialData {
 }
 
 export enum JWTProofType {
-  DataIntegrityProof = 'DataIntegrityProof'
+  EcdsaSecp256k1Signature2019 = "EcdsaSecp256k1Signature2019",
+  DataIntegrityProof = "DataIntegrityProof",
+  Unknown = "Unknown"
 }
 
 export enum JWTProofPurpose {
@@ -315,6 +317,7 @@ export interface JWTStatusListResponse {
   },
   proof: {
     type: JWTProofType,
+    jws: string,
     proofPurpose: JWTProofPurpose,
     verificationMethod: string,
     created: string,

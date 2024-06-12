@@ -188,9 +188,8 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
   }
 
   verify(message: Buffer, signature: Buffer) {
-    const normalised = rawToDER(signature)
     return this.native.verify(
-      Int8Array.from(normalised),
+      Int8Array.from(signature),
       Int8Array.from(message)
     );
   }
