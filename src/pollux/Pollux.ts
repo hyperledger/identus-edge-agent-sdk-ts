@@ -679,10 +679,13 @@ export default class Pollux implements IPollux {
       }
 
       const verifiableCredential = JWTCredential.fromJWS(vc);
-      const isRevoked = await this.isCredentialRevoked(verifiableCredential);
-      if (isRevoked) {
-        throw new InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation, credential is revoked");
-
+      try {
+        const isRevoked = await this.isCredentialRevoked(verifiableCredential);
+        if (isRevoked) {
+          throw new InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation, credential is revoked");
+        }
+      } catch (err) {
+        throw new InvalidVerifyCredentialError(vc, `Invalid Verifiable Presentation, could not verify if the credential is revoked, reason: ${(err as Error).message}`);
       }
 
       if (verifiableCredential.subject !== issuer) {
