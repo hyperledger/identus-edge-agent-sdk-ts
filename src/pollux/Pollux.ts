@@ -56,11 +56,7 @@ import { isPresentationDefinitionRequestType, parsePresentationSubmission, valid
 import { SDJWT as SDJWTClass } from "./utils/SDJWT";
 import { SDJWTCredential } from "./models/SDJWTVerifiableCredential";
 import { HttpStatusCode } from "axios";
-import { base58btc } from "multiformats/bases/base58";
-import { hashSync, SupportedHashingAlg } from "../domain/utils/hash";
-import { readFile } from "fs";
 import { JsonLd, RemoteDocument } from "jsonld/jsonld-spec";
-import { rawToDER } from "../domain/utils/DER";
 import { VerificationKeyType } from "../castor/types";
 
 /**
