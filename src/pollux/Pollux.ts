@@ -148,15 +148,15 @@ export default class Pollux implements IPollux {
     }
   }
 
-  private extractVerificationStatusFromResponse(credentialStatus: any): credentialStatus is JWTRevocationStatus {
-    if (credentialStatus.type === RevocationType.StatusList2021) {
+  private extractVerificationStatusFromResponse(credentialStatus: any) {
+    if (credentialStatus && credentialStatus.type === RevocationType.StatusList2021) {
       return true;
     }
     return false;
   }
 
   private extractVerificationStatusFromCredential(credentialStatus: any): credentialStatus is JWTRevocationStatus {
-    if (credentialStatus.type === CredentialStatusType.StatusList2021Entry) {
+    if (credentialStatus && credentialStatus.type === CredentialStatusType.StatusList2021Entry) {
       return true;
     }
     return false;
@@ -213,7 +213,7 @@ export default class Pollux implements IPollux {
     statusListIndex: number
   ): Promise<boolean> {
     try {
-      const proofObject = revocation.proof;
+      const proofObject = revocation.proof ?? {};
       const { verificationMethod } = proofObject;
       const proofType = proofObject.type;
       const base64VerificationMethod = verificationMethod.split(",").at(1);
@@ -299,9 +299,14 @@ export default class Pollux implements IPollux {
   async isCredentialRevoked(credential: Credential): Promise<boolean> {
     if (credential instanceof JWTCredential) {
       if (!this.extractVerificationStatusFromCredential(credential.credentialStatus)) {
-        throw new PolluxError.CredentialRevocationTypeInvalid(
-          `CredentialStatus revocation type not supported`
-        )
+        if (credential.credentialStatus) {
+          throw new PolluxError.CredentialRevocationTypeInvalid(
+            `CredentialStatus revocation type not supported`
+          )
+        } else {
+          //Credential is non revocable
+          return false;
+        }
       }
       const revocationStatus = credential.credentialStatus;
       const response = await this.fetchRevocationRegistry(revocationStatus);
@@ -674,6 +679,12 @@ export default class Pollux implements IPollux {
       }
 
       const verifiableCredential = JWTCredential.fromJWS(vc);
+      const isRevoked = await this.isCredentialRevoked(verifiableCredential);
+      if (isRevoked) {
+        throw new InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation, credential is revoked");
+
+      }
+
       if (verifiableCredential.subject !== issuer) {
         throw new InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation payload, the credential has been issued to another holder");
       }
