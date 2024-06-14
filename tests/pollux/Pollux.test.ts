@@ -2,9 +2,9 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import { expect, assert } from "chai";
+import { assert } from "chai";
 
-import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, CredentialRequestOptions, CredentialType, Curve, DID, JWT_ALG, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
+import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, CredentialRequestOptions, CredentialType, Curve, DID, JWT_ALG, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, RevocationType, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import Apollo from "../../src/apollo/Apollo";
@@ -19,22 +19,13 @@ import { JWTInstanceType } from "../../src/pollux/utils/jwt/types";
 import { SDJWT } from "../../src/pollux/utils/SDJWT";
 import { JWT } from "../../src/pollux/utils/JWT";
 import { SDJWTCredential } from "../../src/pollux/models/SDJWTVerifiableCredential";
-import axios from "axios";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 let sandbox: sinon.SinonSandbox;
 
 
-
-
-jest.mock("../../src/pollux/utils/JWT", () => ({
-  JWT: jest.fn(() => ({
-    sign: jest.fn(() => "JWT.sign.result"),
-    verify: jest.fn(() => true)
-  }))
-}));
-
+const expect = chai.expect;
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
@@ -1591,71 +1582,6 @@ describe("Pollux", () => {
 
     })
 
-    // it("Should Verify false when the presentation contains a credential that has been issued by an issuer with keys that don't match", async () => {
-
-    //   const issuerSeed = apollo.createRandomSeed().seed;
-    //   const holderSeed = apollo.createRandomSeed().seed;
-    //   const wrongIssuerSeed = apollo.createRandomSeed().seed;
-
-    //   const issuerPrv = apollo.createPrivateKey({
-    //     type: KeyTypes.EC,
-    //     curve: Curve.SECP256K1,
-    //     seed: Buffer.from(issuerSeed.value).toString("hex"),
-    //   });
-
-    //   const wrongIssuerPrv = apollo.createPrivateKey({
-    //     type: KeyTypes.EC,
-    //     curve: Curve.SECP256K1,
-    //     seed: Buffer.from(wrongIssuerSeed.value).toString("hex"),
-    //   });
-
-    //   const holderPrv = apollo.createPrivateKey({
-    //     type: KeyTypes.EC,
-    //     curve: Curve.SECP256K1,
-    //     seed: Buffer.from(holderSeed.value).toString("hex"),
-    //   });
-
-    //   const issuerDID = await castor.createPrismDID(
-    //     issuerPrv.publicKey()
-    //   )
-
-    //   const holderDID = await castor.createPrismDID(
-    //     holderPrv.publicKey()
-    //   )
-
-    //   const {
-    //     presentationDefinition,
-    //     presentationSubmissionJSON,
-    //     issuedJWS
-    //   } = await createJWTVerificationTestCase({
-    //     apollo,
-    //     castor,
-    //     jwt,
-    //     pollux,
-    //     issuer: issuerDID,
-    //     holder: holderDID,
-    //     holderPrv: holderPrv,
-    //     issuerPrv: wrongIssuerPrv,
-    //     subject: {
-    //       course: 'Identus Training course Certification 2024'
-    //     },
-    //     claims: {
-    //       course: {
-    //         type: 'string',
-    //         pattern: 'Identus Training course Certification 2024'
-    //       }
-    //     }
-    //   });
-
-    //   expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
-    //     presentationDefinitionRequest: presentationDefinition
-    //   })).to.eventually.be.rejectedWith(
-    //     `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Presentation Credential JWS Signature`
-    //   );
-
-
-    // })
-
     it("Should reject creating a PresentationDefinitionRequest is no AnoncredsPresentationOptions instance is sent", async () => {
       expect(
         pollux.createPresentationDefinitionRequest(
@@ -2203,52 +2129,4 @@ describe("Pollux", () => {
     );
 
   })
-
-
-
-  it("Should correctly determine that a Credential is revoked when calling the credentialStatus [EcdsaSecp256k1Signature2019] list endpoints", async () => {
-    const revocableJWTCredential = `eyJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6cHJpc206YmM5ZGFhZWFmMGFkNjczZjVkNTViM2I2NjEyYTE2NTNiYzcyYWMxNjU5Y2VmYTgxYzZlZWY0NWMxZjcyMTYzOTpDcmtCQ3JZQkVqb0tCbUYxZEdndE1SQUVTaTRLQ1hObFkzQXlOVFpyTVJJaEFqRDNnM3ctcHNnRXZQcUJxUDJmVjhPQXAwQ0l3WjVYU3FhMU9OWU1HOGRQRWpzS0IybHpjM1ZsTFRFUUFrb3VDZ2x6WldOd01qVTJhekVTSVFQRGNPbm9BV25YODBhZnA2aVVEZUl6ZUViMXMySFVPUEo5TEpRRTd1RzdYeEk3Q2dkdFlYTjBaWEl3RUFGS0xnb0pjMlZqY0RJMU5tc3hFaUVDc3luYTRsbkw3anhfSnctTXUtUjd3UUppSnhCNGpnMWUwODN1Q252amNhSSIsInN1YiI6ImRpZDpwcmlzbTozZjBiNDQ5NjI3NmI3NGEzMTU3ZmRiOTEwODU5MDExYjhjZWQwNjU1ZGYyNWU3ZjgwNTAyZjE0OGU2NmM1NGU4OkN0OEJDdHdCRW5RS0gyRjFkR2hsYm5ScFkyRjBhVzl1WVhWMGFHVnVkR2xqWVhScGIyNUxaWGtRQkVKUENnbHpaV053TWpVMmF6RVNJS0ZpZjRlcnNMOFF2SFF2VmxXUEFNaHFPNmwzbXZSbUp5ZlRFRTYzZzI2MEdpRG9PNS1KRzR3Z1JkZk1LcXlqZnp2ek9sSXRsNDNsdDQ0Z21TMWxtaFpKZUJKa0NnOXRZWE4wWlhKdFlYTjBaWEpMWlhrUUFVSlBDZ2x6WldOd01qVTJhekVTSUtGaWY0ZXJzTDhRdkhRdlZsV1BBTWhxTzZsM212Um1KeWZURUU2M2cyNjBHaURvTzUtSkc0d2dSZGZNS3F5amZ6dnpPbEl0bDQzbHQ0NGdtUzFsbWhaSmVBIiwibmJmIjoxNzE1MDA2OTY4LCJ2YyI6eyJjcmVkZW50aWFsU3ViamVjdCI6eyJlbWFpbEFkZHJlc3MiOiJjb3Jwb3JhdGVAZG9tYWluLmNvbSIsImRyaXZpbmdDbGFzcyI6MSwiZHJpdmluZ0xpY2Vuc2VJRCI6IkVTLTEyMzQ1Njc4OTAiLCJpZCI6ImRpZDpwcmlzbTozZjBiNDQ5NjI3NmI3NGEzMTU3ZmRiOTEwODU5MDExYjhjZWQwNjU1ZGYyNWU3ZjgwNTAyZjE0OGU2NmM1NGU4OkN0OEJDdHdCRW5RS0gyRjFkR2hsYm5ScFkyRjBhVzl1WVhWMGFHVnVkR2xqWVhScGIyNUxaWGtRQkVKUENnbHpaV053TWpVMmF6RVNJS0ZpZjRlcnNMOFF2SFF2VmxXUEFNaHFPNmwzbXZSbUp5ZlRFRTYzZzI2MEdpRG9PNS1KRzR3Z1JkZk1LcXlqZnp2ek9sSXRsNDNsdDQ0Z21TMWxtaFpKZUJKa0NnOXRZWE4wWlhKdFlYTjBaWEpMWlhrUUFVSlBDZ2x6WldOd01qVTJhekVTSUtGaWY0ZXJzTDhRdkhRdlZsV1BBTWhxTzZsM212Um1KeWZURUU2M2cyNjBHaURvTzUtSkc0d2dSZGZNS3F5amZ6dnpPbEl0bDQzbHQ0NGdtUzFsbWhaSmVBIiwiZGF0ZU9mSXNzdWFuY2UiOiIyMDIzLTAxLTAxVDAyOjAyOjAyWiJ9LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sIkBjb250ZXh0IjpbImh0dHBzOlwvXC93d3cudzMub3JnXC8yMDE4XC9jcmVkZW50aWFsc1wvdjEiXSwiY3JlZGVudGlhbFN0YXR1cyI6eyJzdGF0dXNQdXJwb3NlIjoiUmV2b2NhdGlvbiIsInN0YXR1c0xpc3RJbmRleCI6MSwiaWQiOiJodHRwOlwvXC8xOTIuMTY4LjE1NC4yMDU6ODAwMFwvcHJpc20tYWdlbnRcL2NyZWRlbnRpYWwtc3RhdHVzXC8xYzE1Yjk2My1kYzRkLTQ3NjUtYjc1Mi01M2EzZmQxZjE4MzMjMSIsInR5cGUiOiJTdGF0dXNMaXN0MjAyMUVudHJ5Iiwic3RhdHVzTGlzdENyZWRlbnRpYWwiOiJodHRwOlwvXC8xOTIuMTY4LjE1NC4yMDU6ODAwMFwvcHJpc20tYWdlbnRcL2NyZWRlbnRpYWwtc3RhdHVzXC8xYzE1Yjk2My1kYzRkLTQ3NjUtYjc1Mi01M2EzZmQxZjE4MzMifX19.NxuJoiEgSnGs7suM5cxDq3tZ6ZYVDAscnKBuAXghW0KD9MhSr1vBUo9F6y0YkjhHBY4Y_gTGnIMBwgLYjcNVKw`;
-
-    sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
-      {
-        "proof": {
-          "type": "EcdsaSecp256k1Signature2019",
-          "proofPurpose": "assertionMethod",
-          "verificationMethod": "data:application/json;base64,eyJAY29udGV4dCI6WyJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L3YxIl0sInR5cGUiOiJFY2RzYVNlY3AyNTZrMVZlcmlmaWNhdGlvbktleTIwMTkiLCJwdWJsaWNLZXlKd2siOnsiY3J2Ijoic2VjcDI1NmsxIiwia2V5X29wcyI6WyJ2ZXJpZnkiXSwia3R5IjoiRUMiLCJ4IjoiVFlCZ21sM1RpUWRSX1lRRDFoSXVOTzhiUnluU0otcmxQcWFVd3JXa3EtRT0iLCJ5IjoiVjBnVFlBM0xhbFd3Q3hPZHlqb2ZoR2JkYVFEd3EwQXdCblNodFJLXzNYZz0ifX0=",
-          "created": "2024-06-14T10:56:59.948091Z",
-          "jws": "eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFUzI1NksifQ..Q1mj3jMf5DWK83E55r6vNUPpsYYgclgwYoNFBSYBzA5x6fI_2cPHJsXECnQlG1XMj2ifldngpJXegTpwe3Fgwg"
-        },
-        "@context": [
-          "https://www.w3.org/2018/credentials/v1",
-          "https://w3id.org/vc/status-list/2021/v1"
-        ],
-        "type": [
-          "VerifiableCredential",
-          "StatusList2021Credential"
-        ],
-        "id": "http://localhost:8085/credential-status/575092c2-7eb0-40ae-8f41-3b499f45f3dc",
-        "issuer": "did:prism:462c4811bf61d7de25b3baf86c5d2f0609b4debe53792d297bf612269bf8593a",
-        "issuanceDate": 1717714047,
-        "credentialSubject": {
-          "type": "StatusList2021",
-          "statusPurpose": "Revocation",
-          //Credential index [0] has a value of 2
-          "encodedList": "H4sIAAAAAAAA_-3BMQ0AAAACIGf_0MbwARoAAAAAAAAAAAAAAAAAAADgbbmHB0sAQAAA"
-        }
-      }
-    );
-
-    const credential = JWTCredential.fromJWS(revocableJWTCredential);
-
-    //Workaround to hardcode the revocation index
-    const vc = credential.properties.get(JWTVerifiableCredentialProperties.vc);
-    vc.credentialStatus.statusListIndex = 0;
-    credential.properties.set(JWTVerifiableCredentialProperties.vc, vc);
-
-    const revoked = await pollux.isCredentialRevoked(credential)
-    expect(revoked).to.eq(true)
-
-  })
-
-
 });

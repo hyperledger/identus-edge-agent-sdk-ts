@@ -275,8 +275,13 @@ export enum JWTRevocationStatusPurpose {
   Suspension = 'Suspension'
 }
 
-export enum RevocationType {
+export enum CredentialStatusType {
   StatusList2021Entry = 'StatusList2021Entry'
+}
+
+
+export enum RevocationType {
+  StatusList2021 = 'StatusList2021'
 }
 
 export interface JWTRevocationStatus extends W3CVerifiableCredentialData {
