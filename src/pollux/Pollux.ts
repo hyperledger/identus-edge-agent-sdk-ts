@@ -195,9 +195,9 @@ export default class Pollux implements IPollux {
     statusListIndex: number
   ): Promise<boolean> {
     try {
-      const { proof } = revocation;
-      const { verificationMethod } = proof;
-      const proofType = proof.type;
+      const proofObject = revocation.proof;
+      const { verificationMethod } = proofObject;
+      const proofType = proofObject.type;
 
       const base64VerificationMethod = verificationMethod.split(",").at(1);
       if (!base64VerificationMethod) {
@@ -219,7 +219,6 @@ export default class Pollux implements IPollux {
         if (kty !== KeyTypes.EC || curve !== Curve.SECP256K1.toLocaleLowerCase()) {
           throw new ApolloError.InvalidKeyCurve(Curve.SECP256K1, Object.values(Curve))
         }
-
         const { x, y } = decodedVerificationMethod.publicKeyJwk;
         const pk = this.apollo.createPublicKey({
           [KeyProperties.type]: KeyTypes.EC,
@@ -227,21 +226,15 @@ export default class Pollux implements IPollux {
           [KeyProperties.curvePointX]: Buffer.from(base64url.baseDecode(x)),
           [KeyProperties.curvePointY]: Buffer.from(base64url.baseDecode(y))
         })
-
         if (!pk.canVerify()) {
           throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof invalid verifying key`);
         }
-
-        const jwsArray = proof.jws.split(".");
+        const jwsArray = proofObject.jws.split(".");
         if (jwsArray.length !== 3) {
           throw new PolluxError.InvalidJWTString()
         }
-
-        const payload = {
-          ...revocation
-        };
-        delete (payload as any).proof;
-
+        const { proof, ...cleanedPayload } = revocation;
+        const payload = { ...cleanedPayload };
         const encoded = await this.encode(payload)
         const signature = Buffer.from(base64url.baseDecode(jwsArray[2]));
         const signaturePayload = Buffer.from(`${jwsArray[0]}.${encoded.toString()}`)
