@@ -196,19 +196,22 @@ export default class Pollux implements IPollux {
   ): Promise<boolean> {
     try {
       const { proof } = revocation;
-      const { verificationMethod, type } = proof;
+      const { verificationMethod } = proof;
+      const proofType = proof.type;
+
       const base64VerificationMethod = verificationMethod.split(",").at(1);
       if (!base64VerificationMethod) {
         throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof invalid verificationMethod`);
       }
       const decodedVerificationMethod = JSON.parse(Buffer.from(base64.baseDecode(base64VerificationMethod)).toString());
 
-      if (type === JWTProofType.EcdsaSecp256k1Signature2019) {
-        const { publicKeyJwk, type } = decodedVerificationMethod;
+      if (proofType === JWTProofType.EcdsaSecp256k1Signature2019) {
+        const { publicKeyJwk } = decodedVerificationMethod;
+        const verificationMethodType = decodedVerificationMethod.type;
         if (!publicKeyJwk) {
           throw new PolluxError.InvalidCredentialStatus("No public jwk provided")
         }
-        if (type !== VerificationKeyType.EcdsaSecp256k1VerificationKey2019) {
+        if (verificationMethodType !== VerificationKeyType.EcdsaSecp256k1VerificationKey2019) {
           throw new PolluxError.InvalidCredentialStatus(`Only ${VerificationKeyType.EcdsaSecp256k1VerificationKey2019} is supported.`)
         }
         const curve = decodedVerificationMethod.publicKeyJwk.crv;
@@ -246,7 +249,8 @@ export default class Pollux implements IPollux {
         if (!isSignatureValid) {
           throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus invalid signature`);
         }
-        const isRevoked = this.extractEncodedList(revocation)[statusListIndex] === 1
+        const statusListDecoded = this.extractEncodedList(revocation)
+        const isRevoked = statusListDecoded[statusListIndex] !== 0
         return isRevoked
       }
       throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof type not supported`);
