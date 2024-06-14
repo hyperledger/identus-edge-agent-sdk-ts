@@ -245,7 +245,8 @@ export default class Pollux implements IPollux {
 
         const encoded = await this.encode(payload)
         const signature = Buffer.from(base64url.baseDecode(jwsArray[2]));
-        const isSignatureValid = pk.verify(encoded, signature);
+        const signaturePayload = Buffer.from(`${jwsArray[0]}.${encoded.toString()}`)
+        const isSignatureValid = pk.verify(signaturePayload, signature);
         if (!isSignatureValid) {
           throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus invalid signature`);
         }
