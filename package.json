@@ -39,7 +39,9 @@
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
     "docs": "npx typedoc --options typedoc.js",
-    "prepare": "npx husky"
+    "prepare": "npx husky",
+    "preinstall": "sh preinstall.sh",
+    "postinstall": "sh postinstall.sh"
   },
   "author": "IOHK",
   "repository": {
@@ -121,7 +123,7 @@
     "rollup-plugin-polyfill-node": "^0.12.0",
     "rollup-plugin-strip-code": "^0.2.7",
     "rollup-plugin-typescript2": "^0.34.1",
-    "semantic-release": "^21.1.1",
+    "semantic-release": "^24.0.0",
     "semantic-release-slack-bot": "^4.0.2",
     "sinon": "^15.0.1",
     "sinon-chai": "^3.7.0",
@@ -211,7 +213,9 @@
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
     "pako": "^2.1.0",
-    "rxdb": "14.17.1",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
+    "rxdb": "^14.17.1",
     "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"
