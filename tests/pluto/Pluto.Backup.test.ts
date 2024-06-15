@@ -223,7 +223,7 @@ describe("Pluto", () => {
         keys: [
           {
             recovery_id: Fixtures.Backup.secpPrivateKey.recoveryId,
-            key: Buffer.from(JSON.stringify(Fixtures.Backup.secpPrivateKey.to.JWK())).toString("base64url"),
+            key: Buffer.from(JSON.stringify(Fixtures.Backup.secpPrivateKey.to.JWK())).toString("base64url")
           }
         ],
         mediators: [],

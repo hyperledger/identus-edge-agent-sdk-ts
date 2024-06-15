@@ -11,7 +11,7 @@ export class RestoreTask implements IRestoreTask {
   constructor(
     private readonly Pluto: Domain.Pluto,
     private readonly backup: Domain.Backup.v0_0_1,
-  ) {}
+  ) { }
 
   async run(): Promise<void> {
     validate(this.backup, Domain.Backup.v0_0_1);
@@ -30,6 +30,10 @@ export class RestoreTask implements IRestoreTask {
       const decoded = Buffer.from(item.data, "base64url").toString();
 
       if (item.recovery_id === "jwt") {
+        return JWTCredential.fromJWS(decoded);
+      }
+
+      if (item.recovery_id === "sdjwt") {
         return JWTCredential.fromJWS(decoded);
       }
 
@@ -61,21 +65,19 @@ export class RestoreTask implements IRestoreTask {
   }
 
   async restoreKeys() {
-    this.backup.keys.forEach(item => {
+    return Promise.all(this.backup.keys.map(item => {
       const jwk = JSON.parse(Buffer.from(item.key, "base64url").toString());
       const key = this.jwkToDomain(jwk);
-
       if (notNil(item.index)) {
         key.keySpecification.set(Domain.KeyProperties.index, item.index.toString());
       }
-
       if (notEmptyString(item.did)) {
-        this.Pluto.storeDID(Domain.DID.from(item.did), key);
+        return this.Pluto.storeDID(Domain.DID.from(item.did), key);
+      } else {
+        return this.Pluto.storePrivateKey(key);
       }
-      else {
-        this.Pluto.storePrivateKey(key);
-      }
-    });
+    })
+    )
   }
 
   private jwkToDomain(jwk: Domain.JWK): Domain.PrivateKey {

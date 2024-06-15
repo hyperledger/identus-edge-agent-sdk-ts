@@ -3,12 +3,13 @@ import * as Models from "../../../models";
 import { JWTVerifiableCredentialRecoveryId } from "../../../../pollux/models/JWTVerifiableCredential";
 import { repositoryFactory } from "../../../repositories/builders/factory";
 import { IBackupTask } from "../interfaces";
+import { SDJWTVerifiableCredentialRecoveryId } from "../../../../pollux/models/SDJWTVerifiableCredential";
 
 export class BackupTask implements IBackupTask {
   constructor(
     private readonly Pluto: Domain.Pluto,
     private readonly Repositories: ReturnType<typeof repositoryFactory>
-  ) {}
+  ) { }
 
   async run(): Promise<Domain.Backup.Schema> {
     const credentials = await this.getCredentialBackups();
@@ -59,17 +60,14 @@ export class BackupTask implements IBackupTask {
         const keyLink = didKeyLinks.find(x => x.keyId === key.uuid);
         const did = didModels.find(x => x.uuid === keyLink?.didId);
         const jwk = key.to.JWK();
-
         const backup: Domain.Backup.v0_0_1.Key = {
           recovery_id: key.recoveryId,
           key: Buffer.from(JSON.stringify(jwk)).toString("base64url"),
           index: key.index,
           did: did?.uuid,
         };
-
         return acc.concat(backup);
       }
-
       return acc;
     }, []);
 
@@ -99,10 +97,13 @@ export class BackupTask implements IBackupTask {
   }
 
   private mapCredential = (model: Models.Credential): Domain.Backup.v0_0_1.Credential => {
-    const recoveryId = model.recoveryId === JWTVerifiableCredentialRecoveryId ? "jwt" : "anoncred";
-    const data = model.recoveryId === JWTVerifiableCredentialRecoveryId
-      ? JSON.parse(model.dataJson).id
-      : model.dataJson;
+    const recoveryId = model.recoveryId === JWTVerifiableCredentialRecoveryId ? "jwt" :
+      model.recoveryId === SDJWTVerifiableCredentialRecoveryId ? "sdjwt" :
+        "anoncred";
+
+    const data = model.recoveryId === JWTVerifiableCredentialRecoveryId ? JSON.parse(model.dataJson).id :
+      model.recoveryId === SDJWTVerifiableCredentialRecoveryId ? JSON.parse(model.dataJson).id :
+        model.dataJson;
 
     return {
       recovery_id: recoveryId,

@@ -6,6 +6,7 @@ import { JWTVerifiableCredentialRecoveryId } from "../../pollux/models/JWTVerifi
 import { AnonCredsRecoveryId } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PlutoError } from '../../domain';
 import { MigrationStrategies } from 'rxdb/dist/types/types/plugins/migration';
+import { SDJWTVerifiableCredentialRecoveryId } from '../../pollux/models/SDJWTVerifiableCredential';
 
 /**
  * Definition for Storable Credential model
@@ -64,7 +65,14 @@ export const CredentialMigration: MigrationStrategies = {
       const jwtObj = JSON.parse(document.dataJson);
       return {
         ...document,
-        id: jwtObj.id
+        id: jwtObj.jti || jwtObj.id
+      }
+    }
+    if (recoveryId == SDJWTVerifiableCredentialRecoveryId) {
+      const jwtObj = JSON.parse(document.dataJson);
+      return {
+        ...document,
+        id: jwtObj.jti || jwtObj.id
       }
     }
     if (recoveryId == AnonCredsRecoveryId) {

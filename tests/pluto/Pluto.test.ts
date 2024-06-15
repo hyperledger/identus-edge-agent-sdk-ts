@@ -21,10 +21,9 @@ describe("Pluto", () => {
     const store = new Store({
       name: "randomdb" + randomUUID(),
       storage: InMemoryStore,
-      password: 'random12434',
-      ignoreDuplicate: true
-    }); instance = new Pluto(store, apollo);
-
+      password: 'random12434'
+    });
+    instance = new Pluto(store, apollo);
     await instance.start();
   });
 

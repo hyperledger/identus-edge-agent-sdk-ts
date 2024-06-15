@@ -1,6 +1,8 @@
+// @ts-ignore
+import { addRxPlugin, createRxDatabase, removeRxDatabase } from "rxdb";
 import { MangoQuery } from "rxdb/dist/types/types/rx-query";
+import { RxCollection } from "rxdb/dist/types/types/rx-collection";
 import { RxDocument } from "rxdb/dist/types/types/rx-document";
-import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
 import { CollectionList, makeCollections } from "./collections";
 import type { Pluto } from "../Pluto";
@@ -8,8 +10,6 @@ import { Model } from '../models';
 import { Domain } from '../..';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import { CollectionsOfDatabase, RxDatabase, RxDatabaseCreator } from 'rxdb/dist/types/types/rx-database';
-import { addRxPlugin } from "rxdb/dist/types/plugin";
-import { createRxDatabase, removeRxDatabase } from "rxdb/dist/types/rx-database";
 import { RxDBMigrationPlugin } from "rxdb/plugins/migration-schema";
 
 export class RxdbStore implements Pluto.Store {
@@ -20,11 +20,10 @@ export class RxdbStore implements Pluto.Store {
     private readonly collections?: CollectionList
   ) {
     addRxPlugin(RxDBQueryBuilderPlugin);
-    addRxPlugin(RxDBJsonDumpPlugin);
     addRxPlugin(RxDBMigrationPlugin);
     addRxPlugin(RxDBUpdatePlugin);
-  }
 
+  }
 
   get db() {
     if (!this._db) {
@@ -41,10 +40,44 @@ export class RxdbStore implements Pluto.Store {
     if (!this._db) {
       this._db = await createRxDatabase({
         ...this.options,
-        multiInstance: true
+        multiInstance: true,
+        eventReduce: true,
+        ignoreDuplicate: true,
+        allowSlowCount: true,
       });
       const collections = makeCollections(this.collections ?? {});
-      await this._db.addCollections(collections);
+
+      const created = await this.db.addCollections(collections);
+
+      const withMigration = await Promise.all(
+        Object.keys(created).map(
+          key => new Promise<{
+            needed: boolean,
+            collection: RxCollection<any, any, any, any, any>
+          }>((res, err) => {
+            created[key].migrationNeeded().then((yes: boolean) => ({
+              needed: yes,
+              collection: created[key]
+            })).then(res).catch(err)
+          })
+        )
+      )
+
+      const isMigrationNeeded = withMigration.find(({ needed }) => needed === true);
+
+      if (isMigrationNeeded?.needed) {
+        isMigrationNeeded.collection.startMigration(10);
+        const migrationState = isMigrationNeeded.collection.getMigrationState();
+        return new Promise((resolve, reject) => {
+          migrationState.$.subscribe({
+            error: (err: Error) => reject(err),
+            next: (state: any) =>
+              state.error ? reject(state.error) :
+                state.status === "DONE" ? resolve() : null
+          }
+          );
+        })
+      }
     }
   }
 
@@ -56,8 +89,6 @@ export class RxdbStore implements Pluto.Store {
       }
     }).exec();
     if (row) {
-
-      //Improve error handling when not found
       await row.patch(model);
     }
   }
@@ -69,7 +100,6 @@ export class RxdbStore implements Pluto.Store {
         uuid: uuid
       }
     });
-    //TODO: Improve error handling, specially when not found
     await row?.remove();
   }
 
@@ -96,27 +126,11 @@ export class RxdbStore implements Pluto.Store {
     await table.insert(data);
   }
 
-  /**
-   * Use with caution, this will remove all entries from database
-   */
-  async cleanup() {
+  async clean() {
     const storages = Array.from(this.db.storageInstances.values());
-
     for (const storage of storages) {
-      if ((storage as any).cleanup) {
-        await (storage as any).cleanup(Infinity);
-      } else if ((storage as any).clear) {
-        await (storage as any).clear();
-      }
+      await (storage as any).remove()
     }
-  }
-
-  /**
-   * Use with caution, this will remove all entries from database
-   * and then destroy the database itself.
-   */
-  async clear() {
-    await this.cleanup();
     await removeRxDatabase(this.options.name, this.db.storage);
   }
 }

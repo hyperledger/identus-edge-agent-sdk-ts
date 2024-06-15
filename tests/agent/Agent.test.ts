@@ -54,11 +54,15 @@ import { BasicMediatorHandler, Castor, Store } from "../../src";
 import { randomUUID } from "crypto";
 import { AgentDIDHigherFunctions } from "../../src/edge-agent/Agent.DIDHigherFunctions";
 import { JWT } from "../../src/pollux/utils/JWT";
+import { mockPluto } from "../fixtures/inmemory/factory";
 
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 const expect = chai.expect;
+const seed: Seed = {
+  value: new Uint8Array([69, 191, 35, 232, 213, 102, 3, 93, 180, 106, 224, 144, 79, 171, 79, 223, 154, 217, 235, 232, 96, 30, 248, 92, 100, 38, 38, 42, 101, 53, 2, 247, 56, 111, 148, 220, 237, 122, 15, 120, 55, 82, 89, 150, 35, 45, 123, 135, 159, 140, 52, 127, 239, 148, 150, 109, 86, 145, 77, 109, 47, 60, 20, 16])
+};
 
 let agent: Agent;
 let pluto: IPluto;
@@ -66,7 +70,66 @@ let pollux: Pollux;
 let castor: CastorType;
 let sandbox: sinon.SinonSandbox;
 let store: Pluto.Store;
+let apollo: Apollo
+let mercury: Mercury;
+let polluxInstance: Pollux;
 
+
+async function createAndStartBackupRestoreAgent(
+  fnPluto: IPluto, jws?: string) {
+
+  await fnPluto.start()
+
+  const didHigherFunctions = new AgentDIDHigherFunctions(
+    apollo,
+    castor,
+    fnPluto,
+    new BasicMediatorHandler(DID.fromString("did:peer:123456"), mercury, fnPluto),
+    seed
+  );
+
+  const agentCredentials = new AgentCredentials(
+    apollo,
+    castor,
+    fnPluto,
+    polluxInstance,
+    seed,
+    mercury,
+    didHigherFunctions
+  );
+
+  const connectionsManager = ConnectionsManagerMock.buildMock({
+    castor,
+    mercury,
+    pluto: fnPluto,
+    agentCredentials,
+    options: {
+      experiments: {
+        liveMode: false
+      }
+    }
+  });
+
+  const restoreAgent = Agent.instanceFromConnectionManager(
+    apollo,
+    castor,
+    fnPluto,
+    mercury,
+    connectionsManager,
+    seed,
+    undefined,
+    {
+      experiments: {
+        liveMode: false
+      }
+    }
+  );
+
+  if (jws) {
+    await restoreAgent.backup.restore(jws);
+  }
+  return restoreAgent
+}
 
 describe("Agent Tests", () => {
   afterEach(async () => {
@@ -86,7 +149,7 @@ describe("Agent Tests", () => {
       })),
     }));
     sandbox = sinon.createSandbox();
-    const apollo: Apollo = new Apollo();
+    apollo = new Apollo();
     castor = CastorMock;
     const httpManager: Api = {
       request: async () => new HttpResponse<any>(new Uint8Array(), 200),
@@ -101,13 +164,11 @@ describe("Agent Tests", () => {
       password: Buffer.from("demoapp").toString("hex")
     });
     pluto = new Pluto(store, apollo);
-    const mercury = new Mercury(castor, didProtocol, httpManager);
+    mercury = new Mercury(castor, didProtocol, httpManager);
 
-    const polluxInstance = new Pollux(apollo, castor);
+    polluxInstance = new Pollux(apollo, castor);
     const handler = new BasicMediatorHandler(DID.fromString("did:peer:123456"), mercury, pluto);
-    const seed: Seed = {
-      value: new Uint8Array([69, 191, 35, 232, 213, 102, 3, 93, 180, 106, 224, 144, 79, 171, 79, 223, 154, 217, 235, 232, 96, 30, 248, 92, 100, 38, 38, 42, 101, 53, 2, 247, 56, 111, 148, 220, 237, 122, 15, 120, 55, 82, 89, 150, 35, 45, 123, 135, 159, 140, 52, 127, 239, 148, 150, 109, 86, 145, 77, 109, 47, 60, 20, 16])
-    };
+
 
     const didHigherFunctions = new AgentDIDHigherFunctions(
       apollo,
@@ -306,15 +367,23 @@ describe("Agent Tests", () => {
       });
 
       test("round trip integration", async () => {
-        // empty db of linksecret
-        (store as any).cleanup();
-        sandbox.stub(pluto, "backup").resolves(Fixtures.Backup.backupJson);
-        const spyRestore = sandbox.spy(pluto, "restore");
 
-        const jwe = await agent.backup.createJWE();
-        await agent.backup.restore(jwe);
+        const backupPluto = mockPluto();
+        sandbox.stub(backupPluto, "backup").resolves(Fixtures.Backup.backupJson);
 
+        const backupAgent = await createAndStartBackupRestoreAgent(
+          backupPluto
+        )
+
+        const jwe = await backupAgent.backup.createJWE();
         expect(jwe).to.be.a("string");
+
+        const restorePluto = mockPluto();
+        const spyRestore = sandbox.spy(restorePluto, "restore");
+        await createAndStartBackupRestoreAgent(
+          restorePluto,
+          jwe
+        )
 
         // running SERDE to remove nil values, which will happen during backup/restore
         const expected = JSON.parse(JSON.stringify(Fixtures.Backup.backupJson));

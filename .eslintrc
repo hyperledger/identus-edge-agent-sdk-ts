@@ -18,15 +18,14 @@
   ],
   "plugins": [
     "@typescript-eslint",
-    "react",
     "unused-imports"
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
     "comma-dangle": 0,
     "no-unexpected-multiline": "warn",
     "prefer-const": "warn",
@@ -48,11 +47,7 @@
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": "off"
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
+  "settings": {},
   "env": {
     "browser": true,
     "node": true,

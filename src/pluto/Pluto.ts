@@ -99,6 +99,16 @@ export namespace Pluto {
      * @param model 
      */
     delete(table: string, uuid: string): Promise<void>;
+
+    /**
+     * from rxDB storages
+     */
+    clean(): Promise<void>;
+
+    /**
+     * from rxDB storages
+     */
+    clean(): Promise<void>;
   }
 }
 
@@ -190,7 +200,6 @@ export class Pluto implements Domain.Pluto {
     const links = await this.Repositories.DIDKeyLinks.getModels({ selector: { didId: did.uuid } });
     const $or = links.map(x => ({ uuid: x.keyId }));
     const keys = await this.Repositories.Keys.get({ selector: { $or } });
-
     return keys;
   }
 
@@ -201,7 +210,6 @@ export class Pluto implements Domain.Pluto {
     await Promise.all(
       asArray(keys).map(async key => {
         await this.Repositories.Keys.save(key);
-
         await this.Repositories.DIDKeyLinks.insert({
           alias,
           didId: did.uuid,
@@ -209,8 +217,6 @@ export class Pluto implements Domain.Pluto {
         });
       })
     );
-
-
   }
 
   /** Prism DIDs **/
