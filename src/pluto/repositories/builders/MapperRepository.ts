@@ -1,4 +1,4 @@
-import type { MangoQuery } from "rxdb";
+import { MangoQuery } from "rxdb/dist/types/types/rx-query";
 import type * as Domain from "../../../domain";
 import { Model } from "../../models";
 import { BaseRepository } from "./BaseRepository";
@@ -11,8 +11,7 @@ import { BaseRepository } from "./BaseRepository";
  * while mapping between a Domain class and a Model object
  */
 export abstract class MapperRepository<T extends Model, D extends Domain.Pluto.Storable>
-  extends BaseRepository<T>
-{
+  extends BaseRepository<T> {
   /**
    * Map from a Model to the Domain class
    * 

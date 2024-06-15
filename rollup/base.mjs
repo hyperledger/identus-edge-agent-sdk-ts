@@ -24,14 +24,6 @@ const externals = [
   "did-jwt",
   "axios",
   "apollo",
-
-  "rxjs",
-  "rxdb/plugins/storage-dexie",
-  "rxdb/plugins/encryption-crypto-js",
-  "rxdb",
-  "rxdb/plugins/migration",
-  "rxdb/plugins/query-builder",
-  "rxdb/plugins/json-dump",
 ];
 
 export default (outputs, plugins = []) => {

@@ -1,4 +1,4 @@
-import { MangoQuery } from "rxdb";
+import { MangoQuery } from "rxdb/dist/types/types/rx-query";
 import * as Domain from "../../domain";
 import type * as Models from "../models";
 import type { Pluto } from "../Pluto";

@@ -1,12 +1,16 @@
-import { CollectionsOfDatabase, MangoQuery, RxDatabase, RxDatabaseCreator, RxDocument, addRxPlugin, createRxDatabase, removeRxDatabase } from 'rxdb';
+import { MangoQuery } from "rxdb/dist/types/types/rx-query";
+import { RxDocument } from "rxdb/dist/types/types/rx-document";
 import { RxDBJsonDumpPlugin } from 'rxdb/plugins/json-dump';
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
 import { CollectionList, makeCollections } from "./collections";
 import type { Pluto } from "../Pluto";
 import { Model } from '../models';
-import { RxDBEncryptedMigrationPlugin } from '../migration';
 import { Domain } from '../..';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+import { CollectionsOfDatabase, RxDatabase, RxDatabaseCreator } from 'rxdb/dist/types/types/rx-database';
+import { addRxPlugin } from "rxdb/dist/types/plugin";
+import { createRxDatabase, removeRxDatabase } from "rxdb/dist/types/rx-database";
+import { RxDBMigrationPlugin } from "rxdb/plugins/migration-schema";
 
 export class RxdbStore implements Pluto.Store {
   private _db?: RxDatabase<CollectionsOfDatabase, any, any>;
@@ -17,7 +21,7 @@ export class RxdbStore implements Pluto.Store {
   ) {
     addRxPlugin(RxDBQueryBuilderPlugin);
     addRxPlugin(RxDBJsonDumpPlugin);
-    addRxPlugin(RxDBEncryptedMigrationPlugin);
+    addRxPlugin(RxDBMigrationPlugin);
     addRxPlugin(RxDBUpdatePlugin);
   }
 
@@ -99,7 +103,11 @@ export class RxdbStore implements Pluto.Store {
     const storages = Array.from(this.db.storageInstances.values());
 
     for (const storage of storages) {
-      await storage.cleanup(Infinity);
+      if ((storage as any).cleanup) {
+        await (storage as any).cleanup(Infinity);
+      } else if ((storage as any).clear) {
+        await (storage as any).clear();
+      }
     }
   }
 

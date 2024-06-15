@@ -39,7 +39,9 @@
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
     "docs": "npx typedoc --options typedoc.js",
-    "prepare": "npx husky"
+    "prepare": "npx husky",
+    "preinstall": "sh preinstall.sh",
+    "postinstall": "sh postinstall.sh"
   },
   "author": "IOHK",
   "repository": {
@@ -63,7 +65,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@babel/traverse": "^7.23.2",
     "@droppedcode/typedoc-plugin-relative-includes": "^1.0.5",
-    "@pluto-encrypted/inmemory": "^1.12.3",
+    "@pluto-encrypted/inmemory": "^2.0.1",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
@@ -110,6 +112,8 @@
     "husky": "^9.0.11",
     "jest": "^29.5.0",
     "jest-junit": "^16.0.0",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.0.2",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-copy": "^3.5.0",
@@ -119,7 +123,7 @@
     "rollup-plugin-polyfill-node": "^0.12.0",
     "rollup-plugin-strip-code": "^0.2.7",
     "rollup-plugin-typescript2": "^0.34.1",
-    "semantic-release": "^21.1.1",
+    "semantic-release": "^24.0.0",
     "semantic-release-slack-bot": "^4.0.2",
     "sinon": "^15.0.1",
     "sinon-chai": "^3.7.0",
@@ -207,12 +211,9 @@
     "jose": "^4.15.5",
     "jsonwebtoken": "^9.0.0",
     "multiformats": "^9.9.0",
-    "rxdb": "^14.17.1",
+    "rxdb": "^15.24.0",
     "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"
-  },
-  "overrides": {
-    "crypto-js": "^4.2.0"
   }
 }

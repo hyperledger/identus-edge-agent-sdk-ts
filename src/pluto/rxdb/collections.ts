@@ -1,4 +1,4 @@
-import { RxCollectionCreator } from 'rxdb';
+import { RxCollectionCreator } from "rxdb/dist/types/types/rx-collection";
 import * as Models from "../models";
 
 export type CollectionList = Record<string, RxCollectionCreator>;

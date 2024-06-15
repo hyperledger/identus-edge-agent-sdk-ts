@@ -1,10 +1,10 @@
-import type { MangoQuery } from "rxdb";
 import * as Domain from "../domain";
 import * as Models from "./models";
 import { PeerDID } from "../peer-did/PeerDID";
 import { BackupManager } from "./backup/BackupManager";
 import { PlutoRepositories, repositoryFactory } from "./repositories";
 import { Arrayable, asArray } from "../utils";
+import { MangoQuery } from "rxdb/dist/types/types/rx-query";
 
 
 /**
