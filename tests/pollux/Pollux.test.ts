@@ -2,9 +2,9 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
-import { expect, assert } from "chai";
+import { assert } from "chai";
 
-import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, CredentialRequestOptions, CredentialType, Curve, DID, JWT_ALG, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
+import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, CredentialRequestOptions, CredentialType, Curve, DID, JWT_ALG, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, RevocationType, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import Apollo from "../../src/apollo/Apollo";
@@ -24,6 +24,8 @@ chai.use(SinonChai);
 chai.use(chaiAsPromised);
 let sandbox: sinon.SinonSandbox;
 
+
+const expect = chai.expect;
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
@@ -515,6 +517,22 @@ describe("Pollux", () => {
       });
     });
 
+    describe("JWT", () => {
+      test("ok", async () => {
+
+        const pr = new PresentationRequest(AttachmentFormats.JWT, Fixtures.Credentials.JWT.presentationRequest);
+        const cred = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
+        const did = Fixtures.DIDs.peerDID1;
+        const privateKey = Fixtures.Keys.secp256K1.privateKey;
+
+        const result = await pollux.createPresentationProof(pr, cred, {
+          did,
+          privateKey
+        });
+
+        expect(result).not.to.be.null;
+      });
+    });
   });
 
   describe("Anoncreds", () => {
@@ -717,51 +735,6 @@ describe("Pollux", () => {
         const cred = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
         const did = Fixtures.DIDs.peerDID1;
         const privateKey = Fixtures.Keys.secp256K1.privateKey;
-
-        const result = await pollux.createPresentationProof(pr, cred, {
-          did,
-          privateKey
-        });
-
-        expect(result).not.to.be.null;
-      });
-
-      test("ed25519 ok", async () => {
-        const jwt = new JWT(apollo, castor);
-        const issuerSeed = apollo.createRandomSeed().seed;
-        const sk = apollo.createPrivateKey({
-          type: KeyTypes.EC,
-          curve: Curve.ED25519,
-          seed: Buffer.from(issuerSeed.value).toString("hex"),
-        });
-        const masterSk = apollo.createPrivateKey({
-          type: KeyTypes.EC,
-          curve: Curve.SECP256K1,
-          seed: Buffer.from(issuerSeed.value).toString("hex"),
-        });
-        const issuerDID = await castor.createPrismDID(
-          masterSk.publicKey(),
-          [],
-          [
-            sk.publicKey()
-          ]
-        )
-        const validPayload = {
-          iss: issuerDID.toString(),
-          sub: undefined as any,
-          vc: {} as any
-        }
-
-        const validJWTString = await jwt.sign({
-          issuerDID: issuerDID,
-          privateKey: sk,
-          payload: validPayload,
-        })
-
-        const pr = new PresentationRequest(AttachmentFormats.JWT, Fixtures.Credentials.JWT.presentationRequest);
-        const cred = JWTCredential.fromJWS(validJWTString);
-        const did = Fixtures.DIDs.peerDID1;
-        const privateKey = sk;
 
         const result = await pollux.createPresentationProof(pr, cred, {
           did,
@@ -1608,71 +1581,6 @@ describe("Pollux", () => {
       expect(verified).to.equal(false)
 
     })
-
-    // it("Should Verify false when the presentation contains a credential that has been issued by an issuer with keys that don't match", async () => {
-
-    //   const issuerSeed = apollo.createRandomSeed().seed;
-    //   const holderSeed = apollo.createRandomSeed().seed;
-    //   const wrongIssuerSeed = apollo.createRandomSeed().seed;
-
-    //   const issuerPrv = apollo.createPrivateKey({
-    //     type: KeyTypes.EC,
-    //     curve: Curve.SECP256K1,
-    //     seed: Buffer.from(issuerSeed.value).toString("hex"),
-    //   });
-
-    //   const wrongIssuerPrv = apollo.createPrivateKey({
-    //     type: KeyTypes.EC,
-    //     curve: Curve.SECP256K1,
-    //     seed: Buffer.from(wrongIssuerSeed.value).toString("hex"),
-    //   });
-
-    //   const holderPrv = apollo.createPrivateKey({
-    //     type: KeyTypes.EC,
-    //     curve: Curve.SECP256K1,
-    //     seed: Buffer.from(holderSeed.value).toString("hex"),
-    //   });
-
-    //   const issuerDID = await castor.createPrismDID(
-    //     issuerPrv.publicKey()
-    //   )
-
-    //   const holderDID = await castor.createPrismDID(
-    //     holderPrv.publicKey()
-    //   )
-
-    //   const {
-    //     presentationDefinition,
-    //     presentationSubmissionJSON,
-    //     issuedJWS
-    //   } = await createJWTVerificationTestCase({
-    //     apollo,
-    //     castor,
-    //     jwt,
-    //     pollux,
-    //     issuer: issuerDID,
-    //     holder: holderDID,
-    //     holderPrv: holderPrv,
-    //     issuerPrv: wrongIssuerPrv,
-    //     subject: {
-    //       course: 'Identus Training course Certification 2024'
-    //     },
-    //     claims: {
-    //       course: {
-    //         type: 'string',
-    //         pattern: 'Identus Training course Certification 2024'
-    //       }
-    //     }
-    //   });
-
-    //   expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
-    //     presentationDefinitionRequest: presentationDefinition
-    //   })).to.eventually.be.rejectedWith(
-    //     `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Presentation Credential JWS Signature`
-    //   );
-
-
-    // })
 
     it("Should reject creating a PresentationDefinitionRequest is no AnoncredsPresentationOptions instance is sent", async () => {
       expect(

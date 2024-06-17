@@ -16,6 +16,30 @@ export class InvalidPresentationProofArgs extends Error {
     }
 }
 
+export class CredentialRevocationTypeInvalid extends Error {
+    constructor(message?: string) {
+        super(message || "CredentialStatus revocation type not supported");
+    }
+}
+
+export class InvalidCredentialStatus extends Error {
+    constructor(message?: string) {
+        super(message || "CredentialStatus status is invalid");
+    }
+}
+
+export class InvalidRevocationStatusResponse extends Error {
+    constructor(message?: string) {
+        super(message || "CredentialStatus response is invalid");
+    }
+}
+
+export class InvalidRevocationStatusResponseSignature extends Error {
+    constructor(message?: string) {
+        super(message || "CredentialStatus response proof signatue mismatch or invalid.");
+    }
+}
+
 export class CredentialTypeNotSupported extends Error {
     constructor(message?: string) {
         super(message || "Credential type not supported");

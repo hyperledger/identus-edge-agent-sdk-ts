@@ -134,6 +134,10 @@ export default class Agent
     this.backup = new AgentBackup(this);
   }
 
+  isCredentialRevoked(credential: Domain.Credential) {
+    return this.agentCredentials.isCredentialRevoked(credential)
+  }
+
   /**
    * Convenience initializer for Agent
    * allowing default instantiation, omitting all but the absolute necessary parameters

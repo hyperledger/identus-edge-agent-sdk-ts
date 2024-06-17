@@ -53,6 +53,8 @@ export interface Pollux {
     [name: string]: any
   }>;
 
+  isCredentialRevoked: (credential: Credential) => Promise<boolean>;
+
   parseCredential: (
     credentialBuffer: Uint8Array,
     options?: { type: CredentialType;[name: string]: any; }
