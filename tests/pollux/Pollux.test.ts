@@ -181,7 +181,7 @@ describe("Pollux", () => {
 
     const testFn = (format: any, expected: CredentialType) => {
       it(`attachments[0].format is ${format} - returns CredentialType.${expected}`, () => {
-        const msg = new Message("", undefined, "piuri");
+        const msg = new Message("{}", undefined, "piuri");
         msg.attachments.push(
           new AttachmentDescriptor({} as any, undefined, undefined, undefined, format)
         );
@@ -207,7 +207,7 @@ describe("Pollux", () => {
     describe("Multiple Attachments", () => {
       const testMultipleFn = (format: any, expected: CredentialType) => {
         it(`matches first item: ${format} - returns CredentialType.${expected}`, () => {
-          const msg = new Message("", undefined, "piuri");
+          const msg = new Message("{}", undefined, "piuri");
           msg.attachments.push(
             new AttachmentDescriptor({} as any, undefined, undefined, undefined, format),
             new AttachmentDescriptor({} as any, undefined, undefined, undefined, "secondFormat"),

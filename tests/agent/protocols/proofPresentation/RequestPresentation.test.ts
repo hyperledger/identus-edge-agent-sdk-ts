@@ -4,6 +4,7 @@ import { AgentError } from "../../../../src/domain/models/Errors";
 import { ProposePresentation } from "../../../../src/edge-agent/protocols/proofPresentation/ProposePresentation";
 import { RequestPresentation } from "../../../../src/edge-agent/protocols/proofPresentation/RequestPresentation";
 import { DIDTest } from "../../helpers/DID";
+import * as Messages from "../../../fixtures/messages";
 
 describe("ProofPresentation->RequestPresentation Tests", () => {
   it("Should create a RequestPresentation from a valid ProposePresentationMessage", async () => {
@@ -27,6 +28,19 @@ describe("ProofPresentation->RequestPresentation Tests", () => {
 
     expect(validRequestPresentation).to.deep.equal(testRequestPresentation);
   });
+
+  test("RequestPresentation from an actual PrismAgent Message", () => {
+    const sut = RequestPresentation.fromMessage(Messages.RequestPresentationJWT);
+
+    expect(sut).to.be.instanceOf(RequestPresentation);
+    expect(sut.attachments).to.deep.eq(Messages.RequestPresentationJWT.attachments);
+    // expect(sut.body).to.deep.eq(Messages.RequestPresentationJWT.body);
+    expect(sut.from).to.deep.eq(Messages.RequestPresentationJWT.from);
+    expect(sut.id).to.deep.eq(Messages.RequestPresentationJWT.id);
+    expect(sut.thid).to.deep.eq(Messages.RequestPresentationJWT.thid);
+    expect(sut.to).to.deep.eq(Messages.RequestPresentationJWT.to);
+  });
+
   it("Should throw an error when invalid propose message is used to initialise RequestPresentation", () => {
     const invalidRequestPresentation = new Message(
       "{}",

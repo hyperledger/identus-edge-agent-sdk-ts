@@ -1,4 +1,4 @@
-import { Nil } from "./types";
+import { JsonObj, Nil } from "./types";
 
 /**
  * isNullish
@@ -89,3 +89,15 @@ export function asArray<T>(items: T | T[] | Nil, guard?: (item: unknown) => item
 
   return isNil(guard) ? unGuarded : unGuarded.filter(guard);
 }
+
+export const asJsonObj = (value: unknown): JsonObj => {
+  if (isObject(value)) {
+    return value;
+  }
+
+  if (isString(value)) {
+    return JSON.parse(value);
+  }
+
+  return {};
+};

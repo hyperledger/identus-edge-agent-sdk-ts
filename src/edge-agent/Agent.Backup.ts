@@ -69,6 +69,7 @@ export class AgentBackup {
       [Domain.KeyProperties.type]: Domain.KeyTypes.Curve25519,
       [Domain.KeyProperties.curve]: Domain.Curve.X25519,
       [Domain.KeyProperties.seed]: Buffer.from(this.Agent.seed.value).toString("hex"),
+      [Domain.KeyProperties.derivationPath]: "m/0'/0'/0'"
     });
 
     if (!masterKey.isExportable()) {
