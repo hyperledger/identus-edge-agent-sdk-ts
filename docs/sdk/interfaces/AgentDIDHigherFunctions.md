@@ -33,13 +33,13 @@
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:77](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L77)
+[src/edge-agent/types/index.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L90)
 
 ___
 
 ### createNewPrismDID
 
-▸ **createNewPrismDID**(`alias`, `services`, `keyPathIndex?`): `Promise`\<[`DID`](../classes/Domain.DID.md)\>
+▸ **createNewPrismDID**(`alias`, `services`, `keyPathIndex?`, `issuingKeys?`): `Promise`\<[`DID`](../classes/Domain.DID.md)\>
 
 #### Parameters
 
@@ -48,6 +48,7 @@ ___
 | `alias` | `string` |
 | `services` | [`Service`](../classes/Domain.Service.md)[] |
 | `keyPathIndex?` | `number` |
+| `issuingKeys?` | ([`PublicKey`](../classes/Domain.PublicKey.md) \| [`KeyPair`](../classes/Domain.KeyPair.md))[] |
 
 #### Returns
 
@@ -55,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L82)
+[src/edge-agent/types/index.ts:95](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L95)
 
 ___
 
@@ -76,4 +77,4 @@ ___
 
 #### Defined in
 
-[src/prism-agent/types/index.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/types/index.ts#L75)
+[src/edge-agent/types/index.ts:88](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L88)

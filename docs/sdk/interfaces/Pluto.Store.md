@@ -39,7 +39,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:98](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L98)
+[src/pluto/Pluto.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L101)
 
 ___
 
@@ -68,7 +68,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L84)
+[src/pluto/Pluto.ts:87](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L87)
 
 ___
 
@@ -120,7 +120,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/Pluto.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L76)
+[src/pluto/Pluto.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L79)
 
 ___
 
@@ -137,7 +137,7 @@ Will be called first before any usage, if provided.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L47)
+[src/pluto/Pluto.ts:50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L50)
 
 ___
 
@@ -166,4 +166,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:91](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L91)
+[src/pluto/Pluto.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L94)

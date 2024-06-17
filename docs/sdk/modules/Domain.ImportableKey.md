@@ -43,8 +43,8 @@ object with importable functions
 | `Buffer` | (`value`: `Buffer`) => `T` |
 | `Hex` | (`value`: `string`) => `T` |
 | `PEM` | (`value`: `string`) => `T` |
-| `String` | (`value`: `string`, `encoding?`: ``"base64"`` \| ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `T` |
+| `String` | (`value`: `string`, `encoding?`: `BufferEncoding`) => `T` |
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L76)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L76)

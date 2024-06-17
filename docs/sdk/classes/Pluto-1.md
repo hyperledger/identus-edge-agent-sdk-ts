@@ -18,12 +18,14 @@ preferred underlying storage technology, most appropriate for your use case.
 
 ### Properties
 
+- [BackupMgr](Pluto-1.md#backupmgr)
 - [Repositories](Pluto-1.md#repositories)
 - [keyRestoration](Pluto-1.md#keyrestoration)
 - [store](Pluto-1.md#store)
 
 ### Methods
 
+- [backup](Pluto-1.md#backup)
 - [deleteMessage](Pluto-1.md#deletemessage)
 - [getAllCredentials](Pluto-1.md#getallcredentials)
 - [getAllDidPairs](Pluto-1.md#getalldidpairs)
@@ -37,13 +39,15 @@ preferred underlying storage technology, most appropriate for your use case.
 - [getMessage](Pluto-1.md#getmessage)
 - [getPairByDID](Pluto-1.md#getpairbydid)
 - [getPairByName](Pluto-1.md#getpairbyname)
-- [getPrismDID](Pluto-1.md#getprismdid)
+- [getPrismDIDS](Pluto-1.md#getprismdids)
 - [mapDIDPairToDomain](Pluto-1.md#mapdidpairtodomain)
 - [onlyOne](Pluto-1.md#onlyone)
+- [restore](Pluto-1.md#restore)
 - [revokeCredential](Pluto-1.md#revokecredential)
 - [start](Pluto-1.md#start)
 - [storeCredential](Pluto-1.md#storecredential)
 - [storeCredentialMetadata](Pluto-1.md#storecredentialmetadata)
+- [storeDID](Pluto-1.md#storedid)
 - [storeDIDPair](Pluto-1.md#storedidpair)
 - [storeLinkSecret](Pluto-1.md#storelinksecret)
 - [storeMediator](Pluto-1.md#storemediator)
@@ -72,9 +76,19 @@ preferred underlying storage technology, most appropriate for your use case.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:105](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L105)
+[src/pluto/Pluto.ts:109](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L109)
 
 ## Properties
+
+### BackupMgr
+
+• **BackupMgr**: `BackupManager`
+
+#### Defined in
+
+[src/pluto/Pluto.ts:106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L106)
+
+___
 
 ### Repositories
 
@@ -95,7 +109,7 @@ preferred underlying storage technology, most appropriate for your use case.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:103](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L103)
+[src/pluto/Pluto.ts:107](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L107)
 
 ___
 
@@ -105,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:107](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L107)
+[src/pluto/Pluto.ts:111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L111)
 
 ___
 
@@ -115,9 +129,29 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L106)
+[src/pluto/Pluto.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L110)
 
 ## Methods
+
+### backup
+
+▸ **backup**(): `Promise`\<\{ `credentials`: \{ `data`: `string` ; `recovery_id`: `string`  }[] ; `did_pairs`: \{ `alias`: `string` ; `holder`: `string` ; `recipient`: `string`  }[] ; `dids`: \{ `alias?`: `string` ; `did`: `string`  }[] ; `keys`: \{ `did?`: `string` ; `index?`: `number` ; `key`: `string` ; `recovery_id`: `string`  }[] ; `link_secret?`: `string` = linksecret; `mediators`: \{ `holder_did`: `string` ; `mediator_did`: `string` ; `routing_did`: `string`  }[] ; `messages`: `string`[] ; `version?`: ``"0.0.1"``  }\>
+
+Backups *
+
+#### Returns
+
+`Promise`\<\{ `credentials`: \{ `data`: `string` ; `recovery_id`: `string`  }[] ; `did_pairs`: \{ `alias`: `string` ; `holder`: `string` ; `recipient`: `string`  }[] ; `dids`: \{ `alias?`: `string` ; `did`: `string`  }[] ; `keys`: \{ `did?`: `string` ; `index?`: `number` ; `key`: `string` ; `recovery_id`: `string`  }[] ; `link_secret?`: `string` = linksecret; `mediators`: \{ `holder_did`: `string` ; `mediator_did`: `string` ; `routing_did`: `string`  }[] ; `messages`: `string`[] ; `version?`: ``"0.0.1"``  }\>
+
+#### Implementation of
+
+[Pluto](../interfaces/Domain.Pluto-1.md).[backup](../interfaces/Domain.Pluto-1.md#backup)
+
+#### Defined in
+
+[src/pluto/Pluto.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L124)
+
+___
 
 ### deleteMessage
 
@@ -141,7 +175,7 @@ Delete a previously stored messages
 
 #### Defined in
 
-[src/pluto/Pluto.ts:112](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L112)
+[src/pluto/Pluto.ts:132](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L132)
 
 ___
 
@@ -161,7 +195,7 @@ Retrieve all the stored credentials
 
 #### Defined in
 
-[src/pluto/Pluto.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L133)
+[src/pluto/Pluto.ts:146](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L146)
 
 ___
 
@@ -181,7 +215,7 @@ Retrieve all stored DID pairs (DIDComm connections).
 
 #### Defined in
 
-[src/pluto/Pluto.ts:303](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L303)
+[src/pluto/Pluto.ts:330](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L330)
 
 ___
 
@@ -201,7 +235,7 @@ Mediators *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:355](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L355)
+[src/pluto/Pluto.ts:382](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L382)
 
 ___
 
@@ -221,7 +255,7 @@ Retrieve all stored DIDComm messages.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:284](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L284)
+[src/pluto/Pluto.ts:311](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L311)
 
 ___
 
@@ -241,7 +275,7 @@ Retrieve all stored Peer DIDs.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:241](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L241)
+[src/pluto/Pluto.ts:268](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L268)
 
 ___
 
@@ -261,7 +295,7 @@ Retrieve all stored PRISM DIDs.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:202](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L202)
+[src/pluto/Pluto.ts:229](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L229)
 
 ___
 
@@ -287,7 +321,7 @@ Fetch the Credential Metadata by its name
 
 #### Defined in
 
-[src/pluto/Pluto.ts:154](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L154)
+[src/pluto/Pluto.ts:167](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L167)
 
 ___
 
@@ -313,7 +347,7 @@ Retrieve available private keys for a given DID.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:179](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L179)
+[src/pluto/Pluto.ts:189](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L189)
 
 ___
 
@@ -339,7 +373,7 @@ Retrieve the stored link secret by its name
 
 #### Defined in
 
-[src/pluto/Pluto.ts:168](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L168)
+[src/pluto/Pluto.ts:178](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L178)
 
 ___
 
@@ -365,7 +399,7 @@ Retrieve a DIDComm message by ID.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:280](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L280)
+[src/pluto/Pluto.ts:307](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L307)
 
 ___
 
@@ -391,7 +425,7 @@ Retrieve a DID pair containing a given DID as either host or receiver.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:311](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L311)
+[src/pluto/Pluto.ts:338](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L338)
 
 ___
 
@@ -417,13 +451,13 @@ Retrieve a DID pair by a given pair name.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:328](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L328)
+[src/pluto/Pluto.ts:355](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L355)
 
 ___
 
-### getPrismDID
+### getPrismDIDS
 
-▸ **getPrismDID**(`didId`): `Promise`\<``null`` \| [`PrismDID`](Domain.PrismDID.md)\>
+▸ **getPrismDIDS**(`didId`): `Promise`\<[`PrismDID`](Domain.PrismDID.md)[]\>
 
 #### Parameters
 
@@ -433,11 +467,11 @@ ___
 
 #### Returns
 
-`Promise`\<``null`` \| [`PrismDID`](Domain.PrismDID.md)\>
+`Promise`\<[`PrismDID`](Domain.PrismDID.md)[]\>
 
 #### Defined in
 
-[src/pluto/Pluto.ts:210](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L210)
+[src/pluto/Pluto.ts:241](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L241)
 
 ___
 
@@ -457,7 +491,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:339](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L339)
+[src/pluto/Pluto.ts:366](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L366)
 
 ___
 
@@ -483,7 +517,41 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:409](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L409)
+[src/pluto/Pluto.ts:436](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L436)
+
+___
+
+### restore
+
+▸ **restore**(`backup`): `Promise`\<`void`\>
+
+load the given data into the store
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `backup` | `Object` | `undefined` |
+| `backup.credentials` | \{ `data`: `string` ; `recovery_id`: `string`  }[] | `undefined` |
+| `backup.did_pairs` | \{ `alias`: `string` ; `holder`: `string` ; `recipient`: `string`  }[] | `undefined` |
+| `backup.dids` | \{ `alias?`: `string` ; `did`: `string`  }[] | `undefined` |
+| `backup.keys` | \{ `did?`: `string` ; `index?`: `number` ; `key`: `string` ; `recovery_id`: `string`  }[] | `undefined` |
+| `backup.link_secret?` | `string` | `linksecret` |
+| `backup.mediators` | \{ `holder_did`: `string` ; `mediator_did`: `string` ; `routing_did`: `string`  }[] | `undefined` |
+| `backup.messages` | `string`[] | `undefined` |
+| `backup.version?` | ``"0.0.1"`` | `undefined` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[Pluto](../interfaces/Domain.Pluto-1.md).[restore](../interfaces/Domain.Pluto-1.md#restore)
+
+#### Defined in
+
+[src/pluto/Pluto.ts:128](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L128)
 
 ___
 
@@ -509,7 +577,7 @@ Revoke a Credential
 
 #### Defined in
 
-[src/pluto/Pluto.ts:138](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L138)
+[src/pluto/Pluto.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L151)
 
 ___
 
@@ -529,7 +597,7 @@ Pluto initialise function
 
 #### Defined in
 
-[src/pluto/Pluto.ts:121](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L121)
+[src/pluto/Pluto.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L117)
 
 ___
 
@@ -555,7 +623,7 @@ Credentials *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:129](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L129)
+[src/pluto/Pluto.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L142)
 
 ___
 
@@ -581,7 +649,35 @@ Credential Metadata *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:150](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L150)
+[src/pluto/Pluto.ts:163](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L163)
+
+___
+
+### storeDID
+
+▸ **storeDID**(`did`, `keys?`, `alias?`): `Promise`\<`void`\>
+
+DIDs *
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `did` | [`DID`](Domain.DID.md) |
+| `keys?` | `Arrayable`\<[`PrivateKey`](Domain.PrivateKey.md)\> |
+| `alias?` | `string` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[Pluto](../interfaces/Domain.Pluto-1.md).[storeDID](../interfaces/Domain.Pluto-1.md#storedid)
+
+#### Defined in
+
+[src/pluto/Pluto.ts:199](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L199)
 
 ___
 
@@ -609,7 +705,7 @@ DID Pairs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:291](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L291)
+[src/pluto/Pluto.ts:318](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L318)
 
 ___
 
@@ -635,7 +731,7 @@ LinkSecret *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:161](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L161)
+[src/pluto/Pluto.ts:174](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L174)
 
 ___
 
@@ -661,7 +757,7 @@ Store a mediator information.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:391](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L391)
+[src/pluto/Pluto.ts:418](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L418)
 
 ___
 
@@ -687,7 +783,7 @@ Messages *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:272](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L272)
+[src/pluto/Pluto.ts:299](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L299)
 
 ___
 
@@ -713,7 +809,7 @@ Store an array of DIDComm messages
 
 #### Defined in
 
-[src/pluto/Pluto.ts:276](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L276)
+[src/pluto/Pluto.ts:303](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L303)
 
 ___
 
@@ -740,7 +836,7 @@ Peer DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:232](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L232)
+[src/pluto/Pluto.ts:259](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L259)
 
 ___
 
@@ -768,7 +864,7 @@ Prism DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:191](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L191)
+[src/pluto/Pluto.ts:218](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L218)
 
 ___
 
@@ -794,4 +890,4 @@ PrivateKeys *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:175](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/pluto/Pluto.ts#L175)
+[src/pluto/Pluto.ts:185](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L185)

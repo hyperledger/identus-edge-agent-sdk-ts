@@ -19,26 +19,26 @@
 
 ### presentation
 
-▸ **presentation**(): [`W3CVerifiablePresentation`](../modules/Domain.md#w3cverifiablepresentation)
+▸ **presentation**(): `unknown`
 
 #### Returns
 
-[`W3CVerifiablePresentation`](../modules/Domain.md#w3cverifiablepresentation)
+`unknown`
 
 #### Defined in
 
-[src/domain/models/Credential.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L38)
+[src/domain/models/Credential.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Credential.ts#L38)
 
 ___
 
 ### verifiableCredential
 
-▸ **verifiableCredential**(): [`W3CVerifiableCredential`](../modules/Domain.md#w3cverifiablecredential)
+▸ **verifiableCredential**(): `unknown`
 
 #### Returns
 
-[`W3CVerifiableCredential`](../modules/Domain.md#w3cverifiablecredential)
+`unknown`
 
 #### Defined in
 
-[src/domain/models/Credential.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Credential.ts#L39)
+[src/domain/models/Credential.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Credential.ts#L39)

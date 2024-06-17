@@ -9,6 +9,7 @@
 ### Enumeration Members
 
 - [credential](Domain.W3CVerifiableCredentialContext.md#credential)
+- [revocation](Domain.W3CVerifiableCredentialContext.md#revocation)
 
 ## Enumeration Members
 
@@ -18,4 +19,14 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L30)
+[src/domain/models/VerifiableCredential.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L24)
+
+___
+
+### revocation
+
+• **revocation** = ``"https://w3id.org/vc/status-list/2021/v1"``
+
+#### Defined in
+
+[src/domain/models/VerifiableCredential.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L25)

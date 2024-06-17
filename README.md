@@ -10,7 +10,7 @@ it offers core infrastructure for issuing DIDs (Decentralized identifiers) and
 verifiable credentials, alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated into multiple repositories:
 
-* [Cloud Agent](https://github.com/hyperledger/identus-cloud-agent) - Repo that contains the cloud agent that provides self-sovereign identity services to build products and solutions.
+* [Cloud Agent](https://github.com/hyperledger/identus-cloud-agent) - Repo that contains the Cloud Agent that provides self-sovereign identity services to build products and solutions.
 * [Mediator](https://github.com/input-output-hk/atala-prism-mediator) - Repo for the DIDComm V2 Mediator.
 * [Edge Agent SDK TS](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts) - Repo for the Typescript version of the SDK.
 * [Edge Agent SDK Swift](https://github.com/input-output-hk/atala-prism-wallet-sdk-swift) - Repo for the Swift version of the SDK.
@@ -95,5 +95,5 @@ This SDK exposes Pluto, a storage interface that should be implemented by the us
 
 We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
 
-Provided demo implementations are intentionally oversimplified and SHOULD NOT be used in production. 
+Provided demo implementations are intentionally oversimplified and **should not** be used in production. 
 
