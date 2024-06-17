@@ -53,7 +53,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pollux.ts#L44)
+[src/domain/models/errors/Pollux.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Pollux.ts#L68)
 
 ## Properties
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pollux.ts#L44)
+[src/domain/models/errors/Pollux.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Pollux.ts#L68)
 
 ___
 
@@ -137,8 +137,6 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 ▸ (`err`, `stackTraces`): `any`
 
-Optional override for formatting stack traces
-
 ##### Parameters
 
 | Name | Type |
@@ -149,10 +147,6 @@ Optional override for formatting stack traces
 ##### Returns
 
 `any`
-
-**`See`**
-
-https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Inherited from
 

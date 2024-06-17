@@ -7,6 +7,8 @@ It is mainly used to store + fetch mediator from current storage instance (pluto
 
 **`Export`**
 
+PublicMediatorStore
+
 ## Implements
 
 - [`MediatorStore`](../interfaces/MediatorStore.md)
@@ -46,7 +48,7 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Properties
 
@@ -56,7 +58,7 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Methods
 
@@ -78,7 +80,7 @@ Asyncronously fetch all the mediators from storage
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L40)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/mediator/PlutoMediatorStore.ts#L40)
 
 ___
 
@@ -106,4 +108,4 @@ Stores a mediator asyncronously in pluto
 
 #### Defined in
 
-[src/prism-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/mediator/PlutoMediatorStore.ts#L29)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/mediator/PlutoMediatorStore.ts#L29)

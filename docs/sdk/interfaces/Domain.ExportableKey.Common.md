@@ -21,8 +21,8 @@
 | Name | Type |
 | :------ | :------ |
 | `Buffer` | () => `Buffer` |
-| `String` | (`encoding?`: ``"base64"`` \| ``"ascii"`` \| ``"utf8"`` \| ``"utf-8"`` \| ``"utf16le"`` \| ``"ucs2"`` \| ``"ucs-2"`` \| ``"base64url"`` \| ``"latin1"`` \| ``"binary"`` \| ``"hex"``) => `string` |
+| `String` | (`encoding?`: `BufferEncoding`) => `string` |
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/keyManagement/exportable/ExportableKey.ts#L27)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L27)

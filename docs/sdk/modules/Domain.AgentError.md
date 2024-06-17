@@ -8,6 +8,7 @@
 
 ### Classes
 
+- [BackupVersionError](../classes/Domain.AgentError.BackupVersionError.md)
 - [CannotFindDIDKeyPairIndex](../classes/Domain.AgentError.CannotFindDIDKeyPairIndex.md)
 - [CannotFindDIDPrivateKey](../classes/Domain.AgentError.CannotFindDIDPrivateKey.md)
 - [CannotFindLinkSecret](../classes/Domain.AgentError.CannotFindLinkSecret.md)
@@ -37,6 +38,7 @@
 - [InvalidURLError](../classes/Domain.AgentError.InvalidURLError.md)
 - [InvitationHasNoFromDIDError](../classes/Domain.AgentError.InvitationHasNoFromDIDError.md)
 - [InvitationIsInvalidError](../classes/Domain.AgentError.InvitationIsInvalidError.md)
+- [KeyNotExportableError](../classes/Domain.AgentError.KeyNotExportableError.md)
 - [MediationRequestFailedError](../classes/Domain.AgentError.MediationRequestFailedError.md)
 - [NoConnectionOpenError](../classes/Domain.AgentError.NoConnectionOpenError.md)
 - [NoHandshakeResponseError](../classes/Domain.AgentError.NoHandshakeResponseError.md)

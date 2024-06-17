@@ -6,6 +6,8 @@ ConnectionsManager is responsible of establishing didcomm connection and
 mediation process with other mediators through didcomm and is also
 responsible of managing the task to periodically fetch messages from the mediator once connection is established
 
+ ConnectionsManager
+
 ## Implements
 
 - [`ConnectionsManagerInterface`](../interfaces/ConnectionsManagerInterface.md)
@@ -25,8 +27,13 @@ responsible of managing the task to periodically fetch messages from the mediato
 - [events](ConnectionsManager.md#events)
 - [mediationHandler](ConnectionsManager.md#mediationhandler)
 - [mercury](ConnectionsManager.md#mercury)
+- [options](ConnectionsManager.md#options)
 - [pairings](ConnectionsManager.md#pairings)
 - [pluto](ConnectionsManager.md#pluto)
+
+### Accessors
+
+- [withWebsocketsExperiment](ConnectionsManager.md#withwebsocketsexperiment)
 
 ### Methods
 
@@ -46,7 +53,7 @@ responsible of managing the task to periodically fetch messages from the mediato
 
 ### constructor
 
-• **new ConnectionsManager**(`castor`, `mercury`, `pluto`, `agentCredentials`, `mediationHandler`, `pairings?`): [`ConnectionsManager`](ConnectionsManager.md)
+• **new ConnectionsManager**(`castor`, `mercury`, `pluto`, `agentCredentials`, `mediationHandler`, `pairings?`, `options?`): [`ConnectionsManager`](ConnectionsManager.md)
 
 Creates an instance of ConnectionsManager.
 
@@ -60,6 +67,7 @@ Creates an instance of ConnectionsManager.
 | `agentCredentials` | [`AgentCredentials`](../interfaces/AgentCredentials.md) | `undefined` |
 | `mediationHandler` | [`MediatorHandler`](MediatorHandler.md) | `undefined` |
 | `pairings?` | [`DIDPair`](Domain.DIDPair.md)[] | `[]` |
+| `options?` | `AgentOptions` | `undefined` |
 
 #### Returns
 
@@ -67,7 +75,7 @@ Creates an instance of ConnectionsManager.
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L69)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L69)
 
 ## Properties
 
@@ -81,7 +89,7 @@ Creates an instance of ConnectionsManager.
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L73)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L73)
 
 ___
 
@@ -94,7 +102,7 @@ Cancellable task used to listen for new messages, stopping the Agent should also
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L48)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L48)
 
 ___
 
@@ -112,7 +120,7 @@ despite they run asyncronously when the Edge agent stops
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L40)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L40)
 
 ___
 
@@ -126,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L70)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L70)
 
 ___
 
@@ -139,7 +147,7 @@ for now when new messages arrive or didcomm connections are established in order
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L57)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L57)
 
 ___
 
@@ -153,7 +161,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:74](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L74)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:74](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L74)
 
 ___
 
@@ -167,7 +175,17 @@ ___
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:71](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L71)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:71](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L71)
+
+___
+
+### options
+
+• `Optional` **options**: `AgentOptions`
+
+#### Defined in
+
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L76)
 
 ___
 
@@ -181,7 +199,7 @@ ___
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L75)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L75)
 
 ___
 
@@ -195,7 +213,25 @@ ___
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:72](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L72)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:72](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L72)
+
+## Accessors
+
+### withWebsocketsExperiment
+
+• `get` **withWebsocketsExperiment**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Implementation of
+
+[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[withWebsocketsExperiment](../interfaces/ConnectionsManagerInterface.md#withwebsocketsexperiment)
+
+#### Defined in
+
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:81](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L81)
 
 ## Methods
 
@@ -223,7 +259,7 @@ Asyncronously add a didPair (didcomm connection) into pluto
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:182](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L182)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:187](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L187)
 
 ___
 
@@ -251,7 +287,7 @@ Asyncronously wait for a message response just by waiting for new messages that 
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:115](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L115)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:120](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L120)
 
 ___
 
@@ -273,22 +309,22 @@ Find the specified did pair connection index
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:207](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L207)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:211](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L211)
 
 ___
 
 ### processMessages
 
-▸ **processMessages**(`unreadMessages`): `Promise`\<`void`\>
+▸ **processMessages**(`unreadMessages?`): `Promise`\<`void`\>
 
 Asyncronously process unread messages that are received by either http or websockets didcomm transport
 This method replaces awaitMessages()
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `unreadMessages` | \{ `attachmentId`: `string` ; `message`: [`Message`](Domain.Message-1.md)  }[] |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `unreadMessages` | \{ `attachmentId`: `string` ; `message`: [`Message`](Domain.Message-1.md)  }[] | `[]` |
 
 #### Returns
 
@@ -300,7 +336,7 @@ This method replaces awaitMessages()
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:126](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L126)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:131](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L131)
 
 ___
 
@@ -328,7 +364,7 @@ Asyncronously establish mediator with a mediator by providing the Host DID
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:238](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L238)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:242](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L242)
 
 ___
 
@@ -357,7 +393,7 @@ this but just means the connection will be removed from the current storage
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:224](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L224)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:228](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L228)
 
 ___
 
@@ -385,7 +421,7 @@ Asyncronously store a message and send it as didcomm message through the mercury
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:249](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L249)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:253](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L253)
 
 ___
 
@@ -407,7 +443,7 @@ Asyncronously start fetching new messages
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:260](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L260)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:264](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L264)
 
 ___
 
@@ -430,7 +466,7 @@ setting that one as default during the Agent start
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:87](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L87)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:92](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L92)
 
 ___
 
@@ -450,7 +486,7 @@ Stops all the running events
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L99)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:104](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L104)
 
 ___
 
@@ -466,4 +502,4 @@ Asyncronously stop fetching messages
 
 #### Defined in
 
-[src/prism-agent/connectionsManager/ConnectionsManager.ts:299](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/prism-agent/connectionsManager/ConnectionsManager.ts#L299)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:302](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/connectionsManager/ConnectionsManager.ts#L302)

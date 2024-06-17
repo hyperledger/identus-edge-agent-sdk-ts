@@ -11,6 +11,7 @@
 - [CouldNotParseMessageString](../classes/Domain.ApolloError.CouldNotParseMessageString.md)
 - [ECPublicKeyInitialization](../classes/Domain.ApolloError.ECPublicKeyInitialization.md)
 - [InvalidDerivationPath](../classes/Domain.ApolloError.InvalidDerivationPath.md)
+- [InvalidHashingAlgorithm](../classes/Domain.ApolloError.InvalidHashingAlgorithm.md)
 - [InvalidKeyCurve](../classes/Domain.ApolloError.InvalidKeyCurve.md)
 - [InvalidKeyType](../classes/Domain.ApolloError.InvalidKeyType.md)
 - [InvalidMnemonicWord](../classes/Domain.ApolloError.InvalidMnemonicWord.md)

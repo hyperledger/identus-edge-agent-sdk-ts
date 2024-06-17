@@ -10,6 +10,7 @@
 
 - [credential](Domain.W3CVerifiableCredentialType.md#credential)
 - [presentation](Domain.W3CVerifiableCredentialType.md#presentation)
+- [revocation](Domain.W3CVerifiableCredentialType.md#revocation)
 
 ## Enumeration Members
 
@@ -19,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L35)
+[src/domain/models/VerifiableCredential.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L30)
 
 ___
 
@@ -29,4 +30,14 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/VerifiableCredential.ts#L34)
+[src/domain/models/VerifiableCredential.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L29)
+
+___
+
+### revocation
+
+• **revocation** = ``"StatusList2021Credential"``
+
+#### Defined in
+
+[src/domain/models/VerifiableCredential.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L31)

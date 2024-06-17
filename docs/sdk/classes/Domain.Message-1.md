@@ -35,6 +35,11 @@ define properties a Domain object must implement to be compatible with Pluto
 - [to](Domain.Message-1.md#to)
 - [uuid](Domain.Message-1.md#uuid)
 
+### Accessors
+
+- [credentialFormat](Domain.Message-1.md#credentialformat)
+- [safeBody](Domain.Message-1.md#safebody)
+
 ### Methods
 
 - [fromJson](Domain.Message-1.md#fromjson)
@@ -58,7 +63,7 @@ define properties a Domain object must implement to be compatible with Pluto
 | `to?` | [`DID`](Domain.DID.md) | `undefined` |
 | `attachments` | [`AttachmentDescriptor`](Domain.AttachmentDescriptor.md)[] | `[]` |
 | `thid?` | `string` | `undefined` |
-| `extraHeaders` | `string`[] | `[]` |
+| `extraHeaders` | `Record`\<`string`, `any`\> | `{}` |
 | `createdTime` | `string` | `undefined` |
 | `expiresTimePlus` | `string` | `undefined` |
 | `ack` | `string`[] | `[]` |
@@ -72,7 +77,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/Message.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L22)
+[src/domain/models/Message.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L24)
 
 ## Properties
 
@@ -82,7 +87,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/Message.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L38)
+[src/domain/models/Message.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L39)
 
 ___
 
@@ -92,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:28](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L28)
+[src/domain/models/Message.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L30)
 
 ___
 
@@ -102,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L23)
+[src/domain/models/Message.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L25)
 
 ___
 
@@ -112,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L32)
+[src/domain/models/Message.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L34)
 
 ___
 
@@ -122,7 +127,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L39)
+[src/domain/models/Message.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L40)
 
 ___
 
@@ -132,17 +137,17 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L34)
+[src/domain/models/Message.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L35)
 
 ___
 
 ### extraHeaders
 
-• `Readonly` **extraHeaders**: `string`[] = `[]`
+• `Readonly` **extraHeaders**: `Record`\<`string`, `any`\> = `{}`
 
 #### Defined in
 
-[src/domain/models/Message.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L30)
+[src/domain/models/Message.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L32)
 
 ___
 
@@ -152,7 +157,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L26)
+[src/domain/models/Message.ts:28](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L28)
 
 ___
 
@@ -162,7 +167,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L40)
+[src/domain/models/Message.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L41)
 
 ___
 
@@ -172,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L24)
+[src/domain/models/Message.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L26)
 
 ___
 
@@ -182,7 +187,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L25)
+[src/domain/models/Message.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L27)
 
 ___
 
@@ -192,7 +197,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L41)
+[src/domain/models/Message.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L42)
 
 ___
 
@@ -202,7 +207,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L29)
+[src/domain/models/Message.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L31)
 
 ___
 
@@ -212,13 +217,13 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L27)
+[src/domain/models/Message.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L29)
 
 ___
 
 ### uuid
 
-• `Readonly` **uuid**: `string`
+• **uuid**: `string`
 
 Universally Unique Identifier.
 should be unique across all items.
@@ -229,7 +234,35 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Message.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L20)
+[src/domain/models/Message.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L22)
+
+## Accessors
+
+### credentialFormat
+
+• `get` **credentialFormat**(): [`JWT`](../enums/Domain.CredentialType.md#jwt) \| [`SDJWT`](../enums/Domain.CredentialType.md#sdjwt) \| [`AnonCreds`](../enums/Domain.CredentialType.md#anoncreds) \| [`Unknown`](../enums/Domain.CredentialType.md#unknown)
+
+#### Returns
+
+[`JWT`](../enums/Domain.CredentialType.md#jwt) \| [`SDJWT`](../enums/Domain.CredentialType.md#sdjwt) \| [`AnonCreds`](../enums/Domain.CredentialType.md#anoncreds) \| [`Unknown`](../enums/Domain.CredentialType.md#unknown)
+
+#### Defined in
+
+[src/domain/models/Message.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L55)
+
+___
+
+### safeBody
+
+• `get` **safeBody**(): `any`
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+[src/domain/models/Message.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L47)
 
 ## Methods
 
@@ -241,7 +274,7 @@ should be unique across all items.
 
 | Name | Type |
 | :------ | :------ |
-| `jsonString` | `string` |
+| `jsonString` | `any` |
 
 #### Returns
 
@@ -249,7 +282,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Message.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L44)
+[src/domain/models/Message.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L80)
 
 ___
 
@@ -269,7 +302,7 @@ data is AttachmentBase64
 
 #### Defined in
 
-[src/domain/models/Message.ts:136](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L136)
+[src/domain/models/Message.ts:169](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L169)
 
 ___
 
@@ -289,4 +322,4 @@ data is AttachmentJsonData
 
 #### Defined in
 
-[src/domain/models/Message.ts:140](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/Message.ts#L140)
+[src/domain/models/Message.ts:173](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L173)

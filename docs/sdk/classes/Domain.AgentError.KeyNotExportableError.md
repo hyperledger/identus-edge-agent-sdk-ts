@@ -1,49 +1,43 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidJWTPresentationDefinitionError
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / KeyNotExportableError
 
-# Class: InvalidJWTPresentationDefinitionError
+# Class: KeyNotExportableError
 
-[Domain](../modules/Domain.md).[PolluxError](../modules/Domain.PolluxError.md).InvalidJWTPresentationDefinitionError
+[Domain](../modules/Domain.md).[AgentError](../modules/Domain.AgentError.md).KeyNotExportableError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`InvalidJWTPresentationDefinitionError`**
+  ↳ **`KeyNotExportableError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#constructor)
+- [constructor](Domain.AgentError.KeyNotExportableError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#cause)
-- [message](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#message)
-- [name](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#name)
-- [stack](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#stack)
-- [prepareStackTrace](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#preparestacktrace)
-- [stackTraceLimit](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#stacktracelimit)
+- [cause](Domain.AgentError.KeyNotExportableError.md#cause)
+- [message](Domain.AgentError.KeyNotExportableError.md#message)
+- [name](Domain.AgentError.KeyNotExportableError.md#name)
+- [stack](Domain.AgentError.KeyNotExportableError.md#stack)
+- [prepareStackTrace](Domain.AgentError.KeyNotExportableError.md#preparestacktrace)
+- [stackTraceLimit](Domain.AgentError.KeyNotExportableError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md#capturestacktrace)
+- [captureStackTrace](Domain.AgentError.KeyNotExportableError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new InvalidJWTPresentationDefinitionError**(`message?`): [`InvalidJWTPresentationDefinitionError`](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
+• **new KeyNotExportableError**(): [`KeyNotExportableError`](Domain.AgentError.KeyNotExportableError.md)
 
 #### Returns
 
-[`InvalidJWTPresentationDefinitionError`](Domain.PolluxError.InvalidJWTPresentationDefinitionError.md)
+[`KeyNotExportableError`](Domain.AgentError.KeyNotExportableError.md)
 
 #### Overrides
 
@@ -51,7 +45,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/errors/Pollux.ts#L26)
+[src/domain/models/errors/Agent.ts:229](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Agent.ts#L229)
 
 ## Properties
 
@@ -125,8 +119,6 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 ▸ (`err`, `stackTraces`): `any`
 
-Optional override for formatting stack traces
-
 ##### Parameters
 
 | Name | Type |
@@ -137,10 +129,6 @@ Optional override for formatting stack traces
 ##### Returns
 
 `any`
-
-**`See`**
-
-https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Inherited from
 

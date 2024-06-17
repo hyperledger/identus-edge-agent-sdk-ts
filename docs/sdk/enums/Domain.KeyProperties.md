@@ -14,6 +14,7 @@
 - [curvePointX](Domain.KeyProperties.md#curvepointx)
 - [curvePointY](Domain.KeyProperties.md#curvepointy)
 - [derivationPath](Domain.KeyProperties.md#derivationpath)
+- [derivationSchema](Domain.KeyProperties.md#derivationschema)
 - [index](Domain.KeyProperties.md#index)
 - [rawKey](Domain.KeyProperties.md#rawkey)
 - [seed](Domain.KeyProperties.md#seed)
@@ -29,7 +30,7 @@ The 'algorithm' corresponds to the cryptographic algorithm associated with the k
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L5)
+[src/domain/models/KeyProperties.ts:5](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L5)
 
 ___
 
@@ -46,7 +47,7 @@ const chainCode = Buffer.from(props[KeyProperties.chainCode], "hex");
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L25)
+[src/domain/models/KeyProperties.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L30)
 
 ___
 
@@ -58,7 +59,7 @@ The 'curve' represents the elliptic curve used for an elliptic-curve key.
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L10)
+[src/domain/models/KeyProperties.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L10)
 
 ___
 
@@ -70,7 +71,7 @@ The 'curvePointX' represents the x-coordinate of a curve point for an elliptic-c
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L46)
+[src/domain/models/KeyProperties.ts:51](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L51)
 
 ___
 
@@ -82,7 +83,7 @@ The 'curvePointY' represents the y-coordinate of a curve point for an elliptic-c
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:51](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L51)
+[src/domain/models/KeyProperties.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L56)
 
 ___
 
@@ -94,7 +95,19 @@ The 'derivationPath' refers to the path used to derive a key in a hierarchical d
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L35)
+[src/domain/models/KeyProperties.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L40)
+
+___
+
+### derivationSchema
+
+• **derivationSchema** = ``"derivationSchema"``
+
+The 'derivationSchema' corresponds to derivationSchema used.
+
+#### Defined in
+
+[src/domain/models/KeyProperties.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L20)
 
 ___
 
@@ -104,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:36](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L36)
+[src/domain/models/KeyProperties.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L41)
 
 ___
 
@@ -116,7 +129,7 @@ The 'rawKey' refers to the raw binary form of the key.
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L30)
+[src/domain/models/KeyProperties.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L35)
 
 ___
 
@@ -128,7 +141,7 @@ The 'seed' corresponds to the seed value from which a key is derived.
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L15)
+[src/domain/models/KeyProperties.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L15)
 
 ___
 
@@ -140,4 +153,4 @@ The 'type' denotes the type of the key.
 
 #### Defined in
 
-[src/domain/models/KeyProperties.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/f8f2652/src/domain/models/KeyProperties.ts#L41)
+[src/domain/models/KeyProperties.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/KeyProperties.ts#L46)
