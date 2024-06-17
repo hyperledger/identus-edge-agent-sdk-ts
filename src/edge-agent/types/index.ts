@@ -60,6 +60,8 @@ export interface AgentCredentials {
   revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
     [name: string]: any
   }>;
+  isCredentialRevoked: (credential: Credential) => Promise<boolean>;
+
 
 
   prepareRequestCredentialWithIssuer(

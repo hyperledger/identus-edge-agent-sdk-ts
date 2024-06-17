@@ -3,12 +3,13 @@ import * as Models from "../../../models";
 import { JWTVerifiableCredentialRecoveryId } from "../../../../pollux/models/JWTVerifiableCredential";
 import { repositoryFactory } from "../../../repositories/builders/factory";
 import { IBackupTask } from "../interfaces";
+import { SDJWTVerifiableCredentialRecoveryId } from "../../../../pollux/models/SDJWTVerifiableCredential";
 
 export class BackupTask implements IBackupTask {
   constructor(
     private readonly Pluto: Domain.Pluto,
     private readonly Repositories: ReturnType<typeof repositoryFactory>
-  ) {}
+  ) { }
 
   async run(): Promise<Domain.Backup.Schema> {
     const credentials = await this.getCredentialBackups();
@@ -99,11 +100,10 @@ export class BackupTask implements IBackupTask {
   }
 
   private mapCredential = (model: Models.Credential): Domain.Backup.v0_0_1.Credential => {
-    const recoveryId = model.recoveryId === JWTVerifiableCredentialRecoveryId ? "jwt" : "anoncred";
-    const data = model.recoveryId === JWTVerifiableCredentialRecoveryId
-      ? JSON.parse(model.dataJson).id
-      : model.dataJson;
-
+    const isJWT = model.recoveryId === JWTVerifiableCredentialRecoveryId;
+    const isSDJWT = model.recoveryId === SDJWTVerifiableCredentialRecoveryId;
+    const recoveryId = isJWT ? "jwt" : isSDJWT ? "sdjwt" : "anoncred";
+    const data = isJWT || isSDJWT ? JSON.parse(model.dataJson).id : model.dataJson;
     return {
       recovery_id: recoveryId,
       data: Buffer.from(data).toString("base64url"),

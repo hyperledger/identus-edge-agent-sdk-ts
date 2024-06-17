@@ -65,6 +65,9 @@ export class AgentCredentials implements AgentCredentialsClass {
   ) { }
 
 
+
+
+
   private createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
     type: Type,
     definition: PresentationDefinitionRequest<Type>,
@@ -570,6 +573,10 @@ export class AgentCredentials implements AgentCredentialsClass {
     }
 
     throw new AgentError.UnhandledPresentationRequest();
+  }
+
+  async isCredentialRevoked(credential: Credential): Promise<boolean> {
+    return this.pollux.isCredentialRevoked(credential)
   }
 
 }
