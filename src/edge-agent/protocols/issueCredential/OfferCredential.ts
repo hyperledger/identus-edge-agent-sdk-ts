@@ -3,10 +3,10 @@ import { AgentError } from "../../../domain/models/Errors";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { CredentialPreview } from "./CredentialPreview";
 import { ProposeCredential } from "./ProposeCredential";
 import { OfferCredentialBody } from "../types";
+import { parseCredentialAttachments, parseOfferCredentialMessage } from "../../helpers/ProtocolHelpers";
 
 export class OfferCredential {
   public static type = ProtocolType.DidcommOfferCredential;
@@ -65,19 +65,13 @@ export class OfferCredential {
         "Invalid offer credential message error."
       );
     }
-    const type = fromMessage.piuri as ProtocolType;
-    const offerCredentialBody =
-      ProtocolHelpers.safeParseBody<OfferCredentialBody>(
-        fromMessage.body,
-        type
-      );
-    const fromDID = fromMessage.from;
-    const toDID = fromMessage.to;
+    const offerCredentialBody = parseOfferCredentialMessage(fromMessage);
+
     return new OfferCredential(
       offerCredentialBody,
       fromMessage.attachments,
-      fromDID,
-      toDID,
+      fromMessage.from,
+      fromMessage.to,
       fromMessage.thid,
       fromMessage.id
     );
@@ -90,9 +84,7 @@ export class OfferCredential {
     thid?: string,
     credentials: Map<string, T> = new Map()
   ) {
-    const { formats, attachments } =
-      ProtocolHelpers.parseCredentials(credentials);
-
+    const { formats, attachments } = parseCredentialAttachments(credentials);
     const offerCredentialBody = createOfferCredentialBody(
       credentialPreview,
       formats

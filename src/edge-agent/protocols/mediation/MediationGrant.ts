@@ -1,9 +1,9 @@
 import { uuid } from "@stablelib/uuid";
 import { Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
 import { MediationGrantBody } from "../types";
+import { parseMediationGrantMessage } from "../../helpers/ProtocolHelpers";
 
 export class MediationGrant {
   public static type = ProtocolType.DidcommMediationGrant;
@@ -16,9 +16,7 @@ export class MediationGrant {
         "Invalid request credential message error."
       );
     }
-    const type = fromMessage.piuri as ProtocolType;
-    const mediationGrantBody =
-      ProtocolHelpers.safeParseBody<MediationGrantBody>(fromMessage.body, type);
+    const mediationGrantBody = parseMediationGrantMessage(fromMessage);
 
     return new MediationGrant(mediationGrantBody, fromMessage.id);
   }

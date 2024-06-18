@@ -15,6 +15,7 @@ import { DIDCommProtocol } from "../DIDCommProtocol";
 import { MercuryError } from "../../domain/models/Errors";
 
 import { ProtocolType } from "../../edge-agent/protocols/ProtocolTypes";
+import { isObject } from "../../utils";
 
 export class DIDCommWrapper implements DIDCommProtocol {
   public static didcomm: typeof import("didcomm-node");
@@ -75,11 +76,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
   ): Promise<string> {
     const didcomm = await DIDCommWrapper.getDIDComm();
     const to = toDid.toString();
-    const body =
-      message.body && Object.keys(JSON.parse(message.body)).length
-        ? JSON.parse(message.body)
-        : JSON.parse("{}");
-
+    const body = isObject(message.body) ? message.body : {};
     const didcommMsg = new didcomm.Message({
       id: message.id,
       typ: "application/didcomm-plain+json",
@@ -129,7 +126,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
     const msgObj = didcommMsg.as_value();
     const toString = msgObj.to?.at(0);
     const domainMessage = new Domain.Message(
-      JSON.stringify(msgObj.body), // parse
+      msgObj.body,
       msgObj.id,
       msgObj.type,
       typeof msgObj.from === "string"
@@ -141,8 +138,8 @@ export class DIDCommWrapper implements DIDCommProtocol {
       this.parseAttachmentsToDomain(msgObj.attachments ?? []),
       msgObj.thid,
       msgObj.extraHeaders,
-      msgObj.created_time?.toString(),
-      msgObj.expires_time?.toString(),
+      msgObj.created_time,
+      msgObj.expires_time,
       [],
       undefined,
       msgObj.from_prior,

@@ -10,7 +10,7 @@ import {
 import { AgentError } from "./Errors";
 import { CredentialType, JsonString } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
-import { isObject } from "../../utils";
+import { JsonObj, asJsonObj, isArray, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
 import { base64 } from "multiformats/bases/base64";
 
 export enum MessageDirection {
@@ -20,36 +20,26 @@ export enum MessageDirection {
 
 export class Message implements Pluto.Storable {
   public uuid: string;
+  public readonly body: JsonObj;
 
   constructor(
-    public readonly body: string,
+    body: string | JsonObj,
     public readonly id: string = Pluto.makeUUID(),
     public readonly piuri: string,
     public readonly from?: DID,
     public readonly to?: DID,
     public readonly attachments: AttachmentDescriptor[] = [],
     public readonly thid?: string,
-    public readonly extraHeaders: Record<string, any> = {},
-    // Q: why is this a string?
-    public readonly createdTime: string = Date.now().toString(),
-    public readonly expiresTimePlus: string = (
-      createdTime +
-      1 * 24 * 60 * 60
-    ).toString(),
+    public readonly extraHeaders: JsonObj = {},
+    public readonly createdTime: number = Math.floor(Date.now() / 1000),
+    public readonly expiresTimePlus: number = (createdTime + 1 * 24 * 60 * 60),
     public readonly ack: string[] = [],
     public direction: MessageDirection = MessageDirection.RECEIVED,
     public readonly fromPrior?: string,
     public readonly pthid?: string
   ) {
     this.uuid = Pluto.makeUUID();
-  }
-
-  get safeBody() {
-    try {
-      return JSON.parse(this.body)
-    } catch (err) {
-      return {}
-    }
+    this.body = asJsonObj(body);
   }
 
   get credentialFormat() {
@@ -57,8 +47,8 @@ export class Message implements Pluto.Storable {
     if (!attachment) {
       throw new Error("Required Attachment");
     }
-    const body = this.safeBody;
-    const format = body.formats?.find((format: any) => format.attach_id === attachment.id)?.format ?? attachment.format;
+
+    const format = this.body.formats?.find((format: any) => format.attach_id === attachment.id)?.format ?? attachment.format;
     if (
       format === AttachmentFormats.AnonCreds ||
       format === AttachmentFormats.ANONCREDS_PROOF_REQUEST ||
@@ -80,24 +70,29 @@ export class Message implements Pluto.Storable {
   static fromJson(jsonString: JsonString | any): Message {
     const messageObj = typeof jsonString === "object" ? jsonString : JSON.parse(jsonString);
 
-    if (!messageObj.body || typeof messageObj.body !== "string") {
+    if (!isString(messageObj.body) && !isObject(messageObj.body)) {
       throw new AgentError.InvalidMessageError("undefined or wrong body");
     }
-    if (!messageObj.piuri || typeof messageObj.piuri !== "string") {
-      throw new AgentError.InvalidMessageError("undefined or wrong piuri");
-    }
-    if (messageObj.attachments && !Array.isArray(messageObj.attachments)) {
+
+    const body = asJsonObj(messageObj.body);
+
+    if (isNil(messageObj.piuri) || !isString(messageObj.piuri)) {
       throw new AgentError.InvalidMessageError("undefined or wrong piuri");
     }
 
+    if (notNil(messageObj.attachments) && !isArray(messageObj.attachments)) {
+      throw new AgentError.InvalidMessageError("undefined or wrong attachments");
+    }
+
     if (
-      (messageObj.ack && !Array.isArray(messageObj.ack)) ||
-      messageObj.ack.find((val: any) => typeof val !== "string")
+      (notNil(messageObj.ack) && !isArray(messageObj.ack)) ||
+      messageObj.ack.some((x: any) => !isString(x))
     ) {
       throw new AgentError.InvalidMessageError("undefined or wrong ack");
     }
+
     if (
-      messageObj.direction &&
+      notNil(messageObj.direction) &&
       messageObj.direction !== MessageDirection.RECEIVED &&
       messageObj.direction !== MessageDirection.SENT
     ) {
@@ -127,17 +122,17 @@ export class Message implements Pluto.Storable {
         );
       });
 
-    const body = messageObj.body;
     const id = messageObj.id || undefined;
     const piuri = messageObj.piuri;
     const thid = messageObj.thid;
-    const extraHeaders = isObject(messageObj.extraHeaders) ? messageObj.extraHeaders : {};
-    // ??? update this when no longer strings
-    const createdTime = messageObj.createdTime?.toString();
-    const expiredTimePlus = messageObj.expiredTimePlus?.toString();
+    const extraHeaders = asJsonObj(messageObj.extra_headers ?? messageObj.extraHeaders);
+    const createdVal = (messageObj.created_time ?? messageObj.createdTime);
+    const createdTime = notEmptyString(createdVal) ? Number(createdVal) : createdVal;
+    const expiresVal = (messageObj.expires_time ?? messageObj.expires_time_plus ?? messageObj.expiredTimePlus);
+    const expiresTimePlus = notEmptyString(expiresVal) ? Number(expiresVal) : expiresVal;
     const ack = messageObj.ack;
     const direction = messageObj.direction;
-    const fromPrior = messageObj.fromPrior;
+    const fromPrior = messageObj.from_prior ?? messageObj.fromPrior;
     const pthid = messageObj.pthid;
 
     const fromDID = messageObj.from ?
@@ -158,7 +153,7 @@ export class Message implements Pluto.Storable {
       thid,
       extraHeaders,
       createdTime,
-      expiredTimePlus,
+      expiresTimePlus,
       ack,
       direction,
       fromPrior,
@@ -187,14 +182,14 @@ export namespace Message {
       if (isBase64(attachment.data)) {
         const decoded = Buffer.from(base64.baseDecode(attachment.data.base64)).toString();
         try {
-          return JSON.parse(decoded)
+          return JSON.parse(decoded);
         } catch (err) {
-          return decoded
+          return decoded;
         }
       }
 
       if (isJson(attachment.data)) {
-        const decoded = attachment.data.data
+        const decoded = attachment.data.data;
         return typeof decoded === "object"
           ? decoded
           : JSON.parse(decoded);

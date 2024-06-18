@@ -3,10 +3,11 @@ import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { RequestCredential } from "./RequestCredential";
 import { base64url } from "multiformats/bases/base64";
 import { IssueCredentialBody } from "../types";
+import { isNil } from "../../../utils";
+import { parseCredentialAttachments, parseIssueCredentialMessage } from "../../helpers/ProtocolHelpers";
 
 export class IssueCredential {
   public static type = ProtocolType.DidcommIssueCredential;
@@ -49,29 +50,20 @@ export class IssueCredential {
   static fromMessage(fromMessage: Message): IssueCredential {
     if (
       fromMessage.piuri !== ProtocolType.DidcommIssueCredential ||
-      !fromMessage.from ||
-      !fromMessage.to
+      isNil(fromMessage.from) ||
+      isNil(fromMessage.to)
     ) {
       throw new AgentError.InvalidIssueCredentialMessageError(
         "Invalid issue credential message error."
       );
     }
-    const type = fromMessage.piuri as ProtocolType;
-    const issueCredentialBody =
-      ProtocolHelpers.safeParseBody<IssueCredentialBody>(
-        fromMessage.body,
-        type
-      );
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const fromDID = fromMessage.from!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const toDID = fromMessage.to!;
+    const issueCredentialBody = parseIssueCredentialMessage(fromMessage);
 
     return new IssueCredential(
       issueCredentialBody,
       fromMessage.attachments,
-      fromDID,
-      toDID,
+      fromMessage.from,
+      fromMessage.to,
       fromMessage.thid,
       fromMessage.id
     );
@@ -99,10 +91,9 @@ export class IssueCredential {
     thid?: string,
     credentials: Map<string, T> = new Map()
   ): IssueCredential {
-    const { formats, attachments } =
-      ProtocolHelpers.parseCredentials(credentials);
-
+    const { formats, attachments } = parseCredentialAttachments(credentials);
     const issueCredentialBody = createIssueCredentialBody(formats);
+
     return new IssueCredential(
       issueCredentialBody,
       attachments,

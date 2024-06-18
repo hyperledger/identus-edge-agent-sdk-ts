@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AttachmentDescriptor } from "../../domain";
+import { AttachmentDescriptor, Message } from "../../domain";
 import { AgentError } from "../../domain/models/Errors";
+import { asArray, isArray, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
 import { ProtocolType } from "../protocols/ProtocolTypes";
 import { CredentialFormat } from "../protocols/issueCredential/CredentialFormat";
 import {
@@ -15,295 +16,212 @@ import {
   BasicMessageBody,
 } from "../protocols/types";
 
-export class ProtocolHelpers {
-  private static isProposeCredentialBody(
-    type: ProtocolType,
-    body: any
-  ): body is ProposeCredentialBody {
-    return type === ProtocolType.DidcommProposeCredential;
-  }
+export const parseCredentialAttachments = (credentials: Map<string, any>) => {
+  const initialValue = {
+    formats: [] as CredentialFormat[],
+    attachments: [] as AttachmentDescriptor[],
+  };
+  const credentialsArray = Array.from(credentials);
 
-  private static isOfferCredentialBody(
-    type: ProtocolType,
-    body: any
-  ): body is OfferCredentialBody {
-    return type === ProtocolType.DidcommOfferCredential;
-  }
-
-  private static isIssueCredentialBody(
-    type: ProtocolType,
-    body: any
-  ): body is IssueCredentialBody {
-    return type === ProtocolType.DidcommIssueCredential;
-  }
-
-  private static isCredentialBody(
-    type: ProtocolType,
-    body: any
-  ): body is CredentialBody {
-    return type === ProtocolType.DidcommRequestCredential;
-  }
-
-  private static isMediationGrantBody(
-    type: ProtocolType,
-    body: any
-  ): body is MediationGrantBody {
-    return type === ProtocolType.DidcommMediationGrant;
-  }
-
-  private static isPresentationBody(
-    type: ProtocolType,
-    body: any
-  ): body is PresentationBody {
-    return type === ProtocolType.DidcommPresentation;
-  }
-
-  private static isRequestPresentationBody(
-    type: ProtocolType,
-    body: any
-  ): body is RequestPresentationBody {
-    return type === ProtocolType.DidcommRequestPresentation;
-  }
-
-  private static isProposePresentationBody(
-    type: ProtocolType,
-    body: any
-  ): body is ProposePresentationBody {
-    return type === ProtocolType.DidcommProposePresentation;
-  }
-
-  private static isBasicMessageBody(
-    type: ProtocolType,
-    body: any
-  ): body is BasicMessageBody {
-    return type === ProtocolType.DidcommBasicMessage;
-  }
-
-  static parseCredentials<T>(credentials: Map<string, T>) {
-    const initialValue = {
-      formats: [] as CredentialFormat[],
-      attachments: [] as AttachmentDescriptor[],
+  return credentialsArray.reduce((acc, [key, credential]) => {
+    const attachment = AttachmentDescriptor.build(credential);
+    const format: CredentialFormat = {
+      attach_id: attachment.id,
+      format: key,
     };
-    const credentialsArray: Array<[string, T]> = Array.from(credentials);
-    return credentialsArray.reduce(
-      ({ formats, attachments }, [key, credential]) => {
-        const attachment = AttachmentDescriptor.build(credential);
-        const format: CredentialFormat = {
-          attach_id: attachment.id,
-          format: key,
-        };
-        return {
-          formats: [...formats, format],
-          attachments: [...attachments, attachment],
-        };
-      },
-      initialValue
+
+    return {
+      formats: [...acc.formats, format],
+      attachments: [...acc.attachments, attachment],
+    };
+  },
+    initialValue
+  );
+};
+
+const parseCredentialFormat = (value: unknown): CredentialFormat => {
+  if (!isObject(value) || isNil(value.attach_id) || isNil(value.format)) {
+    throw new AgentError.InvalidCredentialFormats();
+  }
+
+  return {
+    attach_id: value.attach_id,
+    format: value.format,
+  };
+};
+
+export const parseBasicMessageBody = (msg: Message): BasicMessageBody => {
+  if (notEmptyString(msg.body.content)) {
+    return {
+      content: msg.body.content,
+    };
+  }
+
+  throw new AgentError.InvalidBasicMessageBodyError("Invalid content");
+};
+
+export const parseCredentialBody = (msg: Message): CredentialBody => {
+  if (Object.keys(msg.body).length === 0) {
+    throw new AgentError.InvalidCredentialBodyError(
+      "Invalid CredentialBody Error"
     );
   }
 
-  static getFormatFromJsonObject(object: CredentialFormat): CredentialFormat {
-    if (!object.attach_id || !object.format) {
-      throw new AgentError.InvalidCredentialFormats();
-    }
-    return {
-      attach_id: object.attach_id,
-      format: object.format,
-    };
+  if (notNil(msg.body.formats) && !isArray(msg.body.formats)) {
+    throw new AgentError.InvalidCredentialFormats();
   }
 
-  //TODO: Improve this function to remove code that is almost equal
-  //Would propose to move each validation to its own class + reuse from here what is needed
-  static safeParseBody<T>(body: string, type: ProtocolType): T {
-    let parsed: T;
-    try {
-      parsed = JSON.parse(body);
-    } catch (err) {
-      throw new AgentError.UnknownCredentialBodyError();
-    }
+  return {
+    formats: asArray(msg.body.formats).map(x => parseCredentialFormat(x)),
+    goalCode: msg.body.goalCode,
+    comment: msg.body.comment,
+  };
+};
 
-    if (this.isBasicMessageBody(type, parsed)) {
-      if (parsed.content && typeof parsed.content !== "string") {
-        throw new AgentError.InvalidBasicMessageBodyError("Invalid content");
-      }
-      return {
-        content: parsed.content,
-      } as T;
-    }
-
-    if (
-      this.isProposePresentationBody(type, parsed) ||
-      this.isRequestPresentationBody(type, parsed)
-    ) {
-      const PresentationError = this.isProposePresentationBody(type, parsed)
-        ? AgentError.InvalidProposePresentationBodyError
-        : AgentError.InvalidPresentationBodyError;
-
-      if (parsed.goalCode && typeof parsed.goalCode !== "string") {
-        throw new PresentationError("Invalid goalCode");
-      }
-      if (parsed.comment && typeof parsed.comment !== "string") {
-        throw new PresentationError("Invalid comment");
-      }
-      if (parsed.willConfirm && typeof parsed.willConfirm !== "boolean") {
-        throw new PresentationError("Invalid willConfirm");
-      }
-      if (parsed.proofTypes) {
-        if (
-          !Array.isArray(parsed.proofTypes) ||
-          parsed.proofTypes.find((proofType: any) => {
-            if (
-              proofType.schema &&
-              typeof proofType.schema !== "string") {
-              return true;
-            }
-            if (
-              proofType.requiredFields &&
-              (!Array.isArray(proofType.requiredFields) ||
-                proofType.requiredFields.find(
-                  (field: any) => typeof field !== "string"
-                ))
-            ) {
-              return true;
-            }
-            if (
-              proofType.trustIssuers &&
-              (!Array.isArray(proofType.trustIssuers) ||
-                proofType.trustIssuers.find(
-                  (field: any) => typeof field !== "string"
-                ))
-            ) {
-              return true;
-            }
-            return false;
-          })
-        ) {
-          throw new PresentationError("Invalid proofTypes");
-        }
-      }
-
-      return {
-        comment: parsed.comment,
-        goalCode: parsed.goalCode,
-        willConfirm:
-          parsed.willConfirm !== undefined ? parsed.willConfirm : false,
-        proofTypes: parsed.proofTypes,
-      } as T;
-    }
-
-    if (this.isPresentationBody(type, parsed)) {
-      if (parsed.goalCode && typeof parsed.goalCode !== "string") {
-        throw new AgentError.InvalidPresentationBodyError("Invalid goalCode");
-      }
-      if (parsed.comment && typeof parsed.comment !== "string") {
-        throw new AgentError.InvalidPresentationBodyError("Invalid comment");
-      }
-      return {
-        comment: parsed.comment,
-        goalCode: parsed.goalCode,
-      } as T;
-    }
-
-    if (this.isMediationGrantBody(type, parsed)) {
-      const { routing_did } = parsed;
-      if (!routing_did) {
-        throw new AgentError.InvalidMediationGrantBodyError(
-          "Undefined routingDid"
-        );
-      }
-      return {
-        routing_did: routing_did,
-      } as T;
-    }
-
-    if (this.isOfferCredentialBody(type, parsed)) {
-      const { formats = [], goalCode, comment } = parsed || {};
-      if (!Object.keys(parsed).length) {
-        throw new AgentError.InvalidOfferCredentialBodyError(
-          "Invalid Offer CredentialBody Error"
-        );
-      }
-      if (!formats || !Array.isArray(formats)) {
-        throw new AgentError.InvalidCredentialFormats();
-      }
-      if (!parsed.credential_preview) {
-        throw new AgentError.InvalidOfferCredentialBodyError(
-          "Undefined credentialPreview"
-        );
-      }
-      return {
-        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        credential_preview: parsed.credential_preview,
-        replacementId: parsed.replacementId,
-        multipleAvailable: parsed.multipleAvailable,
-        goalCode,
-        comment,
-      } as T;
-    }
-
-    if (this.isIssueCredentialBody(type, parsed)) {
-      const { formats = [], goalCode, comment } = parsed || {};
-      if (!Object.keys(parsed).length) {
-        throw new AgentError.InvalidIssueCredentialBodyError(
-          "Invalid Issue CredentialBody Error"
-        );
-      }
-      if (!formats || !Array.isArray(formats)) {
-        throw new AgentError.InvalidCredentialFormats();
-      }
-      if (parsed.replacementId && typeof parsed !== "string") {
-        throw new AgentError.InvalidIssueCredentialBodyError(
-          "Invalid replacementId, should be a string"
-        );
-      }
-      return {
-        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        replacementId: parsed.replacementId,
-        moreAvailable: parsed.moreAvailable,
-        goalCode,
-        comment,
-      } as T;
-    }
-
-    if (this.isProposeCredentialBody(type, parsed)) {
-      const { formats = [], goalCode, comment } = parsed || {};
-      if (!Object.keys(parsed).length) {
-        throw new AgentError.InvalidProposeCredentialBodyError(
-          "Invalid Propose CredentialBody Error"
-        );
-      }
-      if (!formats || !Array.isArray(formats)) {
-        throw new AgentError.InvalidCredentialFormats();
-      }
-      if (!parsed.credential_preview) {
-        throw new AgentError.InvalidProposeCredentialBodyError(
-          "Undefined credentialPreview"
-        );
-      }
-      return {
-        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        credential_preview: parsed.credential_preview,
-        goalCode,
-        comment,
-      } as T;
-    }
-
-    if (this.isCredentialBody(type, parsed)) {
-      const { formats = [], goalCode, comment } = parsed || {};
-      if (!Object.keys(parsed).length) {
-        throw new AgentError.InvalidCredentialBodyError(
-          "Invalid CredentialBody Error"
-        );
-      }
-      if (!formats || !Array.isArray(formats)) {
-        throw new AgentError.InvalidCredentialFormats();
-      }
-      return {
-        formats: formats.map((format) => this.getFormatFromJsonObject(format)),
-        goalCode,
-        comment,
-      } as T;
-    }
-
+export const parseOfferCredentialMessage = (msg: Message): OfferCredentialBody => {
+  if (msg.piuri !== ProtocolType.DidcommOfferCredential) {
     throw new AgentError.UnknownCredentialBodyError();
   }
-}
+
+  if (isNil(msg.body.credential_preview)) {
+    throw new AgentError.InvalidOfferCredentialBodyError("Undefined credentialPreview");
+  }
+
+  const credentialBody = parseCredentialBody(msg);
+
+  return {
+    ...credentialBody,
+    credential_preview: msg.body.credential_preview,
+    replacementId: msg.body.replacementId,
+    multipleAvailable: msg.body.multipleAvailable,
+  };
+};
+
+export const parseIssueCredentialMessage = (msg: Message): IssueCredentialBody => {
+  if (msg.piuri !== ProtocolType.DidcommIssueCredential) {
+    throw new AgentError.UnknownCredentialBodyError();
+  }
+
+  if (notNil(msg.body.replacementId) && !isString(msg.body.replacementId)) {
+    throw new AgentError.InvalidIssueCredentialBodyError(
+      "Invalid replacementId, should be a string"
+    );
+  }
+
+  const credentialBody = parseCredentialBody(msg);
+
+  return {
+    ...credentialBody,
+    replacementId: msg.body.replacementId,
+    moreAvailable: msg.body.moreAvailable,
+  };
+};
+
+export const parseProposeCredentialMessage = (msg: Message): ProposeCredentialBody => {
+  if (isNil(msg.body.credential_preview)) {
+    throw new AgentError.InvalidProposeCredentialBodyError(
+      "Undefined credentialPreview"
+    );
+  }
+
+  const credentialBody = parseCredentialBody(msg);
+
+  return {
+    ...credentialBody,
+    credential_preview: msg.body.credential_preview,
+  };
+};
+
+export const parseMediationGrantMessage = (msg: Message): MediationGrantBody => {
+  if (isNil(msg.body.routing_did)) {
+    throw new AgentError.InvalidMediationGrantBodyError(
+      "Undefined routingDid"
+    );
+  }
+
+  return {
+    routing_did: msg.body.routing_did,
+  };
+};
+
+export const parsePresentationMessage = (msg: Message): PresentationBody => {
+  if (notNil(msg.body.goalCode) && !isString(msg.body.goalCode)) {
+    throw new AgentError.InvalidPresentationBodyError("Invalid goalCode");
+  }
+  if (notNil(msg.body.comment) && !isString(msg.body.comment)) {
+    throw new AgentError.InvalidPresentationBodyError("Invalid comment");
+  }
+  return {
+    comment: msg.body.comment,
+    goalCode: msg.body.goalCode,
+  };
+};
+
+const parseSomePresentationMessage = (msg: Message): RequestPresentationBody | ProposePresentationBody => {
+  if (notNil(msg.body.goalCode) && !isString(msg.body.goalCode)) {
+    throw new Error("Invalid goalCode");
+  }
+
+  if (notNil(msg.body.comment) && !isString(msg.body.comment)) {
+    throw new Error("Invalid comment");
+  }
+
+  if (notNil(msg.body.willConfirm) && typeof msg.body.willConfirm !== "boolean") {
+    throw new Error("Invalid willConfirm");
+  }
+
+  if (notNil(msg.body.proofTypes)) {
+    const invalidProofType = !isArray(msg.body.proofTypes) || msg.body.proofTypes.some((x: any) => {
+      if (notNil(x.schema) && !isString(x.schema)) {
+        return true;
+      }
+
+      if (notNil(x.requiredFields) && (
+        !isArray(x.requiredFields) ||
+        x.requiredFields.some((f: any) => !isString(f))
+      )) {
+        return true;
+      }
+
+      if (notNil(x.trustIssuers) && (
+        !isArray(x.trustIssuers) ||
+        x.trustIssuers.some((f: any) => !isString(f)))
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (invalidProofType) {
+      throw new Error("Invalid proofTypes");
+    }
+  }
+
+  return {
+    comment: msg.body.comment,
+    goalCode: msg.body.goalCode,
+    proofTypes: msg.body.proofTypes,
+    willConfirm: notNil(msg.body.willConfirm) ? msg.body.willConfirm : false,
+  };
+};
+
+export const parseProposePresentationMessage = (msg: Message): ProposePresentationBody => {
+  try {
+    return parseSomePresentationMessage(msg);
+  }
+  catch (e) {
+    const err = e instanceof Error ? e.message : "Invalid propose presentation message";
+    throw new AgentError.InvalidProposePresentationBodyError(err);
+  }
+};
+
+export const parseRequestPresentationMessage = (msg: Message): RequestPresentationBody => {
+  try {
+    return parseSomePresentationMessage(msg);
+  }
+  catch (e) {
+    const err = e instanceof Error ? e.message : "Invalid request presentation message";
+    throw new AgentError.InvalidPresentationBodyError(err);
+  }
+};

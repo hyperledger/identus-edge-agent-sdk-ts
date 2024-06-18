@@ -10,3 +10,10 @@ export type Nil = undefined | null;
  * @see asArray
  */
 export type Arrayable<T> = T | T[];
+
+/**
+ * Construct a Type with a set of string Keys of type T | undefined
+ * To be used in place of Record for arbitrary data structs
+ * where the key does not definitely result in a T
+ */
+export type JsonObj<T = any> = Record<string, T | undefined>;

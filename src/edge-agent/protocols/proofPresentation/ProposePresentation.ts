@@ -2,7 +2,7 @@ import { uuid } from "@stablelib/uuid";
 
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
+import { parseProposePresentationMessage } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
 import { ProposePresentationBody } from "../types";
 import { RequestPresentation } from "./RequestPresentation";
@@ -48,23 +48,13 @@ export class ProposePresentation {
       throw new AgentError.InvalidProposePresentationMessageError();
     }
 
-    const type = fromMessage.piuri as ProtocolType;
-    const requestPresentationBody =
-      ProtocolHelpers.safeParseBody<ProposePresentationBody>(
-        fromMessage.body,
-        type
-      );
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const fromDID = fromMessage.from!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const toDID = fromMessage.to!;
+    const requestPresentationBody = parseProposePresentationMessage(fromMessage);
 
     return new ProposePresentation(
       requestPresentationBody,
       fromMessage.attachments,
-      fromDID,
-      toDID,
+      fromMessage.from,
+      fromMessage.to,
       fromMessage.thid,
       fromMessage.id
     );
@@ -72,13 +62,7 @@ export class ProposePresentation {
 
   static makeProposalFromRequest(message: Message): ProposePresentation {
     const request = RequestPresentation.fromMessage(message);
-
-    const type = message.piuri as ProtocolType;
-    const proposePresentationBody =
-      ProtocolHelpers.safeParseBody<ProposePresentationBody>(
-        message.body,
-        type
-      );
+    const proposePresentationBody = parseProposePresentationMessage(message);
 
     return new ProposePresentation(
       proposePresentationBody,

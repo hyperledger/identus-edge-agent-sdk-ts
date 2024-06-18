@@ -29,8 +29,7 @@ describe("HandShakeRequest Test", () => {
     expect(message.to?.toString()).to.equal(request.to.toString());
     expect(message.thid).to.equal(request.thid);
 
-    const type = message.piuri as ProtocolType;
-    const decodedBody = HandshakeRequest.safeParseBody(message.body, type);
+    const decodedBody = HandshakeRequest.safeParseBody(message);
 
     expect(decodedBody).to.deep.equal(request.body);
   });
