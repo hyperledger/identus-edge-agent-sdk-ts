@@ -1,6 +1,6 @@
 import { DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
+import { parseBasicMessageBody } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
 import { BasicMessageBody } from "../types";
 
@@ -12,7 +12,7 @@ export class BasicMessage {
     public from: DID,
     public to: DID,
     public thid?: string,
-  ) { }
+  ) {}
 
   makeMessage(): Message {
     const body = JSON.stringify(this.body);
@@ -37,14 +37,9 @@ export class BasicMessage {
         "Invalid BasicMessage body error."
       );
     }
-    const type = fromMessage.piuri as ProtocolType;
 
-    const proposeCredentialBody =
-      ProtocolHelpers.safeParseBody<BasicMessageBody>(fromMessage.body, type);
+    const proposeCredentialBody = parseBasicMessageBody(fromMessage);
 
-    const fromDID = fromMessage.from;
-    const toDID = fromMessage.to;
-
-    return new BasicMessage(proposeCredentialBody, fromDID, toDID);
+    return new BasicMessage(proposeCredentialBody, fromMessage.from, fromMessage.to);
   }
 }

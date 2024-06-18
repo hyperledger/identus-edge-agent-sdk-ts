@@ -105,7 +105,7 @@ describe("Pluto", () => {
       piuri: "test a",
       from: Domain.DID.fromString("did:prism:100"),
       thid: "test",
-      body: "Message",
+      body: "{}",
       createdTime: "2000000",
       ack: ["Some string", "saodkas"],
       id: messageId,
@@ -131,7 +131,7 @@ describe("Pluto", () => {
       piuri: "test a",
       from: Domain.DID.fromString("did:prism:100"),
       thid: "test",
-      body: "Message",
+      body: { test: "Message" },
       createdTime: "2000000",
       ack: ["Some string", "saodkas"],
       id: messageId,
@@ -227,7 +227,7 @@ describe("Pluto", () => {
 
     const credential = JWTCredential.fromJWS(
       jwtString
-    )
+    );
 
     await instance.storeCredential(credential);
   });
@@ -354,7 +354,7 @@ describe("Pluto", () => {
       direction: MessageDirection.RECEIVED,
       fromPrior: "",
       ack: ["test"],
-      body: "Message",
+      body: "{}",
       createdTime: new Date().toISOString(),
       attachments: [],
       piuri: "qwerty",
@@ -378,7 +378,7 @@ describe("Pluto", () => {
       direction: MessageDirection.RECEIVED,
       fromPrior: "",
       ack: ["test"],
-      body: "Message",
+      body: "{}",
       createdTime: new Date().toISOString(),
       attachments: [],
       piuri: "type-example",
@@ -389,7 +389,7 @@ describe("Pluto", () => {
     const messages = await instance.getAllMessages();
 
     const result = await instance.getMessage(messages[0].id);
-    expect(result?.body).equal(message.body);
+    expect(result?.body).deep.equal(message.body);
   });
 
   //

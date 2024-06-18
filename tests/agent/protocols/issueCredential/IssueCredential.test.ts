@@ -8,6 +8,7 @@ import {
 import { RequestCredential } from "../../../../src/edge-agent/protocols/issueCredential/RequestCredential";
 import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
+import * as Messages from "../../../fixtures/messages";
 
 describe("IssueCredential", () => {
   it("Should create a valid IssueCredential when valid IssueMessage is provided", () => {
@@ -29,6 +30,19 @@ describe("IssueCredential", () => {
     const testIssueCredential = IssueCredential.fromMessage(issueMessage);
     expect(validIssueCredential).to.deep.equal(testIssueCredential);
   });
+
+  test("IssueCredential from an actual PrismAgent Message", () => {
+    const sut = IssueCredential.fromMessage(Messages.IssueCredential);
+
+    expect(sut).to.be.instanceOf(IssueCredential);
+    expect(sut.attachments).to.eq(Messages.IssueCredential.attachments);
+    // expect(sut.body).to.eq(Messages.IssueCredential.body);
+    expect(sut.from).to.eq(Messages.IssueCredential.from);
+    expect(sut.id).to.eq(Messages.IssueCredential.id);
+    expect(sut.thid).to.eq(Messages.IssueCredential.thid);
+    expect(sut.to).to.eq(Messages.IssueCredential.to);
+  });
+
   it("Should throw an error when initializing an issue credential from an invalid message", () => {
     const fromDID = DIDTest.fromIndex(0);
     const toDID = DIDTest.fromIndex(1);

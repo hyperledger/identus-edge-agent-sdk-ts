@@ -5,6 +5,7 @@ import { AgentError } from "../../../domain/models/Errors";
 import { OutOfBandInvitation } from "../invitation/v2/OutOfBandInvitation";
 import { ProtocolType } from "../ProtocolTypes";
 import { HandshakeRequestBody } from "../types";
+import { asArray, isArray, isString, notNil } from "../../../utils";
 
 export class HandshakeRequest {
   public static type = ProtocolType.DidcommconnectionRequest;
@@ -15,7 +16,7 @@ export class HandshakeRequest {
     public to: DID,
     public thid?: string,
     public id: string = uuid()
-  ) { }
+  ) {}
 
   makeMessage(): Message {
     const body = JSON.stringify(this.body);
@@ -30,65 +31,39 @@ export class HandshakeRequest {
     );
   }
 
-  private static isHandShakeBody(
-    type: ProtocolType,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    body: any
-  ): body is HandshakeRequestBody {
-    return type === this.type;
-  }
+  public static safeParseBody(msg: Message): HandshakeRequestBody {
+    // msg.piuri === HandshakeRequest.type
 
-  public static safeParseBody(
-    body: string,
-    type: ProtocolType
-  ): HandshakeRequestBody {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let parsed: any;
-    try {
-      parsed = JSON.parse(body);
-    } catch (err) {
+    if (notNil(msg.body.goal) && !isString(msg.body.goal)) {
       throw new AgentError.UnknownInvitationTypeError();
     }
 
-    if (type !== ProtocolType.DidcommconnectionRequest) {
+    if (notNil(msg.body.goalCode) && !isString(msg.body.goalCode)) {
       throw new AgentError.UnknownInvitationTypeError();
     }
 
-    if (this.isHandShakeBody(type, parsed)) {
-      if (parsed.goal && typeof parsed.goal !== "string") {
-        throw new AgentError.UnknownInvitationTypeError();
-      }
-      if (parsed.goalCode && typeof parsed.goalCode !== "string") {
-        throw new AgentError.UnknownInvitationTypeError();
-      }
-      if (
-        parsed.accept &&
-        (!Array.isArray(parsed.accept) ||
-          parsed.accept.find((val) => typeof val !== "string"))
-      ) {
-        throw new AgentError.UnknownInvitationTypeError();
-      }
-
-      return {
-        goalCode: parsed.goalCode,
-        goal: parsed.goal,
-        accept: parsed.accept,
-      };
+    if (notNil(msg.body.accept) && (
+      !isArray(msg.body.accept) ||
+      msg.body.accept.some(x => !isString(x)))
+    ) {
+      throw new AgentError.UnknownInvitationTypeError();
     }
 
-    throw new AgentError.UnknownInvitationTypeError();
+    return {
+      goalCode: msg.body.goalCode,
+      goal: msg.body.goal,
+      accept: asArray(msg.body.accept, isString),
+    };
   }
 
   static fromMessage(inviteMessage: Message, from: DID): HandshakeRequest {
+    // TODO piuri not compared
     if (!inviteMessage.from || !inviteMessage.piuri) {
       throw new AgentError.InvitationIsInvalidError();
     }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toDID = inviteMessage.from!;
-    const handShakeRequestBody = this.safeParseBody(
-      inviteMessage.body,
-      this.type
-    );
+    const handShakeRequestBody = HandshakeRequest.safeParseBody(inviteMessage);
 
     return new HandshakeRequest(
       handShakeRequestBody,

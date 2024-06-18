@@ -12,6 +12,8 @@ import {
   Message,
 } from "../../../../src/domain";
 import { PickupRunner } from "../../../../src/edge-agent/protocols/pickup/PickupRunner";
+import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
+import * as Messages from "../../../fixtures/messages";
 
 chai.use(chaiAsPromised);
 
@@ -34,6 +36,34 @@ describe("PickupRunner Tests", () => {
         };
       })
     );
+  });
+
+  test(`${ProtocolType.PickupStatus} - 0 messages`, async () => {
+    const runner = new PickupRunner(Messages.PickupStatus, mercury);
+    const response = await runner.run();
+
+    expect(response).to.be.an("array").with.length(0);
+  });
+
+  test(`${ProtocolType.PickupDelivery} - 1 message`, async () => {
+    const runner = new PickupRunner(Messages.PickupDelivery, mercury);
+    const response = await runner.run();
+
+    expect(response).to.be.an("array").with.length(1);
+    expect(response[0].attachmentId).to.eq(Messages.PickupDelivery.attachments[0].id);
+    expect(response[0].message.ack).to.deep.eq(Messages.ConnectionResponse.ack);
+    expect(response[0].message.attachments).to.deep.eq(Messages.ConnectionResponse.attachments);
+    expect(response[0].message.body).to.deep.eq(Messages.ConnectionResponse.body);
+    expect(response[0].message.createdTime).to.deep.eq(Messages.ConnectionResponse.createdTime);
+    expect(response[0].message.direction).to.deep.eq(Messages.ConnectionResponse.direction);
+    expect(response[0].message.extraHeaders).to.deep.eq(Messages.ConnectionResponse.extraHeaders);
+    expect(response[0].message.from).to.deep.eq(Messages.ConnectionResponse.from);
+    expect(response[0].message.fromPrior).to.deep.eq(Messages.ConnectionResponse.fromPrior);
+    expect(response[0].message.id).to.deep.eq(Messages.ConnectionResponse.id);
+    expect(response[0].message.piuri).to.deep.eq(Messages.ConnectionResponse.piuri);
+    expect(response[0].message.pthid).to.deep.eq(Messages.ConnectionResponse.pthid);
+    expect(response[0].message.thid).to.deep.eq(Messages.ConnectionResponse.thid);
+    expect(response[0].message.to).to.deep.eq(Messages.ConnectionResponse.to);
   });
 
   // it("Should parse message when DeliveryMessage is received", async () => {

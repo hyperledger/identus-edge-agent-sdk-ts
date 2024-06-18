@@ -7,6 +7,7 @@ import {
 } from "../../../../src/edge-agent/protocols/issueCredential/OfferCredential";
 import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
 import { DIDTest } from "../../helpers/DID";
+import * as Messages from "../../../fixtures/messages";
 
 describe("OfferCredential", () => {
   it("Should create a valid OfferCredential from a correct OfferMessage", () => {
@@ -41,6 +42,18 @@ describe("OfferCredential", () => {
     const testOfferCredential = OfferCredential.fromMessage(offerMessage);
 
     expect(validOfferCredential).to.deep.equal(testOfferCredential);
+  });
+
+  test("OfferCredential from an actual PrismAgent Message", () => {
+    const sut = OfferCredential.fromMessage(Messages.OfferCredential);
+
+    expect(sut).to.be.instanceOf(OfferCredential);
+    expect(sut.attachments).to.deep.eq(Messages.OfferCredential.attachments);
+    // expect(sut.body).to.deep.eq(Messages.OfferCredential.body);
+    expect(sut.from).to.deep.eq(Messages.OfferCredential.from);
+    expect(sut.id).to.deep.eq(Messages.OfferCredential.id);
+    expect(sut.thid).to.deep.eq(Messages.OfferCredential.thid);
+    expect(sut.to).to.deep.eq(Messages.OfferCredential.to);
   });
 
   it("Should test failure when invalid OfferMessage is provided when Creating an OfferCredential", () => {

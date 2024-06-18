@@ -3,9 +3,9 @@ import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
 import { CredentialFormat } from "./CredentialFormat";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
 import { CredentialPreview } from "./CredentialPreview";
 import { ProposeCredentialBody } from "../types";
+import { parseCredentialAttachments, parseProposeCredentialMessage } from "../../helpers/ProtocolHelpers";
 
 export class ProposeCredential {
   public static type = ProtocolType.DidcommProposeCredential;
@@ -42,19 +42,13 @@ export class ProposeCredential {
         "Invalid proposed credential message error."
       );
     }
-    const type = fromMessage.piuri as ProtocolType;
-    const proposeCredentialBody =
-      ProtocolHelpers.safeParseBody<ProposeCredentialBody>(
-        fromMessage.body,
-        type
-      );
-    const fromDID = fromMessage.from;
-    const toDID = fromMessage.to;
+    const proposeCredentialBody = parseProposeCredentialMessage(fromMessage);
+
     return new ProposeCredential(
       proposeCredentialBody,
       fromMessage.attachments,
-      fromDID,
-      toDID,
+      fromMessage.from,
+      fromMessage.to,
       fromMessage.thid,
       fromMessage.id
     );
@@ -67,9 +61,7 @@ export class ProposeCredential {
     thid?: string,
     credentials: Map<string, T> = new Map()
   ) {
-    const { formats, attachments } =
-      ProtocolHelpers.parseCredentials(credentials);
-
+    const { formats, attachments } = parseCredentialAttachments(credentials);
     const proposeCredentialBody = createProposeCredentialBody(
       credentialPreview,
       formats

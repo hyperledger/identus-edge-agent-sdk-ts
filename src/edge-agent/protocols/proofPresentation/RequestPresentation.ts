@@ -2,7 +2,7 @@ import { uuid } from "@stablelib/uuid";
 
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { ProtocolHelpers } from "../../helpers/ProtocolHelpers";
+import { parseRequestPresentationMessage } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
 import { RequestPresentationBody } from "../types";
 import { ProposePresentation } from "./ProposePresentation";
@@ -28,7 +28,7 @@ export class RequestPresentation {
   }
 
   get decodedAttachments() {
-    return this.attachments.map((attachment) => attachment.payload)
+    return this.attachments.map((attachment) => attachment.payload);
   }
 
   makeMessage(): Message {
@@ -52,23 +52,13 @@ export class RequestPresentation {
     ) {
       throw new AgentError.InvalidRequestPresentationMessageError();
     }
-    const type = fromMessage.piuri;
-    const requestPresentationBody =
-      ProtocolHelpers.safeParseBody<RequestPresentationBody>(
-        fromMessage.body,
-        type
-      );
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const fromDID = fromMessage.from!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const toDID = fromMessage.to!;
+    const requestPresentationBody = parseRequestPresentationMessage(fromMessage);
 
     return new RequestPresentation(
       requestPresentationBody,
       fromMessage.attachments,
-      fromDID,
-      toDID,
+      fromMessage.from,
+      fromMessage.to,
       fromMessage.thid,
       fromMessage.id
     );
@@ -76,13 +66,7 @@ export class RequestPresentation {
 
   static makeRequestFromProposal(message: Message): RequestPresentation {
     const request = ProposePresentation.fromMessage(message);
-
-    const type = message.piuri as ProtocolType;
-    const requestPresentationBody =
-      ProtocolHelpers.safeParseBody<RequestPresentationBody>(
-        message.body,
-        type
-      );
+    const requestPresentationBody = parseRequestPresentationMessage(message);
 
     return new RequestPresentation(
       requestPresentationBody,
