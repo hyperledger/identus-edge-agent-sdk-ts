@@ -60,6 +60,7 @@ import { HttpStatusCode } from "axios";
 import { JsonLd, RemoteDocument } from "jsonld/jsonld-spec";
 import { VerificationKeyType } from "../castor/types";
 import { revocationJsonldDocuments } from "../domain/models/revocation";
+import { Bitstring } from "./utils/Bitstring";
 
 /**
  * Implementation of Pollux
@@ -165,6 +166,7 @@ export default class Pollux implements IPollux {
   private extractEncodedList(body: JWTStatusListResponse): Uint8Array {
     try {
       const encodedList = Buffer.from(body.credentialSubject.encodedList, 'base64');
+
       return this._pako.ungzip(encodedList);
     } catch (err) {
       throw new PolluxError.InvalidRevocationStatusResponse(`Couldn't ungzip base64 encoded list, err: ${(err as Error).message}`)
@@ -264,8 +266,8 @@ export default class Pollux implements IPollux {
           throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus invalid signature`);
         }
         const statusListDecoded = this.extractEncodedList(revocation)
-        const isRevoked = statusListDecoded[statusListIndex] !== 0
-        return isRevoked
+        const bitstring = new Bitstring({ buffer: statusListDecoded })
+        return bitstring.get(statusListIndex + 1)
       }
       throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof type not supported`);
     } catch (err) {
