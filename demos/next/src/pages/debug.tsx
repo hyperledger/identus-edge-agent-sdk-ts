@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import SDK from "@atala/prism-wallet-sdk";
-import '../app/index.css'
+import '../app/index.css';
 import { FooterNavigation } from "@/components/FooterNavigation";
 import { Mnemonics } from "@/components/Mnemonics";
 import { KeyPair } from "@/components/Keypair";
@@ -9,14 +9,15 @@ import { Dids } from "@/components/Dids";
 import { Box } from "@/app/Box";
 import { useMountedApp } from "@/reducers/store";
 import { PageHeader } from "@/components/PageHeader";
+import { BackupRestore } from "@/components/BackupRestore";
 
 
 export default function App() {
   const app = useMountedApp();
-  const [mediatorDID, setMediatorDID] = useState<string>(app.mediatorDID.toString())
+  const [mediatorDID, setMediatorDID] = useState<string>(app.mediatorDID.toString());
 
   function onChangeMediatorDID(e) {
-    setMediatorDID(e.target.value)
+    setMediatorDID(e.target.value);
   }
 
   return (
@@ -41,6 +42,7 @@ export default function App() {
           />
         </Box>
         <Mnemonics />
+        <BackupRestore />
         <KeyPair curve={SDK.Domain.Curve.SECP256K1} />
         <KeyPair curve={SDK.Domain.Curve.ED25519} />
         <KeyPair curve={SDK.Domain.Curve.X25519} />
