@@ -18,7 +18,9 @@
     "index.mjs",
     "index.cjs",
     "build/**/*",
-    "README.MD"
+    "README.MD",
+    "preinstall.sh",
+    "postinstall.sh"
   ],
   "browserslist": [
     "last 2 chrome version",
