@@ -295,7 +295,7 @@ const Verification: React.FC<{}> = props => {
 
     useEffect(() => {
         if (!app.agent.instance && db.instance) {
-            initAgent({ mediatorDID, pluto: db.instance })
+            initAgent({ mediatorDID, pluto: db.instance, defaultSeed: app.defaultSeed })
         }
     }, [app.agent, db]);
 

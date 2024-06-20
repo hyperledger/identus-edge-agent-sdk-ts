@@ -4,6 +4,7 @@ import { JWTVerifiableCredentialRecoveryId } from "../../../../pollux/models/JWT
 import { repositoryFactory } from "../../../repositories/builders/factory";
 import { IBackupTask } from "../interfaces";
 import { SDJWTVerifiableCredentialRecoveryId } from "../../../../pollux/models/SDJWTVerifiableCredential";
+import { base64url } from "multiformats/bases/base64";
 
 export class BackupTask implements IBackupTask {
   constructor(
@@ -63,7 +64,7 @@ export class BackupTask implements IBackupTask {
 
         const backup: Domain.Backup.v0_0_1.Key = {
           recovery_id: key.recoveryId,
-          key: Buffer.from(JSON.stringify(jwk)).toString("base64url"),
+          key: base64url.baseEncode(Buffer.from(JSON.stringify(jwk))),
           index: key.index,
           did: did?.uuid,
         };
@@ -96,7 +97,7 @@ export class BackupTask implements IBackupTask {
 
   async getMessageBackups(): Promise<Domain.Backup.v0_0_1.Message[]> {
     const messageModels = await this.Repositories.Messages.getModels();
-    return messageModels.map(x => Buffer.from(x.dataJson).toString("base64url"));
+    return messageModels.map(x => base64url.baseEncode(Buffer.from(x.dataJson)));
   }
 
   private mapCredential = (model: Models.Credential): Domain.Backup.v0_0_1.Credential => {
@@ -106,7 +107,7 @@ export class BackupTask implements IBackupTask {
     const data = isJWT || isSDJWT ? JSON.parse(model.dataJson).id : model.dataJson;
     return {
       recovery_id: recoveryId,
-      data: Buffer.from(data).toString("base64url"),
+      data: base64url.baseEncode(data),
     };
   };
 

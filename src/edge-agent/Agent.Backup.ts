@@ -1,4 +1,3 @@
-import { CompactEncrypt, compactDecrypt, importJWK } from "jose";
 import * as Domain from "../domain";
 import Agent from "./Agent";
 import { isObject, validateSafe } from "../utils";
@@ -73,11 +72,11 @@ export class AgentBackup {
       [Domain.KeyProperties.seed]: Buffer.from(this.Agent.seed.value).toString("hex"),
       [Domain.KeyProperties.derivationPath]: "m/0'/0'/0'"
     });
-
     if (!masterKey.isExportable()) {
       throw new Domain.AgentError.KeyNotExportableError();
     }
-
     return masterKey;
   }
 }
+
+'{"kty":"OKP","crv":"X25519","x":"4NIOyyno4KLogqRb_TTF6qo6ExLYCSxwawzJ7XHBfCw","d":"UJrqA2njEcXAboC-AqFnw89xZPL-y8-Y3-f9ny3FD2s"}'

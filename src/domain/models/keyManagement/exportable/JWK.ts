@@ -1,3 +1,4 @@
+import { base64url } from "multiformats/bases/base64";
 import { notEmptyString } from "../../../../utils";
 import { KeyProperties } from "../../KeyProperties";
 import { Curve } from "../Curve";
@@ -147,8 +148,9 @@ export namespace JWK {
     return {
       kty: "EC",
       crv: key.curve.toLowerCase(),
-      x: notEmptyString(curvePointX) ? Buffer.from(curvePointX, "hex").toString("base64url") : undefined,
-      y: notEmptyString(curvePointY) ? Buffer.from(curvePointY, "hex").toString("base64url") : undefined,
+      x: notEmptyString(curvePointX) ? base64url.baseEncode(Buffer.from(curvePointX, "hex")) : undefined,
+      y: notEmptyString(curvePointY) ? base64url.baseEncode(Buffer.from(curvePointY, "hex"))
+        : undefined,
     };
   };
 

@@ -9,7 +9,7 @@ const nodePlugins = [
   nodeResolve({
     browser: false,
     preferBuiltins: true,
-    resolveOnly: ['anoncreds-node', 'didcomm-node'],
+    resolveOnly: ['jwe-node', 'anoncreds-node', 'didcomm-node'],
   }),
   replace({
     preventAssignment: true,

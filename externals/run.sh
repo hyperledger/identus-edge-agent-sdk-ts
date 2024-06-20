@@ -70,9 +70,9 @@ buildJWT() {
   #The code will fully work
   cd "${GenJWERust}-wasm-browser"
   if is_mac; then
-    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" jwe_rust.js
   else
-    sed -i "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+    sed -i "/if (typeof input === 'undefined') {/,/}/d" jwe_rust.js
   fi
 
   cd $ExternalsDir
