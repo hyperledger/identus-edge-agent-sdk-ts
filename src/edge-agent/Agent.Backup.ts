@@ -6,7 +6,7 @@ import { isObject, validateSafe } from "../utils";
 export class AgentBackup {
   constructor(
     public readonly Agent: Agent
-  ) {}
+  ) { }
 
   /**
    * create JWE of data stored in Pluto
@@ -15,17 +15,15 @@ export class AgentBackup {
    * @see restore
    */
   async createJWE(): Promise<string> {
-    const masterJwk = await this.masterKeyJwk();
-    const jwkKey = await importJWK(masterJwk);
+    await this.Agent.pollux.start();
     const backup = await this.Agent.pluto.backup();
-    const data = Buffer.from(JSON.stringify(backup));
-    const encrypter = new CompactEncrypt(data)
-      .setProtectedHeader({
-        alg: "ECDH-ES+A256KW",
-        enc: "A256CBC-HS512",
-      });
-
-    const jwe = await encrypter.encrypt(jwkKey);
+    const masterSk = await this.masterSk();
+    const jwk = masterSk.to.JWK();
+    const jwe = this.Agent.pollux.jwe.JWE.encrypt(
+      JSON.stringify(backup),
+      JSON.stringify(jwk),
+      'backup'
+    )
     return jwe;
   }
 
@@ -36,13 +34,17 @@ export class AgentBackup {
    * @see backup
    */
   async restore(jwe: string) {
-    const masterJwk = await this.masterKeyJwk();
-    const jwkKey = await importJWK(masterJwk);
-    const decrypted = await compactDecrypt(jwe, jwkKey);
-    const jsonStr = Buffer.from(decrypted.plaintext).toString();
+    await this.Agent.pollux.start();
+    const masterSk = await this.masterSk();
+    const jwk = masterSk.to.JWK();
+    const decoded = this.Agent.pollux.jwe.JWE.decrypt(
+      jwe,
+      'backup',
+      JSON.stringify(jwk)
+    )
+    const jsonStr = Buffer.from(decoded).toString();
     const json = JSON.parse(jsonStr);
     const backup = this.parseBackupJson(json);
-
     await this.Agent.pluto.restore(backup);
   }
 
@@ -64,7 +66,7 @@ export class AgentBackup {
    * create a JWK for the MasterKey (X25519)
    * @returns JWK
    */
-  private async masterKeyJwk() {
+  private async masterSk() {
     const masterKey = this.Agent.apollo.createPrivateKey({
       [Domain.KeyProperties.type]: Domain.KeyTypes.Curve25519,
       [Domain.KeyProperties.curve]: Domain.Curve.X25519,
@@ -76,6 +78,6 @@ export class AgentBackup {
       throw new Domain.AgentError.KeyNotExportableError();
     }
 
-    return masterKey.to.JWK();
+    return masterKey;
   }
 }

@@ -70,6 +70,7 @@ import { revocationJsonldDocuments } from "../domain/models/revocation";
  */
 export default class Pollux implements IPollux {
   private _anoncreds: AnoncredsLoader | undefined;
+  private _jwe: typeof import("jwe-browser") | undefined;
   private _pako = pako;
 
   constructor(
@@ -86,6 +87,13 @@ export default class Pollux implements IPollux {
       throw new Error("Pollux - Anoncreds not loaded");
     }
     return this._anoncreds;
+  }
+
+  get jwe() {
+    if (this._jwe === undefined) {
+      throw new Error("Pollux - JWE not loaded");
+    }
+    return this._jwe;
   }
 
   async revealCredentialFields
@@ -831,6 +839,22 @@ export default class Pollux implements IPollux {
 
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
+    /*START.BROWSER_ONLY*/
+    if (typeof window !== "undefined" && !this._jwe) {
+      const DIDCommLib = await import("jwe-browser/jwe_rust.js");
+      const wasmInit = DIDCommLib.default;
+      const { default: wasm } = await import("jwe-browser/jwe_rust_bg.wasm");
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await wasmInit(await wasm());
+      this._jwe = DIDCommLib;
+    }
+    /*END.BROWSER_ONLY*/
+    /*START.NODE_ONLY*/
+    if (!this._jwe) {
+      this._jwe = await import("jwe-node");
+    }
+    /*END.NODE_ONLY*/
   }
 
   private isOfferPayload<Type extends CredentialType>(offer: any, type: Type): offer is CredentialOfferPayloads[CredentialType.JWT] {
