@@ -5,7 +5,7 @@ import { isObject, validateSafe } from "../utils";
 export class AgentBackup {
   constructor(
     public readonly Agent: Agent
-  ) { }
+  ) {}
 
   /**
    * create JWE of data stored in Pluto
@@ -22,7 +22,7 @@ export class AgentBackup {
       JSON.stringify(backup),
       JSON.stringify(jwk),
       'backup'
-    )
+    );
     return jwe;
   }
 
@@ -40,7 +40,7 @@ export class AgentBackup {
       jwe,
       'backup',
       JSON.stringify(jwk)
-    )
+    );
     const jsonStr = Buffer.from(decoded).toString();
     const json = JSON.parse(jsonStr);
     const backup = this.parseBackupJson(json);
@@ -78,5 +78,3 @@ export class AgentBackup {
     return masterKey;
   }
 }
-
-'{"kty":"OKP","crv":"X25519","x":"4NIOyyno4KLogqRb_TTF6qo6ExLYCSxwawzJ7XHBfCw","d":"UJrqA2njEcXAboC-AqFnw89xZPL-y8-Y3-f9ny3FD2s"}'

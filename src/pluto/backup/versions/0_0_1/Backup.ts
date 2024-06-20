@@ -10,7 +10,7 @@ export class BackupTask implements IBackupTask {
   constructor(
     private readonly Pluto: Domain.Pluto,
     private readonly Repositories: ReturnType<typeof repositoryFactory>
-  ) { }
+  ) {}
 
   async run(): Promise<Domain.Backup.Schema> {
     const credentials = await this.getCredentialBackups();
@@ -105,9 +105,10 @@ export class BackupTask implements IBackupTask {
     const isSDJWT = model.recoveryId === SDJWTVerifiableCredentialRecoveryId;
     const recoveryId = isJWT ? "jwt" : isSDJWT ? "sdjwt" : "anoncred";
     const data = isJWT || isSDJWT ? JSON.parse(model.dataJson).id : model.dataJson;
+
     return {
       recovery_id: recoveryId,
-      data: base64url.baseEncode(data),
+      data: base64url.baseEncode(Buffer.from(data)),
     };
   };
 

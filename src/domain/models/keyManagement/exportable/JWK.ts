@@ -149,8 +149,7 @@ export namespace JWK {
       kty: "EC",
       crv: key.curve.toLowerCase(),
       x: notEmptyString(curvePointX) ? base64url.baseEncode(Buffer.from(curvePointX, "hex")) : undefined,
-      y: notEmptyString(curvePointY) ? base64url.baseEncode(Buffer.from(curvePointY, "hex"))
-        : undefined,
+      y: notEmptyString(curvePointY) ? base64url.baseEncode(Buffer.from(curvePointY, "hex")) : undefined,
     };
   };
 
