@@ -7,7 +7,7 @@ const browserPlugins = [
   nodeResolve({
     browser: true,
     preferBuiltins: false,
-    resolveOnly: ["didcomm-browser", "anoncreds-browser"],
+    resolveOnly: ["jwe-browser", "didcomm-browser", "anoncreds-browser"],
   }),
   wasm({
     targetEnv: "browser",

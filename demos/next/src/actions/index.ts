@@ -223,12 +223,13 @@ export const initAgent = createAsyncThunk<
     { agent: SDK.Agent },
     {
         mediatorDID: SDK.Domain.DID,
-        pluto: SDK.Domain.Pluto
+        pluto: SDK.Domain.Pluto,
+        defaultSeed: SDK.Domain.Seed
     }
 >("initAgent", async (options, api) => {
     try {
-        const { mediatorDID, pluto } = options;
-        const agent = await Agent.initialize({ mediatorDID, pluto });
+        const { mediatorDID, pluto, defaultSeed } = options;
+        const agent = await Agent.initialize({ mediatorDID, pluto, seed: defaultSeed });
         return api.fulfillWithValue({
             agent,
         })

@@ -3,6 +3,7 @@ import { JWK as _JWK } from "./JWK";
 import { PEM as _PEM } from "./PEM";
 import { PrivateKey } from "../PrivateKey";
 import { PublicKey } from "../PublicKey";
+import { base64url } from "multiformats/bases/base64";
 
 /**
  * ExportableKey defines the formats a crypographic key can be converted to
@@ -61,7 +62,11 @@ export namespace ExportableKey {
 
   const toBuffer = (key: Key): Buffer => Buffer.from(key.raw);
 
-  const toString = (key: Key, encoding?: BufferEncoding) => toBuffer(key).toString(encoding);
+  const toString = (key: Key, encoding?: BufferEncoding) => {
+    return encoding === "base64url"
+      ? base64url.baseEncode(key.raw)
+      : toBuffer(key).toString(encoding);
+  };
 }
 
 export namespace ImportableKey {
@@ -78,6 +83,12 @@ export namespace ImportableKey {
     // deprecate Hex, use String instead
     Hex: (value: string) => new ctor(Buffer.from(value, "hex")),
     PEM: (value: string) => new ctor(_PEM.toRaw(value, opts.pemLabel)),
-    String: (value: string, encoding?: BufferEncoding) => new ctor(Buffer.from(value, encoding)),
+    String: (value: string, encoding?: BufferEncoding) => {
+      const arg = encoding === 'base64url'
+        ? Buffer.from(base64url.baseDecode(value))
+        : Buffer.from(value, encoding);
+
+      return new ctor(arg);
+    },
   });
 }

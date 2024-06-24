@@ -6,6 +6,7 @@ import { AnonCredsCredential } from "../../../../pollux/models/AnonCredsVerifiab
 import { JWTCredential } from "../../../../pollux/models/JWTVerifiableCredential";
 import { notEmptyString, notNil, validate } from "../../../../utils";
 import { IRestoreTask } from "../interfaces";
+import { base64url } from "multiformats/bases/base64";
 
 export class RestoreTask implements IRestoreTask {
   constructor(
@@ -26,7 +27,7 @@ export class RestoreTask implements IRestoreTask {
 
   async restoreCredentials() {
     const credentials = this.backup.credentials.map<Domain.Credential>(item => {
-      const decoded = Buffer.from(item.data, "base64url").toString();
+      const decoded = Buffer.from(base64url.baseDecode(item.data)).toString()
       if (item.recovery_id === "jwt") {
         return JWTCredential.fromJWS(decoded);
       }
@@ -57,7 +58,8 @@ export class RestoreTask implements IRestoreTask {
 
   async restoreKeys() {
     return Promise.all(this.backup.keys.map(item => {
-      const jwk = JSON.parse(Buffer.from(item.key, "base64url").toString());
+
+      const jwk = JSON.parse(Buffer.from(base64url.baseDecode(item.key)).toString());
       const key = this.jwkToDomain(jwk);
       if (notNil(item.index)) {
         key.keySpecification.set(Domain.KeyProperties.index, item.index.toString());
@@ -109,7 +111,7 @@ export class RestoreTask implements IRestoreTask {
 
   async restoreMessages() {
     const msgs = this.backup.messages.map<Domain.Message>(item => {
-      const data = Buffer.from(item, "base64url").toString();
+      const data = Buffer.from(base64url.baseDecode(item)).toString();
       const msg = Domain.Message.fromJson(data);
       return msg;
     });

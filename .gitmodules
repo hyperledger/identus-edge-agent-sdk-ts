@@ -5,4 +5,5 @@
 
 [submodule "externals/didcomm"]
   path = externals/didcomm
-  url = git@github.com:sicpa-dlab/didcomm-rust.git
+  url = git@github.com:elribonazo/didcomm-rust.git
+  branch = feature/jwe-rust 

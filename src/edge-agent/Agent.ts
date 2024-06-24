@@ -65,7 +65,7 @@ export default class Agent
   private agentDIDHigherFunctions: AgentDIDHigherFunctions;
   private agentInvitations: AgentInvitations;
 
-  private pollux: Pollux;
+  public readonly pollux: Pollux;
 
 
   /**
