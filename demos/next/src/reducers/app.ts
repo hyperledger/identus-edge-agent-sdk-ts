@@ -23,6 +23,34 @@ export enum DBStatus {
     "connected" = "connected"
 }
 
+const defaultSeed = new SDK.Apollo().createSeed([
+    "repeat",
+    "spider",
+    "frozen",
+    "drama",
+    "april",
+    "step",
+    "engage",
+    "pitch",
+    "purity",
+    "arrest",
+    "orchard",
+    "grocery",
+    "green",
+    "chapter",
+    "know",
+    "disease",
+    "attend",
+    "notable",
+    "usage",
+    "add",
+    "trash",
+    "dry",
+    "refuse",
+    "jewel"
+
+])
+
 export const initialState: RootState = {
     errors: [],
     db: {
@@ -35,6 +63,7 @@ export const initialState: RootState = {
     connections: [],
     credentials: [],
     mediatorDID: SDK.Domain.DID.fromString(defaultMediatorDID),
+    defaultSeed: defaultSeed,
     agent: {
         instance: null,
         hasStarted: false,
@@ -59,6 +88,7 @@ export type RootState = {
     connections: SDK.Domain.DIDPair[],
     credentials: SDK.Domain.Credential[],
     mediatorDID: SDK.Domain.DID,
+    defaultSeed: SDK.Domain.Seed,
     agent: {
         instance: SDK.Agent | null,
         selfDID: SDK.Domain.DID | null,

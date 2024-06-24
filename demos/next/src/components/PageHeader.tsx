@@ -21,7 +21,7 @@ export function PageHeader({ children }) {
 
     useEffect(() => {
         if (!app.agent.instance && db.instance) {
-            initAgent({ mediatorDID, pluto: db.instance })
+            initAgent({ mediatorDID, pluto: db.instance, defaultSeed: app.defaultSeed })
         }
     }, [app.agent, db]);
 

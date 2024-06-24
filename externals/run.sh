@@ -7,6 +7,8 @@ AnonCreds=anoncreds
 AnonCredsDir="${ExternalsDir}/${AnonCreds}"
 DIDComm=didcomm
 DIDCommDir="${ExternalsDir}/${DIDComm}"
+JWERust=jwe
+JWERustDir="${ExternalsDir}/${JWERust}"
 
 BOLD='\033[1m'
 BLUE='\033[33m'
@@ -46,6 +48,31 @@ buildDIDComm() {
     sed -i '' "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
   else
     sed -i "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+  fi
+
+  cd $ExternalsDir
+  git submodule | grep $DIDComm | awk '{print $1}' > "./${DIDComm}.commit"
+}
+
+buildJWT() {
+  echo "Build JWT"
+
+  local GenJWERust="${GeneratedDir}/${JWERust}"
+  # remove previous generated
+  rm -rfv "${GenJWERust}*"
+  # generate new
+  cd "${DIDCommDir}/wasm-jwe"
+  wasm-pack build --target=web --out-dir="${GenJWERust}-wasm-browser"
+  wasm-pack build --target=nodejs --out-dir="${GenJWERust}-wasm-node"
+
+  #TODO: find better way to approach this
+  #This code fails on browser when wasm is first loaded, it can just be ignored
+  #The code will fully work
+  cd "${GenJWERust}-wasm-browser"
+  if is_mac; then
+    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" jwe_rust.js
+  else
+    sed -i "/if (typeof input === 'undefined') {/,/}/d" jwe_rust.js
   fi
 
   cd $ExternalsDir
@@ -162,6 +189,7 @@ elif [ "$execute" = "build" ]; then
   mkdir -p "$GeneratedDir"
   buildAnonCreds
   buildDIDComm
+  buildJWT
 elif [ "$execute" = "update" ]; then
   echo "Updating submodules"
   mkdir -p "$GeneratedDir"
@@ -178,6 +206,7 @@ elif [ "$execute" = "update" ]; then
 
   if [ "$didcommResult" -ne 0 ]; then
     buildDIDComm
+    buildJWT
   fi
 else
   echo "Usage: $0 [-x execution mode]"

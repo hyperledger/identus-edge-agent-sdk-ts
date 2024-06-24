@@ -39,7 +39,7 @@ const Agent: React.FC<{}> = props => {
 
   useEffect(() => {
     if (!app.agent.instance && db.instance) {
-      initAgent({ mediatorDID, pluto: db.instance })
+      initAgent({ mediatorDID, pluto: db.instance, defaultSeed: app.defaultSeed })
     }
     if (app.agent && app.agent.instance) {
       setState(app.agent.instance.state)
