@@ -20,7 +20,8 @@
     "build/**/*",
     "README.MD",
     "preinstall.sh",
-    "postinstall.sh"
+    "postinstall.sh",
+    "patches/*.patch"
   ],
   "browserslist": [
     "last 2 chrome version",
@@ -220,12 +221,12 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "rxdb": "^14.17.1",
+    "rxjs": "^7.8.1",
     "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "uuid": "^9.0.0"
   },
   "overrides": {
-    "crypto-js": "^4.2.0",
     "ws": "^8.17.1"
   }
 }
