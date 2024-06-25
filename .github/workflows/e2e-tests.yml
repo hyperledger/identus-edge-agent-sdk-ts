@@ -91,8 +91,9 @@ jobs:
       - name: Install local dependency
         working-directory: integration-tests/e2e-tests
         run: |
+          mv "../../${{ env.PACKAGE_NAME }}" "./${{ env.PACKAGE_NAME }}"
           yarn
-          yarn add "../../${{ env.PACKAGE_NAME }}"
+          yarn add "./${{ env.PACKAGE_NAME }}"
 
       - name: Install dependencies
         working-directory: integration-tests/e2e-tests
