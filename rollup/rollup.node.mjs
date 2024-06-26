@@ -16,12 +16,15 @@ const nodePlugins = [
     values: {
       'didcomm_js_bg.wasm': "../node-wasm/didcomm.wasm",
       'anoncreds_wasm_bg.wasm': "../node-wasm/anoncreds.wasm",
+      'jwe_rust_bg.wasm': "../node-wasm/jwe.wasm",
+
     }
   }),
   copy({
     targets: [
       { src: "./externals/generated/anoncreds-wasm-node/anoncreds_wasm_bg.wasm", dest: "build/node-wasm", rename: "anoncreds.wasm" },
       { src: "./externals/generated/didcomm-wasm-node/didcomm_js_bg.wasm", dest: "build/node-wasm", rename: 'didcomm.wasm' },
+      { src: "./externals/generated/jwe-wasm-node/jwe_rust_bg.wasm", dest: "build/node-wasm", rename: 'jwe.wasm' },
     ],
   }),
   wasm({
