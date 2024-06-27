@@ -30,8 +30,14 @@ class Actors implements Cast {
       await WalletSdk.withANewInstance()
     )
 
+    const verifierEdgeAgent = actorCalled("Verifier Edge Agent").whoCan(
+      TakeNotes.usingAnEmptyNotepad(),
+      await WalletSdk.withANewInstance()
+    )
+
     actors.add(cloudAgent)
     actors.add(edgeAgent)
+    actors.add(verifierEdgeAgent)
 
     engage(actors)
   }
