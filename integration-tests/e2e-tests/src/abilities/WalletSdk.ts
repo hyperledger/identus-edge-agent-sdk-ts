@@ -3,7 +3,6 @@ import SDK from "@atala/prism-wallet-sdk"
 import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
-import { Utils } from "../Utils"
 import InMemoryStore from "../configuration/inmemory"
 
 const { Agent, Apollo, Domain, ListenerKey, } = SDK
@@ -14,16 +13,14 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   messages: MessageQueue = new MessageQueue()
 
   static async withANewInstance(): Promise<Ability> {
-    const {sdk, store} = await Utils.retry(2, async () => {
-      return await WalletSdkBuilder.createInstance()
-    })
-    return new WalletSdk(sdk, store)
+    return new WalletSdk()
   }
 
-  constructor(sdk: SDK.Agent, store: SDK.Store) {
-    super()
-    this.sdk = sdk
-    this.store = store
+  private static async getMediatorDidThroughOob(): Promise<string> {
+    const response = await axios.get(CloudAgentConfiguration.mediatorOobUrl)
+    const encodedData = response.data.split("?_oob=")[1]
+    const oobData = JSON.parse(Buffer.from(encodedData, "base64").toString())
+    return oobData.from
   }
 
   static credentialOfferStackSize(): QuestionAdapter<number> {
@@ -67,11 +64,24 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async discard(): Promise<void> {
-    await this.store.clear()
-    await this.sdk.stop()
+    if (this.isInitialised()) {
+      await this.store.clear()
+      await this.sdk.stop()
+    }
   }
 
   async initialise(): Promise<void> {
+    const apollo = new Apollo()
+    this.store = new SDK.Store({
+      name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
+      storage: InMemoryStore,
+      password: "random12434",
+      ignoreDuplicate: true
+    })
+    const pluto = new SDK.Pluto(this.store, apollo)
+    const mediatorDID = Domain.DID.fromString(await WalletSdk.getMediatorDidThroughOob())
+    this.sdk = Agent.initialize({ apollo, pluto, mediatorDID })
+
     this.sdk.addListener(
       ListenerKey.MESSAGE, (messages: SDK.Domain.Message[]) => {
         for (const message of messages) {
@@ -84,33 +94,10 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   isInitialised(): boolean {
-    return this.sdk.state != "stopped"
-  }
-}
-
-class WalletSdkBuilder {
-  private static async getMediatorDidThroughOob(): Promise<string> {
-    const response = await axios.get(CloudAgentConfiguration.mediatorOobUrl)
-    const encodedData = response.data.split("?_oob=")[1]
-    const oobData = JSON.parse(Buffer.from(encodedData, "base64").toString())
-    return oobData.from
-  }
-
-  static async createInstance() {
-    const apollo = new Apollo()
-    const store = new SDK.Store({
-      name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
-      storage: InMemoryStore,
-      password: "random12434",
-      ignoreDuplicate: true
-    })
-    const pluto = new SDK.Pluto(store, apollo)
-    const mediatorDID = Domain.DID.fromString(await WalletSdkBuilder.getMediatorDidThroughOob())
-
-    return {
-      sdk: Agent.initialize({ apollo, pluto, mediatorDID }),
-      store
+    if (!this.sdk) {
+      return false
     }
+    return this.sdk.state != "stopped"
   }
 }
 

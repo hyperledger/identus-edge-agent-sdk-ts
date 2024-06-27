@@ -3,7 +3,6 @@ import {Actor, Notepad} from "@serenity-js/core"
 import {CloudAgentWorkflow} from "../workflow/CloudAgentWorkflow"
 import {EdgeAgentWorkflow} from "../workflow/EdgeAgentWorkflow"
 import { Utils } from "../Utils"
-import { WalletSdk } from "../abilities/WalletSdk"
 
 Given("{actor} has a connection invitation with '{}', '{}' and '{}' parameters", 
   async function (cloudAgent: Actor, rawLabel: string, rawGoalCode: string, rawGoal: string) {
