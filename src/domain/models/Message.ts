@@ -11,7 +11,7 @@ import { AgentError } from "./Errors";
 import { CredentialType, JsonString } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
 import { JsonObj, asJsonObj, isArray, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
-import { base64 } from "multiformats/bases/base64";
+import { base64, base64url } from "multiformats/bases/base64";
 
 export enum MessageDirection {
   SENT = 0,
@@ -170,6 +170,13 @@ export class Message implements Pluto.Storable {
   }
 }
 
+const decodeBase64 = (data: string) => {
+  try {
+    return base64.baseDecode(data);
+  } catch (err) {
+    return base64url.baseDecode(data);
+  }
+}
 export namespace Message {
   export namespace Attachment {
     /**
@@ -180,7 +187,7 @@ export namespace Message {
      */
     export const extractJSON = (attachment: AttachmentDescriptor) => {
       if (isBase64(attachment.data)) {
-        const decoded = Buffer.from(base64.baseDecode(attachment.data.base64)).toString();
+        const decoded = Buffer.from(decodeBase64(attachment.data.base64)).toString();
         try {
           return JSON.parse(decoded);
         } catch (err) {
