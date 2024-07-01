@@ -10,8 +10,8 @@ export interface Api {
   request<T>(
     httpMethod: string,
     url: string,
-    urlParameters: Map<string, string>,
-    httpHeaders: Map<string, string>,
-    body: any
+    urlParameters?: Map<string, string>,
+    httpHeaders?: Map<string, string>,
+    body?: any
   ): Promise<HttpResponse<T>>;
 }

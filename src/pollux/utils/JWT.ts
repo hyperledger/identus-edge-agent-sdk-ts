@@ -10,7 +10,7 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
   public type = JWTInstanceType.JWT;
 
   async decode(jws: string) {
-    return decodeJWS(jws)
+    return decodeJWS(jws);
   }
 
   async verify(
@@ -32,17 +32,17 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
       }
       const { signature, data } = await this.decode(jws);
       for (const verificationMethod of verificationMethods) {
-        const pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
+        const pk: PublicKey | undefined = this.getPKInstance(verificationMethod);
         if (!pk) {
-          throw new Error("Invalid key verification method type found")
+          throw new Error("Invalid key verification method type found");
         }
         if (!pk.canVerify()) {
-          throw new Error("Invalid key verification method type found")
+          throw new Error("Invalid key verification method type found");
         }
-        const decodedSignature = base64url.baseDecode(signature)
+        const decodedSignature = base64url.baseDecode(signature);
         return pk.verify(
           Buffer.from(data), Buffer.from(decodedSignature)
-        )
+        );
       }
       return false;
     } catch (err) {
@@ -54,6 +54,8 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
     options: JWTSignOptions<JWTInstanceType.JWT, any>
   ): Promise<string> {
     const { issuerDID, privateKey, payload } = options;
+    const headers = options.headers ?? {};
+
     if (!privateKey.isSignable()) {
       throw new Error("Key is not signable");
     }
@@ -61,7 +63,7 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
     const jwt = await didJWT.createJWT(
       payload,
       { issuer: issuerDID.toString(), signer },
-      { alg: signAlg }
+      { alg: signAlg, ...headers }
     );
     return jwt;
   }

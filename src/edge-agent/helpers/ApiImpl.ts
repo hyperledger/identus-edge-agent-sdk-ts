@@ -15,8 +15,8 @@ export class ApiImpl implements Api {
   async request<T>(
     httpMethod: string,
     url: string,
-    urlParameters: Map<string, string>,
-    httpHeaders: Map<string, string>,
+    urlParameters: Map<string, string> = new Map(),
+    httpHeaders: Map<string, string> = new Map(),
     body?: any
   ): Promise<HttpResponse<T>> {
     const rawUrl = new URL(`${url}`);

@@ -7,6 +7,7 @@ export { default as Mercury } from "./mercury/Mercury";
 export * from "./pluto";
 export { default as Pollux } from "./pollux/Pollux";
 export { default as Agent } from "./edge-agent/Agent";
+export { OIDCAgent } from "./edge-agent/OIDCAgent";
 export * from "./edge-agent/protocols/other/BasicMessage";
 export { IssueCredential } from "./edge-agent/protocols/issueCredential/IssueCredential";
 export { OfferCredential } from "./edge-agent/protocols/issueCredential/OfferCredential";

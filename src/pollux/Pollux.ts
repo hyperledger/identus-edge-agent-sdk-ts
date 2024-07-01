@@ -1162,4 +1162,15 @@ export default class Pollux implements IPollux {
 
     throw new PolluxError.InvalidPresentationProofArgs();
   }
+
+
+  async createOIDCCredentialRequestJWT(
+    holderDID: DID,
+    privateKey: PrivateKey,
+    payload: any,
+    headers: any
+  ) {
+    const signedJwt = await this.JWT.sign({ issuerDID: holderDID, payload, privateKey, headers });
+    return signedJwt;
+  }
 }
