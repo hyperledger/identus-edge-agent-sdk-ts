@@ -70,7 +70,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     }
   }
 
-  async initialise(): Promise<void> {
+  async createSdk(seed: SDK.Domain.Seed = undefined) {
     const apollo = new Apollo()
     this.store = new SDK.Store({
       name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
@@ -80,7 +80,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
     const pluto = new SDK.Pluto(this.store, apollo)
     const mediatorDID = Domain.DID.fromString(await WalletSdk.getMediatorDidThroughOob())
-    this.sdk = Agent.initialize({ apollo, pluto, mediatorDID })
+    this.sdk = Agent.initialize({ seed, apollo, pluto, mediatorDID })
 
     this.sdk.addListener(
       ListenerKey.MESSAGE, (messages: SDK.Domain.Message[]) => {
@@ -89,7 +89,10 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
         }
       }
     )
+  }
 
+  async initialise(): Promise<void> {
+    await this.createSdk()
     await this.sdk.start()
   }
 
@@ -113,7 +116,6 @@ class MessageQueue {
   issuedCredentialStack: Message[] = []
   revocationStack: Message[] = []
   receivedMessages: string[] = []
-
 
   enqueue(message: Message) {
     this.queue.push(message)
