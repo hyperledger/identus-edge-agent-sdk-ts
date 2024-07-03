@@ -2,15 +2,15 @@ import * as didJWT from "did-jwt";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
 import { JWTCore } from "./jwt/JWTCore";
 import { JWTInstanceType, JWTSignOptions, JWTVerifyOptions } from "./jwt/types";
-import { PublicKey } from "../../domain";
 import { decodeJWS } from "./decodeJWS";
 import { base64url } from "multiformats/bases/base64";
+import { isNil } from "../../utils";
 
 export class JWT extends JWTCore<JWTInstanceType.JWT> {
   public type = JWTInstanceType.JWT;
 
   async decode(jws: string) {
-    return decodeJWS(jws)
+    return decodeJWS(jws);
   }
 
   async verify(
@@ -30,22 +30,27 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
       if (jwtObject.isCredential && holderDID && holderDID.toString() !== jwtObject.subject) {
         throw new Error("Invalid subject (holder)");
       }
-      const { signature, data } = await this.decode(jws);
-      for (const verificationMethod of verificationMethods) {
-        const pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
-        if (!pk) {
-          throw new Error("Invalid key verification method type found")
+
+      const decoded = await this.decode(jws);
+      const verified = verificationMethods.some(vm => {
+        try {
+          const pk = this.getPKInstance(vm);
+
+          if (isNil(pk) || !pk.canVerify()) {
+            throw new Error("Invalid key verification method type found");
+          }
+
+          const decodedSignature = base64url.baseDecode(decoded.signature);
+          const passed = pk.verify(Buffer.from(decoded.data), Buffer.from(decodedSignature));
+          return passed;
         }
-        if (!pk.canVerify()) {
-          throw new Error("Invalid key verification method type found")
+        catch {
+          return false;
         }
-        const decodedSignature = base64url.baseDecode(signature)
-        return pk.verify(
-          Buffer.from(data), Buffer.from(decodedSignature)
-        )
-      }
-      return false;
-    } catch (err) {
+      });
+
+      return verified;
+    } catch {
       return false;
     }
   }

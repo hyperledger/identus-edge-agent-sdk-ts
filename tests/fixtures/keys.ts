@@ -5,15 +5,6 @@ import { Secp256k1PrivateKey } from "../../src/apollo/utils/Secp256k1PrivateKey"
 import { X25519KeyPair } from "../../src/apollo/utils/X25519KeyPair";
 import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 
-export const expectedDIDSecp256K1 =
-  "did:prism:da61cf65fbf04b6b9fe06fa3b577fca3e05895a13902decaad419845a20d2d78:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw";
-
-export const expectedDIDX25519 =
-  "did:prism:ba32baedae5964a54603f05a10ecb0939131e3160b2e92ec9eda22d202bf2ad4:Cq0CCqoCEkwKEWlzc3Vpbmdpc3N1aW5nS2V5EAJKNQoGWDI1NTE5EitfUGpIZWZGaDlIN3FIM1Z0N01POFZFTi1GMlBsV2NYemR4dzZMUGt4RUdFEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw";
-
-export const expectedDIDEd25519 =
-  "did:prism:969fdc2ae434b4db3e6dd8df42231c719610bd10df93fc6139a6f9d3144e15fd:Cq4CCqsCEk0KEWlzc3Vpbmdpc3N1aW5nS2V5EAJKNgoHRWQyNTUxORIrZG01ZjJHZFI1QmFIcFJ4QjhiVEVsdkVfMGdJQzJwNDA0TXN4OXN3SjkxNBJ0Ch9hdXRoZW50aWNhdGlvbmF1dGhlbnRpY2F0aW9uS2V5EARCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfosSZAoPbWFzdGVybWFzdGVyS2V5EAFCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfos"
-
 const secpPrivateKey = new Secp256k1PrivateKey(
   new Uint8Array([
     45, 182, 188, 189, 107, 229, 136, 180, 199, 177, 110, 84, 98, 140, 121, 84,

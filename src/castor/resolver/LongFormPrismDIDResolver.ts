@@ -17,7 +17,6 @@ import {
   PublicKey,
   Curve,
   getUsage,
-  getUsageId,
 } from "../../domain/models";
 
 import * as DIDParser from "../parser/DIDParser";
@@ -33,7 +32,7 @@ import { PrismDIDPublicKey } from "../did/prismDID/PrismDIDPublicKey";
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
 
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo) {}
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DIDParser.parse(didString);
@@ -119,9 +118,9 @@ export class LongFormPrismDIDResolver implements DIDResolver {
             } else {
               throw new Error("Unsupported key type")
             }
-            const usage = getUsage(key.usage)
+            const usage = getUsage(key.usage);
             return new PrismDIDPublicKey(
-              getUsageId(usage),
+              key.id,
               usage,
               pk,
             )
