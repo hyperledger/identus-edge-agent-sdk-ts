@@ -38,7 +38,6 @@ class Actors implements Cast {
     actors.add(cloudAgent)
     actors.add(edgeAgent)
     actors.add(verifierEdgeAgent)
-
     engage(actors)
   }
 
@@ -48,7 +47,7 @@ class Actors implements Cast {
 
   prepare(actor: Actor): Actor {
     if (!this.actors.has(actor.name)) {
-      throw new Error(`Unable to find actor ${actor.name}`)
+      return actor
     }
     return this.actors.get(actor.name)!
   }
