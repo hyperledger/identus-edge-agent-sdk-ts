@@ -388,7 +388,10 @@ export class AgentCredentials implements AgentCredentialsClass {
     if (!presentation.thid) {
       throw new AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");
     }
-    const presentationSubmission = JSON.parse(attachment.payload)
+    const presentationSubmission = typeof attachment.payload === 'string' ?
+      JSON.parse(attachment.payload) :
+      attachment.payload;
+
     const presentationDefinitionRequest = await this.getPresentationDefinitionByThid<Type>(presentation.thid);
     const options = {
       presentationDefinitionRequest

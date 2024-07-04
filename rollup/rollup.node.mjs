@@ -17,7 +17,6 @@ const nodePlugins = [
       'didcomm_js_bg.wasm': "../node-wasm/didcomm.wasm",
       'anoncreds_wasm_bg.wasm': "../node-wasm/anoncreds.wasm",
       'jwe_rust_bg.wasm': "../node-wasm/jwe.wasm",
-
     }
   }),
   copy({
