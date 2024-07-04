@@ -173,8 +173,8 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
     return new Domain.AttachmentDescriptor(
       this.parseAttachmentDataToDomain(attachment.data),
-      attachment.id,
       attachment.media_type,
+      attachment.id,
       attachment.filename?.split("/"),
       attachment.format,
       attachment.lastmod_time?.toString(),
