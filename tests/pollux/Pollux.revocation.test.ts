@@ -77,7 +77,7 @@ describe("Pollux", () => {
 
         //Workaround to hardcode the revocation index
         const vc = credential.properties.get(JWTVerifiableCredentialProperties.vc);
-        vc.credentialStatus.statusListIndex = 0;
+        vc.credentialStatus.statusListIndex = 1;
         credential.properties.set(JWTVerifiableCredentialProperties.vc, vc);
 
         const revoked = await pollux.isCredentialRevoked(credential)
