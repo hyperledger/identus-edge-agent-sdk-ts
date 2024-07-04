@@ -7,7 +7,7 @@ import { randomUUID } from "crypto"
 import _ from "lodash"
 import { assert } from "chai"
 
-const { IssueCredential, OfferCredential, RequestPresentation, } = SDK
+const { IssueCredential, OfferCredential, RequestPresentation, Presentation } = SDK
 
 export class EdgeAgentWorkflow {
 
@@ -74,6 +74,54 @@ export class EdgeAgentWorkflow {
     )
   }
 
+  static async presentVerificationRequest(edgeAgent: Actor) {
+    await edgeAgent.attemptsTo(
+      WalletSdk.execute(async (sdk, messages) => {
+        const credentials = await sdk.verifiableCredentials()
+        const credential = credentials[0]
+        const requestPresentationMessage = RequestPresentation.fromMessage(
+          messages.proofRequestStack.shift()!,
+        )
+        const presentation = await sdk.createPresentationForRequestProof(
+          requestPresentationMessage,
+          credential,
+        )
+        try {
+          await sdk.sendMessage(presentation.makeMessage())
+        } catch (e) {
+          //
+        }
+      })
+    )
+  }
+
+  static async verifyPresentation(edgeAgent: Actor, expected: boolean = true) {
+    await edgeAgent.attemptsTo(
+      WalletSdk.execute(async (sdk, messages) => {
+        const presentation = messages.presentationMessagesStack.shift()!;
+
+        const presentationMessage = Presentation.fromMessage(
+          presentation,
+        );
+
+        try {
+          const verified = await sdk.handlePresentation(
+            presentationMessage
+          )
+          if (!expected) assert.isFalse(verified)
+          else assert.isTrue(verified)
+        } catch (e) {
+          if (e.message.includes("credential is revoked")) {
+            assert.isTrue(expected === false)
+          } else {
+            throw e
+          }
+        }
+
+      })
+    )
+  }
+
   static async presentProof(edgeAgent: Actor) {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
@@ -96,6 +144,16 @@ export class EdgeAgentWorkflow {
     )
   }
 
+  static async waitForPresentationMessage(edgeAgent: Actor, numberOfMessages: number = 1) {
+    await edgeAgent.attemptsTo(
+      Wait.upTo(Duration.ofSeconds(60)).until(
+        WalletSdk.presentationStackSize(),
+        equals(numberOfMessages)
+      )
+    )
+  }
+
+
   static async waitForCredentialRevocationMessage(edgeAgent: Actor, numberOfRevocation: number) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(60)).until(
@@ -114,7 +172,9 @@ export class EdgeAgentWorkflow {
         const credentials = await sdk.verifiableCredentials()
         const revokedCredentials = await Utils.asyncFilter(credentials, async credential => {
           // checks if it's revoked and part of the revoked ones
-          return credential.isRevoked() && revokedIdList.includes(credential.id)
+          return sdk.isCredentialRevoked(credential) &&
+            credential.isRevoked() &&
+            revokedIdList.includes(credential.id)
         })
         await edgeAgent.attemptsTo(
           Ensure.that(revokedCredentials.length, equals(revokedRecordIdList.length))
@@ -123,12 +183,32 @@ export class EdgeAgentWorkflow {
     )
   }
 
-  static async createPeerDids(edgeAgent: Actor, numberOfDids: number) {
+  static async createPeerDids(edgeAgent: Actor, numberOfDids: number = 1) {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async sdk => {
         await Utils.repeat(numberOfDids, async () => {
-          await sdk.createNewPeerDID()
+          const did = await sdk.createNewPeerDID()
+          await edgeAgent.attemptsTo(
+            Notepad.notes().set('lastPeerDID', did)
+          )
         })
+      })
+    )
+  }
+
+  static async initiatePresentationRequest<T extends SDK.Domain.CredentialType>(
+    edgeAgent: Actor,
+    type: T,
+    toDiD: SDK.Domain.DID,
+    claims: SDK.Domain.PresentationClaims<T>
+  ) {
+    await edgeAgent.attemptsTo(
+      WalletSdk.execute(async (sdk) => {
+        await sdk.initiatePresentationRequest(
+          type,
+          toDiD,
+          claims
+        )
       })
     )
   }
@@ -171,7 +251,7 @@ export class EdgeAgentWorkflow {
           Ensure.that(prismDids.length, equals(expectedPrismDids.length)),
           Ensure.that(didPairs.length, equals(expectedDidPairs.length)),
         )
-        
+
         assert.isTrue(_.isEqual(expectedCredentials.map(it => it.id), credentials.map(it => it.id)))
         assert.isTrue(_.isEqual(expectedPeerDids.map(it => it.did.uuid), peerDids.map(it => it.did.uuid)))
         assert.isTrue(_.isEqual(expectedPrismDids.map(it => it.did.uuid), prismDids.map(it => it.did.uuid)))
