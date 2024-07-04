@@ -47,11 +47,19 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
   }
 
+  static presentationStackSize(): QuestionAdapter<number> {
+    return Question.about("presentation messages stack", actor => {
+      return WalletSdk.as(actor).messages.presentationMessagesStack.length
+    })
+  }
+
   static execute(callback: (sdk: SDK.Agent, messages: {
     credentialOfferStack: Message[];
     issuedCredentialStack: Message[];
     proofRequestStack: Message[];
     revocationStack: Message[],
+    presentationMessagesStack: Message[]
+
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
       await callback(WalletSdk.as(actor).sdk, {
@@ -59,6 +67,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
         issuedCredentialStack: WalletSdk.as(actor).messages.issuedCredentialStack,
         proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack,
         revocationStack: WalletSdk.as(actor).messages.revocationStack,
+        presentationMessagesStack: WalletSdk.as(actor).messages.presentationMessagesStack
       })
     })
   }
@@ -115,6 +124,8 @@ class MessageQueue {
   proofRequestStack: Message[] = []
   issuedCredentialStack: Message[] = []
   revocationStack: Message[] = []
+  presentationMessagesStack: Message[] = [];
+
   receivedMessages: string[] = []
 
   enqueue(message: Message) {
@@ -144,7 +155,8 @@ class MessageQueue {
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
         const message: Message = this.dequeue()
-        
+        const piUri = message.piuri;
+
         // checks if sdk already received message
         if (this.receivedMessages.includes(message.id)) {
           return
@@ -152,14 +164,17 @@ class MessageQueue {
 
         this.receivedMessages.push(message.id)
 
-        if (message.piuri.includes("/offer-credential")) {
+
+        if (piUri === SDK.ProtocolType.DidcommOfferCredential) {
           this.credentialOfferStack.push(message)
-        } else if (message.piuri.includes("/present-proof")) {
+        } else if (piUri === SDK.ProtocolType.DidcommRequestPresentation) {
           this.proofRequestStack.push(message)
-        } else if (message.piuri.includes("/issue-credential")) {
+        } else if (piUri === SDK.ProtocolType.DidcommIssueCredential) {
           this.issuedCredentialStack.push(message)
-        } else if (message.piuri.includes("/revoke")) {
+        } else if (piUri === SDK.ProtocolType.PrismRevocation) {
           this.revocationStack.push(message)
+        } else if (piUri === SDK.ProtocolType.DidcommPresentation) {
+          this.presentationMessagesStack.push(message)
         }
       } else {
         clearInterval(this.processingId!)
