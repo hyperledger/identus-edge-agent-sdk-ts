@@ -48,9 +48,16 @@ export function getProtosUsage(
   }
 }
 
-
-export function getUsageId(index: Usage): string {
-  switch (index) {
+/**
+ * create an identifier for keys within a DID Document
+ * should be unique within the Document
+ * 
+ * @param keyUsage - maps to a prefix word
+ * @param index - occurrence of this keyUsage
+ * @returns {string}
+ */
+export function getUsageId(keyUsage: Usage, index = 0): string {
+  switch (keyUsage) {
     case Usage.MASTER_KEY:
       return `master${index}`;
     case Usage.ISSUING_KEY:
@@ -123,7 +130,7 @@ export function curveToAlg(curve: string) {
   if (curve === Curve.ED25519 || curve === Curve.X25519) {
     return JWT_ALG.EdDSA;
   }
-  return JWT_ALG.unknown
+  return JWT_ALG.unknown;
 }
 export function getKeyCurveByNameAndIndex(
   name: string,
@@ -158,7 +165,7 @@ export abstract class Key {
   get alg(): JWT_ALG {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const curve = this.getProperty(KeyProperties.curve)!;
-    return curveToAlg(curve)
+    return curveToAlg(curve);
   }
 
   isDerivable(): this is DerivableKey {

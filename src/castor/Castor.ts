@@ -43,7 +43,7 @@ import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 import { PrismDIDPublicKey } from "./did/prismDID/PrismDIDPublicKey";
 
-type ExtraResolver = new (apollo: Apollo) => DIDResolver
+type ExtraResolver = new (apollo: Apollo) => DIDResolver;
 /**
  * Castor is a powerful and flexible library for working with DIDs. Whether you are building a decentralised application
  * or a more traditional system requiring secure and private identity management, Castor provides the tools and features
@@ -136,20 +136,18 @@ export default class Castor implements CastorInterface {
       getUsageId(Usage.AUTHENTICATION_KEY),
       Usage.AUTHENTICATION_KEY,
       masterPublicKey,
-
     ).toProto();
 
-    if (issuingKeys.length) {
-      didPublicKeys.push(...issuingKeys.map((issuingKey) => new PrismDIDPublicKey(
-        getUsageId(Usage.ISSUING_KEY),
+    didPublicKeys.push(masterPk);
+    didPublicKeys.push(authenticationPk);
+
+    if (issuingKeys.length > 0) {
+      didPublicKeys.push(...issuingKeys.map((issuingKey, index) => new PrismDIDPublicKey(
+        getUsageId(Usage.ISSUING_KEY, index),
         Usage.ISSUING_KEY,
         "publicKey" in issuingKey ? issuingKey.publicKey : issuingKey,
-
-      ).toProto()))
+      ).toProto()));
     }
-
-    didPublicKeys.push(authenticationPk)
-    didPublicKeys.push(masterPk)
 
     const didCreationData =
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
@@ -332,7 +330,7 @@ export default class Castor implements CastorInterface {
           if (method.type === Curve.ED25519) {
             const publicKey = new Ed25519PublicKey(
               Buffer.from(base58.base58btc.decode(method.publicKeyMultibase))
-            )
+            );
             if (
               publicKey.canVerify() &&
               publicKey.verify(Buffer.from(challenge), Buffer.from(signature))
@@ -341,7 +339,7 @@ export default class Castor implements CastorInterface {
             }
           }
         } catch (err) {
-          console.debug("checking next key for verification")
+          console.debug("checking next key for verification");
         }
       }
     } else if (did.method == "peer") {
