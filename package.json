@@ -1,5 +1,5 @@
 {
-  "name": "@atala/prism-wallet-sdk",
+  "name": "@hyperledger/identus-edge-agent-sdk",
   "version": "3.1.0",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
@@ -49,7 +49,7 @@
   "author": "IOHK",
   "repository": {
     "type": "git",
-    "url": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts.git"
+    "url": "https://github.com/hyperledger/identus-edge-agent-sdk-ts.git"
   },
   "license": "Apache-2.0",
   "peerDependenciesMeta": {
