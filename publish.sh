@@ -17,7 +17,7 @@ npm run build
 npm run docs
 
 # Gets the published versions in the registry
-published_versions=$(echo "$(npm view @atala/prism-wallet-sdk versions)" | tr -d " '")
+published_versions=$(echo "$(npm view @hyperledger/identus-edge-agent-sdk versions)" | tr -d " '")
 
 # Checks if it's been already published to npmjs
 if [[ $published_versions == *$release_version* ]]; then
@@ -28,4 +28,3 @@ if [[ $published_versions == *$release_version* ]]; then
 else
     npm publish --access public
 fi
-
