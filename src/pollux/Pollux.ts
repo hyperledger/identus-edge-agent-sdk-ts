@@ -275,7 +275,7 @@ export default class Pollux implements IPollux {
         }
         const statusListDecoded = this.extractEncodedList(revocation)
         const bitstring = new Bitstring({ buffer: statusListDecoded })
-        return bitstring.get(statusListIndex + 1)
+        return bitstring.get(statusListIndex)
       }
       throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof type not supported`);
     } catch (err) {

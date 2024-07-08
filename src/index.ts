@@ -31,6 +31,7 @@ export type {
 } from "./edge-agent/types";
 export type { DIDCommProtocol } from "./mercury/DIDCommProtocol";
 export * from "./edge-agent/protocols/types";
+export { ProtocolType } from "./edge-agent/protocols/ProtocolTypes";
 export * from "./apollo/utils/Secp256k1PrivateKey";
 export * from "./apollo/utils/Secp256k1PublicKey";
 export * from "./apollo/utils/Secp256k1KeyPair";
