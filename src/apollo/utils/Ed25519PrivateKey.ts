@@ -13,10 +13,10 @@ import {
   ApolloError
 } from "../../domain";
 
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
-const EdHDKey = ApolloSDK.derivation.EdHDKey
+const EdHDKey = ApolloSDK.derivation.EdHDKey;
 /**
  * @ignore
  */
@@ -54,15 +54,15 @@ export class Ed25519PrivateKey extends PrivateKey implements DerivableKey, Expor
       derivationPathStr.split("/").slice(1).length,
       BigIntegerWrapper.initFromInt(0)
     );
-    const derived = hdKey.derive(derivationPathStr)
-    const sk = new Ed25519PrivateKey(Uint8Array.from(derived.privateKey))
+    const derived = hdKey.derive(derivationPathStr);
+    const sk = new Ed25519PrivateKey(Uint8Array.from(derived.privateKey));
     sk.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationPathStr).toString("hex"));
     sk.keySpecification.set(KeyProperties.index, `${this.index ?? 0}`);
     if (derived.chainCode) {
       sk.keySpecification.set(KeyProperties.chainCode, Buffer.from(derived.chainCode).toString("hex"));
     }
 
-    return sk
+    return sk;
   }
 
   publicKey() {

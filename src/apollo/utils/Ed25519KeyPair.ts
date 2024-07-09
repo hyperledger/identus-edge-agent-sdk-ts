@@ -1,7 +1,7 @@
 import { KeyPair } from "../../domain";
 import { Ed25519PrivateKey } from "./Ed25519PrivateKey";
 import { Ed25519PublicKey } from "./Ed25519PublicKey";
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**

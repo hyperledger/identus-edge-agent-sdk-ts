@@ -31,7 +31,7 @@ import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
 import { X25519PublicKey } from "./utils/X25519PublicKey";
 
 import { notEmptyString } from "../utils";
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 import { PrismDerivationPath } from "../domain/models/derivation/schemas/PrismDerivation";
 
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
@@ -238,7 +238,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         if (keyData) {
           return new Ed25519PublicKey(keyData);
         }
-        throw new ApolloError.InvalidPrivateKey("Missing raw bytes")
+        throw new ApolloError.InvalidPrivateKey("Missing raw bytes");
       }
       if (curve === Curve.SECP256K1) {
         if (keyData) {
@@ -250,10 +250,10 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
             return Secp256k1PublicKey.secp256k1FromByteCoordinates(
               xData,
               yData
-            )
+            );
           }
         }
-        throw new ApolloError.InvalidPrivateKey("Missing raw bytes or coordinates")
+        throw new ApolloError.InvalidPrivateKey("Missing raw bytes or coordinates");
       }
     }
 
@@ -262,7 +262,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         if (keyData) {
           return new X25519PublicKey(keyData);
         }
-        throw new ApolloError.InvalidPrivateKey("Missing raw bytes")
+        throw new ApolloError.InvalidPrivateKey("Missing raw bytes");
       }
     }
 
@@ -358,14 +358,14 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         if (notEmptyString(seedHex)) {
 
           const derivationIndex = parameters[KeyProperties.index] ?? "0";
-          const derivationParam = parameters[KeyProperties.derivationPath]
-          const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString()
+          const derivationParam = parameters[KeyProperties.derivationPath];
+          const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString();
 
 
           const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
 
           const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed);
-          const baseKey = new Ed25519PrivateKey(Uint8Array.from(hdKey.privateKey))
+          const baseKey = new Ed25519PrivateKey(Uint8Array.from(hdKey.privateKey));
 
           baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
           baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
@@ -390,7 +390,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
 
         const seedHex = parameters[KeyProperties.seed];
         if (!seedHex) {
-          throw new ApolloError.MissingKeyParameters(["seed"])
+          throw new ApolloError.MissingKeyParameters(["seed"]);
         }
         const seed = Buffer.from(seedHex, "hex");
 
@@ -398,7 +398,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         const derivationParam = parameters[KeyProperties.derivationPath];
         const defaultPath: string = derivationParam ?? PrismDerivationPath.init(
           derivationIndex
-        ).toString()
+        ).toString();
 
         const hdKey = HDKey.InitFromSeed(
           Int8Array.from(seed),
