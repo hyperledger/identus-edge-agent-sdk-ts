@@ -27,9 +27,9 @@ import * as Fixtures from "../fixtures";
 import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/PrismDerivation";
 import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
 import { DerivationAxis } from "../../src/domain/models/derivation/DerivationAxis";
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 import { normaliseDER } from "../../src/domain/utils/DER";
-import { hash, hashSync, SupportedHashingAlg } from '../../src/domain/utils/hash'
+import { hash, hashSync, SupportedHashingAlg } from '../../src/domain/utils/hash';
 import { randomBytes } from "../../src/domain/utils/randomBytes";
 
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
@@ -209,21 +209,21 @@ describe("Apollo", () => {
     const text = "test";
     const validHashing = [SupportedHashingAlg.SHA256, SupportedHashingAlg.SHA512];
     validHashing.forEach((alg) => {
-      expect(() => hashSync(text, alg)).to.not.be.undefined
-      expect(hash(text, alg)).to.eventually.not.be.undefined
-    })
-  })
+      expect(() => hashSync(text, alg)).to.not.be.undefined;
+      expect(hash(text, alg)).to.eventually.not.be.undefined;
+    });
+  });
 
   it("Should generate random bytes", async () => {
     const initValue = new Uint8Array(64);
-    const initHex = Buffer.from(initValue).toString('hex')
-    const random = randomBytes(initValue)
-    expect(initHex).to.not.deep.eq(Buffer.from(random).toString('hex'))
-  })
+    const initHex = Buffer.from(initValue).toString('hex');
+    const random = randomBytes(initValue);
+    expect(initHex).to.not.deep.eq(Buffer.from(random).toString('hex'));
+  });
 
   it("Should should normalise SECP256K1 der signature from apollo", async () => {
     const text = Buffer.from("test text");
-    const seed = apollo.createRandomSeed()
+    const seed = apollo.createRandomSeed();
     const sk = apollo.createPrivateKey({
       type: KeyTypes.EC,
       curve: Curve.SECP256K1,
@@ -237,12 +237,12 @@ describe("Apollo", () => {
       nativeSk.sign(
         Int8Array.from(text)
       )
-    )
-    const normalisedRaw = normaliseDER(signed)
-    const signature = pk.canVerify() && pk.verify(text, signed)
-    expect(signature).to.eq(true)
-    const normalisedSignature = pk.canVerify() && pk.verify(text, normalisedRaw)
-    expect(normalisedSignature).to.eq(true)
+    );
+    const normalisedRaw = normaliseDER(signed);
+    const signature = pk.canVerify() && pk.verify(text, signed);
+    expect(signature).to.eq(true);
+    const normalisedSignature = pk.canVerify() && pk.verify(text, normalisedRaw);
+    expect(normalisedSignature).to.eq(true);
   });
 
   it("Should only verify signed message using the correct SECP256K1 KeyPair", async () => {
@@ -379,59 +379,59 @@ describe("Apollo", () => {
 
   describe("DerivationPath", () => {
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationAxis.normal("m/x" as any)).to.throws("Invalid axis, not a number")
-    })
+      expect(() => DerivationAxis.normal("m/x" as any)).to.throws("Invalid axis, not a number");
+    });
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationAxis.hardened("m/x" as any)).to.throws("Invalid axis, not a number")
-    })
+      expect(() => DerivationAxis.hardened("m/x" as any)).to.throws("Invalid axis, not a number");
+    });
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationAxis.normal(-1)).to.throws("Number corresponding to the axis should be a positive number")
-    })
+      expect(() => DerivationAxis.normal(-1)).to.throws("Number corresponding to the axis should be a positive number");
+    });
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationAxis.hardened(-1)).to.throws("Number corresponding to the axis should be a positive number")
-    })
+      expect(() => DerivationAxis.hardened(-1)).to.throws("Number corresponding to the axis should be a positive number");
+    });
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationPath.fromPath("m/x", [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Invalid axis, not a number")
-    })
+      expect(() => DerivationPath.fromPath("m/x", [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Invalid axis, not a number");
+    });
 
     it("Should throw an error when invalid (non string) path is used", async () => {
-      expect(() => DerivationPath.fromPath(null as any, [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Derivation path should be string")
-    })
+      expect(() => DerivationPath.fromPath(null as any, [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Derivation path should be string");
+    });
     it("Should throw an error when empty derivation schema is used", async () => {
-      const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath])
-      expect(() => path.toString()).to.throws("DerivationPathErr Derivation path is empty")
-    })
+      const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath]);
+      expect(() => path.toString()).to.throws("DerivationPathErr Derivation path is empty");
+    });
     it("Should throw an error when wrong path not starting with m or M", async () => {
-      expect(() => DerivationPath.fromPath("d/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Path needs to start with m or M")
-    })
+      expect(() => DerivationPath.fromPath("d/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Path needs to start with m or M");
+    });
     it("Should throw an error when invalid derivation schema is used", async () => {
-      const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath])
+      const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath]);
       const derived = path
         .derive(DerivationAxis.hardened(1))
         .derive(DerivationAxis.normal(1))
         .derive(DerivationAxis.hardened(1))
-        .derive(DerivationAxis.hardened(1))
+        .derive(DerivationAxis.hardened(1));
 
-      expect(() => derived.toString()).to.throws("DerivationPathErr Incompatible Derivation schema")
-    })
+      expect(() => derived.toString()).to.throws("DerivationPathErr Incompatible Derivation schema");
+    });
 
     it("Should throw an error when invalid derivation schema is used", async () => {
-      expect(() => DerivationPath.fromPath("m/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Incompatible Derivation schema")
-    })
-  })
+      expect(() => DerivationPath.fromPath("m/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Incompatible Derivation schema");
+    });
+  });
 
   describe("Curve to alg", () => {
     it("Should convert from curve to alg correctly", () => {
 
       expect(curveToAlg('and')).to.eq(JWT_ALG.unknown);
-      expect(curveToAlg(Curve.SECP256K1)).to.eq(JWT_ALG.ES256K)
+      expect(curveToAlg(Curve.SECP256K1)).to.eq(JWT_ALG.ES256K);
 
-      expect(curveToAlg(Curve.ED25519)).to.eq(JWT_ALG.EdDSA)
+      expect(curveToAlg(Curve.ED25519)).to.eq(JWT_ALG.EdDSA);
 
-      expect(curveToAlg(Curve.X25519)).to.eq(JWT_ALG.EdDSA)
+      expect(curveToAlg(Curve.X25519)).to.eq(JWT_ALG.EdDSA);
 
-    })
-  })
+    });
+  });
 
   describe("KeyRestoration", () => {
 

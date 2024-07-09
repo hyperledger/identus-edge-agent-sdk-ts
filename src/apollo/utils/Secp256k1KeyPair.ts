@@ -1,7 +1,7 @@
 import { KeyPair, MnemonicWordList } from "../../domain";
 import { Secp256k1PrivateKey } from "./Secp256k1PrivateKey";
 import { Secp256k1PublicKey } from "./Secp256k1PublicKey";
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**
