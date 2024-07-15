@@ -6,7 +6,7 @@ import { Ed25519KeyPair } from "../../../src/apollo/utils/Ed25519KeyPair";
 import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
 import Apollo from "../../../src/apollo/Apollo";
 
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 import { PrismDerivationPath } from "../../../src/domain/models/derivation/schemas/PrismDerivation";
 import { DeprecatedDerivationPath } from "../../../src/domain/models/derivation/schemas/DeprecatedDerivation";
 
@@ -118,7 +118,7 @@ describe("Keys", () => {
         test("keySpecification.chainCode missing - throws", () => {
           expect(() => {
             const derivationPath = DerivationPath.fromPath(0 as any, [DeprecatedDerivationPath, PrismDerivationPath]);
-            privateKey.derive(derivationPath.toString())
+            privateKey.derive(derivationPath.toString());
           }).to.throw;
         });
         test("DerivationPath - m/0'/0'/0'", () => {
@@ -165,7 +165,7 @@ describe("Keys", () => {
           expect(raw1).to.equal(raw2);
           expect(raw1).to.not.equal(raw3);
         });
-      })
+      });
 
       // validation?
       describe("from", () => {

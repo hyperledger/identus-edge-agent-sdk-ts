@@ -12,7 +12,7 @@ import {
   StorableKey,
 } from "../../domain/models/keyManagement";
 
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 import { normaliseDER } from "../../domain/utils/DER";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const HDKey = ApolloSDK.derivation.HDKey;
@@ -93,7 +93,7 @@ export class Secp256k1PrivateKey
   }
 
   sign(message: Buffer) {
-    const normalised = normaliseDER(Buffer.from(Uint8Array.from(this.native.sign(Int8Array.from(message)))))
+    const normalised = normaliseDER(Buffer.from(Uint8Array.from(this.native.sign(Int8Array.from(message)))));
     return normalised;
   }
 
