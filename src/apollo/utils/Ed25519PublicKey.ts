@@ -9,7 +9,7 @@ import {
   VerifiableKey
 } from "../../domain";
 
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 
 /**

@@ -6,7 +6,7 @@ import { Secp256k1KeyPair } from "../../../src/apollo/utils/Secp256k1KeyPair";
 import { ECPublicKeyInitialization } from "../../../src/domain/models/errors/Apollo";
 import { DerivationPath } from "../../../src/apollo/utils/derivation/DerivationPath";
 
-import ApolloPKG from "@atala/apollo";
+import ApolloPKG from "@hyperledger/identus-apollo";
 import { DeprecatedDerivationPath } from "../../../src/domain/models/derivation/schemas/DeprecatedDerivation";
 import { PrismDerivationPath } from "../../../src/domain/models/derivation/schemas/PrismDerivation";
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
@@ -44,7 +44,7 @@ describe("Keys", () => {
 
           expect(() => {
             const derivationPath = DerivationPath.fromPath(0 as any, [DeprecatedDerivationPath, PrismDerivationPath]);
-            key.derive(derivationPath.toString())
+            key.derive(derivationPath.toString());
           }).to.throw;
         });
 
@@ -112,7 +112,7 @@ describe("Keys", () => {
 
           const secp = new Secp256k1PrivateKey(baseRaw);
           secp.keySpecification.set(KeyProperties.chainCode, chainCodeHex);
-          const derivationPath = DerivationPath.fromPath(path, [DeprecatedDerivationPath, PrismDerivationPath])
+          const derivationPath = DerivationPath.fromPath(path, [DeprecatedDerivationPath, PrismDerivationPath]);
           const secpChild = secp.derive(derivationPath.toString());
 
           const hdResult = Buffer.from(hdChild.privateKey!).toString("hex");
