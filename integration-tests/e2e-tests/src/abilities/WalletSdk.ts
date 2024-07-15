@@ -101,8 +101,13 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async initialise(): Promise<void> {
-    await this.createSdk()
-    await this.sdk.start()
+    try {
+      await this.createSdk()
+      await this.sdk.start()
+    } catch (e) {
+      console.error(e)
+      process.exit(-1)
+    }
   }
 
   isInitialised(): boolean {
@@ -124,7 +129,7 @@ class MessageQueue {
   proofRequestStack: Message[] = []
   issuedCredentialStack: Message[] = []
   revocationStack: Message[] = []
-  presentationMessagesStack: Message[] = [];
+  presentationMessagesStack: Message[] = []
 
   receivedMessages: string[] = []
 
@@ -155,7 +160,7 @@ class MessageQueue {
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
         const message: Message = this.dequeue()
-        const piUri = message.piuri;
+        const piUri = message.piuri
 
         // checks if sdk already received message
         if (this.receivedMessages.includes(message.id)) {
