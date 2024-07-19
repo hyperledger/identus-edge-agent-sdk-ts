@@ -12,9 +12,8 @@ release_version="$1"
 # Updates the version to the release
 npm version "$release_version" --git-tag-version false
 
-# Generates the build and docs
+# Generates the build 
 npm run build
-npm run docs
 
 # Gets the published versions in the registry
 published_versions=$(echo "$(npm view @hyperledger/identus-edge-agent-sdk versions)" | tr -d " '")
@@ -28,3 +27,7 @@ if [[ $published_versions == *$release_version* ]]; then
 else
     npm publish --access public
 fi
+
+
+# Build docs
+npm run docs
