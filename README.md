@@ -91,9 +91,11 @@ npm run start
 ```
 
 ### Implementing storage for the SDK
-This SDK exposes Pluto, a storage interface that should be implemented by the user, in the most appropriate way for a particular use case.
+This SDK exposes Pluto, which manages data schemas, migrations for you, but requires a Pluto.Store which needs to be implemented by the user, as this is particular to your use case.
 
-We don't provide a default implementation out of the box at the moment, but we do provide a couple of demo implementations that can be used to get started with demos and testing. 
+Provided demo implementations are intentionally oversimplified and **should not** be used in production.
 
-Provided demo implementations are intentionally oversimplified and **should not** be used in production. 
+Example community implementations:
+- [atala-community-projects/pluto-encrypted](https://github.com/atala-community-projects/pluto-encrypted): InMemory, IndexDB, LevelDB, as well as a test-suite to help you build your own.
+
 
