@@ -19,32 +19,33 @@ export class ApiImpl implements Api {
     httpHeaders: Map<string, string>,
     body?: any
   ): Promise<HttpResponse<T>> {
-    const rawUrl = new URL(`${url}`);
-    const rawHeaders: RawAxiosRequestHeaders = {};
-    for (const [name, value] of urlParameters) {
-      rawUrl.searchParams.append(name, value);
-    }
-
-    for (const [name, value] of httpHeaders) {
-      rawHeaders[name] = value;
-    }
-
-    const requestConfig: AxiosRequestConfig = {
-      baseURL: rawUrl.origin.toString(),
-      url: rawUrl.pathname,
-      method: httpMethod,
-      headers: rawHeaders,
-      validateStatus: function (status) {
-        return status >= 200 && status < 400;
-      },
-    };
-
-    if (body) {
-      requestConfig.data = body;
-    }
 
     // eslint-disable-next-line no-useless-catch
     try {
+      const rawUrl = new URL(`${url}`);
+      const rawHeaders: RawAxiosRequestHeaders = {};
+      for (const [name, value] of urlParameters) {
+        rawUrl.searchParams.append(name, value);
+      }
+
+      for (const [name, value] of httpHeaders) {
+        rawHeaders[name] = value;
+      }
+
+      const requestConfig: AxiosRequestConfig = {
+        baseURL: rawUrl.origin.toString(),
+        url: rawUrl.pathname,
+        method: httpMethod,
+        headers: rawHeaders,
+        validateStatus: function (status) {
+          return status >= 200 && status < 400;
+        },
+      };
+
+      if (body) {
+        requestConfig.data = body;
+      }
+
       const response = await this.client.request<T>(requestConfig);
 
       if (

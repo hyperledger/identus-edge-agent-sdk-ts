@@ -177,8 +177,13 @@ export default class Mercury implements MercuryInterface {
   private getDIDCommURL(document: Domain.DIDDocument): URL | undefined {
     const uri = document.services.find((x) => x.isDIDCommMessaging)
       ?.serviceEndpoint?.uri;
+
     if (uri) {
-      return new URL(uri);
+      try {
+        return new URL(uri);
+      } catch (err) {
+        throw new MercuryError.InvalidURLError('Invalid didcomm url')
+      }
     }
     return undefined;
   }
