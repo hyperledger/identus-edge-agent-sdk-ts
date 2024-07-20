@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/peer-did/PeerDID.ts#L31)
+[src/peer-did/PeerDID.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/peer-did/PeerDID.ts#L31)
 
 ## Properties
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/peer-did/PeerDID.ts#L32)
+[src/peer-did/PeerDID.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/peer-did/PeerDID.ts#L32)
 
 ___
 
@@ -52,4 +52,4 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:33](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/peer-did/PeerDID.ts#L33)
+[src/peer-did/PeerDID.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/peer-did/PeerDID.ts#L33)

@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:184](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L184)
+[src/domain/models/VerifiableCredential.ts:184](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L184)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:184](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L184)
+[src/domain/models/VerifiableCredential.ts:184](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L184)
 
 ## Methods
 
@@ -84,4 +84,4 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L186)
+[src/domain/models/VerifiableCredential.ts:186](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L186)

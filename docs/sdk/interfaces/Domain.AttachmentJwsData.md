@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L15)
+[src/domain/models/MessageAttachment.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/MessageAttachment.ts#L15)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L16)
+[src/domain/models/MessageAttachment.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/MessageAttachment.ts#L16)

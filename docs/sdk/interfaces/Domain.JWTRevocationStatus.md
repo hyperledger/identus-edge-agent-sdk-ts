@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:290](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L290)
+[src/domain/models/VerifiableCredential.ts:290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L290)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:292](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L292)
+[src/domain/models/VerifiableCredential.ts:292](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L292)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:289](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L289)
+[src/domain/models/VerifiableCredential.ts:289](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L289)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:288](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L288)
+[src/domain/models/VerifiableCredential.ts:288](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L288)
 
 ___
 
@@ -76,4 +76,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:291](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L291)
+[src/domain/models/VerifiableCredential.ts:291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/VerifiableCredential.ts#L291)

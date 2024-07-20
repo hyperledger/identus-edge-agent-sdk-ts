@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L12)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L12)
 
 ## Properties
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L13)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L13)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L14)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L14)
 
 ___
 
@@ -70,17 +70,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L15)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L15)
 
 ___
 
 ### type
 
-• **type**: `ProtocolType` = `ProtocolType.Didcomminvitation`
+• **type**: [`ProtocolType`](../enums/ProtocolType.md) = `ProtocolType.Didcomminvitation`
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L10)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L10)
 
 ## Methods
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L39)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L39)
 
 ___
 
@@ -120,4 +120,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L18)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L18)

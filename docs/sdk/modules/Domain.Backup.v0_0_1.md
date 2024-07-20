@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L53)
+[src/domain/backup/v0_0_1.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L53)
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L54)
+[src/domain/backup/v0_0_1.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L54)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L55)
+[src/domain/backup/v0_0_1.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L55)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L56)
+[src/domain/backup/v0_0_1.ts:56](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L56)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:59](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L59)
+[src/domain/backup/v0_0_1.ts:59](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L59)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L57)
+[src/domain/backup/v0_0_1.ts:57](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L57)
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/backup/v0_0_1.ts#L58)
+[src/domain/backup/v0_0_1.ts:58](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/backup/v0_0_1.ts#L58)

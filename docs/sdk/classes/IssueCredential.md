@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L14)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L15)
 
 ## Properties
 
@@ -59,7 +59,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L16)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L17)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L15)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L16)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L17)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L18)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L20)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L21)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L19)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L20)
 
 ___
 
@@ -109,17 +109,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L18)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L19)
 
 ___
 
 ### type
 
-▪ `Static` **type**: `ProtocolType` = `ProtocolType.DidcommIssueCredential`
+▪ `Static` **type**: [`ProtocolType`](../enums/ProtocolType.md) = `ProtocolType.DidcommIssueCredential`
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L12)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L13)
 
 ## Methods
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:36](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L36)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L37)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L23)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:24](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L24)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:96](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L96)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L88)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:49](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L49)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L50)
 
 ___
 
@@ -216,4 +216,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L80)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L72)

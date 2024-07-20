@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Api.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Api.ts#L2)
+[src/domain/models/errors/Api.ts:2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176/src/domain/models/errors/Api.ts#L2)
 
 ## Properties
 
