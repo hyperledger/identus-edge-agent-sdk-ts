@@ -1,10 +1,9 @@
-import SDK from "@atala/prism-wallet-sdk"
 import { Given, Then, When } from "@cucumber/cucumber"
 import { Actor, Notepad } from "@serenity-js/core"
 import { EdgeAgentWorkflow } from "../workflow/EdgeAgentWorkflow"
 import { CloudAgentWorkflow } from "../workflow/CloudAgentWorkflow"
 import { Utils } from "../Utils"
-
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 
 Given("{actor} has '{int}' jwt credentials issued by {actor}",
   async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
@@ -181,78 +180,55 @@ Then("{actor} is dismissed",
 
 Then("{actor} will request {actor} to verify the anonymous credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
-
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
-    const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"));
-
-    await EdgeAgentWorkflow.initiatePresentationRequest(
-      verifierEdgeAgent,
-      SDK.Domain.CredentialType.AnonCreds,
-      holderDID,
-      {
-        attributes: {
-          name: {
-            name: 'name',
-            restrictions: {}
-          }
+    const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
+    const claims = {
+      attributes: {
+        name: {
+          name: "name",
+          restrictions: {}
         }
       }
-    )
+    }
+
+    await EdgeAgentWorkflow.initiatePresentationRequest(verifierEdgeAgent, SDK.Domain.CredentialType.AnonCreds, holderDID, claims)
   }
 )
 
 Then("{actor} will request {actor} to verify the JWT credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
-
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
-    const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"));
-
-    await EdgeAgentWorkflow.initiatePresentationRequest(
-      verifierEdgeAgent,
-      SDK.Domain.CredentialType.JWT,
-      holderDID,
-      {
-        claims: {
-          "automation-required": {
-            type: 'string',
-            pattern: 'required value'
-          }
+    const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
+    const claims = {
+      claims: {
+        "automation-required": {
+          type: "string",
+          pattern: "required value"
         }
       }
-    )
+    }
+
+    await EdgeAgentWorkflow.initiatePresentationRequest(verifierEdgeAgent, SDK.Domain.CredentialType.JWT, holderDID, claims)
   }
 )
 
-When("{actor} sends the verification proof", async (
-  edgeAgent: Actor,
-) => {
-  await EdgeAgentWorkflow.waitForProofRequest(
-    edgeAgent
-  )
-  await EdgeAgentWorkflow.presentVerificationRequest(
-    edgeAgent
-  )
+When("{actor} sends the verification proof", async (edgeAgent: Actor) => {
+  await EdgeAgentWorkflow.waitForProofRequest(edgeAgent)
+  await EdgeAgentWorkflow.presentVerificationRequest(edgeAgent)
 })
 
-Then("{actor} should see the verification proof is verified", async (
-  edgeAgent: Actor,
-) => {
-  await EdgeAgentWorkflow.waitForPresentationMessage(
-    edgeAgent
-  )
-  await EdgeAgentWorkflow.verifyPresentation(
-    edgeAgent
-  )
+
+Then("{actor} should receive an exception when trying to use a wrong anoncred credential", async (edgeAgent: Actor) => {
+  await EdgeAgentWorkflow.waitForProofRequest(edgeAgent)
+  await EdgeAgentWorkflow.tryToPresentVerificationRequestWithWrongAnoncred(edgeAgent)
 })
 
-Then("{actor} should see the verification proof is verified false", async (
-  edgeAgent: Actor,
-) => {
-  await EdgeAgentWorkflow.waitForPresentationMessage(
-    edgeAgent
-  )
-  await EdgeAgentWorkflow.verifyPresentation(
-    edgeAgent,
-    false
-  )
+Then("{actor} should see the verification proof is verified", async (edgeAgent: Actor) => {
+  await EdgeAgentWorkflow.waitForPresentationMessage(edgeAgent)
+  await EdgeAgentWorkflow.verifyPresentation(edgeAgent)
+})
+
+Then("{actor} should see the verification proof is verified false", async (edgeAgent: Actor) => {
+  await EdgeAgentWorkflow.waitForPresentationMessage(edgeAgent)
+  await EdgeAgentWorkflow.verifyPresentation(edgeAgent, false)
 })

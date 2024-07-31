@@ -53,6 +53,14 @@ When("{actor} asks for presentation of AnonCred proof", async function (cloudAge
   await CloudAgentWorkflow.askForPresentProofAnonCreds(cloudAgent)
 })
 
+When("{actor} asks for presentation of AnonCred proof with unexpected attributes", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.askForPresentProofAnonCredsWithUnexpectedAttributes(cloudAgent)
+})
+
+When("{actor} asks for presentation of AnonCred proof with unexpected values", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.askForPresentProofAnonCredsWithUnexpectedValues(cloudAgent)
+})
+
 When("{actor} revokes '{int}' credentials", async function (cloudAgent: Actor, numberOfRevokedCredentials: number) {
   await CloudAgentWorkflow.revokeCredential(cloudAgent, numberOfRevokedCredentials)
 })
@@ -63,6 +71,10 @@ Then("{actor} should have the connection status updated to '{}'", async (cloudAg
 
 Then("{actor} should see the present-proof is verified", async (cloudAgent: Actor) => {
   await CloudAgentWorkflow.verifyPresentProof(cloudAgent, "PresentationVerified")
+})
+
+Then("{actor} should see the present-proof is not verified", async (cloudAgent: Actor) => {
+  await CloudAgentWorkflow.verifyPresentProof(cloudAgent, "PresentationFailed")
 })
 
 Then("{actor} should see all credentials were accepted", async (cloudAgent: Actor) => {

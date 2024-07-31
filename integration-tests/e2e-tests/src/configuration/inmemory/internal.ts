@@ -2,21 +2,21 @@ import type {
   RxDocumentData,
   RxDocumentDataById,
   RxJsonSchema
-} from 'rxdb';
+} from "rxdb"
 
 import type {
   InMemoryDataIndex,
   InMemoryDataStructure,
   InMemoryStorageInternals,
   IndexType
-} from './types';
+} from "./types"
 
 function safeIndexList<RxDocType>(schema: Readonly<RxJsonSchema<RxDocumentData<RxDocType>>>) {
-  const primaryKeyKey = typeof schema.primaryKey === 'string' ? schema.primaryKey : schema.primaryKey.key
+  const primaryKeyKey = typeof schema.primaryKey === "string" ? schema.primaryKey : schema.primaryKey.key
   const allIndexes: string[][] = []
   for (const requiredIndexes of (schema.indexes ?? [])) {
     const currentIndexes: string[] = []
-    if (typeof requiredIndexes === 'string') {
+    if (typeof requiredIndexes === "string") {
       currentIndexes.push(requiredIndexes)
     } else {
       currentIndexes.push(...requiredIndexes)
@@ -30,9 +30,9 @@ function safeIndexList<RxDocType>(schema: Readonly<RxJsonSchema<RxDocumentData<R
 }
 
 function getPrivateKeyValue<RxDocType>(document: RxDocumentData<RxDocType>, schema: Readonly<RxJsonSchema<RxDocumentData<RxDocType>>>) {
-  const primaryKeyKey = typeof schema.primaryKey === 'string' ? schema.primaryKey : schema.primaryKey.key
+  const primaryKeyKey = typeof schema.primaryKey === "string" ? schema.primaryKey : schema.primaryKey.key
   if (!primaryKeyKey) {
-    throw new Error('Data must have a primaryKey defined of type string or number')
+    throw new Error("Data must have a primaryKey defined of type string or number")
   }
   const id = document[primaryKeyKey] as string
   return id
@@ -79,8 +79,12 @@ export class InMemoryInternal<RxDocType> implements InMemoryStorageInternals<RxD
     this.index.clear()
   }
 
-  async bulkPut(items: Array<RxDocumentData<RxDocType>>, collectionName: string, schema: Readonly<RxJsonSchema<RxDocumentData<RxDocType>>>) {
-    const primaryKeyKey = typeof schema.primaryKey === 'string' ? schema.primaryKey : schema.primaryKey.key
+  async bulkPut(
+    items: Array<RxDocumentData<RxDocType>>, 
+    collectionName: string, 
+    schema: Readonly<RxJsonSchema<RxDocumentData<RxDocType>>>
+  ) {
+    const primaryKeyKey = typeof schema.primaryKey === "string" ? schema.primaryKey : schema.primaryKey.key
     const saferIndexList = safeIndexList(schema)
 
     for (const item of items) {
@@ -88,19 +92,19 @@ export class InMemoryInternal<RxDocType> implements InMemoryStorageInternals<RxD
       const id = getPrivateKeyValue(item, schema)
       if (shouldDelete) {
         for (const requiredIndexes of saferIndexList) {
-          const requiredIndex = `[${collectionName}+${requiredIndexes.join('+')}]`
+          const requiredIndex = `[${collectionName}+${requiredIndexes.join("+")}]`
           await this.removeFromIndex(requiredIndex, id)
         }
         await this.removeFromIndex(`[${collectionName}+${primaryKeyKey}]`, id)
-        await this.removeFromIndex('[all]', id)
+        await this.removeFromIndex("[all]", id)
         await this.data.delete(id)
       } else {
         for (const requiredIndexes of saferIndexList) {
-          const requiredIndex = `[${collectionName}+${requiredIndexes.join('+')}]`
+          const requiredIndex = `[${collectionName}+${requiredIndexes.join("+")}]`
           await this.addIndex(requiredIndex, id)
         }
         await this.addIndex(`[${collectionName}+${primaryKeyKey}]`, id)
-        await this.addIndex('[all]', id)
+        await this.addIndex("[all]", id)
         await this.data.set(id, item)
       }
     }

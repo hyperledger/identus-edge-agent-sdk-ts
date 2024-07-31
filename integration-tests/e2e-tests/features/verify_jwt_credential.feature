@@ -4,12 +4,7 @@ Feature: Verify JWT presentation
 
   Scenario: SDKs JWT Verification
     Given Cloud Agent is connected to Edge Agent
-    When Cloud Agent offers '1' jwt credentials
-    Then Edge Agent should receive the credentials offer from Cloud Agent
-    When Edge Agent accepts the credentials offer from Cloud Agent
-    And Cloud Agent should see all credentials were accepted
-    Then Edge Agent wait to receive issued credentials from Cloud Agent
-    And Edge Agent process issued credentials from Cloud Agent
+    And Edge Agent has '1' jwt credentials issued by Cloud Agent
     Then Verifier Edge Agent will request Edge Agent to verify the JWT credential
     When Edge Agent sends the verification proof
     Then Verifier Edge Agent should see the verification proof is verified
