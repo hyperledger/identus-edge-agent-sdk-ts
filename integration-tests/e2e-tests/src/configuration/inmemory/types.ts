@@ -4,7 +4,7 @@ import type {
   RxDocumentDataById,
   RxJsonSchema,
   RxStorage
-} from 'rxdb'
+} from "rxdb"
 
 /**
  * Index of a table can be a string or a number

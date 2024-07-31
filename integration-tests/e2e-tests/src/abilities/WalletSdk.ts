@@ -1,6 +1,5 @@
 import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
-import SDK from "@atala/prism-wallet-sdk"
-import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
@@ -54,11 +53,11 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   static execute(callback: (sdk: SDK.Agent, messages: {
-    credentialOfferStack: Message[];
-    issuedCredentialStack: Message[];
-    proofRequestStack: Message[];
-    revocationStack: Message[],
-    presentationMessagesStack: Message[]
+    credentialOfferStack: SDK.Domain.Message[];
+    issuedCredentialStack: SDK.Domain.Message[];
+    proofRequestStack: SDK.Domain.Message[];
+    revocationStack: SDK.Domain.Message[],
+    presentationMessagesStack: SDK.Domain.Message[]
 
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
@@ -123,17 +122,17 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
  */
 class MessageQueue {
   private processingId: NodeJS.Timeout | null = null
-  private queue: Message[] = []
+  private queue: SDK.Domain.Message[] = []
 
-  credentialOfferStack: Message[] = []
-  proofRequestStack: Message[] = []
-  issuedCredentialStack: Message[] = []
-  revocationStack: Message[] = []
-  presentationMessagesStack: Message[] = []
+  credentialOfferStack: SDK.Domain.Message[] = []
+  proofRequestStack: SDK.Domain.Message[] = []
+  issuedCredentialStack: SDK.Domain.Message[] = []
+  revocationStack: SDK.Domain.Message[] = []
+  presentationMessagesStack: SDK.Domain.Message[] = []
 
   receivedMessages: string[] = []
 
-  enqueue(message: Message) {
+  enqueue(message: SDK.Domain.Message) {
     this.queue.push(message)
 
     // auto start processing messages
@@ -142,7 +141,7 @@ class MessageQueue {
     }
   }
 
-  dequeue(): Message {
+  dequeue(): SDK.Domain.Message {
     return this.queue.shift()!
   }
 
@@ -159,7 +158,7 @@ class MessageQueue {
   processMessages() {
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
-        const message: Message = this.dequeue()
+        const message: SDK.Domain.Message = this.dequeue()
         const piUri = message.piuri
 
         // checks if sdk already received message

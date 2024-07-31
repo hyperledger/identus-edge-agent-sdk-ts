@@ -45,7 +45,7 @@ export class CloudAgentConfiguration {
   }
 
   private static getSdkVersion(): string {
-    const file = "node_modules/@atala/prism-wallet-sdk/package.json"
+    const file = "node_modules/@hyperledger/identus-edge-agent-sdk/package.json"
     const json = JSON.parse(fs.readFileSync(file).toString())
     return json.version
   }

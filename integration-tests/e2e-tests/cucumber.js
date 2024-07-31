@@ -13,6 +13,7 @@ module.exports = {
     require: [
       "src/**/*.ts"
     ],
-    retry: 1
+    retry: 1,
+    tags: "not @disabled"
   }
 }
