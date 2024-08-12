@@ -10,6 +10,7 @@ import { Box } from "@/app/Box";
 import { useMountedApp } from "@/reducers/store";
 import { PageHeader } from "@/components/PageHeader";
 import { BackupRestore } from "@/components/BackupRestore";
+import { reduxActions } from "@/reducers/app";
 
 
 export default function App() {
@@ -17,7 +18,10 @@ export default function App() {
   const [mediatorDID, setMediatorDID] = useState<string>(app.mediatorDID.toString());
 
   function onChangeMediatorDID(e) {
-    setMediatorDID(e.target.value);
+    setMediatorDID(e.target.value)
+    app.dispatch(reduxActions.updateMediator({
+      mediator: e.target.value
+    }))
   }
 
   return (
