@@ -39,6 +39,39 @@ Edge Agent SDK TS software development kit will help adoption within TS platform
 
 Unsure where to begin contributing to Edge Agent SDK TS? You can start by looking through the [Readme](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/README.md) that provides all the steps to setup your environment.
 
+### Commit Signing
+
+As part of the Hyperledger project, all commits to Identus repos must by signed (cryptographically) and signed-off.
+
+Getting started:
+
+1. [Generate a gpg key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) (if you've not already done so)
+2. [Tell git about your signing key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key)
+3. [Add your signing key to your Github account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
+4. Set your sign-off signature
+  ```shell
+  git config user.name "FIRST_NAME LAST_NAME" --global
+  git config user.email "MY_NAME@example.com" --global
+  ```
+
+From here you can add `-sS` to many commit related commands to sign your commits:
+
+```shell
+git commit -sS -m 'docs: add commit signing notes to CONTRIBUTING'
+```
+
+Missed signing some commits? You can rebase + sign:
+
+```shell
+git rebase origin/main -sS
+```
+
+
+Other resources:
+
+ * [Git Tools - Signing Your Work](https://git-scm.c(om/book/en/v2/Git-Tools-Signing-Your-Work)
+
+
 ### Pull Requests
 
 The process described here has several goals:
@@ -50,9 +83,10 @@ The process described here has several goals:
 
 Please follow these steps to have your contribution considered by the maintainers:
 
-1. Follow all instructions in [the template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
-2. Follow the [styleguides](#styleguides)
-3. After you submit your pull request, verify that all [status checks](https://help.github.com/articles/about-status-checks/) are passing <details><summary>What if the status checks are failing?</summary>If a status check is failing, and you believe that the failure is unrelated to your change, please leave a comment on the pull request explaining why you believe the failure is unrelated. A maintainer will re-run the status check for you. If we conclude that the failure was a false positive, we will open an issue to track that problem with our status check suite.</details>
+1. Sign your commits (see [more info](#commit-signing))
+2. Follow all instructions in [the template](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
+3. Follow the [styleguides](#styleguides)
+4. After you submit your pull request, verify that all [status checks](https://help.github.com/articles/about-status-checks/) are passing <details><summary>What if the status checks are failing?</summary>If a status check is failing, and you believe that the failure is unrelated to your change, please leave a comment on the pull request explaining why you believe the failure is unrelated. A maintainer will re-run the status check for you. If we conclude that the failure was a false positive, we will open an issue to track that problem with our status check suite.</details>
 
 While the prerequisites above must be satisfied before your pull request is reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be accepted.
 
