@@ -35,6 +35,7 @@ export const useMountedApp = () => {
     return {
         ...state,
         ...dispatchedActions,
+        dispatch
     };
 };
 

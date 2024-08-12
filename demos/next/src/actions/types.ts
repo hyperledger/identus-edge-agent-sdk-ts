@@ -15,3 +15,7 @@ export enum Message {
 export enum Credential {
     success = "credentialSuccess"
 }
+
+export enum Mediator {
+    update = "updateMediator",
+}
