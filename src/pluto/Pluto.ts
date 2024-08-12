@@ -198,19 +198,14 @@ export class Pluto implements Domain.Pluto {
 
   async storeDID(did: Domain.DID, keys?: Arrayable<Domain.PrivateKey>, alias?: string): Promise<void> {
     await this.Repositories.DIDs.save(did, alias);
-    await Promise.all(
-      asArray(keys).map(async key => {
-        await this.Repositories.Keys.save(key);
-
-        await this.Repositories.DIDKeyLinks.insert({
-          alias,
-          didId: did.uuid,
-          keyId: key.uuid
-        });
-      })
-    );
-
-
+    for (const key of asArray(keys)) {
+      await this.Repositories.Keys.save(key);
+      await this.Repositories.DIDKeyLinks.insert({
+        alias,
+        didId: did.uuid,
+        keyId: key.uuid
+      });
+    }
   }
 
   /** Prism DIDs **/
@@ -258,11 +253,10 @@ export class Pluto implements Domain.Pluto {
 
   async storePeerDID(did: Domain.DID, privateKeys: Domain.PrivateKey[]): Promise<void> {
     await this.Repositories.DIDs.save(did);
-    await Promise.all(privateKeys.map(x => this.Repositories.Keys.save(x)));
-
-    await Promise.all(
-      privateKeys.map(x => this.Repositories.DIDKeyLinks.insert({ didId: did.uuid, keyId: x.uuid }))
-    );
+    for (const key of privateKeys) {
+      await this.Repositories.Keys.save(key);
+      await this.Repositories.DIDKeyLinks.insert({ didId: did.uuid, keyId: key.uuid });
+    }
   }
 
   async getAllPeerDIDs(): Promise<PeerDID[]> {
@@ -301,7 +295,9 @@ export class Pluto implements Domain.Pluto {
   }
 
   async storeMessages(messages: Domain.Message[]): Promise<void> {
-    await Promise.all(messages.map(x => this.Repositories.Messages.save(x)));
+    for (const msg of messages) {
+      await this.Repositories.Messages.save(msg);
+    }
   }
 
   async getMessage(id: string): Promise<Domain.Message | null> {
