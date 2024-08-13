@@ -117,7 +117,7 @@ const appSlice = createSlice({
                 mediator: string
             }>
         ) => {
-            state.mediatorDID = action.payload.mediator
+            state.mediatorDID = SDK.Domain.DID.fromString(action.payload.mediator)
         },
         [DBPreload.complete]: (
             state,
@@ -176,7 +176,6 @@ const appSlice = createSlice({
                 isAnswering: true,
                 hasAnswered: false,
                 error: null,
-                safeBody: action.meta.arg.message.safeBody,
                 credentialFormat: action.meta.arg.message.credentialFormat
             })
         })
