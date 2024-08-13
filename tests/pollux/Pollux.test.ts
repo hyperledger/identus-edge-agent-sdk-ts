@@ -2083,7 +2083,11 @@ describe("Pollux", () => {
   })
 
   it("Should Reject Creating an Anoncreds Presentation Submission using an invalid LinkSecret", async () => {
+    sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
+    sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
+
     const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+
     expect(pollux.createPresentationSubmission<CredentialType.AnonCreds>(
       Fixtures.Credentials.Anoncreds.presentationRequest,
       credential,
@@ -2094,8 +2098,12 @@ describe("Pollux", () => {
 
   })
 
-  it("Should Reject Creating an Anoncreds Presentation Submission using an invalid LinkSecret", async () => {
+  it("Should Reject Creating an Anoncreds Presentation Submission using an invalid presentationDefinition", async () => {
+    sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
+    sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
+
     const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+
     expect(pollux.createPresentationSubmission<CredentialType.AnonCreds>(
       null as any,
       credential,
@@ -2103,23 +2111,14 @@ describe("Pollux", () => {
     )).to.eventually.be.rejectedWith(
       'Serialization Error: invalid type: unit value, expected struct PresentationRequestPayload'
     );
-
-  })
-
-  it("Should Reject Creating an Anoncreds Presentation Submission using an presentationDefinition", async () => {
-    const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
-    expect(pollux.createPresentationSubmission<CredentialType.AnonCreds>(
-      null as any,
-      credential,
-      Fixtures.Credentials.Anoncreds.linkSecret
-    )).to.eventually.be.rejectedWith(
-      'Serialization Error: invalid type: unit value, expected struct PresentationRequestPayload'
-    );
-
   })
 
   it("Should Reject Creating an Anoncreds Presentation Submission using a wrong JWT Credential", async () => {
+    sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
+    sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
+
     const credential = new JWTCredential(Fixtures.Credentials.JWT.credentialPayload)
+    
     expect(pollux.createPresentationSubmission<CredentialType.AnonCreds>(
       Fixtures.Credentials.Anoncreds.presentationRequest,
       credential,
