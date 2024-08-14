@@ -46,8 +46,10 @@ buildDIDComm() {
   cd "${GenDIDComm}-wasm-browser"
   if is_mac; then
     sed -i '' "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+    sed -i '' "/if (typeof module_or_path === 'undefined') {/,/}/d" didcomm_js.js
   else
     sed -i "/if (typeof input === 'undefined') {/,/}/d" didcomm_js.js
+    sed -i "/if (typeof module_or_path === 'undefined') {/,/}/d" didcomm_js.js
   fi
 
   cd $ExternalsDir
@@ -70,9 +72,9 @@ buildJWT() {
   #The code will fully work
   cd "${GenJWERust}-wasm-browser"
   if is_mac; then
-    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" jwe_rust.js
+    sed -i '' "/if (typeof \(input\|module_or_path\) === 'undefined') {/,/}/d" jwe_rust.js
   else
-    sed -i "/if (typeof input === 'undefined') {/,/}/d" jwe_rust.js
+    sed -i "/if (typeof \(input\|module_or_path\) === 'undefined') {/,/}/d" jwe_rust.js
   fi
 
   cd $ExternalsDir
@@ -95,9 +97,11 @@ buildAnonCreds() {
   #The code will fully work
   cd "${GenAnonCreds}-wasm-browser"
   if is_mac; then
-    sed -i '' "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
+    sed -i '' "/if (typeof \(input\|module_or_path\) === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
+
   else
-    sed -i "/if (typeof input === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
+    sed -i "/if (typeof \(input\|module_or_path\) === 'undefined') {/,/}/d" "./${AnonCreds}_wasm.js"
+
   fi
   cd $ExternalsDir
   git submodule | grep $AnonCreds | awk '{print $1}' > "./${AnonCreds}.commit"
