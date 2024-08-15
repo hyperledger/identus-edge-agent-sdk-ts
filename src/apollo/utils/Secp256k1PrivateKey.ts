@@ -42,8 +42,9 @@ export class Secp256k1PrivateKey
 
   constructor(nativeValue: Uint8Array) {
     if (nativeValue.length !== ECConfig.PRIVATE_KEY_BYTE_SIZE) {
-      throw new ApolloError.ECPublicKeyInitialization();
+      throw new ApolloError.KeyInitializationError(`Invalid byte size: ${ECConfig.PRIVATE_KEY_BYTE_SIZE} exptected, ${nativeValue.length} given`);
     }
+
     super();
 
     this.keySpecification.set(KeyProperties.curve, Curve.SECP256K1);
@@ -54,7 +55,7 @@ export class Secp256k1PrivateKey
   derive(derivationPath: string): Secp256k1PrivateKey {
     const chainCodeHex = this.getProperty(KeyProperties.chainCode);
     if (!chainCodeHex) {
-      throw new ApolloError.MissingKeyParameters([KeyProperties.chainCode]);
+      throw new ApolloError.MissingKeyParameters(KeyProperties.chainCode);
     }
     const chaincode = Buffer.from(chainCodeHex, "hex");
     const derivationPathStr = derivationPath.toString();
@@ -67,7 +68,7 @@ export class Secp256k1PrivateKey
     );
     const derivedKey = hdKey.derive(derivationPathStr);
     if (derivedKey.privateKey == null) {
-      throw new ApolloError.MissingPrivateKey();
+      throw new ApolloError.ApolloLibError("Key generated incorrectly: missing privateKey");
     }
     const privateKey = new Secp256k1PrivateKey(Buffer.from(derivedKey.privateKey));
     privateKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationPathStr).toString("hex"));
@@ -104,7 +105,7 @@ export class Secp256k1PrivateKey
 
   static secp256k1FromBytes(encoded: Uint8Array): Secp256k1PrivateKey {
     if (encoded.length !== ECConfig.PRIVATE_KEY_BYTE_SIZE) {
-      throw new ApolloError.ECPublicKeyInitialization();
+      throw new ApolloError.KeyInitializationError(`Invalid byte size: ${ECConfig.PRIVATE_KEY_BYTE_SIZE} exptected, ${encoded.length} given`);
     }
     const bnprv = new BN(encoded);
     return new Secp256k1PrivateKey(Uint8Array.from(bnprv.toArray()));

@@ -78,8 +78,7 @@ describe("PrismDID", () => {
       );
       const masterPkProto = masterPk.toProto();
 
-      expect(() => PrismDIDPublicKey.fromProto(apollo, masterPkProto)).to.throw(`Invalid key curve: ${unsupportedCurve}. Valid options are: X25519,Ed25519,Secp256k1`);
-
+      expect(() => PrismDIDPublicKey.fromProto(apollo, masterPkProto)).to.throw(`16: Invalid key curve: ${unsupportedCurve}. Valid options are: X25519, Ed25519, Secp256k1`);
     });
   });
 

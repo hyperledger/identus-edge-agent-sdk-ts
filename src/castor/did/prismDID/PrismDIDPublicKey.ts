@@ -89,7 +89,7 @@ export class PrismDIDPublicKey {
         this.fromEd25519ORX25519Proto(apollo, proto)
       );
     } else {
-      throw new ApolloError.InvalidKeyCurve(curve, Object.values(Curve))
+      throw new ApolloError.InvalidKeyCurve(curve);
     }
   }
 

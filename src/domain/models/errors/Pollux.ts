@@ -81,3 +81,8 @@ export class InvalidDescriptorFormatError extends Error {
         super(message || "Invalid Descriptor format")
     }
 }
+
+/**
+ * general Revocation error, message should contain details
+ */
+export class RevocationError extends Error {}
