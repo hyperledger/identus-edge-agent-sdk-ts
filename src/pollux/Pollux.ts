@@ -48,7 +48,7 @@ import {
 } from "../domain";
 import { AnonCredsCredential } from "./models/AnonCredsVerifiableCredential";
 import { JWTCredential } from "./models/JWTVerifiableCredential";
-import { ApiImpl } from "../edge-agent/helpers/ApiImpl";
+import { FetchApi } from "../edge-agent/helpers/FetchApi";
 import { JWTJson, PresentationRequest, SDJWTJson } from "./models/PresentationRequest";
 import { DescriptorPath } from "./utils/DescriptorPath";
 import { JWT as JWTClass } from "./utils/JWT";
@@ -56,7 +56,6 @@ import { InvalidVerifyCredentialError, InvalidVerifyFormatError } from "../domai
 import { isPresentationDefinitionRequestType, parsePresentationSubmission, validatePresentationClaims } from "./utils/claims";
 import { SDJWT as SDJWTClass } from "./utils/SDJWT";
 import { SDJWTCredential } from "./models/SDJWTVerifiableCredential";
-import { HttpStatusCode } from "axios";
 import { JsonLd, RemoteDocument } from "jsonld/jsonld-spec";
 import { VerificationKeyType } from "../castor/types";
 import { revocationJsonldDocuments } from "../domain/models/revocation";
@@ -77,7 +76,7 @@ export default class Pollux implements IPollux {
   constructor(
     private apollo: Apollo,
     private castor: Castor,
-    private api: Api = new ApiImpl(),
+    private api: Api = new FetchApi(),
     private JWT = new JWTClass(apollo, castor),
     private SDJWT = new SDJWTClass(apollo, castor)
   ) {
@@ -195,12 +194,7 @@ export default class Pollux implements IPollux {
       // The above ignores are justified because we are mocking the API calls
       // And always using the catched jsonLD documents for statusProof..
       // istanbul ignore next
-      const response = await this.api.request<JsonLd>(
-        "GET",
-        url,
-        new Map(),
-        new Map(),
-        null)
+      const response = await this.api.request<JsonLd>("GET", url);
       const doc: RemoteDocument = {
         documentUrl: url,
         document: response.body
@@ -294,12 +288,9 @@ export default class Pollux implements IPollux {
     const response = await this.api.request<JWTStatusListResponse>(
       "GET",
       revocationStatus.statusListCredential,
-      new Map(),
-      new Map(),
-      null
-    )
+    );
     // istanbul ignore next
-    if (response.httpStatus !== HttpStatusCode.Ok) {
+    if (response.httpStatus !== 200) {
       throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus response status code ${response.httpStatus}`)
     }
     // istanbul ignore next
@@ -992,11 +983,8 @@ export default class Pollux implements IPollux {
     credentialDefinitionId: string
   ): Promise<Anoncreds.CredentialDefinitionType> {
     const response = await this.api.request<Anoncreds.CredentialDefinitionType>(
-      "get",
+      "GET",
       credentialDefinitionId,
-      new Map(),
-      new Map(),
-      null
     );
 
     return response.body;
@@ -1010,11 +998,8 @@ export default class Pollux implements IPollux {
    */
   private async fetchSchema(schemaURI: string): Promise<Anoncreds.CredentialSchemaType> {
     const response = await this.api.request<Anoncreds.CredentialSchemaType>(
-      "get",
-      schemaURI,
-      new Map(),
-      new Map(),
-      null
+      "GET",
+      schemaURI
     );
 
     return response.body;

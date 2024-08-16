@@ -3,9 +3,7 @@ import Apollo from "../apollo";
 import Castor from "../castor";
 import Mercury from "../mercury";
 import Pollux from "../pollux";
-
-import { ApiImpl } from "./helpers/ApiImpl";
-
+import { FetchApi } from "./helpers/FetchApi";
 import {
   AgentCredentials as AgentCredentialsClass,
   AgentDIDHigherFunctions as AgentDIDHigherFunctionsClass,
@@ -89,7 +87,7 @@ export default class Agent
     public readonly mediationHandler: MediatorHandler,
     public readonly connectionManager: ConnectionsManager,
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
-    public readonly api: Domain.Api = new ApiImpl(),
+    public readonly api: Domain.Api = new FetchApi(),
     options?: AgentOptions
   ) {
 
@@ -135,7 +133,7 @@ export default class Agent
   }
 
   isCredentialRevoked(credential: Domain.Credential) {
-    return this.agentCredentials.isCredentialRevoked(credential)
+    return this.agentCredentials.isCredentialRevoked(credential);
   }
 
   /**
@@ -165,7 +163,7 @@ export default class Agent
     const mediatorDID = Domain.DID.from(params.mediatorDID);
     const pluto = params.pluto;
 
-    const api = params.api ?? new ApiImpl();
+    const api = params.api ?? new FetchApi();
     const apollo = params.apollo ?? new Apollo();
     const castor = params.castor ?? new Castor(apollo);
 
@@ -252,7 +250,7 @@ export default class Agent
       connectionManager.mediationHandler,
       connectionManager,
       seed ? seed : apollo.createRandomSeed().seed,
-      api ? api : new ApiImpl(),
+      api ? api : new FetchApi(),
       options
     );
   }

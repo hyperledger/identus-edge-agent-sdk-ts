@@ -9,7 +9,6 @@ import {
   Api,
   DID,
   DIDDocument,
-  HttpResponse,
   KeyPair,
   Message,
   PublicKey,
@@ -21,7 +20,8 @@ import * as Domain from "../../src/domain";
 import { MercuryError } from "../../src/domain/models/Errors";
 import { DIDCommProtocol } from "../../src/mercury/DIDCommProtocol";
 import Mercury from "../../src/mercury/Mercury";
-import Castor from "../../src/domain/buildingBlocks/Castor";
+import { Castor } from "../../src/domain/buildingBlocks/Castor";
+
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -72,7 +72,7 @@ describe("Mercury", () => {
       },
     };
     const httpManager: Api = {
-      request: async () => new HttpResponse<any>(new Uint8Array(), 200),
+      request: async () => new Domain.ApiResponse<any>(new Uint8Array(), 200),
     };
     const didProtocol: DIDCommProtocol = {
       packEncrypted: async () => "",
@@ -160,7 +160,7 @@ describe("Mercury", () => {
       sandbox.stub(ctx.castor, "parseDID").returns(fromDID);
       sandbox
         .stub(ctx.httpManager, "request")
-        .resolves(new HttpResponse<any>({}, 200));
+        .resolves(new Domain.ApiResponse<any>({}, 200));
     });
 
     // it("should call HttpManager.postEncrypted with [ServiceEndpoint.uri, packedMessage]", async () => {
