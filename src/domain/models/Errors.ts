@@ -5,4 +5,3 @@ export * as CommonError from "./errors/Common";
 export * as MercuryError from "./errors/Mercury";
 export * as PlutoError from "./errors/Pluto";
 export * as PolluxError from "./errors/Pollux";
-export * as ApiError from "./errors/Api";

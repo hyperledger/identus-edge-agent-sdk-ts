@@ -19,7 +19,6 @@ import {
   CredentialMetadata,
   CredentialType,
   DID,
-  HttpResponse,
   JWTCredentialPayload,
   LinkSecret,
   Message,
@@ -45,7 +44,7 @@ import { Presentation } from "../../src/edge-agent/protocols/proofPresentation/P
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import { AnonCredsCredential } from "../../src/pollux/models/AnonCredsVerifiableCredential";
 import InMemoryStore from "../fixtures/inmemory";
-import { Pluto as IPluto } from "../../src/domain";
+import { ApiResponse, Pluto as IPluto } from "../../src/domain";
 import { Pluto } from "../../src/pluto/Pluto";
 import { RevocationNotification } from "../../src/edge-agent/protocols/revocation/RevocationNotfiication";
 import { AgentCredentials } from "../../src/edge-agent/Agent.Credentials";
@@ -88,7 +87,7 @@ describe("Agent Tests", () => {
     const apollo: Apollo = new Apollo();
     castor = CastorMock;
     const httpManager: Api = {
-      request: async () => new HttpResponse<any>(new Uint8Array(), 200),
+      request: async () => new ApiResponse<any>(new Uint8Array(), 200),
     };
     const didProtocol: DIDCommProtocol = {
       packEncrypted: async () => "",

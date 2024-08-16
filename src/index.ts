@@ -17,7 +17,7 @@ export * from "./edge-agent/connectionsManager/ConnectionsManager";
 export * from "./edge-agent/mediator/BasicMediatorHandler";
 export * from "./edge-agent/mediator/PlutoMediatorStore";
 export * from "./mercury/didcomm/Wrapper";
-export * from "./edge-agent/helpers/ApiImpl";
+export { FetchApi as ApiImpl } from "./edge-agent/helpers/FetchApi";
 export { ListenerKey } from "./edge-agent/types";
 export * from './peer-did/PeerDID';
 export type {
