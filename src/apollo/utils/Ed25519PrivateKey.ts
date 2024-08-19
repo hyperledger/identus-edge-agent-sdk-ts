@@ -43,7 +43,7 @@ export class Ed25519PrivateKey extends PrivateKey implements DerivableKey, Expor
   derive(derivationPath: string): PrivateKey {
     const chainCodeHex = this.getProperty(KeyProperties.chainCode);
     if (!chainCodeHex) {
-      throw new ApolloError.MissingKeyParameters([KeyProperties.chainCode]);
+      throw new ApolloError.MissingKeyParameters(KeyProperties.chainCode);
     }
     const derivationPathStr = derivationPath.toString();
     const skRaw = Int8Array.from(this.raw);

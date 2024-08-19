@@ -53,7 +53,7 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
       nativeValue.at(0) === 0x04;
 
     if (!isCompressed && !isUnCompressed) {
-      throw new ApolloError.ECPublicKeyInitialization();
+      throw new ApolloError.KeyInitializationError(`Invalid key bytes`);
     }
     this.keySpecification.set(KeyProperties.curve, Curve.SECP256K1);
     this.keySpecification.set("compressed", isCompressed ? "true" : "false");

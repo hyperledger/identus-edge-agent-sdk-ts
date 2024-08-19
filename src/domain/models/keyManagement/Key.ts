@@ -144,7 +144,7 @@ export function getKeyCurveByNameAndIndex(
     case Curve.SECP256K1:
       return { curve: Curve.SECP256K1, index };
     default:
-      throw new ApolloError.InvalidKeyCurve(name, Object.keys(Curve));
+      throw new ApolloError.InvalidKeyCurve(name);
   }
 }
 

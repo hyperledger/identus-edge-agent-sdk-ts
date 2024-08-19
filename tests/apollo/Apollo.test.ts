@@ -12,7 +12,6 @@ import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 import { Ed25519PublicKey } from "../../src/apollo/utils/Ed25519PublicKey";
 import { X25519PublicKey } from "../../src/apollo/utils/X25519PublicKey";
 import { Secp256k1PublicKey } from "../../src/apollo/utils/Secp256k1PublicKey";
-import { MnemonicLengthException, MnemonicWordException } from "../../src/domain/models/errors/Mnemonic";
 import {
   ApolloError,
   Curve,
@@ -29,7 +28,7 @@ import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/sch
 import { DerivationAxis } from "../../src/domain/models/derivation/DerivationAxis";
 import ApolloPKG from "@hyperledger/identus-apollo";
 import { normaliseDER } from "../../src/domain/utils/DER";
-import { hash, hashSync, SupportedHashingAlg } from '../../src/domain/utils/hash';
+import { hash, hashSync } from '../../src/domain/utils/hash';
 import { randomBytes } from "../../src/domain/utils/randomBytes";
 
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
@@ -112,7 +111,7 @@ describe("Apollo", () => {
 
         assert.throws(
           () => apollo.createSeed(mnemonics as any, ""),
-          MnemonicLengthException
+          ApolloError.MnemonicLengthError
         );
       });
     }
@@ -123,8 +122,7 @@ describe("Apollo", () => {
         () => {
           apollo.createSeed(mnemonicCode, "");
         },
-        Error,
-        "Invalid mnemonic word/s"
+        ApolloError.MnemonicWordError
       );
     });
 
@@ -153,7 +151,7 @@ describe("Apollo", () => {
       ] as MnemonicWordList;
       assert.throws(() => {
         apollo.createSeed(mnemonicCode, "");
-      }, MnemonicWordException);
+      }, ApolloError.MnemonicWordError);
     });
   });
 
@@ -207,7 +205,7 @@ describe("Apollo", () => {
 
   it("Should test our hashing libraries", async () => {
     const text = "test";
-    const validHashing = [SupportedHashingAlg.SHA256, SupportedHashingAlg.SHA512];
+    const validHashing = ["SHA256", "SHA512"];
     validHashing.forEach((alg) => {
       expect(() => hashSync(text, alg)).to.not.be.undefined;
       expect(hash(text, alg)).to.eventually.not.be.undefined;
@@ -391,18 +389,18 @@ describe("Apollo", () => {
       expect(() => DerivationAxis.hardened(-1)).to.throws("Number corresponding to the axis should be a positive number");
     });
     it("Should throw an error when invalid path is used", async () => {
-      expect(() => DerivationPath.fromPath("m/x", [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Invalid axis, not a number");
+      expect(() => DerivationPath.fromPath("m/x", [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("182: Invalid axis, not a number");
     });
 
     it("Should throw an error when invalid (non string) path is used", async () => {
-      expect(() => DerivationPath.fromPath(null as any, [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("DerivationPathErr Derivation path should be string");
+      expect(() => DerivationPath.fromPath(null as any, [DeprecatedDerivationPath, PrismDerivationPath])).to.throws("182: Derivation path should be string");
     });
     it("Should throw an error when empty derivation schema is used", async () => {
       const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath]);
       expect(() => path.toString()).to.throws("DerivationPathErr Derivation path is empty");
     });
     it("Should throw an error when wrong path not starting with m or M", async () => {
-      expect(() => DerivationPath.fromPath("d/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("DerivationPathErr Path needs to start with m or M");
+      expect(() => DerivationPath.fromPath("d/0", [DeprecatedDerivationPath, PrismDerivationPath]).toString()).to.throws("182: Path needs to start with m or M");
     });
     it("Should throw an error when invalid derivation schema is used", async () => {
       const path = DerivationPath.empty([DeprecatedDerivationPath, PrismDerivationPath]);

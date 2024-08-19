@@ -298,7 +298,7 @@ describe("Pollux", () => {
         );
 
         await expect(pollux.isCredentialRevoked(JWTCredential.fromJWS(revocableJWTCredential)))
-            .to.eventually.rejectedWith("Err Invalid key type: undefined. Valid options are: EC,Curve25519,unknown")
+            .to.eventually.rejectedWith("Err Invalid JWK kty: undefined, should be EC")
 
     })
 
@@ -333,7 +333,7 @@ describe("Pollux", () => {
         );
 
         await expect(pollux.isCredentialRevoked(JWTCredential.fromJWS(revocableJWTCredential)))
-            .to.eventually.rejectedWith("Err Invalid key curve: undefined. Valid options are: X25519,Ed25519,Secp256k1")
+            .to.eventually.rejectedWith("Err Invalid JWK crv: undefined, should be secp256k1")
 
 
     })

@@ -39,7 +39,6 @@ import {
   JWTRevocationStatus,
   RevocationType,
   JWTStatusListResponse,
-  ApolloError,
   Curve,
   KeyProperties,
   KeyTypes,
@@ -239,10 +238,10 @@ export default class Pollux implements IPollux {
         const curve = decodedVerificationMethod.publicKeyJwk.crv;
         const kty = decodedVerificationMethod.publicKeyJwk.kty;
         if (kty !== KeyTypes.EC) {
-          throw new ApolloError.InvalidKeyType(kty, Object.values(KeyTypes))
+          throw new PolluxError.RevocationError(`Invalid JWK kty: ${kty}, should be ${KeyTypes.EC}`);
         }
         if (curve !== Curve.SECP256K1.toLocaleLowerCase()) {
-          throw new ApolloError.InvalidKeyCurve(curve, Object.values(Curve))
+          throw new PolluxError.RevocationError(`Invalid JWK crv: ${curve}, should be ${Curve.SECP256K1.toLocaleLowerCase()}`);
         }
         const { x, y } = decodedVerificationMethod.publicKeyJwk;
         const pk = this.apollo.createPublicKey({
