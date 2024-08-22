@@ -1,21 +1,29 @@
-import * as didJWT from "did-jwt";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
 import { JWTCore } from "./jwt/JWTCore";
-import { JWTInstanceType, JWTSignOptions, JWTVerifyOptions } from "./jwt/types";
-import { decodeJWS } from "./decodeJWS";
 import { base64url } from "multiformats/bases/base64";
-import { isNil } from "../../utils";
+import { JsonObj, isNil } from "../../utils";
+import * as Domain from "../../domain";
 
-export class JWT extends JWTCore<JWTInstanceType.JWT> {
-  public type = JWTInstanceType.JWT;
-
+export class JWT extends JWTCore {
   async decode(jws: string) {
-    return decodeJWS(jws);
+    return Domain.JWT.decode(jws);
   }
 
-  async verify(
-    options: JWTVerifyOptions<JWTInstanceType.JWT>
-  ): Promise<boolean> {
+  async sign(options: {
+    issuerDID: Domain.DID,
+    privateKey: Domain.PrivateKey,
+    payload: Partial<Domain.JWT.Payload>,
+    header?: JsonObj,
+  }): Promise<string> {
+    const { issuerDID, privateKey, payload, header } = options;
+    return Domain.JWT.sign(issuerDID, privateKey, payload, header);
+  }
+
+  async verify(options: {
+    jws: string;
+    issuerDID: Domain.DID,
+    holderDID?: Domain.DID,
+  }): Promise<boolean> {
     try {
       const { issuerDID, jws, holderDID } = options;
       const resolved = await this.resolve(issuerDID.toString());
@@ -53,21 +61,5 @@ export class JWT extends JWTCore<JWTInstanceType.JWT> {
     } catch {
       return false;
     }
-  }
-
-  async sign(
-    options: JWTSignOptions<JWTInstanceType.JWT, any>
-  ): Promise<string> {
-    const { issuerDID, privateKey, payload } = options;
-    if (!privateKey.isSignable()) {
-      throw new Error("Key is not signable");
-    }
-    const { signAlg, signer } = this.getSKConfig(privateKey);
-    const jwt = await didJWT.createJWT(
-      payload,
-      { issuer: issuerDID.toString(), signer },
-      { alg: signAlg }
-    );
-    return jwt;
   }
 }

@@ -1,4 +1,5 @@
 import { uuid } from "@stablelib/uuid";
+import { base58btc } from "multiformats/bases/base58";
 import type * as Anoncreds from "anoncreds-browser";
 import * as  jsonld from 'jsonld';
 import { Castor } from "../domain/buildingBlocks/Castor";
@@ -356,7 +357,6 @@ export default class Pollux implements IPollux {
         }
       });
 
-    const subject = credential.subject;
     if (!privateKey.isSignable()) {
       throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.")
     }
@@ -364,6 +364,10 @@ export default class Pollux implements IPollux {
     if (!credential.isProvable()) {
       throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
     }
+
+    const subject = credential.subject;
+    const issuerDID = DID.fromString(subject);
+    const kid = await this.getSigningKid(issuerDID, privateKey);
 
     const payload: JWTPresentationPayload = {
       iss: subject,
@@ -374,9 +378,10 @@ export default class Pollux implements IPollux {
     }
 
     const jws = await this.JWT.sign({
-      issuerDID: DID.fromString(subject),
+      issuerDID,
       privateKey,
-      payload
+      payload,
+      header: { kid }
     });
 
     const presentationSubmission: PresentationSubmission = {
@@ -911,6 +916,36 @@ export default class Pollux implements IPollux {
       if (!keyPair) {
         throw new Error("Required keyPair ");
       }
+
+      const kid = await this.getSigningKid(did, keyPair.privateKey);
+      const challenge = offer.options.challenge;
+      const domain = offer.options.domain;
+      
+      const signedJWT = await this.JWT.sign({
+        issuerDID: did,
+        privateKey: keyPair.privateKey,
+        payload: {
+          aud: domain,
+          nonce: challenge,
+          vp: {
+            "@context": ["https://www.w3.org/2018/presentations/v1"],
+            type: ["VerifiablePresentation"],
+          },
+        },
+        header: { kid }
+      });
+      return signedJWT as ProcessedCredentialOfferPayloads[Types];
+    }
+    if (this.isOfferPayload<CredentialType.JWT>(offer, CredentialType.JWT)) {
+      const { did, keyPair } = options;
+      if (!did) {
+        throw new Error("Required did ");
+      }
+      if (!keyPair) {
+        throw new Error("Required keyPair ");
+      }
+
+      const kid = await this.getSigningKid(did, keyPair.privateKey);
       const challenge = offer.options.challenge;
       const domain = offer.options.domain;
 
@@ -924,32 +959,10 @@ export default class Pollux implements IPollux {
             "@context": ["https://www.w3.org/2018/presentations/v1"],
             type: ["VerifiablePresentation"],
           },
-        }
+        },
+        header: { kid },
       });
-      return signedJWT as ProcessedCredentialOfferPayloads[Types];
-    }
-    if (this.isOfferPayload<CredentialType.JWT>(offer, CredentialType.JWT)) {
-      const { did, keyPair } = options;
-      if (!did) {
-        throw new Error("Required did ");
-      }
-      if (!keyPair) {
-        throw new Error("Required keyPair ");
-      }
-      const challenge = offer.options.challenge;
-      const domain = offer.options.domain;
-      const signedJWT = await this.JWT.sign({
-        issuerDID: did,
-        privateKey: keyPair.privateKey,
-        payload: {
-          aud: domain,
-          nonce: challenge,
-          vp: {
-            "@context": ["https://www.w3.org/2018/presentations/v1"],
-            type: ["VerifiablePresentation"],
-          },
-        }
-      });
+
       return signedJWT as ProcessedCredentialOfferPayloads[Types];
     }
 
@@ -1094,6 +1107,8 @@ export default class Pollux implements IPollux {
       const jwtPresentationRequest = presentationRequest
       const presReqJson: JWTJson = jwtPresentationRequest.toJSON() as any;
       const presReqOptions = presReqJson.options;
+      const kid = await this.getSigningKid(options.did, options.privateKey);
+      
       const signedJWT = await this.JWT.sign({
         issuerDID: options.did,
         privateKey: options.privateKey,
@@ -1102,7 +1117,8 @@ export default class Pollux implements IPollux {
           aud: presReqOptions.domain,
           nonce: presReqOptions.challenge,
           vp: credential.presentation()
-        }
+        },
+        header: { kid }
       });
 
       return signedJWT;
@@ -1145,5 +1161,26 @@ export default class Pollux implements IPollux {
     }
 
     throw new PolluxError.InvalidPresentationProofArgs();
+  }
+
+
+  /**
+   * try to match the privateKey with a dids verificationMethod
+   * returning the relevant key id
+   * 
+   * @param did 
+   * @param privateKey 
+   * @returns {string} kid (key identifier)
+   */
+  private async getSigningKid(did: DID, privateKey: PrivateKey) {
+    const pubKey = privateKey.publicKey();
+    const encoded = base58btc.encode(pubKey.to.Buffer());
+    const document = await this.castor.resolveDID(did.toString());
+
+    const signingKey = document.verificationMethods.find(key => {
+      return key.publicKeyMultibase === encoded;
+    });
+
+    return signingKey?.id;
   }
 }

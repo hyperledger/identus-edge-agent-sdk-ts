@@ -122,6 +122,15 @@ export class DIDDocument {
       return serviceArray;
     }, [] as Service[]);
   }
+
+  get verificationMethods(): VerificationMethod[] {
+    return this.coreProperties.reduce((serviceArray, coreProperty) => {
+      if (coreProperty instanceof VerificationMethods) {
+        return [...serviceArray, ...coreProperty.values];
+      }
+      return serviceArray;
+    }, [] as VerificationMethod[]);
+  }
 }
 
 export interface PublicKeyJWK {

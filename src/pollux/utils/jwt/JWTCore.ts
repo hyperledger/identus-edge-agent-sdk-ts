@@ -1,11 +1,7 @@
 import * as didResolver from "did-resolver";
-import type { Extensible } from '@sd-jwt/types';
 import { base64url } from "multiformats/bases/base64";
 import { base58btc } from 'multiformats/bases/base58';
-
 import { Castor, AlsoKnownAs, Controller, VerificationMethods, Services, PublicKey, PrivateKey, Signer, Hasher, Verifier, Curve, Apollo, KeyProperties, KeyTypes } from "../../../domain";
-import { JWTDecodeResponse, JWTInstanceType, JWTSignOptions, JWTVerifyOptions } from "./types";
-
 import { defaultHashConfig, defaultSaltGen } from "./config";
 import { VerificationKeyType } from "../../../castor/types";
 
@@ -15,25 +11,11 @@ import { VerificationKeyType } from "../../../castor/types";
  * Wraps signing and verifying functionality with all our supported algorithms
  * Works for both secp256k1(ECDSA) and ed25519(EdDSA)
  */
-export abstract class JWTCore<T extends JWTInstanceType> {
-    abstract verify(
-        options: JWTVerifyOptions<T>
-    ): Promise<boolean>;
-
-    abstract sign<E extends Extensible>(
-        options: JWTSignOptions<T, E>
-    ): Promise<string>;
-
-    abstract decode(jws: string): JWTDecodeResponse<T>
-    abstract type: JWTInstanceType;
-
-    public castor: Castor;
-    public apollo: Apollo;
-
-    constructor(apollo: Apollo, castor: Castor) {
-        this.apollo = apollo;
-        this.castor = castor;
-    }
+export abstract class JWTCore {
+    constructor(
+      public readonly apollo: Apollo, 
+      public readonly castor: Castor
+    ) {}
 
     public async resolve(did: string): Promise<didResolver.DIDResolutionResult> {
         const resolved = await this.castor.resolveDID(did);

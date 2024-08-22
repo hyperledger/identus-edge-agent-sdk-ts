@@ -1,24 +1,24 @@
-import { SDJwtVcInstance, } from '@sd-jwt/sd-jwt-vc';
+import { SDJwtVcInstance, SdJwtVcPayload, } from '@sd-jwt/sd-jwt-vc';
 import type { DisclosureFrame, Extensible, PresentationFrame } from '@sd-jwt/types';
 import { JWTCore } from "./jwt/JWTCore";
-import { JWTInstanceType, JWTSignOptions, JWTVerifyOptions } from "./jwt/types";
-import { JWTObject, PublicKey, PrivateKey } from '../../domain';
-import { decodeJWS } from './decodeJWS';
 import { SDJWTCredential } from '../models/SDJWTVerifiableCredential';
+import * as Domain from '../../domain';
 
-
-export class SDJWT extends JWTCore<JWTInstanceType.SDJWT> {
-    public type = JWTInstanceType.SDJWT;
-
-    async decode(jws: string): Promise<JWTObject> {
-        return decodeJWS(jws)
+export class SDJWT extends JWTCore {
+    async decode(jws: string) {
+      return Domain.JWT.decode(jws);
     }
 
-    public createDisclosureFrameFor<T extends Extensible>(config: DisclosureFrame<T>): DisclosureFrame<T> {
-        return config;
+    createDisclosureFrameFor<T extends Extensible>(config: DisclosureFrame<T>): DisclosureFrame<T> {
+      return config;
     }
 
-    async verify(options: JWTVerifyOptions<JWTInstanceType.SDJWT>): Promise<boolean> {
+    async verify(options: {
+      issuerDID: Domain.DID,
+      jws: string,
+      requiredClaimKeys?: string[],
+      requiredKeyBindings?: boolean
+    }): Promise<boolean> {
         const { issuerDID, jws } = options;
         const resolved = await this.resolve(issuerDID.toString());
         const verificationMethods = resolved.didDocument?.verificationMethod;
@@ -30,7 +30,7 @@ export class SDJWT extends JWTCore<JWTInstanceType.SDJWT> {
             throw new Error("Invalid issuer");
         }
         for (const verificationMethod of verificationMethods) {
-            const pk: PublicKey | undefined = this.getPKInstance(verificationMethod)
+            const pk: Domain.PublicKey | undefined = this.getPKInstance(verificationMethod)
             if (pk && pk.canVerify()) {
                 const sdjwt = new SDJwtVcInstance(this.getPKConfig(pk));
                 try {
@@ -49,22 +49,23 @@ export class SDJWT extends JWTCore<JWTInstanceType.SDJWT> {
         return false;
     }
 
-    async sign<E extends Extensible>(options: JWTSignOptions<JWTInstanceType.SDJWT, E>): Promise<string> {
+    async sign<E extends Extensible>(options: {
+      issuerDID: Domain.DID,
+      privateKey: Domain.PrivateKey,
+      payload: SdJwtVcPayload,
+      disclosureFrame: DisclosureFrame<E>
+    }): Promise<string> {
         const sdjwt = new SDJwtVcInstance(this.getSKConfig(options.privateKey));
         return sdjwt.issue(options.payload, options.disclosureFrame)
     }
 
-    async createPresentationFor<E extends Extensible>(
-        options: {
-            jws: string,
-            privateKey: PrivateKey,
-            frame?: PresentationFrame<E> | undefined
-        }
-    ) {
-        const sdjwt = new SDJwtVcInstance(
-            this.getSKConfig(options.privateKey)
-        );
-        return sdjwt.present<E>(options.jws, options.frame)
+    async createPresentationFor<E extends Extensible>(options: {
+      jws: string,
+      privateKey: Domain.PrivateKey,
+      frame?: PresentationFrame<E> | undefined
+    }) {
+      const sdjwt = new SDJwtVcInstance(this.getSKConfig(options.privateKey));
+      return sdjwt.present<E>(options.jws, options.frame)
     }
 
 }

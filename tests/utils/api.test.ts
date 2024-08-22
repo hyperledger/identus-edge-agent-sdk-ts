@@ -3,7 +3,7 @@ import { ApiError } from "../../src/domain";
 import Server from "./server";
 
 describe("Api test", () => {
-  const url = 'http://127.0.0.1:3000';
+  const url = 'http://127.0.0.1:3333';
   // loopback reflects request data in response body
   const urlLB = `${url}/loopback`;
   // json returns request body as response body
