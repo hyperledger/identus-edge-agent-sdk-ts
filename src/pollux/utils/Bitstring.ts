@@ -2,8 +2,8 @@ import { base64url } from 'multiformats/bases/base64';
 import { gzip, ungzip } from 'pako';
 
 export class Bitstring {
-    private bits: Uint8Array;
-    private length: number;
+    public bits: Uint8Array;
+    public length: number;
     private leftToRightIndexing: boolean;
 
     constructor(options: {
