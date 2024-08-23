@@ -11,9 +11,9 @@ describe('Bitstring', () => {
       }
     });
 
-    it('should create a Bitstring with indexes 7, 14, 15 true for [128,3]', () => {
-      const buffer = Uint8Array.from([0b10000000, 0b00000011]);
-      const bitstring = new Bitstring({ buffer, leftToRightIndexing: true });
+    it('should create a Bitstring with indexes 0, 14, 15 true for [128,3]', () => {
+      const buffer = Uint8Array.from([128, 3]);
+      const bitstring = new Bitstring({ buffer });
       const validIndexes = [0, 14, 15];
       for (let i = 0; i < 16; i++) {
         const bitstringIndex = bitstring.get(i);
@@ -27,10 +27,10 @@ describe('Bitstring', () => {
       }
     });
 
-    it('should create a Bitstring with indexes 1 true for [2,0]', () => {
-      const buffer = Uint8Array.from([0b00000010, 0b00000000]);
-      const bitstring = new Bitstring({ buffer, leftToRightIndexing: false });
-      const validIndexes = [1];
+    it('should create a Bitstring with indexes 6 true for [2,0]', () => {
+      const buffer = Uint8Array.from([2, 0]);
+      const bitstring = new Bitstring({ buffer });
+      const validIndexes = [6];
       for (let i = 0; i < 16; i++) {
         const bitstringIndex = bitstring.get(i);
         if (validIndexes.includes(i)) {
@@ -45,7 +45,7 @@ describe('Bitstring', () => {
 
     it('should set a bit to true on default instance', async () => {
       const buffer = Uint8Array.from([0b00000000]);
-      const bitstring = new Bitstring({ buffer, leftToRightIndexing: true });
+      const bitstring = new Bitstring({ buffer });
       bitstring.set(4, true);
       expect(bitstring.get(0)).to.equal(false);
       expect(bitstring.get(1)).to.equal(false);
