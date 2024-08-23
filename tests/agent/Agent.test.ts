@@ -252,7 +252,7 @@ describe("Agent Tests", () => {
       expect(sendMessage).calledWith(validHanshakeMessage);
     });
 
-    it("As a developer with a valid invitationMessage I will be sending a presentation with the correct information.", async () => {
+    it("As a developer with a valid invitationMessage I will be sending a presentation with the correct information, but will fail as it is expired.", async () => {
       const agentInvitations = (agent as any).agentInvitations;
       const agentInvitationsConnection = agentInvitations.connection;
       const didHigherFunctions = (agent as any).agentDIDHigherFunctions;
@@ -282,11 +282,9 @@ describe("Agent Tests", () => {
       sendMessage.resolves();
       addConnection.resolves();
 
-      const oobInvitation = await agent.parseOOBInvitation(new URL(validOOB));
-      await agent.acceptInvitation(oobInvitation);
-      expect(createPeerDID.callCount).to.be.equal(0);
-      expect(sendMessage.callCount).to.be.equal(0);
-      expect(addConnection.callCount).to.be.equal(0);
+      expect(
+        agent.parseOOBInvitation(new URL(validOOB))
+      ).to.eventually.be.rejectedWith(AgentError.InvitationIsInvalidError);
     });
 
   });

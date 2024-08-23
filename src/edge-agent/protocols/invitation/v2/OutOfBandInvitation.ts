@@ -13,8 +13,17 @@ export class OutOfBandInvitation {
     public body: OutOfBandInvitationBody,
     public from: string,
     public id: string = uuid(),
-    public attachments: AttachmentDescriptor[] = []
+    public attachments: AttachmentDescriptor[] = [],
+    public expiration: number | null = null
   ) { }
+
+  get isExpired() {
+    if (this.expiration) {
+      const currentTime = Math.floor(Date.now() / 1000);
+      return currentTime > this.expiration;
+    }
+    return false;
+  }
 
   static parsePrismOnboardingInvitationFromJson(
     json: JsonString

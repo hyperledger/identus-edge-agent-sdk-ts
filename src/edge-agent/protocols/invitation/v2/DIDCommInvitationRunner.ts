@@ -13,7 +13,7 @@ export class DIDCommInvitationRunner {
     type: ProtocolType,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     body: any
-  ): body is { body: OutOfBandInvitationBody; from: string; id?: string, attachments: any[] } {
+  ): body is { body: OutOfBandInvitationBody; from: string; id?: string, expires_time?: number, attachments: any[] } {
     return type === ProtocolType.Didcomminvitation;
   }
 
@@ -62,7 +62,13 @@ export class DIDCommInvitationRunner {
         )
         return descriptor
       })
-      return new OutOfBandInvitation(parsed.body, parsed.from, parsed.id, attachments);
+      return new OutOfBandInvitation(
+        parsed.body,
+        parsed.from,
+        parsed.id,
+        attachments,
+        parsed.expires_time
+      );
     }
 
     throw new AgentError.UnknownInvitationTypeError();
@@ -78,6 +84,10 @@ export class DIDCommInvitationRunner {
       throw new AgentError.InvalidURLError();
     }
     const dataJson = Buffer.from(base64.baseDecode(message)).toString();
-    return this.safeParseBody(dataJson, ProtocolType.Didcomminvitation);
+    const invitation = this.safeParseBody(dataJson, ProtocolType.Didcomminvitation);
+    if (invitation.isExpired) {
+      throw new AgentError.InvitationIsInvalidError('expired')
+    }
+    return invitation
   }
 }
