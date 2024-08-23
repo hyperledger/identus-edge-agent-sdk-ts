@@ -37,7 +37,9 @@ export class PickupRunner {
     } else if (Message.isJsonAttachment(attachment.data)) {
       return {
         attachmentId: attachment.id,
-        data: JSON.stringify(attachment.data.data),
+        data: "data" in attachment.data ?
+          JSON.stringify(attachment.data.data) :
+          JSON.stringify(attachment.data.json),
       };
     }
 

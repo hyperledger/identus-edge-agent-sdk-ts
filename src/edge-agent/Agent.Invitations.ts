@@ -106,7 +106,14 @@ export class AgentInvitations implements AgentInvitationsClass {
       ).run();
       await this.connection.addConnection(pair);
     } else {
-      const msg = Message.fromJson(attachment.payload);
+      const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
+        [],
+        true
+      );
+      const msg = Message.fromJson({
+        ...attachment.payload,
+        to: ownDID.toString()
+      });
       await this.pluto.storeMessage(msg)
     }
   }

@@ -73,8 +73,9 @@ export const OOB: React.FC<{ agent: SDK.Agent, pluto: SDK.Domain.Pluto; }> = pro
 
     return <>
         <h1 className="mb-4 text-lg font-extrabold tracking-tight leading-none text-gray-900  dark:text-white">
-            Establish DIDCOMM Connections
+            Accept OOB (Connections / Presentatios)
         </h1>
+        <p className="mb-4 text-md  text-gray-900  dark:text-white">This screen can help you establish a connection with anothe entity, wallet or agent. But also it allows accepting an out of band verification request, when a verifier is asking u to prove him something without a pre-existing connection, what we call "Connectionless presentation".</p>
         <AgentRequire text="Agent required You cannot process an OOB invitation while the agent is not running.">
             <p>
                 <input
