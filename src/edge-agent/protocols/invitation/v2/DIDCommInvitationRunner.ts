@@ -1,17 +1,19 @@
+import { base64 } from "multiformats/bases/base64";
+
 import { AgentError } from "../../../../domain/models/Errors";
 import { ProtocolType } from "../../ProtocolTypes";
 import { OutOfBandInvitationBody } from "../../types";
 import { OutOfBandInvitation } from "./OutOfBandInvitation";
-import { OutOfBandParser } from "./OutOfBandParser";
+import { AttachmentDescriptor } from "../../../../domain";
 
 export class DIDCommInvitationRunner {
-  constructor(private url: URL) {}
+  constructor(private url: URL) { }
 
   private isDIDCommInvitation(
     type: ProtocolType,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     body: any
-  ): body is { body: OutOfBandInvitationBody; from: string; id?: string } {
+  ): body is { body: OutOfBandInvitationBody; from: string; id?: string, attachments: AttachmentDescriptor[] } {
     return type === ProtocolType.Didcomminvitation;
   }
 
@@ -44,6 +46,7 @@ export class DIDCommInvitationRunner {
       if (parsed.body.goal && typeof parsed.body.goal !== "string") {
         throw new AgentError.UnknownInvitationTypeError();
       }
+
       if (
         parsed.body.accept &&
         (!Array.isArray(parsed.body.accept) ||
@@ -51,14 +54,22 @@ export class DIDCommInvitationRunner {
       ) {
         throw new AgentError.UnknownInvitationTypeError();
       }
-      return new OutOfBandInvitation(parsed.body, parsed.from, parsed.id);
+      return new OutOfBandInvitation(parsed.body, parsed.from, parsed.id, parsed.attachments ?? []);
     }
 
     throw new AgentError.UnknownInvitationTypeError();
   }
 
   run(): OutOfBandInvitation {
-    const messageData = OutOfBandParser.parseMessage(this.url);
-    return this.safeParseBody(messageData, ProtocolType.Didcomminvitation);
+    const components = new URLSearchParams(this.url.search);
+    if (!components) {
+      throw new AgentError.InvalidURLError();
+    }
+    const message = components.get("_oob");
+    if (!message) {
+      throw new AgentError.InvalidURLError();
+    }
+    const dataJson = Buffer.from(base64.baseDecode(message)).toString();
+    return this.safeParseBody(dataJson, ProtocolType.Didcomminvitation);
   }
 }

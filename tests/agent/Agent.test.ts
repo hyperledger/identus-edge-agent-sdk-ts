@@ -36,7 +36,7 @@ import { ProtocolType } from "../../src/edge-agent/protocols/ProtocolTypes";
 import { CredentialPreview } from "../../src/edge-agent/protocols/issueCredential/CredentialPreview";
 import { RequestCredential } from "../../src/edge-agent/protocols/issueCredential/RequestCredential";
 import { IssueCredential } from "../../src/edge-agent/protocols/issueCredential/IssueCredential";
-import { base64, base64url } from "multiformats/bases/base64";
+import { base64url } from "multiformats/bases/base64";
 import Pollux from "../../src/pollux/Pollux";
 import { AnoncredsLoader } from "../../src/pollux/AnoncredsLoader";
 import { RequestPresentation } from "../../src/edge-agent/protocols/proofPresentation/RequestPresentation";
