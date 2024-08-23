@@ -62,7 +62,7 @@ const makeServer = async () => {
     });
   });
 
-  const PORT = 3000;
+  const PORT = 3333;
 
   server.listen(PORT, log(`Listening on localhost:${PORT}...`));
   server.on('error', (error) => {

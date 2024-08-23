@@ -6,3 +6,4 @@ export * from "./buildingBlocks/Castor";
 export * from "./buildingBlocks/Mercury";
 export * from "./buildingBlocks/Pluto";
 export * from "./buildingBlocks/Pollux";
+export * from "./utils/JWT";

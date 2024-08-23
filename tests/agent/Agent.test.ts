@@ -85,7 +85,7 @@ describe("Agent Tests", () => {
     }));
     sandbox = sinon.createSandbox();
     const apollo: Apollo = new Apollo();
-    castor = CastorMock;
+    castor = new Castor(apollo);
     const httpManager: Api = {
       request: async () => new ApiResponse<any>(new Uint8Array(), 200),
     };
