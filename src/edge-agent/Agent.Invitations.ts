@@ -8,6 +8,7 @@ import {
 import {
   Service as DIDDocumentService,
   ServiceEndpoint as DIDDocumentServiceEndpoint,
+  Message,
 } from "../domain";
 import { AgentError } from "../domain/models/Errors";
 import {
@@ -90,21 +91,24 @@ export class AgentInvitations implements AgentInvitationsClass {
     if (!this.connection.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
-
-    const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
-      [],
-      true
-    );
-
-    const pair = await new DIDCommConnectionRunner(
-      invitation,
-      this.pluto,
-      ownDID,
-      this.connection,
-      optionalAlias
-    ).run();
-
-    await this.connection.addConnection(pair);
+    const [attachment] = invitation.attachments ?? [];
+    if (!attachment) {
+      const ownDID = await this.agentDIDHigherFunctions.createNewPeerDID(
+        [],
+        true
+      );
+      const pair = await new DIDCommConnectionRunner(
+        invitation,
+        this.pluto,
+        ownDID,
+        this.connection,
+        optionalAlias
+      ).run();
+      await this.connection.addConnection(pair);
+    } else {
+      const msg = Message.fromJson(attachment.payload);
+      await this.pluto.storeMessage(msg)
+    }
   }
 
   /**

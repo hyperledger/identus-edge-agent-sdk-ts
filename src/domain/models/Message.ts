@@ -76,7 +76,9 @@ export class Message implements Pluto.Storable {
 
     const body = asJsonObj(messageObj.body);
 
-    if (isNil(messageObj.piuri) || !isString(messageObj.piuri)) {
+    if (
+      (isNil(messageObj.piuri) || !isString(messageObj.piuri)) &&
+      (isNil(messageObj.type) || !isString(messageObj.type))) {
       throw new AgentError.InvalidMessageError("undefined or wrong piuri");
     }
 
@@ -86,7 +88,7 @@ export class Message implements Pluto.Storable {
 
     if (
       (notNil(messageObj.ack) && !isArray(messageObj.ack)) ||
-      messageObj.ack.some((x: any) => !isString(x))
+      messageObj.ack && messageObj.ack.some((x: any) => !isString(x))
     ) {
       throw new AgentError.InvalidMessageError("undefined or wrong ack");
     }
@@ -123,7 +125,7 @@ export class Message implements Pluto.Storable {
       });
 
     const id = messageObj.id || undefined;
-    const piuri = messageObj.piuri;
+    const piuri = messageObj.piuri || messageObj.type;
     const thid = messageObj.thid;
     const extraHeaders = asJsonObj(messageObj.extra_headers ?? messageObj.extraHeaders);
     const createdVal = (messageObj.created_time ?? messageObj.createdTime);
@@ -166,7 +168,7 @@ export class Message implements Pluto.Storable {
   }
 
   static isJsonAttachment(data: any): data is AttachmentJsonData {
-    return data.data !== undefined;
+    return data.data !== undefined || data.json !== undefined;
   }
 }
 
@@ -196,7 +198,12 @@ export namespace Message {
       }
 
       if (isJson(attachment.data)) {
-        const decoded = attachment.data.data;
+        let decoded: any;
+        if ("data" in attachment.data) {
+          decoded = attachment.data.data;
+        } else if ("json" in attachment.data) {
+          decoded = attachment.data.json;
+        }
         return typeof decoded === "object"
           ? decoded
           : JSON.parse(decoded);
@@ -212,7 +219,7 @@ export namespace Message {
 
     const isJson = (data: AttachmentData): data is AttachmentJsonData => {
       // ?? why do we mutate json -> data in didcomm Wrapper
-      return "data" in data;
+      return "data" in data || "json" in data;
     };
   }
 }

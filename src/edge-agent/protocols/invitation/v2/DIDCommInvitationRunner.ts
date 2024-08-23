@@ -13,7 +13,7 @@ export class DIDCommInvitationRunner {
     type: ProtocolType,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     body: any
-  ): body is { body: OutOfBandInvitationBody; from: string; id?: string, attachments: AttachmentDescriptor[] } {
+  ): body is { body: OutOfBandInvitationBody; from: string; id?: string, attachments: any[] } {
     return type === ProtocolType.Didcomminvitation;
   }
 
@@ -54,7 +54,15 @@ export class DIDCommInvitationRunner {
       ) {
         throw new AgentError.UnknownInvitationTypeError();
       }
-      return new OutOfBandInvitation(parsed.body, parsed.from, parsed.id, parsed.attachments ?? []);
+      const attachments = (parsed.attachments ?? []).map((attachment) => {
+        const descriptor = AttachmentDescriptor.build(
+          attachment.data,
+          attachment.id,
+          attachment.mediaType
+        )
+        return descriptor
+      })
+      return new OutOfBandInvitation(parsed.body, parsed.from, parsed.id, attachments);
     }
 
     throw new AgentError.UnknownInvitationTypeError();

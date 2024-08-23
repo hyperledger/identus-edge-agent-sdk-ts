@@ -25,8 +25,10 @@ export interface AttachmentLinkData {
   hash: string;
 }
 
-export interface AttachmentJsonData {
-  data: string;
+export type AttachmentJsonData = {
+  json: any;
+} | {
+  data: any
 }
 
 export type AttachmentData =
@@ -64,12 +66,23 @@ export class AttachmentDescriptor {
     description?: string
 
   ): AttachmentDescriptor {
-    const jsonString = typeof payload === "string" ? payload : JSON.stringify(payload)
-    const encoded = base64.baseEncode(Buffer.from(jsonString));
-    const attachment: AttachmentBase64 = {
-      base64: encoded,
-    };
-
+    if (typeof payload === "string") {
+      const encoded = base64.baseEncode(Uint8Array.from(Buffer.from(payload)));
+      const attachment: AttachmentBase64 = {
+        base64: encoded,
+      };
+      return new AttachmentDescriptor(
+        attachment,
+        mediaType,
+        id,
+        filename,
+        format,
+        lastModTime,
+        byteCount,
+        description
+      );
+    }
+    const attachment = payload as AttachmentJsonData
     return new AttachmentDescriptor(
       attachment,
       mediaType,
