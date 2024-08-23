@@ -3,12 +3,12 @@ import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 
-import { CredentialStatusType, Curve, JWTVerifiableCredentialProperties, KeyProperties, KeyTypes, RevocationType } from "../../src/domain";
+import { Curve, JWTVerifiableCredentialProperties, KeyTypes } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import type Castor from "../../src/castor/Castor";
 import type Apollo from "../../src/apollo/Apollo";
 import type Pollux from "../../src/pollux/Pollux";
-import { base64, base64url } from "multiformats/bases/base64";
+import { base64 } from "multiformats/bases/base64";
 import { VerificationKeyType } from "../../src/castor/types";
 import * as Fixtures from "../fixtures";
 import { SDJWTCredential } from "../../src/pollux/models/SDJWTVerifiableCredential";
@@ -49,9 +49,9 @@ describe("Pollux", () => {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
                     "proofPurpose": "assertionMethod",
-                    "verificationMethod": "data:application/json;base64,eyJAY29udGV4dCI6WyJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L3YxIl0sInR5cGUiOiJFY2RzYVNlY3AyNTZrMVZlcmlmaWNhdGlvbktleTIwMTkiLCJwdWJsaWNLZXlKd2siOnsiY3J2Ijoic2VjcDI1NmsxIiwia2V5X29wcyI6WyJ2ZXJpZnkiXSwia3R5IjoiRUMiLCJ4IjoiVFlCZ21sM1RpUWRSX1lRRDFoSXVOTzhiUnluU0otcmxQcWFVd3JXa3EtRT0iLCJ5IjoiVjBnVFlBM0xhbFd3Q3hPZHlqb2ZoR2JkYVFEd3EwQXdCblNodFJLXzNYZz0ifX0=",
-                    "created": "2024-06-14T10:56:59.948091Z",
-                    "jws": "eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFUzI1NksifQ..Q1mj3jMf5DWK83E55r6vNUPpsYYgclgwYoNFBSYBzA5x6fI_2cPHJsXECnQlG1XMj2ifldngpJXegTpwe3Fgwg"
+                    "verificationMethod": "data:application/json;base64,eyJAY29udGV4dCI6WyJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L3YxIl0sInR5cGUiOiJFY2RzYVNlY3AyNTZrMVZlcmlmaWNhdGlvbktleTIwMTkiLCJwdWJsaWNLZXlKd2siOnsiY3J2Ijoic2VjcDI1NmsxIiwia2V5X29wcyI6WyJ2ZXJpZnkiXSwia3R5IjoiRUMiLCJ4IjoiQ1hJRmwyUjE4YW1lTEQteWtTT0dLUW9DQlZiRk01b3Vsa2MydklySnRTND0iLCJ5IjoiRDJRWU5pNi1BOXoxbHhwUmpLYm9jS1NUdk5BSXNOVnNsQmpsemVnWXlVQT0ifX0=",
+                    "created": "2024-07-25T22:49:59.091957Z",
+                    "jws": "eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFUzI1NksifQ..FJLUBsZhGB1o_G1UwsVaoL-8agvcpoelJtAr2GlNOOqCSOd-WNEj5-FOgv0m0QcdKMokl2TxibJMg3Y-MJq4-A"
                 },
                 "@context": [
                     "https://www.w3.org/2018/credentials/v1",
@@ -61,27 +61,40 @@ describe("Pollux", () => {
                     "VerifiableCredential",
                     "StatusList2021Credential"
                 ],
-                "id": "http://localhost:8085/credential-status/575092c2-7eb0-40ae-8f41-3b499f45f3dc",
+                "id": "http://localhost:8085/credential-status/01def9a2-2bcb-4bb3-8a36-6834066431d0",
                 "issuer": "did:prism:462c4811bf61d7de25b3baf86c5d2f0609b4debe53792d297bf612269bf8593a",
-                "issuanceDate": 1717714047,
+                "issuanceDate": 1721947798,
                 "credentialSubject": {
                     "type": "StatusList2021",
                     "statusPurpose": "Revocation",
-                    //Credential index [0] has a value of 2
-                    "encodedList": "H4sIAAAAAAAA_-3BMQ0AAAACIGf_0MbwARoAAAAAAAAAAAAAAAAAAADgbbmHB0sAQAAA"
+                    "encodedList": "H4sIAAAAAAAA_-3BIQEAAAACIKf6f4UzLEADAAAAAAAAAAAAAAAAAAAAvA3PduITAEAAAA=="
                 }
             }
         );
 
         const credential = JWTCredential.fromJWS(revocableJWTCredential);
+        const credential2 = JWTCredential.fromJWS(revocableJWTCredential);
+        const credential3 = JWTCredential.fromJWS(revocableJWTCredential);
 
-        //Workaround to hardcode the revocation index
         const vc = credential.properties.get(JWTVerifiableCredentialProperties.vc);
         vc.credentialStatus.statusListIndex = 1;
         credential.properties.set(JWTVerifiableCredentialProperties.vc, vc);
 
+        const vc2 = credential2.properties.get(JWTVerifiableCredentialProperties.vc);
+        vc2.credentialStatus.statusListIndex = 2;
+        credential2.properties.set(JWTVerifiableCredentialProperties.vc, vc2);
+
+        const vc3 = credential3.properties.get(JWTVerifiableCredentialProperties.vc);
+        vc3.credentialStatus.statusListIndex = 3;
+        credential3.properties.set(JWTVerifiableCredentialProperties.vc, vc3);
+
         const revoked = await pollux.isCredentialRevoked(credential)
+        const revoked2 = await pollux.isCredentialRevoked(credential2)
+        const revoked3 = await pollux.isCredentialRevoked(credential3)
+
         expect(revoked).to.eq(true)
+        expect(revoked2).to.eq(true)
+        expect(revoked3).to.eq(false)
 
     })
 
