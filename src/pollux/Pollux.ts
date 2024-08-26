@@ -920,7 +920,7 @@ export default class Pollux implements IPollux {
       const kid = await this.getSigningKid(did, keyPair.privateKey);
       const challenge = offer.options.challenge;
       const domain = offer.options.domain;
-      
+
       const signedJWT = await this.JWT.sign({
         issuerDID: did,
         privateKey: keyPair.privateKey,
@@ -1108,7 +1108,7 @@ export default class Pollux implements IPollux {
       const presReqJson: JWTJson = jwtPresentationRequest.toJSON() as any;
       const presReqOptions = presReqJson.options;
       const kid = await this.getSigningKid(options.did, options.privateKey);
-      
+
       const signedJWT = await this.JWT.sign({
         issuerDID: options.did,
         privateKey: options.privateKey,
