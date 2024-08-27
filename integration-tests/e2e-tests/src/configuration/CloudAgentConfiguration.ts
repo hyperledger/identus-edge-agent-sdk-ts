@@ -5,7 +5,7 @@ import {
   CredentialSchemaInput,
   ManagedDIDKeyTemplate,
   Purpose
-} from "@hyperledger/identus-cloud-agent-client-ts"
+} from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { Utils } from "../Utils"
 import { randomUUID } from "crypto"
 import * as fs from "fs"

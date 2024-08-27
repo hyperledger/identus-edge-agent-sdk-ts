@@ -11,7 +11,7 @@ import {
   Options,
   ProofRequestAux,
   RequestPresentationInput,
-} from "@hyperledger/identus-cloud-agent-client-ts"
+} from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
 

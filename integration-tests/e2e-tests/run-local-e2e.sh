@@ -18,6 +18,7 @@ echo "Generated package: $PACKAGE_NAME"
 # e2e
 cd "$E2E_FOLDER"
 
+yarn cache clean
 yarn
 yarn add "../../$PACKAGE_NAME"
 yarn test:sdk

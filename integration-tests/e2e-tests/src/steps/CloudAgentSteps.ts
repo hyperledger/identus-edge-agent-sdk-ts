@@ -1,10 +1,10 @@
-import {Given, Then, When} from "@cucumber/cucumber"
-import {Actor, Notepad} from "@serenity-js/core"
-import {CloudAgentWorkflow} from "../workflow/CloudAgentWorkflow"
-import {EdgeAgentWorkflow} from "../workflow/EdgeAgentWorkflow"
+import { Given, Then, When } from "@cucumber/cucumber"
+import { Actor, Notepad } from "@serenity-js/core"
+import { CloudAgentWorkflow } from "../workflow/CloudAgentWorkflow"
+import { EdgeAgentWorkflow } from "../workflow/EdgeAgentWorkflow"
 import { Utils } from "../Utils"
 
-Given("{actor} has a connection invitation with '{}', '{}' and '{}' parameters", 
+Given("{actor} has a connection invitation with '{}', '{}' and '{}' parameters",
   async function (cloudAgent: Actor, rawLabel: string, rawGoalCode: string, rawGoal: string) {
     const label = rawLabel == "null" ? undefined : rawLabel
     const goalCode = rawGoalCode == "null" ? undefined : rawGoalCode
@@ -34,7 +34,7 @@ When("{actor} offers '{int}' jwt credentials", async function (cloudAgent: Actor
   )
 })
 
-When("{actor} offers '{int}' anonymous credential", async function(cloudAgent: Actor, numberOfAnoncreds: number) {
+When("{actor} offers '{int}' anonymous credential", async function (cloudAgent: Actor, numberOfAnoncreds: number) {
   const recordIdList = []
   await Utils.repeat(numberOfAnoncreds, async () => {
     await CloudAgentWorkflow.offerAnonymousCredential(cloudAgent)
