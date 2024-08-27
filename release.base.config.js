@@ -18,18 +18,18 @@ module.exports = (extraConfig = {}) => (
                     message: 'chore(release): release ${nextRelease.version}\n\n${nextRelease.notes}',
                 },
             ],
-            [
-                'semantic-release-slack-bot',
-                {
-                    notifyOnSuccess: true,
-                    notifyOnFail: true,
-                    markdownReleaseNotes: true,
-                    onSuccessTemplate: {
-                        text:
-                            "A new version of `$package_name` successfully released!\nVersion: `$npm_package_version`\nTag: $repo_url/releases/tag/v$npm_package_version\n\nRelease notes:\n$release_notes",
-                    },
-                },
-            ],
+            // [
+            //     'semantic-release-slack-bot',
+            //     {
+            //         notifyOnSuccess: true,
+            //         notifyOnFail: true,
+            //         markdownReleaseNotes: true,
+            //         onSuccessTemplate: {
+            //             text:
+            //                 "A new version of `$package_name` successfully released!\nVersion: `$npm_package_version`\nTag: $repo_url/releases/tag/v$npm_package_version\n\nRelease notes:\n$release_notes",
+            //         },
+            //     },
+            // ],
         ],
     }
 );
