@@ -15,7 +15,7 @@ The complete platform is separated into multiple repositories:
 
 We also have edge agents for other platforms:
 * [Edge Agent SDK Swift](https://github.com/hyperledger/identus-edge-agent-sdk-swift) - Repo for the Swift version of the SDK.
-* [Edge Agent SDK KMP](https://github.com/hyperledger/identus-edge-agent-sdk-kmm) - Repo for the Kotlin Multi-Platform version of the SDK.
+* [Edge Agent SDK KMP](https://github.com/hyperledger/identus-edge-agent-sdk-kmp) - Repo for the Kotlin Multi-Platform version of the SDK.
 
 ## SDK Overview
 
