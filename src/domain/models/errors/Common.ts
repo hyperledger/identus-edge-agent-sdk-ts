@@ -12,3 +12,10 @@ export class UnknownError extends SDKError {
 export class ExpectError extends SDKError {
   constructor(msg?: string) { super(-1, msg ?? "value should exist"); }
 }
+
+export class ValidationError extends SDKError {
+  constructor(public readonly errors?: string[]) {
+    const msg = errors?.join(" | ");
+    super(-1, msg ?? "Validation failed");
+  }
+}

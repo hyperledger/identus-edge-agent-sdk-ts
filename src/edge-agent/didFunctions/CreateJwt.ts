@@ -51,7 +51,6 @@ export class CreateJWT extends Task<string, Args> {
     const pubKey = privateKey.publicKey();
     const encoded = base58btc.encode(pubKey.to.Buffer());
     const document = await ctx.Castor.resolveDID(did.toString());
-    console.dir({ document }, { depth: null });
 
     const signingKey = document.verificationMethods.find(key => {
       // TODO improve key identification
