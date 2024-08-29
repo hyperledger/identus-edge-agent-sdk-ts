@@ -1,8 +1,8 @@
-import { Before, BeforeAll } from "@cucumber/cucumber"
+import { AfterAll, Before, BeforeAll } from "@cucumber/cucumber"
 import { Actor, actorCalled, Cast, engage, TakeNotes } from "@serenity-js/core"
 import { CallAnApi } from "@serenity-js/rest"
 import { Utils } from "../Utils"
-import { WalletSdk } from "../abilities/WalletSdk"
+import { agentList, WalletSdk } from "../abilities/WalletSdk"
 import { axiosInstance, CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 
 BeforeAll(async () => {
@@ -12,6 +12,16 @@ BeforeAll(async () => {
 
 Before(async () => {
   await Actors.createAndEngageActors()
+})
+
+AfterAll(async () => {
+  if (agentList.size > 0) {
+    console.warn("Found dangling agents in the end of execution. Explicitly removing them, please check lifecycle.")
+    console.warn([...agentList.keys()])
+    new Map(agentList).forEach((v) => {
+      v.discard()
+    })
+  }
 })
 
 class Actors implements Cast {

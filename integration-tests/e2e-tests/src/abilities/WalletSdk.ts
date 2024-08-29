@@ -3,14 +3,19 @@ import SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
+import { randomUUID, UUID } from "crypto"
 
 const { Agent, Apollo, Domain, ListenerKey, } = SDK
+
+// fallback in any case of dangling sdk agents
+export const agentList: Map<string, WalletSdk> = new Map()
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
   sdk!: SDK.Agent
   store: SDK.Store
   messages: MessageQueue = new MessageQueue()
-
+  id: UUID = randomUUID()
+  
   static async withANewInstance(): Promise<Ability> {
     return new WalletSdk()
   }
@@ -72,6 +77,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async discard(): Promise<void> {
+    agentList.delete(this.id)
     if (this.isInitialised()) {
       await this.store.clear()
       await this.sdk.stop()
@@ -103,6 +109,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     try {
       await this.createSdk()
       await this.sdk.start()
+      agentList.set(this.id, this)
     } catch (e) {
       console.error(e)
       process.exit(-1)
