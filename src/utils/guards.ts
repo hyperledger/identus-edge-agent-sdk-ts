@@ -1,4 +1,5 @@
-import { JsonObj, Nil } from "./types";
+import { ExpectError } from "../domain/models/errors/Common";
+import { Ctor, JsonObj, Nil } from "./types";
 
 /**
  * isNullish
@@ -25,7 +26,7 @@ export const notNil = <T>(value: T | Nil): value is T => !isNil(value);
  * @see isString
  * @see isArray
  */
-export const isEmpty = (value: unknown) => {
+export const isEmpty = (value: unknown): value is Nil => {
   if (isString(value) || isArray(value)) {
     return value.length === 0;
   }
@@ -91,13 +92,35 @@ export function asArray<T>(items: T | T[] | Nil, guard?: (item: unknown) => item
 }
 
 export const asJsonObj = (value: unknown): JsonObj => {
-  if (isObject(value)) {
-    return value;
-  }
-
   if (isString(value)) {
     return JSON.parse(value);
   }
 
+  if (isObject(value)) {
+    return value;
+  }
+
   return {};
 };
+
+/**
+ * expect
+ * assert a value is notNil and return the value typed as such
+ * panic otherwise
+ * 
+ * @param value - the value to check
+ * @param error? - custom error
+ */
+export function expect<T>(value: T, error?: string | Ctor<Error> | Error): Exclude<T, Nil> {
+  if (isNil(value)) {
+    if (error instanceof Error)
+      throw error;
+
+    if (typeof error === "function")
+      throw new error();
+
+    throw new ExpectError(error);
+  }
+
+  return value as Exclude<T, Nil>;
+}

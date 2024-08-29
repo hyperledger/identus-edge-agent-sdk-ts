@@ -1,9 +1,24 @@
 import * as didResolver from "did-resolver";
 import { base64url } from "multiformats/bases/base64";
 import { base58btc } from 'multiformats/bases/base58';
-import { Castor, AlsoKnownAs, Controller, VerificationMethods, Services, PublicKey, PrivateKey, Signer, Hasher, Verifier, Curve, Apollo, KeyProperties, KeyTypes } from "../../../domain";
 import { defaultHashConfig, defaultSaltGen } from "./config";
+// TODO shouldnt be importing from castor
 import { VerificationKeyType } from "../../../castor/types";
+import { Castor,
+  AlsoKnownAs,
+  Controller,
+  VerificationMethods,
+  Services,
+  PublicKey,
+  PrivateKey,
+  Signer,
+  Hasher,
+  Verifier,
+  Curve,
+  Apollo,
+  KeyProperties,
+  KeyTypes
+} from "../../../domain";
 
 
 /**

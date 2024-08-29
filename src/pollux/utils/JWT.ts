@@ -31,10 +31,12 @@ export class JWT extends JWTCore {
       if (!verificationMethods) {
         throw new Error("Invalid did document");
       }
+
       const jwtObject = JWTCredential.fromJWS(jws);
       if (jwtObject.issuer !== issuerDID.toString()) {
         throw new Error("Invalid issuer");
       }
+
       if (jwtObject.isCredential && holderDID && holderDID.toString() !== jwtObject.subject) {
         throw new Error("Invalid subject (holder)");
       }

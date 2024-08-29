@@ -213,11 +213,11 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     const keyCurve = parameters[KeyProperties.curve];
 
     if (isEmpty(keyType)) {
-      throw new ApolloError.InvalidKeyType(keyType);
+      throw new ApolloError.InvalidKeyType();
     }
 
     if (isEmpty(keyCurve)) {
-      throw new ApolloError.InvalidKeyCurve(keyCurve);
+      throw new ApolloError.InvalidKeyCurve();
     }
 
     const { curve } = getKeyCurveByNameAndIndex(keyCurve);
@@ -325,11 +325,11 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     const keyCurve = parameters[KeyProperties.curve];
 
     if (isEmpty(keyType)) {
-      throw new ApolloError.InvalidKeyType(keyType);
+      throw new ApolloError.InvalidKeyType();
     }
 
     if (isEmpty(keyCurve)) {
-      throw new ApolloError.InvalidKeyCurve(keyCurve);
+      throw new ApolloError.InvalidKeyCurve();
     }
 
     const { curve } = getKeyCurveByNameAndIndex(parameters[KeyProperties.curve]);

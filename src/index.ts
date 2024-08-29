@@ -6,7 +6,10 @@ export * as Domain from "./domain";
 export { default as Mercury } from "./mercury/Mercury";
 export * from "./pluto";
 export { default as Pollux } from "./pollux/Pollux";
-export { default as Agent } from "./edge-agent/Agent";
+// alias DIDCommAgent as Agent to hide breaking changes
+export { default as Agent } from "./edge-agent/didcomm/Agent";
+// export { default as Agent } from "./edge-agent/Agent";
+// export { default as DIDCommAgent } from "./edge-agent/didcomm/Agent";
 export * from "./edge-agent/protocols/other/BasicMessage";
 export { IssueCredential } from "./edge-agent/protocols/issueCredential/IssueCredential";
 export { OfferCredential } from "./edge-agent/protocols/issueCredential/OfferCredential";
@@ -24,9 +27,6 @@ export type {
   MediatorHandler,
   ConnectionsManager as ConnectionsManagerInterface,
   MediatorStore,
-  AgentCredentials,
-  AgentInvitations,
-  AgentDIDHigherFunctions,
   AgentMessageEvents,
 } from "./edge-agent/types";
 export type { DIDCommProtocol } from "./mercury/DIDCommProtocol";
