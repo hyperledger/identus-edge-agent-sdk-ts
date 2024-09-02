@@ -1,7 +1,7 @@
 @goncalo-frade-iohk @yshyn-iohk @elribonazo @curtis-h @cristianIOHK 
 
 # Test related:
-/tests/ @amagyar-iohk @todorkoleviohk @curtis-h @elribonazo
+/tests/ @amagyar-iohk @curtis-h @elribonazo
 
 # Docs:
 *.md @petevielhaber
