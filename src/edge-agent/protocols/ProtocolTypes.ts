@@ -26,10 +26,9 @@ export enum ProtocolType {
 
 export function findProtocolTypeByValue(string: string): ProtocolType {
   const values = Object.values(ProtocolType) as string[];
-  for (const value of values) {
-    if (value === string) {
-      return ProtocolType[value as keyof typeof ProtocolType];
-    }
+  const validType = values.includes(string)
+  if (validType) {
+    return string as ProtocolType
   }
   throw new Error("Unknown invitation type error.");
 }

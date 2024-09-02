@@ -7,7 +7,7 @@ import { OutOfBandInvitation } from "./OutOfBandInvitation";
 import { AttachmentDescriptor } from "../../../../domain";
 
 export class DIDCommInvitationRunner {
-  constructor(private url: URL) { }
+  constructor(private url: URL | object) { }
 
   private isDIDCommInvitation(
     type: ProtocolType,
@@ -17,11 +17,11 @@ export class DIDCommInvitationRunner {
     return type === ProtocolType.Didcomminvitation;
   }
 
-  private safeParseBody(body: string, type: ProtocolType): OutOfBandInvitation {
+  private safeParseBody(body: string | object, type: ProtocolType): OutOfBandInvitation {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let parsed: any;
     try {
-      parsed = JSON.parse(body);
+      parsed = typeof body === "string" ? JSON.parse(body) : body
     } catch (err) {
       throw new AgentError.UnknownInvitationTypeError();
     }
@@ -75,19 +75,29 @@ export class DIDCommInvitationRunner {
   }
 
   run(): OutOfBandInvitation {
-    const components = new URLSearchParams(this.url.search);
-    if (!components) {
-      throw new AgentError.InvalidURLError();
+    if (this.url instanceof URL) {
+      const components = new URLSearchParams(this.url.search);
+      if (!components) {
+        throw new AgentError.InvalidURLError();
+      }
+      const message = components.get("_oob");
+      if (!message) {
+        throw new AgentError.InvalidURLError();
+      }
+      const dataJson = Buffer.from(base64.baseDecode(message)).toString();
+      const invitation = this.safeParseBody(dataJson, ProtocolType.Didcomminvitation);
+      if (invitation.isExpired) {
+        throw new AgentError.InvitationIsInvalidError('expired')
+      }
+      return invitation;
+
+    } else {
+      const invitation = this.safeParseBody(this.url, ProtocolType.Didcomminvitation);
+      if (invitation.isExpired) {
+        throw new AgentError.InvitationIsInvalidError('expired')
+      }
+      return invitation;
     }
-    const message = components.get("_oob");
-    if (!message) {
-      throw new AgentError.InvalidURLError();
-    }
-    const dataJson = Buffer.from(base64.baseDecode(message)).toString();
-    const invitation = this.safeParseBody(dataJson, ProtocolType.Didcomminvitation);
-    if (invitation.isExpired) {
-      throw new AgentError.InvitationIsInvalidError('expired')
-    }
-    return invitation
+
   }
 }
