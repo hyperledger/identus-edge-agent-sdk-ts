@@ -23,7 +23,7 @@ on:
       jwtSchemaGuid:
         required: false
         description: JWT schema GUID
-        default: 
+        default:
       anoncredDefinitionGuid:
         required: false
         description: Anoncred definition GUID
@@ -33,7 +33,7 @@ on:
   push:
     branches:
       - main
-      - 'release/**'
+      - "release/**"
 
 jobs:
   run-e2e-tests:
@@ -51,7 +51,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
-          submodules: 'true' 
+          submodules: "true"
 
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -63,22 +63,13 @@ jobs:
         run: |
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-      - name: Setup Node.js for @hyperledger
-        uses: actions/setup-node@v3
-        env:
-            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          node-version: "lts/*"
-          registry-url: https://npm.pkg.github.com/
-          scope: "@hyperledger"
-
       - name: Pack sdk
         run: |
           npm install
           npm run build
           npm pack
           echo "PACKAGE_NAME=$(find . -maxdepth 1 -name hyperledger-identus-edge-agent-sdk* | tr -d '\n')" >> "$GITHUB_ENV"
-  
+
       - name: Install local dependency
         working-directory: integration-tests/e2e-tests
         run: |
