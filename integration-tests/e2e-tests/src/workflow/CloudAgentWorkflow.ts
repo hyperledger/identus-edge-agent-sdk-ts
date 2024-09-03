@@ -11,7 +11,7 @@ import {
   Options,
   ProofRequestAux,
   RequestPresentationInput,
-} from "@hyperledger-labs/open-enterprise-agent-ts-client"
+} from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
 
@@ -163,6 +163,74 @@ export class CloudAgentWorkflow {
             restrictions: []
           }
         },
+        name: "proof_req_1",
+        nonce: Utils.generateNonce(25),
+        version: "0.1"
+      },
+      proofs: [],
+      options: null
+    }
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations").with(presentationRequest)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set("presentationId", LastResponse.body().presentationId)
+    )
+  }
+
+  static async askForPresentProofAnonCredsWithUnexpectedAttributes(cloudAgent: Actor) {
+    const anoncredGuid = CloudAgentConfiguration.anoncredDefinitionGuid
+    const definitionUrl = `${CloudAgentConfiguration.agentUrl}credential-definition-registry/definitions/${anoncredGuid}/definition`
+    const connectionId = await cloudAgent.answer(Notepad.notes().get("connectionId"))
+
+    const presentationRequest = {
+      connectionId: connectionId,
+      credentialFormat: "AnonCreds",
+      anoncredPresentationRequest: {
+        requested_attributes: {
+          driversLicense: {
+            name: "driversLicense",
+            restrictions: [{
+              "attr::driversLicense::value": "B",
+              cred_def_id: definitionUrl
+            }]
+          }
+        },
+        requested_predicates: {},
+        name: "proof_req_1",
+        nonce: Utils.generateNonce(25),
+        version: "0.1"
+      },
+      proofs: [],
+      options: null
+    }
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations").with(presentationRequest)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set("presentationId", LastResponse.body().presentationId)
+    )
+  }
+
+  static async askForPresentProofAnonCredsWithUnexpectedValues(cloudAgent: Actor) {
+    const anoncredGuid = CloudAgentConfiguration.anoncredDefinitionGuid
+    const definitionUrl = `${CloudAgentConfiguration.agentUrl}credential-definition-registry/definitions/${anoncredGuid}/definition`
+    const connectionId = await cloudAgent.answer(Notepad.notes().get("connectionId"))
+
+    const presentationRequest = {
+      connectionId: connectionId,
+      credentialFormat: "AnonCreds",
+      anoncredPresentationRequest: {
+        requested_attributes: {
+          name: {
+            name: "name",
+            restrictions: [{
+              "attr::name::value": "John",
+              cred_def_id: definitionUrl
+            }]
+          }
+        },
+        requested_predicates: {},
         name: "proof_req_1",
         nonce: Utils.generateNonce(25),
         version: "0.1"

@@ -253,6 +253,16 @@ export class DIDCommWrapper implements DIDCommProtocol {
       return parsed;
     }
 
+    if ("json" in data) {
+      const parsed: JsonAttachmentData = {
+        json: typeof data.json === "string" ?
+          JSON.parse(data.json) :
+          data.json,
+      };
+
+      return parsed;
+    }
+
     if ("data" in data) {
       const parsed: JsonAttachmentData = {
         json: JSON.parse(data.data),

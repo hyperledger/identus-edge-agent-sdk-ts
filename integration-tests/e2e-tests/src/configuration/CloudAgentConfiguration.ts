@@ -5,7 +5,7 @@ import {
   CredentialSchemaInput,
   ManagedDIDKeyTemplate,
   Purpose
-} from "@hyperledger-labs/open-enterprise-agent-ts-client"
+} from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { Utils } from "../Utils"
 import { randomUUID } from "crypto"
 import * as fs from "fs"
@@ -45,7 +45,7 @@ export class CloudAgentConfiguration {
   }
 
   private static getSdkVersion(): string {
-    const file = "node_modules/@atala/prism-wallet-sdk/package.json"
+    const file = "node_modules/@hyperledger/identus-edge-agent-sdk/package.json"
     const json = JSON.parse(fs.readFileSync(file).toString())
     return json.version
   }
@@ -219,7 +219,7 @@ export class CloudAgentConfiguration {
 
 export const axiosInstance = axios.create({
   baseURL: CloudAgentConfiguration.agentUrl,
-  timeout: 30000,
+  timeout: 60000,
   headers: {
     Accept: "application/json,application/xml",
     APIKEY: CloudAgentConfiguration.apiKey

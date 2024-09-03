@@ -12,22 +12,22 @@ import type {
   RxStorageQueryResult,
   RxStorageCountResult,
   RxConflictResultionTask,
-} from 'rxdb';
+} from "rxdb"
 
 import type {
   QueryMatcher
-} from 'rxdb/dist/types/types';
+} from "rxdb/dist/types/types"
 
 import type {
   Observable
-} from 'rxjs';
+} from "rxjs"
 
 import type {
   InMemoryStorageInternals,
   InMemorySettings,
   RxStorageInMemoryType,
   InMemoryPreparedQuery
-} from './types';
+} from "./types"
 
 
 import {
@@ -37,16 +37,16 @@ import {
   getPrimaryFieldOfPrimaryKey,
   getQueryMatcher,
   getSortComparator
-} from 'rxdb';
+} from "rxdb"
 
 import {
   Subject
-} from 'rxjs'
+} from "rxjs"
 
 function fixTxPipe(str: string): string {
-  const split = str.split('.')
+  const split = str.split(".")
   if (split.length > 1) {
-    return split.map(part => fixTxPipe(part)).join('.')
+    return split.map(part => fixTxPipe(part)).join(".")
   }
 
   return str
@@ -86,7 +86,7 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
     const fixed = documentWrites.reduce<Array<BulkWriteRow<RxDocType>>>((fixedDocs, currentWriteDoc) => {
       const currentId = currentWriteDoc.document[this.primaryPath] as any
       const previousDocument = currentWriteDoc.previous ?? this.internals.documents.get(currentId)
-      if (context === 'data-migrator-delete') {
+      if (context === "data-migrator-delete") {
         if (previousDocument) {
           currentWriteDoc.document = {
             ...previousDocument,
@@ -96,7 +96,7 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
             ...previousDocument,
             _deleted: false
           }
-          fixedDocs.push(currentWriteDoc);
+          fixedDocs.push(currentWriteDoc)
         }
       } else {
         if (previousDocument && previousDocument._rev !== currentWriteDoc.document._rev) {
@@ -178,7 +178,7 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
     }
 
     const shouldAddCompoundIndexes = this.schema.indexes?.find((index) => {
-      if (typeof index === 'string') {
+      if (typeof index === "string") {
         return indexes.find((index2) => index2 === index)
       } else {
         return index.find((subIndex) => {
@@ -190,7 +190,7 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
     if (shouldAddCompoundIndexes) {
       indexes.splice(0, indexes.length)
       indexes.push(this.collectionName)
-      if (typeof shouldAddCompoundIndexes === 'string') {
+      if (typeof shouldAddCompoundIndexes === "string") {
         indexes.push(shouldAddCompoundIndexes)
       } else {
         indexes.push(...shouldAddCompoundIndexes)
@@ -199,7 +199,7 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
       indexes.unshift(this.collectionName)
     }
 
-    const indexName: string = `[${indexes.join('+')}]`
+    const indexName: string = `[${indexes.join("+")}]`
     const documentIds = this.internals.index.get(indexName)
 
     if (!documentIds) {
@@ -232,18 +232,18 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
     const result = await this.query(preparedQuery)
     return {
       count: result.documents.length,
-      mode: 'fast'
+      mode: "fast"
     }
   }
 
   /* istanbul ignore next */
   async getAttachmentData(): Promise<string> {
-    throw new Error('Method not implemented.')
+    throw new Error("Method not implemented.")
   }
 
   /* istanbul ignore next */
   async getChangedDocumentsSince(): Promise<{ documents: Array<RxDocumentData<RxDocType>>, checkpoint: RxStorageDefaultCheckpoint }> {
-    throw new Error('Method not implemented.')
+    throw new Error("Method not implemented.")
   }
 
   /* istanbul ignore next */
@@ -260,7 +260,7 @@ export class RxStorageIntanceInMemory<RxDocType> implements RxStorageInstance<
   /* istanbul ignore next */
   async close(): Promise<void> {
     if (this.closed) {
-      await Promise.reject(new Error('already closed')); return
+      await Promise.reject(new Error("already closed")); return
     }
     this.closed = true
 

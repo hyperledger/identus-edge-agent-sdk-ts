@@ -1,17 +1,21 @@
 import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
-import SDK from "@atala/prism-wallet-sdk"
-import { Message } from "@atala/prism-wallet-sdk/build/typings/domain"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
+import { randomUUID, UUID } from "crypto"
 
 const { Agent, Apollo, Domain, ListenerKey, } = SDK
+
+// fallback in any case of dangling sdk agents
+export const agentList: Map<string, WalletSdk> = new Map()
 
 export class WalletSdk extends Ability implements Initialisable, Discardable {
   sdk!: SDK.Agent
   store: SDK.Store
   messages: MessageQueue = new MessageQueue()
-
+  id: UUID = randomUUID()
+  
   static async withANewInstance(): Promise<Ability> {
     return new WalletSdk()
   }
@@ -54,11 +58,11 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   static execute(callback: (sdk: SDK.Agent, messages: {
-    credentialOfferStack: Message[];
-    issuedCredentialStack: Message[];
-    proofRequestStack: Message[];
-    revocationStack: Message[],
-    presentationMessagesStack: Message[]
+    credentialOfferStack: SDK.Domain.Message[];
+    issuedCredentialStack: SDK.Domain.Message[];
+    proofRequestStack: SDK.Domain.Message[];
+    revocationStack: SDK.Domain.Message[],
+    presentationMessagesStack: SDK.Domain.Message[]
 
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
@@ -73,6 +77,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async discard(): Promise<void> {
+    agentList.delete(this.id)
     if (this.isInitialised()) {
       await this.store.clear()
       await this.sdk.stop()
@@ -101,8 +106,14 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async initialise(): Promise<void> {
-    await this.createSdk()
-    await this.sdk.start()
+    try {
+      await this.createSdk()
+      await this.sdk.start()
+      agentList.set(this.id, this)
+    } catch (e) {
+      console.error(e)
+      process.exit(-1)
+    }
   }
 
   isInitialised(): boolean {
@@ -118,17 +129,17 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
  */
 class MessageQueue {
   private processingId: NodeJS.Timeout | null = null
-  private queue: Message[] = []
+  private queue: SDK.Domain.Message[] = []
 
-  credentialOfferStack: Message[] = []
-  proofRequestStack: Message[] = []
-  issuedCredentialStack: Message[] = []
-  revocationStack: Message[] = []
-  presentationMessagesStack: Message[] = [];
+  credentialOfferStack: SDK.Domain.Message[] = []
+  proofRequestStack: SDK.Domain.Message[] = []
+  issuedCredentialStack: SDK.Domain.Message[] = []
+  revocationStack: SDK.Domain.Message[] = []
+  presentationMessagesStack: SDK.Domain.Message[] = []
 
   receivedMessages: string[] = []
 
-  enqueue(message: Message) {
+  enqueue(message: SDK.Domain.Message) {
     this.queue.push(message)
 
     // auto start processing messages
@@ -137,7 +148,7 @@ class MessageQueue {
     }
   }
 
-  dequeue(): Message {
+  dequeue(): SDK.Domain.Message {
     return this.queue.shift()!
   }
 
@@ -154,8 +165,8 @@ class MessageQueue {
   processMessages() {
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
-        const message: Message = this.dequeue()
-        const piUri = message.piuri;
+        const message: SDK.Domain.Message = this.dequeue()
+        const piUri = message.piuri
 
         // checks if sdk already received message
         if (this.receivedMessages.includes(message.id)) {

@@ -78,19 +78,22 @@ export class AgentCredentials implements AgentCredentialsClass {
       AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS :
       AttachmentFormats.ANONCREDS_PROOF_REQUEST;
 
+    const attachments = [
+      AttachmentDescriptor.build(
+        {
+          json: definition
+        },
+        uuid(),
+        'application/json',
+        undefined,
+        attachmentFormat
+      )
+    ]
     return new RequestPresentation(
       {
         proofTypes: [],
       },
-      [
-        AttachmentDescriptor.build(
-          definition,
-          uuid(),
-          'application/json',
-          undefined,
-          attachmentFormat
-        )
-      ],
+      attachments,
       from,
       to,
       uuid()
@@ -118,13 +121,13 @@ export class AgentCredentials implements AgentCredentialsClass {
         claims,
         new PresentationOptions({}, CredentialType.AnonCreds)
       );
-
-      return this.createPresentationDefinitionRequest<CredentialType.AnonCreds>(
+      const request = await this.createPresentationDefinitionRequest<CredentialType.AnonCreds>(
         type,
         presentationDefinitionRequest,
         newPeerDID,
         toDID
       );
+      return request
     }
 
     if (type === CredentialType.JWT) {

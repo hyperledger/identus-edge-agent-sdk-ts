@@ -1,4 +1,4 @@
-import SDK from "@atala/prism-wallet-sdk"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 import { Actor, Duration, Notepad, TakeNotes, Wait } from "@serenity-js/core"
 import { Ensure, equals } from "@serenity-js/assertions"
 import { WalletSdk } from "../abilities/WalletSdk"
@@ -98,16 +98,11 @@ export class EdgeAgentWorkflow {
   static async verifyPresentation(edgeAgent: Actor, expected: boolean = true) {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
-        const presentation = messages.presentationMessagesStack.shift()!;
-
-        const presentationMessage = Presentation.fromMessage(
-          presentation,
-        );
+        const presentation = messages.presentationMessagesStack.shift()!
+        const presentationMessage = Presentation.fromMessage(presentation)
 
         try {
-          const verified = await sdk.handlePresentation(
-            presentationMessage
-          )
+          const verified = await sdk.handlePresentation(presentationMessage)
           if (!expected) assert.isFalse(verified)
           else assert.isTrue(verified)
         } catch (e) {
@@ -117,7 +112,24 @@ export class EdgeAgentWorkflow {
             throw e
           }
         }
+      })
+    )
+  }
 
+  static async tryToPresentVerificationRequestWithWrongAnoncred(edgeAgent: Actor) {
+    await edgeAgent.attemptsTo(
+      WalletSdk.execute(async (sdk, messages) => {
+        const credentials = await sdk.verifiableCredentials()
+        const credential = credentials[0]
+        const requestPresentationMessage = RequestPresentation.fromMessage(
+          messages.proofRequestStack.shift()!,
+        )
+        try {
+          await sdk.createPresentationForRequestProof(requestPresentationMessage, credential)
+          assert.fail("Wrong anoncred should produce exception message")
+        } catch (e) {
+          assert.isTrue(e.message.includes("value not found for attribute"))
+        }
       })
     )
   }
@@ -152,7 +164,6 @@ export class EdgeAgentWorkflow {
       )
     )
   }
-
 
   static async waitForCredentialRevocationMessage(edgeAgent: Actor, numberOfRevocation: number) {
     await edgeAgent.attemptsTo(
@@ -189,7 +200,7 @@ export class EdgeAgentWorkflow {
         await Utils.repeat(numberOfDids, async () => {
           const did = await sdk.createNewPeerDID()
           await edgeAgent.attemptsTo(
-            Notepad.notes().set('lastPeerDID', did)
+            Notepad.notes().set("lastPeerDID", did)
           )
         })
       })
@@ -204,11 +215,7 @@ export class EdgeAgentWorkflow {
   ) {
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk) => {
-        await sdk.initiatePresentationRequest(
-          type,
-          toDiD,
-          claims
-        )
+        await sdk.initiatePresentationRequest(type, toDiD, claims)
       })
     )
   }
