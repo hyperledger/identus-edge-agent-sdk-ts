@@ -1,4 +1,5 @@
 import type * as Anoncreds from "anoncreds-browser";
+import { JWK } from "./keyManagement";
 
 export enum CredentialType {
   JWT = "prism/jwt",
@@ -20,16 +21,6 @@ export enum DescriptorItemFormat {
   JWT_VP = 'jwt_vp'
 }
 
-export enum W3CVerifiableCredentialContext {
-  credential = "https://www.w3.org/2018/credentials/v1",
-  revocation = "https://w3id.org/vc/status-list/2021/v1"
-}
-
-export enum W3CVerifiableCredentialType {
-  presentation = "VerifiablePresentation",
-  credential = "VerifiableCredential",
-  revocation = "StatusList2021Credential"
-}
 
 export enum SDJWTVerifiableCredentialProperties {
   iss = "iss",
@@ -229,40 +220,6 @@ export type PresentationSubmission<Type extends CredentialType = CredentialType.
   PresentationSubmissionData[Type]
 
 
-export type W3CVerifiableCredential = {
-  "@context": [W3CVerifiableCredentialContext.credential],
-  type: [W3CVerifiableCredentialType.credential],
-  issuer: string,
-  issuanceDate: string,
-  issued?: string,
-  credentialSubject: Record<string, any>,
-  expirationDate?: string,
-  evidence?: {
-    id: string,
-    type: string
-  },
-  refreshService?: {
-    id: string,
-    type: string
-  },
-  termsOfUse?: {
-    id: string,
-    type: string
-  },
-  validFrom?: {
-    id: string,
-    type: string
-  },
-  validUntil?: {
-    id: string,
-    type: string
-  },
-  credentialSchema?: {
-    id: string,
-    type: string
-  },
-  credentialStatus?: JWTRevocationStatus | unknown
-}
 
 export interface W3CVerifiableCredentialData {
   id: string,
@@ -340,7 +297,7 @@ export type JWTCredentialPayload = {
   [JWTVerifiableCredentialProperties.sub]: string;
   [JWTVerifiableCredentialProperties.aud]?: string;
   [JWTVerifiableCredentialProperties.revoked]?: boolean;
-  [JWTVerifiableCredentialProperties.vc]: W3CVerifiableCredential
+  [JWTVerifiableCredentialProperties.vc]: VCDataModel.Credential
 }
 
 
@@ -351,20 +308,11 @@ export type JWTPresentationPayload = {
   [JWTVerifiablePresentationProperties.nbf]?: number;
   [JWTVerifiablePresentationProperties.exp]?: number;
   [JWTVerifiablePresentationProperties.nonce]: string
-  [JWTVerifiablePresentationProperties.vp]: W3CVerifiablePresentation
+  [JWTVerifiablePresentationProperties.vp]: VCDataModel.Presentation
 }
 
 
-export type W3CVerifiablePresentation = {
-  "@context": [
-    W3CVerifiableCredentialContext.credential
-  ],
-  type: [
-    W3CVerifiableCredentialType.presentation
-  ],
-  verifiableCredential: string[],
-  proof?: W3CVerifiablePresentationProof
-}
+
 
 export type W3CVerifiablePresentationProof = {
   challenge: string,
@@ -459,3 +407,159 @@ export enum JWT_ALG {
   EdDSA = "EdDSA",
   unknown = 'unknown'
 }
+
+
+
+
+export enum W3CVerifiableCredentialContext {
+  credential = "https://www.w3.org/2018/credentials/v1",
+  revocation = "https://w3id.org/vc/status-list/2021/v1",
+  credentialV2 = "https://www.w3.org/ns/credentials/v2"
+}
+
+export enum W3CVerifiableCredentialType {
+  presentation = "VerifiablePresentation",
+  credential = "VerifiableCredential",
+  revocation = "StatusList2021Credential"
+}
+
+type Translatable = string | { "@value": string, "@language": string, "@direction"?: 'rtl' }
+
+
+export namespace VCDataModel {
+  export type Presentation = PresentationV1 | PresentationV2;
+  export type Credential = CredentialV1 | CredentialV2;
+
+  export type PresentationV1 = {
+    "@context": [
+      W3CVerifiableCredentialContext.credential,
+      ...string[]
+    ],
+    type: [
+      W3CVerifiableCredentialType.presentation,
+      ...string[]
+    ],
+    verifiableCredential: string[],
+    proof?: W3CVerifiablePresentationProof
+  }
+  export type PresentationV2 = {
+    "@context": [
+      W3CVerifiableCredentialContext.credential,
+      ...string[]
+    ],
+    type: [
+      W3CVerifiableCredentialType.presentation,
+      ...string[]
+    ],
+    verifiableCredential: (CredentialV2 | string)[],
+    proof?: ProofV2
+  }
+  export type CredentialV1 = {
+    "@context": [
+      W3CVerifiableCredentialContext.credential,
+      ...string[]
+    ],
+    type: [
+      "VerifiableCredential",
+      ...string[]
+    ],
+    issuer: string,
+    issuanceDate: string,
+    issued?: string,
+    credentialSubject: Record<string, any>,
+    expirationDate?: string,
+    evidence?: {
+      id: string,
+      type: string
+    },
+    refreshService?: {
+      id: string,
+      type: string
+    },
+    termsOfUse?: {
+      id: string,
+      type: string
+    },
+    validFrom?: {
+      id: string,
+      type: string
+    },
+    validUntil?: {
+      id: string,
+      type: string
+    },
+    credentialSchema?: {
+      id: string,
+      type: string
+    },
+    credentialStatus?: JWTRevocationStatus | unknown
+  }
+
+  export type ProofV2 = {
+    type: JWTProofType,
+    cryptoSuite: string
+    created: string,
+    verificationMethod: string,
+    proofPurpose: JWTProofPurpose,
+    proofValue: string,
+  }
+  export type CredentialV2 = {
+    "@context": [
+      W3CVerifiableCredentialContext.credentialV2,
+      ...string[]
+    ],
+    type: [
+      "VerifiableCredential",
+      ...string[]
+    ],
+    id?: string,
+    name?: Translatable,
+    description?: Translatable,
+    issuer: string | { id: string, name: Translatable } | JWK.EC | JWK.OCT | JWK.OKP | JWK.RSA
+    credentialSubject: Record<string, any> & { id?: string }
+    validFrom: string,
+    validUntil: string,
+    credentialStatus?: JWTRevocationStatus | unknown | (JWTRevocationStatus | unknown)[],
+    credentialSchema: {
+      id: string,
+      type: string
+    } | {
+      id: string,
+      type: string
+    }[],
+    proof?: ProofV2,
+    refreshService?: {
+      id: string,
+      type: string
+    } | {
+      id: string,
+      type: string
+    }[],
+    termsOfUse?: {
+      id: string,
+      type: string
+    } | {
+      id: string,
+      type: string
+    }[],
+    evidence?: {
+      id: string,
+      type: string
+    } | {
+      id: string,
+      type: string
+    }[]
+  }
+}
+
+/**
+ * @deprecated
+ * Usage of W3CVerifiablePresentation type is deprecated, use VCDataModel.PresentationV1 or VCDataModel.PresentationV2 instead
+ */
+export type W3CVerifiablePresentation = VCDataModel.PresentationV1
+
+/**
+ * @deprecated
+ * Usage of W3CVerifiableCredential type is deprecated, use VCDataModel.CredentialV1 or VCDataModel.CredentialV2 instead
+ */
+export type W3CVerifiableCredential = VCDataModel.CredentialV1

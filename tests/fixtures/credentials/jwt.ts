@@ -1,4 +1,4 @@
-import { AttachmentDescriptor, CredentialType, JWT_ALG, JWTCredentialPayload, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
+import { AttachmentDescriptor, CredentialType, JWT_ALG, JWTCredentialPayload, VCDataModel, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
 import { OfferCredential } from "../../../src/edge-agent/protocols/issueCredential/OfferCredential";
 import { list } from "../dids";
 
@@ -51,7 +51,7 @@ export const credentialOfferMessage = new OfferCredential(
   "f8fe3752-710a-4d76-8d9b-87d7d045c85e"
 );
 
-export const credentialAgent: W3CVerifiableCredential = {
+export const credentialAgent: VCDataModel.CredentialV1 = {
   "@context": [W3CVerifiableCredentialContext.credential],
   credentialSubject: {
     additionalProp2: "Test3",
@@ -62,7 +62,7 @@ export const credentialAgent: W3CVerifiableCredential = {
   issuanceDate: new Date().toISOString(),
 };
 
-export const credential: W3CVerifiableCredential = {
+export const credential: VCDataModel.CredentialV1 = {
   type: [W3CVerifiableCredentialType.credential],
   "@context": [W3CVerifiableCredentialContext.credential],
   credentialSubject: {

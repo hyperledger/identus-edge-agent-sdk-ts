@@ -5,6 +5,8 @@ import {
   StorableCredential,
 } from "../../domain/models/Credential";
 import { InvalidCredentialError } from "../../domain/models/errors/Pollux";
+import { revocationJsonldDocuments } from "../../domain/models/revocation";
+import * as  jsonld from 'jsonld';
 import {
   CredentialType,
   JWTCredentialPayload,
@@ -13,12 +15,13 @@ import {
   JWTVerifiablePresentationProperties,
   JWTVerifiableCredentialProperties as JWT_VC_PROPS,
   JWTVerifiablePresentationProperties as JWT_VP_PROPS,
-  W3CVerifiableCredential,
+  VCDataModel,
   W3CVerifiableCredentialContext,
   W3CVerifiableCredentialType,
-  W3CVerifiablePresentation,
 } from "../../domain/models/VerifiableCredential";
 import { decodeJWS } from "../utils/decodeJWS";
+import { JsonLd, RemoteDocument } from "jsonld/jsonld-spec";
+import { FetchApi } from "../../edge-agent/helpers/FetchApi";
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
@@ -179,6 +182,39 @@ export class JWTCredential
     return new JWTCredential(jws, revoked)
   }
 
+  private async encode(data: any) {
+    const api = new FetchApi();
+    const customLoader = async (url: any) => {
+      const cached = (revocationJsonldDocuments as any)[url]
+      // istanbul ignore else
+      if (cached) {
+        const doc: RemoteDocument = {
+          documentUrl: url,
+          document: cached
+        }
+        return doc
+      }
+      // The above ignores are justified because we are mocking the API calls
+      // And always using the catched jsonLD documents for statusProof..
+      // istanbul ignore next
+      const response = await api.request<JsonLd>("GET", url);
+      const doc: RemoteDocument = {
+        documentUrl: url,
+        document: response.body
+      }
+      // istanbul ignore next
+      return doc
+    };
+
+    const canonised = await jsonld.canonize(data, {
+      algorithm: 'URDNA2015',
+      format: 'application/n-quads',
+      documentLoader: customLoader,
+    });
+    return Buffer.from(canonised);
+
+  }
+
   private isCredentialPayload(payload: any): payload is JWTCredentialPayload {
     const hasJWTCredentialRequiredProperties = typeof payload.vc !== 'undefined';
 
@@ -273,7 +309,7 @@ export class JWTCredential
     }
   }
 
-  get vc(): W3CVerifiableCredential | undefined {
+  get vc(): VCDataModel.CredentialV1 | VCDataModel.CredentialV2 | undefined {
     if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
       return this.properties.get(JWT_VC_PROPS.vc);
     } else {
@@ -281,7 +317,7 @@ export class JWTCredential
     }
   }
 
-  get vp(): W3CVerifiablePresentation | undefined {
+  get vp(): VCDataModel.PresentationV1 | VCDataModel.PresentationV2 | undefined {
     if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
       return undefined;
     } else {
@@ -374,39 +410,96 @@ export class JWTCredential
     return this.vc?.type ?? this.vp?.type;
   }
 
-  presentation(): W3CVerifiablePresentation {
-    if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
-      throw new InvalidCredentialError("Invalid payload is not VC")
-    }
-    return {
-      "@context": [
-        W3CVerifiableCredentialContext.credential
-      ],
-      type: [
-        W3CVerifiableCredentialType.presentation
-      ],
-      verifiableCredential: [
-        this.id
-      ],
-    };
+  get v2() {
+    return this.context?.some((c) => c === W3CVerifiableCredentialContext.credentialV2) || false
   }
 
-  verifiableCredential(): W3CVerifiableCredential {
-    if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
-      throw new InvalidCredentialError("Invalid payload is not VC")
+  presentation(): VCDataModel.PresentationV1 | VCDataModel.PresentationV2 {
+    let response: VCDataModel.PresentationV1 | VCDataModel.PresentationV2;
+    if (this.v2) {
+      if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
+        throw new InvalidCredentialError("Invalid payload is not VC")
+      }
+      const credential = this.verifiableCredential() as VCDataModel.CredentialV2;
+      const v2: VCDataModel.PresentationV2 = {
+        "@context": [
+          W3CVerifiableCredentialContext.credential
+        ],
+        type: [
+          W3CVerifiableCredentialType.presentation
+        ],
+        verifiableCredential: [
+          credential
+        ],
+      };
+      response = v2;
+    } else {
+      if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
+        throw new InvalidCredentialError("Invalid payload is not VC")
+      }
+      const v1: VCDataModel.PresentationV1 = {
+        "@context": [
+          W3CVerifiableCredentialContext.credential
+        ],
+        type: [
+          W3CVerifiableCredentialType.presentation
+        ],
+        verifiableCredential: [
+          this.id
+        ],
+      };
+      response = v1;
     }
-    return {
-      "@context": [
-        W3CVerifiableCredentialContext.credential
-      ],
-      type: [
-        W3CVerifiableCredentialType.credential
-      ],
-      issuer: this.issuer,
-      issuanceDate: this.issuanceDate,
-      expirationDate: this.expirationDate,
-      credentialSubject: this.credentialSubject ?? {},
-    };
+    return response
+  }
+
+  verifiableCredential(): VCDataModel.CredentialV2 | VCDataModel.CredentialV1 {
+    let response: VCDataModel.CredentialV2 | VCDataModel.CredentialV1;
+    if (this.v2) {
+      if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
+        throw new InvalidCredentialError("Invalid payload is not VC")
+      }
+      if (!this.expirationDate) {
+        throw new Error("Expiration data is required in VC Data model 2.0");
+      }
+      if (!this.credentialSchema) {
+        throw new Error("Credential Schema is required in VC Data model 2.0");
+      }
+      const v2: VCDataModel.CredentialV2 = {
+        "@context": [
+          W3CVerifiableCredentialContext.credentialV2
+        ],
+        type: [
+          W3CVerifiableCredentialType.credential
+        ],
+        issuer: this.issuer,
+        validFrom: this.issuanceDate,
+        validUntil: this.expirationDate,
+        credentialSubject: this.credentialSubject ?? {},
+        credentialSchema: this.credentialSchema,
+
+      };
+      response = v2;
+    } else {
+      if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
+        throw new InvalidCredentialError("Invalid payload is not VC")
+      }
+      const v1: VCDataModel.CredentialV1 = {
+        "@context": [
+          W3CVerifiableCredentialContext.credential
+        ],
+        type: [
+          W3CVerifiableCredentialType.credential
+        ],
+        issuer: this.issuer,
+        issuanceDate: this.issuanceDate,
+        expirationDate: this.expirationDate,
+        credentialSubject: this.credentialSubject ?? {},
+      };
+      response = v1;
+    }
+
+    return response;
   }
 
   toStorable() {
