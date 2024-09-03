@@ -63,6 +63,11 @@ jobs:
         run: |
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
       - name: Pack sdk
         run: |
           npm install
@@ -97,6 +102,7 @@ jobs:
         run: cat notes >> $GITHUB_STEP_SUMMARY
 
       - name: Publish Serenity report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sdk-ts-e2e-results
