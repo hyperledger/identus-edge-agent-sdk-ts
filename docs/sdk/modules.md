@@ -18,11 +18,13 @@
 
 - [AnonCredsCredentialProperties](enums/AnonCredsCredentialProperties.md)
 - [ListenerKey](enums/ListenerKey.md)
+- [ProtocolType](enums/ProtocolType.md)
 
 ### Classes
 
 - [Agent](classes/Agent.md)
 - [AnonCredsCredential](classes/AnonCredsCredential.md)
+- [ApiImpl](classes/ApiImpl.md)
 - [Apollo](classes/Apollo.md)
 - [BasicMediatorHandler](classes/BasicMediatorHandler.md)
 - [BasicMessage](classes/BasicMessage.md)
@@ -102,7 +104,7 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L93)
+[src/edge-agent/protocols/types.ts:93](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/edge-agent/protocols/types.ts#L93)
 
 ___
 
@@ -112,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L78)
+[src/edge-agent/protocols/types.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/edge-agent/protocols/types.ts#L78)
 
 ## Variables
 
@@ -122,7 +124,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -132,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/JWTVerifiableCredential.ts#L23)
+[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pollux/models/JWTVerifiableCredential.ts#L23)
 
 ## Functions
 
@@ -159,4 +161,4 @@ request is PresentationDefinitionRequest\<Type\>
 
 #### Defined in
 
-[src/pollux/utils/claims.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/utils/claims.ts#L69)
+[src/pollux/utils/claims.ts:69](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pollux/utils/claims.ts#L69)

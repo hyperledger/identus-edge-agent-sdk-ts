@@ -1,43 +1,54 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / ECPublicKeyInitialization
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / ApiError
 
-# Class: ECPublicKeyInitialization
+# Class: ApiError
 
-[Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).ECPublicKeyInitialization
+[Domain](../modules/Domain.md).ApiError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`ECPublicKeyInitialization`**
+  ↳ **`ApiError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApolloError.ECPublicKeyInitialization.md#constructor)
+- [constructor](Domain.ApiError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApolloError.ECPublicKeyInitialization.md#cause)
-- [message](Domain.ApolloError.ECPublicKeyInitialization.md#message)
-- [name](Domain.ApolloError.ECPublicKeyInitialization.md#name)
-- [stack](Domain.ApolloError.ECPublicKeyInitialization.md#stack)
-- [prepareStackTrace](Domain.ApolloError.ECPublicKeyInitialization.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApolloError.ECPublicKeyInitialization.md#stacktracelimit)
+- [body](Domain.ApiError.md#body)
+- [cause](Domain.ApiError.md#cause)
+- [message](Domain.ApiError.md#message)
+- [name](Domain.ApiError.md#name)
+- [stack](Domain.ApiError.md#stack)
+- [status](Domain.ApiError.md#status)
+- [statusText](Domain.ApiError.md#statustext)
+- [prepareStackTrace](Domain.ApiError.md#preparestacktrace)
+- [stackTraceLimit](Domain.ApiError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApolloError.ECPublicKeyInitialization.md#capturestacktrace)
+- [captureStackTrace](Domain.ApiError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new ECPublicKeyInitialization**(): [`ECPublicKeyInitialization`](Domain.ApolloError.ECPublicKeyInitialization.md)
+• **new ApiError**(`status`, `statusText`, `body`): [`ApiError`](Domain.ApiError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `status` | `number` |
+| `statusText` | `string` |
+| `body` | `any` |
 
 #### Returns
 
-[`ECPublicKeyInitialization`](Domain.ApolloError.ECPublicKeyInitialization.md)
+[`ApiError`](Domain.ApiError.md)
 
 #### Overrides
 
@@ -45,9 +56,19 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L47)
+[src/domain/models/Api.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/models/Api.ts#L52)
 
 ## Properties
+
+### body
+
+• `Readonly` **body**: `any`
+
+#### Defined in
+
+[src/domain/models/Api.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/models/Api.ts#L55)
+
+___
 
 ### cause
 
@@ -102,6 +123,26 @@ Error.stack
 #### Defined in
 
 node_modules/typescript/lib/lib.es5.d.ts:1055
+
+___
+
+### status
+
+• `Readonly` **status**: `number`
+
+#### Defined in
+
+[src/domain/models/Api.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/models/Api.ts#L53)
+
+___
+
+### statusText
+
+• `Readonly` **statusText**: `string`
+
+#### Defined in
+
+[src/domain/models/Api.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/models/Api.ts#L54)
 
 ___
 

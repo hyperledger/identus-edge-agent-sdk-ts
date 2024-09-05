@@ -1,3 +1,24 @@
+# [6.1.0-rc.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.0.1...v6.1.0-rc.1) (2024-09-05)
+
+
+### Bug Fixes
+
+* bitstring improvement and test coverage ([#270](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/270)) ([dce65b5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/dce65b56affd5ed2a17d5d82dbab3efcfb8475bb))
+* external build update for new generated code ([#264](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/264)) ([460102a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/460102ac442a2b7aa41f73d91a7f1301b9686db7))
+* main branchname in semantic release config ([#279](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/279)) ([a6a72ff](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a6a72ff6f9ce61f383485202cf2349f473bbd1f4))
+* make mediator updateable in the nextjs demo ([#262](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/262)) ([99df3c0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/99df3c042cf722c9137bcd576e1ac71c44bea6db))
+* nextjs demo safeBody ([#263](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/263)) ([0d09ea7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0d09ea79d9c044a9b672b0543b1c1a4bf08e4d70))
+* noble-ciphers dependency ([#284](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/284)) ([fabcc2c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/fabcc2c636b237414ad4d0b27717c9994bd1b9ca))
+* package dependencies found by mixmix ([#273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/273)) ([#275](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/275)) ([82a50d3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/82a50d36f80116f8047b6e83b9efb82690de97d6))
+* rollup is not a optionalDependency, and is not included in our m… ([#269](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/269)) ([9ea9d42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9ea9d424eb95627fdfe90c7f6337b04b9afd47ac))
+
+
+### Features
+
+* Connectionless presentation ([#272](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/272)) ([d43ec60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/d43ec604b24b2b5b18a80d714a7188223f58a4bb))
+* decoupling JWT from Pollux and adding KID header to JWTs ([#271](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/271)) ([8a1ed3f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8a1ed3fb7d3df5e627c1bdaf56434ca799ab01f7))
+* errors introducing error codes and refactoring Apollo errors ([#265](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/265)) ([f99c565](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f99c565c8c0d2f97e78c8bba6a64e07e22d5a0b6))
+
 # [4.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.1.0...v4.0.0) (2024-02-02)
 
 * fix: removing terser to allow an unminified build that is easier to d… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/127

@@ -49,7 +49,7 @@ handle Credential related tasks
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L56)
+[src/domain/buildingBlocks/Pollux.ts:56](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L56)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L58)
+[src/domain/buildingBlocks/Pollux.ts:58](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L58)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L52)
+[src/domain/buildingBlocks/Pollux.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L52)
 
 ## Methods
 
@@ -131,7 +131,7 @@ Creates a PresentationDefinitionRequest object for oob Verifications
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:107](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L107)
+[src/domain/buildingBlocks/Pollux.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L107)
 
 ___
 
@@ -159,7 +159,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L124)
+[src/domain/buildingBlocks/Pollux.ts:124](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L124)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
 
@@ -177,7 +177,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:125](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L125)
+[src/domain/buildingBlocks/Pollux.ts:125](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L125)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options`): `Promise`\<`string`\>
 
@@ -195,7 +195,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:126](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L126)
+[src/domain/buildingBlocks/Pollux.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L126)
 
 ▸ **createPresentationProof**(`presentationRequest`, `credential`, `options?`): `Promise`\<`any`\>
 
@@ -213,7 +213,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:127](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L127)
+[src/domain/buildingBlocks/Pollux.ts:127](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L127)
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L70)
+[src/domain/buildingBlocks/Pollux.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L70)
 
 ▸ **createPresentationSubmission**(`presentationDefinition`, `credential`, `privateKey`): `Promise`\<`PresentationType`\>
 
@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L75)
+[src/domain/buildingBlocks/Pollux.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L75)
 
 ___
 
@@ -280,7 +280,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:63](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L63)
+[src/domain/buildingBlocks/Pollux.ts:63](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L63)
 
 ___
 
@@ -305,7 +305,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:88](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L88)
+[src/domain/buildingBlocks/Pollux.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L88)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options?`): `Promise`\<`boolean`\>
 
@@ -322,7 +322,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:92](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L92)
+[src/domain/buildingBlocks/Pollux.ts:92](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L92)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options?`): `Promise`\<`boolean`\>
 
@@ -339,4 +339,4 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:96](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L96)
+[src/domain/buildingBlocks/Pollux.ts:96](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/buildingBlocks/Pollux.ts#L96)

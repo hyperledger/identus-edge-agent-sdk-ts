@@ -62,7 +62,7 @@ Creates an instance of Mercury.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L29)
+[src/mercury/Mercury.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L29)
 
 ## Properties
 
@@ -72,7 +72,7 @@ Creates an instance of Mercury.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L32)
+[src/mercury/Mercury.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L32)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L30)
+[src/mercury/Mercury.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L30)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L31)
+[src/mercury/Mercury.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L31)
 
 ## Methods
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L186)
+[src/mercury/Mercury.ts:186](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L186)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:177](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L177)
+[src/mercury/Mercury.ts:177](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L177)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L101)
+[src/mercury/Mercury.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L101)
 
 ___
 
@@ -179,7 +179,7 @@ did is undefined
 
 #### Defined in
 
-[src/mercury/Mercury.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L142)
+[src/mercury/Mercury.ts:142](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L142)
 
 ___
 
@@ -206,7 +206,7 @@ message object is invalid.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L42)
+[src/mercury/Mercury.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L42)
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L158)
+[src/mercury/Mercury.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L158)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[src/mercury/Mercury.ts:199](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L199)
+[src/mercury/Mercury.ts:199](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L199)
 
 ___
 
@@ -282,7 +282,7 @@ Asynchronously sends a given message and returns the response data.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:70](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L70)
+[src/mercury/Mercury.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L70)
 
 ___
 
@@ -310,7 +310,7 @@ Asynchronously sends a given message and returns the response message object.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:130](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L130)
+[src/mercury/Mercury.ts:130](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L130)
 
 ___
 
@@ -337,4 +337,4 @@ function may throw an error if the string is not a valid message representation.
 
 #### Defined in
 
-[src/mercury/Mercury.ts:58](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/mercury/Mercury.ts#L58)
+[src/mercury/Mercury.ts:58](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/mercury/Mercury.ts#L58)

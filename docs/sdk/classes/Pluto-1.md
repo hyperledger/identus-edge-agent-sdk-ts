@@ -76,7 +76,7 @@ preferred underlying storage technology, most appropriate for your use case.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:109](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L109)
+[src/pluto/Pluto.ts:109](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L109)
 
 ## Properties
 
@@ -86,7 +86,7 @@ preferred underlying storage technology, most appropriate for your use case.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:106](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L106)
+[src/pluto/Pluto.ts:106](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L106)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:107](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L107)
+[src/pluto/Pluto.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L107)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L111)
+[src/pluto/Pluto.ts:111](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L111)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L110)
+[src/pluto/Pluto.ts:110](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L110)
 
 ## Methods
 
@@ -149,7 +149,7 @@ Backups *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L124)
+[src/pluto/Pluto.ts:124](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L124)
 
 ___
 
@@ -175,7 +175,7 @@ Delete a previously stored messages
 
 #### Defined in
 
-[src/pluto/Pluto.ts:132](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L132)
+[src/pluto/Pluto.ts:132](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L132)
 
 ___
 
@@ -195,7 +195,7 @@ Retrieve all the stored credentials
 
 #### Defined in
 
-[src/pluto/Pluto.ts:146](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L146)
+[src/pluto/Pluto.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L146)
 
 ___
 
@@ -215,7 +215,7 @@ Retrieve all stored DID pairs (DIDComm connections).
 
 #### Defined in
 
-[src/pluto/Pluto.ts:330](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L330)
+[src/pluto/Pluto.ts:326](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L326)
 
 ___
 
@@ -235,7 +235,7 @@ Mediators *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:382](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L382)
+[src/pluto/Pluto.ts:378](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L378)
 
 ___
 
@@ -255,7 +255,7 @@ Retrieve all stored DIDComm messages.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:311](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L311)
+[src/pluto/Pluto.ts:307](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L307)
 
 ___
 
@@ -275,7 +275,7 @@ Retrieve all stored Peer DIDs.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:268](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L268)
+[src/pluto/Pluto.ts:262](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L262)
 
 ___
 
@@ -295,7 +295,7 @@ Retrieve all stored PRISM DIDs.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:229](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L229)
+[src/pluto/Pluto.ts:224](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L224)
 
 ___
 
@@ -321,7 +321,7 @@ Fetch the Credential Metadata by its name
 
 #### Defined in
 
-[src/pluto/Pluto.ts:167](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L167)
+[src/pluto/Pluto.ts:167](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L167)
 
 ___
 
@@ -347,7 +347,7 @@ Retrieve available private keys for a given DID.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:189](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L189)
+[src/pluto/Pluto.ts:189](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L189)
 
 ___
 
@@ -373,7 +373,7 @@ Retrieve the stored link secret by its name
 
 #### Defined in
 
-[src/pluto/Pluto.ts:178](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L178)
+[src/pluto/Pluto.ts:178](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L178)
 
 ___
 
@@ -399,7 +399,7 @@ Retrieve a DIDComm message by ID.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:307](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L307)
+[src/pluto/Pluto.ts:303](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L303)
 
 ___
 
@@ -425,7 +425,7 @@ Retrieve a DID pair containing a given DID as either host or receiver.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:338](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L338)
+[src/pluto/Pluto.ts:334](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L334)
 
 ___
 
@@ -451,7 +451,7 @@ Retrieve a DID pair by a given pair name.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:355](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L355)
+[src/pluto/Pluto.ts:351](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L351)
 
 ___
 
@@ -471,7 +471,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:241](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L241)
+[src/pluto/Pluto.ts:236](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L236)
 
 ___
 
@@ -491,7 +491,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:366](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L366)
+[src/pluto/Pluto.ts:362](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L362)
 
 ___
 
@@ -517,7 +517,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:436](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L436)
+[src/pluto/Pluto.ts:432](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L432)
 
 ___
 
@@ -551,7 +551,7 @@ load the given data into the store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:128](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L128)
+[src/pluto/Pluto.ts:128](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L128)
 
 ___
 
@@ -577,7 +577,7 @@ Revoke a Credential
 
 #### Defined in
 
-[src/pluto/Pluto.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L151)
+[src/pluto/Pluto.ts:151](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L151)
 
 ___
 
@@ -597,7 +597,7 @@ Pluto initialise function
 
 #### Defined in
 
-[src/pluto/Pluto.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L117)
+[src/pluto/Pluto.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L117)
 
 ___
 
@@ -623,7 +623,7 @@ Credentials *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L142)
+[src/pluto/Pluto.ts:142](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L142)
 
 ___
 
@@ -649,7 +649,7 @@ Credential Metadata *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:163](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L163)
+[src/pluto/Pluto.ts:163](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L163)
 
 ___
 
@@ -677,7 +677,7 @@ DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:199](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L199)
+[src/pluto/Pluto.ts:199](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L199)
 
 ___
 
@@ -705,7 +705,7 @@ DID Pairs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:318](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L318)
+[src/pluto/Pluto.ts:314](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L314)
 
 ___
 
@@ -731,7 +731,7 @@ LinkSecret *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:174](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L174)
+[src/pluto/Pluto.ts:174](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L174)
 
 ___
 
@@ -757,7 +757,7 @@ Store a mediator information.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:418](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L418)
+[src/pluto/Pluto.ts:414](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L414)
 
 ___
 
@@ -783,7 +783,7 @@ Messages *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:299](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L299)
+[src/pluto/Pluto.ts:293](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L293)
 
 ___
 
@@ -809,7 +809,7 @@ Store an array of DIDComm messages
 
 #### Defined in
 
-[src/pluto/Pluto.ts:303](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L303)
+[src/pluto/Pluto.ts:297](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L297)
 
 ___
 
@@ -836,7 +836,7 @@ Peer DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:259](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L259)
+[src/pluto/Pluto.ts:254](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L254)
 
 ___
 
@@ -864,7 +864,7 @@ Prism DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:218](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L218)
+[src/pluto/Pluto.ts:213](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L213)
 
 ___
 
@@ -890,4 +890,4 @@ PrivateKeys *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:185](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L185)
+[src/pluto/Pluto.ts:185](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/pluto/Pluto.ts#L185)

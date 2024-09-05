@@ -1,49 +1,72 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / MissingChainCode
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [CommonError](../modules/Domain.CommonError.md) / SDKError
 
-# Class: MissingChainCode
+# Class: SDKError
 
-[Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).MissingChainCode
+[Domain](../modules/Domain.md).[CommonError](../modules/Domain.CommonError.md).SDKError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`MissingChainCode`**
+  ↳ **`SDKError`**
+
+  ↳↳ [`MnemonicWordError`](Domain.ApolloError.MnemonicWordError.md)
+
+  ↳↳ [`MnemonicLengthError`](Domain.ApolloError.MnemonicLengthError.md)
+
+  ↳↳ [`CouldNotParseMessageString`](Domain.ApolloError.CouldNotParseMessageString.md)
+
+  ↳↳ [`KeyRestoratonFailed`](Domain.ApolloError.KeyRestoratonFailed.md)
+
+  ↳↳ [`InvalidKeyCurve`](Domain.ApolloError.InvalidKeyCurve.md)
+
+  ↳↳ [`InvalidKeyType`](Domain.ApolloError.InvalidKeyType.md)
+
+  ↳↳ [`MissingKeyParameters`](Domain.ApolloError.MissingKeyParameters.md)
+
+  ↳↳ [`KeyInitializationError`](Domain.ApolloError.KeyInitializationError.md)
+
+  ↳↳ [`InvalidDerivationPath`](Domain.ApolloError.InvalidDerivationPath.md)
+
+  ↳↳ [`ApolloLibError`](Domain.ApolloError.ApolloLibError.md)
+
+  ↳↳ [`UnknownError`](Domain.CommonError.UnknownError.md)
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApolloError.MissingChainCode.md#constructor)
+- [constructor](Domain.CommonError.SDKError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApolloError.MissingChainCode.md#cause)
-- [message](Domain.ApolloError.MissingChainCode.md#message)
-- [name](Domain.ApolloError.MissingChainCode.md#name)
-- [stack](Domain.ApolloError.MissingChainCode.md#stack)
-- [prepareStackTrace](Domain.ApolloError.MissingChainCode.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApolloError.MissingChainCode.md#stacktracelimit)
+- [cause](Domain.CommonError.SDKError.md#cause)
+- [message](Domain.CommonError.SDKError.md#message)
+- [name](Domain.CommonError.SDKError.md#name)
+- [stack](Domain.CommonError.SDKError.md#stack)
+- [prepareStackTrace](Domain.CommonError.SDKError.md#preparestacktrace)
+- [stackTraceLimit](Domain.CommonError.SDKError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApolloError.MissingChainCode.md#capturestacktrace)
+- [captureStackTrace](Domain.CommonError.SDKError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new MissingChainCode**(`message?`): [`MissingChainCode`](Domain.ApolloError.MissingChainCode.md)
+• **new SDKError**(`code`, `message`): [`SDKError`](Domain.CommonError.SDKError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `message?` | `string` |
+| `code` | `number` |
+| `message` | `string` |
 
 #### Returns
 
-[`MissingChainCode`](Domain.ApolloError.MissingChainCode.md)
+[`SDKError`](Domain.CommonError.SDKError.md)
 
 #### Overrides
 
@@ -51,7 +74,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L82)
+[src/domain/models/errors/Common.ts:2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/382b1c7b46001b3d4171eaa2010aa8f9482d27e8/src/domain/models/errors/Common.ts#L2)
 
 ## Properties
 
