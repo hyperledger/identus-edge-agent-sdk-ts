@@ -62,8 +62,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          if [[ "${{ inputs.release_candidate }}" == "true" ]]; then
-            npx semantic-release -e ./release-dev.config.js 
-          else
-            npx semantic-release -e ./release-prod.config.js
-          fi
+          npx semantic-release -e ./release.config.js
