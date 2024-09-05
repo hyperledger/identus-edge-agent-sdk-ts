@@ -3,7 +3,7 @@ module.exports = baseConfig({
   branches: [
     'main',
     {
-      name: 'release/*',
+      name: 'rc',
     }
   ],
 });
