@@ -16,10 +16,11 @@ npm version "$release_version" --git-tag-version false
 npm run build
 
 # Gets the published versions in the registry
-published_versions=$(echo "$(npm view @hyperledger/identus-edge-agent-sdk versions)" | tr -d " '")
+version_list=$(npm view @hyperledger/identus-edge-agent-sdk versions)
+published_versions=${version_list//[\[\]]/}
 
 # Checks if it's been already published to npmjs
-if [[ $published_versions == *$release_version* ]]; then
+if [[ ${published_versions[@]} =~ "'$release_version'" ]]; then
     # The goal of this case is to enable the generation of semantic-release
     # commits despite of the current version is already published.
     # Usually this is due some error during the pipeline execution.
