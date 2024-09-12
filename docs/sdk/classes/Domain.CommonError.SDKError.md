@@ -1,49 +1,72 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApiError](../modules/Domain.ApiError.md) / InvalidRequestPath
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [CommonError](../modules/Domain.CommonError.md) / SDKError
 
-# Class: InvalidRequestPath
+# Class: SDKError
 
-[Domain](../modules/Domain.md).[ApiError](../modules/Domain.ApiError.md).InvalidRequestPath
+[Domain](../modules/Domain.md).[CommonError](../modules/Domain.CommonError.md).SDKError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`InvalidRequestPath`**
+  ↳ **`SDKError`**
+
+  ↳↳ [`MnemonicWordError`](Domain.ApolloError.MnemonicWordError.md)
+
+  ↳↳ [`MnemonicLengthError`](Domain.ApolloError.MnemonicLengthError.md)
+
+  ↳↳ [`CouldNotParseMessageString`](Domain.ApolloError.CouldNotParseMessageString.md)
+
+  ↳↳ [`KeyRestoratonFailed`](Domain.ApolloError.KeyRestoratonFailed.md)
+
+  ↳↳ [`InvalidKeyCurve`](Domain.ApolloError.InvalidKeyCurve.md)
+
+  ↳↳ [`InvalidKeyType`](Domain.ApolloError.InvalidKeyType.md)
+
+  ↳↳ [`MissingKeyParameters`](Domain.ApolloError.MissingKeyParameters.md)
+
+  ↳↳ [`KeyInitializationError`](Domain.ApolloError.KeyInitializationError.md)
+
+  ↳↳ [`InvalidDerivationPath`](Domain.ApolloError.InvalidDerivationPath.md)
+
+  ↳↳ [`ApolloLibError`](Domain.ApolloError.ApolloLibError.md)
+
+  ↳↳ [`UnknownError`](Domain.CommonError.UnknownError.md)
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApiError.InvalidRequestPath.md#constructor)
+- [constructor](Domain.CommonError.SDKError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApiError.InvalidRequestPath.md#cause)
-- [message](Domain.ApiError.InvalidRequestPath.md#message)
-- [name](Domain.ApiError.InvalidRequestPath.md#name)
-- [stack](Domain.ApiError.InvalidRequestPath.md#stack)
-- [prepareStackTrace](Domain.ApiError.InvalidRequestPath.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApiError.InvalidRequestPath.md#stacktracelimit)
+- [cause](Domain.CommonError.SDKError.md#cause)
+- [message](Domain.CommonError.SDKError.md#message)
+- [name](Domain.CommonError.SDKError.md#name)
+- [stack](Domain.CommonError.SDKError.md#stack)
+- [prepareStackTrace](Domain.CommonError.SDKError.md#preparestacktrace)
+- [stackTraceLimit](Domain.CommonError.SDKError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApiError.InvalidRequestPath.md#capturestacktrace)
+- [captureStackTrace](Domain.CommonError.SDKError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new InvalidRequestPath**(`path`): [`InvalidRequestPath`](Domain.ApiError.InvalidRequestPath.md)
+• **new SDKError**(`code`, `message`): [`SDKError`](Domain.CommonError.SDKError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `path` | `string` |
+| `code` | `number` |
+| `message` | `string` |
 
 #### Returns
 
-[`InvalidRequestPath`](Domain.ApiError.InvalidRequestPath.md)
+[`SDKError`](Domain.CommonError.SDKError.md)
 
 #### Overrides
 
@@ -51,7 +74,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Api.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Api.ts#L2)
+[src/domain/models/errors/Common.ts:2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/errors/Common.ts#L2)
 
 ## Properties
 

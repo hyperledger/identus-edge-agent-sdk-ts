@@ -38,7 +38,6 @@ define properties a Domain object must implement to be compatible with Pluto
 ### Accessors
 
 - [credentialFormat](Domain.Message-1.md#credentialformat)
-- [safeBody](Domain.Message-1.md#safebody)
 
 ### Methods
 
@@ -56,16 +55,16 @@ define properties a Domain object must implement to be compatible with Pluto
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `body` | `string` | `undefined` |
+| `body` | `string` \| `JsonObj`\<`any`\> | `undefined` |
 | `id` | `string` | `undefined` |
 | `piuri` | `string` | `undefined` |
 | `from?` | [`DID`](Domain.DID.md) | `undefined` |
 | `to?` | [`DID`](Domain.DID.md) | `undefined` |
 | `attachments` | [`AttachmentDescriptor`](Domain.AttachmentDescriptor.md)[] | `[]` |
 | `thid?` | `string` | `undefined` |
-| `extraHeaders` | `Record`\<`string`, `any`\> | `{}` |
-| `createdTime` | `string` | `undefined` |
-| `expiresTimePlus` | `string` | `undefined` |
+| `extraHeaders` | `JsonObj`\<`any`\> | `{}` |
+| `createdTime` | `number` | `undefined` |
+| `expiresTimePlus` | `number` | `undefined` |
 | `ack` | `string`[] | `[]` |
 | `direction` | [`MessageDirection`](../enums/Domain.MessageDirection.md) | `MessageDirection.RECEIVED` |
 | `fromPrior?` | `string` | `undefined` |
@@ -77,7 +76,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/Message.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L24)
+[src/domain/models/Message.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L25)
 
 ## Properties
 
@@ -87,7 +86,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/Message.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L39)
+[src/domain/models/Message.ts:36](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L36)
 
 ___
 
@@ -97,27 +96,27 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L30)
+[src/domain/models/Message.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L31)
 
 ___
 
 ### body
 
-• `Readonly` **body**: `string`
+• `Readonly` **body**: `JsonObj`\<`any`\>
 
 #### Defined in
 
-[src/domain/models/Message.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L25)
+[src/domain/models/Message.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L23)
 
 ___
 
 ### createdTime
 
-• `Readonly` **createdTime**: `string`
+• `Readonly` **createdTime**: `number`
 
 #### Defined in
 
-[src/domain/models/Message.ts:34](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L34)
+[src/domain/models/Message.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L34)
 
 ___
 
@@ -127,27 +126,27 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L40)
+[src/domain/models/Message.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L37)
 
 ___
 
 ### expiresTimePlus
 
-• `Readonly` **expiresTimePlus**: `string`
+• `Readonly` **expiresTimePlus**: `number`
 
 #### Defined in
 
-[src/domain/models/Message.ts:35](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L35)
+[src/domain/models/Message.ts:35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L35)
 
 ___
 
 ### extraHeaders
 
-• `Readonly` **extraHeaders**: `Record`\<`string`, `any`\> = `{}`
+• `Readonly` **extraHeaders**: `JsonObj`\<`any`\> = `{}`
 
 #### Defined in
 
-[src/domain/models/Message.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L32)
+[src/domain/models/Message.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L33)
 
 ___
 
@@ -157,7 +156,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:28](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L28)
+[src/domain/models/Message.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L29)
 
 ___
 
@@ -167,7 +166,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L41)
+[src/domain/models/Message.ts:38](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L38)
 
 ___
 
@@ -177,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:26](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L26)
+[src/domain/models/Message.ts:27](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L27)
 
 ___
 
@@ -187,7 +186,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:27](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L27)
+[src/domain/models/Message.ts:28](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L28)
 
 ___
 
@@ -197,7 +196,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L42)
+[src/domain/models/Message.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L39)
 
 ___
 
@@ -207,7 +206,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L31)
+[src/domain/models/Message.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L32)
 
 ___
 
@@ -217,7 +216,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L29)
+[src/domain/models/Message.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L30)
 
 ___
 
@@ -234,7 +233,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Message.ts:22](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L22)
+[src/domain/models/Message.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L22)
 
 ## Accessors
 
@@ -248,21 +247,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Message.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L55)
-
-___
-
-### safeBody
-
-• `get` **safeBody**(): `any`
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[src/domain/models/Message.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L47)
+[src/domain/models/Message.ts:45](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L45)
 
 ## Methods
 
@@ -282,7 +267,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L80)
+[src/domain/models/Message.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L70)
 
 ___
 
@@ -302,7 +287,7 @@ data is AttachmentBase64
 
 #### Defined in
 
-[src/domain/models/Message.ts:169](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L169)
+[src/domain/models/Message.ts:166](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L166)
 
 ___
 
@@ -322,4 +307,4 @@ data is AttachmentJsonData
 
 #### Defined in
 
-[src/domain/models/Message.ts:173](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L173)
+[src/domain/models/Message.ts:170](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/Message.ts#L170)

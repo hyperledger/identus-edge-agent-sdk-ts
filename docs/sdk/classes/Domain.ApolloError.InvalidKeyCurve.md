@@ -4,9 +4,11 @@
 
 [Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).InvalidKeyCurve
 
+thrown when given Key Curve is not supported
+
 ## Hierarchy
 
-- `Error`
+- [`SDKError`](Domain.CommonError.SDKError.md)
 
   ↳ **`InvalidKeyCurve`**
 
@@ -33,14 +35,13 @@
 
 ### constructor
 
-• **new InvalidKeyCurve**(`invalidKeyCurve`, `validKeyCurves`): [`InvalidKeyCurve`](Domain.ApolloError.InvalidKeyCurve.md)
+• **new InvalidKeyCurve**(`keyCurve?`): [`InvalidKeyCurve`](Domain.ApolloError.InvalidKeyCurve.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `invalidKeyCurve` | `string` |
-| `validKeyCurves` | `string`[] |
+| `keyCurve?` | `string` |
 
 #### Returns
 
@@ -48,11 +49,11 @@
 
 #### Overrides
 
-Error.constructor
+[SDKError](Domain.CommonError.SDKError.md).[constructor](Domain.CommonError.SDKError.md#constructor)
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:31](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L31)
+[src/domain/models/errors/Apollo.ts:57](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/models/errors/Apollo.ts#L57)
 
 ## Properties
 
@@ -62,7 +63,7 @@ Error.constructor
 
 #### Inherited from
 
-Error.cause
+[SDKError](Domain.CommonError.SDKError.md).[cause](Domain.CommonError.SDKError.md#cause)
 
 #### Defined in
 
@@ -76,7 +77,7 @@ ___
 
 #### Inherited from
 
-Error.message
+[SDKError](Domain.CommonError.SDKError.md).[message](Domain.CommonError.SDKError.md#message)
 
 #### Defined in
 
@@ -90,7 +91,7 @@ ___
 
 #### Inherited from
 
-Error.name
+[SDKError](Domain.CommonError.SDKError.md).[name](Domain.CommonError.SDKError.md#name)
 
 #### Defined in
 
@@ -104,7 +105,7 @@ ___
 
 #### Inherited from
 
-Error.stack
+[SDKError](Domain.CommonError.SDKError.md).[stack](Domain.CommonError.SDKError.md#stack)
 
 #### Defined in
 
@@ -139,7 +140,7 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Inherited from
 
-Error.prepareStackTrace
+[SDKError](Domain.CommonError.SDKError.md).[prepareStackTrace](Domain.CommonError.SDKError.md#preparestacktrace)
 
 #### Defined in
 
@@ -153,7 +154,7 @@ ___
 
 #### Inherited from
 
-Error.stackTraceLimit
+[SDKError](Domain.CommonError.SDKError.md).[stackTraceLimit](Domain.CommonError.SDKError.md#stacktracelimit)
 
 #### Defined in
 
@@ -180,7 +181,7 @@ Create .stack property on a target object
 
 #### Inherited from
 
-Error.captureStackTrace
+[SDKError](Domain.CommonError.SDKError.md).[captureStackTrace](Domain.CommonError.SDKError.md#capturestacktrace)
 
 #### Defined in
 

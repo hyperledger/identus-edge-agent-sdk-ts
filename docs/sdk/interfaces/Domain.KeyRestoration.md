@@ -43,7 +43,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/protocols/KeyRestoration.ts#L14)
+[src/domain/protocols/KeyRestoration.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/protocols/KeyRestoration.ts#L14)
 
 ___
 
@@ -71,4 +71,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/protocols/KeyRestoration.ts#L23)
+[src/domain/protocols/KeyRestoration.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/47157819fe5d19bccc5fcc542e98f32706bff6c2/src/domain/protocols/KeyRestoration.ts#L23)

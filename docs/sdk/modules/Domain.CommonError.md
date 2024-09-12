@@ -8,4 +8,5 @@
 
 ### Classes
 
-- [SomethingWentWrongError](../classes/Domain.CommonError.SomethingWentWrongError.md)
+- [SDKError](../classes/Domain.CommonError.SDKError.md)
+- [UnknownError](../classes/Domain.CommonError.UnknownError.md)
