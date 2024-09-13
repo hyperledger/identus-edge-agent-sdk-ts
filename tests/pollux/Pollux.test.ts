@@ -1,3 +1,5 @@
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
@@ -23,7 +25,6 @@ chai.use(chaiAsPromised);
 let sandbox: sinon.SinonSandbox;
 
 
-const expect = chai.expect;
 const jwtParts = [
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
@@ -704,12 +705,12 @@ describe("Pollux", () => {
     let pollux: Pollux;
 
     beforeEach(async () => {
-      jest.restoreAllMocks();
+      vi.restoreAllMocks();
 
-      const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
-      const Castor = jest.requireActual("../../src/castor/Castor").default;
-      const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
-      const JWT = jest.requireActual("../../src/pollux/utils/JWT").JWT;
+      const Pollux = (await import("../../src/pollux/Pollux")).default;
+      const Castor = (await import("../../src/castor/Castor")).default;
+      const Apollo = (await import("../../src/apollo/Apollo")).default;
+      const JWT = (await import("../../src/pollux/utils/JWT")).JWT;
 
       apollo = new Apollo();
       castor = new Castor(apollo);

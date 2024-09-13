@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import chai from "chai";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
@@ -9,7 +10,6 @@ import { DIDCommSecretsResolver } from "../../../src/mercury/didcomm/SecretsReso
 import { Curve, PrivateKey } from "../../../src/domain";
 
 chai.use(SinonChai);
-const expect = chai.expect;
 
 describe("Mercury DIDComm SecretsResolver", () => {
   let sandbox: sinon.SinonSandbox;

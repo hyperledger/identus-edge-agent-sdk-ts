@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+
 import Castor from "../../../castor/Castor";
 import * as Domain from "../../../src/domain";
 import { DIDCommDIDResolver } from "../../../src/mercury/didcomm/DIDResolver";

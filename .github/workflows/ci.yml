@@ -42,7 +42,7 @@ jobs:
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
           
       - name: Install
-        run: npm install
+        run: npm install && npm i @rollup/rollup-linux-x64-gnu
 
       - name: Eslint
         run: npx eslint .

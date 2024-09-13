@@ -1,4 +1,4 @@
-import { expect, assert } from "chai";
+import { vi, assert, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { Message } from "../../../../src/domain";
 import { AgentError } from "../../../../src/domain/models/Errors";
 

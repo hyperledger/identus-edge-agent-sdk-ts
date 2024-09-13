@@ -1,4 +1,4 @@
-import { expect, assert } from "chai";
+import { describe, assert, it, expect, test, beforeEach, afterEach } from 'vitest';
 import * as DIDParser from "../../src/castor/parser/DIDParser";
 
 describe("DIDParser", () => {

@@ -3,7 +3,7 @@
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "declarationDir": "build/typings",
+    "declarationDir": "build",
     "module": "esnext",
     "target": "es2020",
     "skipLibCheck": true,
@@ -26,7 +26,18 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "anoncreds-wasm": [
+        "./externals/generated/anoncreds-wasm"
+      ],
+      "didcomm-wasm": [
+        "./externals/generated/didcomm-wasm"
+      ],
+      "jwe-wasm": [
+        "./externals/generated/jwe-wasm"
+      ]
+    }
   },
   "include": [
     "src"

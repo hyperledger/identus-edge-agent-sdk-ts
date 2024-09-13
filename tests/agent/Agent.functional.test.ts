@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
@@ -13,7 +11,6 @@ import { ApolloError } from "../../src/domain";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 describe("Agent", () => {
   let agent: Agent;
@@ -24,12 +21,12 @@ describe("Agent", () => {
   describe("Functional Tests", () => {
 
     afterEach(async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       sandbox.restore();
     });
 
     beforeEach(async () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       sandbox = sinon.createSandbox();
       pluto = mockPluto();
       agent = Agent.initialize({ mediatorDID: Fixtures.DIDs.peerDID1, pluto });

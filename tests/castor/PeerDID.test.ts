@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+import { base64url } from "multiformats/bases/base64";
 
 import {
   Service,
@@ -59,19 +60,13 @@ describe("PEERDID CreateTest", () => {
     const keyAgreementPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.Curve25519,
       curve: Curve.X25519,
-      raw: Buffer.from(
-        "COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE",
-        "base64url"
-      ),
+      raw: base64url.baseDecode("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
     });
 
     const authenticationPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.EC,
       curve: Curve.ED25519,
-      raw: Buffer.from(
-        "JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs",
-        "base64url"
-      ),
+      raw: base64url.baseDecode("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
     });
 
     publicKeys.push(authenticationPrivateKey.publicKey());
@@ -135,19 +130,13 @@ describe("PEERDID CreateTest", () => {
     const keyAgreementPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.Curve25519,
       curve: Curve.X25519,
-      raw: Buffer.from(
-        "COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE",
-        "base64url"
-      ),
+      raw: base64url.baseDecode("COd9Xhr-amD7fuswWId2706JBUY_tmjp9eiNEieJeEE"),
     });
 
     const authenticationPrivateKey = apollo.createPrivateKey({
       type: KeyTypes.EC,
       curve: Curve.ED25519,
-      raw: Buffer.from(
-        "JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs",
-        "base64url"
-      ),
+      raw: base64url.baseDecode("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs"),
     });
 
     publicKeys.push(keyAgreementPrivateKey.publicKey());

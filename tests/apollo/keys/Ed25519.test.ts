@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect, test } from 'vitest';
 import { Curve, KeyTypes, PrivateKey } from "../../../src/domain";
 import { Ed25519PrivateKey } from "../../../src/apollo/utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "../../../src/apollo/utils/Ed25519PublicKey";

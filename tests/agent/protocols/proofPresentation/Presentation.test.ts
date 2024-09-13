@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { Message } from "../../../../src/domain";
 import { AgentError } from "../../../../src/domain/models/Errors";
 import { parsePresentationMessage } from "../../../../src/edge-agent/helpers/ProtocolHelpers";

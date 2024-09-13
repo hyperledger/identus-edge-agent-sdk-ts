@@ -4,7 +4,7 @@ import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 addRxPlugin(RxDBDevModePlugin);
 
 import { AnyAction, ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
-import SDK from "@atala/prism-wallet-sdk";
+import SDK from "@hyperledger/identus-edge-agent-sdk";
 import { sha512 } from '@noble/hashes/sha512'
 import { RootState, reduxActions } from "@/reducers/app";
 import IndexDB from '@pluto-encrypted/indexdb'

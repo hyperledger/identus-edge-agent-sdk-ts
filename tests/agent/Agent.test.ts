@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
@@ -55,7 +53,6 @@ import { JWT } from "../../src/pollux/utils/JWT";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 let agent: Agent;
 let pluto: IPluto;
@@ -67,19 +64,19 @@ let store: Pluto.Store;
 
 describe("Agent Tests", () => {
   afterEach(async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
 
     await agent.stop();
     sandbox.restore();
   });
 
   beforeEach(async () => {
-    jest.useFakeTimers();
-    jest.mock('isows', () => ({
-      WebSocket: jest.fn(() => ({
-        addEventListener: jest.fn(),
-        send: jest.fn(),
-        close: jest.fn(),
+    vi.useFakeTimers();
+    vi.mock('isows', () => ({
+      WebSocket: vi.fn(() => ({
+        addEventListener: vi.fn(),
+        send: vi.fn(),
+        close: vi.fn(),
       })),
     }));
     sandbox = sinon.createSandbox();

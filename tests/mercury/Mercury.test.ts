@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import chai from "chai";
@@ -24,7 +25,6 @@ import { Castor } from "../../src/domain/buildingBlocks/Castor";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 describe("Mercury", () => {
   let sandbox: sinon.SinonSandbox;

@@ -1,5 +1,7 @@
+import { base64url } from "multiformats/bases/base64";
+
 import { AnonCredsCredential, JWTCredential, Secp256k1PrivateKey } from "../../src";
-import { Backup, DID, LinkSecret, Mediator, Message, Pluto } from "../../src/domain";
+import { Backup, DID, LinkSecret, Mediator, Message } from "../../src/domain";
 import { credentialPayloadEncoded } from "./credentials/jwt";
 import { credential as anonCredential } from "./credentials/anoncreds";
 import { peerDID4, peerDID5 } from "./dids";
@@ -35,11 +37,11 @@ export const backupJson: Backup.Schema = {
   credentials: [
     {
       recovery_id: 'jwt',
-      data: Buffer.from(credentialPayloadEncoded).toString("base64url"),
+      data: Buffer.from(base64url.baseEncode(Buffer.from(credentialPayloadEncoded))).toString(),
     },
     {
       recovery_id: "anoncred",
-      data: Buffer.from(credentialAnoncreds.toStorable().credentialData).toString("base64url"),
+      data: Buffer.from(base64url.baseEncode(Buffer.from(credentialAnoncreds.toStorable().credentialData))).toString(),
     }
   ],
   dids: [

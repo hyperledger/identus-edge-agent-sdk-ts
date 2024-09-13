@@ -1,4 +1,4 @@
-import { sha512, sha256 } from "hash.js";
+import Hashing from "hash.js";
 
 enum Alg {
   SHA256 = 'SHA256',
@@ -13,11 +13,11 @@ class InvalidHashingAlgorithm extends Error {
 
 export const hashSync = (data: string | Uint8Array, alg: string) => {
   if (alg === Alg.SHA256) {
-    return Uint8Array.from(sha256().update(data).digest());
+    return Uint8Array.from(Hashing.sha256().update(data).digest());
   }
 
   if (alg === Alg.SHA512) {
-    return Uint8Array.from(sha512().update(data).digest());
+    return Uint8Array.from(Hashing.sha512().update(data).digest());
   }
 
   throw new InvalidHashingAlgorithm();

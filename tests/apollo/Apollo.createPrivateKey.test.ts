@@ -1,4 +1,5 @@
-import { expect, assert } from "chai";
+import { describe, it, assert, expect, test, beforeEach, afterEach } from 'vitest';
+
 
 import Apollo from "../../src/apollo/Apollo";
 import { ApolloError, Curve, KeyProperties, KeyTypes } from "../../src/domain/models";

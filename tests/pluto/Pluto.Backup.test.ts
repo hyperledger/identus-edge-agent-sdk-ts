@@ -1,12 +1,14 @@
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 import * as Domain from "../../src/domain";
 import * as Fixtures from "../fixtures";
 import { mockPluto } from "../fixtures/inmemory/factory";
 import { AnonCredsCredential, JWTCredential } from "../../src";
+import { base64url } from 'multiformats/bases/base64';
 
 describe("Pluto", () => {
   let instance: Domain.Pluto;
@@ -37,7 +39,7 @@ describe("Pluto", () => {
 
       expect(result.credentials).to.be.an("array").to.have.length(1);
       expect(result.credentials[0]).to.have.property("recovery_id", "jwt");
-      const expectedData = Buffer.from(Fixtures.Backup.credentialJWT.id).toString("base64url");
+      const expectedData = Buffer.from(base64url.baseEncode(Buffer.from(Fixtures.Backup.credentialJWT.id))).toString();
       expect(result.credentials[0]).to.have.property("data", expectedData);
     });
 
@@ -70,7 +72,15 @@ describe("Pluto", () => {
 
       expect(result.keys).to.be.an("array").to.have.length(1);
 
-      const expectedKey = Buffer.from(JSON.stringify(Fixtures.Backup.peerDIDKeys[0].to.JWK())).toString("base64url");
+      const expectedKey = Buffer.from(
+
+        base64url.baseEncode(
+          Buffer.from(
+            JSON.stringify(Fixtures.Backup.peerDIDKeys[0].to.JWK())
+          )
+        )
+
+      ).toString();
       expect(result.keys[0]).to.have.property("key", expectedKey);
       expect(result.keys[0]).to.have.property("index", Fixtures.Backup.peerDIDKeys[0].index);
       expect(result.keys[0]).to.have.property("did", Fixtures.Backup.hostDID.toString());
@@ -106,7 +116,7 @@ describe("Pluto", () => {
         credentials: [
           {
             recovery_id: 'jwt',
-            data: Buffer.from(Fixtures.Credentials.JWT.credentialPayloadEncoded).toString("base64url"),
+            data: Buffer.from(base64url.baseEncode(Buffer.from(Fixtures.Credentials.JWT.credentialPayloadEncoded))).toString(),
           },
         ],
         dids: [],
@@ -145,7 +155,7 @@ describe("Pluto", () => {
         credentials: [
           {
             recovery_id: "anoncred",
-            data: Buffer.from(Fixtures.Backup.credentialAnoncreds.toStorable().credentialData).toString("base64url")
+            data: Buffer.from(base64url.baseEncode(Buffer.from(Fixtures.Backup.credentialAnoncreds.toStorable().credentialData))).toString()
           },
         ],
         dids: [],
@@ -223,7 +233,7 @@ describe("Pluto", () => {
         keys: [
           {
             recovery_id: Fixtures.Backup.secpPrivateKey.recoveryId,
-            key: Buffer.from(JSON.stringify(Fixtures.Backup.secpPrivateKey.to.JWK())).toString("base64url"),
+            key: Buffer.from(base64url.baseEncode(Buffer.from(JSON.stringify(Fixtures.Backup.secpPrivateKey.to.JWK())))).toString(),
           }
         ],
         mediators: [],

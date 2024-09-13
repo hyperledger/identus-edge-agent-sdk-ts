@@ -1,6 +1,6 @@
 
 import { useMountedApp } from "@/reducers/store";
-import SDK from "@atala/prism-wallet-sdk";
+import SDK from "@hyperledger/identus-edge-agent-sdk";
 import React, { useCallback, useEffect } from "react";
 import { AgentRequire } from "./AgentRequire";
 

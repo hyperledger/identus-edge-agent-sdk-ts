@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { Message } from "../../src/domain";
 
 describe("Message", () => {

@@ -6,7 +6,8 @@ import type {
   LinksAttachmentData,
   Attachment,
   AttachmentData,
-} from "didcomm-node";
+} from "didcomm-wasm";
+import wasmBuffer from "../../../externals/generated/didcomm-wasm/didcomm_js_bg.wasm"
 
 import * as Domain from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
@@ -18,7 +19,7 @@ import { ProtocolType } from "../../edge-agent/protocols/ProtocolTypes";
 import { isObject } from "../../utils";
 
 export class DIDCommWrapper implements DIDCommProtocol {
-  public static didcomm: typeof import("didcomm-node");
+  public static didcomm: typeof import("didcomm-wasm");
   private readonly didResolver: DIDResolver;
   private readonly secretsResolver: SecretsResolver;
 
@@ -32,25 +33,12 @@ export class DIDCommWrapper implements DIDCommProtocol {
   }
 
   public static async getDIDComm() {
-
-    /*START.BROWSER_ONLY*/
-    if (typeof window !== "undefined" && !this.didcomm) {
-      const DIDCommLib = await import("didcomm-browser/didcomm_js.js");
-      const wasmInit = DIDCommLib.default;
-      const { default: wasm } = await import("didcomm-browser/didcomm_js_bg.wasm");
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      await wasmInit(await wasm());
-      this.didcomm = DIDCommLib;
-    }
-    /*END.BROWSER_ONLY*/
-    /*START.NODE_ONLY*/
-    if (!this.didcomm) {
-      this.didcomm = await import("didcomm-node");
-    }
-    /*END.NODE_ONLY*/
-
-    return this.didcomm;
+    this.didcomm ??= await import("didcomm-wasm").then(async module => {
+      const wasmInstance = module.initSync(wasmBuffer);
+      await module.default(wasmInstance);
+      return module;
+    });
+    return this.didcomm!;
   }
 
   private doesRequireReturnRoute(type: string) {

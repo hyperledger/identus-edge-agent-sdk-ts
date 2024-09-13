@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@atala/prism-wallet-sdk": "../..",
+    "@hyperledger/identus-edge-agent-sdk": "../..",
     "@pluto-encrypted/indexdb": "^1.12.2",
     "crypto": "^1.0.1",
     "fs": "^0.0.1-security",

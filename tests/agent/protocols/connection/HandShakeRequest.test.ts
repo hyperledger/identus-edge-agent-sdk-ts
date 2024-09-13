@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { Message } from "../../../../src/domain";
 
 import { HandshakeRequest } from "../../../../src/edge-agent/protocols/connection/HandshakeRequest";

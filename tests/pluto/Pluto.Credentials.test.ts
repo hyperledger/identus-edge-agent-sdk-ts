@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+
 import { Pluto } from "../../src/pluto/Pluto";
 import InMemoryStore from "../fixtures/inmemory";
 import * as Fixtures from "../fixtures";

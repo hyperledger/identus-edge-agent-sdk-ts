@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@atala/prism-wallet-sdk": "../..",
+    "@hyperledger/identus-edge-agent-sdk": "../..",
     "@pluto-encrypted/inmemory": "^1.12.2",
     "prettier": "^3.0.2"
   },
