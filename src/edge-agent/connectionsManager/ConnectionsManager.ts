@@ -1,4 +1,4 @@
-import { DID, Message, MessageDirection } from "../../domain";
+import { DID, Message, MessageDirection, Pollux } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { Pluto } from "../../domain/buildingBlocks/Pluto";
@@ -7,7 +7,6 @@ import { AgentError } from "../../domain/models/Errors";
 import { AgentMessageEvents } from "../Agent.MessageEvents";
 import { CancellableTask } from "../helpers/Task";
 import {
-  AgentCredentials,
   AgentMessageEvents as AgentMessageEventsClass,
   AgentOptions,
   ConnectionsManager as ConnectionsManagerClass,
@@ -17,6 +16,8 @@ import {
 import { ProtocolType } from "../protocols/ProtocolTypes";
 import { RevocationNotification } from "../protocols/revocation/RevocationNotfiication";
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
+import { HandleIssueCredential } from "../didcomm/HandleIssueCredential";
+import { Task } from "../../utils/tasks";
 
 
 /**
@@ -70,7 +71,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public castor: Castor,
     public mercury: Mercury,
     public pluto: Pluto,
-    public agentCredentials: AgentCredentials,
+    public pollux: Pollux,
     public mediationHandler: MediatorHandler,
     public pairings: DIDPair[] = [],
     public options?: AgentOptions
@@ -79,7 +80,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
   }
 
   get withWebsocketsExperiment() {
-    return this.options?.experiments?.liveMode === true
+    return this.options?.experiments?.liveMode === true;
   }
 
   /**
@@ -159,10 +160,11 @@ export class ConnectionsManager implements ConnectionsManagerClass {
 
         if (matchingMessages.length > 0) {
           for (const message of matchingMessages) {
-            const issueMessage = IssueCredential.fromMessage(message);
-            const credential = await this.agentCredentials.processIssuedCredentialMessage(
-              issueMessage
-            );
+            const issueCredential = IssueCredential.fromMessage(message);
+            const ctx = new Task.Context({ Pluto: this.pluto, Pollux: this.pollux });
+            const task = new HandleIssueCredential({ issueCredential });
+            const credential = await ctx.run(task);
+
             await this.pluto.revokeCredential(credential);
             this.events.emit(ListenerKey.REVOKE, credential);
           }

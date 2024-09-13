@@ -15,13 +15,12 @@ describe('Bitstring', () => {
       const buffer = Uint8Array.from([128, 3]);
       const bitstring = new Bitstring({ buffer });
       const validIndexes = [0, 14, 15];
+
       for (let i = 0; i < 16; i++) {
         const bitstringIndex = bitstring.get(i);
         if (validIndexes.includes(i)) {
-          console.log("Index should be true ", i)
           expect(bitstringIndex).to.be.true;
         } else {
-          console.log("Index should be false ", i)
           expect(bitstringIndex).to.be.false;
         }
       }
@@ -31,13 +30,12 @@ describe('Bitstring', () => {
       const buffer = Uint8Array.from([2, 0]);
       const bitstring = new Bitstring({ buffer });
       const validIndexes = [6];
+
       for (let i = 0; i < 16; i++) {
         const bitstringIndex = bitstring.get(i);
         if (validIndexes.includes(i)) {
-          console.log("Index should be true ", i)
           expect(bitstringIndex).to.be.true;
         } else {
-          console.log("Index should be false ", i)
           expect(bitstringIndex).to.be.false;
         }
       }

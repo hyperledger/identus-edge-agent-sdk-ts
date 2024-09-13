@@ -2,6 +2,8 @@ import { JWTPayload, Signer, createJWT } from "did-jwt";
 import { base64url } from "multiformats/bases/base64";
 import { DID, PrivateKey } from "..";
 import { asJsonObj, isNil } from "../../utils/guards";
+// ??? shouldnt be importing Pollux error
+import { InvalidJWTString } from "../models/errors/Pollux";
 
 export namespace JWT {
   export interface Header {
@@ -65,9 +67,7 @@ export namespace JWT {
     const payloadEnc = parts.at(1);
 
     if (parts.length != 3 || isNil(headersEnc) || isNil(payloadEnc)) {
-      // TODO error
-      // throw new InvalidJWTString();
-      throw new Error();
+      throw new InvalidJWTString();
     }
 
     const headers = base64url.baseDecode(headersEnc);

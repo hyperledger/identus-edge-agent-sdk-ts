@@ -1,4 +1,11 @@
 /**
+ * Constructor for T
+ */
+export interface Ctor<T = any> {
+  new(...args: any[]): T;
+}
+
+/**
  * no value shorthand
  */
 export type Nil = undefined | null;

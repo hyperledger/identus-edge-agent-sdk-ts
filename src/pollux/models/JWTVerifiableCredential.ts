@@ -1,4 +1,4 @@
-import { Pluto } from "../../domain";
+import { JWT, Pluto } from "../../domain";
 import {
   Credential,
   ProvableCredential,
@@ -18,7 +18,6 @@ import {
   W3CVerifiableCredentialType,
   W3CVerifiablePresentation,
 } from "../../domain/models/VerifiableCredential";
-import { decodeJWS } from "../utils/decodeJWS";
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
@@ -31,8 +30,8 @@ export class JWTCredential
   public recoveryId = JWTVerifiableCredentialRecoveryId;
   public properties = new Map<JWT_VC_PROPS | JWT_VP_PROPS, any>();
 
-  constructor(payload: string, revoked?: boolean)
-  constructor(payload: JWTCredentialPayload | JWTPresentationPayload, revoked?: boolean)
+  constructor(payload: string, revoked?: boolean);
+  constructor(payload: JWTCredentialPayload | JWTPresentationPayload, revoked?: boolean);
   constructor(
     payload: any,
     revoked = false
@@ -41,9 +40,9 @@ export class JWTCredential
 
     let originalString: string | undefined;
     if (typeof payload === 'string') {
-      const jwtObject = decodeJWS(payload)
+      const jwtObject = JWT.decode(payload);
       originalString = payload;
-      payload = jwtObject.payload
+      payload = jwtObject.payload;
     } else {
       originalString = payload.jti;
     }
@@ -85,35 +84,35 @@ export class JWTCredential
         this.properties.set(
           JWT_VC_PROPS.exp,
           payload[JWT_VC_PROPS.exp]
-        )
+        );
       }
 
       if (originalString) {
         this.properties.set(
           JWT_VC_PROPS.jti,
           originalString
-        )
+        );
       }
 
       if (payload[JWT_VC_PROPS.iss]) {
         this.properties.set(
           JWT_VC_PROPS.iss,
           payload[JWT_VC_PROPS.iss]
-        )
+        );
       }
 
       if (payload[JWT_VC_PROPS.sub]) {
         this.properties.set(
           JWT_VC_PROPS.sub,
           payload[JWT_VC_PROPS.sub]
-        )
+        );
       }
 
       if (payload[JWT_VC_PROPS.nbf]) {
         this.properties.set(
           JWT_VC_PROPS.nbf,
           payload[JWT_VC_PROPS.nbf]
-        )
+        );
       }
     } else {
       //Set properties for a JWTCredential Presentation
@@ -121,62 +120,62 @@ export class JWTCredential
         this.properties.set(
           JWT_VP_PROPS.iss,
           payload[JWT_VP_PROPS.iss]
-        )
+        );
       }
 
       if (originalString) {
         this.properties.set(
           JWT_VC_PROPS.jti,
           originalString
-        )
+        );
       }
 
       if (payload[JWT_VP_PROPS.aud]) {
         this.properties.set(
           JWT_VP_PROPS.aud,
           payload[JWT_VP_PROPS.aud]
-        )
+        );
       }
 
       if (payload[JWT_VP_PROPS.nbf]) {
         this.properties.set(
           JWT_VP_PROPS.nbf,
           payload[JWT_VP_PROPS.nbf]
-        )
+        );
       }
 
       if (payload[JWT_VP_PROPS.exp]) {
         this.properties.set(
           JWT_VP_PROPS.exp,
           payload[JWT_VP_PROPS.exp]
-        )
+        );
       }
 
       if (payload[JWT_VP_PROPS.nonce]) {
         this.properties.set(
           JWT_VP_PROPS.nonce,
           payload[JWT_VP_PROPS.nonce]
-        )
+        );
       }
 
       if (payload[JWT_VP_PROPS.nbf]) {
         this.properties.set(
           JWT_VP_PROPS.nbf,
           payload[JWT_VP_PROPS.nbf]
-        )
+        );
       }
 
       if (payload[JWT_VP_PROPS.vp]) {
         this.properties.set(
           JWT_VP_PROPS.vp,
           payload[JWT_VP_PROPS.vp]
-        )
+        );
       }
     }
   }
 
   static fromJWS(jws: string, revoked?: boolean): JWTCredential {
-    return new JWTCredential(jws, revoked)
+    return new JWTCredential(jws, revoked);
   }
 
   private isCredentialPayload(payload: any): payload is JWTCredentialPayload {
@@ -262,7 +261,7 @@ export class JWTCredential
   }
 
   get isCredential() {
-    return this.isCredentialPayload(Object.fromEntries(this.properties))
+    return this.isCredentialPayload(Object.fromEntries(this.properties));
   }
 
   get id() {
@@ -295,7 +294,7 @@ export class JWTCredential
         this.credentialSubject
       ];
     }
-    return []
+    return [];
   }
 
   get context() {
@@ -336,7 +335,7 @@ export class JWTCredential
     const aud = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
       this.properties.get(JWT_VC_PROPS.aud) :
       this.properties.get(JWT_VP_PROPS.aud);
-    return aud
+    return aud;
   }
 
   get issuer() {
@@ -354,7 +353,7 @@ export class JWTCredential
     if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
       return this.properties.get(JWT_VC_PROPS.sub);
     } else {
-      throw new InvalidCredentialError("Subject is only available in a VC")
+      throw new InvalidCredentialError("Subject is only available in a VC");
     }
   }
 
@@ -376,7 +375,7 @@ export class JWTCredential
 
   presentation(): W3CVerifiablePresentation {
     if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
-      throw new InvalidCredentialError("Invalid payload is not VC")
+      throw new InvalidCredentialError("Invalid payload is not VC");
     }
     return {
       "@context": [
@@ -393,7 +392,7 @@ export class JWTCredential
 
   verifiableCredential(): W3CVerifiableCredential {
     if (!this.isCredentialPayload(Object.fromEntries(this.properties))) {
-      throw new InvalidCredentialError("Invalid payload is not VC")
+      throw new InvalidCredentialError("Invalid payload is not VC");
     }
     return {
       "@context": [
@@ -412,7 +411,7 @@ export class JWTCredential
   toStorable() {
     const id = this.id;
     const data = { id, ...Object.fromEntries(this.properties) };
-    const claims = this.claims.map((claim) => typeof claim !== 'string' ? JSON.stringify(claim) : claim)
+    const claims = this.claims.map((claim) => typeof claim !== 'string' ? JSON.stringify(claim) : claim);
     return {
       id,
       recoveryId: this.recoveryId,

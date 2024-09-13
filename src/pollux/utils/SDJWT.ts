@@ -30,8 +30,8 @@ export class SDJWT extends JWTCore {
             throw new Error("Invalid issuer");
         }
         for (const verificationMethod of verificationMethods) {
-            const pk: Domain.PublicKey | undefined = this.getPKInstance(verificationMethod)
-            if (pk && pk.canVerify()) {
+            const pk = this.getPKInstance(verificationMethod)
+            if (pk?.canVerify()) {
                 const sdjwt = new SDJwtVcInstance(this.getPKConfig(pk));
                 try {
                     await sdjwt.verify(

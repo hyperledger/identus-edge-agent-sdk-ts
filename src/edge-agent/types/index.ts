@@ -3,24 +3,13 @@ import {
   DID,
   Mediator,
   Message,
-  Service as DIDDocumentService,
-  Signature,
   Credential,
-  CredentialType,
-  PresentationClaims,
-  KeyPair,
-  PublicKey,
 } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { Pluto } from "../../domain/buildingBlocks/Pluto";
 import { CancellableTask } from "../helpers/Task";
-import { OfferCredential } from "../protocols/issueCredential/OfferCredential";
-import { RequestCredential } from "../protocols/issueCredential/RequestCredential";
-import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
-import { RequestPresentation } from "../protocols/proofPresentation/RequestPresentation";
-import { Presentation } from "../protocols/proofPresentation/Presentation";
 
 interface InvitationInterface {
   type: InvitationTypes;
@@ -35,9 +24,9 @@ export enum InvitationTypes {
 
 export type AgentOptions = {
   experiments?: {
-    liveMode?: boolean
-  }
-}
+    liveMode?: boolean;
+  };
+};
 
 export type InvitationType = PrismOnboardingInvitation | OutOfBandInvitation;
 
@@ -55,62 +44,6 @@ export class PrismOnboardingInvitation implements InvitationInterface {
   }
 }
 
-
-export interface AgentCredentials {
-  revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
-    [name: string]: any
-  }>;
-  isCredentialRevoked: (credential: Credential) => Promise<boolean>;
-
-
-
-  prepareRequestCredentialWithIssuer(
-    offer: OfferCredential
-  ): Promise<RequestCredential>;
-  processIssuedCredentialMessage(message: IssueCredential): Promise<Credential>;
-
-  verifiableCredentials(): Promise<Credential[]>;
-
-  initiatePresentationRequest(type: CredentialType.JWT, toDID: DID, claims: PresentationClaims): Promise<RequestPresentation>;
-
-  initiatePresentationRequest(type: CredentialType.AnonCreds, toDID: DID, claims: PresentationClaims<CredentialType.AnonCreds>): Promise<RequestPresentation>;
-
-
-  createPresentationForRequestProof(
-    request: RequestPresentation,
-    credential: Credential
-  ): Promise<Presentation>;
-
-  handlePresentation(presentation: Presentation): Promise<boolean>
-}
-
-export interface AgentDIDHigherFunctions {
-  signWith(did: DID, message: Uint8Array): Promise<Signature>;
-
-  createNewPeerDID(
-    services: DIDDocumentService[],
-    updateMediator: boolean
-  ): Promise<DID>;
-
-  createNewPrismDID(
-    alias: string,
-    services: DIDDocumentService[],
-    keyPathIndex?: number,
-    issuingKeys?: (PublicKey | KeyPair)[]
-  ): Promise<DID>;
-}
-
-export interface AgentInvitations {
-  acceptDIDCommInvitation(invitation: OutOfBandInvitation, optionalAlias?: string): Promise<void>;
-
-  parseInvitation(str: string): Promise<InvitationType>;
-
-  acceptInvitation(invitation: PrismOnboardingInvitation, optionalAlias?: string): Promise<void>;
-
-  parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation>;
-
-  parseOOBInvitation(str: URL): Promise<OutOfBandInvitation>;
-}
 
 type MessageEventArg = Message[];
 type ConnectionEventArg = DIDPair;
@@ -142,7 +75,6 @@ export interface ConnectionsManager {
   castor: Castor;
   mercury: Mercury;
   pluto: Pluto;
-  agentCredentials: AgentCredentials;
   mediationHandler: MediatorHandler;
   pairings: DIDPair[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -180,7 +112,7 @@ export abstract class MediatorHandler {
 
   abstract pickupUnreadMessages(
     limit: number
-  ): Promise<Array<{ attachmentId: string; message: Message }>>;
+  ): Promise<Array<{ attachmentId: string; message: Message; }>>;
 
   abstract registerMessagesAsRead(ids: string[]): Promise<void>;
 
@@ -191,5 +123,5 @@ export abstract class MediatorHandler {
       attachmentId: string;
       message: Message;
     }[]) => void | Promise<void>
-  ): void
+  ): void;
 }

@@ -2,9 +2,14 @@ import * as Domain from "../domain";
 import Agent from "./Agent";
 import { isObject, validateSafe } from "../utils";
 
+/**
+ * define Agent requirements for Backup
+ */
+type BackupAgent = Pick<Agent, "apollo" | "pluto" | "pollux" | "seed">;
+
 export class AgentBackup {
   constructor(
-    public readonly Agent: Agent
+    public readonly Agent: BackupAgent
   ) {}
 
   /**

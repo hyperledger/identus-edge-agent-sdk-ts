@@ -1171,6 +1171,7 @@ export default class Pollux implements IPollux {
    * @param did 
    * @param privateKey 
    * @returns {string} kid (key identifier)
+   * // ??? replaced by CreateJWT task
    */
   private async getSigningKid(did: DID, privateKey: PrivateKey) {
     const pubKey = privateKey.publicKey();

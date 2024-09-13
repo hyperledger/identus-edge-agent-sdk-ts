@@ -4,10 +4,9 @@
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import SinonChai from "sinon-chai";
-import { Apollo, BasicMediatorHandler, Castor, ConnectionsManager, MediatorStore, Pluto } from "../../src";
+import { Apollo, BasicMediatorHandler, Castor, ConnectionsManager, MediatorStore, Pluto, Pollux } from "../../src";
 import { Curve, KeyTypes, Mercury, Service, ServiceEndpoint } from "../../src/domain";
 import { MercuryStub } from "./mocks/MercuryMock";
-import { AgentCredentials } from "../../src/edge-agent/Agent.Credentials";
 import { AgentOptions } from "../../src/edge-agent/types";
 
 chai.use(SinonChai);
@@ -19,8 +18,6 @@ const mercury: Mercury = new MercuryStub();
 const apollo = new Apollo();
 const castor = new Castor(apollo)
 const pluto: Pluto = null as any;
-const agentCredentials: AgentCredentials = null as any;
-
 
 async function createBasicMediationHandler(
     ConnectionsManager: any,
@@ -50,11 +47,13 @@ async function createBasicMediationHandler(
         routingDID: mediatorDID,
         mediatorDID: mediatorDID
     }
+
+    const pollux: Pollux = null as any;
     const manager = new ConnectionsManager(
         castor,
         mercury,
         pluto,
-        agentCredentials,
+        pollux,
         handler,
         [],
         options
