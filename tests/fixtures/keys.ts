@@ -1,3 +1,5 @@
+import { base64url } from "multiformats/bases/base64";
+
 import { Ed25519KeyPair } from "../../src/apollo/utils/Ed25519KeyPair";
 import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
 import { Secp256k1KeyPair } from "../../src/apollo/utils/Secp256k1KeyPair";
@@ -17,7 +19,7 @@ export const secp256K1 = new Secp256k1KeyPair(
 );
 
 const ed25519PrivateKey = new Ed25519PrivateKey(
-  Buffer.from("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs", "base64url")
+  base64url.baseDecode("JLIJQ5jlkyqtGmtOth6yggJLLC0zuRhUPiBhd1-rGPs")
 );
 export const ed25519 = new Ed25519KeyPair(
   ed25519PrivateKey,
@@ -25,7 +27,7 @@ export const ed25519 = new Ed25519KeyPair(
 );
 
 const x25519PrivateKey = new X25519PrivateKey(
-  Buffer.from("eHbEtI71XIBIsuQK7XdjZ_ZPnLZb3y4paWoqSoS7BnI", "base64url")
+  base64url.baseDecode("eHbEtI71XIBIsuQK7XdjZ_ZPnLZb3y4paWoqSoS7BnI")
 );
 export const x25519 = new X25519KeyPair(
   x25519PrivateKey,

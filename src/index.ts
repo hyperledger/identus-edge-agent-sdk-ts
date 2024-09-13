@@ -28,6 +28,10 @@ export type {
   ConnectionsManager as ConnectionsManagerInterface,
   MediatorStore,
   AgentMessageEvents,
+  EventCallback,
+  MessageEventArg,
+  ConnectionEventArg,
+  RevokeEventArg
 } from "./edge-agent/types";
 export type { DIDCommProtocol } from "./mercury/DIDCommProtocol";
 export * from "./edge-agent/protocols/types";

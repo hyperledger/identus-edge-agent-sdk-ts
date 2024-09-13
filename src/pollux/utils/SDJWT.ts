@@ -37,7 +37,7 @@ export class SDJWT extends JWTCore {
                     await sdjwt.verify(
                         options.jws,
                         options.requiredClaimKeys,
-                        !!options.requiredKeyBindings ?? false
+                        options.requiredKeyBindings ?? false
                     );
                     return true;
                 } catch (err) {

@@ -1,7 +1,5 @@
-import chai from "chai";
-import chaiAsPromised from "chai-as-promised";
-import * as sinon from "sinon";
-import SinonChai from "sinon-chai";
+import { vi, describe, it, beforeEach, afterEach } from 'vitest';
+import { expect } from 'chai';
 
 import { Curve, JWTVerifiableCredentialProperties, KeyTypes } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
@@ -13,12 +11,13 @@ import { VerificationKeyType } from "../../src/castor/types";
 import * as Fixtures from "../fixtures";
 import { SDJWTCredential } from "../../src/pollux/models/SDJWTVerifiableCredential";
 
+import SinonChai from "sinon-chai";
+
+import chai from "chai";
+import chaiAsPromised from "chai-as-promised";
+
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
-let sandbox: sinon.SinonSandbox;
-
-
-const expect = chai.expect;
 const revocableJWTCredential = `eyJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6cHJpc206YmM5ZGFhZWFmMGFkNjczZjVkNTViM2I2NjEyYTE2NTNiYzcyYWMxNjU5Y2VmYTgxYzZlZWY0NWMxZjcyMTYzOTpDcmtCQ3JZQkVqb0tCbUYxZEdndE1SQUVTaTRLQ1hObFkzQXlOVFpyTVJJaEFqRDNnM3ctcHNnRXZQcUJxUDJmVjhPQXAwQ0l3WjVYU3FhMU9OWU1HOGRQRWpzS0IybHpjM1ZsTFRFUUFrb3VDZ2x6WldOd01qVTJhekVTSVFQRGNPbm9BV25YODBhZnA2aVVEZUl6ZUViMXMySFVPUEo5TEpRRTd1RzdYeEk3Q2dkdFlYTjBaWEl3RUFGS0xnb0pjMlZqY0RJMU5tc3hFaUVDc3luYTRsbkw3anhfSnctTXUtUjd3UUppSnhCNGpnMWUwODN1Q252amNhSSIsInN1YiI6ImRpZDpwcmlzbTozZjBiNDQ5NjI3NmI3NGEzMTU3ZmRiOTEwODU5MDExYjhjZWQwNjU1ZGYyNWU3ZjgwNTAyZjE0OGU2NmM1NGU4OkN0OEJDdHdCRW5RS0gyRjFkR2hsYm5ScFkyRjBhVzl1WVhWMGFHVnVkR2xqWVhScGIyNUxaWGtRQkVKUENnbHpaV053TWpVMmF6RVNJS0ZpZjRlcnNMOFF2SFF2VmxXUEFNaHFPNmwzbXZSbUp5ZlRFRTYzZzI2MEdpRG9PNS1KRzR3Z1JkZk1LcXlqZnp2ek9sSXRsNDNsdDQ0Z21TMWxtaFpKZUJKa0NnOXRZWE4wWlhKdFlYTjBaWEpMWlhrUUFVSlBDZ2x6WldOd01qVTJhekVTSUtGaWY0ZXJzTDhRdkhRdlZsV1BBTWhxTzZsM212Um1KeWZURUU2M2cyNjBHaURvTzUtSkc0d2dSZGZNS3F5amZ6dnpPbEl0bDQzbHQ0NGdtUzFsbWhaSmVBIiwibmJmIjoxNzE1MDA2OTY4LCJ2YyI6eyJjcmVkZW50aWFsU3ViamVjdCI6eyJlbWFpbEFkZHJlc3MiOiJjb3Jwb3JhdGVAZG9tYWluLmNvbSIsImRyaXZpbmdDbGFzcyI6MSwiZHJpdmluZ0xpY2Vuc2VJRCI6IkVTLTEyMzQ1Njc4OTAiLCJpZCI6ImRpZDpwcmlzbTozZjBiNDQ5NjI3NmI3NGEzMTU3ZmRiOTEwODU5MDExYjhjZWQwNjU1ZGYyNWU3ZjgwNTAyZjE0OGU2NmM1NGU4OkN0OEJDdHdCRW5RS0gyRjFkR2hsYm5ScFkyRjBhVzl1WVhWMGFHVnVkR2xqWVhScGIyNUxaWGtRQkVKUENnbHpaV053TWpVMmF6RVNJS0ZpZjRlcnNMOFF2SFF2VmxXUEFNaHFPNmwzbXZSbUp5ZlRFRTYzZzI2MEdpRG9PNS1KRzR3Z1JkZk1LcXlqZnp2ek9sSXRsNDNsdDQ0Z21TMWxtaFpKZUJKa0NnOXRZWE4wWlhKdFlYTjBaWEpMWlhrUUFVSlBDZ2x6WldOd01qVTJhekVTSUtGaWY0ZXJzTDhRdkhRdlZsV1BBTWhxTzZsM212Um1KeWZURUU2M2cyNjBHaURvTzUtSkc0d2dSZGZNS3F5amZ6dnpPbEl0bDQzbHQ0NGdtUzFsbWhaSmVBIiwiZGF0ZU9mSXNzdWFuY2UiOiIyMDIzLTAxLTAxVDAyOjAyOjAyWiJ9LCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sIkBjb250ZXh0IjpbImh0dHBzOlwvXC93d3cudzMub3JnXC8yMDE4XC9jcmVkZW50aWFsc1wvdjEiXSwiY3JlZGVudGlhbFN0YXR1cyI6eyJzdGF0dXNQdXJwb3NlIjoiUmV2b2NhdGlvbiIsInN0YXR1c0xpc3RJbmRleCI6MSwiaWQiOiJodHRwOlwvXC8xOTIuMTY4LjE1NC4yMDU6ODAwMFwvcHJpc20tYWdlbnRcL2NyZWRlbnRpYWwtc3RhdHVzXC8xYzE1Yjk2My1kYzRkLTQ3NjUtYjc1Mi01M2EzZmQxZjE4MzMjMSIsInR5cGUiOiJTdGF0dXNMaXN0MjAyMUVudHJ5Iiwic3RhdHVzTGlzdENyZWRlbnRpYWwiOiJodHRwOlwvXC8xOTIuMTY4LjE1NC4yMDU6ODAwMFwvcHJpc20tYWdlbnRcL2NyZWRlbnRpYWwtc3RhdHVzXC8xYzE1Yjk2My1kYzRkLTQ3NjUtYjc1Mi01M2EzZmQxZjE4MzMifX19.NxuJoiEgSnGs7suM5cxDq3tZ6ZYVDAscnKBuAXghW0KD9MhSr1vBUo9F6y0YkjhHBY4Y_gTGnIMBwgLYjcNVKw`;
 
 describe("Pollux", () => {
@@ -27,11 +26,9 @@ describe("Pollux", () => {
     let castor: Castor;
 
     beforeEach(async () => {
-        const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
-        const Castor = jest.requireActual("../../src/castor/Castor").default;
-        const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
-
-        sandbox = sinon.createSandbox();
+        const Pollux = (await import("../../src/pollux/Pollux")).default;
+        const Castor = (await import("../../src/castor/Castor")).default;
+        const Apollo = (await import("../../src/apollo/Apollo")).default;
         apollo = new Apollo();
         castor = new Castor(apollo);
         pollux = new Pollux(apollo, castor);
@@ -39,12 +36,11 @@ describe("Pollux", () => {
     });
 
     afterEach(async () => {
-        sandbox.restore();
-        jest.restoreAllMocks(); // Reset modules before applying the mock
+        vi.restoreAllMocks(); // Reset modules before applying the mock
     });
 
     it("Should correctly determine that a Credential is revoked when calling the credentialStatus [EcdsaSecp256k1Signature2019] list endpoints", async () => {
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -99,7 +95,7 @@ describe("Pollux", () => {
     })
 
     it("Should throw an error if we try to use a SDJWT credential ", async () => {
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -134,7 +130,7 @@ describe("Pollux", () => {
     })
 
     it("Should throw an error if we try to use a credential which an unsupported type ", async () => {
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -177,7 +173,7 @@ describe("Pollux", () => {
 
     it("Should throw an error if the credential status proof contains an invalid verificationMethod", async () => {
 
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -212,7 +208,7 @@ describe("Pollux", () => {
 
     it("should throw an error if no jwk is provided", async () => {
         const encoded = base64.baseEncode(Buffer.from(JSON.stringify({ noJWK: true })))
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -246,7 +242,7 @@ describe("Pollux", () => {
 
     it("should throw an eror if a wrong verificationMethod type is used", async () => {
         const encoded2 = base64.baseEncode(Buffer.from(JSON.stringify({ publicKeyJwk: { x: "423", y: "123" } })))
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -282,7 +278,7 @@ describe("Pollux", () => {
 
     it("Should throw an error if a wrong key type is used", async () => {
         const encoded3 = base64.baseEncode(Buffer.from(JSON.stringify({ type: VerificationKeyType.EcdsaSecp256k1VerificationKey2019, publicKeyJwk: { x: "423", y: "123" } })))
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -317,7 +313,7 @@ describe("Pollux", () => {
 
     it("Should throw an error if a wrong key curve is used", async () => {
         const encoded4 = base64.baseEncode(Buffer.from(JSON.stringify({ type: VerificationKeyType.EcdsaSecp256k1VerificationKey2019, publicKeyJwk: { x: "423", y: "123", kty: KeyTypes.EC } })))
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -356,10 +352,11 @@ describe("Pollux", () => {
         const pk = Fixtures.Keys.secp256K1.publicKey;
 
         (pk as any).canVerify = () => false;
-        sandbox.stub((pollux as any), "apollo").get(() => ({
-            createPublicKey: sandbox.stub().returns(pk)
-        }));
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        (pollux as any).apollo = {
+            createPublicKey: vi.fn().mockReturnValue(pk)
+        };
+
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -394,7 +391,7 @@ describe("Pollux", () => {
     it("Should throw an error if the status jwt is invalid", async () => {
         const encoded6 = base64.baseEncode(Buffer.from(JSON.stringify({ type: VerificationKeyType.EcdsaSecp256k1VerificationKey2019, publicKeyJwk: { x: 'TYBgml3TiQdR_YQD1hIuNO8bRynSJ-rlPqaUwrWkq-E=', y: 'V0gTYA3LalWwCxOdyjofhGbdaQDwq0AwBnShtRK_3Xg=', kty: KeyTypes.EC, crv: Curve.SECP256K1.toLocaleLowerCase() } })))
 
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -430,11 +427,26 @@ describe("Pollux", () => {
         const pk2 = Fixtures.Keys.secp256K1.publicKey;
         (pk2 as any).verify = () => false;
         (pk2 as any).canVerify = () => true;
-        const encoded8 = base64.baseEncode(Buffer.from(JSON.stringify({ type: VerificationKeyType.EcdsaSecp256k1VerificationKey2019, publicKeyJwk: { x: 'TYBgml3TiQdR_YQD1hIuNO8bRynSJ-rlPqaUwrWkq-E=', y: 'V0gTYA3LalWwCxOdyjofhGbdaQDwq0AwBnShtRK_3Xg=', kty: KeyTypes.EC, crv: Curve.SECP256K1.toLocaleLowerCase() } })))
-        sandbox.stub((pollux as any), "apollo").get(() => ({
-            createPublicKey: sandbox.stub().returns(pk2)
-        }));
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        const encoded8 = base64.baseEncode(
+            Buffer.from(
+                JSON.stringify({
+                    type: VerificationKeyType.EcdsaSecp256k1VerificationKey2019,
+                    publicKeyJwk: {
+                        x: 'TYBgml3TiQdR_YQD1hIuNO8bRynSJ-rlPqaUwrWkq-E=',
+                        y: 'V0gTYA3LalWwCxOdyjofhGbdaQDwq0AwBnShtRK_3Xg=',
+                        kty: KeyTypes.EC,
+                        crv: Curve.SECP256K1.toLocaleLowerCase()
+                    }
+                }
+                )
+            )
+        );
+
+        (pollux as any).apollo = {
+            createPublicKey: vi.fn().mockReturnValue(pk2)
+        };
+
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -468,17 +480,21 @@ describe("Pollux", () => {
 
     it("Should throw an error if we cannot decode the revocation registry correctly ", async () => {
 
-        const Pollux = jest.requireActual("../../src/pollux/Pollux").default;
-        const Castor = jest.requireActual("../../src/castor/Castor").default;
-        const Apollo = jest.requireActual("../../src/apollo/Apollo").default;
+        const Pollux = await vi.importActual<any>("../../src/pollux/Pollux");
+        const Castor = await vi.importActual<any>("../../src/castor/Castor");
+        const Apollo = await vi.importActual<any>("../../src/apollo/Apollo");
 
-        apollo = new Apollo();
-        castor = new Castor(apollo);
-        pollux = new Pollux(apollo, castor);
+        const apollo = new Apollo.default();
+        const castor = new Castor.default(apollo);
+        const pollux = new Pollux.default(apollo, castor);
 
-        sandbox.stub((pollux as any)._pako, 'ungzip').throws(new Error("whatever"));
+        (pollux as any)._pako = {
+            ungzip: vi.fn(() => {
+                throw new Error('whatever');
+            }),
+        }
 
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        const fetchRevocationRegistryStub = vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2019",
@@ -508,12 +524,14 @@ describe("Pollux", () => {
 
         await expect(pollux.isCredentialRevoked(JWTCredential.fromJWS(revocableJWTCredential)))
             .to.eventually.rejectedWith(`Couldn't ungzip base64 encoded list, err: whatever`)
+
+        fetchRevocationRegistryStub.mockRestore();
     })
 
 
     it("Should throw an error if the status proof type is invalid", async () => {
         const encoded6 = base64.baseEncode(Buffer.from(JSON.stringify({ type: VerificationKeyType.EcdsaSecp256k1VerificationKey2019, publicKeyJwk: { x: 'TYBgml3TiQdR_YQD1hIuNO8bRynSJ-rlPqaUwrWkq-E=', y: 'V0gTYA3LalWwCxOdyjofhGbdaQDwq0AwBnShtRK_3Xg=', kty: KeyTypes.EC, crv: Curve.SECP256K1.toLocaleLowerCase() } })))
-        sandbox.stub(pollux as any, "fetchRevocationRegistry").resolves(
+        vi.spyOn(pollux as any, "fetchRevocationRegistry").mockResolvedValue(
             {
                 "proof": {
                     "type": "EcdsaSecp256k1Signature2024",

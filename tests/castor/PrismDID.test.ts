@@ -1,6 +1,7 @@
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { base58btc } from "multiformats/bases/base58";
+import { describe, assert, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { Authentication, Curve, DIDDocument, getProtosUsage, getUsageId, JWT_ALG, KeyTypes, PublicKey, Services, Usage, VerificationMethod, VerificationMethods } from "../../src/domain";
 import Apollo from "../../src/apollo/Apollo";
 import Castor from "../../src/castor/Castor";
@@ -12,7 +13,6 @@ import { PrismDIDPublicKey } from "../../src/castor/did/prismDID/PrismDIDPublicK
 import { ed25519, x25519 } from "../fixtures/keys";
 
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 const apollo = new Apollo();
 const castor = new Castor(apollo);

@@ -1,3 +1,4 @@
+import { describe, expect, test, beforeEach, beforeAll, afterAll } from 'vitest';
 import { ApiImpl } from "../../src";
 import { ApiError } from "../../src/domain";
 import Server from "./server";

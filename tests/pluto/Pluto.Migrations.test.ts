@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import * as sinon from "sinon";
 
 import * as Domain from "../../src/domain";

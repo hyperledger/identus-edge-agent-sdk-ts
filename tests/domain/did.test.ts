@@ -1,4 +1,4 @@
-import { assert, expect } from "chai";
+import { describe, it, assert, expect, test, beforeEach, afterEach } from 'vitest';
 import { DID } from "../../src/domain";
 import { InvalidDIDString } from "../../src/domain/models/errors/Castor";
 

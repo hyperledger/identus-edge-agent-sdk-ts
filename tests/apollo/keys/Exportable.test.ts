@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, it, expect, test } from 'vitest';
 import { Ed25519PrivateKey } from "../../../src/apollo/utils/Ed25519PrivateKey";
 import { Ed25519PublicKey } from "../../../src/apollo/utils/Ed25519PublicKey";
 import { X25519PrivateKey } from "../../../src/apollo/utils/X25519PrivateKey";
@@ -6,6 +6,7 @@ import { X25519PublicKey } from "../../../src/apollo/utils/X25519PublicKey";
 import { Secp256k1PrivateKey } from "../../../src/apollo/utils/Secp256k1PrivateKey";
 import { Secp256k1PublicKey } from "../../../src/apollo/utils/Secp256k1PublicKey";
 import { JWK } from "../../../src/domain";
+import { base64url } from 'multiformats/bases/base64';
 
 describe("Keys", () => {
   describe("Ed25519PrivateKey", () => {
@@ -14,7 +15,7 @@ describe("Keys", () => {
     const jwk: JWK.OKP = {
       kty: 'OKP',
       crv: 'Ed25519',
-      d: raw.toString("base64url"),
+      d: Buffer.from(base64url.baseEncode(raw)).toString(),
       x: 'TLWr9q15-_WrvMr8wmnYXNJlHtS4hbWGnyQa7fCluik'
     };
 
@@ -47,7 +48,7 @@ describe("Keys", () => {
     const jwk: JWK.OKP = {
       kty: 'OKP',
       crv: 'Ed25519',
-      x: raw.toString("base64url")
+      x: Buffer.from(base64url.baseEncode(raw)).toString(),
     };
 
     describe("Exportable", () => {
@@ -79,7 +80,7 @@ describe("Keys", () => {
     const jwk: JWK.OKP = {
       kty: 'OKP',
       crv: 'X25519',
-      d: raw.toString("base64url"),
+      d: Buffer.from(base64url.baseEncode(raw)).toString(),
       x: '_TOE4TKtAqVsePRVR-5AA43HkAK5DSntkOCO7nYq5xU'
     };
 
@@ -112,7 +113,7 @@ describe("Keys", () => {
     const jwk: JWK.OKP = {
       kty: 'OKP',
       crv: 'X25519',
-      x: raw.toString("base64url"),
+      x: Buffer.from(base64url.baseEncode(raw)).toString(),
     };
 
     describe("Exportable", () => {
@@ -144,7 +145,7 @@ describe("Keys", () => {
     const jwk: JWK.EC = {
       kty: 'EC',
       crv: 'secp256k1',
-      d: raw.toString("base64url"),
+      d: Buffer.from(base64url.baseEncode(raw)).toString(),
       x: "eb5mfvncu6xVoGKVzocLBwKb_NstzijZWfKBWxb4F5g",
       y: "SDradyajxGVdpPv8DhEIqP0XtEimhVQZnEfQj_sQ1Lg",
     };

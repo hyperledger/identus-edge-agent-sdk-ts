@@ -1,5 +1,5 @@
 import { AttachmentFormats, CredentialType, PresentationDefinitionRequest } from "../../domain";
-import type * as Anoncreds from "anoncreds-browser";
+import type * as Anoncreds from "anoncreds-wasm";
 
 export interface JWTJson {
   options: {

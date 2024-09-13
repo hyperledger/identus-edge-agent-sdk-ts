@@ -54,7 +54,7 @@ This repository contains compiles typescript code and some rust dependencies for
 
 Clone the repository
 ```
-git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git --recruse-submodules
+git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git --recurse-submodules
 ```
 
 To be able to run the demos, we have to build `identus-edge-agent-sdk-ts`.

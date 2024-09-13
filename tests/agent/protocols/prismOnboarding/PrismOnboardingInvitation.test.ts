@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { AgentError } from "../../../../src/domain/models/Errors";
 import { PrismOnboardingInvitation } from "../../../../src/edge-agent/protocols/prismOnboarding/PrismOnboardingInvitation";
 import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";

@@ -1,4 +1,4 @@
-import type * as Anoncreds from "anoncreds-browser";
+import type * as Anoncreds from "anoncreds-wasm";
 
 export enum CredentialType {
   JWT = "prism/jwt",

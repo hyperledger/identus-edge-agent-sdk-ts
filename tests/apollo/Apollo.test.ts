@@ -1,3 +1,5 @@
+import { describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+
 import chai, { assert } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import Apollo from "../../src/apollo/Apollo";
@@ -33,7 +35,6 @@ import { randomBytes } from "../../src/domain/utils/randomBytes";
 
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 describe("Apollo", () => {
   let apollo: Apollo;

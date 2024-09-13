@@ -70,7 +70,7 @@ jobs:
 
       - name: Pack sdk
         run: |
-          npm install
+          npm install && npm i @rollup/rollup-linux-x64-gnu
           npm run build
           npm pack
           echo "PACKAGE_NAME=$(find . -maxdepth 1 -name hyperledger-identus-edge-agent-sdk* | tr -d '\n')" >> "$GITHUB_ENV"

@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import SDK from "@atala/prism-wallet-sdk";
+import SDK from "@hyperledger/identus-edge-agent-sdk";
 
 export const mnemonicsAtom = atom<SDK.Domain.MnemonicWordList | undefined>(
   undefined

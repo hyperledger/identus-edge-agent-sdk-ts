@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { describe, expect, test, beforeEach } from 'vitest';
+
 import { base64url } from "multiformats/bases/base64";
 import { JWT } from "../../src/pollux/utils/JWT";
 import { Domain, Secp256k1PrivateKey } from "../../src";

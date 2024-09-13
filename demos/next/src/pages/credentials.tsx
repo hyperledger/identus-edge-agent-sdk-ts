@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import SDK from "@atala/prism-wallet-sdk";
+import SDK from "@hyperledger/identus-edge-agent-sdk";
 
 import '../app/index.css'
 import { FooterNavigation } from "@/components/FooterNavigation";

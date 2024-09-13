@@ -1,8 +1,8 @@
 import { uuid } from "@stablelib/uuid";
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
+import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 
-import { expect } from "chai";
 
 import { Mercury } from "../../../../src/domain/buildingBlocks/Mercury";
 import { MercuryStub } from "../../mocks/MercuryMock";

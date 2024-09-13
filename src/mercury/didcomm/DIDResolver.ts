@@ -3,13 +3,13 @@ import type {
   Service,
   VerificationMethod,
   DIDDoc,
-} from "didcomm-node";
+} from "didcomm-wasm";
 
 import * as Domain from "../../domain";
 import { PeerDIDService } from "../../peer-did/PeerDID";
 
 export class DIDCommDIDResolver implements DIDResolver {
-  constructor(private readonly castor: Domain.Castor) {}
+  constructor(private readonly castor: Domain.Castor) { }
 
   async resolve(did: string): Promise<DIDDoc | null> {
     const doc = await this.castor.resolveDID(did);

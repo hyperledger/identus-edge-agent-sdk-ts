@@ -1,5 +1,5 @@
 import React from "react";
-import SDK from "@atala/prism-wallet-sdk";
+import SDK from "@hyperledger/identus-edge-agent-sdk";
 import { Box } from "../app/Box";
 
 const apollo = new SDK.Apollo();
