@@ -27,6 +27,12 @@ const InputFields: React.FC<{ fields: SDK.Domain.InputField[]; }> = props => {
   </>;
 };
 
+function replacePlaceholders(text: string, args: any[]): string {
+  return text.replace(/\{(\d+)\}/g, (match, index) => {
+    const idx = parseInt(index) - 1; // Adjust for zero-based array index
+    return args[idx] !== undefined ? args[idx] : match; // Replace or keep original if undefined
+  });
+}
 
 export function Message({ message }) {
   const app = useMountedApp();
@@ -370,8 +376,36 @@ export function Message({ message }) {
     </div>;
   }
 
+  if (message.piuri === SDK.ProtocolType.ProblemReporting) {
+    const content = replacePlaceholders(message.body.comment, message.body.args);
 
-
+    return <div className="flex items-center justify-center">
+      <div className="w-full bg-red-300 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-lg my-5 w-full">
+        <div className="flex">
+          <svg
+            className="w-6 h-6 text-red-500 mr-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728"
+            ></path>
+          </svg>
+          <div>
+            <p className="font-bold">Error {message.id}</p>
+          </div>
+        </div>
+        <div className="mt-5">
+          <div className="w-full shadow-lg bg-white px-10 py-4 rounded-lg">An error ocurred, {content}, CODE {message.body.code}</div>
+        </div>
+      </div>
+    </div>
+  }
 
   if (message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation") {
     const requestPresentationMessage = SDK.RequestPresentation.fromMessage(message);
