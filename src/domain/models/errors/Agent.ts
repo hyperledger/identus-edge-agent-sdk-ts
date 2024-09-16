@@ -161,6 +161,11 @@ export class InvalidPresentationBodyError extends Error {
     super(message || "Invalid Presentation body Error");
   }
 }
+export class InvalidProblemReportBodyError extends Error {
+  constructor(message?: string) {
+    super(message || "Invalid Problem reporting body Error");
+  }
+}
 export class InvalidProposeCredentialBodyError extends Error {
   constructor(message?: string) {
     super(message || "Invalid Propose CredentialBody Error");
