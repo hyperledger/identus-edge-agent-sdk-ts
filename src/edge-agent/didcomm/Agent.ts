@@ -26,9 +26,7 @@ import { HandleIssueCredential } from "./HandleIssueCredential";
 import { HandleOfferCredential } from "./HandleOfferCredential";
 import { HandlePresentation } from "./HandlePresentation";
 import { CreatePresentation } from "./CreatePresentation";
-import { ProtocolType, findProtocolTypeByValue } from "../protocols/ProtocolTypes";
-import { DIDCommConnectionRunner } from "../protocols/connection/DIDCommConnectionRunner";
-import { DIDCommInvitationRunner } from "../protocols/invitation/v2/DIDCommInvitationRunner";
+import { ProtocolType } from "../protocols/ProtocolTypes";
 import Pollux from "../../pollux";
 import Apollo from "../../apollo";
 import Castor from "../../castor";
@@ -36,7 +34,9 @@ import * as DIDfns from "../didFunctions";
 import { Task } from "../../utils/tasks";
 import { DIDCommContext } from "./Context";
 import { FetchApi } from "../helpers/FetchApi";
-import { isNil } from "../../utils";
+import { ParsePrismInvitation } from "./ParsePrismInvitation";
+import { ParseInvitation } from "./ParseInvitation";
+import { HandleOOBInvitation } from "./HandleOOBInvitation";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -246,6 +246,7 @@ export default class DIDCommAgent {
 
   private runTask<T>(task: Task<T>) {
     const ctx = new DIDCommContext({
+      ConnectionManager: this.connectionManager,
       MediationHandler: this.mediationHandler,
       Mercury: this.mercury,
       Api: this.api,
@@ -315,17 +316,8 @@ export default class DIDCommAgent {
    * @returns {Promise<InvitationType>}
    */
   async parseInvitation(str: string): Promise<InvitationType> {
-    const json = JSON.parse(str);
-    const typeString = findProtocolTypeByValue(json.type);
-
-    switch (typeString) {
-      case ProtocolType.PrismOnboarding:
-        return this.parsePrismInvitation(str);
-      case ProtocolType.Didcomminvitation:
-        return this.parseOOBInvitation(new URL(str));
-    }
-
-    throw new Domain.AgentError.UnknownInvitationTypeError();
+    const task = new ParseInvitation({ value: str });
+    return this.runTask(task);
   }
 
   /**
@@ -355,24 +347,8 @@ export default class DIDCommAgent {
    * @returns {Promise<PrismOnboardingInvitation>}
    */
   async parsePrismInvitation(str: string): Promise<PrismOnboardingInvitation> {
-    try {
-      const prismOnboarding = OutOfBandInvitation.parsePrismOnboardingInvitationFromJson(str);
-      const service = new Domain.Service(
-        "#didcomm-1",
-        ["DIDCommMessaging"],
-        new Domain.ServiceEndpoint(prismOnboarding.onboardEndpoint, ["DIDCommMessaging"])
-      );
-      const did = await this.createNewPeerDID([service], true);
-      prismOnboarding.from = did;
-
-      return prismOnboarding;
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new Domain.AgentError.UnknownInvitationTypeError(e.message);
-      } else {
-        throw e;
-      }
-    }
+    const task = new ParsePrismInvitation({ value: str });
+    return this.runTask(task);
   }
 
   /**
@@ -406,11 +382,18 @@ export default class DIDCommAgent {
    * Asyncronously parse an out of band invitation from a URI as the oob come in format of valid URL
    *
    * @async
-   * @param {URL} str
+   * @param {URL} url
    * @returns {Promise<OutOfBandInvitation>}
    */
-  async parseOOBInvitation(str: URL): Promise<OutOfBandInvitation> {
-    return new DIDCommInvitationRunner(str).run();
+  async parseOOBInvitation(url: URL): Promise<OutOfBandInvitation> {
+    const task = new ParseInvitation({ value: url });
+    const result = await this.runTask(task);
+
+    if (result instanceof OutOfBandInvitation) {
+      return result;
+    }
+
+    throw new Domain.AgentError.UnknownInvitationTypeError();
   }
 
   /**
@@ -424,32 +407,10 @@ export default class DIDCommAgent {
    */
   async acceptDIDCommInvitation(
     invitation: OutOfBandInvitation,
-    optionalAlias?: string
+    alias?: string
   ): Promise<void> {
-    if (!this.connectionManager.mediationHandler.mediator) {
-      throw new Domain.AgentError.NoMediatorAvailableError();
-    }
-    const [attachment] = invitation.attachments ?? [];
-    const ownDID = await this.createNewPeerDID([], true);
-
-    if (isNil(attachment)) {
-      const pair = await new DIDCommConnectionRunner(
-        invitation,
-        this.pluto,
-        ownDID,
-        this.connectionManager,
-        optionalAlias
-      ).run();
-
-      await this.connectionManager.addConnection(pair);
-    }
-    else {
-      const msg = Domain.Message.fromJson({
-        ...attachment.payload,
-        to: ownDID.toString()
-      });
-      await this.pluto.storeMessage(msg);
-    }
+    const task = new HandleOOBInvitation({ invitation, alias });
+    return this.runTask(task);
   }
 
   /**

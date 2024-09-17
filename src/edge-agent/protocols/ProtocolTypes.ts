@@ -24,13 +24,3 @@ export enum ProtocolType {
   PrismRevocation = "https://atalaprism.io/revocation_notification/1.0/revoke",
   ProblemReporting = "https://didcomm.org/report-problem/2.0/problem-report"
 }
-
-export function findProtocolTypeByValue(string: string): ProtocolType {
-  const values = Object.values(ProtocolType) as string[];
-  for (const value of values) {
-    if (value === string) {
-      return ProtocolType[value as keyof typeof ProtocolType];
-    }
-  }
-  throw new Error("Unknown invitation type error.");
-}

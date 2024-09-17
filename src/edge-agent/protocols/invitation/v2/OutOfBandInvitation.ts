@@ -15,7 +15,7 @@ export class OutOfBandInvitation {
     public id: string = uuid(),
     public attachments: AttachmentDescriptor[] = [],
     public expiration: number | null = null
-  ) { }
+  ) {}
 
   get isExpired() {
     if (this.expiration) {
@@ -25,6 +25,12 @@ export class OutOfBandInvitation {
     return false;
   }
 
+  /**
+   * @deprecated
+   * 
+   * @param json 
+   * @returns 
+   */
   static parsePrismOnboardingInvitationFromJson(
     json: JsonString
   ): PrismOnboardingInvitation {
