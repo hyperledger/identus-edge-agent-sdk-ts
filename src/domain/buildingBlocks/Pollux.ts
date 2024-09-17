@@ -139,6 +139,7 @@ export namespace Pollux {
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.JWT>,
       }
       export interface SDJWT {
+        issuer: DID,
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.SDJWT>,
       }
     }
@@ -154,9 +155,7 @@ export namespace Pollux {
         privateKey: PrivateKey;
       }
       export interface SDJWT {
-        did: DID;
         privateKey: PrivateKey;
-
       }
     }
   }

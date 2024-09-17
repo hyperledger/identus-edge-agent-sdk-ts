@@ -82,14 +82,9 @@ export type AttributeType = string | number;
 
 
 export type Claims<Type extends CredentialType = CredentialType.JWT> =
-  Type extends CredentialType.JWT ?
-  {
-    [name: string]: InputFieldFilter
-  } :
-  {
-    [name: string]: AnoncredsInputFieldFilter
-  }
-
+  Type extends CredentialType.JWT ? { [name: string]: InputFieldFilter } :
+  Type extends CredentialType.SDJWT ? { [name: string]: any } :
+  { [name: string]: AnoncredsInputFieldFilter }
 
 export type JWTPresentationClaims = {
   schema?: string;
@@ -97,14 +92,19 @@ export type JWTPresentationClaims = {
   claims: Claims<CredentialType.JWT>
 }
 
+export type SDJWTPresentationClaims = {
+  claims: Claims<CredentialType.SDJWT>
+}
+
+
 export type AnoncredsPresentationClaims = {
   predicates?: Claims<CredentialType.AnonCreds>,
   attributes?: Anoncreds.RequestedAttributes
 }
 
 export type PresentationClaims<Type extends CredentialType = CredentialType.JWT> =
-  Type extends CredentialType.JWT ?
-  JWTPresentationClaims :
+  Type extends CredentialType.JWT ? JWTPresentationClaims :
+  Type extends CredentialType.SDJWT ? SDJWTPresentationClaims :
   AnoncredsPresentationClaims;
 
 
@@ -168,17 +168,19 @@ export type PresentationExchangeDefinitionRequest = {
   }
 }
 
-
+export type PresentationSDJWTRequest = any
 
 export type PresentationDefinitionData = {
   [CredentialType.AnonCreds]: PresentationAnoncredsRequest;
   [CredentialType.JWT]: PresentationExchangeDefinitionRequest;
-  [CredentialType.SDJWT]: any;
+  [CredentialType.SDJWT]: {
+    claims: {
+      [name: string]: any
+    }
+  };
   [CredentialType.Unknown]: any;
   [CredentialType.W3C]: any;
 };
-
-
 
 export class PresentationDefinitionRequestType<Type extends CredentialType> {
   constructor(public data: PresentationDefinitionData[Type]) { }
@@ -212,6 +214,13 @@ export type JWTPresentationSubmission = {
   verifiablePresentation: string[],
 }
 
+export type SDJWTPresentationSubmission = {
+  disclosures: any[],
+  protected: string,
+  payload: string,
+  signature: string
+}
+
 export type AnoncredsPresentationSubmission = Anoncreds.PresentationType;
 
 
@@ -219,7 +228,12 @@ export type AnoncredsPresentationSubmission = Anoncreds.PresentationType;
 export type PresentationSubmissionData = {
   [CredentialType.AnonCreds]: AnoncredsPresentationSubmission;
   [CredentialType.JWT]: JWTPresentationSubmission;
-  [CredentialType.SDJWT]: any;
+  [CredentialType.SDJWT]: {
+    disclosures: [],
+    payload: string,
+    protected: string,
+    signature: string
+  };
   [CredentialType.Unknown]: any;
   [CredentialType.W3C]: any;
 }
@@ -396,6 +410,7 @@ export type PresentationJWTOptions = {
 export type PresentationRequestOptions = {
   [CredentialType.AnonCreds]: ConstructorParameters<typeof AnoncredsPresentationOptions>['0'];
   [CredentialType.JWT]: ConstructorParameters<typeof JWTPresentationOptions>['0'];
+  [CredentialType.SDJWT]: ConstructorParameters<typeof SDJWPresentationOptions>['0'];
   [CredentialType.Unknown]: any;
   [CredentialType.W3C]: any;
 }
@@ -418,13 +433,18 @@ export class PresentationOptions {
     if (this.type === CredentialType.JWT) {
       return new JWTPresentationOptions(this.data)
     }
+    if (this.type === CredentialType.SDJWT) {
+      return new SDJWPresentationOptions(this.data)
+    }
     throw new Error("Not supported" + this.type)
   }
 }
 
-
-
 export class AnoncredsPresentationOptions {
+  constructor(_data: any) { }
+}
+
+export class SDJWPresentationOptions {
   constructor(_data: any) { }
 }
 
