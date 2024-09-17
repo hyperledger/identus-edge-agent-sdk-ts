@@ -1,5 +1,6 @@
 import { base64 } from "multiformats/bases/base64";
 import * as Domain from "../../../src/domain";
+import { ProtocolType } from "../../../src/edge-agent/protocols/ProtocolTypes";
 
 // convert raw DIDComm message to domain, handles parsing idiosyncrasies
 const convertDidcomm = (value: any) => new Domain.Message(
@@ -238,3 +239,23 @@ const pickupStatusRaw: any = {
 };
 
 export const PickupStatus = convertDidcomm(pickupStatusRaw);
+
+
+export const Reporting = convertDidcomm({
+  "id": "033642e4-9064-4da2-ac84-6be20b3ec8b8",
+  "typ": "application/didcomm-plain+json",
+  "type": ProtocolType.ProblemReporting,
+  "body": {
+    "args": [
+      'did:peer:2.Ez6LSmEZPCeaFeA1vwBTZeLvXi6F24ZdEQgmzJCqHaQQojBj8.Vz6MktyGjB1ogYgsu3nt9ncjzXM4mBBGJSU5cPrCScDcC2GrN.SW10'
+    ],
+    "comment": "The DID '{1}' is not enroled",
+    "code": "e.p.req.not_enroll",
+    "escalate_to": "email@email.com"
+  },
+  "from": "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHBzOi8vc2l0LXByaXNtLW1lZGlhdG9yLmF0YWxhcHJpc20uaW8iLCJhIjpbImRpZGNvbW0vdjIiXX19.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzczovL3NpdC1wcmlzbS1tZWRpYXRvci5hdGFsYXByaXNtLmlvL3dzIiwiYSI6WyJkaWRjb21tL3YyIl19fQ",
+  "to": [
+    "did:peer:2.Ez6LSrjn3NUEgFDY2wKnxbNfbXLozs8Em5RX6xWkTJn3kqpsL.Vz6MkuK1KvyssRGvzYuerJQQaTANA9hAe3dXt2X31d6Ef9xee.SW10"
+  ],
+  "thid": "dcc4af0e-0a9c-4082-98d1-bbdc582002b7"
+})

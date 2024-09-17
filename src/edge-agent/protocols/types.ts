@@ -70,6 +70,14 @@ export interface BasicMessageBody {
   content: string;
 }
 
+
+export interface ProblemReportBody {
+  code: string,
+  comment: string,
+  args: string[],
+  escalate_to: string
+}
+
 export interface RequestPresentationBody extends PresentationBody {
   willConfirm?: boolean;
   proofTypes: ProofTypes[];

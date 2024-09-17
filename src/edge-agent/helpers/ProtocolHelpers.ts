@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AttachmentDescriptor, Message } from "../../domain";
 import { AgentError } from "../../domain/models/Errors";
-import { asArray, isArray, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
+import { asArray, isArray, isEmpty, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
 import { ProtocolType } from "../protocols/ProtocolTypes";
 import { CredentialFormat } from "../protocols/issueCredential/CredentialFormat";
 import {
@@ -14,6 +14,7 @@ import {
   RequestPresentationBody,
   ProposePresentationBody,
   BasicMessageBody,
+  ProblemReportBody,
 } from "../protocols/types";
 
 export const parseCredentialAttachments = (credentials: Map<string, any>) => {
@@ -59,6 +60,18 @@ export const parseBasicMessageBody = (msg: Message): BasicMessageBody => {
 
   throw new AgentError.InvalidBasicMessageBodyError("Invalid content");
 };
+
+export const parseProblemReportBody = (msg: Message): ProblemReportBody => {
+  if (notEmptyString(msg.body.code) &&
+    notEmptyString(msg.body.comment) &&
+    notEmptyString(msg.body.escalate_to) &&
+    isArray(msg.body.args) && isEmpty(msg.body.args)
+  ) {
+    const { code, comment, escalate_to, args } = msg.body;
+    return { code, comment, escalate_to, args }
+  }
+  throw new AgentError.InvalidProblemReportBodyError()
+}
 
 export const parseCredentialBody = (msg: Message): CredentialBody => {
   if (Object.keys(msg.body).length === 0) {

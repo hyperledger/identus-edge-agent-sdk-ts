@@ -170,7 +170,6 @@ export class ConnectionsManager implements ConnectionsManagerClass {
           }
         }
       }
-
       if (messageIds.length) {
         await this.mediationHandler.registerMessagesAsRead(messageIds);
       }

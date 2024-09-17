@@ -6,7 +6,8 @@ import { PickupAttachment } from "../types";
 
 type PickupResponse =
   | { type: "status"; message: Message }
-  | { type: "delivery"; message: Message };
+  | { type: "delivery"; message: Message }
+  | { type: 'report', message: Message };
 
 export class PickupRunner {
   private message: PickupResponse;
@@ -19,6 +20,9 @@ export class PickupRunner {
         break;
       case ProtocolType.PickupDelivery:
         this.message = { type: "delivery", message: message };
+        break;
+      case ProtocolType.ProblemReporting:
+        this.message = { type: "report", message: message };
         break;
       default:
         throw new AgentError.InvalidPickupDeliveryMessageError();
@@ -63,6 +67,13 @@ export class PickupRunner {
             message: await this.mercury.unpackMessage(attachment.data),
           }))
       );
+    } else if (this.message.type === "report") {
+      return [
+        {
+          attachmentId: this.message.message.id,
+          message: this.message.message
+        }
+      ]
     }
 
     return [];

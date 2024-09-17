@@ -45,6 +45,27 @@ describe("PickupRunner Tests", () => {
     expect(response).to.be.an("array").with.length(0);
   });
 
+  test(`${ProtocolType.PickupDelivery} - 1 problem report message`, async () => {
+    const runner = new PickupRunner(Messages.Reporting, mercury);
+    const response = await runner.run();
+    expect(response).to.be.an("array").with.length(1);
+    expect(response[0].message.ack).to.deep.eq(Messages.Reporting.ack);
+    expect(response[0].message.attachments).to.deep.eq(Messages.Reporting.attachments);
+    expect(response[0].message.body).to.deep.eq(Messages.Reporting.body);
+    expect(response[0].message.createdTime).to.deep.eq(Messages.Reporting.createdTime);
+    expect(response[0].message.direction).to.deep.eq(Messages.Reporting.direction);
+    expect(response[0].message.extraHeaders).to.deep.eq(Messages.Reporting.extraHeaders);
+    expect(response[0].message.from).to.deep.eq(Messages.Reporting.from);
+    expect(response[0].message.fromPrior).to.deep.eq(Messages.Reporting.fromPrior);
+    expect(response[0].message.id).to.deep.eq(Messages.Reporting.id);
+    expect(response[0].message.piuri).to.deep.eq(Messages.Reporting.piuri);
+    expect(response[0].message.pthid).to.deep.eq(Messages.Reporting.pthid);
+    expect(response[0].message.thid).to.deep.eq(Messages.Reporting.thid);
+    expect(response[0].message.to).to.deep.eq(Messages.Reporting.to);
+  });
+
+
+
   test(`${ProtocolType.PickupDelivery} - 1 message`, async () => {
     const runner = new PickupRunner(Messages.PickupDelivery, mercury);
     const response = await runner.run();

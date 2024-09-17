@@ -179,7 +179,6 @@ export class BasicMediatorHandler implements MediatorHandler {
     if (!message) {
       return [];
     }
-
     return new PickupRunner(message, this.mercury).run();
   }
 
