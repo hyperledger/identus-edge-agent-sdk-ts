@@ -182,22 +182,28 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
     static fromJWS<E extends Record<string, any> = Record<string, any>>(
         jws: string,
         revoked?: boolean,
-        disclosures: string[] = []
     ): SDJWTCredential {
         const { hasherSync, hasherAlg } = defaultHashConfig;
         const jwt = new Jwt(Jwt.decodeJWT(jws))
         const decoded = decodeSdJwtSync(jws, hasherSync);
-        const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync(disclosure, {
+        const disclosures = jws.split("~").slice(1).filter((k) => k)
+        const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync<E>(disclosure, {
             hasher: hasherSync,
             alg: hasherAlg
         }))
-        const claims = getClaimsSync<E>(decoded.jwt.payload, computed, hasherSync)
+
+
+        // const disclosedClaims = getClaimsSync<E>(decoded.jwt.payload, computed, hasherSync)
         const loaded = new SDJwt(
             {
                 jwt: jwt,
                 disclosures: computed
             }
         )
+        const claims: Record<string, Disclosure<E>> = {};
+        for (let disclosure of computed) {
+            claims[disclosure.key!] = disclosure
+        }
         return new SDJWTCredential(loaded, [claims], revoked);
     }
 

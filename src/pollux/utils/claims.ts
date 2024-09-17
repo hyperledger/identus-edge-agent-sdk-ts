@@ -5,7 +5,7 @@ export function validatePresentationClaims<Type extends CredentialType = Credent
     claims: any,
     type: Type,
 ): claims is PresentationClaims<Type> {
-    if (type === CredentialType.JWT) {
+    if (type === CredentialType.JWT || type === CredentialType.SDJWT) {
         if (claims.schema && typeof claims.schema !== 'string') {
             return false;
         }
@@ -63,6 +63,24 @@ export function parsePresentationSubmission<
     if (type === CredentialType.AnonCreds) {
         return anoncreds.isValidPresentation(data)
     }
+    if (type === CredentialType.SDJWT) {
+        if (!data || (data && typeof data !== "object")) {
+            return false;
+        }
+        const disclosures = data.disclosures;
+        const payload = data.payload;
+        const protected_ = data.protected;
+        const signature = data.signature;
+        if (!Array.isArray(disclosures)) {
+            return false;
+        }
+        if (typeof payload !== "string" ||
+            typeof protected_ !== "string" ||
+            typeof signature !== "string") {
+            return false;
+        }
+        return true;
+    }
     return false;
 }
 
@@ -80,5 +98,27 @@ export function isPresentationDefinitionRequestType
         }
         return true;
     }
-    return true;
+
+    if (type === CredentialType.AnonCreds) {
+
+        if (!request ||
+            !request.name ||
+            !request.nonce ||
+            !request.requested_attributes ||
+            !request.requested_predicates) {
+            return false;
+        }
+        return true;
+    }
+
+    if (type === CredentialType.SDJWT) {
+        if (!request ||
+            !request.claims) {
+            return false
+        }
+
+        return true
+    }
+    return false
+
 }
