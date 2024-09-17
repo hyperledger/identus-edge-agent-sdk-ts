@@ -45,6 +45,8 @@ type JWTVerificationTestCase = {
   subject: Record<string, any>,
   claims: Claims;
 };
+import type { DisclosureFrame, PresentationFrame } from '@sd-jwt/types';
+
 
 
 type AnoncredsVerificationTestCase = {
@@ -77,6 +79,71 @@ async function createAnoncredsVerificationTestCase(options: AnoncredsVerificatio
     presentationDefinition,
     presentationSubmissionJSON,
   };
+}
+
+
+async function createSDJWTVerificationTestCase<T extends Claims<CredentialType.SDJWT>>(
+  options: {
+    challenge?: string,
+    apollo: Apollo,
+    castor: Castor,
+    jwt: SDJWT,
+    pollux: Pollux,
+    issuer: DID,
+    holder: DID,
+    holderPrv: PrivateKey,
+    issuerPrv: PrivateKey,
+    payload: T,
+    disclosure: DisclosureFrame<T>
+  }
+) {
+  const {
+    pollux,
+    issuer,
+    issuerPrv,
+    holderPrv,
+    jwt,
+    payload,
+    disclosure,
+    challenge = 'sign this'
+  } = options;
+
+
+  const signedJWT = await jwt.sign<typeof payload>({
+    issuerDID: issuer,
+    privateKey: issuerPrv,
+    payload: payload,
+    disclosureFrame: disclosure,
+  });
+  const jwtCredential = SDJWTCredential.fromJWS(signedJWT);
+  const presentationDefinition = await pollux.createPresentationDefinitionRequest(
+    CredentialType.SDJWT,
+    {
+      claims: payload,
+    },
+    new PresentationOptions(
+      {
+        challenge
+      },
+      CredentialType.SDJWT
+    )
+  );
+
+  const disclosed = await pollux.revealCredentialFields(jwtCredential, []);
+  expect(disclosed).to.not.be.undefined;
+  expect(Object.keys(disclosed).length).to.gte(1);
+  const presentationSubmissionJSON = await pollux.createPresentationSubmission
+    <CredentialType.SDJWT>(
+      presentationDefinition,
+      jwtCredential,
+      holderPrv
+    );
+  return {
+    presentationDefinition,
+    presentationSubmissionJSON,
+    issuedJWS: signedJWT
+  };
+
 }
 
 async function createJWTVerificationTestCase(options: JWTVerificationTestCase) {
@@ -702,6 +769,7 @@ describe("Pollux", () => {
     let apollo: Apollo;
     let castor: Castor;
     let jwt: JWT;
+    let sdJwt: SDJWT
     let pollux: Pollux;
 
     beforeEach(async () => {
@@ -711,10 +779,12 @@ describe("Pollux", () => {
       const Castor = (await import("../../src/castor/Castor")).default;
       const Apollo = (await import("../../src/apollo/Apollo")).default;
       const JWT = (await import("../../src/pollux/utils/JWT")).JWT;
+      const SDJWT = (await import("../../src/pollux/utils/SDJWT")).SDJWT;
 
       apollo = new Apollo();
       castor = new Castor(apollo);
       jwt = new JWT(apollo, castor);
+      sdJwt = new SDJWT(apollo, castor)
       pollux = new Pollux(
         apollo,
         castor,
@@ -935,6 +1005,80 @@ describe("Pollux", () => {
           privateKey: sk
         });
         expect(result).not.to.be.null;
+      });
+
+
+      test("Should Verify true when the presentation and the credential are completely valid", async () => {
+        const issuerSeed = apollo.createRandomSeed().seed;
+        const holderSeed = apollo.createRandomSeed().seed;
+
+        const issuerPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(issuerSeed.value).toString("hex"),
+        });
+
+        const holderPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(holderSeed.value).toString("hex"),
+        });
+
+        const issuerDID = await castor.createPrismDID(
+          issuerPrv.publicKey()
+        );
+
+        const holderDID = await castor.createPrismDID(
+          holderPrv.publicKey()
+        );
+
+        const currentDate = new Date();
+        const nextMonthDate = new Date(currentDate);
+        nextMonthDate.setMonth(currentDate.getMonth() + 1);
+        const issuanceDate = currentDate.getTime();
+        const expirationDate = nextMonthDate.getTime();
+
+        const payload = {
+          iss: issuerDID.toString(),
+          nbf: issuanceDate,
+          exp: expirationDate,
+          sub: holderDID.toString(),
+          vc: {
+            "@context": [W3CVerifiableCredentialContext.credential],
+            type: [W3CVerifiableCredentialType.credential],
+            issuer: issuerDID.toString(),
+            issuanceDate: new Date(issuanceDate).toISOString(),
+            credentialSubject: {
+              firstname: "hola",
+            },
+          },
+          vct: issuerDID.toString()
+        };
+
+        const {
+          presentationDefinition,
+          presentationSubmissionJSON,
+        } = await createSDJWTVerificationTestCase<typeof payload>({
+          apollo,
+          castor,
+          jwt: sdJwt,
+          pollux,
+          issuer: issuerDID,
+          holder: holderDID,
+          holderPrv: holderPrv,
+          issuerPrv: issuerPrv,
+          payload: payload,
+          disclosure: {
+            _sd: ["vc"],
+            vc: {
+              _sd: ["@context", "credentialSubject", "issuanceDate", "issuer", "type"]
+            }
+          }
+        });
+        expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
+          presentationDefinitionRequest: presentationDefinition,
+          issuer: issuerDID,
+        })).to.eventually.equal(true);
       });
 
 
@@ -2100,15 +2244,13 @@ describe("Pollux", () => {
   it("Should Reject Creating an Anoncreds Presentation Submission using an invalid presentationDefinition", async () => {
     sandbox.stub(pollux as any, "fetchSchema").resolves(Fixtures.Credentials.Anoncreds.schema);
     sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
-
     const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
-
     expect(pollux.createPresentationSubmission<CredentialType.AnonCreds>(
       null as any,
       credential,
       Fixtures.Credentials.Anoncreds.linkSecret
     )).to.eventually.be.rejectedWith(
-      'Serialization Error: invalid type: unit value, expected struct PresentationRequestPayload'
+      'Invalid Presentation definition error'
     );
   });
 

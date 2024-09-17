@@ -38,6 +38,26 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
       );
     }
 
+    if (type === Domain.CredentialType.SDJWT) {
+      if (!validatePresentationClaims(claims, Domain.CredentialType.SDJWT)) {
+        throw new Domain.PolluxError.InvalidPresentationDefinitionError("SD+JWT Claims are invalid");
+      }
+
+      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
+        type,
+        claims,
+        new Domain.PresentationOptions({
+          jwt: {
+            jwtAlg: [
+              Domain.curveToAlg(Domain.Curve.ED25519)
+            ]
+          },
+          challenge: "Sign this text " + uuid(),
+          domain: 'N/A'
+        })
+      );
+    }
+
     if (type === Domain.CredentialType.JWT) {
       if (!validatePresentationClaims(claims, Domain.CredentialType.JWT)) {
         throw new Domain.PolluxError.InvalidPresentationDefinitionError("JWT Claims are invalid");
