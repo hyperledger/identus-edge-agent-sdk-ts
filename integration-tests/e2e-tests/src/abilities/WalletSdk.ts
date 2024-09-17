@@ -5,7 +5,6 @@ import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguratio
 import InMemoryStore from "../configuration/inmemory"
 import { randomUUID, UUID } from "crypto"
 
-const { Agent, Apollo, Domain, ListenerKey, } = SDK
 
 // fallback in any case of dangling sdk agents
 export const agentList: Map<string, WalletSdk> = new Map()
@@ -15,7 +14,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   store: SDK.Store
   messages: MessageQueue = new MessageQueue()
   id: UUID = randomUUID()
-  
+
   static async withANewInstance(): Promise<Ability> {
     return new WalletSdk()
   }
@@ -85,6 +84,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async createSdk(seed: SDK.Domain.Seed = undefined) {
+    const { Agent, Apollo, Domain, ListenerKey, } = SDK
     const apollo = new Apollo()
     this.store = new SDK.Store({
       name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),

@@ -7,7 +7,6 @@ import { randomUUID } from "crypto"
 import _ from "lodash"
 import { assert } from "chai"
 
-const { IssueCredential, OfferCredential, RequestPresentation, Presentation } = SDK
 
 export class EdgeAgentWorkflow {
 
@@ -40,6 +39,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async processIssuedCredential(edgeAgent: Actor, recordId: string) {
+    const { IssueCredential } = SDK;
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const issuedCredential = messages.issuedCredentialStack.shift()!
@@ -51,6 +51,8 @@ export class EdgeAgentWorkflow {
   }
 
   static async acceptCredential(edgeAgent: Actor) {
+    const { OfferCredential } = SDK
+
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const message = OfferCredential.fromMessage(messages.credentialOfferStack.shift()!)
@@ -75,6 +77,8 @@ export class EdgeAgentWorkflow {
   }
 
   static async presentVerificationRequest(edgeAgent: Actor) {
+    const { RequestPresentation } = SDK
+
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
@@ -96,6 +100,8 @@ export class EdgeAgentWorkflow {
   }
 
   static async verifyPresentation(edgeAgent: Actor, expected: boolean = true) {
+    const { Presentation } = SDK
+
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const presentation = messages.presentationMessagesStack.shift()!
@@ -117,6 +123,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async tryToPresentVerificationRequestWithWrongAnoncred(edgeAgent: Actor) {
+    const { RequestPresentation } = SDK
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
@@ -135,6 +142,8 @@ export class EdgeAgentWorkflow {
   }
 
   static async presentProof(edgeAgent: Actor) {
+    const { RequestPresentation } = SDK
+
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
