@@ -1,11 +1,11 @@
 import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
-import SDK from "@hyperledger/identus-edge-agent-sdk"
+import type SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
 import { randomUUID, UUID } from "crypto"
 
-
+let instance: typeof import("@hyperledger/identus-edge-agent-sdk").default;
 // fallback in any case of dangling sdk agents
 export const agentList: Map<string, WalletSdk> = new Map()
 
@@ -14,6 +14,8 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   store: SDK.Store
   messages: MessageQueue = new MessageQueue()
   id: UUID = randomUUID()
+
+
 
   static async withANewInstance(): Promise<Ability> {
     return new WalletSdk()
@@ -75,6 +77,11 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
   }
 
+  static async loadSDK() {
+    instance ??= require("@hyperledger/identus-edge-agent-sdk");
+    return instance
+  }
+
   async discard(): Promise<void> {
     agentList.delete(this.id)
     if (this.isInitialised()) {
@@ -84,22 +91,29 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async createSdk(seed: SDK.Domain.Seed = undefined) {
-    const { Agent, Apollo, Domain, ListenerKey, } = SDK
+    const {
+      Agent,
+      Apollo,
+      Domain,
+      ListenerKey,
+      Store,
+      Pluto
+    } = await WalletSdk.loadSDK()
     const apollo = new Apollo()
-    this.store = new SDK.Store({
+    this.store = new Store({
       name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
       storage: InMemoryStore,
       password: "random12434",
       ignoreDuplicate: true
     })
-    const pluto = new SDK.Pluto(this.store, apollo)
+    const pluto = new Pluto(this.store, apollo)
     const mediatorDID = Domain.DID.fromString(await WalletSdk.getMediatorDidThroughOob())
     this.sdk = Agent.initialize({ seed, apollo, pluto, mediatorDID })
 
     this.sdk.addListener(
-      ListenerKey.MESSAGE, (messages: SDK.Domain.Message[]) => {
+      ListenerKey.MESSAGE, async (messages: SDK.Domain.Message[]) => {
         for (const message of messages) {
-          this.messages.enqueue(message)
+          await this.messages.enqueue(message)
         }
       }
     )
@@ -139,12 +153,12 @@ class MessageQueue {
 
   receivedMessages: string[] = []
 
-  enqueue(message: SDK.Domain.Message) {
+  async enqueue(message: SDK.Domain.Message) {
     this.queue.push(message)
 
     // auto start processing messages
     if (!this.processingId) {
-      this.processMessages()
+      await this.processMessages()
     }
   }
 
@@ -162,7 +176,8 @@ class MessageQueue {
     return this.queue.length
   }
 
-  processMessages() {
+  async processMessages() {
+    const SDK = await WalletSdk.loadSDK();
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
         const message: SDK.Domain.Message = this.dequeue()
@@ -174,7 +189,6 @@ class MessageQueue {
         }
 
         this.receivedMessages.push(message.id)
-
 
         if (piUri === SDK.ProtocolType.DidcommOfferCredential) {
           this.credentialOfferStack.push(message)

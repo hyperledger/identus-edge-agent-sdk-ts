@@ -3,7 +3,6 @@ import { Actor, Notepad } from "@serenity-js/core"
 import { EdgeAgentWorkflow } from "../workflow/EdgeAgentWorkflow"
 import { CloudAgentWorkflow } from "../workflow/CloudAgentWorkflow"
 import { Utils } from "../Utils"
-import SDK from "@hyperledger/identus-edge-agent-sdk"
 
 Given("{actor} has '{int}' jwt credentials issued by {actor}",
   async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
@@ -180,6 +179,7 @@ Then("{actor} is dismissed",
 
 Then("{actor} will request {actor} to verify the anonymous credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
+    const SDK = await EdgeAgentWorkflow.instance;
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
     const claims = {
@@ -197,6 +197,7 @@ Then("{actor} will request {actor} to verify the anonymous credential",
 
 Then("{actor} will request {actor} to verify the JWT credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
+    const SDK = await EdgeAgentWorkflow.instance;
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
     const claims = {

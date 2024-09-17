@@ -1,4 +1,4 @@
-import SDK from "@hyperledger/identus-edge-agent-sdk"
+import type SDK from "@hyperledger/identus-edge-agent-sdk"
 import { Actor, Duration, Notepad, TakeNotes, Wait } from "@serenity-js/core"
 import { Ensure, equals } from "@serenity-js/assertions"
 import { WalletSdk } from "../abilities/WalletSdk"
@@ -9,6 +9,9 @@ import { assert } from "chai"
 
 
 export class EdgeAgentWorkflow {
+  static get instance() {
+    return WalletSdk.loadSDK()
+  }
 
   static async connect(edgeAgent: Actor) {
     const url = await edgeAgent.answer<string>(Notepad.notes().get("invitation"))
@@ -39,7 +42,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async processIssuedCredential(edgeAgent: Actor, recordId: string) {
-    const { IssueCredential } = SDK;
+    const { IssueCredential } = await this.instance;
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const issuedCredential = messages.issuedCredentialStack.shift()!
@@ -51,7 +54,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async acceptCredential(edgeAgent: Actor) {
-    const { OfferCredential } = SDK
+    const { OfferCredential } = await this.instance;
 
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
@@ -77,7 +80,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async presentVerificationRequest(edgeAgent: Actor) {
-    const { RequestPresentation } = SDK
+    const { RequestPresentation } = await this.instance;
 
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
@@ -100,7 +103,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async verifyPresentation(edgeAgent: Actor, expected: boolean = true) {
-    const { Presentation } = SDK
+    const { Presentation } = await this.instance;
 
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
@@ -123,7 +126,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async tryToPresentVerificationRequestWithWrongAnoncred(edgeAgent: Actor) {
-    const { RequestPresentation } = SDK
+    const { RequestPresentation } = await this.instance;
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
@@ -142,7 +145,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async presentProof(edgeAgent: Actor) {
-    const { RequestPresentation } = SDK
+    const { RequestPresentation } = await this.instance;
 
     await edgeAgent.attemptsTo(
       WalletSdk.execute(async (sdk, messages) => {
@@ -301,6 +304,7 @@ export class EdgeAgentWorkflow {
   }
 
   static async createNewWalletFromBackupWithWrongSeed(edgeAgent: Actor) {
+    const SDK = await this.instance;
     const backup = await edgeAgent.answer(Notepad.notes().get("backup"))
     const walletSdk = new WalletSdk()
     const seed = new SDK.Apollo().createRandomSeed().seed
