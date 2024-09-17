@@ -7,7 +7,7 @@ import type {
   Attachment,
   AttachmentData,
 } from "didcomm-wasm";
-import wasmBuffer from "../../../externals/generated/didcomm-wasm/didcomm_js_bg.wasm"
+import wasmBuffer from "didcomm-wasm/didcomm_js_bg.wasm"
 
 import * as Domain from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
@@ -34,7 +34,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
 
   public static async getDIDComm() {
     this.didcomm ??= await import("didcomm-wasm").then(async module => {
-      const wasmInstance = module.initSync(wasmBuffer);
+      const wasmInstance = module.initSync({ module: wasmBuffer });
       await module.default(wasmInstance);
       return module;
     });

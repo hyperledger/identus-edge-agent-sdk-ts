@@ -838,7 +838,7 @@ export default class Pollux implements IPollux {
   async start() {
     this._anoncreds = await AnoncredsLoader.getInstance();
     this._jwe ??= await import("jwe-wasm").then(async module => {
-      const wasmInstance = module.initSync(wasmBuffer);
+      const wasmInstance = module.initSync({ module: wasmBuffer });
       await module.default(wasmInstance);
       return module;
     });

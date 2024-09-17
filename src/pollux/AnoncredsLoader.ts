@@ -1,6 +1,9 @@
 // import { Anoncreds } from "../domain/models/Anoncreds";
 import type * as Anoncreds from "anoncreds-wasm";
 
+
+
+import wasmBuffer from 'anoncreds-wasm/anoncreds_wasm_bg.wasm';
 /**
  * @class AnoncredsLoader
  * handle loading and access of anoncreds library
@@ -21,18 +24,8 @@ export class AnoncredsLoader {
 
   private async load() {
     this.pkg ??= await import("anoncreds-wasm").then(async module => {
-
-      let wasmBuffer: Buffer;
-      if (typeof window !== 'undefined') {
-        const wasmModule = await import("../../externals/generated/anoncreds-wasm/anoncreds_wasm_bg.wasm")
-        wasmBuffer = wasmModule.default as any
-        module.initSync(wasmBuffer);
-
-      } else {
-        const wasmModule = await import("../../externals/generated/anoncreds-wasm/anoncreds_wasm_bg.wasm")
-        wasmBuffer = wasmModule.default as any
-        module.initSync(wasmBuffer);
-      }
+      const wasmInstance = module.initSync({ module: wasmBuffer });
+      await module.default(wasmInstance);
       return module
     });
   }
