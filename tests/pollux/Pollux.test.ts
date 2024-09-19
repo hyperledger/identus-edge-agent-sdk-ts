@@ -5,8 +5,9 @@ import chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 import SinonChai from "sinon-chai";
 import { assert } from "chai";
+import type { DisclosureFrame, PresentationFrame } from '@sd-jwt/types';
 
-import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, CredentialRequestOptions, CredentialType, Curve, DID, JWT_ALG, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, LinkSecret, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, RevocationType, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
+import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, CredentialType, Curve, DID, JWT_ALG, JWTCredentialPayload, JWTPresentationPayload, JWTVerifiableCredentialProperties, KeyTypes, Message, PolluxError, PresentationClaims, PresentationOptions, PrivateKey, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../src/domain";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import Apollo from "../../src/apollo/Apollo";
@@ -19,6 +20,7 @@ import * as Fixtures from "../fixtures";
 import { SDJWT } from "../../src/pollux/utils/SDJWT";
 import { JWT } from "../../src/pollux/utils/JWT";
 import { SDJWTCredential } from "../../src/pollux/models/SDJWTVerifiableCredential";
+import { SdJwtVcPayload } from '@sd-jwt/sd-jwt-vc';
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -45,7 +47,6 @@ type JWTVerificationTestCase = {
   subject: Record<string, any>,
   claims: Claims;
 };
-import type { DisclosureFrame, PresentationFrame } from '@sd-jwt/types';
 
 
 
@@ -82,7 +83,7 @@ async function createAnoncredsVerificationTestCase(options: AnoncredsVerificatio
 }
 
 
-async function createSDJWTVerificationTestCase<T extends Claims<CredentialType.SDJWT>>(
+async function createSDJWTVerificationTestCase<T extends SdJwtVcPayload>(
   options: {
     challenge?: string,
     apollo: Apollo,
@@ -94,7 +95,9 @@ async function createSDJWTVerificationTestCase<T extends Claims<CredentialType.S
     holderPrv: PrivateKey,
     issuerPrv: PrivateKey,
     payload: T,
+    presentationFrame: PresentationFrame<T>,
     disclosure: DisclosureFrame<T>
+    claims: Claims;
   }
 ) {
   const {
@@ -105,36 +108,38 @@ async function createSDJWTVerificationTestCase<T extends Claims<CredentialType.S
     jwt,
     payload,
     disclosure,
-    challenge = 'sign this'
+    claims
   } = options;
-
-
+  const kid = await (pollux as any).getSigningKid(issuer, issuerPrv);
   const signedJWT = await jwt.sign<typeof payload>({
     issuerDID: issuer,
     privateKey: issuerPrv,
     payload: payload,
     disclosureFrame: disclosure,
+    kid
   });
   const jwtCredential = SDJWTCredential.fromJWS(signedJWT);
   const presentationDefinition = await pollux.createPresentationDefinitionRequest(
     CredentialType.SDJWT,
     {
-      claims: payload,
+      claims,
     },
     new PresentationOptions(
-      {
-        challenge
-      },
+      {},
       CredentialType.SDJWT
     )
   );
-
   const disclosed = await pollux.revealCredentialFields(jwtCredential, []);
   expect(disclosed).to.not.be.undefined;
   expect(Object.keys(disclosed).length).to.gte(1);
   const presentationSubmissionJSON = await pollux.createPresentationSubmission
     <CredentialType.SDJWT>(
-      presentationDefinition,
+      {
+        ...presentationDefinition,
+        options: {
+          presentationFrame: options.presentationFrame
+        }
+      },
       jwtCredential,
       holderPrv
     );
@@ -1050,6 +1055,7 @@ describe("Pollux", () => {
             issuanceDate: new Date(issuanceDate).toISOString(),
             credentialSubject: {
               firstname: "hola",
+              email: 'secret@email.com'
             },
           },
           vct: issuerDID.toString()
@@ -1068,19 +1074,320 @@ describe("Pollux", () => {
           holderPrv: holderPrv,
           issuerPrv: issuerPrv,
           payload: payload,
+          claims: {
+            firstname: {
+              type: 'string',
+              pattern: 'hola'
+            }
+          },
+          //The issuer decided what can be disclosed and what cannot, at the credential level
           disclosure: {
             _sd: ["vc"],
             vc: {
-              _sd: ["@context", "credentialSubject", "issuanceDate", "issuer", "type"]
+              _sd: [
+                "@context",
+                "credentialSubject",
+                "issuanceDate",
+                "issuer",
+                "type"
+              ]
             }
-          }
+          },
+          //At the presentation level the holder chooses which fields it wants to disclose to verifier
+          presentationFrame: {
+            vc: {
+              credentialSubject: {
+                firstname: true
+              }
+            }
+          },
         });
+        // At verification level, the verifier can choose which fields it requires to be included in the presentation and also disclosed fields
+        const requiredClaims = ['vc.credentialSubject.firstname'];
+
         expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
           presentationDefinitionRequest: presentationDefinition,
           issuer: issuerDID,
+          requiredClaims
         })).to.eventually.equal(true);
       });
 
+      test("Should Verify false when the presentation and the credential are completely valid, but verifier asks for a field that was not disclosed by the user", async () => {
+        const issuerSeed = apollo.createRandomSeed().seed;
+        const holderSeed = apollo.createRandomSeed().seed;
+
+        const issuerPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(issuerSeed.value).toString("hex"),
+        });
+
+        const holderPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(holderSeed.value).toString("hex"),
+        });
+
+        const issuerDID = await castor.createPrismDID(
+          issuerPrv.publicKey()
+        );
+
+        const holderDID = await castor.createPrismDID(
+          holderPrv.publicKey()
+        );
+
+        const currentDate = new Date();
+        const nextMonthDate = new Date(currentDate);
+        nextMonthDate.setMonth(currentDate.getMonth() + 1);
+        const issuanceDate = currentDate.getTime();
+        const expirationDate = nextMonthDate.getTime();
+
+        const payload = {
+          iss: issuerDID.toString(),
+          nbf: issuanceDate,
+          exp: expirationDate,
+          sub: holderDID.toString(),
+          vc: {
+            "@context": [W3CVerifiableCredentialContext.credential],
+            type: [W3CVerifiableCredentialType.credential],
+            issuer: issuerDID.toString(),
+            issuanceDate: new Date(issuanceDate).toISOString(),
+            credentialSubject: {
+              firstname: "hola",
+              email: 'secret@email.com'
+            },
+          },
+          vct: issuerDID.toString()
+        };
+
+        const {
+          presentationDefinition,
+          presentationSubmissionJSON,
+        } = await createSDJWTVerificationTestCase<typeof payload>({
+          apollo,
+          castor,
+          jwt: sdJwt,
+          pollux,
+          issuer: issuerDID,
+          holder: holderDID,
+          holderPrv: holderPrv,
+          issuerPrv: issuerPrv,
+          payload: payload,
+          claims: {
+            firstname: {
+              type: 'string',
+              pattern: 'hola'
+            },
+            email: {
+              type: 'string',
+              pattern: '*'
+            }
+          },
+          //The issuer decided what can be disclosed and what cannot, at the credential level
+          disclosure: {
+            _sd: ["vc"],
+            vc: {
+              _sd: [
+                "@context",
+                "credentialSubject",
+                "issuanceDate",
+                "issuer",
+                "type"
+              ],
+              credentialSubject: {
+                _sd: ['email', 'firstname']
+              }
+            }
+          },
+          //At the presentation level the holder chooses which fields it wants to disclose to verifier
+          presentationFrame: {
+            vc: {
+              credentialSubject: {
+                firstname: true,
+                email: false
+              }
+            }
+          },
+        });
+        // At verification level, the verifier can choose which fields it requires to be included in the presentation and also disclosed fields
+        const requiredClaims = ['vc.credentialSubject.email'];
+        // Fails despite the verifier asked for the email, the holder rejected disclosing it
+        expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
+          presentationDefinitionRequest: presentationDefinition,
+          issuer: issuerDID,
+          requiredClaims
+        })).to.eventually.be.rejectedWith(
+          "Invalid Claim: Expected one of the paths $.vc.credentialSubject.email, $.credentialSubject.email, $.email to exist."
+        );
+      });
+
+      test("Should throw an error when the verified presentation and the credential are completely valid, but verifier asks for a field that was not disclosed by the user", async () => {
+        const issuerSeed = apollo.createRandomSeed().seed;
+        const holderSeed = apollo.createRandomSeed().seed;
+
+        const issuerPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(issuerSeed.value).toString("hex"),
+        });
+
+        const holderPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(holderSeed.value).toString("hex"),
+        });
+
+        const issuerDID = await castor.createPrismDID(
+          issuerPrv.publicKey()
+        );
+
+        const holderDID = await castor.createPrismDID(
+          holderPrv.publicKey()
+        );
+
+        const currentDate = new Date();
+        const nextMonthDate = new Date(currentDate);
+        nextMonthDate.setMonth(currentDate.getMonth() + 1);
+        const issuanceDate = currentDate.getTime();
+        const expirationDate = nextMonthDate.getTime();
+
+        const payload = {
+          iss: issuerDID.toString(),
+          nbf: issuanceDate,
+          exp: expirationDate,
+          sub: holderDID.toString(),
+          vc: {
+            "@context": [W3CVerifiableCredentialContext.credential],
+            type: [W3CVerifiableCredentialType.credential],
+            issuer: issuerDID.toString(),
+            issuanceDate: new Date(issuanceDate).toISOString(),
+            credentialSubject: {
+              firstname: "hola",
+              email: 'secret@email.com'
+            },
+          },
+          vct: issuerDID.toString()
+        };
+
+        const {
+          presentationDefinition,
+          presentationSubmissionJSON,
+        } = await createSDJWTVerificationTestCase<typeof payload>({
+          apollo,
+          castor,
+          jwt: sdJwt,
+          pollux,
+          issuer: issuerDID,
+          holder: holderDID,
+          holderPrv: holderPrv,
+          issuerPrv: issuerPrv,
+          payload: payload,
+          claims: {},
+          //The issuer decided what can be disclosed and what cannot, at the credential level
+          disclosure: {
+            _sd: ["vc"],
+            vc: {
+              _sd: [
+                "@context",
+                "credentialSubject",
+                "issuanceDate",
+                "issuer",
+                "type"
+              ],
+              credentialSubject: {
+                _sd: ['email', 'firstname']
+              }
+            }
+          },
+          //At the presentation level the holder chooses which fields it wants to disclose to verifier
+          presentationFrame: {
+            vc: undefined
+          },
+        });
+        // At verification level, the verifier can choose which fields it requires to be included in the presentation and also disclosed fields
+        const requiredClaims = ['vc.credentialSubject.email'];
+        expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
+          presentationDefinitionRequest: presentationDefinition,
+          issuer: issuerDID,
+          requiredClaims
+        })).to.eventually.equal(true);
+      });
+
+      test("Should Verify true when the presentation and the credential are completely valid and uses no disclosure, holder, issuer and verifier don't use it", async () => {
+        const issuerSeed = apollo.createRandomSeed().seed;
+        const holderSeed = apollo.createRandomSeed().seed;
+
+        const issuerPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(issuerSeed.value).toString("hex"),
+        });
+
+        const holderPrv = apollo.createPrivateKey({
+          type: KeyTypes.EC,
+          curve: Curve.ED25519,
+          seed: Buffer.from(holderSeed.value).toString("hex"),
+        });
+
+        const issuerDID = await castor.createPrismDID(
+          issuerPrv.publicKey()
+        );
+
+        const holderDID = await castor.createPrismDID(
+          holderPrv.publicKey()
+        );
+
+        const currentDate = new Date();
+        const nextMonthDate = new Date(currentDate);
+        nextMonthDate.setMonth(currentDate.getMonth() + 1);
+        const issuanceDate = currentDate.getTime();
+        const expirationDate = nextMonthDate.getTime();
+
+        const payload = {
+          iss: issuerDID.toString(),
+          nbf: issuanceDate,
+          exp: expirationDate,
+          sub: holderDID.toString(),
+          vc: {
+            "@context": [W3CVerifiableCredentialContext.credential],
+            type: [W3CVerifiableCredentialType.credential],
+            issuer: issuerDID.toString(),
+            issuanceDate: new Date(issuanceDate).toISOString(),
+            credentialSubject: {
+              firstname: "hola",
+              email: 'secret@email.com'
+            },
+          },
+          vct: issuerDID.toString()
+        };
+
+        const {
+          presentationDefinition,
+          presentationSubmissionJSON,
+        } = await createSDJWTVerificationTestCase<typeof payload>({
+          apollo,
+          castor,
+          jwt: sdJwt,
+          pollux,
+          issuer: issuerDID,
+          holder: holderDID,
+          holderPrv: holderPrv,
+          issuerPrv: issuerPrv,
+          payload: payload,
+          //The issuer decided what can be disclosed and what cannot, at the credential level
+          disclosure: {},
+          //At the presentation level the holder chooses which fields it wants to disclose to verifier
+          presentationFrame: {},
+          claims: {}
+        });
+        // At verification level, the verifier can choose which fields it requires to be included in the presentation and also disclosed fields
+        const requiredClaims = [];
+        expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
+          presentationDefinitionRequest: presentationDefinition,
+          issuer: issuerDID,
+          requiredClaims
+        })).to.eventually.equal(true);
+      });
 
     });
 
@@ -1908,7 +2215,7 @@ describe("Pollux", () => {
       expect(pollux.verifyPresentationSubmission(null as any, {
         presentationDefinitionRequest: null as any
       })).to.eventually.be.rejectedWith(
-        `Verification format is invalid: reason -> Invalid Submission, only JWT or Anoncreds are supported`
+        `Verification format is invalid: reason -> Invalid Submission, only JWT, SDJWT or Anoncreds are supported`
       );
     });
 
@@ -1916,7 +2223,7 @@ describe("Pollux", () => {
       expect(pollux.verifyPresentationSubmission({ presentation_submission: null, verifiablePresentation: null } as any, {
         presentationDefinitionRequest: null as any
       })).to.eventually.be.rejectedWith(
-        `Verification format is invalid: reason -> Invalid Submission, only JWT or Anoncreds are supported`
+        `Verification format is invalid: reason -> Invalid Submission, only JWT, SDJWT or Anoncreds are supported`
       );
     });
 
@@ -1927,7 +2234,7 @@ describe("Pollux", () => {
           presentationDefinitionRequest: undefined
         } as any
       )).to.eventually.be.rejectedWith(
-        `VerifyPresentationSubmission options are invalid`
+        `Invalid Submission, only JWT, SDJWT or Anoncreds are supported`
       );
     });
 
@@ -1983,7 +2290,7 @@ describe("Pollux", () => {
       expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
         presentationDefinitionRequest: presentationDefinition
       })).to.eventually.be.rejectedWith(
-        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected one of the paths $.vc.credentialSubject.course, $.credentialSubject.course to exist.`
+        `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected one of the paths $.vc.credentialSubject.course, $.credentialSubject.course, $.course to exist.`
       );
     });
 
