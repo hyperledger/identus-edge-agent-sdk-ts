@@ -9,7 +9,7 @@ import { base64, base64url } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import * as pako from 'pako';
 import wasmBuffer from "jwe-wasm/jwe_rust_bg.wasm"
-import type { DisclosureFrame, Extensible, PresentationFrame } from '@sd-jwt/types';
+import type { PresentationFrame } from '@sd-jwt/types';
 
 import {
   CredentialRequestOptions,

@@ -1,5 +1,4 @@
 import type * as Anoncreds from "anoncreds-wasm";
-import type { PresentationFrame } from '@sd-jwt/types';
 
 export enum CredentialType {
   JWT = "prism/jwt",
