@@ -171,25 +171,11 @@ export type PresentationExchangeDefinitionRequest = {
   }
 }
 
-export type PresentationExchangeDefinitionRequestOptions = {
-  options?: {
-    challenge: string,
-    domain: string
-  }
-}
-
-export type PresentationExchangeDefinitionSDJWTRequestOptions = {
-  options?: {
-    presentationFrame: PresentationFrame<any>
-  }
-}
-
-export type PresentationSDJWTRequest = any
 
 export type PresentationDefinitionData = {
   [CredentialType.AnonCreds]: PresentationAnoncredsRequest;
-  [CredentialType.JWT]: PresentationExchangeDefinitionRequest & PresentationExchangeDefinitionRequestOptions;
-  [CredentialType.SDJWT]: PresentationExchangeDefinitionRequest & PresentationExchangeDefinitionSDJWTRequestOptions;
+  [CredentialType.JWT]: PresentationExchangeDefinitionRequest;
+  [CredentialType.SDJWT]: PresentationExchangeDefinitionRequest;
   [CredentialType.Unknown]: any;
   [CredentialType.W3C]: any;
 };
@@ -464,19 +450,16 @@ export class SDJWPresentationOptions {
   public name: string;
   public purpose: string;
   public sdjwt?: PresentationJWTOptions
-  public requiredClaims: PresentationFrame<any>
 
   constructor(
     options: {
       name?: string,
       purpose?: string,
-      jwt?: PresentationJWTOptions,
-      requiredClaims?: PresentationFrame<any>
+      jwt?: PresentationJWTOptions
     }
   ) {
     this.name = options.name ?? "Presentation";
     this.purpose = options.purpose ?? "Verifying Credentials";
-    this.requiredClaims = options.requiredClaims ?? {}
     this.sdjwt = options.jwt ?? {
       jwtAlg: [JWT_ALG.ES256K],
     };
