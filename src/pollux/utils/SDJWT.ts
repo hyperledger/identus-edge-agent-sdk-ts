@@ -98,10 +98,10 @@ export class SDJWT extends JWTCore {
   async createPresentationFor<E extends Extensible>(options: {
     jws: string,
     privateKey: Domain.PrivateKey,
-    frame?: PresentationFrame<E> | undefined
+    presentationFrame?: PresentationFrame<E>
   }) {
     const sdjwt = new SDJwtVcInstance(this.getSKConfig(options.privateKey));
-    return sdjwt.present<E>(options.jws, options.frame)
+    return sdjwt.present<E>(options.jws, options.presentationFrame)
   }
 
 

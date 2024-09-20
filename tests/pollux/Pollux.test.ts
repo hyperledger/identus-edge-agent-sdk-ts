@@ -11,6 +11,7 @@ import { AttachmentDescriptor, AttachmentFormats, Claims, Credential, Credential
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 import Castor from "../../src/castor/Castor";
 import Apollo from "../../src/apollo/Apollo";
+import { CredentialOfferPayloads, CredentialOfferTypes, Pollux as IPollux, ProcessedCredentialOfferPayloads } from "../../src/domain/buildingBlocks/Pollux";
 
 import { InvalidJWTString } from "../../src/domain/models/errors/Pollux";
 import Pollux from "../../src/pollux/Pollux";
@@ -36,6 +37,7 @@ const jwtString = jwtParts.join(".");
 
 type JWTVerificationTestCase = {
   challenge?: string,
+  domain?: string,
   apollo: Apollo,
   castor: Castor,
   jwt: JWT,
@@ -85,7 +87,6 @@ async function createAnoncredsVerificationTestCase(options: AnoncredsVerificatio
 
 async function createSDJWTVerificationTestCase<T extends SdJwtVcPayload>(
   options: {
-    challenge?: string,
     apollo: Apollo,
     castor: Castor,
     jwt: SDJWT,
@@ -108,7 +109,8 @@ async function createSDJWTVerificationTestCase<T extends SdJwtVcPayload>(
     jwt,
     payload,
     disclosure,
-    claims
+    claims,
+    presentationFrame
   } = options;
   const kid = await (pollux as any).getSigningKid(issuer, issuerPrv);
   const signedJWT = await jwt.sign<typeof payload>({
@@ -134,14 +136,12 @@ async function createSDJWTVerificationTestCase<T extends SdJwtVcPayload>(
   expect(Object.keys(disclosed).length).to.gte(1);
   const presentationSubmissionJSON = await pollux.createPresentationSubmission
     <CredentialType.SDJWT>(
-      {
-        ...presentationDefinition,
-        options: {
-          presentationFrame: options.presentationFrame
-        }
-      },
+      presentationDefinition,
       jwtCredential,
-      holderPrv
+      holderPrv,
+      {
+        presentationFrame
+      }
     );
   return {
     presentationDefinition,
@@ -161,7 +161,8 @@ async function createJWTVerificationTestCase(options: JWTVerificationTestCase) {
     jwt,
     subject,
     claims,
-    challenge = 'sign this'
+    challenge = 'sign this',
+    domain
   } = options;
 
   const currentDate = new Date();
@@ -926,7 +927,7 @@ describe("Pollux", () => {
         const presentation = await sdjwt.createPresentationFor<typeof claims>(
           {
             jws: credential,
-            frame: { firstname: true, id: true },
+            presentationFrame: { firstname: true, id: true },
             privateKey: sk
           }
         );
@@ -977,7 +978,7 @@ describe("Pollux", () => {
         const presentation = await sdjwt.createPresentationFor<typeof claims>(
           {
             jws: credential,
-            frame: { firstname: true, id: true },
+            presentationFrame: { firstname: true, id: true },
             privateKey: sk
           }
         );
@@ -1209,13 +1210,12 @@ describe("Pollux", () => {
             }
           },
         });
-        // At verification level, the verifier can choose which fields it requires to be included in the presentation and also disclosed fields
-        const requiredClaims = ['vc.credentialSubject.email'];
         // Fails despite the verifier asked for the email, the holder rejected disclosing it
         expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
           presentationDefinitionRequest: presentationDefinition,
           issuer: issuerDID,
-          requiredClaims
+          // At verification level, the verifier can choose which fields it requires to be included in the presentation and also disclosed fields
+          requiredClaims: ['vc.credentialSubject.email']
         })).to.eventually.be.rejectedWith(
           "Invalid Claim: Expected one of the paths $.vc.credentialSubject.email, $.credentialSubject.email, $.email to exist."
         );
@@ -2148,9 +2148,16 @@ describe("Pollux", () => {
         }
       });
 
-      expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
-        presentationDefinitionRequest: presentationDefinition
-      })).to.eventually.be.rejectedWith(
+      expect(
+        pollux.verifyPresentationSubmission(
+          presentationSubmissionJSON,
+          {
+            presentationDefinitionRequest: presentationDefinition,
+            challenge,
+            domain: 'n/a'
+          }
+        )
+      ).to.eventually.be.rejectedWith(
         `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Holder Presentation JWS Signature`
       );
     });
@@ -2205,7 +2212,8 @@ describe("Pollux", () => {
       });
 
       expect(pollux.verifyPresentationSubmission(presentationSubmissionJSON, {
-        presentationDefinitionRequest: presentationDefinition
+        presentationDefinitionRequest: presentationDefinition,
+
       })).to.eventually.be.rejectedWith(
         `Verification failed for credential (${issuedJWS.slice(0, 10)}...): reason -> Invalid Claim: Expected the $.credentialSubject.course field to be "Identus Training course Certification 2024" but got "Identus Training course Certification 2023"`
       );

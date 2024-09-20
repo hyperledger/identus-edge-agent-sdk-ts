@@ -9,6 +9,7 @@ import { base64, base64url } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import * as pako from 'pako';
 import wasmBuffer from "jwe-wasm/jwe_rust_bg.wasm"
+import type { DisclosureFrame, Extensible, PresentationFrame } from '@sd-jwt/types';
 
 import {
   CredentialRequestOptions,
@@ -379,10 +380,15 @@ export default class Pollux implements IPollux {
   private async createJWTPresentationSubmission(
     presentationDefinitionRequest: any,
     credential: Credential,
-    privateKey: PrivateKey
+    privateKey: PrivateKey,
+    options?: {
+      presentationFrame?: PresentationFrame<any>,
+      domain?: string,
+      challenge?: string
+    }
   ): Promise<PresentationSubmission<CredentialType.JWT | CredentialType.SDJWT>> {
 
-    const { presentation_definition, options } = presentationDefinitionRequest;
+    const { presentation_definition } = presentationDefinitionRequest;
     const inputDescriptors = presentation_definition.input_descriptors ?? [];
 
     if (credential.isCredentialType<JWTCredential>(CredentialType.JWT)) {
@@ -421,6 +427,7 @@ export default class Pollux implements IPollux {
         nbf: nbf,
         vp: credential.presentation(),
       }
+
       const challenge = options && "challenge" in options && options?.challenge;
       const domain = options && "domain" in options && options?.domain;
 
@@ -441,21 +448,14 @@ export default class Pollux implements IPollux {
 
     } else if (credential.isCredentialType<SDJWTCredential>(CredentialType.SDJWT)) {
 
-      //TODO: improve this
-      const options: {
-        presentationFrame?: { [name: string]: boolean }
-      } = presentationDefinitionRequest?.options ?? {};
+      const presentationFrame = options && "presentationFrame" in options ?
+        options.presentationFrame :
+        undefined;
 
-      const presentationFrame =
-        options &&
-          "presentationFrame" in options ?
-          options.presentationFrame :
-          {};
-
-      jws = await this.SDJWT.createPresentationFor({
+      jws = await this.SDJWT.createPresentationFor<any>({
         jws: credential.id,
         privateKey,
-        frame: presentationFrame
+        presentationFrame: presentationFrame
       })
     } else {
       throw new PolluxError.InvalidCredentialError("Expected JWT or SDJWT credential")
@@ -499,7 +499,13 @@ export default class Pollux implements IPollux {
   >(
     presentationDefinitionRequest: PresentationDefinitionRequest<Type>,
     credential: Credential,
-    privateKey?: PrivateKey | LinkSecret
+    privateKey?: PrivateKey | LinkSecret,
+    options?: {
+      presentationFrame?: PresentationFrame<any>,
+      domain?: string,
+      challenge?: string
+    }
+
   ): Promise<PresentationSubmission<Type>> {
 
     if (
@@ -514,7 +520,8 @@ export default class Pollux implements IPollux {
       return this.createJWTPresentationSubmission(
         presentationDefinitionRequest,
         credential,
-        privateKey
+        privateKey,
+        options
       )
     }
 
@@ -849,7 +856,7 @@ export default class Pollux implements IPollux {
           JWTCredential.fromJWS(jws);
 
         const issuer = presentation.issuer
-        const presentationDefinitionOptions = presentationDefinitionRequest.options ?? {};
+        const presentationDefinitionOptions = options.presentationDefinitionRequest;
 
         if ("challenge" in presentationDefinitionOptions && "domain" in presentationDefinitionOptions) {
           const challenge = presentationDefinitionOptions?.challenge;
@@ -877,6 +884,10 @@ export default class Pollux implements IPollux {
             issuerDID: issuer,
             jws
           })
+
+          if (!credentialValid) {
+            throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
+          }
         } else {
           const requiredClaims = "requiredClaims" in options && Array.isArray(options.requiredClaims) ?
             options.requiredClaims :
@@ -889,14 +900,13 @@ export default class Pollux implements IPollux {
 
         }
 
+
         let vc: string;
         let verifiableCredentialPropsMapper: DescriptorPath;
         const verifiablePresentation = presentation;
 
         if (descriptorItem.format === DescriptorItemFormat.JWT_VP) {
-          if (!credentialValid) {
-            throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
-          }
+
           const nestedPath = descriptorItem.path_nested;
           if (!nestedPath) {
             throw new InvalidVerifyFormatError(
@@ -932,6 +942,7 @@ export default class Pollux implements IPollux {
           }
           verifiableCredentialPropsMapper = new DescriptorPath(verifiableCredential);
         } else {
+
           const sdjwtPresentation = presentation as SDJWTCredential;
           const claims = await this.SDJWT.reveal(
             sdjwtPresentation.core.jwt?.payload ?? {},
@@ -1315,14 +1326,15 @@ export default class Pollux implements IPollux {
       credential.isCredentialType<SDJWTCredential>(CredentialType.SDJWT)
       && presentationRequest.isType(AttachmentFormats.SDJWT)
       && "privateKey" in options
-    ) {
 
-      const presentationJSON = presentationRequest.toJSON();
-      const frame = presentationJSON.options?.presentationFrame ?? {}
+    ) {
+      const presentationFrame = "presentationFrame" in options ?
+        options.presentationFrame :
+        {};
       const presentationJWS = await this.SDJWT.createPresentationFor<any>(
         {
           jws: credential.id,
-          frame,
+          presentationFrame,
           privateKey: options.privateKey
         }
       )
