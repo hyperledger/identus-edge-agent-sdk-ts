@@ -1091,8 +1091,12 @@ describe("Pollux", () => {
                 "issuanceDate",
                 "issuer",
                 "type"
-              ]
-            }
+              ],
+              credentialSubject: {
+                _sd: ['firstname', 'email']
+              }
+            },
+
           },
           //At the presentation level the holder chooses which fields it wants to disclose to verifier
           presentationFrame: {
