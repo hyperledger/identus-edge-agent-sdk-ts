@@ -171,13 +171,19 @@ const appSlice = createSlice({
         builder.addCase(sendMessage.pending, (state, action) => {
             state.agent.isSendingMessage = true;
             state.agent.hasSentMessage = false;
+            let credentialFormat = SDK.Domain.CredentialType.Unknown;
+            try {
+              credentialFormat = action.meta.arg.message.credentialFormat;
+            }
+            catch {}
+      
             state.messages.push({
                 ...action.meta.arg.message,
                 isAnswering: true,
                 hasAnswered: false,
                 error: null,
                 body: action.meta.arg.message.body,
-                credentialFormat: action.meta.arg.message.credentialFormat
+                credentialFormat
             })
         })
 
