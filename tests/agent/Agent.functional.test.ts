@@ -7,7 +7,6 @@ import Agent from "../../src/edge-agent/Agent";
 import { Pluto } from "../../src";
 import { mockPluto } from "../fixtures/inmemory/factory";
 import * as Fixtures from "../fixtures";
-import { ApolloError } from "../../src/domain";
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -29,7 +28,7 @@ describe("Agent", () => {
       vi.useFakeTimers();
       sandbox = sinon.createSandbox();
       pluto = mockPluto();
-      agent = Agent.initialize({ mediatorDID: Fixtures.DIDs.peerDID1, pluto });
+      agent = Agent.initialize({ pluto });
       await pluto.start();
     });
 

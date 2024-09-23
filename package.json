@@ -37,7 +37,7 @@
     "build:dev": "npm run externals:check && rm -rf build && npm run build:agnostic && npm run types",
     "build:agnostic": "node esbuild.config.mjs",
     "types": "rm -rf build/**/*.d.ts && tsc",
-    "test": "npx vitest --config vitest.config.mjs --run tests",
+    "test": "npx vitest --config vitest.config.mjs --run",
     "coverage": "npm run test -- --coverage",
     "lint": "npx eslint .",
     "docs": "npx typedoc --options typedoc.js",

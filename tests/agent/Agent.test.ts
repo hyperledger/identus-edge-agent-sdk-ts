@@ -182,40 +182,25 @@ describe("Agent Tests", () => {
     });
 
 
-
     it("As a developer with a valid invitationMessage I will be sending a Handshake request with the correct information and store the didPair in pluto right after.", async () => {
-      const connectionManager = agent.connectionManager;
-
-      const did = DID.fromString(
-        "did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ"
-      );
-      const validOOB =
-        "https://my.domain.com/path?_oob=eyJpZCI6Ijg5NWYzMWZhLTIyNWUtNDRlNi1hNzkyLWFhN2E0OGY1MjgzYiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNlenlrY0JqTUtnR1BFRGg0NHBDOFFmdTdjQ3pKb3NWdVY0anA2eDVZNUJITC5WejZNa3dSSnQxU21acDNhRERoTFVuNGZLMzNtOExMWlhXOTJYVDh2clVIdTR1cEE2LlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19";
-
-      const createPeerDID = sandbox.stub(agent, "createNewPeerDID");
-      const sendMessage = sandbox.stub(connectionManager, "sendMessage");
-      const addConnection = sandbox.stub(connectionManager, "addConnection");
+      const did = DID.fromString("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ");
+      const validOOB = "https://my.domain.com/path?_oob=eyJpZCI6Ijg5NWYzMWZhLTIyNWUtNDRlNi1hNzkyLWFhN2E0OGY1MjgzYiIsInR5cGUiOiJodHRwczovL2RpZGNvbW0ub3JnL291dC1vZi1iYW5kLzIuMC9pbnZpdGF0aW9uIiwiZnJvbSI6ImRpZDpwZWVyOjIuRXo2TFNlenlrY0JqTUtnR1BFRGg0NHBDOFFmdTdjQ3pKb3NWdVY0anA2eDVZNUJITC5WejZNa3dSSnQxU21acDNhRERoTFVuNGZLMzNtOExMWlhXOTJYVDh2clVIdTR1cEE2LlNleUowSWpvaVpHMGlMQ0p6SWpvaWFIUjBjSE02THk5ck9ITXRaR1YyTG1GMFlXeGhjSEpwYzIwdWFXOHZjSEpwYzIwdFlXZGxiblF2Wkdsa1kyOXRiU0lzSW5JaU9sdGRMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAiLCJib2R5Ijp7ImdvYWxfY29kZSI6ImlvLmF0YWxhcHJpc20uY29ubmVjdCIsImdvYWwiOiJFc3RhYmxpc2ggYSB0cnVzdCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHBlZXJzIHVzaW5nIHRoZSBwcm90b2NvbCAnaHR0cHM6Ly9hdGFsYXByaXNtLmlvL21lcmN1cnkvY29ubmVjdGlvbnMvMS4wL3JlcXVlc3QnIiwiYWNjZXB0IjpbXX19";
 
       sandbox.stub(UUIDLib, "uuid").returns("123456-123456-12356-123456");
-
-      createPeerDID.resolves(did);
-      sendMessage.resolves();
-      addConnection.resolves();
+      const stubStoreDID = sandbox.stub(agent.pluto, "storeDID").resolves();
+      const stubCreateDID = sandbox.stub(agent.castor, "createPeerDID").resolves(did);
+      const stubSendMessage = sandbox.stub(agent.connectionManager, "sendMessage").resolves();
+      const stubAddConnection = sandbox.stub(agent.connectionManager, "addConnection").resolves();
 
       const oobInvitation = await agent.parseOOBInvitation(new URL(validOOB));
-
-      const validHanshakeMessage = HandshakeRequest.fromOutOfBand(
-        oobInvitation,
-        did
-      ).makeMessage();
-
       await agent.acceptInvitation(oobInvitation);
 
-      expect(createPeerDID.callCount).to.be.equal(1);
-      expect(sendMessage.callCount).to.be.equal(1);
-      expect(addConnection.callCount).to.be.equal(1);
-
-      expect(sendMessage).calledWith(validHanshakeMessage);
+      expect(stubStoreDID).to.have.been.calledOnce;
+      expect(stubAddConnection).to.have.been.calledOnce;
+      expect(stubCreateDID).to.have.been.calledOnce;
+      expect(stubSendMessage).to.have.been.calledWith(
+        HandshakeRequest.fromOutOfBand(oobInvitation, did).makeMessage()
+      );
     });
 
     it("As a developer with a valid invitationMessage I will be sending a presentation with the correct information, but will fail as it is expired.", async () => {
@@ -241,7 +226,6 @@ describe("Agent Tests", () => {
         agent.parseOOBInvitation(new URL(validOOB))
       ).to.eventually.be.rejectedWith(AgentError.InvitationIsInvalidError);
     });
-
   });
 
 

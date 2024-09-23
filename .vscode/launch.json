@@ -30,13 +30,9 @@
       "name": "TESTS",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
       "args": [
-        "--colors",
-        "--workerThreads",
-        "--detectOpenHandles",
-        "--maxWorkers",
-        "1",
+        "run",
         "./tests"
       ],
       "skipFiles": [
@@ -48,14 +44,10 @@
       "name": "TEST:file",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
       "args": [
-        "--colors",
-        "--workerThreads",
-        "--detectOpenHandles",
-        "--maxWorkers",
-        "1",
-        "${fileBasenameNoExtension}",
+        "run",
+        "${relativeFile}"
       ],
       "skipFiles": [
         "${workspaceRoot}/../../node_modules/**/*",
