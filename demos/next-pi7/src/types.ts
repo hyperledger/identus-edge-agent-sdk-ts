@@ -16,8 +16,8 @@ export interface Prescription {
   prescriptionDetails: string;
   dosage: string;
   quantity: number;
-  duration: string;
-  dateIssued: string;
+  issuanceDate: Date,
+  expirationDate: Date
 }
 
 export interface VerificationRequest {
