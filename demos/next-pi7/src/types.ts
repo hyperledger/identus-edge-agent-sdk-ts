@@ -12,17 +12,20 @@ export interface Patient {
 
 export interface Prescription {
     id: string;
-    medication: string;
+    prescriptionName: string;
+    prescriptionDetails: string;
     dosage: string;
-    frequency: string;
+    quantity: number;
     duration: string;
     dateIssued: string;
 }
 
 export interface VerificationRequest {
     id: string;
-    patientName: string;
+    dosage: string,
+    quantity: number,
+    prescriptionName: string,
     prescriptionDetails: string;
-    status: "Pending" | "Verified" | "Rejected";
-    dateRequested: string;
+    issuanceDate: Date,
+    expirationDate: Date
 }

@@ -17,27 +17,21 @@ const Agent: React.FC = () => {
   const [issuedPrescriptions, setIssuedPrescriptions] = useState<Prescription[]>([
     {
       id: "1",
-      medication: "Amoxicillin",
+      prescriptionName: "Amoxicillin",
+      prescriptionDetails: "",
       dosage: "500mg",
-      frequency: "3 times daily",
+      quantity: 1,
       duration: "7 days",
       dateIssued: "2023-04-01",
-    },
-    {
-      id: "2",
-      medication: "Ibuprofen",
-      dosage: "400mg",
-      frequency: "As needed",
-      duration: "5 days",
-      dateIssued: "2023-03-28",
-    },
+    }
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPrescription, setNewPrescription] = useState<Omit<Prescription, 'id' | 'dateIssued'>>({
-    medication: "",
+    prescriptionName: "",
+    prescriptionDetails: "",
     dosage: "",
-    frequency: "",
+    quantity: 0,
     duration: "",
   });
 

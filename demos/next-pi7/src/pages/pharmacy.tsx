@@ -8,37 +8,27 @@ const Pharmacy: React.FC = () => {
     const [verificationRequests, setVerificationRequests] = useState<VerificationRequest[]>([
         {
             id: "1",
-            patientName: "John Doe",
+            dosage: "500mg",
+            quantity: 1,
+            prescriptionName: "John Doe",
             prescriptionDetails: "Amoxicillin 500mg, 3 times daily for 7 days",
-            status: "Pending",
-            dateRequested: "2023-04-01",
-        },
-        {
-            id: "2",
-            patientName: "Jane Smith",
-            prescriptionDetails: "Lisinopril 10mg, once daily",
-            status: "Verified",
-            dateRequested: "2023-03-28",
-        },
+            issuanceDate: new Date(),
+            expirationDate: new Date()
+        }
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newRequest, setNewRequest] = useState({
-        patientName: "",
-        prescriptionDetails: "",
-    });
+    const [newRequest, setNewRequest] = useState<VerificationRequest>();
 
-    const handleRequestChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setNewRequest((prev) => ({ ...prev, [name]: value }));
-    };
 
     const handleSubmitRequest = (e: React.FormEvent) => {
         e.preventDefault();
         const currentDate = new Date().toISOString().split('T')[0];
         const newVerificationRequest: VerificationRequest = {
             id: (verificationRequests.length + 1).toString(),
-            patientName: newRequest.patientName,
+            dosage: "500mg",
+            quantity: 1,
+            prescriptionName: newRequest.prescriptionName,
             prescriptionDetails: newRequest.prescriptionDetails,
             status: "Pending",
             dateRequested: currentDate,
