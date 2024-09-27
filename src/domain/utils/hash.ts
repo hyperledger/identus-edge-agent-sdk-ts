@@ -12,11 +12,11 @@ class InvalidHashingAlgorithm extends Error {
 }
 
 export const hashSync = (data: string | Uint8Array, alg: string) => {
-  if (alg === Alg.SHA256) {
+  if (alg === Alg.SHA256 || alg === Alg.SHA256.toLocaleLowerCase()) {
     return Uint8Array.from(Hashing.sha256().update(data).digest());
   }
 
-  if (alg === Alg.SHA512) {
+  if (alg === Alg.SHA512 || alg === Alg.SHA512.toLocaleLowerCase()) {
     return Uint8Array.from(Hashing.sha512().update(data).digest());
   }
 

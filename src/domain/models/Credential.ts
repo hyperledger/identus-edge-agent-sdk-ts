@@ -16,6 +16,12 @@ export abstract class Credential implements Pluto.Storable {
 
   public readonly uuid = Pluto.makeUUID();
 
+  isCredentialType<
+    C extends Credential
+  >(t: CredentialType): this is C {
+    return this.credentialType === t
+  }
+
   getProperty(name: string) {
     return this.properties.get(name);
   }

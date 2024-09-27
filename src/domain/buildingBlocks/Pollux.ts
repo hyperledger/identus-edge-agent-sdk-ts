@@ -137,9 +137,13 @@ export namespace Pollux {
       }
       export interface JWT {
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.JWT>,
+        challenge?: string,
+        domain?: string
       }
       export interface SDJWT {
+        issuer: DID,
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.SDJWT>,
+        requiredClaims?: string[]
       }
     }
   }
@@ -154,9 +158,8 @@ export namespace Pollux {
         privateKey: PrivateKey;
       }
       export interface SDJWT {
-        did: DID;
         privateKey: PrivateKey;
-
+        presentationFrame: Record<string, boolean>
       }
     }
   }
