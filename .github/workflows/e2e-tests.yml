@@ -108,3 +108,11 @@ jobs:
           name: sdk-ts-e2e-results
           path: integration-tests/e2e-tests/target/sdk-ts-e2e-results.html
           if-no-files-found: error
+
+      - name: Dispatch integration notification
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: input-output-hk/identus-integration
+          event-type: integration
+          client-payload: '{"component": "sdk-ts" }'

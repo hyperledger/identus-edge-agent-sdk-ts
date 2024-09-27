@@ -172,6 +172,16 @@
     reflect-metadata "0.2.1"
     uuid "9.0.1"
 
+"@cucumber/messages@26.0.0":
+  version "26.0.0"
+  resolved "https://registry.yarnpkg.com/@cucumber/messages/-/messages-26.0.0.tgz#ac28dcbd43b3e953e960b62e12ac2eb3bc3193ad"
+  integrity sha512-8czw2GfA1caaTKCnQJkpmly6bU2jwUmHfgH2wV9skVxr79O9UnzjCeCy36XGm87l97G+7AQ5GucsR8wYWu8Fbg==
+  dependencies:
+    "@types/uuid" "10.0.0"
+    class-transformer "0.5.1"
+    reflect-metadata "0.2.2"
+    uuid "10.0.0"
+
 "@cucumber/pretty-formatter@^1.0.0":
   version "1.0.1"
   resolved "https://registry.npmjs.org/@cucumber/pretty-formatter/-/pretty-formatter-1.0.1.tgz"
@@ -668,10 +678,12 @@
     hash.js "1.1.7"
     stream-browserify "3.0.0"
 
-"@hyperledger/identus-edge-agent-sdk@../..":
+"@hyperledger/identus-edge-agent-sdk@../../hyperledger-identus-edge-agent-sdk-3.1.0.tgz":
   version "3.1.0"
+  resolved "../../hyperledger-identus-edge-agent-sdk-3.1.0.tgz#9eaf45ae9ac72fd590192eedaead852a7b9671fd"
   dependencies:
     "@hyperledger/identus-apollo" "^1.4.3"
+    "@noble/ciphers" "^0.6.0"
     "@scure/bip32" "^1.3.0"
     "@scure/bip39" "^1.1.1"
     "@sd-jwt/sd-jwt-vc" "^0.7.1"
@@ -750,6 +762,11 @@
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-0.5.3.tgz#48b536311587125e0d0c1535f73ec8375cd76b23"
   integrity sha512-B0+6IIHiqEs3BPMT0hcRmHvEj2QHOLu+uwt+tqDDeVd0oyVzh7BPrDcPjRnV1PV/5LaknXJJQvOuRGR0zQJz+w==
+
+"@noble/ciphers@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-0.6.0.tgz#a3d82c72ce71ba43128e7eb71757b5ecb75b1273"
+  integrity sha512-mIbq/R9QXk5/cTfESb1OKtyFnk7oc1Om/8onA1158K9/OZUQFDEVy55jVTato+xmp3XX6F6Qh0zz0Nc1AxAlRQ==
 
 "@noble/curves@1.2.0":
   version "1.2.0"
@@ -953,64 +970,64 @@
     "@sd-jwt/types" "0.7.2"
     js-base64 "^3.7.6"
 
-"@serenity-js/assertions@^3.16.0":
-  version "3.24.0"
-  resolved "https://registry.npmjs.org/@serenity-js/assertions/-/assertions-3.24.0.tgz"
-  integrity sha512-xLZOWcqX5Dt+kzOft7c1kwlugMy6eXezurdhlgwAtnAxYCEHxVCocPqZ8umGXXcuSmUBRyyCnX3ax4OmOZS3YA==
+"@serenity-js/assertions@^3.29.2":
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/@serenity-js/assertions/-/assertions-3.29.2.tgz#51fd2f8510f6fd46a131e2377358fb7bd98894cb"
+  integrity sha512-NRT8jdQ/LFKCJvjtrZe2Pr7bf2xk02p/kdpCMfqo3SQuwdeKcunl5p6AnN3/Bn6LXnlXNw9VGcv2sPJ8pnXNug==
   dependencies:
-    "@serenity-js/core" "3.24.0"
-    tiny-types "1.22.0"
+    "@serenity-js/core" "3.29.2"
+    tiny-types "1.23.0"
 
-"@serenity-js/console-reporter@^3.16.0":
-  version "3.24.0"
-  resolved "https://registry.npmjs.org/@serenity-js/console-reporter/-/console-reporter-3.24.0.tgz"
-  integrity sha512-Dp7aEwZ4aEQy7CQTF9XD6V72dZIpFgzvS/LBN2L/IOqN54a9M64+nmh/MqTNpDu0w7JHnm93Rb0cWlX6KvCxdw==
+"@serenity-js/console-reporter@^3.29.2":
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/@serenity-js/console-reporter/-/console-reporter-3.29.2.tgz#fc51af24e521762b503e5fa2b97be564a9f20c82"
+  integrity sha512-fp4lLlvDsamQGLTKka52DanNcLf3XmQqVZSysS9zMrwOQuYfFttsmm1xP7hVUbwdqy5iBIdqvI7biKqALG+KCA==
   dependencies:
-    "@serenity-js/core" "3.24.0"
+    "@serenity-js/core" "3.29.2"
     chalk "4.1.2"
-    tiny-types "1.22.0"
+    tiny-types "1.23.0"
 
-"@serenity-js/core@3.24.0", "@serenity-js/core@^3.16.0":
-  version "3.24.0"
-  resolved "https://registry.npmjs.org/@serenity-js/core/-/core-3.24.0.tgz"
-  integrity sha512-QMfjExR3dFyTms+5TuyAue2eF2PNSF0DYVWsYW48+EN2CogtbbSffujSC+zcu+ANhzB68/5EtDE6UCr+9FhiAw==
+"@serenity-js/core@3.29.2", "@serenity-js/core@^3.29.2":
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/@serenity-js/core/-/core-3.29.2.tgz#ec355ddf5ce51e97ce24692027c86c529171fea6"
+  integrity sha512-vxMMxaT8Fbd/3t8YmeoHDXJMQd9jOa7M8m2jqSQ9dh/JkY1j9/UEIdO6ulUqarNfbK4SkrmXKIPYoO4Mu/Hjyw==
   dependencies:
     "@paralleldrive/cuid2" "2.2.2"
     chalk "4.1.2"
-    diff "5.2.0"
+    diff "6.0.0"
     error-stack-parser "2.1.4"
     fast-glob "3.3.2"
     filenamify "4.3.0"
     graceful-fs "4.2.11"
-    semver "7.6.2"
-    tiny-types "1.22.0"
+    semver "7.6.3"
+    tiny-types "1.23.0"
     upath "2.0.1"
     validate-npm-package-name "5.0.1"
 
-"@serenity-js/cucumber@^3.16.0":
-  version "3.24.0"
-  resolved "https://registry.npmjs.org/@serenity-js/cucumber/-/cucumber-3.24.0.tgz"
-  integrity sha512-uN1iHYHQVcGmPITAq8VjxOsy/6EMDyMS2D36g0adhn/cNBlqwNZ7KBqaHqODBPozbz0cGSZSFhQdGgeM7yYtFQ==
+"@serenity-js/cucumber@^3.29.2":
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/@serenity-js/cucumber/-/cucumber-3.29.2.tgz#d18f14a6b4c2b316f972bcb49d25b77a4d6283e0"
+  integrity sha512-yfxSCfVCObL/rnWvT/YeEVURYG07aSxO4E21q+Y1Tn4hm/dAB0oM5nEm5Lwor/Y8vqY8smmipWZS3tGzcjTyDA==
   dependencies:
-    "@cucumber/messages" "24.1.0"
-    "@serenity-js/core" "3.24.0"
+    "@cucumber/messages" "26.0.0"
+    "@serenity-js/core" "3.29.2"
     cli-table3 "0.6.5"
     gherkin "5.1.0"
-    tiny-types "1.22.0"
+    tiny-types "1.23.0"
 
-"@serenity-js/rest@^3.16.0":
-  version "3.24.0"
-  resolved "https://registry.npmjs.org/@serenity-js/rest/-/rest-3.24.0.tgz"
-  integrity sha512-2mQnD7LO3WvgBbj8z6wcJ0NNdXFzxP4PBAZIhdI8fsn5FPDlkJWhAlbI3hL8lbFt/ipdOYURM+tfNvBF8mtszg==
+"@serenity-js/rest@^3.29.2":
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/@serenity-js/rest/-/rest-3.29.2.tgz#a0aaf090fa82078583926f30223bed9a5e88cf1b"
+  integrity sha512-+j8AJEwyyOuoTClr2LQCWzEbxV6IKgguQFzZ162ZsIuxuK3estxHRSW86e/MmLyjtngvw33tGubAB6vUdjFnlw==
   dependencies:
-    "@serenity-js/core" "3.24.0"
+    "@serenity-js/core" "3.29.2"
     agent-base "7.1.1"
-    axios "1.7.2"
+    axios "1.7.7"
     http-proxy-agent "7.0.2"
-    https-proxy-agent "7.0.4"
-    lru-cache "10.2.2"
+    https-proxy-agent "7.0.5"
+    lru-cache "11.0.1"
     proxy-from-env "1.1.0"
-    tiny-types "1.22.0"
+    tiny-types "1.23.0"
 
 "@sinclair/typebox@^0.32.31":
   version "0.32.35"
@@ -1289,6 +1306,11 @@
   integrity sha512-haXgWcAa3Y3Sn+T8lzkE4ErQUpYzhW6Cz2lh00RhQTyWt+xZ3s87wJPztUxlqSdFRqGhe2MQIBd0XsyHP3No4w==
   dependencies:
     "@types/node" "*"
+
+"@types/uuid@10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-10.0.0.tgz#e9c07fe50da0f53dc24970cca94d619ff03f6f6d"
+  integrity sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==
 
 "@types/uuid@9.0.8":
   version "9.0.8"
@@ -1654,7 +1676,16 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@1.7.2, axios@^1.6.7:
+axios@1.7.7:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.7.tgz#2f554296f9892a72ac8d8e4c5b79c14a91d0a47f"
+  integrity sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
+axios@^1.6.7:
   version "1.7.2"
   resolved "https://registry.npmjs.org/axios/-/axios-1.7.2.tgz"
   integrity sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==
@@ -2110,10 +2141,10 @@ did-resolver@^4.1.0:
   resolved "https://registry.yarnpkg.com/did-resolver/-/did-resolver-4.1.0.tgz#740852083c4fd5bf9729d528eca5d105aff45eb6"
   integrity sha512-S6fWHvCXkZg2IhS4RcVHxwuyVejPR7c+a4Go0xbQ9ps5kILa8viiYQgrM4gfTyeTjJ0ekgJH9gk/BawTpmkbZA==
 
-diff@5.2.0:
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/diff/-/diff-5.2.0.tgz"
-  integrity sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==
+diff@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-6.0.0.tgz#eb5931d25d073c41eb39285aa45f2970d01c6c7a"
+  integrity sha512-NbGtgPSw7il+jeajji1H6iKjCk3r/ANQKw3FFUhGV50+MH5MKIMeUmi53piTr7jlkWcq9eS858qbkRzkehwe+w==
 
 diff@^4.0.1:
   version "4.0.2"
@@ -3021,10 +3052,10 @@ http-proxy-agent@7.0.2:
     agent-base "^7.1.0"
     debug "^4.3.4"
 
-https-proxy-agent@7.0.4:
-  version "7.0.4"
-  resolved "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-7.0.4.tgz"
-  integrity sha512-wlwpilI7YdjSkWaQ/7omYBMTliDcmCN8OLihO6I9B86g06lMyAoqgoDpV0XqoaPOKj+0DIdAvnsWfyAAhmimcg==
+https-proxy-agent@7.0.5:
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-7.0.5.tgz#9e8b5013873299e11fab6fd548405da2d6c602b2"
+  integrity sha512-1e4Wqeblerz+tMKPIq2EMGiiWW1dIjZOksyHWSUm1rmuvw/how9hBHZ38lAGj5ID4Ik6EdkOw7NmWPy6LAwalw==
   dependencies:
     agent-base "^7.0.2"
     debug "4"
@@ -3631,7 +3662,12 @@ lower-case@^2.0.2:
   dependencies:
     tslib "^2.0.3"
 
-lru-cache@10.2.2, lru-cache@^10.2.0:
+lru-cache@11.0.1:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.0.1.tgz#3a732fbfedb82c5ba7bca6564ad3f42afcb6e147"
+  integrity sha512-CgeuL5uom6j/ZVrg7G/+1IXqRY8JXX4Hghfy5YE0EhoYQWvndP1kufu58cmZLNIDKnRhZrXfdS9urVWx98AipQ==
+
+lru-cache@^10.2.0:
   version "10.2.2"
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-10.2.2.tgz"
   integrity sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==
@@ -4263,6 +4299,11 @@ reflect-metadata@0.2.1:
   resolved "https://registry.npmjs.org/reflect-metadata/-/reflect-metadata-0.2.1.tgz"
   integrity sha512-i5lLI6iw9AU3Uu4szRNPPEkomnkjRTaVt9hy/bn5g/oSzekBSMeLZblcjP74AW0vBabqERLLIrz+gR8QYR54Tw==
 
+reflect-metadata@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.2.2.tgz#400c845b6cba87a21f2c65c4aeb158f4fa4d9c5b"
+  integrity sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==
+
 regenerator-runtime@^0.13.4:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
@@ -4471,15 +4512,20 @@ semver@7.5.3:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.6.2, semver@^7.0.0, semver@^7.5.3, semver@^7.5.4:
-  version "7.6.2"
-  resolved "https://registry.npmjs.org/semver/-/semver-7.6.2.tgz"
-  integrity sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==
+semver@7.6.3:
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
+  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
 
 semver@^6.3.1:
   version "6.3.1"
   resolved "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
+
+semver@^7.0.0, semver@^7.5.3, semver@^7.5.4:
+  version "7.6.2"
+  resolved "https://registry.npmjs.org/semver/-/semver-7.6.2.tgz"
+  integrity sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==
 
 set-function-length@^1.2.1:
   version "1.2.2"
@@ -4795,10 +4841,10 @@ tiny-case@^1.0.3:
   resolved "https://registry.npmjs.org/tiny-case/-/tiny-case-1.0.3.tgz"
   integrity sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==
 
-tiny-types@1.22.0:
-  version "1.22.0"
-  resolved "https://registry.npmjs.org/tiny-types/-/tiny-types-1.22.0.tgz"
-  integrity sha512-NQZpeRLP+jbw1iZ/PCNDmAWmm5anY6WpDTQeVfFbu7dmumLQLkcvBFTpBXLwChFp1/U+Mv0DF51KelSIvHP2FA==
+tiny-types@1.23.0:
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/tiny-types/-/tiny-types-1.23.0.tgz#01a7a9f7cc8a8aa93817bfc0cd1f50a6a004255b"
+  integrity sha512-MLLNTCDWF3dJTNZul/oBOFVZlI22iTtEga/BZqeb2VGXo+Ue5Oz6p0I6qIY5Z6jpiYV4lUsEwg3dZUb4vOOBQQ==
 
 tmp@0.2.3:
   version "0.2.3"
@@ -5074,6 +5120,11 @@ util@0.12.5, util@^0.12.5:
     is-generator-function "^1.0.7"
     is-typed-array "^1.1.3"
     which-typed-array "^1.1.2"
+
+uuid@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294"
+  integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
 
 uuid@9.0.1, uuid@^9.0.0:
   version "9.0.1"
