@@ -20,12 +20,12 @@
     "@amagyar-iohk/identus-cloud-agent-client-ts": "^1.36.1",
     "@cucumber/cucumber": "^10.3.1",
     "@cucumber/pretty-formatter": "^1.0.0",
-    "@hyperledger/identus-edge-agent-sdk": "../..",
-    "@serenity-js/assertions": "^3.16.0",
-    "@serenity-js/console-reporter": "^3.16.0",
-    "@serenity-js/core": "^3.16.0",
-    "@serenity-js/cucumber": "^3.16.0",
-    "@serenity-js/rest": "^3.16.0"
+    "@hyperledger/identus-edge-agent-sdk": "../../hyperledger-identus-edge-agent-sdk-3.1.0.tgz",
+    "@serenity-js/assertions": "^3.29.2",
+    "@serenity-js/console-reporter": "^3.29.2",
+    "@serenity-js/core": "^3.29.2",
+    "@serenity-js/cucumber": "^3.29.2",
+    "@serenity-js/rest": "^3.29.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
