@@ -27,63 +27,54 @@ We also have edge agents for other platforms:
 - Agent: A component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
 
 ## Getting started
+We highly recommend you [check out the online docs](https://hyperledger.github.io/identus-docs/docs/getting-started) :world_map:
 
-This repository includes a browser and a Node.js demo application, and also a step-by-step documented process on [how to run it](#running-a-demo-project).
-
-### Use in your project
-You can install and use this library in browsers and nodejs.
+### Install
 
 ```bash
-npm i @hyperledger/identus-edge-agent-sdk --save
+npm i @hyperledger/identus-edge-agent-sdk
 ```
 
-or with yarn
-
+or
 ```bash
 yarn add @atala/prism-wallet-sdk
 ```
 
-### Running a demo project
+### Demo application
+This repository also includes a browser and a Node.js demo application
 
-#### Building from source
-This repository contains compiles typescript code and some rust dependencies for DIDComm and AnonCreds, so in order to build the code from source you will need the following:
-
+#### Build demo dependencies
+The demos assume building this repo from source, so you will need the following:
 * Bash
-* Have Rust ([cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)) and [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/) installed.
+* Rust ([cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)) and [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/) installed.
 * Node JS Version (20/LTS Recommended)
 
-Clone the repository
-```
-git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git --recurse-submodules
-```
-
-To be able to run the demos, we have to build `identus-edge-agent-sdk-ts`.
-From the repository root run:
-
+Clone and build:
 ```bash
+git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git --recurse-submodules
+cd identus-agent-sdk-ts
 npm i
 npm run build
 ```
 
-### Running the sample applications
-We have enabled sample implementations for browsers (React or Next.js) and Node.js.
-To run each demo, ensure the whole SDK builds from the source, then cd into the demo.
+#### Run the demos
+Once you have [built the demo dependencies](#build-demo-dependencies), you can try out each of the demos:
 
-Nodejs CommonJS
-```bash
-cd demos/node-cjs
-npm i
-npm run start
-```
-
-Nodejs Module
+Nodejs Module:
 ```bash
 cd demos/node-esm
 npm i
 npm run start
 ```
 
-Browser NextJS
+Nodejs CommonJS:
+```bash
+cd demos/node-cjs
+npm i
+npm run start
+```
+
+Browser React / NextJS
 ```bash
 cd demos/next
 npm i
