@@ -37,7 +37,7 @@ npm i @hyperledger/identus-edge-agent-sdk
 
 or
 ```bash
-yarn add @atala/prism-wallet-sdk
+yarn add @hyperledger/identus-edge-agent-sdk
 ```
 
 ### Demo application
