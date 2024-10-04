@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L13)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L13)
 
 ## Properties
 
@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L15)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L15)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L12)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L12)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L16)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L16)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L19)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L19)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L18)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L18)
 
 ___
 
@@ -107,17 +107,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:17](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L17)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L17)
 
 ___
 
 ### type
 
-▪ `Static` **type**: `ProtocolType` = `ProtocolType.DidcommProposePresentation`
+▪ `Static` **type**: [`ProtocolType`](../enums/ProtocolType.md) = `ProtocolType.DidcommProposePresentation`
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L11)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L11)
 
 ## Methods
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:29](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L29)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L29)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L42)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L42)
 
 ___
 
@@ -171,4 +171,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L73)
+[src/edge-agent/protocols/proofPresentation/ProposePresentation.ts:63](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/proofPresentation/ProposePresentation.ts#L63)

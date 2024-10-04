@@ -1,3 +1,20 @@
+# [6.2.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.1.1...v6.2.0) (2024-10-04)
+
+
+### Bug Fixes
+
+* e2e cucumber import ([#291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/291)) ([e569d79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e569d799dd50c1bdc5abe26cc9e1471422c0d252))
+* next generation building tools and testing framework ([#258](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/258)) ([54ead35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/54ead350b06df8bbe53212e7189e5762e1e9eb33))
+* sdk module resolution issues ([#290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/290)) ([f53d728](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f53d72829dbb64b64b6998fdcbfcbb47c6b4361a))
+
+
+### Features
+
+* Connectionless Offer ([#293](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/293)) ([97e05e7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/97e05e7ae6b07162dfb48222ba1f42beba97fd2c))
+* integrating error reporting protocol  ([#289](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/289)) ([02430db](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/02430dbd5158607f9f9c227bb9428f3733e0388f))
+* OIDC Agent ([#278](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/278)) ([295e14f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/295e14fdcec839ecfad1190c4644a489a3d56014))
+* separate DIDCommAgent and adding Tasks ([#277](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/277)) ([3a8fd66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/3a8fd6661fae80b05e3fc98154488fc98be504a5))
+
 # [4.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.1.0...v4.0.0) (2024-02-02)
 
 * fix: removing terser to allow an unminified build that is easier to d… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/127

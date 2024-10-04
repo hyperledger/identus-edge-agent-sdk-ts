@@ -120,7 +120,7 @@ export enum KeyProperties {
 
 #### Defined in
 
-[src/apollo/Apollo.ts:119](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L119)
+[src/apollo/Apollo.ts:115](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L115)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/apollo/Apollo.ts:118](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L118)
+[src/apollo/Apollo.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L114)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/apollo/Apollo.ts:120](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L120)
+[src/apollo/Apollo.ts:116](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L116)
 
 ## Methods
 
@@ -217,7 +217,7 @@ Calling this function just generates a new random privateKey for that curve
 
 #### Defined in
 
-[src/apollo/Apollo.ts:329](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L329)
+[src/apollo/Apollo.ts:321](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L321)
 
 ___
 
@@ -255,7 +255,7 @@ Create an EC Key with secp256k1 curve
 
 #### Defined in
 
-[src/apollo/Apollo.ts:215](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L215)
+[src/apollo/Apollo.ts:209](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L209)
 
 ___
 
@@ -283,7 +283,7 @@ This function creates a random mnemonic phrase whose usage is as a seed for gene
 
 #### Defined in
 
-[src/apollo/Apollo.ts:135](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L135)
+[src/apollo/Apollo.ts:131](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L131)
 
 ___
 
@@ -317,7 +317,7 @@ This function creates a random mnemonic phrase and seed.
 
 #### Defined in
 
-[src/apollo/Apollo.ts:186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L186)
+[src/apollo/Apollo.ts:180](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L180)
 
 ___
 
@@ -352,7 +352,7 @@ This function takes mnemonics and passphrases and creates a seed object to gener
 
 #### Defined in
 
-[src/apollo/Apollo.ts:153](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L153)
+[src/apollo/Apollo.ts:149](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L149)
 
 ___
 
@@ -384,7 +384,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/apollo/Apollo.ts:465](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L465)
+[src/apollo/Apollo.ts:445](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L445)
 
 ___
 
@@ -416,4 +416,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/apollo/Apollo.ts:480](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/apollo/Apollo.ts#L480)
+[src/apollo/Apollo.ts:460](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/apollo/Apollo.ts#L460)

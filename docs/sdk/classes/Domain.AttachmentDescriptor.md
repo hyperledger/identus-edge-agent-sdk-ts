@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:41](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L41)
+[src/domain/models/MessageAttachment.ts:43](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L43)
 
 ## Properties
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L48)
+[src/domain/models/MessageAttachment.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L50)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:42](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L42)
+[src/domain/models/MessageAttachment.ts:44](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L44)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:49](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L49)
+[src/domain/models/MessageAttachment.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L51)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:45](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L45)
+[src/domain/models/MessageAttachment.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L47)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:46](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L46)
+[src/domain/models/MessageAttachment.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L48)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L44)
+[src/domain/models/MessageAttachment.ts:46](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L46)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L47)
+[src/domain/models/MessageAttachment.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L49)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:43](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L43)
+[src/domain/models/MessageAttachment.ts:45](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L45)
 
 ## Accessors
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L52)
+[src/domain/models/MessageAttachment.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L54)
 
 ## Methods
 
@@ -181,4 +181,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L56)
+[src/domain/models/MessageAttachment.ts:58](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/MessageAttachment.ts#L58)

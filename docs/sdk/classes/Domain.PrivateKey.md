@@ -77,7 +77,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:146](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L146)
+[src/domain/models/keyManagement/Key.ts:153](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L153)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:148](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L148)
+[src/domain/models/keyManagement/Key.ts:155](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L155)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:147](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L147)
+[src/domain/models/keyManagement/Key.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L154)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:149](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L149)
+[src/domain/models/keyManagement/Key.ts:156](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L156)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:145](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L145)
+[src/domain/models/keyManagement/Key.ts:152](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L152)
 
 ___
 
@@ -157,7 +157,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/PrivateKey.ts#L9)
+[src/domain/models/keyManagement/PrivateKey.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/PrivateKey.ts#L9)
 
 ## Accessors
 
@@ -175,7 +175,7 @@ Key.alg
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L158)
+[src/domain/models/keyManagement/Key.ts:165](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L165)
 
 ___
 
@@ -193,7 +193,7 @@ Key.curve
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/PrivateKey.ts#L11)
+[src/domain/models/keyManagement/PrivateKey.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/PrivateKey.ts#L11)
 
 ___
 
@@ -211,7 +211,7 @@ Only applicable for HD keys
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/PrivateKey.ts#L23)
+[src/domain/models/keyManagement/PrivateKey.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/PrivateKey.ts#L23)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:30](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/PrivateKey.ts#L30)
+[src/domain/models/keyManagement/PrivateKey.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/PrivateKey.ts#L30)
 
 ## Methods
 
@@ -243,7 +243,7 @@ this is VerifiableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:180](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L180)
+[src/domain/models/keyManagement/Key.ts:187](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L187)
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L151)
+[src/domain/models/keyManagement/Key.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L158)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:184](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L184)
+[src/domain/models/keyManagement/Key.ts:191](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L191)
 
 ___
 
@@ -315,7 +315,7 @@ this is T
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:188](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L188)
+[src/domain/models/keyManagement/Key.ts:195](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L195)
 
 ___
 
@@ -333,7 +333,7 @@ this is DerivableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:164](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L164)
+[src/domain/models/keyManagement/Key.ts:171](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L171)
 
 ___
 
@@ -351,7 +351,7 @@ this is All
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:168](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L168)
+[src/domain/models/keyManagement/Key.ts:175](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L175)
 
 ___
 
@@ -369,7 +369,7 @@ this is SignableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:172](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L172)
+[src/domain/models/keyManagement/Key.ts:179](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L179)
 
 ___
 
@@ -387,7 +387,7 @@ this is StorableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:176](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L176)
+[src/domain/models/keyManagement/Key.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/Key.ts#L183)
 
 ___
 
@@ -401,4 +401,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/PrivateKey.ts:7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/PrivateKey.ts#L7)
+[src/domain/models/keyManagement/PrivateKey.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/keyManagement/PrivateKey.ts#L7)

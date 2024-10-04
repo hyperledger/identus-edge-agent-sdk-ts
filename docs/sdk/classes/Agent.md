@@ -8,12 +8,6 @@ Edge agent implementation
 
 Agent
 
-## Implements
-
-- [`AgentCredentials`](../interfaces/AgentCredentials.md)
-- [`AgentDIDHigherFunctions`](../interfaces/AgentDIDHigherFunctions.md)
-- [`AgentInvitations`](../interfaces/AgentInvitations.md)
-
 ## Table of contents
 
 ### Constructors
@@ -22,9 +16,6 @@ Agent
 
 ### Properties
 
-- [agentCredentials](Agent.md#agentcredentials)
-- [agentDIDHigherFunctions](Agent.md#agentdidhigherfunctions)
-- [agentInvitations](Agent.md#agentinvitations)
 - [api](Agent.md#api)
 - [apollo](Agent.md#apollo)
 - [backup](Agent.md#backup)
@@ -45,6 +36,7 @@ Agent
 
 - [acceptDIDCommInvitation](Agent.md#acceptdidcomminvitation)
 - [acceptInvitation](Agent.md#acceptinvitation)
+- [acceptPrismOnboardingInvitation](Agent.md#acceptprismonboardinginvitation)
 - [addListener](Agent.md#addlistener)
 - [createNewPeerDID](Agent.md#createnewpeerdid)
 - [createNewPrismDID](Agent.md#createnewprismdid)
@@ -59,6 +51,7 @@ Agent
 - [processIssuedCredentialMessage](Agent.md#processissuedcredentialmessage)
 - [removeListener](Agent.md#removelistener)
 - [revealCredentialFields](Agent.md#revealcredentialfields)
+- [runTask](Agent.md#runtask)
 - [sendMessage](Agent.md#sendmessage)
 - [signWith](Agent.md#signwith)
 - [start](Agent.md#start)
@@ -67,7 +60,6 @@ Agent
 - [stopFetchingMessages](Agent.md#stopfetchingmessages)
 - [verifiableCredentials](Agent.md#verifiablecredentials)
 - [initialize](Agent.md#initialize)
-- [instanceFromConnectionManager](Agent.md#instancefromconnectionmanager)
 
 ## Constructors
 
@@ -87,8 +79,8 @@ Creates an instance of Agent.
 | `mercury` | [`Mercury`](../interfaces/Domain.Mercury.md) |
 | `mediationHandler` | [`MediatorHandler`](MediatorHandler.md) |
 | `connectionManager` | [`ConnectionsManager`](ConnectionsManager.md) |
-| `seed?` | [`Seed`](../interfaces/Domain.Seed.md) |
-| `api?` | [`Api`](../interfaces/Domain.Api.md) |
+| `seed` | [`Seed`](../interfaces/Domain.Seed.md) |
+| `api` | [`Api`](../interfaces/Domain.Api.md) |
 | `options?` | `AgentOptions` |
 
 #### Returns
@@ -97,39 +89,9 @@ Creates an instance of Agent.
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L84)
+[src/edge-agent/didcomm/Agent.ts:74](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L74)
 
 ## Properties
-
-### agentCredentials
-
-• `Private` **agentCredentials**: `AgentCredentials`
-
-#### Defined in
-
-[src/edge-agent/Agent.ts:64](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L64)
-
-___
-
-### agentDIDHigherFunctions
-
-• `Private` **agentDIDHigherFunctions**: `AgentDIDHigherFunctions`
-
-#### Defined in
-
-[src/edge-agent/Agent.ts:65](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L65)
-
-___
-
-### agentInvitations
-
-• `Private` **agentInvitations**: `AgentInvitations`
-
-#### Defined in
-
-[src/edge-agent/Agent.ts:66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L66)
-
-___
 
 ### api
 
@@ -137,7 +99,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:92](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L92)
+[src/edge-agent/didcomm/Agent.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L82)
 
 ___
 
@@ -147,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:85](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L85)
+[src/edge-agent/didcomm/Agent.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L75)
 
 ___
 
@@ -157,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:62](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L62)
+[src/edge-agent/didcomm/Agent.ts:63](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L63)
 
 ___
 
@@ -167,7 +129,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:86](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L86)
+[src/edge-agent/didcomm/Agent.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L76)
 
 ___
 
@@ -177,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L90)
+[src/edge-agent/didcomm/Agent.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L80)
 
 ___
 
@@ -187,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:89](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L89)
+[src/edge-agent/didcomm/Agent.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L79)
 
 ___
 
@@ -197,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:88](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L88)
+[src/edge-agent/didcomm/Agent.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L78)
 
 ___
 
@@ -207,17 +169,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:87](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L87)
+[src/edge-agent/didcomm/Agent.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L77)
 
 ___
 
 ### pollux
 
-• `Private` **pollux**: [`Pollux`](Pollux.md)
+• `Readonly` **pollux**: [`Pollux`](Pollux.md)
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L68)
+[src/edge-agent/didcomm/Agent.ts:64](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L64)
 
 ___
 
@@ -227,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:91](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L91)
+[src/edge-agent/didcomm/Agent.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L81)
 
 ___
 
@@ -239,7 +201,7 @@ Agent state
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L61)
+[src/edge-agent/didcomm/Agent.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L62)
 
 ## Accessors
 
@@ -255,13 +217,13 @@ Get current mediator DID if available or null
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:220](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L220)
+[src/edge-agent/didcomm/Agent.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L243)
 
 ## Methods
 
 ### acceptDIDCommInvitation
 
-▸ **acceptDIDCommInvitation**(`invitation`, `optionalAlias?`): `Promise`\<`void`\>
+▸ **acceptDIDCommInvitation**(`invitation`, `alias?`): `Promise`\<`void`\>
 
 Asyncronously accept a didcomm v2 invitation, will create a pair between the Agent
  its connecting with and the current owner's did
@@ -271,7 +233,7 @@ Asyncronously accept a didcomm v2 invitation, will create a pair between the Age
 | Name | Type |
 | :------ | :------ |
 | `invitation` | [`OutOfBandInvitation`](OutOfBandInvitation.md) |
-| `optionalAlias?` | `string` |
+| `alias?` | `string` |
 
 #### Returns
 
@@ -283,13 +245,9 @@ Asyncronously accept a didcomm v2 invitation, will create a pair between the Age
 
 **`Async`**
 
-#### Implementation of
-
-[AgentInvitations](../interfaces/AgentInvitations.md).[acceptDIDCommInvitation](../interfaces/AgentInvitations.md#acceptdidcomminvitation)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:444](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L444)
+[src/edge-agent/didcomm/Agent.ts:408](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L408)
 
 ___
 
@@ -312,13 +270,33 @@ Handle an invitation to create a connection
 
 **`Async`**
 
-#### Implementation of
+#### Defined in
 
-[AgentInvitations](../interfaces/AgentInvitations.md).[acceptInvitation](../interfaces/AgentInvitations.md#acceptinvitation)
+[src/edge-agent/didcomm/Agent.ts:330](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L330)
+
+___
+
+### acceptPrismOnboardingInvitation
+
+▸ **acceptPrismOnboardingInvitation**(`invitation`): `Promise`\<`void`\>
+
+Asyncronously accept an onboarding invitation, used to onboard the current DID in the Cloud Agent.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `invitation` | `PrismOnboardingInvitation` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+**`Async`**
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:397](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L397)
+[src/edge-agent/didcomm/Agent.ts:361](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L361)
 
 ___
 
@@ -333,7 +311,7 @@ Add an event listener to get notified from an Event "MESSAGE"
 | Name | Type |
 | :------ | :------ |
 | `eventName` | [`ListenerKey`](../enums/ListenerKey.md) |
-| `callback` | `EventCallback` |
+| `callback` | [`EventCallback`](../modules.md#eventcallback) |
 
 #### Returns
 
@@ -341,7 +319,7 @@ Add an event listener to get notified from an Event "MESSAGE"
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:491](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L491)
+[src/edge-agent/didcomm/Agent.ts:217](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L217)
 
 ___
 
@@ -364,13 +342,9 @@ Asyncronously Create a new PeerDID
 
 **`Async`**
 
-#### Implementation of
-
-[AgentDIDHigherFunctions](../interfaces/AgentDIDHigherFunctions.md).[createNewPeerDID](../interfaces/AgentDIDHigherFunctions.md#createnewpeerdid)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:369](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L369)
+[src/edge-agent/didcomm/Agent.ts:290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L290)
 
 ___
 
@@ -394,13 +368,9 @@ Asyncronously create a new PrismDID
 
 **`Async`**
 
-#### Implementation of
-
-[AgentDIDHigherFunctions](../interfaces/AgentDIDHigherFunctions.md).[createNewPrismDID](../interfaces/AgentDIDHigherFunctions.md#createnewprismdid)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:349](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L349)
+[src/edge-agent/didcomm/Agent.ts:273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L273)
 
 ___
 
@@ -425,27 +395,17 @@ instance of the presentation which we can share with the verifier.
 
 **`Async`**
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[createPresentationForRequestProof](../interfaces/AgentCredentials.md#createpresentationforrequestproof)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:542](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L542)
+[src/edge-agent/didcomm/Agent.ts:510](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L510)
 
 ___
 
 ### handlePresentation
 
-▸ **handlePresentation**\<`Type`\>(`presentation`): `Promise`\<`boolean`\>
+▸ **handlePresentation**(`presentation`): `Promise`\<`boolean`\>
 
 Initiate the Presentation and presentationSubmission
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `Type` | extends [`CredentialType`](../enums/Domain.CredentialType.md) = [`JWT`](../enums/Domain.CredentialType.md#jwt) |
 
 #### Parameters
 
@@ -457,13 +417,9 @@ Initiate the Presentation and presentationSubmission
 
 `Promise`\<`boolean`\>
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[handlePresentation](../interfaces/AgentCredentials.md#handlepresentation)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:594](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L594)
+[src/edge-agent/didcomm/Agent.ts:556](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L556)
 
 ___
 
@@ -509,13 +465,9 @@ Initiate a PresentationRequest from the SDK, to create oob Verification Requests
 );
 ```
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[initiatePresentationRequest](../interfaces/AgentCredentials.md#initiatepresentationrequest)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:578](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L578)
+[src/edge-agent/didcomm/Agent.ts:543](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L543)
 
 ___
 
@@ -533,13 +485,9 @@ ___
 
 `Promise`\<`boolean`\>
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[isCredentialRevoked](../interfaces/AgentCredentials.md#iscredentialrevoked)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:137](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L137)
+[src/edge-agent/didcomm/Agent.ts:447](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L447)
 
 ___
 
@@ -561,19 +509,15 @@ Asyncronously parse an invitation from a valid json string
 
 **`Async`**
 
-#### Implementation of
-
-[AgentInvitations](../interfaces/AgentInvitations.md).[parseInvitation](../interfaces/AgentInvitations.md#parseinvitation)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:386](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L386)
+[src/edge-agent/didcomm/Agent.ts:318](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L318)
 
 ___
 
 ### parseOOBInvitation
 
-▸ **parseOOBInvitation**(`str`): `Promise`\<[`OutOfBandInvitation`](OutOfBandInvitation.md)\>
+▸ **parseOOBInvitation**(`url`): `Promise`\<[`OutOfBandInvitation`](OutOfBandInvitation.md)\>
 
 Asyncronously parse an out of band invitation from a URI as the oob come in format of valid URL
 
@@ -581,7 +525,7 @@ Asyncronously parse an out of band invitation from a URI as the oob come in form
 
 | Name | Type |
 | :------ | :------ |
-| `str` | `URL` |
+| `url` | `URL` |
 
 #### Returns
 
@@ -589,13 +533,9 @@ Asyncronously parse an out of band invitation from a URI as the oob come in form
 
 **`Async`**
 
-#### Implementation of
-
-[AgentInvitations](../interfaces/AgentInvitations.md).[parseOOBInvitation](../interfaces/AgentInvitations.md#parseoobinvitation)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:431](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L431)
+[src/edge-agent/didcomm/Agent.ts:388](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L388)
 
 ___
 
@@ -617,13 +557,9 @@ Asyncronously parse a prismOnboarding invitation from a string
 
 **`Async`**
 
-#### Implementation of
-
-[AgentInvitations](../interfaces/AgentInvitations.md).[parsePrismInvitation](../interfaces/AgentInvitations.md#parseprisminvitation)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:420](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L420)
+[src/edge-agent/didcomm/Agent.ts:349](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L349)
 
 ___
 
@@ -645,19 +581,15 @@ Asyncronously prepare a request credential message from a valid offerCredential 
 
 **`Async`**
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[prepareRequestCredentialWithIssuer](../interfaces/AgentCredentials.md#preparerequestcredentialwithissuer)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:513](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L513)
+[src/edge-agent/didcomm/Agent.ts:479](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L479)
 
 ___
 
 ### processIssuedCredentialMessage
 
-▸ **processIssuedCredentialMessage**(`message`): `Promise`\<[`Credential`](Domain.Credential.md)\>
+▸ **processIssuedCredentialMessage**(`issueCredential`): `Promise`\<[`Credential`](Domain.Credential.md)\>
 
 Extract the verifiableCredential object from the Issue credential message asyncronously
 
@@ -665,7 +597,7 @@ Extract the verifiableCredential object from the Issue credential message asyncr
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`IssueCredential`](IssueCredential.md) |
+| `issueCredential` | [`IssueCredential`](IssueCredential.md) |
 
 #### Returns
 
@@ -673,13 +605,9 @@ Extract the verifiableCredential object from the Issue credential message asyncr
 
 **`Async`**
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[processIssuedCredentialMessage](../interfaces/AgentCredentials.md#processissuedcredentialmessage)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:526](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L526)
+[src/edge-agent/didcomm/Agent.ts:493](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L493)
 
 ___
 
@@ -694,7 +622,7 @@ Remove event listener, used by stop procedure
 | Name | Type |
 | :------ | :------ |
 | `eventName` | [`ListenerKey`](../enums/ListenerKey.md) |
-| `callback` | `EventCallback` |
+| `callback` | [`EventCallback`](../modules.md#eventcallback) |
 
 #### Returns
 
@@ -706,13 +634,13 @@ Remove event listener, used by stop procedure
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:502](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L502)
+[src/edge-agent/didcomm/Agent.ts:228](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L228)
 
 ___
 
 ### revealCredentialFields
 
-▸ **revealCredentialFields**(`credential`, `fields`, `linkSecret`): `Promise`\<\{ `[name: string]`: `any`;  }\>
+▸ **revealCredentialFields**(`credential`, `fields`, `linkSecret`): `Promise`\<`Claim`\>
 
 This method can be used by holders in order to disclose the value of a Credential
 JWT are just encoded plainText
@@ -728,15 +656,37 @@ Anoncreds will really need to be disclosed as the fields are encoded.
 
 #### Returns
 
-`Promise`\<\{ `[name: string]`: `any`;  }\>
-
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[revealCredentialFields](../interfaces/AgentCredentials.md#revealcredentialfields)
+`Promise`\<`Claim`\>
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:268](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L268)
+[src/edge-agent/didcomm/Agent.ts:459](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L459)
+
+___
+
+### runTask
+
+▸ **runTask**\<`T`\>(`task`): `Promise`\<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `task` | `Task`\<`T`, `unknown`\> |
+
+#### Returns
+
+`Promise`\<`T`\>
+
+#### Defined in
+
+[src/edge-agent/didcomm/Agent.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L247)
 
 ___
 
@@ -758,7 +708,7 @@ Asyncronously send a didcomm Message
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:472](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L472)
+[src/edge-agent/didcomm/Agent.ts:438](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L438)
 
 ___
 
@@ -781,13 +731,9 @@ Asyncronously sign a message with a DID
 
 **`Async`**
 
-#### Implementation of
-
-[AgentDIDHigherFunctions](../interfaces/AgentDIDHigherFunctions.md).[signWith](../interfaces/AgentDIDHigherFunctions.md#signwith)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:409](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L409)
+[src/edge-agent/didcomm/Agent.ts:306](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L306)
 
 ___
 
@@ -805,7 +751,7 @@ Asyncronously start the agent
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:283](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L283)
+[src/edge-agent/didcomm/Agent.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L158)
 
 ___
 
@@ -827,7 +773,7 @@ Start fetching for new messages in such way that it can be stopped at any point 
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:455](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L455)
+[src/edge-agent/didcomm/Agent.ts:421](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L421)
 
 ___
 
@@ -845,7 +791,7 @@ Asyncronously stop the agent and any side task that is running
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:330](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L330)
+[src/edge-agent/didcomm/Agent.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L200)
 
 ___
 
@@ -861,7 +807,7 @@ Stops fetching messages
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:462](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L462)
+[src/edge-agent/didcomm/Agent.ts:428](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L428)
 
 ___
 
@@ -875,13 +821,9 @@ Asyncronously get all verifiable credentials
 
 `Promise`\<[`Credential`](Domain.Credential.md)[]\>
 
-#### Implementation of
-
-[AgentCredentials](../interfaces/AgentCredentials.md).[verifiableCredentials](../interfaces/AgentCredentials.md#verifiablecredentials)
-
 #### Defined in
 
-[src/edge-agent/Agent.ts:481](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L481)
+[src/edge-agent/didcomm/Agent.ts:468](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L468)
 
 ___
 
@@ -912,35 +854,4 @@ allowing default instantiation, omitting all but the absolute necessary paramete
 
 #### Defined in
 
-[src/edge-agent/Agent.ts:155](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L155)
-
-___
-
-### instanceFromConnectionManager
-
-▸ **instanceFromConnectionManager**(`apollo`, `castor`, `pluto`, `mercury`, `connectionManager`, `seed?`, `api?`, `options?`): [`Agent`](Agent.md)
-
-Mainly for testing purposes but instantiating the Agent from a ConnectionManager directly
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `apollo` | [`Apollo`](../interfaces/Domain.Apollo.md) |
-| `castor` | [`Castor`](../interfaces/Domain.Castor.md) |
-| `pluto` | [`Pluto`](../interfaces/Domain.Pluto-1.md) |
-| `mercury` | [`Mercury`](../interfaces/Domain.Mercury.md) |
-| `connectionManager` | [`ConnectionsManager`](ConnectionsManager.md) |
-| `seed?` | [`Seed`](../interfaces/Domain.Seed.md) |
-| `api?` | [`Api`](../interfaces/Domain.Api.md) |
-| `options?` | `AgentOptions` |
-
-#### Returns
-
-[`Agent`](Agent.md)
-
-**`Static`**
-
-#### Defined in
-
-[src/edge-agent/Agent.ts:237](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/Agent.ts#L237)
+[src/edge-agent/didcomm/Agent.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/didcomm/Agent.ts#L103)

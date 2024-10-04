@@ -6,7 +6,7 @@ Pluto implementation
 
 Structure:
 - Pluto class is an orchestration layer
-- Repositories handle mapping Domain `<->` Storable Models
+- Repositories handle mapping Domain <-> Storable Models
 - Models suggest db structure
 - Store abstracts db implementation
 

@@ -11,6 +11,7 @@
 ### Namespaces
 
 - [Domain](modules/Domain.md)
+- [OIDC](modules/OIDC.md)
 - [PeerDID](modules/PeerDID.md)
 - [Pluto](modules/Pluto.md)
 
@@ -18,11 +19,13 @@
 
 - [AnonCredsCredentialProperties](enums/AnonCredsCredentialProperties.md)
 - [ListenerKey](enums/ListenerKey.md)
+- [ProtocolType](enums/ProtocolType.md)
 
 ### Classes
 
 - [Agent](classes/Agent.md)
 - [AnonCredsCredential](classes/AnonCredsCredential.md)
+- [ApiImpl](classes/ApiImpl.md)
 - [Apollo](classes/Apollo.md)
 - [BasicMediatorHandler](classes/BasicMediatorHandler.md)
 - [BasicMessage](classes/BasicMessage.md)
@@ -34,6 +37,7 @@
 - [JWTCredential](classes/JWTCredential.md)
 - [MediatorHandler](classes/MediatorHandler.md)
 - [Mercury](classes/Mercury.md)
+- [OIDCAgent](classes/OIDCAgent.md)
 - [OfferCredential](classes/OfferCredential.md)
 - [OutOfBandInvitation](classes/OutOfBandInvitation.md)
 - [PeerDID](classes/PeerDID-1.md)
@@ -48,9 +52,6 @@
 
 ### Interfaces
 
-- [AgentCredentials](interfaces/AgentCredentials.md)
-- [AgentDIDHigherFunctions](interfaces/AgentDIDHigherFunctions.md)
-- [AgentInvitations](interfaces/AgentInvitations.md)
 - [AgentMessageEvents](interfaces/AgentMessageEvents.md)
 - [BasicMessageBody](interfaces/BasicMessageBody.md)
 - [ConnectionsManagerInterface](interfaces/ConnectionsManagerInterface.md)
@@ -70,14 +71,19 @@
 - [PresentationBody](interfaces/PresentationBody.md)
 - [PrismOnboardingInvitationBody](interfaces/PrismOnboardingInvitationBody.md)
 - [PrismRevocationBody](interfaces/PrismRevocationBody.md)
+- [ProblemReportBody](interfaces/ProblemReportBody.md)
 - [ProofTypes](interfaces/ProofTypes.md)
 - [ProposeCredentialBody](interfaces/ProposeCredentialBody.md)
 - [RequestPresentationBody](interfaces/RequestPresentationBody.md)
 
 ### Type Aliases
 
+- [ConnectionEventArg](modules.md#connectioneventarg)
+- [EventCallback](modules.md#eventcallback)
+- [MessageEventArg](modules.md#messageeventarg)
 - [OutOfBandInvitationBody](modules.md#outofbandinvitationbody)
 - [ProposePresentationBody](modules.md#proposepresentationbody)
+- [RevokeEventArg](modules.md#revokeeventarg)
 
 ### Variables
 
@@ -96,13 +102,57 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 ## Type Aliases
 
+### ConnectionEventArg
+
+Ƭ **ConnectionEventArg**: [`DIDPair`](classes/Domain.DIDPair.md)
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/types/index.ts#L49)
+
+___
+
+### EventCallback
+
+Ƭ **EventCallback**: (`arg`: [`MessageEventArg`](modules.md#messageeventarg) \| [`ConnectionEventArg`](modules.md#connectioneventarg) \| [`RevokeEventArg`](modules.md#revokeeventarg)) => `void`
+
+#### Type declaration
+
+▸ (`arg`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `arg` | [`MessageEventArg`](modules.md#messageeventarg) \| [`ConnectionEventArg`](modules.md#connectioneventarg) \| [`RevokeEventArg`](modules.md#revokeeventarg) |
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/types/index.ts#L51)
+
+___
+
+### MessageEventArg
+
+Ƭ **MessageEventArg**: [`Message`](classes/Domain.Message-1.md)[]
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/types/index.ts#L48)
+
+___
+
 ### OutOfBandInvitationBody
 
 Ƭ **OutOfBandInvitationBody**: [`HandshakeRequestBody`](interfaces/HandshakeRequestBody.md)
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L93)
+[src/edge-agent/protocols/types.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/types.ts#L101)
 
 ___
 
@@ -112,7 +162,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L78)
+[src/edge-agent/protocols/types.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/protocols/types.ts#L86)
+
+___
+
+### RevokeEventArg
+
+Ƭ **RevokeEventArg**: [`Credential`](classes/Domain.Credential.md)
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/edge-agent/types/index.ts#L50)
 
 ## Variables
 
@@ -122,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -132,7 +192,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/JWTVerifiableCredential.ts#L23)
+[src/pollux/models/JWTVerifiableCredential.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pollux/models/JWTVerifiableCredential.ts#L22)
 
 ## Functions
 
@@ -159,4 +219,4 @@ request is PresentationDefinitionRequest\<Type\>
 
 #### Defined in
 
-[src/pollux/utils/claims.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/utils/claims.ts#L69)
+[src/pollux/utils/claims.ts:69](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pollux/utils/claims.ts#L69)

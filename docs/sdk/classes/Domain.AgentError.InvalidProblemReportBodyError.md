@@ -1,49 +1,49 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApiError](../modules/Domain.ApiError.md) / InvalidRequestPath
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidProblemReportBodyError
 
-# Class: InvalidRequestPath
+# Class: InvalidProblemReportBodyError
 
-[Domain](../modules/Domain.md).[ApiError](../modules/Domain.ApiError.md).InvalidRequestPath
+[Domain](../modules/Domain.md).[AgentError](../modules/Domain.AgentError.md).InvalidProblemReportBodyError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`InvalidRequestPath`**
+  ↳ **`InvalidProblemReportBodyError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApiError.InvalidRequestPath.md#constructor)
+- [constructor](Domain.AgentError.InvalidProblemReportBodyError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApiError.InvalidRequestPath.md#cause)
-- [message](Domain.ApiError.InvalidRequestPath.md#message)
-- [name](Domain.ApiError.InvalidRequestPath.md#name)
-- [stack](Domain.ApiError.InvalidRequestPath.md#stack)
-- [prepareStackTrace](Domain.ApiError.InvalidRequestPath.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApiError.InvalidRequestPath.md#stacktracelimit)
+- [cause](Domain.AgentError.InvalidProblemReportBodyError.md#cause)
+- [message](Domain.AgentError.InvalidProblemReportBodyError.md#message)
+- [name](Domain.AgentError.InvalidProblemReportBodyError.md#name)
+- [stack](Domain.AgentError.InvalidProblemReportBodyError.md#stack)
+- [prepareStackTrace](Domain.AgentError.InvalidProblemReportBodyError.md#preparestacktrace)
+- [stackTraceLimit](Domain.AgentError.InvalidProblemReportBodyError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApiError.InvalidRequestPath.md#capturestacktrace)
+- [captureStackTrace](Domain.AgentError.InvalidProblemReportBodyError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new InvalidRequestPath**(`path`): [`InvalidRequestPath`](Domain.ApiError.InvalidRequestPath.md)
+• **new InvalidProblemReportBodyError**(`message?`): [`InvalidProblemReportBodyError`](Domain.AgentError.InvalidProblemReportBodyError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `path` | `string` |
+| `message?` | `string` |
 
 #### Returns
 
-[`InvalidRequestPath`](Domain.ApiError.InvalidRequestPath.md)
+[`InvalidProblemReportBodyError`](Domain.AgentError.InvalidProblemReportBodyError.md)
 
 #### Overrides
 
@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Api.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Api.ts#L2)
+[src/domain/models/errors/Agent.ts:165](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/errors/Agent.ts#L165)
 
 ## Properties
 

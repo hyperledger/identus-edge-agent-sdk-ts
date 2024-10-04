@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L61)
+[src/domain/models/DIDDocument.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/DIDDocument.ts#L61)
 
 ## Properties
 
@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L61)
+[src/domain/models/DIDDocument.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/DIDDocument.ts#L61)
