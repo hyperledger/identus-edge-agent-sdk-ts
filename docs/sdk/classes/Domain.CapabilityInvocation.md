@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/DIDDocument.ts#L86)
+[src/domain/models/DIDDocument.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/DIDDocument.ts#L86)
 
 ## Properties
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/DIDDocument.ts#L87)
+[src/domain/models/DIDDocument.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/DIDDocument.ts#L87)
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/DIDDocument.ts#L88)
+[src/domain/models/DIDDocument.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/DIDDocument.ts#L88)

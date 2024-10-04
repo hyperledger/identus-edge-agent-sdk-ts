@@ -30,4 +30,4 @@ Get the presumed JSON from the attachment
 
 #### Defined in
 
-[src/domain/models/Message.ts:190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/Message.ts#L190)
+[src/domain/models/Message.ts:190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/Message.ts#L190)

@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
 
 ## Properties
 
@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L12)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L12)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L17)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L17)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L20)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L20)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L19)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L19)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L18)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L18)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L11)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L11)
 
 ## Accessors
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L30)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L30)
 
 ## Methods
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L34)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L34)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L47)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L47)
 
 ___
 
@@ -189,4 +189,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:67](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L67)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:67](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L67)

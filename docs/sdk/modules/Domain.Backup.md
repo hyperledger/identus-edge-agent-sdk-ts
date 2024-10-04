@@ -30,7 +30,7 @@ All supported backup schemas
 
 #### Defined in
 
-[src/domain/backup/index.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/index.ts#L6)
+[src/domain/backup/index.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/index.ts#L6)
 
 ___
 
@@ -40,11 +40,11 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/v0_0_1.ts#L39)
+[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/v0_0_1.ts#L39)
 
-[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/v0_0_1.ts#L50)
+[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/v0_0_1.ts#L50)
 
-[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/v0_0_1.ts#L52)
+[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/v0_0_1.ts#L52)
 
 ## Variables
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/index.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/index.ts#L8)
+[src/domain/backup/index.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/index.ts#L8)
 
 ___
 
@@ -64,8 +64,8 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/v0_0_1.ts#L39)
+[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/v0_0_1.ts#L39)
 
-[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/v0_0_1.ts#L50)
+[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/v0_0_1.ts#L50)
 
-[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/backup/v0_0_1.ts#L52)
+[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/backup/v0_0_1.ts#L52)

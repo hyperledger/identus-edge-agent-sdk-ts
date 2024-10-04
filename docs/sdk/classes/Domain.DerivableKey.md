@@ -42,4 +42,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/DerivableKey.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/keyManagement/DerivableKey.ts#L4)
+[src/domain/models/keyManagement/DerivableKey.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/keyManagement/DerivableKey.ts#L4)

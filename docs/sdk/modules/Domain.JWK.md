@@ -33,7 +33,7 @@ based on https://www.iana.org/assignments/jose/jose.xhtml
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/keyManagement/exportable/JWK.ts#L18)
+[src/domain/models/keyManagement/exportable/JWK.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/keyManagement/exportable/JWK.ts#L18)
 
 ## Functions
 
@@ -56,4 +56,4 @@ create a JWK from a given Key
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:111](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/keyManagement/exportable/JWK.ts#L111)
+[src/domain/models/keyManagement/exportable/JWK.ts:111](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/models/keyManagement/exportable/JWK.ts#L111)

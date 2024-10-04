@@ -50,7 +50,7 @@ should `body` be included in the request
 
 #### Defined in
 
-[src/edge-agent/helpers/FetchApi.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/helpers/FetchApi.ts#L55)
+[src/edge-agent/helpers/FetchApi.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/helpers/FetchApi.ts#L55)
 
 ___
 
@@ -73,7 +73,7 @@ or return as string
 
 #### Defined in
 
-[src/edge-agent/helpers/FetchApi.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/helpers/FetchApi.ts#L66)
+[src/edge-agent/helpers/FetchApi.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/helpers/FetchApi.ts#L66)
 
 ___
 
@@ -111,4 +111,4 @@ throw ApiError otherwise
 
 #### Defined in
 
-[src/edge-agent/helpers/FetchApi.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/edge-agent/helpers/FetchApi.ts#L7)
+[src/edge-agent/helpers/FetchApi.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/edge-agent/helpers/FetchApi.ts#L7)

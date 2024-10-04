@@ -43,7 +43,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/protocols/KeyRestoration.ts#L14)
+[src/domain/protocols/KeyRestoration.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/protocols/KeyRestoration.ts#L14)
 
 ___
 
@@ -71,4 +71,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/protocols/KeyRestoration.ts#L23)
+[src/domain/protocols/KeyRestoration.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/3c504bead94c87cd52de807c230d8a674846dce5/src/domain/protocols/KeyRestoration.ts#L23)
