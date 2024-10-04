@@ -39,7 +39,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pluto/Pluto.ts#L101)
+[src/pluto/Pluto.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/pluto/Pluto.ts#L101)
 
 ___
 
@@ -68,7 +68,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pluto/Pluto.ts#L87)
+[src/pluto/Pluto.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/pluto/Pluto.ts#L87)
 
 ___
 
@@ -120,7 +120,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/Pluto.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pluto/Pluto.ts#L79)
+[src/pluto/Pluto.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/pluto/Pluto.ts#L79)
 
 ___
 
@@ -137,7 +137,7 @@ Will be called first before any usage, if provided.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pluto/Pluto.ts#L50)
+[src/pluto/Pluto.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/pluto/Pluto.ts#L50)
 
 ___
 
@@ -166,4 +166,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:94](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/pluto/Pluto.ts#L94)
+[src/pluto/Pluto.ts:94](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/pluto/Pluto.ts#L94)

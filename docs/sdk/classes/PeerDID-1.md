@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/peer-did/PeerDID.ts#L31)
+[src/peer-did/PeerDID.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/peer-did/PeerDID.ts#L31)
 
 ## Properties
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/peer-did/PeerDID.ts#L32)
+[src/peer-did/PeerDID.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/peer-did/PeerDID.ts#L32)
 
 ___
 
@@ -52,4 +52,4 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/peer-did/PeerDID.ts#L33)
+[src/peer-did/PeerDID.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/peer-did/PeerDID.ts#L33)

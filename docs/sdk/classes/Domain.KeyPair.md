@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/KeyPair.ts#L10)
+[src/domain/models/KeyPair.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/KeyPair.ts#L10)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/KeyPair.ts#L9)
+[src/domain/models/KeyPair.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/KeyPair.ts#L9)
 
 ## Accessors
 
@@ -61,4 +61,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/models/KeyPair.ts#L5)
+[src/domain/models/KeyPair.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/models/KeyPair.ts#L5)

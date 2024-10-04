@@ -1,3 +1,10 @@
+## [6.2.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.0...v6.2.1) (2024-10-04)
+
+
+### Bug Fixes
+
+* remove optional rollup dependency causing issues ([412988e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/412988e74b53c977d2db02a120bdfcde11978df5))
+
 # [6.2.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.1.1...v6.2.0) (2024-10-04)
 
 

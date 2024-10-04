@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7b4542fdfe44dc06a6c4ef341cf3335e29422147/src/domain/buildingBlocks/Pluto.ts#L25)
+[src/domain/buildingBlocks/Pluto.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/412988e74b53c977d2db02a120bdfcde11978df5/src/domain/buildingBlocks/Pluto.ts#L25)
