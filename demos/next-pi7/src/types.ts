@@ -11,11 +11,11 @@ export interface Patient {
 }
 
 export interface Prescription {
-  id: string;
-  prescriptionName: string;
-  prescriptionDetails: string;
-  dosage: string;
-  quantity: number;
+  patientIdentifier: string,
+  medicationName: string,
+  dosage: string,
+  quantity: number,
+  prescribingDoctor: string,
   issuanceDate: Date,
   expirationDate: Date
 }

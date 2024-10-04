@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import { VerificationRequest } from "@/types";
 import SDK from "@hyperledger/identus-edge-agent-sdk";
 import IndexDB from '@pluto-encrypted/indexdb';
-import { randomUUID } from "crypto";
-import QRCode from "react-qr-code";
-import { QRCodeSVG, QRCodeCanvas } from "qrcode.react";
-
 import { addRxPlugin } from "rxdb";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 addRxPlugin(RxDBDevModePlugin);
