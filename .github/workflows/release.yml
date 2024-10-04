@@ -61,5 +61,5 @@ jobs:
           GIT_AUTHOR_NAME: ${{ steps.import_gpg.outputs.name }}
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
-          npm install && npm i @rollup/rollup-linux-x64-gnu
+          npm install
           npx semantic-release -e ./release.config.js
