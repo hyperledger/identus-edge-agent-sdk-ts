@@ -38,7 +38,7 @@ export class CreatePresentation extends Task<Presentation, Args> {
       uuid(),
       'application/json',
       undefined,
-      Domain.AttachmentFormats.ANONCREDS_PROOF
+      attachmentFormat
     );
     const presentation = new Presentation(
       {

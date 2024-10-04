@@ -543,8 +543,9 @@ export default class DIDCommAgent {
   async initiatePresentationRequest<T extends Domain.CredentialType = Domain.CredentialType.JWT>(type: T, toDID: Domain.DID, presentationClaims: Domain.PresentationClaims<T>): Promise<RequestPresentation> {
     const task = new CreatePresentationRequest({ type, toDID, claims: presentationClaims });
     const requestPresentation = await this.runTask(task);
-    const requestPresentationMessage = requestPresentation.makeMessage();
-    await this.connectionManager.sendMessage(requestPresentationMessage);
+    // TODO dont want this if we're providing a link / qrcode
+    // const requestPresentationMessage = requestPresentation.makeMessage();
+    // await this.connectionManager.sendMessage(requestPresentationMessage);
 
     return requestPresentation;
   }
