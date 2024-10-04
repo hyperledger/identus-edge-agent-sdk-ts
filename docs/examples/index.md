@@ -11,7 +11,13 @@ Start a verification flow from an Edge Agent (holder wallet) and another holder 
 [Start tutorial](./SDKVerification.md)
 
 
-### Connection less presentation
+### Connectionless Credential Offer
+
+How to handle a Connectionless Credential Offer.
+
+[Start tutorial](./ConnectionlessOffer.md)
+
+### Connectionless presentation
 
 Trigger the verifier to generate an out of band verification request. It will work exactly as the didcomm connection invitation links
 
