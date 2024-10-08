@@ -5,8 +5,14 @@ import { PrescriptionModal } from "@/components/PrescriptionModal";
 import { HealthCard } from "@/components/HealthCard";
 
 const BASE_URL = "http://localhost:8090/cloud-agent";
-const PUBLISHED_DID = "";
-const CONNECTION_ID = "";
+/**
+ * During the demo:
+ * 1. Create unpublished ed25519 DID
+ * 2. Publish DID
+ * 3. Create connectionID
+ */
+const PUBLISHED_DID = "did:prism:df3389671b3a458cc226693a886b9a0f1fd403d305deb177f38741319c8c9d94:CrEBCq4BEjYKBWF1dGgxEARKKwoHRWQyNTUxORIgURsOwA5bVlw0Qg1ArlzbVLJW3dplphFjSoM-DwPhXSsSNwoGaXNzdWUxEAJKKwoHRWQyNTUxORIgZoJiDMHCgRY-R2CNqFpZX2bsAsNky3DVuZ1M-nttEEUSOwoHbWFzdGVyMBABSi4KCXNlY3AyNTZrMRIhA-cZDMykLi51VSorocxs_6J5w_8_eQ-YUp6Xyny1ExjN";
+const CONNECTION_ID = "530e0115-b573-4434-8f40-c2c3d3f40f7a";
 
 async function fetchPrescriptions(): Promise<Prescription[]> {
   const myHeaders = new Headers();
@@ -31,13 +37,11 @@ async function issuePrescription(prescription: Prescription): Promise<void> {
       "credentialFormat": "SDJWT",
       "claims": prescription,
       "automaticIssuance": true,
-      "issuingDID": "{{PUBLISHED_DID}}",
-      "connectionId": "{{CONNECTION_ID}}"
+      "issuingDID": `${PUBLISHED_DID}`,
+      "connectionId": `${CONNECTION_ID}`
     })
   };
-  const response = await fetch(BASE_URL + "/issue-credentials/credential-offers", requestOptions);
-  const responseJson = await response.json();
-  return responseJson.contents.filter((prescription) => prescription && prescription.claims.patientIdentifier !== undefined).map((p) => p.claims)
+  await fetch(BASE_URL + "/issue-credentials/credential-offers", requestOptions);
 }
 
 type AgentState = {
