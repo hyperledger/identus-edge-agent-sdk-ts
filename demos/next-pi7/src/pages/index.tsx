@@ -22,9 +22,8 @@ async function fetchPrescriptions(): Promise<Prescription[]> {
   };
   const response = await fetch(BASE_URL + "/issue-credentials/records", requestOptions);
   const responseJson = await response.json();
-  return responseJson.contents.filter((prescription) => {
-    return prescription && prescription.claims.patientIdentifier !== undefined
-  }).map((p) => p.claims)
+  const filteredRecords = responseJson.contents.filter((prescription) => prescription && prescription.claims.patientIdentifier !== undefined)
+  return filteredRecords.map((p) => p.claims).reverse()
 }
 
 async function issuePrescription(prescription: Prescription): Promise<void> {
@@ -129,13 +128,30 @@ const Agent: React.FC = () => {
           </div>
         </div>
       </div>
+
       <button
         onClick={() => setIsModalOpen(true)}
         className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >Issue New Prescription</button>
+
       {isModalOpen &&
         <PrescriptionModal
-          onSubmit={(prescription) => issuePrescription(prescription)}
+          onSubmit={(prescription) => {
+            issuePrescription(prescription).then(() => {
+
+              fetchPrescriptions().then((prescriptions) => {
+                setState({
+                  ...state,
+                  isFetchingPrescriptions: false,
+                  hasFetchedPrescriptions: true
+                })
+                setIssuedPrescriptions(prescriptions)
+                setIsModalOpen(false)
+              })
+            }).catch((err) => {
+              debugger;
+            })
+          }}
           onModalToggle={
             () => setIsModalOpen(!!isModalOpen)
           }
