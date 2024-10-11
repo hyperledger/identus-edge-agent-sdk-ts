@@ -52,7 +52,7 @@ The demos assume building this repo from source, so you will need the following:
 Clone and build:
 ```bash
 git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git --recurse-submodules
-cd identus-agent-sdk-ts
+cd identus-edge-agent-sdk-ts
 npm i
 npm run build
 ```
