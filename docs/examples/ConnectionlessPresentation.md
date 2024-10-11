@@ -1,4 +1,4 @@
-# Cross-Platform Edge SDK Verification
+# Edge SDK Connectionless Presentation
 ## Requirements
 1. A working Identus Mediator and an Identus Cloud Agent.
 2. A holder who already has a JWT Credential issued by a known issuer (prism:did) [Holder A]
@@ -6,7 +6,7 @@
 
 > NOTE:
 >
-> Please follow the [Quick started guide](../../docs/quick-start) to complete steps 1, 2, 3
+> Please follow the [Quick started guide](../../docs/quick-start) to complete steps 1, 2
 
 
 ## Flow
