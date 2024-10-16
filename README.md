@@ -57,29 +57,20 @@ npm i
 npm run build
 ```
 
+If you have any issues while building you can try building from docker (this runs exaclty the same build):
+```bash
+docker build -t atalaprismwalletsdkts:latest "." 
+docker run  -v $(pwd)/build:/app/build atalaprismwalletsdkts:latest
+```
+
 #### Run the demos
 Once you have [built the demo dependencies](#build-demo-dependencies), you can try out each of the demos:
-
-Nodejs Module:
-```bash
-cd demos/node-esm
-npm i
-npm run start
-```
-
-Nodejs CommonJS:
-```bash
-cd demos/node-cjs
-npm i
-npm run start
-```
 
 Browser React / NextJS
 ```bash
 cd demos/next
 npm i
-npm run build # becuase Error: ENOENT: no such file or directory, open '/.../identus-edge-agent-sdk-ts/demos/next/.next/BUILD_ID']
-npm run start
+npm run dev
 ```
 
 ### Implementing storage for the SDK
