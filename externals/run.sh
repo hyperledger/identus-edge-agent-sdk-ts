@@ -89,7 +89,7 @@ buildAnonCreds() {
 
   cd $AnonCredsDir/wasm
 
-  wasm-pack build --target=web --out-dir="${GenAnonCreds}-wasm"
+  RUSTFLAGS='-C target-feature=+bulk-memory' wasm-pack build --target=web --out-dir="${GenAnonCreds}-wasm"
   
   #TODO: find better way to approach this
   #This code fails on browser when wasm is first loaded, it can just be ignored
