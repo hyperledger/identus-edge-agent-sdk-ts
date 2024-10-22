@@ -37,13 +37,8 @@ import { FetchApi } from "../helpers/FetchApi";
 import { ParsePrismInvitation } from "./ParsePrismInvitation";
 import { ParseInvitation } from "./ParseInvitation";
 import { HandleOOBInvitation } from "./HandleOOBInvitation";
-
-enum AgentState {
-  STOPPED = "stopped",
-  STARTING = "starting",
-  RUNNING = "running",
-  STOPPING = "stopping",
-}
+import { Startable } from "../../utils/startable";
+import { notNil } from "../../utils";
 
 /**
  * Edge agent implementation
@@ -52,14 +47,8 @@ enum AgentState {
  * @class Agent
  * @typedef {Agent}
  */
-export default class DIDCommAgent {
-  /**
-   * Agent state
-   *
-   * @public
-   * @type {AgentState}
-   */
-  public state: AgentState = AgentState.STOPPED;
+export default class DIDCommAgent implements Startable.Controller {
+  public state = Startable.State.STOPPED;
   public backup: AgentBackup;
   public readonly pollux: Pollux;
 
@@ -148,64 +137,55 @@ export default class DIDCommAgent {
     return agent;
   }
 
+  start(): Promise<Startable.State> {
+    return Startable.start(this, async () => {
+      try {
+        this.state = Startable.State.STARTING;
+        await this.pluto.start();
+        await this.pollux.start();
+        await this.connectionManager.startMediator();
+      }
+      catch (e) {
+        if (e instanceof Domain.AgentError.NoMediatorAvailableError) {
+          const hostDID = await this.createNewPeerDID([], false);
+          await this.connectionManager.registerMediator(hostDID);
+        }
+        else {
+          throw e;
+        }
+      }
 
-  /**
-   * Asyncronously start the agent
-   *
-   * @async
-   * @returns {Promise<AgentState>}
-   */
-  async start(): Promise<AgentState> {
-    if (this.state !== AgentState.STOPPED) {
-      return this.state;
-    }
+      if (this.connectionManager.mediationHandler.mediator !== undefined) {
+        await this.connectionManager.startFetchingMessages(5);
+      }
+      else {
+        throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
+      }
 
-    try {
-      this.state = AgentState.STARTING;
-      await this.pluto.start();
-      await this.pollux.start();
-      await this.connectionManager.startMediator();
-    } catch (e) {
-      if (e instanceof Domain.AgentError.NoMediatorAvailableError) {
-        const hostDID = await this.createNewPeerDID([], false);
-
-        await this.connectionManager.registerMediator(hostDID);
-
-      } else throw e;
-    }
-
-    if (this.connectionManager.mediationHandler.mediator !== undefined) {
-      await this.connectionManager.startFetchingMessages(5);
-      this.state = AgentState.RUNNING;
-    } else {
-      throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
-    }
-
-    const storedLinkSecret = await this.pluto.getLinkSecret();
-    if (storedLinkSecret == null) {
-      const secret = this.pollux.anoncreds.createLinksecret();
-      const linkSecret = new Domain.LinkSecret(secret);
-      await this.pluto.storeLinkSecret(linkSecret);
-    }
-
-    return this.state;
+      const storedLinkSecret = await this.pluto.getLinkSecret();
+      if (storedLinkSecret == null) {
+        const secret = this.pollux.anoncreds.createLinksecret();
+        const linkSecret = new Domain.LinkSecret(secret);
+        await this.pluto.storeLinkSecret(linkSecret);
+      }
+    });
   }
 
   /**
-   * Asyncronously stop the agent and any side task that is running
+   * Asyncronously stop the agent and dependencies
    *
-   * @async
    * @returns {Promise<void>}
    */
-  async stop(): Promise<void> {
-    if (this.state !== AgentState.RUNNING) {
-      return;
-    }
-    this.state = AgentState.STOPPING;
-    await this.connectionManager.stopAllEvents();
-    await this.connectionManager.stopFetchingMessages();
-    // await this.agent.stop();
-    this.state = AgentState.STOPPED;
+  stop(): Promise<Startable.State> {
+    return Startable.stop(this, async () => {
+      await this.connectionManager.stopAllEvents();
+      await this.connectionManager.stopFetchingMessages();
+      await this.pollux.stop();
+
+      if (notNil(this.pluto.stop)) {
+        await this.pluto.stop();
+      }
+    });
   }
 
   /**

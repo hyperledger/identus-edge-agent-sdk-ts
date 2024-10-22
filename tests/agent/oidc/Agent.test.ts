@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, test, beforeEach, afterEach, MockInstance } from 'vitest';
+import { vi, describe, expect, test, beforeEach, afterEach, MockInstance } from 'vitest';
 import { Apollo, OIDCAgent, Pluto } from "../../../src";
 import { mockPluto } from "../../fixtures/inmemory/factory";
 import { ExpectError } from "../../../src/domain/models/errors/Common";

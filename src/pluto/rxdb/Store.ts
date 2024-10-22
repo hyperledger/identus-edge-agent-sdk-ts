@@ -44,6 +44,11 @@ export class RxdbStore implements Pluto.Store {
     }
   }
 
+  async stop(): Promise<void> {
+    await this.db.destroy();
+    delete this._db;
+  }
+
   async update<T extends Domain.Pluto.Storable>(name: string, model: T): Promise<void> {
     const table = this.getCollection(name);
     const row = await table.findOne({
