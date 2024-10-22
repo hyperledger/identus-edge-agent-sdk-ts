@@ -4,7 +4,8 @@ import * as Models from "./models";
 import { PeerDID } from "../peer-did/PeerDID";
 import { BackupManager } from "./backup/BackupManager";
 import { PlutoRepositories, repositoryFactory } from "./repositories";
-import { Arrayable, asArray } from "../utils";
+import { Arrayable, asArray, notNil } from "../utils";
+import { Startable } from "../utils/startable";
 import { Version } from "../domain/backup";
 
 
@@ -49,6 +50,11 @@ export namespace Pluto {
      * Will be called first before any usage, if provided.
      */
     start?(): Promise<void>;
+
+    /**
+     * Handle any necessary teardown.
+     */
+    stop?(): Promise<void>;
 
     /**
      * Run a query to fetch data from the Store
@@ -104,6 +110,7 @@ export namespace Pluto {
 }
 
 export class Pluto implements Domain.Pluto {
+  public state = Startable.State.STOPPED;
   public BackupMgr: BackupManager;
   private Repositories: PlutoRepositories;
 
@@ -115,10 +122,20 @@ export class Pluto implements Domain.Pluto {
     this.BackupMgr = new BackupManager(this, this.Repositories);
   }
 
-  async start(): Promise<void> {
-    if (this.store.start !== undefined) {
-      await this.store.start();
-    }
+  async start() {
+    await Startable.start(this, async () => {
+      if (notNil(this.store.start)) {
+        await this.store.start();
+      }
+    });
+  }
+
+  async stop() {
+    await Startable.stop(this, async () => {
+      if (notNil(this.store.stop)) {
+        await this.store.stop();
+      }
+    });
   }
 
   /** Backups **/
