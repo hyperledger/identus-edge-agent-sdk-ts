@@ -12,7 +12,8 @@ import { Task } from "../../utils/tasks";
 import * as DIDfns from "../didFunctions";
 import * as Tasks from "./tasks";
 import * as Errors from "./errors";
-import { JsonObj, expect } from "../../utils";
+import { JsonObj, expect, notNil } from "../../utils";
+import { Startable } from "../../utils/startable";
 
 /**
  * https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
@@ -24,20 +25,12 @@ class Connection {
     public readonly issuerMeta: OIDC.IssuerMetadata,
     public readonly scopes: string[],
     public readonly tokenResponse: TokenResponse,
-  ) { }
+  ) {}
 }
 
-// TODO make startable interface
-enum AgentState {
-  STOPPED = "stopped",
-  STARTING = "starting",
-  RUNNING = "running",
-  STOPPING = "stopping",
-}
-
-export class OIDCAgent {
+export class OIDCAgent implements Startable.Controller {
   private connections: Connection[] = [];
-  public state = AgentState.STOPPED;
+  public state = Startable.State.STOPPED;
   public readonly pollux: Pollux;
 
   constructor(
@@ -81,18 +74,21 @@ export class OIDCAgent {
     return agent;
   }
 
-  async start() {
-    if (this.state === AgentState.STOPPED) {
-      this.state = AgentState.STARTING;
+  start(): Promise<Startable.State> {
+    return Startable.start(this, async () => {
       await this.pluto.start();
       await this.pollux.start();
-      this.state = AgentState.RUNNING;
-    }
-    return this.state;
+    });
   }
 
-  async stop(): Promise<void> {
-    this.state = AgentState.STOPPED
+  async stop(): Promise<Startable.State> {
+    return Startable.stop(this, async () => {
+      await this.pollux.stop();
+
+      if (notNil(this.pluto.stop)) {
+        await this.pluto.stop();
+      }
+    });
   }
 
   private runTask<T>(task: Task<T>): Promise<T> {

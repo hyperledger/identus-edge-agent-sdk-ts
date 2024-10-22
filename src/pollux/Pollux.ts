@@ -61,6 +61,7 @@ import { JsonLd, RemoteDocument } from "jsonld/jsonld-spec";
 import { VerificationKeyType } from "../castor/types";
 import { revocationJsonldDocuments } from "../domain/models/revocation";
 import { Bitstring } from "./utils/Bitstring";
+import { Startable } from "../utils/startable";
 
 /**
  * Implementation of Pollux
@@ -69,10 +70,11 @@ import { Bitstring } from "./utils/Bitstring";
  * @class Pollux
  * @typedef {Pollux}
  */
-export default class Pollux implements IPollux {
+export default class Pollux implements IPollux, Startable.Controller {
   private _anoncreds: AnoncredsLoader | undefined;
   private _jwe: typeof import("jwe-wasm") | undefined;
   private _pako = pako;
+  public state = Startable.State.STOPPED;
 
   constructor(
     private apollo: Apollo,
@@ -95,6 +97,21 @@ export default class Pollux implements IPollux {
       throw new Error("Pollux - JWE not loaded");
     }
     return this._jwe;
+  }
+
+  start(): Promise<Startable.State> {
+    return Startable.start(this, async () => {
+      this._anoncreds = await AnoncredsLoader.getInstance();
+      this._jwe ??= await import("jwe-wasm").then(async module => {
+        const wasmInstance = module.initSync({ module: wasmBuffer });
+        await module.default(wasmInstance);
+        return module;
+      });
+    });
+  }
+
+  async stop(): Promise<Startable.State> {
+    return Startable.stop(this, async () => {});
   }
 
   async revealCredentialFields
@@ -833,15 +850,6 @@ export default class Pollux implements IPollux {
     throw new InvalidVerifyFormatError(
       `Invalid Submission, only JWT or Anoncreds are supported`
     );
-  }
-
-  async start() {
-    this._anoncreds = await AnoncredsLoader.getInstance();
-    this._jwe ??= await import("jwe-wasm").then(async module => {
-      const wasmInstance = module.initSync({ module: wasmBuffer });
-      await module.default(wasmInstance);
-      return module;
-    });
   }
 
   private isOfferPayload<Type extends CredentialType>(offer: any, type: Type): offer is CredentialOfferPayloads[CredentialType.JWT] {
