@@ -110,7 +110,7 @@ export default class Pollux implements IPollux {
   ) {
 
     const type = credential.credentialType;
-    if (credential.isCredentialType<AnonCredsCredential>(CredentialType.AnonCreds)) {
+    if (credential instanceof AnonCredsCredential) {
       if (!linkSecret) {
         throw new PolluxError.InvalidCredentialError("Link secret is required when revealing anoncreds fields")
       }
@@ -193,7 +193,7 @@ export default class Pollux implements IPollux {
     try {
       const encodedList = Buffer.from(body.credentialSubject.encodedList, 'base64');
 
-      return this._pako.ungzip(encodedList);
+      return this._pako.ungzip(Uint8Array.from(encodedList));
     } catch (err) {
       throw new PolluxError.InvalidRevocationStatusResponse(`Couldn't ungzip base64 encoded list, err: ${(err as Error).message}`)
     }
@@ -318,7 +318,7 @@ export default class Pollux implements IPollux {
 
   async isCredentialRevoked(credential: Credential): Promise<boolean> {
 
-    if (credential.isCredentialType<JWTCredential>(CredentialType.JWT)) {
+    if (credential instanceof JWTCredential) {
       if (!this.extractVerificationStatusFromCredential(credential.credentialStatus)) {
         if (credential.credentialStatus) {
           throw new PolluxError.CredentialRevocationTypeInvalid(
@@ -351,7 +351,7 @@ export default class Pollux implements IPollux {
   }
 
   private getDescriptorItems(inputDescriptors: InputDescriptor[], credential: Credential): DescriptorItem[] {
-    const isJWT = credential.isCredentialType(CredentialType.JWT)
+    const isJWT = credential instanceof JWTCredential
     return inputDescriptors.map(
       (inputDescriptor) => {
         if (inputDescriptor.format &&
@@ -391,13 +391,13 @@ export default class Pollux implements IPollux {
     const { presentation_definition } = presentationDefinitionRequest;
     const inputDescriptors = presentation_definition.input_descriptors ?? [];
 
-    if (credential.isCredentialType<JWTCredential>(CredentialType.JWT)) {
+    if (credential instanceof JWTCredential) {
       if (
         !this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.JWT)
       ) {
         throw new Error("PresentationDefinition didn't match credential type")
       }
-    } else if (credential.isCredentialType<SDJWTCredential>(CredentialType.SDJWT)) {
+    } else if (credential instanceof SDJWTCredential) {
       if (
         !this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.SDJWT)
       ) {
@@ -421,7 +421,7 @@ export default class Pollux implements IPollux {
 
     let jws: string;
     const nbf = Date.parse(new Date().toISOString());
-    if (credential.isCredentialType<JWTCredential>(CredentialType.JWT)) {
+    if (credential instanceof JWTCredential) {
       const payload: Partial<JWTPayload> = {
         iss: subject,
         nbf: nbf,
@@ -446,7 +446,7 @@ export default class Pollux implements IPollux {
         header: { kid }
       });
 
-    } else if (credential.isCredentialType<SDJWTCredential>(CredentialType.SDJWT)) {
+    } else if (credential instanceof SDJWTCredential) {
 
       const presentationFrame = options && "presentationFrame" in options ?
         options.presentationFrame :
@@ -529,7 +529,7 @@ export default class Pollux implements IPollux {
       presentationDefinitionRequest, CredentialType.AnonCreds)
     ) {
 
-      if (!credential.isCredentialType<AnonCredsCredential>(CredentialType.AnonCreds)) {
+      if (!(credential instanceof AnonCredsCredential)) {
         throw new CastorError.InvalidKeyError("Required a valid Anoncreds Credential for Anoncreds Presentation submission")
       }
 
@@ -1276,7 +1276,7 @@ export default class Pollux implements IPollux {
     options: IPollux.createPresentationProof.options
   ) {
     if (
-      credential.isCredentialType<AnonCredsCredential>(CredentialType.AnonCreds)
+      credential instanceof AnonCredsCredential
       && presentationRequest.isType(AttachmentFormats.AnonCreds)
       && "linkSecret" in options
     ) {
@@ -1297,7 +1297,7 @@ export default class Pollux implements IPollux {
     }
 
     if (
-      credential.isCredentialType<JWTCredential>(CredentialType.JWT)
+      credential instanceof JWTCredential
       && presentationRequest.isType(AttachmentFormats.JWT)
       && "did" in options
       && "privateKey" in options
@@ -1323,7 +1323,7 @@ export default class Pollux implements IPollux {
     }
 
     if (
-      credential.isCredentialType<SDJWTCredential>(CredentialType.SDJWT)
+      credential instanceof SDJWTCredential
       && presentationRequest.isType(AttachmentFormats.SDJWT)
       && "privateKey" in options
 
@@ -1368,7 +1368,7 @@ export default class Pollux implements IPollux {
    */
   private async getSigningKid(did: DID, privateKey: PrivateKey) {
     const pubKey = privateKey.publicKey();
-    const encoded = base58btc.encode(pubKey.to.Buffer());
+    const encoded = base58btc.encode(Uint8Array.from(pubKey.to.Buffer()));
     const document = await this.castor.resolveDID(did.toString());
 
     const signingKey = document.verificationMethods.find(key => {
