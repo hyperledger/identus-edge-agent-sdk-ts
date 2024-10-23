@@ -65,6 +65,7 @@
     "@esbuild-plugins/node-resolve": "^0.2.2",
     "@playwright/test": "^1.45.1",
     "@pluto-encrypted/inmemory": "^1.12.3",
+    "@rollup/rollup-linux-x64-gnu": "^4.24.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/exec": "^6.0.3",
