@@ -129,7 +129,7 @@
     "webdriverio": "^7.16.4"
   },
   "dependencies": {
-    "@hyperledger/identus-apollo": "^1.4.3",
+    "@hyperledger/identus-apollo": "^1.4.4",
     "@noble/ciphers": "^0.6.0",
     "@scure/bip32": "^1.3.0",
     "@scure/bip39": "^1.1.1",
