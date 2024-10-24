@@ -224,13 +224,17 @@ export default class Castor implements CastorInterface {
    */
   async resolveDID(did: string): Promise<DIDDocument> {
     const parsed = DID.fromString(did);
-    const resolver = this.resolvers.find(
+    const resolvers = this.resolvers.filter(
       (resolver) => resolver.method === parsed.method
     );
-    if (!resolver) {
-      throw new CastorError.NotPossibleToResolveDID();
+    for (let resolver of resolvers) {
+      try {
+        return await resolver.resolve(did)
+      } catch (err) {
+        console.log("Failed resolving did " + did)
+      }
     }
-    return resolver.resolve(did);
+    throw new Error("Non of the available Castor resolvers could resolve the did")
   }
 
   /**
