@@ -476,6 +476,7 @@ export function Message({ message }) {
                                   if (!agent) {
                                     throw new Error("Start the agent first");
                                   }
+                                  debugger;
                                   app.acceptPresentationRequest({
                                     agent,
                                     message,

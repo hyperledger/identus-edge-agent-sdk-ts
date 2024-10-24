@@ -49,7 +49,7 @@ export type ProcessedCredentialOfferPayloads = {
  */
 export interface Pollux {
 
-  revealCredentialFields: (credential: Credential, fields: string[], linkSecret: string) => Promise<{
+  revealCredentialFields: (credential: Credential, fields: string[], linkSecret?: string) => Promise<{
     [name: string]: any
   }>;
 

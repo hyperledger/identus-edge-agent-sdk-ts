@@ -388,7 +388,6 @@ export default class Pollux implements IPollux {
 
     const { presentation_definition } = presentationDefinitionRequest;
     const inputDescriptors = presentation_definition.input_descriptors ?? [];
-
     if (credential instanceof JWTCredential) {
       if (
         !this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.JWT)
@@ -404,21 +403,20 @@ export default class Pollux implements IPollux {
     }
 
     const descriptorItems: DescriptorItem[] = this.getDescriptorItems(inputDescriptors, credential)
-
     if (!privateKey.isSignable()) {
       throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.")
     }
-
     if (!credential.isProvable()) {
       throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
     }
 
-    const subject = credential.subject;
+    const disclosedFields = await this.revealCredentialFields(credential, ['subject', 'sub']);
+    const subject = disclosedFields['subject'] || disclosedFields['sub'];
     const issuerDID = DID.fromString(subject);
     const kid = await this.getSigningKid(issuerDID, privateKey);
-
     let jws: string;
     const nbf = Date.parse(new Date().toISOString());
+
     if (credential instanceof JWTCredential) {
       const payload: Partial<JWTPayload> = {
         iss: subject,
@@ -455,6 +453,7 @@ export default class Pollux implements IPollux {
         privateKey,
         presentationFrame: presentationFrame
       })
+
     } else {
       throw new PolluxError.InvalidCredentialError("Expected JWT or SDJWT credential")
     }
@@ -469,6 +468,7 @@ export default class Pollux implements IPollux {
         jws
       ]
     }
+
     return presentationSubmission
   }
 
@@ -505,16 +505,13 @@ export default class Pollux implements IPollux {
     }
 
   ): Promise<PresentationSubmission<Type>> {
-
     if (
       this.isPresentationDefinitionRequestType<CredentialType.JWT>(presentationDefinitionRequest, CredentialType.JWT) ||
       this.isPresentationDefinitionRequestType<CredentialType.SDJWT>(presentationDefinitionRequest, CredentialType.SDJWT)
     ) {
-
       if (!privateKey || !(privateKey instanceof PrivateKey)) {
         throw new CastorError.InvalidKeyError("Required a valid private key for a JWT Presentation submission")
       }
-
       return this.createJWTPresentationSubmission(
         presentationDefinitionRequest,
         credential,
@@ -839,7 +836,6 @@ export default class Pollux implements IPollux {
     const inputDescriptors = presentationDefinitionRequest.presentation_definition.input_descriptors;
     const presentationSubmissionMapper = new DescriptorPath(presentationSubmission);
     const descriptorMaps = presentationSubmission.presentation_submission.descriptor_map;
-
     for (const descriptorItem of descriptorMaps) {
 
       if (descriptorItem.format === DescriptorItemFormat.JWT_VP || descriptorItem.format === DescriptorItemFormat.SDJWT) {

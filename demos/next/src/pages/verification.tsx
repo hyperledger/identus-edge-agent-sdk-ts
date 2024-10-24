@@ -144,7 +144,6 @@ const VerificationRequestAnoncreds: React.FC<{ onHandleInitiate: <T extends SDK.
 
 const VerificationRequestJWT: React.FC<{ onHandleInitiate: <T extends SDK.Domain.CredentialType = SDK.Domain.CredentialType.JWT>(claims: SDK.Domain.PresentationClaims<T>, type: T) => void }> = props => {
     const [presentationClaims, setPresentationClaims] = useState<SDK.Domain.PresentationClaims>();
-
     const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress=test@email.com")
     const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:a0209ebd691c5ec20636f206b3e101c726fdc1c22b9b850b4b811ac4a82e28d8")
 
@@ -231,6 +230,7 @@ const VerificationRequest: React.FC<{}> = props => {
             id="verificationType"
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value={SDK.Domain.CredentialType.JWT}>JWT</option>
+            <option value={SDK.Domain.CredentialType.SDJWT}>SD+JWT</option>
             <option value={SDK.Domain.CredentialType.AnonCreds}>Anoncreds</option>
         </select>
 
@@ -238,10 +238,11 @@ const VerificationRequest: React.FC<{}> = props => {
             label="To"
             onSelect={(connection) => {
                 setSendTo(connection.receiver.toString())
-            }} />
+            }}
+        />
 
         {
-            type === SDK.Domain.CredentialType.JWT &&
+            (type === SDK.Domain.CredentialType.JWT || type === SDK.Domain.CredentialType.SDJWT) &&
             <VerificationRequestJWT onHandleInitiate={onHandleInitiate} />
         }
         {
