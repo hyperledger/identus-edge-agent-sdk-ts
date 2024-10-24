@@ -38,8 +38,9 @@ export class CreatePresentation extends Task<Presentation, Args> {
       uuid(),
       'application/json',
       undefined,
-      Domain.AttachmentFormats.ANONCREDS_PROOF
+      this.submissionFormat
     );
+
     const presentation = new Presentation(
       {
         comment: request.body.comment,
@@ -54,6 +55,28 @@ export class CreatePresentation extends Task<Presentation, Args> {
     );
 
     return presentation;
+  }
+
+  get submissionFormat() {
+    const { request, credential } = this.args;
+    const attachment = request.attachments.at(0);
+    if (!attachment) {
+      throw new Domain.AgentError.OfferDoesntProvideEnoughInformation();
+    }
+    const attachmentFormat = attachment.format ?? 'unknown';
+    if (attachmentFormat === Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
+      return Domain.AttachmentFormats.PRESENTATION_EXCHANGE_SUBMISSION
+    }
+    if (credential.credentialType === Domain.CredentialType.AnonCreds) {
+      return Domain.AttachmentFormats.ANONCREDS_PROOF
+    }
+    if (credential.credentialType === Domain.CredentialType.JWT) {
+      return Domain.AttachmentFormats.JWT
+    }
+    if (credential.credentialType === Domain.CredentialType.SDJWT) {
+      return Domain.AttachmentFormats.SDJWT
+    }
+    return undefined
   }
 
   /**
@@ -90,7 +113,34 @@ export class CreatePresentation extends Task<Presentation, Args> {
   ): Promise<string> {
     if (request.isType(Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
       if (credential instanceof JWTCredential) {
+        if (!credential.isProvable()) {
+          throw new Error("Credential is not Provable");
+        }
         const privateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(Domain.DID.fromString(credential.subject));
+        const privateKey = privateKeys.at(0);
+        if (!privateKey) {
+          throw new Error("Undefined privatekey from credential subject.");
+        }
+        if (!request.isType(Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS)) {
+          throw new Error("Undefined privatekey from credential subject.");
+        }
+        const presentationSubmission = await ctx.Pollux.createPresentationSubmission(
+          request.toJSON(),
+          credential,
+          privateKey
+        );
+        return JSON.stringify(presentationSubmission);
+      }
+
+      if (credential instanceof SDJWTCredential) {
+        if (!credential.isProvable()) {
+          throw new Error("Credential is not Provable");
+        }
+        const { sub } = await ctx.Pollux.revealCredentialFields(
+          credential,
+          ['subject', 'sub']
+        )
+        const privateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(Domain.DID.fromString(sub));
         const privateKey = privateKeys.at(0);
         if (!privateKey) {
           throw new Error("Undefined privatekey from credential subject.");
@@ -135,16 +185,21 @@ export class CreatePresentation extends Task<Presentation, Args> {
       if (!credential.isProvable()) {
         throw new Error("Credential is not Provable");
       }
-      const subjectDID = Domain.DID.from(credential.subject);
+      const disclosed = await ctx.Pollux.revealCredentialFields(credential, ['subject', 'sub'])
+      const subjectDID = Domain.DID.from(disclosed.sub);
+
       const prismPrivateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(subjectDID);
-      const prismPrivateKey = prismPrivateKeys.find((key) => key.curve === Domain.Curve.ED25519);
+      const prismPrivateKey = prismPrivateKeys.sort((a, b) => a.index! - b.index!).at(0);
+
       if (prismPrivateKey === undefined) {
         throw new Domain.AgentError.CannotFindDIDPrivateKey();
       }
+
       const signedJWT = await ctx.Pollux.createPresentationProof(request, credential, {
         did: subjectDID,
         privateKey: prismPrivateKey
       });
+
       return signedJWT;
     }
 

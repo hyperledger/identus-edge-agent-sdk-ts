@@ -353,8 +353,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
           baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
           baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
           baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
-
-          if (derivationParam) {
+          if (defaultPath) {
             const privateKey = baseKey.derive(defaultPath);
             return privateKey;
           }
@@ -402,7 +401,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
         baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
 
-        if (derivationParam) {
+        if (defaultPath) {
           const privateKey = baseKey.derive(defaultPath);
           return privateKey;
         }

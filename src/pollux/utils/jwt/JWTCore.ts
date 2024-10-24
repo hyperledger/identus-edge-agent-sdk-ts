@@ -2,22 +2,22 @@ import * as didResolver from "did-resolver";
 import { base64url } from "multiformats/bases/base64";
 import { base58btc } from 'multiformats/bases/base58';
 import { defaultHashConfig, defaultSaltGen } from "./config";
-// TODO shouldnt be importing from castor
 import { VerificationKeyType } from "../../../castor/types";
-import { Castor,
-  AlsoKnownAs,
-  Controller,
-  VerificationMethods,
-  Services,
-  PublicKey,
-  PrivateKey,
-  Signer,
-  Hasher,
-  Verifier,
-  Curve,
-  Apollo,
-  KeyProperties,
-  KeyTypes
+import {
+    Castor,
+    AlsoKnownAs,
+    Controller,
+    VerificationMethods,
+    Services,
+    PublicKey,
+    PrivateKey,
+    Signer,
+    Hasher,
+    Verifier,
+    Curve,
+    Apollo,
+    KeyProperties,
+    KeyTypes
 } from "../../../domain";
 
 
@@ -28,9 +28,9 @@ import { Castor,
  */
 export abstract class JWTCore {
     constructor(
-      public readonly apollo: Apollo, 
-      public readonly castor: Castor
-    ) {}
+        public readonly apollo: Apollo,
+        public readonly castor: Castor
+    ) { }
 
     public async resolve(did: string): Promise<didResolver.DIDResolutionResult> {
         const resolved = await this.castor.resolveDID(did);
@@ -92,9 +92,6 @@ export abstract class JWTCore {
         };
     }
 
-    // Function to convert DER signature to raw signature
-
-
     protected getSKConfig(privateKey: PrivateKey): { signAlg: string, signer: Signer, hasher: Hasher, hasherAlg: string } {
         return {
             signAlg: privateKey.alg,
@@ -112,9 +109,10 @@ export abstract class JWTCore {
     }
 
     protected getPKInstance(verificationMethod: didResolver.VerificationMethod) {
+        let pk: PublicKey | undefined = undefined
         if (verificationMethod.publicKeyMultibase) {
             const decoded = base58btc.decode(verificationMethod.publicKeyMultibase);
-            let pk: PublicKey | undefined = undefined
+
             if (verificationMethod.type === VerificationKeyType.EcdsaSecp256k1VerificationKey2019) {
                 pk = this.apollo.createPublicKey({
                     [KeyProperties.curve]: Curve.SECP256K1,
@@ -127,6 +125,23 @@ export abstract class JWTCore {
                     [KeyProperties.curve]: Curve.ED25519,
                     [KeyProperties.type]: KeyTypes.EC,
                     [KeyProperties.rawKey]: decoded
+                })
+            }
+            return pk
+        }
+        if (verificationMethod.publicKeyJwk) {
+            const { crv, x } = verificationMethod.publicKeyJwk;
+            if (crv === Curve.ED25519) {
+                pk = this.apollo.createPublicKey({
+                    [KeyProperties.curve]: Curve.ED25519,
+                    [KeyProperties.type]: KeyTypes.EC,
+                    [KeyProperties.rawKey]: base64url.baseDecode(x!)
+                })
+            } else if (crv === Curve.SECP256K1) {
+                pk = this.apollo.createPublicKey({
+                    [KeyProperties.curve]: Curve.SECP256K1,
+                    [KeyProperties.type]: KeyTypes.EC,
+                    [KeyProperties.rawKey]: base64url.baseDecode(x!)
                 })
             }
             return pk
