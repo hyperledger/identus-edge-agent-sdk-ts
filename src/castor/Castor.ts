@@ -20,7 +20,6 @@ import * as Protos from "./protos/node_models";
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
-import { CastorError } from "../domain/models/Errors";
 import {
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
@@ -227,7 +226,7 @@ export default class Castor implements CastorInterface {
     const resolvers = this.resolvers.filter(
       (resolver) => resolver.method === parsed.method
     );
-    for (let resolver of resolvers) {
+    for (const resolver of resolvers) {
       try {
         return await resolver.resolve(did)
       } catch (err) {
