@@ -104,12 +104,9 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
         [Domain.KeyProperties.seed]: Buffer.from(ctx.Seed.value).toString("hex"),
       });
 
-      const getIndexTask2 = new PrismKeyPathIndexTask({});
-      const index2 = await ctx.run(getIndexTask2);
-
-      const issSK = await ctx.Apollo.createPrivateKey({
-        [Domain.KeyProperties.curve]: Domain.Curve.ED25519,
-        [Domain.KeyProperties.index]: index2,
+      const authSk = await ctx.Apollo.createPrivateKey({
+        [Domain.KeyProperties.curve]: Domain.Curve.SECP256K1,
+        [Domain.KeyProperties.index]: index + 1,
         [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
         [Domain.KeyProperties.seed]: Buffer.from(ctx.Seed.value).toString("hex"),
       });
@@ -118,19 +115,18 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
         masterSk.publicKey(),
         [],
         [
-          issSK.publicKey()
+          authSk.publicKey()
         ]
       );
 
-      await ctx.Pluto.storeDID(did, [masterSk, issSK]);
-
+      await ctx.Pluto.storeDID(did, [masterSk, authSk]);
       credRequestBuffer = await ctx.Pollux.processCredentialOffer<Domain.CredentialType.SDJWT>(payload, {
         did: did,
         sdJWT: true,
         keyPair: {
-          curve: Domain.Curve.SECP256K1,
-          privateKey: masterSk,
-          publicKey: masterSk.publicKey(),
+          curve: authSk.curve,
+          privateKey: authSk,
+          publicKey: authSk.publicKey(),
         },
       });
     } else {

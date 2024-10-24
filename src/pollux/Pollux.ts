@@ -154,10 +154,8 @@ export default class Pollux implements IPollux {
       }
       return revealedFields;
     } else if (type === CredentialType.SDJWT) {
-
-      const { hasherSync, hasherAlg } = defaultHashConfig;
+      const { hasherSync } = defaultHashConfig;
       let disclosedClaims: Record<string, any> = {};
-
       for (const computed of credential.claims) {
         const disclosed = Object.values(computed);
         const decoded = decodeSdJwtSync(credential.id, hasherSync);
@@ -1115,11 +1113,10 @@ export default class Pollux implements IPollux {
       if (!keyPair) {
         throw new Error("Required keyPair ");
       }
-
-      const kid = await this.getSigningKid(did, keyPair.privateKey);
+      //FIXME: Kid is currently not working so its temporarily disabled and can be restored once the Agent can use it properly
+      //const kid = await this.getSigningKid(did, keyPair.privateKey);
       const challenge = offer.options.challenge;
       const domain = offer.options.domain;
-
       const signedJWT = await this.JWT.sign({
         issuerDID: did,
         privateKey: keyPair.privateKey,
@@ -1131,7 +1128,8 @@ export default class Pollux implements IPollux {
             type: ["VerifiablePresentation"],
           },
         },
-        header: { kid }
+        //FIXME: Kid is currently not working so its temporarily disabled and can be restored once the Agent can use it properly
+        //header: { kid }
       });
       return signedJWT as ProcessedCredentialOfferPayloads[Types];
     }
@@ -1152,7 +1150,7 @@ export default class Pollux implements IPollux {
         issuerDID: did,
         privateKey: keyPair.privateKey,
         payload: {
-          aud: domain,
+          aud: [domain],
           nonce: challenge,
           vp: {
             "@context": ["https://www.w3.org/2018/presentations/v1"],
@@ -1233,9 +1231,7 @@ export default class Pollux implements IPollux {
     }
 
     if (credentialType === CredentialType.SDJWT) {
-      const sdJWTPayload = JSON.parse(credentialString);
-      const jwsString = `${sdJWTPayload.protected}.${sdJWTPayload.payload}.${sdJWTPayload.signature},${sdJWTPayload.disclosures}`;
-      return SDJWTCredential.fromJWS(jwsString, false);
+      return SDJWTCredential.fromJWS(credentialString);
     }
 
     if (credentialType === CredentialType.AnonCreds) {

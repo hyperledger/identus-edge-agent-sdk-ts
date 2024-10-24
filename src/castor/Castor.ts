@@ -121,7 +121,7 @@ export default class Castor implements CastorInterface {
   async createPrismDID(
     key: PublicKey | KeyPair,
     services?: Service[] | undefined,
-    issuingKeys: (PublicKey | KeyPair)[] = []
+    authenticationKeys: (PublicKey | KeyPair)[] = []
   ): Promise<DID> {
     const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
     const masterPublicKey = "publicKey" in key ? key.publicKey : key;
@@ -132,21 +132,16 @@ export default class Castor implements CastorInterface {
       masterPublicKey,
     ).toProto();
 
-    const authenticationPk = new PrismDIDPublicKey(
-      getUsageId(Usage.AUTHENTICATION_KEY),
-      Usage.AUTHENTICATION_KEY,
-      masterPublicKey,
-    ).toProto();
-
     didPublicKeys.push(masterPk);
-    didPublicKeys.push(authenticationPk);
 
-    if (issuingKeys.length > 0) {
-      didPublicKeys.push(...issuingKeys.map((issuingKey, index) => new PrismDIDPublicKey(
-        getUsageId(Usage.ISSUING_KEY, index),
-        Usage.ISSUING_KEY,
-        "publicKey" in issuingKey ? issuingKey.publicKey : issuingKey,
-      ).toProto()));
+    for (const [index, authenticationKey] of authenticationKeys.entries()) {
+      const pk = "publicKey" in authenticationKey ? authenticationKey.publicKey : authenticationKey
+      const prismDIDPublicKey = new PrismDIDPublicKey(
+        getUsageId(Usage.AUTHENTICATION_KEY, index),
+        Usage.AUTHENTICATION_KEY,
+        pk,
+      )
+      didPublicKeys.push(prismDIDPublicKey.toProto())
     }
 
     const didCreationData =

@@ -180,7 +180,7 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
 
     static fromJWS<E extends Record<string, any> = Record<string, any>>(
         jws: string,
-        revoked?: boolean,
+        revoked = false,
     ): SDJWTCredential {
         const { hasherSync, hasherAlg } = defaultHashConfig;
         const jwt = new Jwt(Jwt.decodeJWT(jws))
