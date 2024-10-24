@@ -185,16 +185,21 @@ export class CreatePresentation extends Task<Presentation, Args> {
       if (!credential.isProvable()) {
         throw new Error("Credential is not Provable");
       }
-      const subjectDID = Domain.DID.from(credential.subject);
+      const disclosed = await ctx.Pollux.revealCredentialFields(credential, ['subject', 'sub'])
+      const subjectDID = Domain.DID.from(disclosed.sub);
+
       const prismPrivateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(subjectDID);
-      const prismPrivateKey = prismPrivateKeys.find((key) => key.curve === Domain.Curve.ED25519);
+      const prismPrivateKey = prismPrivateKeys.sort((a, b) => a.index! - b.index!).at(0);
+
       if (prismPrivateKey === undefined) {
         throw new Domain.AgentError.CannotFindDIDPrivateKey();
       }
+
       const signedJWT = await ctx.Pollux.createPresentationProof(request, credential, {
         did: subjectDID,
         privateKey: prismPrivateKey
       });
+
       return signedJWT;
     }
 

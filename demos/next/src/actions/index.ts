@@ -31,7 +31,6 @@ export const acceptPresentationRequest = createAsyncThunk<
         const { agent, message, credential } = options;
         const requestPresentation = RequestPresentation.fromMessage(message);
         try {
-            debugger;
             const presentation = await agent.createPresentationForRequestProof(requestPresentation, credential);
             await agent.sendMessage(presentation.makeMessage());
         } catch (err) {
@@ -229,12 +228,10 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
 
     private async parseResponse(response: Response) {
         const data = await response.text();
-        debugger;
         try {
             return JSON.parse(data);
         }
         catch {
-            debugger;
             return data;
         }
     }
