@@ -26,7 +26,7 @@ sequenceDiagram
 
 ## Steps
 
-1. The `Admin` creates a Credential Offer as Invitation for connectionless issuance Issuer Agent
+1. The `Admin` requests a connectionless credential offer invitation with the Issuer Agent
   
     ```bash
     curl --location --request POST 'http://localhost:8000/cloud-agent/issue-credentials/credential-offers/invitation' \
@@ -84,22 +84,18 @@ sequenceDiagram
 
 4. The `Peer` checks the validity of the `invitationUrl` using `agent.parseInvitation`
 
-    - `parseInvitation` decodes and validates the encoded Out of Band Invitation, plus attachments, returning an instance of  `OutOfBandInvitation` on success. This OutOfBandInvitation will have a single Attachment for the Credential Offer.
-
       ```typescript
       const oob = await agent.parseInvitation(invitationUrl)
       ```
 
 5. The `Peer` accepts the Invitation using `agent.acceptInvitation`
 
-    - In this case, with an attached Credential Offer, the Credential Offer Message will be stored in Pluto.
-
       ```typescript
       await agent.acceptInvitation(oob)
       ```
 
 6. The `Issuer` will then send back the credential offer.
-7. The `Peer` listens for the credential offer response from the `Issuer`, accepts it
+7. The `Peer` listens for the credential offer response from the `Issuer`, and accepts it
 
     ```typescript
     agent.addListener(SDK.ListenerKey.MESSAGE, async (newMessages: SDK.Domain.Message[]) => {
@@ -130,28 +126,28 @@ sequenceDiagram
 
 8. The `Issuer` sends back the `Verifiable Credential`
 
-    - The `Peer`listens for the credential and stores it in pluto
+9. The `Peer`listens for the credential and stores it in pluto
 
-      ```javascript
-      agent.addListener(SDK.ListenerKey.MESSAGE, async (newMessages: SDK.Domain.Message[]) => {
-        // newMessages can contain any didcomm message that is received, including
-        // Credential Offers, Issued credentials and Request Presentation Messages
-        const issuedCredentials = newMessages.filter(
-          (message) => message.piuri === 'https://didcomm.org/issue-credential/3.0/issue-credential'
-        )
+  ```javascript
+  agent.addListener(SDK.ListenerKey.MESSAGE, async (newMessages: SDK.Domain.Message[]) => {
+    // newMessages can contain any didcomm message that is received, including
+    // Credential Offers, Issued credentials and Request Presentation Messages
+    const issuedCredentials = newMessages.filter(
+      (message) => message.piuri === 'https://didcomm.org/issue-credential/3.0/issue-credential'
+    )
 
-        if (issuedCredentials.length) {
-          for (const issuedCredential of issuedCredentials) {
-            try {
-              // Create issue credential object from the message
-              const issueCredential = await SDK.IssueCredential.fromMessage(issuedCredential)
-              
-              // Store the credential in pluto
-              await agent.processIssuedCredentialMessage(issueCredential)
-            } catch (err) {
-              console.error('Error occurred while storing the credential:', err)
-            }
-          }
+    if (issuedCredentials.length) {
+      for (const issuedCredential of issuedCredentials) {
+        try {
+          // Create issue credential object from the message
+          const issueCredential = await SDK.IssueCredential.fromMessage(issuedCredential)
+          
+          // Store the credential in pluto
+          await agent.processIssuedCredentialMessage(issueCredential)
+        } catch (err) {
+          console.error('Error occurred while storing the credential:', err)
         }
-      })
-        ```
+      }
+    }
+  })
+  ```
