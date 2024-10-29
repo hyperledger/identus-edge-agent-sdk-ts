@@ -102,7 +102,7 @@ sequenceDiagram
       // newMessages can contain any didcomm message that is received, including
       // Credential Offers, Issued credentials and Request Presentation Messages
       const credentialOffers = newMessages.filter(
-        (message) => message.piuri === 'https://didcomm.org/issue-credential/3.0/offer-credential'
+        (message) => message.piuri === SDK.ProtocolType.DidcommOfferCredential
       )
 
       if (credentialOffers.length) {
@@ -128,12 +128,12 @@ sequenceDiagram
 
 9. The `Peer`listens for the credential and stores it in pluto
 
-  ```javascript
+  ```typescript
   agent.addListener(SDK.ListenerKey.MESSAGE, async (newMessages: SDK.Domain.Message[]) => {
     // newMessages can contain any didcomm message that is received, including
     // Credential Offers, Issued credentials and Request Presentation Messages
     const issuedCredentials = newMessages.filter(
-      (message) => message.piuri === 'https://didcomm.org/issue-credential/3.0/issue-credential'
+      (message) => message.piuri === SDK.ProtocolType.DidcommIssueCredential
     )
 
     if (issuedCredentials.length) {
