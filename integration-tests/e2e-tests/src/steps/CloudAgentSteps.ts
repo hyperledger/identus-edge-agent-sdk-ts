@@ -34,6 +34,17 @@ When("{actor} offers '{int}' jwt credentials", async function (cloudAgent: Actor
   )
 })
 
+When("{actor} offers '{int}' sd+jwt credentials", async function (cloudAgent: Actor, numberOfCredentials: number) {
+  const recordIdList = []
+  await Utils.repeat(numberOfCredentials, async () => {
+    await CloudAgentWorkflow.offerSDJWTCredential(cloudAgent)
+    recordIdList.push(await cloudAgent.answer(Notepad.notes().get("recordId")))
+  })
+  await cloudAgent.attemptsTo(
+    Notepad.notes().set("recordIdList", recordIdList)
+  )
+})
+
 When("{actor} offers '{int}' anonymous credential", async function (cloudAgent: Actor, numberOfAnoncreds: number) {
   const recordIdList = []
   await Utils.repeat(numberOfAnoncreds, async () => {
@@ -43,6 +54,10 @@ When("{actor} offers '{int}' anonymous credential", async function (cloudAgent: 
   await cloudAgent.attemptsTo(
     Notepad.notes().set("recordIdList", recordIdList)
   )
+})
+
+When("{actor} asks for sdjwt present-proof", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.askForSDJWTPresentProof(cloudAgent)
 })
 
 When("{actor} asks for present-proof", async function (cloudAgent: Actor) {

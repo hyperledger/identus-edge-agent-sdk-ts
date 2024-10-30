@@ -1,4 +1,4 @@
-import { CredentialType, PresentationClaims, InputFieldFilter, PresentationSubmission, PresentationDefinitionRequest } from "../../domain";
+import { CredentialType, PresentationClaims, InputFieldFilter, PresentationSubmission, PresentationDefinitionRequest, DescriptorItemFormat, DescriptorItem } from "../../domain";
 import { AnoncredsLoader } from "../AnoncredsLoader";
 
 export function validatePresentationClaims<Type extends CredentialType = CredentialType.JWT>(
@@ -41,6 +41,16 @@ export function validatePresentationClaims<Type extends CredentialType = Credent
     return true
 }
 
+
+const jwtDescriptorFormats = [
+    DescriptorItemFormat.JWT_VP,
+    DescriptorItemFormat.JWT_VC
+];
+
+const sdjwtDescriptorFormats = [
+    DescriptorItemFormat.SDJWT
+];
+
 export function parsePresentationSubmission<
     Type extends CredentialType = CredentialType.JWT
 >(
@@ -48,7 +58,7 @@ export function parsePresentationSubmission<
     data: any,
     type: Type
 ): data is PresentationSubmission<Type> {
-    if (type === CredentialType.JWT) {
+    if (type === CredentialType.JWT || type === CredentialType.SDJWT) {
         if (!data || (data && typeof data !== "object")) {
             return false;
         }
@@ -58,28 +68,19 @@ export function parsePresentationSubmission<
         if (!presentation_submission || (typeof presentation_submission !== "object")) {
             return false;
         }
-        return true;
+        const descriptorMaps = presentation_submission?.descriptor_map ?? [];
+        if (type === CredentialType.JWT) {
+            return descriptorMaps.some(
+                ({ format }: DescriptorItem) => jwtDescriptorFormats.includes(format)
+            );
+        } else if (type === CredentialType.SDJWT) {
+            return descriptorMaps.some(
+                ({ format }: DescriptorItem) => sdjwtDescriptorFormats.includes(format)
+            );
+        }
     }
     if (type === CredentialType.AnonCreds) {
-        return anoncreds.isValidPresentation(data)
-    }
-    if (type === CredentialType.SDJWT) {
-        if (!data || (data && typeof data !== "object")) {
-            return false;
-        }
-        const disclosures = data.disclosures;
-        const payload = data.payload;
-        const protected_ = data.protected;
-        const signature = data.signature;
-        if (!Array.isArray(disclosures)) {
-            return false;
-        }
-        if (typeof payload !== "string" ||
-            typeof protected_ !== "string" ||
-            typeof signature !== "string") {
-            return false;
-        }
-        return true;
+        return anoncreds.isValidPresentation(data);
     }
     return false;
 }
@@ -90,17 +91,30 @@ export function isPresentationDefinitionRequestType
         type: Type,
     ): request is PresentationDefinitionRequest<Type> {
 
+
     if (type === CredentialType.JWT) {
-        if (!request ||
-            !request.options ||
-            !request.presentation_definition) {
+        if (!request || !request.presentation_definition) {
+            return false;
+        }
+        const [format] = Object.keys(request.presentation_definition.format);
+        if (!format || !['jwt'].includes(format)) {
+            return false
+        }
+        return true;
+    }
+
+    if (type === CredentialType.SDJWT) {
+        if (!request || !request.presentation_definition) {
+            return false;
+        }
+        const [format] = Object.keys(request.presentation_definition.format);
+        if (!format || !['sdjwt'].includes(format)) {
             return false
         }
         return true;
     }
 
     if (type === CredentialType.AnonCreds) {
-
         if (!request ||
             !request.name ||
             !request.nonce ||
@@ -111,14 +125,6 @@ export function isPresentationDefinitionRequestType
         return true;
     }
 
-    if (type === CredentialType.SDJWT) {
-        if (!request ||
-            !request.claims) {
-            return false
-        }
-
-        return true
-    }
-    return false
+    return false;
 
 }

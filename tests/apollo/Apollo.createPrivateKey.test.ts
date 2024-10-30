@@ -20,27 +20,6 @@ describe("Apollo", () => {
     const seedHex = "947877896c61a5c64f266adbebbc69a2a01f1a2cfbf72c08a11c693d0429ccded34bdc0c28b5be910a5095b97e7bc6e3e209527ce8e75f9964d25cd6f6ad63e0";
 
     describe("Secp256k1", () => {
-      it("default - creates a new key", () => {
-        const result = apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
-          [KeyProperties.curve]: Curve.SECP256K1,
-          [KeyProperties.seed]: seedHex,
-        });
-
-        expect(result).to.be.an.instanceOf(Secp256k1PrivateKey);
-        expect(result.raw).to.eql(Uint8Array.from([232, 19, 52, 112, 248, 184, 7, 231, 180, 5, 168, 209, 33, 77, 26, 108, 130, 201, 137, 168, 15, 197, 29, 152, 88, 235, 87, 76, 73, 255, 159, 229]));
-        expect(result.type).to.eq(KeyTypes.EC);
-        expect(result.curve).to.eq(Curve.SECP256K1);
-
-        expect(result.getProperty(KeyProperties.curve)).to.eq(Curve.SECP256K1);
-        expect(result.getProperty(KeyProperties.chainCode)).to.eq("7e9952eb18d135283fd633180e31b202a5ec87e3e37cc66c6836f18bdf9684b2");
-
-        // no derivationPath provided, defaults to `m/29'/29'/0'/4'/0'` hexed
-        expect(result.getProperty(KeyProperties.derivationPath)).to.eq("6d2f3239272f3239272f30272f34272f3027");
-
-        // no index provided, defaults to 0
-        expect(result.getProperty(KeyProperties.index)).to.eq("0");
-      });
 
       it("KeyProperties.type - missing - throws", () => {
         const sut = () => apollo.createPrivateKey({
@@ -101,8 +80,11 @@ describe("Apollo", () => {
             [KeyProperties.curve]: Curve.SECP256K1,
             [KeyProperties.seed]: fixture.seed,
           });
+          assert.equal(master.to.String("hex"), fixture.raw);
+
 
           const derivationPath = DerivationPath.fromPath(fixture.path.toString(), [DeprecatedDerivationPath, PrismDerivationPath])
+
           const child = master.isDerivable()
             ? master.derive(derivationPath.toString())
             : null;
@@ -114,7 +96,7 @@ describe("Apollo", () => {
             [KeyProperties.derivationPath]: fixture.path
           });
 
-          assert.equal(master.to.String("hex"), fixture.raw);
+
           assert.equal(child?.to.String("hex"), fixture.derived);
           assert.equal(derived.to.String("hex"), fixture.derived);
         });

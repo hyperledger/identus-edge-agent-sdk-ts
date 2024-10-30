@@ -1,5 +1,5 @@
 import { uuid } from "@stablelib/uuid";
-import { base64 } from "multiformats/bases/base64";
+import { base64url } from "multiformats/bases/base64";
 import { Message } from "..";
 export interface AttachmentHeader {
   children: string;
@@ -67,7 +67,7 @@ export class AttachmentDescriptor {
 
   ): AttachmentDescriptor {
     if (typeof payload === "string") {
-      const encoded = base64.baseEncode(Uint8Array.from(Buffer.from(payload)));
+      const encoded = base64url.baseEncode(Uint8Array.from(Buffer.from(payload)));
       const attachment: AttachmentBase64 = {
         base64: encoded,
       };

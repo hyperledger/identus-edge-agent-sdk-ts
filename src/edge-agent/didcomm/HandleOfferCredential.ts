@@ -43,11 +43,7 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
       throw new Error("Missing to");
     }
     const thid = offer.thid;
-    const credentialFormat =
-      credentialType === Domain.CredentialType.AnonCreds ? Domain.AttachmentFormats.ANONCREDS_REQUEST :
-        credentialType === Domain.CredentialType.JWT ? Domain.CredentialType.JWT :
-          credentialType === Domain.CredentialType.SDJWT ? Domain.CredentialType.SDJWT :
-            Domain.CredentialType.Unknown;
+
 
     if (credentialType === Domain.CredentialType.AnonCreds) {
       const metaname = offer.thid;
@@ -73,25 +69,40 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
       const getIndexTask = new PrismKeyPathIndexTask({});
       const index = await ctx.run(getIndexTask);
 
-      const privateKey = await ctx.Apollo.createPrivateKey({
+      const masterSk = await ctx.Apollo.createPrivateKey({
         [Domain.KeyProperties.curve]: Domain.Curve.SECP256K1,
         [Domain.KeyProperties.index]: index,
         [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
         [Domain.KeyProperties.seed]: Buffer.from(ctx.Seed.value).toString("hex"),
       });
 
-      const did = await ctx.Castor.createPrismDID(privateKey.publicKey());
+      const authSk = await ctx.Apollo.createPrivateKey({
+        [Domain.KeyProperties.curve]: Domain.Curve.SECP256K1,
+        [Domain.KeyProperties.index]: index + 1,
+        [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
+        [Domain.KeyProperties.seed]: Buffer.from(ctx.Seed.value).toString("hex"),
+      });
 
-      await ctx.Pluto.storeDID(did, privateKey);
+
+      const did = await ctx.Castor.createPrismDID(
+        masterSk.publicKey(),
+        [],
+        [
+          authSk.publicKey()
+        ]
+      );
+
+      await ctx.Pluto.storeDID(did, [masterSk, authSk]);
 
       credRequestBuffer = await ctx.Pollux.processCredentialOffer<Domain.CredentialType.JWT>(payload, {
         did: did,
         keyPair: {
-          curve: Domain.Curve.SECP256K1,
-          privateKey: privateKey,
-          publicKey: privateKey.publicKey(),
+          curve: authSk.curve,
+          privateKey: authSk,
+          publicKey: authSk.publicKey(),
         },
       });
+
     }
     else if (credentialType === Domain.CredentialType.SDJWT) {
       const getIndexTask = new PrismKeyPathIndexTask({});
@@ -104,12 +115,9 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
         [Domain.KeyProperties.seed]: Buffer.from(ctx.Seed.value).toString("hex"),
       });
 
-      const getIndexTask2 = new PrismKeyPathIndexTask({});
-      const index2 = await ctx.run(getIndexTask2);
-
-      const issSK = await ctx.Apollo.createPrivateKey({
+      const authSk = await ctx.Apollo.createPrivateKey({
         [Domain.KeyProperties.curve]: Domain.Curve.ED25519,
-        [Domain.KeyProperties.index]: index2,
+        [Domain.KeyProperties.index]: index + 1,
         [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
         [Domain.KeyProperties.seed]: Buffer.from(ctx.Seed.value).toString("hex"),
       });
@@ -118,25 +126,29 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
         masterSk.publicKey(),
         [],
         [
-          issSK.publicKey()
+          authSk.publicKey()
         ]
       );
 
-      await ctx.Pluto.storeDID(did, [masterSk, issSK]);
-
+      await ctx.Pluto.storeDID(did, [masterSk, authSk]);
       credRequestBuffer = await ctx.Pollux.processCredentialOffer<Domain.CredentialType.SDJWT>(payload, {
         did: did,
         sdJWT: true,
         keyPair: {
-          curve: Domain.Curve.SECP256K1,
-          privateKey: masterSk,
-          publicKey: masterSk.publicKey(),
+          curve: authSk.curve,
+          privateKey: authSk,
+          publicKey: authSk.publicKey(),
         },
       });
     } else {
       throw new Domain.AgentError.InvalidCredentialFormats();
     }
 
+    const credentialFormat =
+      credentialType === Domain.CredentialType.AnonCreds ? Domain.AttachmentFormats.ANONCREDS_REQUEST :
+        credentialType === Domain.CredentialType.JWT ? Domain.CredentialType.JWT :
+          credentialType === Domain.CredentialType.SDJWT ? Domain.CredentialType.SDJWT :
+            Domain.CredentialType.Unknown;
 
     const attachments = [
       new Domain.AttachmentDescriptor(

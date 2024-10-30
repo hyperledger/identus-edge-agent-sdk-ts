@@ -16,11 +16,9 @@ export class CredentialRepository extends MapperRepository<Models.Credential, Do
       case SDJWTVerifiableCredentialRecoveryId: {
         const jwtModel = JSON.parse(model.dataJson);
         const jws = jwtModel.id;
-        const disclosures: string[] = jwtModel.disclosures.map((disclosure: any) => disclosure._encoded);
         const credential = SDJWTCredential.fromJWS(
           jws,
           jwtModel.revoked ?? false,
-          disclosures
         );
         return this.withId(credential, model.uuid);
       }

@@ -142,12 +142,16 @@ const VerificationRequestAnoncreds: React.FC<{ onHandleInitiate: <T extends SDK.
     </AgentRequire>
 }
 
-const VerificationRequestJWT: React.FC<{ onHandleInitiate: <T extends SDK.Domain.CredentialType = SDK.Domain.CredentialType.JWT>(claims: SDK.Domain.PresentationClaims<T>, type: T) => void }> = props => {
+const VerificationRequestJWT: React.FC<{
+    onHandleInitiate: <T extends SDK.Domain.CredentialType = SDK.Domain.CredentialType.JWT>(
+        claims: SDK.Domain.PresentationClaims<T>,
+        type: T
+    ) => void,
+    type: SDK.Domain.CredentialType
+}> = props => {
     const [presentationClaims, setPresentationClaims] = useState<SDK.Domain.PresentationClaims>();
-
     const [requiredFields, setRequiredFields] = React.useState<string>("emailAddress=test@email.com")
     const [trustIssuers, setTrustIssuers] = React.useState<string>("did:prism:a0209ebd691c5ec20636f206b3e101c726fdc1c22b9b850b4b811ac4a82e28d8")
-
     return <AgentRequire text="In order to start a Verification request the Edge Agent needs to be started first." >
         <label htmlFor="requiredJWTClaims">Required claims<span style={{ fontSize: 11 }}>(variable=value split by ,)</span></label>
         <input
@@ -186,7 +190,7 @@ const VerificationRequestJWT: React.FC<{ onHandleInitiate: <T extends SDK.Domain
                         }
                         return all
                     }, {})
-                }, SDK.Domain.CredentialType.JWT)
+                }, props.type)
             }}>
             Initiate
         </button>
@@ -231,6 +235,7 @@ const VerificationRequest: React.FC<{}> = props => {
             id="verificationType"
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value={SDK.Domain.CredentialType.JWT}>JWT</option>
+            <option value={SDK.Domain.CredentialType.SDJWT}>SD+JWT</option>
             <option value={SDK.Domain.CredentialType.AnonCreds}>Anoncreds</option>
         </select>
 
@@ -238,11 +243,12 @@ const VerificationRequest: React.FC<{}> = props => {
             label="To"
             onSelect={(connection) => {
                 setSendTo(connection.receiver.toString())
-            }} />
+            }}
+        />
 
         {
-            type === SDK.Domain.CredentialType.JWT &&
-            <VerificationRequestJWT onHandleInitiate={onHandleInitiate} />
+            (type === SDK.Domain.CredentialType.JWT || type === SDK.Domain.CredentialType.SDJWT) &&
+            <VerificationRequestJWT onHandleInitiate={onHandleInitiate} type={type} />
         }
         {
             type === SDK.Domain.CredentialType.AnonCreds &&
@@ -313,13 +319,14 @@ const Verification: React.FC<{}> = props => {
     return (
         <>
             <div className="mx-10 mt-5 mb-30">
-                <Box>
-                    <PageHeader>
-                        <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                            Edge Agent
-                        </h1>
-                    </PageHeader>
-                    <DBConnect>
+
+                <PageHeader>
+                    <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                        Edge Agent
+                    </h1>
+                </PageHeader>
+                <DBConnect>
+                    <Box>
                         <div className="flex">
                             <div className="w-1/3 p-4 ">
                                 <VerificationRequest />
@@ -331,15 +338,15 @@ const Verification: React.FC<{}> = props => {
                             </div>
                         </div>
 
-                    </DBConnect>
-                    {error instanceof Error && (
-                        <pre>
-                            Error: {error.message}
-                        </pre>
-                    )}
-                </Box>
-            </div>
-            <FooterNavigation />
+
+                        {error instanceof Error && (
+                            <pre>
+                                Error: {error.message}
+                            </pre>
+                        )}
+                    </Box>
+                </DBConnect>
+            </div >
         </>
 
     );

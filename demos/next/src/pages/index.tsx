@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import SDK from "@hyperledger/identus-edge-agent-sdk";
 import { Box } from "../app/Box";
 import '../app/index.css'
-import { FooterNavigation } from "@/components/FooterNavigation";
 import { DBConnect } from "@/components/DBConnect";
 import { useMountedApp } from "@/reducers/store";
 import { Message } from "@/components/Message";
@@ -60,23 +59,28 @@ const Agent: React.FC<{}> = props => {
   return (
     <>
       <div className="mx-10 mt-5 mb-30">
+
+
+        <PageHeader>
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            Edge Agent
+          </h1>
+        </PageHeader>
+
         <DBConnect>
           <Box>
-
-            <PageHeader>
-              <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                Edge Agent
-              </h1>
-            </PageHeader>
             <div>
 
               {state === "running" && (
                 <>
-                  {messages.reverse().map((message, i) => {
+
+                  {messages.length > 0 ? messages.reverse().map((message, i) => {
                     return <Message message={message} key={`index_message${message.id}_${i}`} />
-                  })}
+                  }) : <>Listening for new messages</>}
                 </>
               )}
+
+              {state !== "running" && <>Start the agent first</>}
             </div>
 
             {error instanceof Error && (
@@ -87,7 +91,6 @@ const Agent: React.FC<{}> = props => {
           </Box>
         </DBConnect>
       </div>
-      <FooterNavigation />
     </>
 
   );
