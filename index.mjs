@@ -1,3 +1,3 @@
-import * as SDK from './build/index.mjs';
+import SDK from './build/index.js';
 
 export default SDK
