@@ -52,7 +52,7 @@ export namespace Pluto {
     /**
      * Run a query to fetch data from the Store
      * 
-     * @param name Model name
+     * @param table table name
      * @param query a MangoQuery object, a set of values and operators defining the query
      * 
      * properties within an object will be AND'ed
@@ -76,15 +76,15 @@ export namespace Pluto {
      * 
      * @returns relevant Models
      */
-    query<T extends Models.Model>(name: string, query?: MangoQuery<T>): Promise<T[]>;
+    query<T extends Models.Model>(table: string, query?: MangoQuery<T>): Promise<T[]>;
 
     /**
      * Persist new data in the Store.
      * 
-     * @param name table name
+     * @param table table name
      * @param model object to save
      */
-    insert<T extends Models.Model>(name: string, model: T): Promise<void>;
+    insert<T extends Models.Model>(table: string, model: T): Promise<void>;
 
     /**
      * Updating a new row in the Store
@@ -227,7 +227,7 @@ export class Pluto implements Domain.Pluto {
     for (const did of dids) {
       const dbDids = await this.getPrismDIDS(did.uuid);
       for (const prismDID of dbDids) {
-        prismDIDS.push(prismDID)
+        prismDIDS.push(prismDID);
       }
     }
     return prismDIDS;
@@ -245,7 +245,7 @@ export class Pluto implements Domain.Pluto {
         const prismDID = new Domain.PrismDID(did, key, link.alias);
         return prismDID;
       })
-    )
+    );
   }
 
 
