@@ -47,13 +47,13 @@ const generic = {
     platform: 'neutral',
     splitting: false,
     resolveExtensions: ['.ts', '.js', '.wasm'],
-    inject: ['anoncreds-wasm', 'didcomm-wasm', 'jwe-wasm'],
     mainFields: ['module', 'main'],
-    banner: {
-        js: bufferShim,
-    },
+    target: ['esnext'],
     define: {
         'global.Buffer': 'Buffer',
+    },
+    banner: {
+        js: bufferShim,
     },
     external: ['buffer']
 };
@@ -61,16 +61,8 @@ const generic = {
 (async () => {
     await esbuild.build({
         ...generic,
-        outfile: "build/index.mjs",
-        target: ['esnext'],
-        format: 'esm',
-        plugins
-    })
-    await esbuild.build({
-        ...generic,
-        entryPoints: ['./build/index.mjs'],
-        outfile: "build/index.cjs",
-        target: ['es6'],
+        outdir: "build",
+        inject: ['anoncreds-wasm', 'didcomm-wasm', 'jwe-wasm'],
         format: 'cjs',
         plugins
     })
