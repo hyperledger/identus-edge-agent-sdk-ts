@@ -7,13 +7,8 @@ import { SignWithDID } from "./didFunctions/Sign";
 import { CreatePrismDID } from "./didFunctions/CreatePrismDID";
 import { FetchApi } from "./helpers/FetchApi";
 import { Task } from "../utils/tasks";
-
-enum AgentState {
-  STOPPED = "stopped",
-  STARTING = "starting",
-  RUNNING = "running",
-  STOPPING = "stopping",
-}
+import { Startable } from "../utils/startable";
+import { notNil } from "../utils";
 
 /**
  * Edge agent implementation
@@ -22,14 +17,14 @@ enum AgentState {
  * @class Agent
  * @typedef {Agent}
  */
-export default class Agent {
+export default class Agent implements Startable.Controller {
   /**
    * Agent state
    *
    * @public
-   * @type {AgentState}
+   * @type {Startable.State}
    */
-  public state: AgentState = AgentState.STOPPED;
+  public state = Startable.State.STOPPED;
   public backup: AgentBackup;
   public readonly pollux: Pollux;
 
@@ -86,30 +81,28 @@ export default class Agent {
   /**
    * Asyncronously start the agent
    *
-   * @async
    * @returns {Promise<AgentState>}
    */
-  async start(): Promise<AgentState> {
-    if (this.state === AgentState.STOPPED) {
-      this.state = AgentState.STARTING;
+  start(): Promise<Startable.State> {
+    return Startable.start(this, async () => {
       await this.pluto.start();
       await this.pollux.start();
-    }
-
-    return this.state;
+    });
   }
 
   /**
    * Asyncronously stop the agent and any side task that is running
    *
-   * @async
-   * @returns {Promise<void>}
+   * @returns {Promise<Startable.State>}
    */
-  async stop(): Promise<void> {
-    if (this.state !== AgentState.RUNNING) {
-      return;
-    }
-    this.state = AgentState.STOPPED;
+  stop(): Promise<Startable.State> {
+    return Startable.stop(this, async () => {
+      await this.pollux.stop();
+
+      if (notNil(this.pluto.stop)) {
+        await this.pluto.stop();
+      }
+    });
   }
 
   /**
