@@ -32,7 +32,7 @@ import { PrismDIDPublicKey } from "../did/prismDID/PrismDIDPublicKey";
 export class LongFormPrismDIDResolver implements DIDResolver {
   method = "prism";
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo) { }
 
   async resolve(didString: string): Promise<DIDDocument> {
     const did = DIDParser.parse(didString);

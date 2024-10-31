@@ -3,7 +3,7 @@ import {
   PrismDerivationPath,
   PRISM_WALLET_PURPOSE,
   PRISM_DID_METHOD,
-  AUTHENTICATION_KEY,
+  MASTER_KEY,
   ISSUING_KEY,
   PrismDerivationPathSchema
 } from "../../domain/models/derivation/schemas/PrismDerivation";
@@ -29,11 +29,11 @@ export class CreatePrismDID extends Task<Domain.DID, Args> {
     const getIndexTask = new PrismKeyPathIndexTask({ index: this.args.keyPathIndex });
     const index = await ctx.run(getIndexTask);
 
-    const authenticationDerivation = new PrismDerivationPath([
+    const masterKeyDerivation = new PrismDerivationPath([
       PRISM_WALLET_PURPOSE,
       PRISM_DID_METHOD,
       0,
-      AUTHENTICATION_KEY,
+      MASTER_KEY,
       index
     ]);
 
@@ -47,11 +47,11 @@ export class CreatePrismDID extends Task<Domain.DID, Args> {
 
     const seedHex = Buffer.from(ctx.Seed.value).toString("hex");
 
-    const sk = ctx.Apollo.createPrivateKey({
+    const masterSK = ctx.Apollo.createPrivateKey({
       [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
       [Domain.KeyProperties.curve]: Domain.Curve.SECP256K1,
       [Domain.KeyProperties.seed]: seedHex,
-      [Domain.KeyProperties.derivationPath]: authenticationDerivation.toString(),
+      [Domain.KeyProperties.derivationPath]: masterKeyDerivation.toString(),
       [Domain.KeyProperties.derivationSchema]: PrismDerivationPathSchema
     });
 
@@ -64,12 +64,14 @@ export class CreatePrismDID extends Task<Domain.DID, Args> {
     });
 
     const did = await ctx.Castor.createPrismDID(
-      sk.publicKey(),
+      masterSK.publicKey(),
       this.args.services,
-      [edSk.publicKey()]
+      [
+        edSk.publicKey()
+      ]
     );
 
-    await ctx.Pluto.storeDID(did, [sk, edSk], this.args.alias);
+    await ctx.Pluto.storeDID(did, [masterSK, edSk], this.args.alias);
 
     return did;
   }

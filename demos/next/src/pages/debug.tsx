@@ -53,7 +53,6 @@ export default function App() {
         <Dids />
         <br /> <br /> <br /> <br /> <br /> <br />
       </div>
-      <FooterNavigation />
     </>
   );
 }

@@ -1,11 +1,10 @@
-import { Provider } from 'react-redux';
-import { store } from '../reducers/store'; // Assuming your store is in store.js
+import { MountSDK } from '@/components/Agent';
 
 function App({ Component, pageProps }) {
     return (
-        <Provider store={store}>
+        <MountSDK>
             <Component {...pageProps} />
-        </Provider>
+        </MountSDK>
     );
 }
 

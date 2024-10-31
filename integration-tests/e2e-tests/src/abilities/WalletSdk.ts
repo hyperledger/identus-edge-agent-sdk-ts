@@ -9,6 +9,67 @@ let instance: typeof import("@hyperledger/identus-edge-agent-sdk").default;
 // fallback in any case of dangling sdk agents
 export const agentList: Map<string, WalletSdk> = new Map()
 
+
+class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
+  method: string = "prism"
+
+  async resolve(didString: string): Promise<SDK.Domain.DIDDocument> {
+    const { Domain } = await WalletSdk.loadSDK()
+    const url = `${CloudAgentConfiguration.agentUrl}dids/${didString}`;
+    const response = await fetch(url, {
+      "headers": {
+        "accept": "*/*",
+        "accept-language": "en",
+        "cache-control": "no-cache",
+        "pragma": "no-cache",
+        "sec-gpc": "1"
+      },
+      "method": "GET",
+      "mode": "cors",
+      "credentials": "omit"
+    })
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    const data: any = await response.json();
+    const didDocument = data.didDocument;
+
+    const servicesProperty = new Domain.Services(
+      didDocument.service
+    )
+    const verificationMethodsProperty = new Domain.VerificationMethods(
+      didDocument.verificationMethod
+    )
+    const coreProperties: SDK.Domain.DIDDocumentCoreProperty[] = [];
+    const authenticate: SDK.Domain.Authentication[] = [];
+    const assertion: SDK.Domain.AssertionMethod[] = [];
+
+    for (const verificationMethod of didDocument.verificationMethod) {
+      const isAssertion = didDocument.assertionMethod.find((method) => method === verificationMethod.id)
+      if (isAssertion) {
+        assertion.push(new Domain.AssertionMethod([isAssertion], [verificationMethod]))
+      }
+      const isAuthentication = didDocument.authentication.find((method) => method === verificationMethod.id)
+      if (isAuthentication) {
+        authenticate.push(new Domain.Authentication([isAuthentication], [verificationMethod]));
+      }
+    }
+
+    coreProperties.push(...authenticate);
+    coreProperties.push(servicesProperty);
+    coreProperties.push(verificationMethodsProperty);
+
+    const resolved = new Domain.DIDDocument(
+      Domain.DID.fromString(didString),
+      coreProperties
+    );
+
+    return resolved;
+  }
+}
+
+
+
 export class WalletSdk extends Ability implements Initialisable, Discardable {
   sdk!: SDK.Agent
   store: SDK.Store
@@ -97,9 +158,14 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
       Domain,
       ListenerKey,
       Store,
-      Pluto
+      Pluto,
+      Castor
     } = await WalletSdk.loadSDK()
+
+    const resolvers = [ShortFormDIDResolverSample];
     const apollo = new Apollo()
+    const castor = new Castor(apollo, resolvers);
+
     this.store = new Store({
       name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
       storage: InMemoryStore,
@@ -108,7 +174,13 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
     const pluto = new Pluto(this.store, apollo)
     const mediatorDID = Domain.DID.fromString(await WalletSdk.getMediatorDidThroughOob())
-    this.sdk = Agent.initialize({ seed, apollo, pluto, mediatorDID })
+    this.sdk = Agent.initialize({
+      seed,
+      apollo,
+      pluto,
+      mediatorDID,
+      castor
+    })
 
     this.sdk.addListener(
       ListenerKey.MESSAGE, async (messages: SDK.Domain.Message[]) => {
@@ -200,6 +272,8 @@ class MessageQueue {
           this.revocationStack.push(message)
         } else if (piUri === SDK.ProtocolType.DidcommPresentation) {
           this.presentationMessagesStack.push(message)
+        } else {
+          console.log(piUri)
         }
       } else {
         clearInterval(this.processingId!)

@@ -20,7 +20,6 @@ import * as Protos from "./protos/node_models";
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
-import { CastorError } from "../domain/models/Errors";
 import {
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
@@ -121,7 +120,7 @@ export default class Castor implements CastorInterface {
   async createPrismDID(
     key: PublicKey | KeyPair,
     services?: Service[] | undefined,
-    issuingKeys: (PublicKey | KeyPair)[] = []
+    authenticationKeys: (PublicKey | KeyPair)[] = []
   ): Promise<DID> {
     const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
     const masterPublicKey = "publicKey" in key ? key.publicKey : key;
@@ -132,21 +131,18 @@ export default class Castor implements CastorInterface {
       masterPublicKey,
     ).toProto();
 
-    const authenticationPk = new PrismDIDPublicKey(
-      getUsageId(Usage.AUTHENTICATION_KEY),
-      Usage.AUTHENTICATION_KEY,
-      masterPublicKey,
-    ).toProto();
-
     didPublicKeys.push(masterPk);
-    didPublicKeys.push(authenticationPk);
 
-    if (issuingKeys.length > 0) {
-      didPublicKeys.push(...issuingKeys.map((issuingKey, index) => new PrismDIDPublicKey(
-        getUsageId(Usage.ISSUING_KEY, index),
-        Usage.ISSUING_KEY,
-        "publicKey" in issuingKey ? issuingKey.publicKey : issuingKey,
-      ).toProto()));
+    if (authenticationKeys.length) {
+      for (const [index, authenticationKey] of authenticationKeys.entries()) {
+        const pk = "publicKey" in authenticationKey ? authenticationKey.publicKey : authenticationKey
+        const prismDIDPublicKey = new PrismDIDPublicKey(
+          getUsageId(Usage.AUTHENTICATION_KEY, index),
+          Usage.AUTHENTICATION_KEY,
+          pk,
+        )
+        didPublicKeys.push(prismDIDPublicKey.toProto())
+      }
     }
 
     const didCreationData =
@@ -177,7 +173,6 @@ export default class Castor implements CastorInterface {
     ).toString("hex");
 
     const base64State = base64.base64url.baseEncode(encodedState);
-
     const methodSpecificId = PrismDID.parseMethodId([stateHash, base64State]);
 
     return new DID("did", "prism", methodSpecificId.toString());
@@ -229,13 +224,17 @@ export default class Castor implements CastorInterface {
    */
   async resolveDID(did: string): Promise<DIDDocument> {
     const parsed = DID.fromString(did);
-    const resolver = this.resolvers.find(
+    const resolvers = this.resolvers.filter(
       (resolver) => resolver.method === parsed.method
     );
-    if (!resolver) {
-      throw new CastorError.NotPossibleToResolveDID();
+    for (const resolver of resolvers) {
+      try {
+        return await resolver.resolve(did)
+      } catch (err) {
+        console.log("Failed resolving did " + did)
+      }
     }
-    return resolver.resolve(did);
+    throw new Error("Non of the available Castor resolvers could resolve the did")
   }
 
   /**

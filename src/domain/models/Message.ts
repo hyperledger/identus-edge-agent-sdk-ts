@@ -174,9 +174,9 @@ export class Message implements Pluto.Storable {
 
 const decodeBase64 = (data: string) => {
   try {
-    return base64.baseDecode(data);
-  } catch (err) {
     return base64url.baseDecode(data);
+  } catch (err) {
+    return base64.baseDecode(data);
   }
 }
 export namespace Message {

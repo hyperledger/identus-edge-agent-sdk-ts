@@ -3,6 +3,7 @@ import {
   CreateManagedDidRequestDocumentTemplate,
   CredentialDefinitionInput,
   CredentialSchemaInput,
+  Curve,
   ManagedDIDKeyTemplate,
   Purpose
 } from "@amagyar-iohk/identus-cloud-agent-client-ts"
@@ -19,7 +20,9 @@ export class CloudAgentConfiguration {
   public static mediatorOobUrl: string = process.env.MEDIATOR_OOB_URL!
   public static agentUrl: string = process.env.AGENT_URL!
   public static publishedDid: string = process.env.PUBLISHED_DID!
+  public static publishedEd25519Did: string = process.env.ED25519_PUBLISHED_DID!
   public static jwtSchemaGuid: string = process.env.JWT_SCHEMA_GUID!
+  public static sdJWTSchemaGuid: string = process.env.SDJWT_SCHEMA_GUID!
   public static anoncredDefinitionGuid: string = process.env.ANONCRED_DEFINITION_GUID!
   public static apiKey: string | undefined = process.env.APIKEY
 
@@ -30,8 +33,56 @@ export class CloudAgentConfiguration {
       return
     }
 
-    await this.preparePublishedDid()
-    await this.prepareJwtSchema()
+    //Secp256k1 prism did for jwt credentials
+    try {
+      assert(this.publishedDid != null)
+      assert(this.publishedDid != "")
+      await axiosInstance.get(
+        `did-registrar/dids/${this.publishedDid}`
+      )
+      return
+    } catch (err) {
+      Utils.appendToNotes("DID not found. Creating a new one and publishing it.")
+      this.publishedDid = await this.preparePublishedDid(Curve.Secp256k1)
+    }
+    //Ed25519 prism did for jwt credentials
+    try {
+      assert(this.publishedEd25519Did != null)
+      assert(this.publishedEd25519Did != "")
+      await axiosInstance.get(
+        `did-registrar/dids/${this.publishedEd25519Did}`
+      )
+      return
+    } catch (err) {
+      Utils.appendToNotes("Ed25519 DID not found. Creating a new one and publishing it.")
+      this.publishedEd25519Did = await this.preparePublishedDid(Curve.Ed25519)
+    }
+
+    //JWT schema from Secp256k1 published did
+    try {
+      assert(this.jwtSchemaGuid != null)
+      assert(this.jwtSchemaGuid != "")
+      await axiosInstance.get(
+        `schema-registry/schemas/${this.jwtSchemaGuid}`
+      )
+      return
+    } catch (err) {
+      Utils.appendToNotes("JWT Schema not found. Creating a new one.")
+      this.jwtSchemaGuid = await this.prepareJwtSchema(this.publishedDid)
+    }
+    //SDJWT schema from Secp256k1 published did
+    try {
+      assert(this.sdJWTSchemaGuid != null)
+      assert(this.sdJWTSchemaGuid != "")
+      await axiosInstance.get(
+        `schema-registry/schemas/${this.sdJWTSchemaGuid}`
+      )
+      return
+    } catch (err) {
+      Utils.appendToNotes("SDJWT Schema not found. Creating a new one.")
+      this.sdJWTSchemaGuid = await this.prepareJwtSchema(this.publishedEd25519Did)
+    }
+
     await this.prepareAnoncredDefinition()
 
     this.isInitialized = true
@@ -53,27 +104,25 @@ export class CloudAgentConfiguration {
   /**
    * Checks if the environment PUBLISHED_DID variable exists in Cloud Agent, otherwise it creates a new one.
    */
-  static async preparePublishedDid() {
-    try {
-      assert(this.publishedDid != null)
-      assert(this.publishedDid != "")
-      await axiosInstance.get(
-        `did-registrar/dids/${this.publishedDid}`
-      )
-      return
-    } catch (err) {
-      Utils.appendToNotes("DID not found. Creating a new one and publishing it.")
-    }
-
+  static async preparePublishedDid(curve: Curve = Curve.Secp256k1) {
     const creationData = new CreateManagedDidRequest()
     creationData.documentTemplate =
       new CreateManagedDidRequestDocumentTemplate()
 
-    const publicKey = new ManagedDIDKeyTemplate()
-    publicKey.id = "key-1"
-    publicKey.purpose = Purpose.AssertionMethod
+    const assertionKey = new ManagedDIDKeyTemplate()
+    assertionKey.id = "key-assertion-1"
+    assertionKey.purpose = Purpose.AssertionMethod;
+    assertionKey.curve = curve;
 
-    creationData.documentTemplate.publicKeys = [publicKey]
+    const authenticationKey = new ManagedDIDKeyTemplate()
+    authenticationKey.id = "key-authentication-1"
+    authenticationKey.purpose = Purpose.Authentication;
+    assertionKey.curve = curve;
+
+    creationData.documentTemplate.publicKeys = [
+      assertionKey,
+      authenticationKey
+    ]
     creationData.documentTemplate.services = []
 
     const creationResponse = await axiosInstance.post(
@@ -81,7 +130,6 @@ export class CloudAgentConfiguration {
       creationData
     )
     const longFormDid = creationResponse.data.longFormDid
-
     const publicationResponse = await axiosInstance.post(
       `did-registrar/dids/${longFormDid}/publications`
     )
@@ -92,7 +140,7 @@ export class CloudAgentConfiguration {
       abortController.abort()
     }, 60000)
 
-    this.publishedDid = await new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
       if (!abortController.signal.aborted) {
         abortController.signal.onabort = () =>
           reject("Timeout waiting for the publication")
@@ -112,22 +160,12 @@ export class CloudAgentConfiguration {
   /**
    * Checks if the environment JWT_SCHEMA_GUID variable exists in Cloud Agent, otherwise it creates a new one.
    */
-  static async prepareJwtSchema() {
-    try {
-      assert(this.jwtSchemaGuid != null)
-      assert(this.jwtSchemaGuid != "")
-      await axiosInstance.get(
-        `schema-registry/schemas/${this.jwtSchemaGuid}`
-      )
-      return
-    } catch (err) {
-      Utils.appendToNotes("Schema not found. Creating a new one.")
-    }
-
+  static async prepareJwtSchema(did: string) {
     const credentialSchemaInput = new CredentialSchemaInput()
-    credentialSchemaInput.author = this.publishedDid
+    credentialSchemaInput.author = did
     credentialSchemaInput.description =
       "Some description to automation generated schema"
+
     credentialSchemaInput.name = "automation-schema-" + randomUUID()
     credentialSchemaInput.schema = {
       $id: `https://example.com/${credentialSchemaInput.name}`,
@@ -155,7 +193,7 @@ export class CloudAgentConfiguration {
       credentialSchemaInput
     )
 
-    this.jwtSchemaGuid = schemaResponse.data.guid
+    return schemaResponse.data.guid
   }
 
   /**

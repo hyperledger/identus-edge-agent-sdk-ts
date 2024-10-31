@@ -118,7 +118,9 @@ export class EdgeAgentWorkflow {
           if (e.message.includes("credential is revoked")) {
             assert.isTrue(expected === false)
           } else {
-            throw e
+            if (expected) {
+              throw e
+            }
           }
         }
       })

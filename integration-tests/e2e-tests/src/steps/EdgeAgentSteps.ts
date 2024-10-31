@@ -20,6 +20,22 @@ Given("{actor} has '{int}' jwt credentials issued by {actor}",
     await cloudAgent.attemptsTo(Notepad.notes().set("recordIdList", recordIdList))
   })
 
+Given("{actor} has '{int}' sd+jwt credentials issued by {actor}",
+  async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
+    const recordIdList = []
+    await Utils.repeat(numberOfIssuedCredentials, async () => {
+      await CloudAgentWorkflow.offerSDJWTCredential(cloudAgent)
+      await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, 1)
+      await EdgeAgentWorkflow.acceptCredential(edgeAgent)
+      const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
+      recordIdList.push(recordId)
+      await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
+      await EdgeAgentWorkflow.waitToReceiveCredentialIssuance(edgeAgent, 1)
+      await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, recordId)
+    })
+    await cloudAgent.attemptsTo(Notepad.notes().set("recordIdList", recordIdList))
+  })
+
 Given("{actor} has '{int}' anonymous credentials issued by {actor}",
   async function (edgeAgent: Actor, numberOfIssuedCredentials: number, cloudAgent: Actor) {
     const recordIdList = []
@@ -55,6 +71,21 @@ Given("{actor} creates '{}' prism DIDs",
   }
 )
 
+When("{actor} accepts {int} sd+jwt credential offer sequentially from {actor}",
+  async function (edgeAgent: Actor, numberOfCredentialOffers: number, cloudAgent: Actor) {
+    const recordIdList: string[] = []
+    await Utils.repeat(numberOfCredentialOffers, async () => {
+      await CloudAgentWorkflow.offerSDJWTCredential(cloudAgent)
+      await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, 1)
+      await EdgeAgentWorkflow.acceptCredential(edgeAgent)
+      const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
+      await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
+      recordIdList.push(recordId)
+    })
+    await cloudAgent.attemptsTo(Notepad.notes().set("recordIdList", recordIdList))
+  }
+)
+
 When("{actor} accepts {int} jwt credential offer sequentially from {actor}",
   async function (edgeAgent: Actor, numberOfCredentialOffers: number, cloudAgent: Actor) {
     const recordIdList: string[] = []
@@ -87,6 +118,25 @@ When("{actor} accepts {int} jwt credentials offer at once from {actor}",
     })
   }
 )
+
+When("{actor} accepts {int} sd+jwt credentials offer at once from {actor}",
+  async function (edgeAgent: Actor, numberOfCredentials: number, cloudAgent: Actor) {
+    const recordIdList: string[] = []
+    await Utils.repeat(numberOfCredentials, async () => {
+      await CloudAgentWorkflow.offerSDJWTCredential(cloudAgent)
+      const recordId = await cloudAgent.answer(Notepad.notes().get("recordId"))
+      recordIdList.push(recordId)
+    })
+    await cloudAgent.attemptsTo(Notepad.notes().set("recordIdList", recordIdList))
+
+    await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, numberOfCredentials)
+
+    await Utils.repeat(numberOfCredentials, async () => {
+      await EdgeAgentWorkflow.acceptCredential(edgeAgent)
+    })
+  }
+)
+
 
 When("{actor} connects through the invite",
   async function (edgeAgent: Actor) {
@@ -210,6 +260,40 @@ Then("{actor} will request {actor} to verify the JWT credential",
     }
 
     await EdgeAgentWorkflow.initiatePresentationRequest(verifierEdgeAgent, SDK.Domain.CredentialType.JWT, holderDID, claims)
+  }
+)
+
+Then("{actor} will request {actor} to verify the SD+JWT credential",
+  async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
+    const SDK = await EdgeAgentWorkflow.instance;
+    await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
+    const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
+    const claims: any = {
+      claims: {
+        automationRequired: {
+          type: "string",
+          pattern: "required value"
+        }
+      }
+    }
+    await EdgeAgentWorkflow.initiatePresentationRequest(verifierEdgeAgent, SDK.Domain.CredentialType.SDJWT, holderDID, claims)
+  }
+)
+
+Then("{actor} will request {actor} to verify the SD+JWT credential with non-existing claims",
+  async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
+    const SDK = await EdgeAgentWorkflow.instance;
+    await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
+    const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
+    const claims: any = {
+      claims: {
+        doesNotExist: {
+          type: "string",
+          pattern: "required value"
+        }
+      }
+    }
+    await EdgeAgentWorkflow.initiatePresentationRequest(verifierEdgeAgent, SDK.Domain.CredentialType.SDJWT, holderDID, claims)
   }
 )
 

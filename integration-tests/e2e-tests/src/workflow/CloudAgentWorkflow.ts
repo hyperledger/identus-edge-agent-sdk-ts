@@ -14,6 +14,7 @@ import {
 } from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 
 export class CloudAgentWorkflow {
   static async createConnection(cloudAgent: Actor, label?: string, goalCode?: string, goal?: string) {
@@ -92,6 +93,25 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async offerSDJWTCredential(cloudAgent: Actor) {
+    const credential = new CreateIssueCredentialRecordRequest();
+    credential.validityPeriod = 360000;
+    credential.claims = {
+      "automationRequired": "required value",
+    };
+    credential.automaticIssuance = true;
+    credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did;
+    credential.connectionId = await cloudAgent.answer<string>(
+      Notepad.notes().get("connectionId")
+    );
+    credential.credentialFormat = "SDJWT";
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("issue-credentials/credential-offers").with(credential)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set("recordId", LastResponse.body().recordId)
+    )
+  }
+
   static async offerAnonymousCredential(cloudAgent: Actor) {
     const credential: CreateIssueCredentialRecordRequest = {
       claims: {
@@ -129,6 +149,28 @@ export class CloudAgentWorkflow {
     proof.trustIssuers = [CloudAgentConfiguration.publishedDid]
 
     presentProofRequest.proofs = [proof]
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations").with(presentProofRequest)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set("presentationId", LastResponse.body().presentationId)
+    )
+  }
+
+  static async askForSDJWTPresentProof(cloudAgent: Actor) {
+    const presentProofRequest = new RequestPresentationInput()
+    presentProofRequest.connectionId = await cloudAgent.answer(
+      Notepad.notes().get("connectionId")
+    )
+    presentProofRequest.options = new Options()
+    presentProofRequest.options.challenge = randomUUID()
+    presentProofRequest.options.domain = CloudAgentConfiguration.agentUrl
+    const proof = new ProofRequestAux()
+    proof.schemaId = "https://schema.org/Person"
+    proof.trustIssuers = [CloudAgentConfiguration.publishedEd25519Did]
+    presentProofRequest.proofs = [proof]
+    presentProofRequest.credentialFormat = "SDJWT"
+    presentProofRequest.claims = {}
 
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("present-proof/presentations").with(presentProofRequest)),

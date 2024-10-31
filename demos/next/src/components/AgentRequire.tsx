@@ -1,7 +1,7 @@
 import { useMountedApp } from "@/reducers/store";
 import React from "react";
 
-export function AgentRequire({ children, text }: { children: any, text?: string }) {
+export function AgentRequire({ children, text, hide }: { hide?: boolean, children: any, text?: string }) {
 
     const { agent } = useMountedApp();
     // Function to recursively clone children with disabled prop set to true
@@ -11,6 +11,10 @@ export function AgentRequire({ children, text }: { children: any, text?: string 
             React.isValidElement(child) &&
             (child.type === 'input' || child.type === 'button')
         ) {
+            if (hide) {
+                return null;
+
+            }
             return React.cloneElement(child, { disabled: true } as any);
         }
         // If the child has children, recursively iterate over its children
