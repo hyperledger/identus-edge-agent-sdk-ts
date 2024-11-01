@@ -1,0 +1,11 @@
+{
+  "name": "@identus-edge-agent-sdk/integration-tests-cjs",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "sdk": "file:../../../"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
