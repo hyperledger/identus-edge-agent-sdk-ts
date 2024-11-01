@@ -178,13 +178,16 @@ describe('CommonJS Integration', () => {
     });
 
     // hack to avoid mediation startup
+    agent.connectionManager.cancellable = { cancel: () => { } };
     agent.mediationHandler.mediator = {
       hostDID: did,
       mediatorDID: did,
       routingDID: did,
     };
 
-    const started = await agent.start();
-    assert(started === "running")
+    await agent.start();
+    assert(agent.state === "running");
+    await agent.stop();
+    assert(agent.state === "stopped");
   });
 });
