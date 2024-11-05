@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:407](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L407)
+[src/domain/models/VerifiableCredential.ts:423](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L423)
 
 ## Properties
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:408](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L408)
+[src/domain/models/VerifiableCredential.ts:424](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L424)
 
 ___
 
@@ -58,18 +58,18 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:409](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L409)
+[src/domain/models/VerifiableCredential.ts:425](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L425)
 
 ## Accessors
 
 ### options
 
-• `get` **options**(): [`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md)
+• `get` **options**(): [`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md) \| [`SDJWPresentationOptions`](Domain.SDJWPresentationOptions.md)
 
 #### Returns
 
-[`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md)
+[`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md) \| [`SDJWPresentationOptions`](Domain.SDJWPresentationOptions.md)
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:414](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L414)
+[src/domain/models/VerifiableCredential.ts:430](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L430)

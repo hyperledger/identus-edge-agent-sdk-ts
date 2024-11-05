@@ -23,6 +23,7 @@ Pollux
 - [JWT](Pollux.md#jwt)
 - [SDJWT](Pollux.md#sdjwt)
 - [\_anoncreds](Pollux.md#_anoncreds)
+- [\_jwe](Pollux.md#_jwe)
 - [\_pako](Pollux.md#_pako)
 - [api](Pollux.md#api)
 - [apollo](Pollux.md#apollo)
@@ -31,6 +32,7 @@ Pollux
 ### Accessors
 
 - [anoncreds](Pollux.md#anoncreds)
+- [jwe](Pollux.md#jwe)
 
 ### Methods
 
@@ -46,6 +48,8 @@ Pollux
 - [fetchCredentialDefinition](Pollux.md#fetchcredentialdefinition)
 - [fetchRevocationRegistry](Pollux.md#fetchrevocationregistry)
 - [fetchSchema](Pollux.md#fetchschema)
+- [getDescriptorItems](Pollux.md#getdescriptoritems)
+- [getSigningKid](Pollux.md#getsigningkid)
 - [isCredentialRevoked](Pollux.md#iscredentialrevoked)
 - [isOfferPayload](Pollux.md#isofferpayload)
 - [isPresentationDefinitionRequestType](Pollux.md#ispresentationdefinitionrequesttype)
@@ -55,6 +59,8 @@ Pollux
 - [revealCredentialFields](Pollux.md#revealcredentialfields)
 - [start](Pollux.md#start)
 - [validPresentationSubmissionOptions](Pollux.md#validpresentationsubmissionoptions)
+- [validateInputDescriptor](Pollux.md#validateinputdescriptor)
+- [validatePresentationDefinitionOptions](Pollux.md#validatepresentationdefinitionoptions)
 - [verifyPresentationSubmission](Pollux.md#verifypresentationsubmission)
 - [verifyPresentationSubmissionAnoncreds](Pollux.md#verifypresentationsubmissionanoncreds)
 - [verifyPresentationSubmissionJWT](Pollux.md#verifypresentationsubmissionjwt)
@@ -82,7 +88,7 @@ Pollux
 
 #### Defined in
 
-[src/pollux/Pollux.ts:75](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L75)
+[src/pollux/Pollux.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L82)
 
 ## Properties
 
@@ -92,7 +98,7 @@ Pollux
 
 #### Defined in
 
-[src/pollux/Pollux.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L79)
+[src/pollux/Pollux.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L86)
 
 ___
 
@@ -102,7 +108,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L80)
+[src/pollux/Pollux.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L87)
 
 ___
 
@@ -112,7 +118,17 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:72](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L72)
+[src/pollux/Pollux.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L78)
+
+___
+
+### \_jwe
+
+• `Private` **\_jwe**: `undefined` \| `__module`
+
+#### Defined in
+
+[src/pollux/Pollux.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L79)
 
 ___
 
@@ -122,7 +138,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L73)
+[src/pollux/Pollux.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L80)
 
 ___
 
@@ -132,7 +148,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L78)
+[src/pollux/Pollux.ts:85](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L85)
 
 ___
 
@@ -142,7 +158,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L76)
+[src/pollux/Pollux.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L83)
 
 ___
 
@@ -152,7 +168,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:77](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L77)
+[src/pollux/Pollux.ts:84](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L84)
 
 ## Accessors
 
@@ -166,7 +182,21 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L84)
+[src/pollux/Pollux.ts:91](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L91)
+
+___
+
+### jwe
+
+• `get` **jwe**(): `__module`
+
+#### Returns
+
+`__module`
+
+#### Defined in
+
+[src/pollux/Pollux.ts:98](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L98)
 
 ## Methods
 
@@ -188,21 +218,25 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:396](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L396)
+[src/pollux/Pollux.ts:476](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L476)
 
 ___
 
 ### createJWTPresentationSubmission
 
-▸ **createJWTPresentationSubmission**(`presentationDefinitionRequest`, `credential`, `privateKey`): `Promise`\<[`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission)\>
+▸ **createJWTPresentationSubmission**(`presentationDefinitionRequest`, `credential`, `privateKey`, `options?`): `Promise`\<[`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `presentationDefinitionRequest` | `any` |
-| `credential` | [`JWTCredential`](JWTCredential.md) |
+| `credential` | [`Credential`](Domain.Credential.md) |
 | `privateKey` | [`PrivateKey`](Domain.PrivateKey.md) |
+| `options?` | `Object` |
+| `options.challenge?` | `string` |
+| `options.domain?` | `string` |
+| `options.presentationFrame?` | `boolean` \| `Record`\<`number`, `boolean`\> \| {} |
 
 #### Returns
 
@@ -210,7 +244,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:332](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L332)
+[src/pollux/Pollux.ts:379](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L379)
 
 ___
 
@@ -244,7 +278,7 @@ Creates a PresentationDefinitionRequest object for oob Verifications
 
 #### Defined in
 
-[src/pollux/Pollux.ts:467](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L467)
+[src/pollux/Pollux.ts:587](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L587)
 
 ___
 
@@ -276,13 +310,13 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1051](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L1051)
+[src/pollux/Pollux.ts:1259](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1259)
 
 ___
 
 ### createPresentationSubmission
 
-▸ **createPresentationSubmission**\<`Type`\>(`presentationDefinitionRequest`, `credential`, `privateKey?`): `Promise`\<[`PresentationSubmission`](../modules/Domain.md#presentationsubmission)\<`Type`\>\>
+▸ **createPresentationSubmission**\<`Type`\>(`presentationDefinitionRequest`, `credential`, `privateKey?`, `options?`): `Promise`\<[`PresentationSubmission`](../modules/Domain.md#presentationsubmission)\<`Type`\>\>
 
 #### Type parameters
 
@@ -297,6 +331,10 @@ ___
 | `presentationDefinitionRequest` | [`PresentationDefinitionRequest`](../modules/Domain.md#presentationdefinitionrequest)\<`Type`\> |
 | `credential` | [`Credential`](Domain.Credential.md) |
 | `privateKey?` | [`PrivateKey`](Domain.PrivateKey.md) \| [`LinkSecret`](Domain.LinkSecret.md) |
+| `options?` | `Object` |
+| `options.challenge?` | `string` |
+| `options.domain?` | `string` |
+| `options.presentationFrame?` | `boolean` \| `Record`\<`number`, `boolean`\> \| {} |
 
 #### Returns
 
@@ -308,7 +346,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:416](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L416)
+[src/pollux/Pollux.ts:496](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L496)
 
 ___
 
@@ -328,7 +366,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:174](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L174)
+[src/pollux/Pollux.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L200)
 
 ___
 
@@ -348,7 +386,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:165](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L165)
+[src/pollux/Pollux.ts:190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L190)
 
 ___
 
@@ -368,7 +406,7 @@ credentialStatus is JWTRevocationStatus
 
 #### Defined in
 
-[src/pollux/Pollux.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L158)
+[src/pollux/Pollux.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L183)
 
 ___
 
@@ -388,7 +426,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L151)
+[src/pollux/Pollux.ts:176](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L176)
 
 ___
 
@@ -410,7 +448,7 @@ handle the retrieval of a Credential Definition
 
 #### Defined in
 
-[src/pollux/Pollux.ts:965](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L965)
+[src/pollux/Pollux.ts:1181](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1181)
 
 ___
 
@@ -430,7 +468,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:282](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L282)
+[src/pollux/Pollux.ts:304](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L304)
 
 ___
 
@@ -452,7 +490,55 @@ handle the retrieval of a Schema definition
 
 #### Defined in
 
-[src/pollux/Pollux.ts:985](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L985)
+[src/pollux/Pollux.ts:1198](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1198)
+
+___
+
+### getDescriptorItems
+
+▸ **getDescriptorItems**(`inputDescriptors`, `credential`): [`DescriptorItem`](../modules/Domain.md#descriptoritem)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `inputDescriptors` | [`InputDescriptor`](../modules/Domain.md#inputdescriptor)[] |
+| `credential` | [`Credential`](Domain.Credential.md) |
+
+#### Returns
+
+[`DescriptorItem`](../modules/Domain.md#descriptoritem)[]
+
+#### Defined in
+
+[src/pollux/Pollux.ts:352](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L352)
+
+___
+
+### getSigningKid
+
+▸ **getSigningKid**(`did`, `privateKey`): `Promise`\<`undefined` \| `string`\>
+
+try to match the privateKey with a dids verificationMethod
+returning the relevant key id
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `did` | [`DID`](Domain.DID.md) |
+| `privateKey` | [`PrivateKey`](Domain.PrivateKey.md) |
+
+#### Returns
+
+`Promise`\<`undefined` \| `string`\>
+
+kid (key identifier)
+// ??? replaced by CreateJWT task
+
+#### Defined in
+
+[src/pollux/Pollux.ts:1343](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1343)
 
 ___
 
@@ -476,7 +562,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:299](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L299)
+[src/pollux/Pollux.ts:318](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L318)
 
 ___
 
@@ -503,7 +589,7 @@ offer is CredentialOfferJWTBasePayload
 
 #### Defined in
 
-[src/pollux/Pollux.ts:836](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L836)
+[src/pollux/Pollux.ts:1046](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1046)
 
 ___
 
@@ -530,13 +616,13 @@ request is PresentationDefinitionRequest\<Type\>
 
 #### Defined in
 
-[src/pollux/Pollux.ts:324](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L324)
+[src/pollux/Pollux.ts:344](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L344)
 
 ___
 
 ### parseCredential
 
-▸ **parseCredential**(`credentialBuffer`, `options?`): `Promise`\<[`AnonCredsCredential`](AnonCredsCredential.md) \| [`JWTCredential`](JWTCredential.md) \| `SDJWTCredential`\>
+▸ **parseCredential**(`credentialBuffer`, `options?`): `Promise`\<[`AnonCredsCredential`](AnonCredsCredential.md) \| [`JWTCredential`](JWTCredential.md) \| [`SDJWTCredential`](SDJWTCredential.md)\>
 
 #### Parameters
 
@@ -550,7 +636,7 @@ ___
 
 #### Returns
 
-`Promise`\<[`AnonCredsCredential`](AnonCredsCredential.md) \| [`JWTCredential`](JWTCredential.md) \| `SDJWTCredential`\>
+`Promise`\<[`AnonCredsCredential`](AnonCredsCredential.md) \| [`JWTCredential`](JWTCredential.md) \| [`SDJWTCredential`](SDJWTCredential.md)\>
 
 #### Implementation of
 
@@ -558,7 +644,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:997](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L997)
+[src/pollux/Pollux.ts:1207](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1207)
 
 ___
 
@@ -585,7 +671,7 @@ data is PresentationSubmission\<Type\>
 
 #### Defined in
 
-[src/pollux/Pollux.ts:461](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L461)
+[src/pollux/Pollux.ts:547](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L547)
 
 ___
 
@@ -616,13 +702,13 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:884](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L884)
+[src/pollux/Pollux.ts:1094](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1094)
 
 ___
 
 ### revealCredentialFields
 
-▸ **revealCredentialFields**(`credential`, `fields`, `linkSecret?`): `Promise`\<`Claim`\>
+▸ **revealCredentialFields**(`credential`, `fields`, `linkSecret?`): `Promise`\<`Record`\<`string`, `any`\>\>
 
 #### Parameters
 
@@ -634,7 +720,7 @@ ___
 
 #### Returns
 
-`Promise`\<`Claim`\>
+`Promise`\<`Record`\<`string`, `any`\>\>
 
 #### Implementation of
 
@@ -642,7 +728,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:91](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L91)
+[src/pollux/Pollux.ts:106](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L106)
 
 ___
 
@@ -656,7 +742,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:832](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L832)
+[src/pollux/Pollux.ts:1037](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L1037)
 
 ___
 
@@ -684,7 +770,50 @@ options is Response
 
 #### Defined in
 
-[src/pollux/Pollux.ts:613](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L613)
+[src/pollux/Pollux.ts:736](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L736)
+
+___
+
+### validateInputDescriptor
+
+▸ **validateInputDescriptor**(`vc`, `descriptorMapper`, `inputDescriptor`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `vc` | `any` |
+| `descriptorMapper` | `DescriptorPath` |
+| `inputDescriptor` | `undefined` \| [`InputDescriptor`](../modules/Domain.md#inputdescriptor) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[src/pollux/Pollux.ts:764](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L764)
+
+___
+
+### validatePresentationDefinitionOptions
+
+▸ **validatePresentationDefinitionOptions**(`type`, `options`): [`PresentationJWTOptions`](../modules/Domain.md#presentationjwtoptions)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | [`CredentialType`](../enums/Domain.CredentialType.md) |
+| `options` | [`AnoncredsPresentationOptions`](Domain.AnoncredsPresentationOptions.md) \| [`JWTPresentationOptions`](Domain.JWTPresentationOptions.md) \| [`SDJWPresentationOptions`](Domain.SDJWPresentationOptions.md) |
+
+#### Returns
+
+[`PresentationJWTOptions`](../modules/Domain.md#presentationjwtoptions)
+
+#### Defined in
+
+[src/pollux/Pollux.ts:554](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L554)
 
 ___
 
@@ -713,7 +842,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/pollux/Pollux.ts:797](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L797)
+[src/pollux/Pollux.ts:991](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L991)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options`): `Promise`\<`boolean`\>
 
@@ -734,7 +863,28 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/pollux/Pollux.ts:798](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L798)
+[src/pollux/Pollux.ts:992](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L992)
+
+▸ **verifyPresentationSubmission**(`presentationSubmission`, `options`): `Promise`\<`boolean`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `presentationSubmission` | [`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission) |
+| `options` | [`SDJWT`](../interfaces/Domain.Pollux.verifyPresentationSubmission.options.SDJWT.md) |
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+#### Implementation of
+
+[Pollux](../interfaces/Domain.Pollux-1.md).[verifyPresentationSubmission](../interfaces/Domain.Pollux-1.md#verifypresentationsubmission)
+
+#### Defined in
+
+[src/pollux/Pollux.ts:993](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L993)
 
 ___
 
@@ -755,7 +905,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:766](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L766)
+[src/pollux/Pollux.ts:960](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L960)
 
 ___
 
@@ -776,7 +926,24 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:623](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L623)
+[src/pollux/Pollux.ts:825](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L825)
+
+▸ **verifyPresentationSubmissionJWT**(`presentationSubmission`, `options`): `Promise`\<`boolean`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `presentationSubmission` | [`JWTPresentationSubmission`](../modules/Domain.md#jwtpresentationsubmission) |
+| `options` | [`SDJWT`](../interfaces/Domain.Pollux.verifyPresentationSubmission.options.SDJWT.md) |
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+#### Defined in
+
+[src/pollux/Pollux.ts:826](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L826)
 
 ___
 
@@ -797,4 +964,4 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:211](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/Pollux.ts#L211)
+[src/pollux/Pollux.ts:232](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pollux/Pollux.ts#L232)

@@ -8,14 +8,36 @@
 
 ### Properties
 
+- [issuer](Domain.Pollux.verifyPresentationSubmission.options.SDJWT.md#issuer)
 - [presentationDefinitionRequest](Domain.Pollux.verifyPresentationSubmission.options.SDJWT.md#presentationdefinitionrequest)
+- [requiredClaims](Domain.Pollux.verifyPresentationSubmission.options.SDJWT.md#requiredclaims)
 
 ## Properties
 
-### presentationDefinitionRequest
+### issuer
 
-• **presentationDefinitionRequest**: `any`
+• **issuer**: [`DID`](../classes/Domain.DID.md)
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L142)
+[src/domain/buildingBlocks/Pollux.ts:144](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L144)
+
+___
+
+### presentationDefinitionRequest
+
+• **presentationDefinitionRequest**: [`PresentationExchangeDefinitionRequest`](../modules/Domain.md#presentationexchangedefinitionrequest)
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:145](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L145)
+
+___
+
+### requiredClaims
+
+• `Optional` **requiredClaims**: `string`[]
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L146)

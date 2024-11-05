@@ -1,43 +1,49 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / ECPublicKeyInitialization
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidProblemReportBodyError
 
-# Class: ECPublicKeyInitialization
+# Class: InvalidProblemReportBodyError
 
-[Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).ECPublicKeyInitialization
+[Domain](../modules/Domain.md).[AgentError](../modules/Domain.AgentError.md).InvalidProblemReportBodyError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`ECPublicKeyInitialization`**
+  ↳ **`InvalidProblemReportBodyError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApolloError.ECPublicKeyInitialization.md#constructor)
+- [constructor](Domain.AgentError.InvalidProblemReportBodyError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApolloError.ECPublicKeyInitialization.md#cause)
-- [message](Domain.ApolloError.ECPublicKeyInitialization.md#message)
-- [name](Domain.ApolloError.ECPublicKeyInitialization.md#name)
-- [stack](Domain.ApolloError.ECPublicKeyInitialization.md#stack)
-- [prepareStackTrace](Domain.ApolloError.ECPublicKeyInitialization.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApolloError.ECPublicKeyInitialization.md#stacktracelimit)
+- [cause](Domain.AgentError.InvalidProblemReportBodyError.md#cause)
+- [message](Domain.AgentError.InvalidProblemReportBodyError.md#message)
+- [name](Domain.AgentError.InvalidProblemReportBodyError.md#name)
+- [stack](Domain.AgentError.InvalidProblemReportBodyError.md#stack)
+- [prepareStackTrace](Domain.AgentError.InvalidProblemReportBodyError.md#preparestacktrace)
+- [stackTraceLimit](Domain.AgentError.InvalidProblemReportBodyError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApolloError.ECPublicKeyInitialization.md#capturestacktrace)
+- [captureStackTrace](Domain.AgentError.InvalidProblemReportBodyError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new ECPublicKeyInitialization**(): [`ECPublicKeyInitialization`](Domain.ApolloError.ECPublicKeyInitialization.md)
+• **new InvalidProblemReportBodyError**(`message?`): [`InvalidProblemReportBodyError`](Domain.AgentError.InvalidProblemReportBodyError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
 
 #### Returns
 
-[`ECPublicKeyInitialization`](Domain.ApolloError.ECPublicKeyInitialization.md)
+[`InvalidProblemReportBodyError`](Domain.AgentError.InvalidProblemReportBodyError.md)
 
 #### Overrides
 
@@ -45,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L47)
+[src/domain/models/errors/Agent.ts:165](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/errors/Agent.ts#L165)
 
 ## Properties
 

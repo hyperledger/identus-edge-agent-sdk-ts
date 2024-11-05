@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:279](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L279)
+[src/domain/models/VerifiableCredential.ts:294](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L294)

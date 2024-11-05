@@ -59,7 +59,7 @@ create a Backup object from the stored data
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:44](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L44)
+[src/domain/buildingBlocks/Pluto.ts:44](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L44)
 
 ___
 
@@ -81,7 +81,7 @@ Delete a previously stored messages
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:179](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L179)
+[src/domain/buildingBlocks/Pluto.ts:179](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L179)
 
 ___
 
@@ -97,7 +97,7 @@ Retrieve all the stored credentials
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:159](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L159)
+[src/domain/buildingBlocks/Pluto.ts:159](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L159)
 
 ___
 
@@ -113,7 +113,7 @@ Retrieve all stored DID pairs (DIDComm connections).
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:129](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L129)
+[src/domain/buildingBlocks/Pluto.ts:129](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L129)
 
 ___
 
@@ -129,7 +129,7 @@ Retrieve all stored mediators.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:154](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L154)
+[src/domain/buildingBlocks/Pluto.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L154)
 
 ___
 
@@ -145,7 +145,7 @@ Retrieve all stored DIDComm messages.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:144](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L144)
+[src/domain/buildingBlocks/Pluto.ts:144](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L144)
 
 ___
 
@@ -161,7 +161,7 @@ Retrieve all stored Peer DIDs.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:119](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L119)
+[src/domain/buildingBlocks/Pluto.ts:119](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L119)
 
 ___
 
@@ -177,7 +177,7 @@ Retrieve all stored PRISM DIDs.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:114](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L114)
+[src/domain/buildingBlocks/Pluto.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L114)
 
 ___
 
@@ -199,7 +199,7 @@ Fetch the Credential Metadata by its name
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L61)
+[src/domain/buildingBlocks/Pluto.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L61)
 
 ___
 
@@ -221,7 +221,7 @@ Retrieve available private keys for a given DID.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:124](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L124)
+[src/domain/buildingBlocks/Pluto.ts:124](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L124)
 
 ___
 
@@ -243,7 +243,7 @@ Retrieve the stored link secret by its name
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:164](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L164)
+[src/domain/buildingBlocks/Pluto.ts:164](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L164)
 
 ___
 
@@ -265,7 +265,7 @@ Retrieve a DIDComm message by ID.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:149](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L149)
+[src/domain/buildingBlocks/Pluto.ts:149](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L149)
 
 ___
 
@@ -287,7 +287,7 @@ Retrieve a DID pair containing a given DID as either host or receiver.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:134](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L134)
+[src/domain/buildingBlocks/Pluto.ts:134](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L134)
 
 ___
 
@@ -309,7 +309,7 @@ Retrieve a DID pair by a given pair name.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:139](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L139)
+[src/domain/buildingBlocks/Pluto.ts:139](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L139)
 
 ___
 
@@ -339,7 +339,7 @@ load the given data into the store
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L50)
+[src/domain/buildingBlocks/Pluto.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L50)
 
 ___
 
@@ -361,7 +361,7 @@ Revoke a Credential
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:174](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L174)
+[src/domain/buildingBlocks/Pluto.ts:174](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L174)
 
 ___
 
@@ -377,7 +377,7 @@ Pluto initialise function
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L39)
+[src/domain/buildingBlocks/Pluto.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L39)
 
 ___
 
@@ -399,7 +399,7 @@ Store a Credential into the Database
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:109](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L109)
+[src/domain/buildingBlocks/Pluto.ts:109](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L109)
 
 ___
 
@@ -421,7 +421,7 @@ Store the Credential Metadata
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:55](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L55)
+[src/domain/buildingBlocks/Pluto.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L55)
 
 ___
 
@@ -446,7 +446,7 @@ with optional private key(s) and alias
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:67](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L67)
+[src/domain/buildingBlocks/Pluto.ts:67](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L67)
 
 ___
 
@@ -470,7 +470,7 @@ Store a named pair of DIDs representing a DIDComm connection.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L84)
+[src/domain/buildingBlocks/Pluto.ts:84](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L84)
 
 ___
 
@@ -492,7 +492,7 @@ Store a new linkSecret
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:169](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L169)
+[src/domain/buildingBlocks/Pluto.ts:169](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L169)
 
 ___
 
@@ -514,7 +514,7 @@ Store a mediator information.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:104](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L104)
+[src/domain/buildingBlocks/Pluto.ts:104](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L104)
 
 ___
 
@@ -536,7 +536,7 @@ Store a DIDComm message.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:89](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L89)
+[src/domain/buildingBlocks/Pluto.ts:89](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L89)
 
 ___
 
@@ -558,7 +558,7 @@ Store an array of DIDComm messages
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L94)
+[src/domain/buildingBlocks/Pluto.ts:94](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L94)
 
 ___
 
@@ -585,7 +585,7 @@ use storeDID instead
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L79)
+[src/domain/buildingBlocks/Pluto.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L79)
 
 ___
 
@@ -613,7 +613,7 @@ use storeDID instead
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L73)
+[src/domain/buildingBlocks/Pluto.ts:73](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L73)
 
 ___
 
@@ -635,4 +635,4 @@ Store a list of private keys with its metadata and a reference to the DID it bel
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pluto.ts#L99)
+[src/domain/buildingBlocks/Pluto.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pluto.ts#L99)

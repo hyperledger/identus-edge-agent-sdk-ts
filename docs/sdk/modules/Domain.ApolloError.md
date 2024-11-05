@@ -8,15 +8,13 @@
 
 ### Classes
 
+- [ApolloLibError](../classes/Domain.ApolloError.ApolloLibError.md)
 - [CouldNotParseMessageString](../classes/Domain.ApolloError.CouldNotParseMessageString.md)
-- [ECPublicKeyInitialization](../classes/Domain.ApolloError.ECPublicKeyInitialization.md)
 - [InvalidDerivationPath](../classes/Domain.ApolloError.InvalidDerivationPath.md)
-- [InvalidHashingAlgorithm](../classes/Domain.ApolloError.InvalidHashingAlgorithm.md)
 - [InvalidKeyCurve](../classes/Domain.ApolloError.InvalidKeyCurve.md)
 - [InvalidKeyType](../classes/Domain.ApolloError.InvalidKeyType.md)
-- [InvalidMnemonicWord](../classes/Domain.ApolloError.InvalidMnemonicWord.md)
-- [InvalidPrivateKey](../classes/Domain.ApolloError.InvalidPrivateKey.md)
+- [KeyInitializationError](../classes/Domain.ApolloError.KeyInitializationError.md)
 - [KeyRestoratonFailed](../classes/Domain.ApolloError.KeyRestoratonFailed.md)
-- [MissingChainCode](../classes/Domain.ApolloError.MissingChainCode.md)
 - [MissingKeyParameters](../classes/Domain.ApolloError.MissingKeyParameters.md)
-- [MissingPrivateKey](../classes/Domain.ApolloError.MissingPrivateKey.md)
+- [MnemonicLengthError](../classes/Domain.ApolloError.MnemonicLengthError.md)
+- [MnemonicWordError](../classes/Domain.ApolloError.MnemonicWordError.md)

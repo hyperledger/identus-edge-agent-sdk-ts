@@ -1,3 +1,19 @@
+# [6.3.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.3...v6.3.0) (2024-11-05)
+
+
+### Bug Fixes
+
+* anoncreds rust build failing, enable bulk-memory c flag on compilation ([#307](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/307)) ([7481938](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/74819386e633ea9d6c0cf31f2afb6776d4fc738b))
+* build single commonjs output while keeping ability to use import or require ([#320](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/320)) ([2cdbf1e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2cdbf1ede368164be3dd56f3e362e76e94d48b48))
+* e2e workflows misnamed package ([#317](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/317)) ([7c152bf](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/7c152bffe0de1de68ac1c06f96d49ebc38b64391))
+* enable building from docker ([#303](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/303)) ([e6d0008](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e6d0008dafe5db8d87f683665509722ad60a6acd))
+* remove rollup dependency ([#300](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/300)) ([ff6740e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ff6740e2d5f62262b1db65f517410af2ddc11448))
+
+
+### Features
+
+* sdk to sdk sdjwt holder verification ([#292](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/292)) ([1d841f4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/1d841f42bb311d696ed7d2c9aff2cf9293aa8217))
+
 # [4.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.1.0...v4.0.0) (2024-02-02)
 
 * fix: removing terser to allow an unminified build that is easier to d… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/127

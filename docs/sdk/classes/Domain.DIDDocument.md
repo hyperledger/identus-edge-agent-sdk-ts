@@ -18,6 +18,7 @@
 ### Accessors
 
 - [services](Domain.DIDDocument.md#services)
+- [verificationMethods](Domain.DIDDocument.md#verificationmethods)
 
 ## Constructors
 
@@ -38,7 +39,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:112](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L112)
+[src/domain/models/DIDDocument.ts:112](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/DIDDocument.ts#L112)
 
 ## Properties
 
@@ -48,7 +49,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:114](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L114)
+[src/domain/models/DIDDocument.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/DIDDocument.ts#L114)
 
 ___
 
@@ -58,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:113](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L113)
+[src/domain/models/DIDDocument.ts:113](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/DIDDocument.ts#L113)
 
 ## Accessors
 
@@ -72,4 +73,18 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:117](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L117)
+[src/domain/models/DIDDocument.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/DIDDocument.ts#L117)
+
+___
+
+### verificationMethods
+
+• `get` **verificationMethods**(): [`VerificationMethod`](Domain.VerificationMethod.md)[]
+
+#### Returns
+
+[`VerificationMethod`](Domain.VerificationMethod.md)[]
+
+#### Defined in
+
+[src/domain/models/DIDDocument.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/DIDDocument.ts#L126)

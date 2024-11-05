@@ -22,3 +22,4 @@
 - [InvalidVerifyCredentialError](../classes/Domain.PolluxError.InvalidVerifyCredentialError.md)
 - [InvalidVerifyFormatError](../classes/Domain.PolluxError.InvalidVerifyFormatError.md)
 - [NoDomainOrChallengeFound](../classes/Domain.PolluxError.NoDomainOrChallengeFound.md)
+- [RevocationError](../classes/Domain.PolluxError.RevocationError.md)

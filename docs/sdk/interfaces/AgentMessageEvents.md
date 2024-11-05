@@ -21,7 +21,7 @@
 | Name | Type |
 | :------ | :------ |
 | `eventName` | [`ListenerKey`](../enums/ListenerKey.md) |
-| `callback` | `EventCallback` |
+| `callback` | [`EventCallback`](../modules.md#eventcallback) |
 
 #### Returns
 
@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L133)
+[src/edge-agent/types/index.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/types/index.ts#L66)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:135](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L135)
+[src/edge-agent/types/index.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/types/index.ts#L68)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `eventName` | [`ListenerKey`](../enums/ListenerKey.md) |
-| `callback` | `EventCallback` |
+| `callback` | [`EventCallback`](../modules.md#eventcallback) |
 
 #### Returns
 
@@ -71,4 +71,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:134](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L134)
+[src/edge-agent/types/index.ts:67](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/types/index.ts#L67)

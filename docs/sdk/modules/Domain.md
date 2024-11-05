@@ -7,7 +7,6 @@
 ### Namespaces
 
 - [AgentError](Domain.AgentError.md)
-- [ApiError](Domain.ApiError.md)
 - [ApolloError](Domain.ApolloError.md)
 - [Backup](Domain.Backup.md)
 - [CastorError](Domain.CastorError.md)
@@ -15,6 +14,7 @@
 - [ExportableKey](Domain.ExportableKey.md)
 - [ImportableKey](Domain.ImportableKey.md)
 - [JWK](Domain.JWK.md)
+- [JWT](Domain.JWT.md)
 - [MercuryError](Domain.MercuryError.md)
 - [Message](Domain.Message.md)
 - [PEM](Domain.PEM.md)
@@ -52,6 +52,8 @@
 
 - [AlsoKnownAs](../classes/Domain.AlsoKnownAs.md)
 - [AnoncredsPresentationOptions](../classes/Domain.AnoncredsPresentationOptions.md)
+- [ApiError](../classes/Domain.ApiError.md)
+- [ApiResponse](../classes/Domain.ApiResponse.md)
 - [AssertionMethod](../classes/Domain.AssertionMethod.md)
 - [AttachmentDescriptor](../classes/Domain.AttachmentDescriptor.md)
 - [Authentication](../classes/Domain.Authentication.md)
@@ -66,7 +68,6 @@
 - [DIDResolver](../classes/Domain.DIDResolver.md)
 - [DIDUrl](../classes/Domain.DIDUrl.md)
 - [DerivableKey](../classes/Domain.DerivableKey.md)
-- [HttpResponse](../classes/Domain.HttpResponse.md)
 - [JWTPresentationOptions](../classes/Domain.JWTPresentationOptions.md)
 - [Key](../classes/Domain.Key.md)
 - [KeyAgreement](../classes/Domain.KeyAgreement.md)
@@ -78,6 +79,7 @@
 - [PrismDID](../classes/Domain.PrismDID.md)
 - [PrivateKey](../classes/Domain.PrivateKey.md)
 - [PublicKey](../classes/Domain.PublicKey.md)
+- [SDJWPresentationOptions](../classes/Domain.SDJWPresentationOptions.md)
 - [Service](../classes/Domain.Service.md)
 - [ServiceEndpoint](../classes/Domain.ServiceEndpoint.md)
 - [Services](../classes/Domain.Services.md)
@@ -92,7 +94,6 @@
 - [Apollo](../interfaces/Domain.Apollo.md)
 - [AttachmentBase64](../interfaces/Domain.AttachmentBase64.md)
 - [AttachmentHeader](../interfaces/Domain.AttachmentHeader.md)
-- [AttachmentJsonData](../interfaces/Domain.AttachmentJsonData.md)
 - [AttachmentJws](../interfaces/Domain.AttachmentJws.md)
 - [AttachmentJwsData](../interfaces/Domain.AttachmentJwsData.md)
 - [AttachmentLinkData](../interfaces/Domain.AttachmentLinkData.md)
@@ -124,6 +125,7 @@
 - [AnoncredsPresentationClaims](Domain.md#anoncredspresentationclaims)
 - [AnoncredsPresentationSubmission](Domain.md#anoncredspresentationsubmission)
 - [AttachmentData](Domain.md#attachmentdata)
+- [AttachmentJsonData](Domain.md#attachmentjsondata)
 - [AttributeType](Domain.md#attributetype)
 - [Claims](Domain.md#claims)
 - [CredentialOfferJWTBasePayload](Domain.md#credentialofferjwtbasepayload)
@@ -135,6 +137,7 @@
 - [DescriptorItem](Domain.md#descriptoritem)
 - [ExportableKey](Domain.md#exportablekey)
 - [Hasher](Domain.md#hasher)
+- [HttpMethod](Domain.md#httpmethod)
 - [InputConstraints](Domain.md#inputconstraints)
 - [InputDescriptor](Domain.md#inputdescriptor)
 - [InputField](Domain.md#inputfield)
@@ -160,6 +163,9 @@
 - [PresentationSubmission](Domain.md#presentationsubmission)
 - [PresentationSubmissionData](Domain.md#presentationsubmissiondata)
 - [ProcessedCredentialOfferPayloads](Domain.md#processedcredentialofferpayloads)
+- [SDJWTPresentationClaims](Domain.md#sdjwtpresentationclaims)
+- [SDJWTPresentationExchangeSubmission](Domain.md#sdjwtpresentationexchangesubmission)
+- [SDJWTPresentationSubmission](Domain.md#sdjwtpresentationsubmission)
 - [Signer](Domain.md#signer)
 - [Verifier](Domain.md#verifier)
 - [W3CVerifiableCredential](Domain.md#w3cverifiablecredential)
@@ -193,7 +199,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:111](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L111)
+[src/domain/models/VerifiableCredential.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L114)
 
 ___
 
@@ -210,7 +216,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:100](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L100)
+[src/domain/models/VerifiableCredential.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L103)
 
 ___
 
@@ -220,17 +226,27 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:215](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L215)
+[src/domain/models/VerifiableCredential.ts:230](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L230)
 
 ___
 
 ### AttachmentData
 
-Ƭ **AttachmentData**: [`AttachmentJsonData`](../interfaces/Domain.AttachmentJsonData.md) \| [`AttachmentLinkData`](../interfaces/Domain.AttachmentLinkData.md) \| [`AttachmentBase64`](../interfaces/Domain.AttachmentBase64.md) \| [`AttachmentJwsData`](../interfaces/Domain.AttachmentJwsData.md) \| [`AttachmentJws`](../interfaces/Domain.AttachmentJws.md) \| [`AttachmentHeader`](../interfaces/Domain.AttachmentHeader.md)
+Ƭ **AttachmentData**: [`AttachmentJsonData`](Domain.md#attachmentjsondata) \| [`AttachmentLinkData`](../interfaces/Domain.AttachmentLinkData.md) \| [`AttachmentBase64`](../interfaces/Domain.AttachmentBase64.md) \| [`AttachmentJwsData`](../interfaces/Domain.AttachmentJwsData.md) \| [`AttachmentJws`](../interfaces/Domain.AttachmentJws.md) \| [`AttachmentHeader`](../interfaces/Domain.AttachmentHeader.md)
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/MessageAttachment.ts#L32)
+[src/domain/models/MessageAttachment.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/MessageAttachment.ts#L34)
+
+___
+
+### AttachmentJsonData
+
+Ƭ **AttachmentJsonData**: \{ `json`: `any`  } \| \{ `data`: `any`  }
+
+#### Defined in
+
+[src/domain/models/MessageAttachment.ts:28](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/MessageAttachment.ts#L28)
 
 ___
 
@@ -240,13 +256,13 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:81](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L81)
+[src/domain/models/VerifiableCredential.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L82)
 
 ___
 
 ### Claims
 
-Ƭ **Claims**\<`Type`\>: `Type` extends [`JWT`](../enums/Domain.CredentialType.md#jwt) ? \{ `[name: string]`: [`InputFieldFilter`](Domain.md#inputfieldfilter);  } : \{ `[name: string]`: [`AnoncredsInputFieldFilter`](Domain.md#anoncredsinputfieldfilter);  }
+Ƭ **Claims**\<`Type`\>: `Type` extends [`JWT`](../enums/Domain.CredentialType.md#jwt) ? \{ `[name: string]`: [`InputFieldFilter`](Domain.md#inputfieldfilter);  } : `Type` extends [`SDJWT`](../enums/Domain.CredentialType.md#sdjwt) ? \{ `[name: string]`: [`InputFieldFilter`](Domain.md#inputfieldfilter);  } : \{ `[name: string]`: [`AnoncredsInputFieldFilter`](Domain.md#anoncredsinputfieldfilter);  }
 
 #### Type parameters
 
@@ -256,7 +272,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:84](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L84)
+[src/domain/models/VerifiableCredential.ts:85](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L85)
 
 ___
 
@@ -274,7 +290,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L16)
+[src/domain/buildingBlocks/Pollux.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L16)
 
 ___
 
@@ -294,7 +310,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L23)
+[src/domain/buildingBlocks/Pollux.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L23)
 
 ___
 
@@ -304,7 +320,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:32](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L32)
+[src/domain/buildingBlocks/Pollux.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L32)
 
 ___
 
@@ -321,7 +337,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L9)
+[src/domain/buildingBlocks/Pollux.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L9)
 
 ___
 
@@ -331,7 +347,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:99](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/DIDDocument.ts#L99)
+[src/domain/models/DIDDocument.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/DIDDocument.ts#L99)
 
 ___
 
@@ -343,12 +359,14 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `jwt` | \{ `alg`: `string`[]  } |
+| `jwt?` | \{ `alg`: `string`[]  } |
 | `jwt.alg` | `string`[] |
+| `sdjwt?` | \{ `alg`: `string`[]  } |
+| `sdjwt.alg` | `string`[] |
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L151)
+[src/domain/models/VerifiableCredential.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L154)
 
 ___
 
@@ -367,7 +385,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:198](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L198)
+[src/domain/models/VerifiableCredential.ts:197](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L197)
 
 ___
 
@@ -380,9 +398,9 @@ Default is all
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L11)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/exportable/ExportableKey.ts#L12)
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L23)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
 
 ___
 
@@ -407,7 +425,17 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:373](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L373)
+[src/domain/models/VerifiableCredential.ts:388](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L388)
+
+___
+
+### HttpMethod
+
+Ƭ **HttpMethod**: ``"DELETE"`` \| ``"GET"`` \| ``"POST"`` \| ``"PUT"``
+
+#### Defined in
+
+[src/domain/models/Api.ts:1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/Api.ts#L1)
 
 ___
 
@@ -424,7 +452,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:138](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L138)
+[src/domain/models/VerifiableCredential.ts:141](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L141)
 
 ___
 
@@ -444,7 +472,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:143](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L143)
+[src/domain/models/VerifiableCredential.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L146)
 
 ___
 
@@ -465,7 +493,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:129](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L129)
+[src/domain/models/VerifiableCredential.ts:132](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L132)
 
 ___
 
@@ -485,7 +513,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:120](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L120)
+[src/domain/models/VerifiableCredential.ts:123](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L123)
 
 ___
 
@@ -497,9 +525,9 @@ JWK
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/JWK.ts#L10)
+[src/domain/models/keyManagement/exportable/JWK.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/exportable/JWK.ts#L11)
 
-[src/domain/models/keyManagement/exportable/JWK.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/JWK.ts#L16)
+[src/domain/models/keyManagement/exportable/JWK.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/exportable/JWK.ts#L17)
 
 ___
 
@@ -522,7 +550,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:335](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L335)
+[src/domain/models/VerifiableCredential.ts:350](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L350)
 
 ___
 
@@ -543,7 +571,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:377](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L377)
+[src/domain/models/VerifiableCredential.ts:392](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L392)
 
 ___
 
@@ -562,7 +590,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:385](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L385)
+[src/domain/models/VerifiableCredential.ts:400](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L400)
 
 ___
 
@@ -572,7 +600,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:384](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L384)
+[src/domain/models/VerifiableCredential.ts:399](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L399)
 
 ___
 
@@ -590,7 +618,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L94)
+[src/domain/models/VerifiableCredential.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L90)
 
 ___
 
@@ -602,17 +630,17 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `aud` | `string` |
+| `aud?` | `string` |
 | `exp?` | `number` |
 | `iss?` | `string` |
 | `jti?` | `string` |
 | `nbf?` | `number` |
-| `nonce` | `string` |
+| `nonce?` | `string` |
 | `vp` | [`W3CVerifiablePresentation`](Domain.md#w3cverifiablepresentation) |
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:347](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L347)
+[src/domain/models/VerifiableCredential.ts:362](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L362)
 
 ___
 
@@ -632,7 +660,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:206](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L206)
+[src/domain/models/VerifiableCredential.ts:205](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L205)
 
 ___
 
@@ -642,7 +670,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/index.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/index.ts#L23)
+[src/domain/models/index.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/index.ts#L23)
 
 ___
 
@@ -652,7 +680,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/WordList.ts:1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/WordList.ts#L1)
+[src/domain/models/WordList.ts:1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/WordList.ts#L1)
 
 ___
 
@@ -662,7 +690,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:80](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L80)
+[src/domain/models/VerifiableCredential.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L81)
 
 ___
 
@@ -672,13 +700,13 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:157](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L157)
+[src/domain/models/VerifiableCredential.ts:163](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L163)
 
 ___
 
 ### PresentationClaims
 
-Ƭ **PresentationClaims**\<`Type`\>: `Type` extends [`JWT`](../enums/Domain.CredentialType.md#jwt) ? [`JWTPresentationClaims`](Domain.md#jwtpresentationclaims) : [`AnoncredsPresentationClaims`](Domain.md#anoncredspresentationclaims)
+Ƭ **PresentationClaims**\<`Type`\>: `Type` extends [`JWT`](../enums/Domain.CredentialType.md#jwt) ? [`JWTPresentationClaims`](Domain.md#jwtpresentationclaims) : `Type` extends [`SDJWT`](../enums/Domain.CredentialType.md#sdjwt) ? [`SDJWTPresentationClaims`](Domain.md#sdjwtpresentationclaims) : [`AnoncredsPresentationClaims`](Domain.md#anoncredspresentationclaims)
 
 #### Type parameters
 
@@ -688,7 +716,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:105](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L105)
+[src/domain/models/VerifiableCredential.ts:108](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L108)
 
 ___
 
@@ -703,12 +731,12 @@ ___
 | `AnonCreds` | [`PresentationAnoncredsRequest`](Domain.md#presentationanoncredsrequest) |
 | `Unknown` | `any` |
 | `prism/jwt` | [`PresentationExchangeDefinitionRequest`](Domain.md#presentationexchangedefinitionrequest) |
-| `vc+sd-jwt` | `any` |
+| `vc+sd-jwt` | [`PresentationExchangeDefinitionRequest`](Domain.md#presentationexchangedefinitionrequest) |
 | `w3c` | `any` |
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:173](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L173)
+[src/domain/models/VerifiableCredential.ts:174](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L174)
 
 ___
 
@@ -724,7 +752,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:194](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L194)
+[src/domain/models/VerifiableCredential.ts:193](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L193)
 
 ___
 
@@ -736,9 +764,6 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | \{ `challenge`: `string` ; `domain`: `string`  } |
-| `options.challenge` | `string` |
-| `options.domain` | `string` |
 | `presentation_definition` | \{ `format?`: [`DefinitionFormat`](Domain.md#definitionformat) ; `id`: `string` ; `input_descriptors`: [`InputDescriptor`](Domain.md#inputdescriptor)[]  } |
 | `presentation_definition.format?` | [`DefinitionFormat`](Domain.md#definitionformat) |
 | `presentation_definition.id` | `string` |
@@ -746,7 +771,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:159](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L159)
+[src/domain/models/VerifiableCredential.ts:165](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L165)
 
 ___
 
@@ -762,7 +787,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:392](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L392)
+[src/domain/models/VerifiableCredential.ts:407](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L407)
 
 ___
 
@@ -777,11 +802,12 @@ ___
 | `AnonCreds` | `ConstructorParameters`\<typeof [`AnoncredsPresentationOptions`](../classes/Domain.AnoncredsPresentationOptions.md)\>[``"0"``] |
 | `Unknown` | `any` |
 | `prism/jwt` | `ConstructorParameters`\<typeof [`JWTPresentationOptions`](../classes/Domain.JWTPresentationOptions.md)\>[``"0"``] |
+| `vc+sd-jwt` | `ConstructorParameters`\<typeof [`SDJWPresentationOptions`](../classes/Domain.SDJWPresentationOptions.md)\>[``"0"``] |
 | `w3c` | `any` |
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:396](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L396)
+[src/domain/models/VerifiableCredential.ts:411](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L411)
 
 ___
 
@@ -797,7 +823,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:228](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L228)
+[src/domain/models/VerifiableCredential.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L243)
 
 ___
 
@@ -812,12 +838,12 @@ ___
 | `AnonCreds` | [`AnoncredsPresentationSubmission`](Domain.md#anoncredspresentationsubmission) |
 | `Unknown` | `any` |
 | `prism/jwt` | [`JWTPresentationSubmission`](Domain.md#jwtpresentationsubmission) |
-| `vc+sd-jwt` | `any` |
+| `vc+sd-jwt` | [`JWTPresentationSubmission`](Domain.md#jwtpresentationsubmission) |
 | `w3c` | `any` |
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:219](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L219)
+[src/domain/models/VerifiableCredential.ts:234](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L234)
 
 ___
 
@@ -837,7 +863,64 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:37](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L37)
+[src/domain/buildingBlocks/Pollux.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/buildingBlocks/Pollux.ts#L37)
+
+___
+
+### SDJWTPresentationClaims
+
+Ƭ **SDJWTPresentationClaims**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `claims` | [`Claims`](Domain.md#claims)\<[`SDJWT`](../enums/Domain.CredentialType.md#sdjwt)\> |
+| `issuer?` | `string` |
+| `schema?` | `string` |
+
+#### Defined in
+
+[src/domain/models/VerifiableCredential.ts:96](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L96)
+
+___
+
+### SDJWTPresentationExchangeSubmission
+
+Ƭ **SDJWTPresentationExchangeSubmission**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `presentation_submission` | \{ `definition_id`: `string` ; `descriptor_map`: [`DescriptorItem`](Domain.md#descriptoritem)[] ; `id`: `string`  } |
+| `presentation_submission.definition_id` | `string` |
+| `presentation_submission.descriptor_map` | [`DescriptorItem`](Domain.md#descriptoritem)[] |
+| `presentation_submission.id` | `string` |
+| `verifiablePresentation` | `string`[] |
+
+#### Defined in
+
+[src/domain/models/VerifiableCredential.ts:214](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L214)
+
+___
+
+### SDJWTPresentationSubmission
+
+Ƭ **SDJWTPresentationSubmission**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `disclosures` | `any`[] |
+| `payload` | `string` |
+| `protected` | `string` |
+| `signature` | `string` |
+
+#### Defined in
+
+[src/domain/models/VerifiableCredential.ts:223](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L223)
 
 ___
 
@@ -861,7 +944,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:374](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L374)
+[src/domain/models/VerifiableCredential.ts:389](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L389)
 
 ___
 
@@ -886,7 +969,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:375](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L375)
+[src/domain/models/VerifiableCredential.ts:390](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L390)
 
 ___
 
@@ -927,7 +1010,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:232](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L232)
+[src/domain/models/VerifiableCredential.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L247)
 
 ___
 
@@ -946,7 +1029,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:358](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L358)
+[src/domain/models/VerifiableCredential.ts:373](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L373)
 
 ___
 
@@ -963,7 +1046,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:369](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L369)
+[src/domain/models/VerifiableCredential.ts:384](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/VerifiableCredential.ts#L384)
 
 ## Functions
 
@@ -983,7 +1066,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:119](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L119)
+[src/domain/models/keyManagement/Key.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/Key.ts#L126)
 
 ___
 
@@ -1004,7 +1087,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:128](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L128)
+[src/domain/models/keyManagement/Key.ts:135](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/Key.ts#L135)
 
 ___
 
@@ -1024,7 +1107,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L24)
+[src/domain/models/keyManagement/Key.ts:24](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/Key.ts#L24)
 
 ___
 
@@ -1044,19 +1127,23 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L73)
+[src/domain/models/keyManagement/Key.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/Key.ts#L80)
 
 ___
 
 ### getUsageId
 
-▸ **getUsageId**(`index`): `string`
+▸ **getUsageId**(`keyUsage`, `index?`): `string`
+
+create an identifier for keys within a DID Document
+should be unique within the Document
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | [`Usage`](../enums/Domain.Usage.md) |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `keyUsage` | [`Usage`](../enums/Domain.Usage.md) | `undefined` | maps to a prefix word |
+| `index` | `number` | `0` | occurrence of this keyUsage |
 
 #### Returns
 
@@ -1064,4 +1151,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:52](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Key.ts#L52)
+[src/domain/models/keyManagement/Key.ts:59](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/keyManagement/Key.ts#L59)

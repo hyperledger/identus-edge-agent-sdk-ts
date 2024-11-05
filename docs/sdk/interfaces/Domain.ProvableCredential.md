@@ -7,6 +7,7 @@
 ## Implemented by
 
 - [`JWTCredential`](../classes/JWTCredential.md)
+- [`SDJWTCredential`](../classes/SDJWTCredential.md)
 
 ## Table of contents
 
@@ -27,7 +28,7 @@
 
 #### Defined in
 
-[src/domain/models/Credential.ts:38](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Credential.ts#L38)
+[src/domain/models/Credential.ts:38](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/Credential.ts#L38)
 
 ___
 
@@ -41,4 +42,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/Credential.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Credential.ts#L39)
+[src/domain/models/Credential.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/Credential.ts#L39)
