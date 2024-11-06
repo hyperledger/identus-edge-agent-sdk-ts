@@ -164,6 +164,7 @@
     "uuid": "^9.0.0"
   },
   "optionalDependencies": {
+    "@esbuild/darwin-arm64": "0.15.18",
     "@rollup/rollup-linux-x64-gnu": "^4.24.0"
   },
   "overrides": {

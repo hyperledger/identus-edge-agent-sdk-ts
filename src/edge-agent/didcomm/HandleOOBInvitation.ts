@@ -5,6 +5,7 @@ import { OutOfBandInvitation } from "../protocols/invitation/v2/OutOfBandInvitat
 import { DIDCommContext } from "./Context";
 import { CreatePeerDID } from "./CreatePeerDID";
 import { HandshakeRequest } from "../protocols/connection/HandshakeRequest";
+import { ListenerKey } from "../types";
 
 /**
  * Create a connection from an OutOfBandInvitation
@@ -37,6 +38,7 @@ export class HandleOOBInvitation extends Task<void, Args> {
     }
     else {
       await ctx.Pluto.storeMessage(attachedMsg);
+      await ctx.ConnectionManager.events.emit(ListenerKey.MESSAGE, [attachedMsg])
     }
   }
 }
