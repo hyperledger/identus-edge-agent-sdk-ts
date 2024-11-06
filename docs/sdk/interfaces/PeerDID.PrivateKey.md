@@ -21,7 +21,7 @@ Instance of a KeyCurve
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/peer-did/PeerDID.ts#L11)
+[src/peer-did/PeerDID.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/peer-did/PeerDID.ts#L11)
 
 ___
 
@@ -33,4 +33,4 @@ Value as Uint8Array, buffer like
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/peer-did/PeerDID.ts#L17)
+[src/peer-did/PeerDID.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/peer-did/PeerDID.ts#L17)

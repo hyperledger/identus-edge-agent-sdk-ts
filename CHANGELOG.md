@@ -1,3 +1,10 @@
+## [6.3.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.0...v6.3.1) (2024-11-06)
+
+
+### Bug Fixes
+
+* adding esbuild also as optional missing dependency ([#324](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/324)) ([#326](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/326)) ([c632f0e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/c632f0efed4b3d905476bd3d4312ebd50a8d0a12))
+
 # [6.3.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.3...v6.3.0) (2024-11-05)
 
 

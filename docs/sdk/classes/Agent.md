@@ -89,7 +89,7 @@ Creates an instance of Agent.
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:74](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L74)
+[src/edge-agent/didcomm/Agent.ts:74](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L74)
 
 ## Properties
 
@@ -99,7 +99,7 @@ Creates an instance of Agent.
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L82)
+[src/edge-agent/didcomm/Agent.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L82)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L75)
+[src/edge-agent/didcomm/Agent.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L75)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:63](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L63)
+[src/edge-agent/didcomm/Agent.ts:63](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L63)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L76)
+[src/edge-agent/didcomm/Agent.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L76)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L80)
+[src/edge-agent/didcomm/Agent.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L80)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L79)
+[src/edge-agent/didcomm/Agent.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L79)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L78)
+[src/edge-agent/didcomm/Agent.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L78)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L77)
+[src/edge-agent/didcomm/Agent.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L77)
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:64](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L64)
+[src/edge-agent/didcomm/Agent.ts:64](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L64)
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L81)
+[src/edge-agent/didcomm/Agent.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L81)
 
 ___
 
@@ -201,7 +201,7 @@ Agent state
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L62)
+[src/edge-agent/didcomm/Agent.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L62)
 
 ## Accessors
 
@@ -217,7 +217,7 @@ Get current mediator DID if available or null
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L243)
+[src/edge-agent/didcomm/Agent.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L243)
 
 ## Methods
 
@@ -247,7 +247,7 @@ Asyncronously accept a didcomm v2 invitation, will create a pair between the Age
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:408](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L408)
+[src/edge-agent/didcomm/Agent.ts:408](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L408)
 
 ___
 
@@ -272,7 +272,7 @@ Handle an invitation to create a connection
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:330](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L330)
+[src/edge-agent/didcomm/Agent.ts:330](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L330)
 
 ___
 
@@ -296,7 +296,7 @@ Asyncronously accept an onboarding invitation, used to onboard the current DID i
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:361](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L361)
+[src/edge-agent/didcomm/Agent.ts:361](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L361)
 
 ___
 
@@ -319,7 +319,7 @@ Add an event listener to get notified from an Event "MESSAGE"
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:217](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L217)
+[src/edge-agent/didcomm/Agent.ts:217](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L217)
 
 ___
 
@@ -344,7 +344,7 @@ Asyncronously Create a new PeerDID
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L290)
+[src/edge-agent/didcomm/Agent.ts:290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L290)
 
 ___
 
@@ -370,7 +370,7 @@ Asyncronously create a new PrismDID
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L273)
+[src/edge-agent/didcomm/Agent.ts:273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L273)
 
 ___
 
@@ -397,7 +397,7 @@ instance of the presentation which we can share with the verifier.
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:510](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L510)
+[src/edge-agent/didcomm/Agent.ts:510](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L510)
 
 ___
 
@@ -419,7 +419,7 @@ Initiate the Presentation and presentationSubmission
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:556](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L556)
+[src/edge-agent/didcomm/Agent.ts:556](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L556)
 
 ___
 
@@ -467,7 +467,7 @@ Initiate a PresentationRequest from the SDK, to create oob Verification Requests
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:543](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L543)
+[src/edge-agent/didcomm/Agent.ts:543](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L543)
 
 ___
 
@@ -487,7 +487,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:447](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L447)
+[src/edge-agent/didcomm/Agent.ts:447](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L447)
 
 ___
 
@@ -511,7 +511,7 @@ Asyncronously parse an invitation from a valid json string
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:318](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L318)
+[src/edge-agent/didcomm/Agent.ts:318](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L318)
 
 ___
 
@@ -535,7 +535,7 @@ Asyncronously parse an out of band invitation from a URI as the oob come in form
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:388](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L388)
+[src/edge-agent/didcomm/Agent.ts:388](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L388)
 
 ___
 
@@ -559,7 +559,7 @@ Asyncronously parse a prismOnboarding invitation from a string
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:349](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L349)
+[src/edge-agent/didcomm/Agent.ts:349](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L349)
 
 ___
 
@@ -583,7 +583,7 @@ Asyncronously prepare a request credential message from a valid offerCredential 
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:479](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L479)
+[src/edge-agent/didcomm/Agent.ts:479](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L479)
 
 ___
 
@@ -607,7 +607,7 @@ Extract the verifiableCredential object from the Issue credential message asyncr
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:493](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L493)
+[src/edge-agent/didcomm/Agent.ts:493](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L493)
 
 ___
 
@@ -634,7 +634,7 @@ Remove event listener, used by stop procedure
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:228](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L228)
+[src/edge-agent/didcomm/Agent.ts:228](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L228)
 
 ___
 
@@ -660,7 +660,7 @@ Anoncreds will really need to be disclosed as the fields are encoded.
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:459](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L459)
+[src/edge-agent/didcomm/Agent.ts:459](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L459)
 
 ___
 
@@ -686,7 +686,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L247)
+[src/edge-agent/didcomm/Agent.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L247)
 
 ___
 
@@ -708,7 +708,7 @@ Asyncronously send a didcomm Message
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:438](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L438)
+[src/edge-agent/didcomm/Agent.ts:438](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L438)
 
 ___
 
@@ -733,7 +733,7 @@ Asyncronously sign a message with a DID
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:306](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L306)
+[src/edge-agent/didcomm/Agent.ts:306](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L306)
 
 ___
 
@@ -751,7 +751,7 @@ Asyncronously start the agent
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L158)
+[src/edge-agent/didcomm/Agent.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L158)
 
 ___
 
@@ -773,7 +773,7 @@ Start fetching for new messages in such way that it can be stopped at any point 
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:421](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L421)
+[src/edge-agent/didcomm/Agent.ts:421](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L421)
 
 ___
 
@@ -791,7 +791,7 @@ Asyncronously stop the agent and any side task that is running
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L200)
+[src/edge-agent/didcomm/Agent.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L200)
 
 ___
 
@@ -807,7 +807,7 @@ Stops fetching messages
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:428](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L428)
+[src/edge-agent/didcomm/Agent.ts:428](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L428)
 
 ___
 
@@ -823,7 +823,7 @@ Asyncronously get all verifiable credentials
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:468](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L468)
+[src/edge-agent/didcomm/Agent.ts:468](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L468)
 
 ___
 
@@ -854,4 +854,4 @@ allowing default instantiation, omitting all but the absolute necessary paramete
 
 #### Defined in
 
-[src/edge-agent/didcomm/Agent.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/edge-agent/didcomm/Agent.ts#L103)
+[src/edge-agent/didcomm/Agent.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/didcomm/Agent.ts#L103)

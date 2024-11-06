@@ -53,7 +53,7 @@ thrown when failing to create a key
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/domain/models/errors/Apollo.ts#L88)
+[src/domain/models/errors/Apollo.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/errors/Apollo.ts#L88)
 
 ## Properties
 

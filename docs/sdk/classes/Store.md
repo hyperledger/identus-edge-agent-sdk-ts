@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L14)
+[src/pluto/rxdb/Store.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L14)
 
 ## Properties
 
@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L12)
+[src/pluto/rxdb/Store.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L12)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L16)
+[src/pluto/rxdb/Store.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L16)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L15)
+[src/pluto/rxdb/Store.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L15)
 
 ## Accessors
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L25)
+[src/pluto/rxdb/Store.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L25)
 
 ## Methods
 
@@ -112,7 +112,7 @@ Use with caution, this will remove all entries from database
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:98](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L98)
+[src/pluto/rxdb/Store.ts:98](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L98)
 
 ___
 
@@ -129,7 +129,7 @@ and then destroy the database itself.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:110](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L110)
+[src/pluto/rxdb/Store.ts:110](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L110)
 
 ___
 
@@ -156,7 +156,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L61)
+[src/pluto/rxdb/Store.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L61)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:73](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L73)
+[src/pluto/rxdb/Store.ts:73](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L73)
 
 ___
 
@@ -203,7 +203,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L90)
+[src/pluto/rxdb/Store.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L90)
 
 ___
 
@@ -259,7 +259,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L82)
+[src/pluto/rxdb/Store.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L82)
 
 ___
 
@@ -279,7 +279,7 @@ Start the database and build collections
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:36](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L36)
+[src/pluto/rxdb/Store.ts:36](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L36)
 
 ___
 
@@ -312,4 +312,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/2cdbf1ede368164be3dd56f3e362e76e94d48b48/src/pluto/rxdb/Store.ts#L47)
+[src/pluto/rxdb/Store.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pluto/rxdb/Store.ts#L47)
