@@ -27,7 +27,7 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
                 endpoint: () => `${BASE_URL}/present-proof/presentations/invitation`,
                 requestBody: () => ({
                     "goalCode": "present-vp",
-                    "goal": "Request proof of vaccination information",
+                    "goal": "Request proof of Medical Prescription information",
                     "proofs": [],
                     "claims": {},
                     "credentialFormat": "SDJWT",
@@ -38,9 +38,9 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
                 }
                 ),
                 curlCommand: (url, method, body) => `const getPresentationRequest = await fetch("${url}", {
-method: "${method}",
-headers: { "Content-Type": "application/json" },
-body: ${body ? `JSON.stringify(${JSON.stringify(body)})` : 'undefined'}
+    method: "${method}",
+    headers: { "Content-Type": "application/json" },
+    body: ${body ? `JSON.stringify(${JSON.stringify(body)})` : 'undefined'}
 });
 const presentationRequestResponse = await getPresentationRequest.json();`,
             },
@@ -126,7 +126,7 @@ if (message instanceof SDK.Domain.Message) {
             const getPresentationRequest = await fetch("http://localhost:3000/cloud-agent/present-proof/presentations/invitation", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "goalCode": "present-vp", "goal": "Request proof of vaccination information", "proofs": [], "claims": {}, "credentialFormat": "SDJWT", "options": { "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf", "domain": "https://prism-verifier.com" } })
+                body: JSON.stringify({ "goalCode": "present-vp", "goal": "Request proof of prescription information", "proofs": [], "claims": {}, "credentialFormat": "SDJWT", "options": { "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf", "domain": "https://prism-verifier.com" } })
             });
             const presentationRequestResponse = await getPresentationRequest.json();
             presentationId = presentationRequestResponse.presentationId;
@@ -175,8 +175,8 @@ if (message instanceof SDK.Domain.Message) {
                 endpoint: (store: Store) => `${BASE_URL}/present-proof/presentations/${store.presentationId}`,
                 requestBody: (store) => null,
                 curlCommand: (url, method, body) => `const verifyPresentation = await fetch("${url}", {
-method: "${method}",
-headers: { "Content-Type": "application/json" }
+    method: "${method}",
+    headers: { "Content-Type": "application/json" }
 });
 const verificationResponse = await verifyPresentation.json();
 console.log('Verification Result:', { isValid: verificationResponse.status === "PresentationVerified" });`,

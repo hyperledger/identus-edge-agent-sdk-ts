@@ -114,12 +114,12 @@ class ShortFormDIDResolverSample {
     const registerPrismDid = await fetch("http://localhost:3000/cloud-agent/did-registrar/dids", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: { "documentTemplate": { "publicKeys": [{ "id": "auth1", "purpose": "authentication", "curve": "Ed25519" }, { "id": "issue1", "purpose": "assertionMethod", "curve": "Ed25519" }], "services": [] } }
+        body: {"documentTemplate":{"publicKeys":[{"id":"auth1","purpose":"authentication","curve":"Ed25519"},{"id":"issue1","purpose":"assertionMethod","curve":"Ed25519"}],"services":[]}}
     });
     const prismDidResponse = await registerPrismDid.json();
     console.log('Prism DID created:', { longFormDid: prismDidResponse.longFormDid });
 
-    const publishPrismDid = await fetch("http://localhost:3000/cloud-agent/did-registrar/dids/undefined/publications", {
+    const publishPrismDid = await fetch("http://localhost:3000/cloud-agent/did-registrar/dids/did:prism:352775c6d3b86b51f93b61b888ed9353732166abde5dac6ca217440b4c79e304:CvgBCvUBEjYKBWF1dGgxEARKKwoHRWQyNTUxORIgipZINPqRolfaxcWxSxkAo1KnEt3kSY-DTeOWriyT33ASNwoGaXNzdWUxEAJKKwoHRWQyNTUxORIgPkYidf03hwLyykZAdvCj0BbqGnJRS1qmgGJMJmXRWTsSOwoHbWFzdGVyMBABSi4KCXNlY3AyNTZrMRIhAn6kDJLjfQOnh5N0RjUhTrg4TOYwqwuGwvCo0EC_gfHBGkUKDmFnZW50LWJhc2UtdXJsEhBMaW5rZWRSZXNvdXJjZVYxGiFodHRwOi8vbG9jYWxob3N0OjgwODUvY2xvdWQtYWdlbnQ/publications", {
         method: "POST",
         headers: { "Content-Type": "application/json" }
     });
@@ -129,7 +129,7 @@ class ShortFormDIDResolverSample {
     const createCredentialSchema = await fetch("http://localhost:3000/cloud-agent/schema-registry/schemas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: { "name": "driving-schema246420b7-0365-476b-8e0b-47423fa9afe3", "version": "2.0.0", "description": "Driving LicenseSchema", "type": "https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json", "tags": ["driving", "license"], "schema": { "$id": "https://example.com/driving-license-1.0.0", "$schema": "https://json-schema.org/draft/2020-12/schema", "description": "Driving License", "type": "object", "properties": { "emailAddress": { "type": "string", "format": "email" }, "givenName": { "type": "string" }, "familyName": { "type": "string" }, "dateOfIssuance": { "type": "string", "format": "date-time" }, "drivingLicenseID": { "type": "string" }, "drivingClass": { "type": "integer" } }, "required": ["emailAddress", "familyName", "dateOfIssuance", "drivingLicenseID", "drivingClass"], "additionalProperties": false } }
+        body: {"name":"medical-prescription-schema2c167d81-cb21-4760-a142-6ebb1399b665","version":"2.0.0","description":"Medical Prescription Schema","type":"https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json","author":"did:prism:9103e2f31b3b7c9b127785ffb41b47c28bf18614e798dba566c3adea8791ec28","tags":["driving","license"],"schema":{"$id":"https://example.com/medical-prescription-1.0.0","$schema":"https://json-schema.org/draft/2020-12/schema","description":"Medical Prescription ","type":"object","properties":{"patientId":{"type":"string"},"patientName":{"type":"string"},"patientFamilyName":{"type":"string"},"prescriptionId":{"type":"string"},"dateOfIssuance":{"type":"string","format":"date-time"}},"required":["patientId","patientName","patientFamilyName","prescriptionId","dateOfIssuance"],"additionalProperties":false}}
     });
     const schemaResponse = await createCredentialSchema.json();
     console.log('Schema Created:', { schemaId: schemaResponse.id });
@@ -200,7 +200,7 @@ class ShortFormDIDResolverSample {
                             },
                             body: JSON.stringify({
                                 "goalCode": "present-vp",
-                                "goal": "Request proof of vaccination information",
+                                "goal": "Request proof of prescription information",
                                 "proofs": [],
                                 "claims": {},
                                 "credentialFormat": "SDJWT",
@@ -256,12 +256,11 @@ class ShortFormDIDResolverSample {
             "automaticIssuance": true,
             "credentialFormat": "SDJWT",
             "claims": {
-                "emailAddress": "alice@wonderland.com",
-                "givenName": "Alice",
-                "familyName": "Wonderland",
+                "patientId": "12345",
+                "patientName": "Alice",
+                "patientFamilyName": "Wonderland",
+                "prescriptionId": "12345",
                 "dateOfIssuance": "2020-11-13T20:20:39+00:00",
-                "drivingLicenseID": "12345",
-                "drivingClass": 3
             }
         })
     });

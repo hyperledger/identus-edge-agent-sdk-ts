@@ -28,7 +28,7 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
             endpoint: () => `${BASE_URL}/issue-credentials/credential-offers/invitation`,
             requestBody: (store: Store) => ({
                 "goalCode": "issue-vc",
-                "goal": "To issue a Faber College Graduate credential",
+                "goal": "To Issue a Medical Prescription Credential",
                 "issuingDID": store?.scheduledOperation?.didRef,
                 "validityPeriod": 3600,
                 "automaticIssuance": true,
@@ -42,9 +42,9 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
                 }
             }),
             curlCommand: (url, method, body) => `const getCredentialOffer = await fetch("${url}", {
-method: "${method}",
-headers: { "Content-Type": "application/json" },
-body: ${body ? `JSON.stringify(${JSON.stringify(body)})` : 'undefined'}
+    method: "${method}",
+    headers: { "Content-Type": "application/json" },
+    body: ${body ? `JSON.stringify(${JSON.stringify(body)})` : 'undefined'}
 });
 const credentialOfferResponse = await getCredentialOffer.json();
 console.log('Credential Offer:', { invitationUrl: credentialOfferResponse.invitation.invitationUrl });`,
@@ -116,11 +116,11 @@ await agent.acceptInvitation(parsed, 'SampleCredentialOfferOOB');
                 <CodeComponent content={{
                     code: `let credential;
 agent.addListener(SDK.ListenerKey.MESSAGE, (messages) => {
-for (const message of messages) {
-    if (message.piuri === SDK.ProtocolType.DidcommOfferCredential) {
-        console.log('Credential Offer:', message);
-    } 
-}
+    for (const message of messages) {
+        if (message.piuri === SDK.ProtocolType.DidcommOfferCredential) {
+            console.log('Credential Offer:', message);
+        } 
+    }
 });`, language: 'typescript'
                 }} />
             </div>
@@ -140,24 +140,24 @@ for (const message of messages) {
                         <CodeComponent content={{
                             code: `let credential;
 agent.addListener(SDK.ListenerKey.MESSAGE, (messages) => {
-for (const message of messages) {
-    if (message instanceof SDK.Domain.Message) {
-        if (message.piuri === SDK.ProtocolType.DidcommOfferCredential) {
-            console.log('Credential Offer:', message);
-            const credentialOffer = SDK.OfferCredential.fromMessage(message);
-            const requestCredential = await agent.prepareRequestCredentialWithIssuer(credentialOffer);
-            const requestMessage = requestCredential.makeMessage()
-            await agent.sendMessage(requestMessage);
-        } else if (message.piuri === SDK.ProtocolType.DidcommIssueCredential) {
-            console.log('Credential Issue:', message);
-            const attachment = message.attachments.at(0)
-            if (attachment) {
-                const encodedCompactSDJWT = attachment.payload;
-                credential = SDK.SDJWTCredential.fromJWS(encodedCompactSDJWT);
+    for (const message of messages) {
+        if (message instanceof SDK.Domain.Message) {
+            if (message.piuri === SDK.ProtocolType.DidcommOfferCredential) {
+                console.log('Credential Offer:', message);
+                const credentialOffer = SDK.OfferCredential.fromMessage(message);
+                const requestCredential = await agent.prepareRequestCredentialWithIssuer(credentialOffer);
+                const requestMessage = requestCredential.makeMessage()
+                await agent.sendMessage(requestMessage);
+            } else if (message.piuri === SDK.ProtocolType.DidcommIssueCredential) {
+                console.log('Credential Issue:', message);
+                const attachment = message.attachments.at(0)
+                if (attachment) {
+                    const encodedCompactSDJWT = attachment.payload;
+                    credential = SDK.SDJWTCredential.fromJWS(encodedCompactSDJWT);
+                }
             }
         }
     }
-}
 });`, language: 'typescript'
                         }} />
 
