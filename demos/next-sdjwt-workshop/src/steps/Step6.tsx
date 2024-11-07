@@ -256,10 +256,10 @@ class ShortFormDIDResolverSample {
             "automaticIssuance": true,
             "credentialFormat": "SDJWT",
             "claims": {
-                "patientId": "12345",
+                "patientId": "#d4aab32e1",
                 "patientName": "Alice",
                 "patientFamilyName": "Wonderland",
-                "prescriptionId": "12345",
+                "prescriptionId": "42344211134",
                 "dateOfIssuance": "2020-11-13T20:20:39+00:00",
             }
         })

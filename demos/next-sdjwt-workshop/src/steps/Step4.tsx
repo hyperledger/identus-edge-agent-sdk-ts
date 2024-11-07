@@ -16,7 +16,7 @@ const CodeComponent = dynamic(() => import('@/components/CodeEditor').then((e) =
 
 
 export default {
-    title: 'Step 4: Alice (patient) will receive a medical prescription to her wallet, by a Doctor (Issuer)',
+    title: 'Step 4: Doctor (Issuer) will issue a medical prescription to Alice (patient)',
     description:
         `In this section we will be requesting a Credential Offer from the Cloud Agent.A Connectionless Credential Offer is an Out of Band Invitation with a Credential Offer Attachment.
 This should be a URI with a single query parameter \`_oob\`, which is an encoded JSON.`,
@@ -34,10 +34,10 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
                 "automaticIssuance": true,
                 "credentialFormat": "SDJWT",
                 "claims": {
-                    "patientId": "12345",
+                    "patientId": "#d4aab32e1",
                     "patientName": "Alice",
                     "patientFamilyName": "Wonderland",
-                    "prescriptionId": "12345",
+                    "prescriptionId": "42344211134",
                     "dateOfIssuance": "2020-11-13T20:20:39+00:00",
                 }
             }),
