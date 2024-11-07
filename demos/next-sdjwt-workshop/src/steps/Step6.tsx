@@ -7,12 +7,52 @@ export default
     {
         title: 'Step 6: Workshop wrap up and sample code',
         description:
-            `We hope that you enjoyed the workshop, links to github, etc.`,
+            `You've just completed the workshop. Here's the full code in case you need, you can copy and run locally.`,
         content: [
             (props: InteractiveProps) => (
-                <div className="py-2 text-gray-600 transition duration-200">
-                    <p>Wrapping up</p>
-                </div>),
+                <>
+                    <p className="text-1xl font-semibold mt-6 text-blue-700">
+                        Workshop Summary
+                    </p>
+                    <p className="text-gray-600 leading-relaxed mb-6">
+                        <i><strong>Alice</strong> (Holder Patient)</i> went to the <i><strong>Doctor</strong> (Issuer)</i> to get her medicine prescription.<br />
+                        <i><strong>Alice</strong> (Holder Patient)</i> then goes to the <i><strong>Pharmacy</strong> (Verifier)</i> to get the medicine using the Prescription.
+
+                    </p>
+                    <div className="my-6">
+                        <p className="text-1xl font-semibold text-blue-700">
+                            Additional information
+                        </p>
+                        <ul>
+                            <li className="text-gray-600">
+
+                                Cloud agent <a href="https://github.com/hyperledger/identus-cloud-agent"><strong>[repository]</strong></a>
+                                <br />
+                            </li>
+                            <li className="text-gray-600">
+
+                                Mediator <a href="https://github.com/hyperledger/identus-mediator"><strong>[repository]</strong></a>
+                                <br />
+                            </li>
+                            <li className="text-gray-600">
+
+                                Wallet SDK <a href="https://github.com/hyperledger/identus-edge-agent-sdk-ts"><strong>[repository]</strong></a>
+                                <br />
+                            </li>
+                        </ul>
+                    </div>
+                </>
+            ),
+            (props: InteractiveProps) => (
+                <>
+                    <div className="my-2 mt-4">
+                        <p className="text-1xl font-semibold text-blue-700">
+                            Complete code
+                        </p>
+
+                    </div>
+                </>
+            ),
             {
                 code: `/// <reference types="@hyperledger/identus-edge-agent-sdk" />
 //Add this packages on top
