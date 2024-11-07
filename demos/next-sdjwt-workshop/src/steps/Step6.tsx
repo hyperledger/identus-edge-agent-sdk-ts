@@ -250,7 +250,7 @@ class ShortFormDIDResolverSample {
         },
         body: JSON.stringify({
             "goalCode": "issue-vc",
-            "goal": "To issue a Faber College Graduate credential",
+            "goal": "To Issue a Medical Prescription Credential",
             "issuingDID": "did:prism:edc6f253c1186b9056cdb657b764906c304343306c82b9896bc90b4899824169",
             "validityPeriod": 3600,
             "automaticIssuance": true,
