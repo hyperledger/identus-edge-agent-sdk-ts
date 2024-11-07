@@ -9,7 +9,7 @@
 <hr>
 
 # Introduction
-This workshop will show you how to Issue and Verify a SD-JWT Credential and Presentation using connectionless flows, meaming, you won't need to establish a didcomm connection for issuance and verification flows.
+This workshop will show you how to Issue and Verify a SD-JWT Credential and Presentation using connectionless flows, meaning, you won't need to establish a didcomm connection between the Issuer, Holder and Verifier.
 
 ### **What Can I expect from this workshop?**
 
@@ -17,7 +17,7 @@ You will learn everything that is needed to receive an Issued SD-JWT credential 
 
 ### **What are connectionless flows?**
 
-In this presentation we won't be using [DIDComm Connections](https://hyperledger.github.io/identus-docs/docs/concepts/multi-tenancy#didcomm-connections) but instead we will generate OOB codes for Issuance and Verification.
+In this presentation we won't be using [DIDComm Connections](https://hyperledger.github.io/identus-docs/docs/concepts/multi-tenancy#didcomm-connections) but instead we will generate Out of Band (OOB) codes for Issuance and Verification.
 
 You will then receive and process this OOB in your Edge Agent and run the corresponding flow:
 1. Create the Credential Request from the Credential Offer

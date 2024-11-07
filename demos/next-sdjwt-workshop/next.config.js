@@ -11,6 +11,18 @@ const nextConfig = {
         }
         return config;
     },
+    async rewrites() {
+        return [
+            {
+                source: '/cloud-agent/:path*',
+                destination: 'http://localhost:8085/:path*'
+            },
+            {
+                source: '/didcomm',
+                destination: 'http://localhost:8090'
+            }
+        ]
+    }
 }
 
 module.exports = nextConfig

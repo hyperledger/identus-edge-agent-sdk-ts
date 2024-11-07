@@ -51,7 +51,7 @@ function CredentialDisplay(props) {
         <MessageTitle message={message} title={`Credential (${format})`} />
       </div>
 
-      <div className="p-0  space-y-6">
+      <div className="p-0 space-y-6">
         <Credential credential={attachment} />
       </div>
     </div>
@@ -283,6 +283,7 @@ export function Message({ message }) {
 
   if (message.piuri === "https://didcomm.org/issue-credential/3.0/offer-credential") {
     const data = body.credential_preview.body.attributes.map(({ name }) => name);
+    debugger;
     return <div
       className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
     >
@@ -317,7 +318,7 @@ export function Message({ message }) {
             </>
           }
           {
-            !message?.isAnswering && <>
+            !message.isAnswering && <>
               {
                 message?.error && <p>{JSON.stringify(message.error.message)}</p>
               }
@@ -425,6 +426,9 @@ export function Message({ message }) {
     const requestPresentation = requestPresentationMessage.decodedAttachments.at(0);
     const requestPresentationFormat = requestPresentationMessage.attachments.at(0)?.format;
     const shouldRespond = isReceived && !hasResponse;
+
+
+
     if (requestPresentationFormat === SDK.Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
 
       if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.SDJWT)) {
@@ -446,12 +450,12 @@ export function Message({ message }) {
 
             {shouldRespond && <AgentRequire>
               {
-                message?.isAnswering && <Loading />
+                message.isAnswering && <Loading />
               }
               {
-                !message?.isAnswering && <>
+                !message.isAnswering && <>
                   {
-                    message?.error && <p>{JSON.stringify(message.error.message)}</p>
+                    message.error && <p>{JSON.stringify(message.error.message)}</p>
                   }
 
                   <button

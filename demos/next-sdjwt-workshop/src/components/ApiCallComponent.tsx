@@ -1,7 +1,7 @@
-import { ApiCall } from "@/reducers/app";
+'use client'
+import { ApiCall, Store } from "@/reducers/app";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import { Store } from "redux";
 
 const CodeComponent = dynamic(() => import('@/components/CodeEditor').then((e) => e.CodeComponent), {
     ssr: false,
@@ -10,7 +10,7 @@ const CodeComponent = dynamic(() => import('@/components/CodeEditor').then((e) =
 export const ApiCallComponent: React.FC<{
     content: ApiCall,
     store: Store,
-    onResponse: (response: any) => void
+    onResponse: (response: any, endpoint: string) => void
 }> = (props) => {
     const [response, setResponse] = useState<any>(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -56,17 +56,21 @@ export const ApiCallComponent: React.FC<{
             },
             body: content.method === "POST" ? JSON.stringify(body) : undefined,
         })
-            .then((response) => {
+            .then(async (response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return response.json();
+                let code = await response.text();
+                try {
+                    return JSON.parse(code)
+                } catch (err) {
+                    return code
+                }
             })
             .then((data) => {
-                console.log("API response:", data);
                 setResponse(data);
                 if (props.onResponse) {
-                    props.onResponse(data)
+                    props.onResponse(data, url);
                 }
                 setRequestStatus('success');
             })
@@ -101,13 +105,13 @@ export const ApiCallComponent: React.FC<{
     }
 
     return (
-        <div className="my-4">
+        <div className="my-4 text-gray-600 bg-[#282c34] rounded-xl border border-gray-200 shadow-sm p-6">
             <div className="flex items-center mb-2">
                 <div className="flex-grow">
-                    <p className="text-lg font-semibold text-gray-800">
+                    <p className="text-1xl font-semibold mb-4 text-blue-700">
                         {content.title}
                     </p>
-                    <p className="text-xs font-semibold text-gray-800">
+                    <p>
                         {content.description}
                     </p>
                 </div>
@@ -123,7 +127,7 @@ export const ApiCallComponent: React.FC<{
                     className="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-400 transition duration-200"
                     onClick={handleCopyCurl}
                 >
-                    Show me cURL
+                    Javascript code
                 </button>
                 {response && (
                     <button
@@ -159,7 +163,7 @@ export const ApiCallComponent: React.FC<{
             {isCurlPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg max-w-2xl mx-auto overflow-y-auto max-h-screen shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4 text-blue-700">cURL Command</h2>
+                        <h2 className="text-lg font-semibold mb-4 text-blue-700">Javascript code</h2>
                         <CodeComponent content={{ language: 'bash', code: curlCommand }} />
 
                         <div className="mt-4 flex justify-end">

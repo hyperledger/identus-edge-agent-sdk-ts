@@ -36,6 +36,8 @@ export const acceptPresentationRequest = createAsyncThunk<
         } catch (err) {
             console.log("continue after err", err);
         }
+
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         return api.fulfillWithValue(null);
     } catch (err) {
         return api.rejectWithValue(err as Error);
