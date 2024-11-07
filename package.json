@@ -130,6 +130,7 @@
   },
   "peerDependencies": {
     "@playwright/test": "^1.45.1",
+    "@trust0/ridb": "^0.4.6-rc.4",
     "@types/elliptic": "^6.4.16",
     "buffer": "^6.0.3",
     "core-js": "^3.32.2",

@@ -36,7 +36,7 @@ export interface Pluto {
   /**
    * Pluto initialise function
    */
-  start(): Promise<void>;
+  start(options?: any): Promise<void>;
 
   /**
    * create a Backup object from the stored data

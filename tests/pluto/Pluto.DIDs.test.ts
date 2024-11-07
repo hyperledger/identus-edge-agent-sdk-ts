@@ -1,25 +1,19 @@
-import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+import { describe, expect, test, beforeEach } from 'vitest';
 import { Pluto } from "../../src/pluto/Pluto";
-import InMemoryStore from "../fixtures/inmemory";
 import * as Domain from "../../src/domain";
-import { Apollo, PeerDID, Store, X25519PrivateKey } from "../../src";
+import { Apollo, PeerDID, RIDBStore, X25519PrivateKey } from "../../src";
 import * as Fixtures from "../fixtures";
-import { randomUUID } from "crypto";
 
 describe("Pluto", () => {
   let instance: Domain.Pluto;
 
   beforeEach(async () => {
     const apollo = new Apollo();
-    const store = new Store({
-      name: "randomdb" + randomUUID(),
-      storage: InMemoryStore,
-      password: 'random12434',
-      ignoreDuplicate: true
-    });
+    const store = new RIDBStore();
     instance = new Pluto(store, apollo);
-
-    await instance.start();
+    await instance.start({
+      password: 'random12434',
+    });
   });
 
   describe("DIDs", () => {
@@ -27,12 +21,10 @@ describe("Pluto", () => {
       test("uuid set on Domain instance - same after store", async () => {
         const sutDID = Domain.DID.from("did:prism:mock1");
         const sutKey = new X25519PrivateKey(Fixtures.Keys.x25519.privateKey.raw);
-
         const uuidDID = sutDID.uuid;
         const uuidKey = sutKey.uuid;
         expect(uuidDID).to.be.a.string;
         expect(uuidKey).to.be.a.string;
-
         await instance.storePrismDID(sutDID, sutKey);
         expect(sutDID.uuid).to.be.a.string;
         expect(sutKey.uuid).to.be.a.string;

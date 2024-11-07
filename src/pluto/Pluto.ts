@@ -47,7 +47,7 @@ export namespace Pluto {
      * Handle any necessary startup.
      * Will be called first before any usage, if provided.
      */
-    start?(): Promise<void>;
+    start?(options?: any): Promise<void>;
 
     /**
      * Run a query to fetch data from the Store
@@ -114,9 +114,9 @@ export class Pluto implements Domain.Pluto {
     this.BackupMgr = new BackupManager(this, this.Repositories);
   }
 
-  async start(): Promise<void> {
+  async start(options?: any): Promise<void> {
     if (this.store.start !== undefined) {
-      await this.store.start();
+      await this.store.start(options);
     }
   }
 
