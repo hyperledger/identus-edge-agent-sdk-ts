@@ -21,26 +21,45 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
         content: [
             {
                 title: 'Obtain a Connectionless Presentation request from an Issuer',
-                description: `We will be using the data from previous api calls, concretely the Issuer's short form did`,
+                description: `We will be requesting Alice to disclose her PatientId and PrescriptionId and not other fields on her credential`,
                 method: 'POST',
-
-                endpoint: () => `${BASE_URL}/present-proof/presentations/invitation`,
-                requestBody: () => ({
-                    "goalCode": "present-vp",
-                    "goal": "Request proof of Medical Prescription information",
-                    "proofs": [],
-                    "claims": {},
-                    "credentialFormat": "SDJWT",
-                    "options": {
-                        "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf",
-                        "domain": "https://prism-verifier.com"
-                    }
-                }
-                ),
-                curlCommand: (url, method, body) => `const getPresentationRequest = await fetch("${url}", {
-    method: "${method}",
+                request(store: Store) {
+                    return fetch(`${BASE_URL}/present-proof/presentations/invitation`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            "goalCode": "present-vp",
+                            "goal": "Request proof of Medical Prescription information",
+                            "proofs": [],
+                            "claims": {
+                                "patientId": {},
+                                "prescriptionId": {}
+                            },
+                            "credentialFormat": "SDJWT",
+                            "options": {
+                                "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf",
+                                "domain": "https://prism-verifier.com"
+                            }
+                        })
+                    })
+                },
+                curlCommand: (store: Store) => `const getPresentationRequest = await fetch("${BASE_URL}/present-proof/presentations/invitation", {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: ${body ? `JSON.stringify(${JSON.stringify(body)})` : 'undefined'}
+    body: JSON.stringify({
+        "goalCode": "present-vp",
+        "goal": "Request proof of Medical Prescription information",
+        "proofs": [],
+        "claims": {
+            "patientId": {},
+            "prescriptionId": {}
+        },
+        "credentialFormat": "SDJWT",
+        "options": {
+            "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf",
+            "domain": "https://prism-verifier.com"
+        }
+    })
 });
 const presentationRequestResponse = await getPresentationRequest.json();`,
             },
@@ -172,10 +191,15 @@ if (message instanceof SDK.Domain.Message) {
                 title: 'Verify the Presentation submission',
                 description: 'This will confirm if the SDJWT Presentation submission is valid',
                 method: 'GET',
-                endpoint: (store: Store) => `${BASE_URL}/present-proof/presentations/${store.presentationId}`,
-                requestBody: (store) => null,
-                curlCommand: (url, method, body) => `const verifyPresentation = await fetch("${url}", {
-    method: "${method}",
+
+                request(store: Store) {
+                    return fetch(`${BASE_URL}/present-proof/presentations/${store.presentationId}`, {
+                        method: 'GET',
+                        headers: { "Content-Type": "application/json" }
+                    })
+                },
+                curlCommand: (store: Store) => `const verifyPresentation = await fetch(\`${BASE_URL}/present-proof/presentations/\${presentationId}\`, {
+    method: "GET",
     headers: { "Content-Type": "application/json" }
 });
 const verificationResponse = await verifyPresentation.json();

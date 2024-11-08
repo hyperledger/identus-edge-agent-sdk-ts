@@ -111,15 +111,31 @@ class ShortFormDIDResolverSample {
 
 
 (async () => {
-    const registerPrismDid = await fetch("http://localhost:3000/cloud-agent/did-registrar/dids", {
+    const registerPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids\`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: {"documentTemplate":{"publicKeys":[{"id":"auth1","purpose":"authentication","curve":"Ed25519"},{"id":"issue1","purpose":"assertionMethod","curve":"Ed25519"}],"services":[]}}
+        body: JSON.stringify({
+            "documentTemplate": {
+                "publicKeys": [
+                    {
+                        "id": "auth1",
+                        "purpose": "authentication",
+                        "curve": "Ed25519"
+                    },
+                    {
+                        "id": "issue1",
+                        "purpose": "assertionMethod",
+                        "curve": "Ed25519"
+                    }
+                ],
+                "services": []
+            }
+        })
     });
     const prismDidResponse = await registerPrismDid.json();
     console.log('Prism DID created:', { longFormDid: prismDidResponse.longFormDid });
 
-    const publishPrismDid = await fetch("http://localhost:3000/cloud-agent/did-registrar/dids/did:prism:352775c6d3b86b51f93b61b888ed9353732166abde5dac6ca217440b4c79e304:CvgBCvUBEjYKBWF1dGgxEARKKwoHRWQyNTUxORIgipZINPqRolfaxcWxSxkAo1KnEt3kSY-DTeOWriyT33ASNwoGaXNzdWUxEAJKKwoHRWQyNTUxORIgPkYidf03hwLyykZAdvCj0BbqGnJRS1qmgGJMJmXRWTsSOwoHbWFzdGVyMBABSi4KCXNlY3AyNTZrMRIhAn6kDJLjfQOnh5N0RjUhTrg4TOYwqwuGwvCo0EC_gfHBGkUKDmFnZW50LWJhc2UtdXJsEhBMaW5rZWRSZXNvdXJjZVYxGiFodHRwOi8vbG9jYWxob3N0OjgwODUvY2xvdWQtYWdlbnQ/publications", {
+    const publishPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids/\${prismDidResponse.longFormDid}/publications\`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }
     });
@@ -129,7 +145,49 @@ class ShortFormDIDResolverSample {
     const createCredentialSchema = await fetch("http://localhost:3000/cloud-agent/schema-registry/schemas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: {"name":"medical-prescription-schema2c167d81-cb21-4760-a142-6ebb1399b665","version":"2.0.0","description":"Medical Prescription Schema","type":"https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json","author":"did:prism:9103e2f31b3b7c9b127785ffb41b47c28bf18614e798dba566c3adea8791ec28","tags":["driving","license"],"schema":{"$id":"https://example.com/medical-prescription-1.0.0","$schema":"https://json-schema.org/draft/2020-12/schema","description":"Medical Prescription ","type":"object","properties":{"patientId":{"type":"string"},"patientName":{"type":"string"},"patientFamilyName":{"type":"string"},"prescriptionId":{"type":"string"},"dateOfIssuance":{"type":"string","format":"date-time"}},"required":["patientId","patientName","patientFamilyName","prescriptionId","dateOfIssuance"],"additionalProperties":false}}
+        body: JSON.stringify({
+            "name": "medical-prescription-schema-2b754046-32c6-42e0-b587-b28013422778",
+            "version": "2.0.0",
+            "description": "Medical Prescription Schema",
+            "type": "https://w3c-ccg.github.io/vc-json-schemas/schema/2.0/schema.json",
+            "author": \`\${publishResponse.scheduledOperation?.didRef}\`,
+            "tags": [
+                "driving",
+                "license"
+            ],
+            "schema": {
+                "$id": "https://example.com/medical-prescription-1.0.0",
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "description": "Medical Prescription ",
+                "type": "object",
+                "properties": {
+                    "patientId": {
+                        "type": "string",
+                    },
+                    "patientName": {
+                        "type": "string"
+                    },
+                    "patientFamilyName": {
+                        "type": "string"
+                    },
+                    "prescriptionId": {
+                        "type": "string"
+                    },
+                    "dateOfIssuance": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "patientId",
+                    "patientName",
+                    "patientFamilyName",
+                    "prescriptionId",
+                    "dateOfIssuance"
+                ],
+                "additionalProperties": false
+            }
+        })
     });
     const schemaResponse = await createCredentialSchema.json();
     console.log('Schema Created:', { schemaId: schemaResponse.id });
@@ -144,6 +202,7 @@ class ShortFormDIDResolverSample {
     console.log('Mediator DID:', {
         did: mediatorDID
     });
+
     const hashedPassword = sha512("123456")
     const apollo = new SDK.Apollo();
     const store = new SDK.Store({
@@ -195,14 +254,15 @@ class ShortFormDIDResolverSample {
                         credential = SDK.SDJWTCredential.fromJWS(encodedCompactSDJWT);
                         const getPresentationRequest = await fetch("http://localhost:3000/cloud-agent/present-proof/presentations/invitation", {
                             method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
+                            headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
                                 "goalCode": "present-vp",
-                                "goal": "Request proof of prescription information",
+                                "goal": "Request proof of Medical Prescription information",
                                 "proofs": [],
-                                "claims": {},
+                                "claims": {
+                                    "patientId": {},
+                                    "prescriptionId": {}
+                                },
                                 "credentialFormat": "SDJWT",
                                 "options": {
                                     "challenge": "11c91493-01b3-4c4d-ac36-b336bab5bddf",
@@ -228,14 +288,10 @@ class ShortFormDIDResolverSample {
                     await agent.sendMessage(presentation.makeMessage());
                     const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/\${presentationId}\`, {
                         method: "GET",
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
+                        headers: { "Content-Type": "application/json" }
                     });
                     const verificationResponse = await verifyPresentation.json();
-                    console.log('Verification Result:', {
-                        isValid: verificationResponse.status === "PresentationVerified"
-                    });
+                    console.log('Verification Result:', { isValid: verificationResponse.status === "PresentationVerified" });
                 }
             }
         }
@@ -245,13 +301,11 @@ class ShortFormDIDResolverSample {
 
     const getCredentialOffer = await fetch("http://localhost:3000/cloud-agent/issue-credentials/credential-offers/invitation", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             "goalCode": "issue-vc",
             "goal": "To Issue a Medical Prescription Credential",
-            "issuingDID": "did:prism:edc6f253c1186b9056cdb657b764906c304343306c82b9896bc90b4899824169",
+            "issuingDID": publishResponse.scheduledOperation?.didRef,
             "validityPeriod": 3600,
             "automaticIssuance": true,
             "credentialFormat": "SDJWT",
@@ -260,14 +314,12 @@ class ShortFormDIDResolverSample {
                 "patientName": "Alice",
                 "patientFamilyName": "Wonderland",
                 "prescriptionId": "42344211134",
-                "dateOfIssuance": "2020-11-13T20:20:39+00:00",
+                "dateOfBirth": "2020-11-13T20:20:39+00:00"
             }
         })
     });
     const credentialOfferResponse = await getCredentialOffer.json();
-    console.log('Credential Offer:', {
-        invitationUrl: credentialOfferResponse.invitation.invitationUrl
-    });
+    console.log('Credential Offer:', { invitationUrl: credentialOfferResponse.invitation.invitationUrl });
     const parsed = await agent.parseOOBInvitation(new URL(credentialOfferResponse.invitation.invitationUrl));
     await agent.acceptInvitation(parsed, 'SampleCredentialOfferOOB');
 })()`,

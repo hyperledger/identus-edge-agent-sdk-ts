@@ -25,26 +25,45 @@ This should be a URI with a single query parameter \`_oob\`, which is an encoded
             title: 'Obtain a Connectionless Credential Offer from an Issuer',
             description: `We will be using the data from previous api calls, concretely the Issuer's short form did`,
             method: 'POST',
-            endpoint: () => `${BASE_URL}/issue-credentials/credential-offers/invitation`,
-            requestBody: (store: Store) => ({
-                "goalCode": "issue-vc",
-                "goal": "To Issue a Medical Prescription Credential",
-                "issuingDID": store?.scheduledOperation?.didRef,
-                "validityPeriod": 3600,
-                "automaticIssuance": true,
-                "credentialFormat": "SDJWT",
-                "claims": {
-                    "patientId": "#d4aab32e1",
-                    "patientName": "Alice",
-                    "patientFamilyName": "Wonderland",
-                    "prescriptionId": "42344211134",
-                    "dateOfIssuance": "2020-11-13T20:20:39+00:00",
-                }
-            }),
-            curlCommand: (url, method, body) => `const getCredentialOffer = await fetch("${url}", {
-    method: "${method}",
+            request(store: Store) {
+                return fetch(`${BASE_URL}/issue-credentials/credential-offers/invitation`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        "goalCode": "issue-vc",
+                        "goal": "To Issue a Medical Prescription Credential",
+                        "issuingDID": store?.scheduledOperation?.didRef,
+                        "validityPeriod": 3600,
+                        "automaticIssuance": true,
+                        "credentialFormat": "SDJWT",
+                        "claims": {
+                            "patientId": "#d4aab32e1",
+                            "patientName": "Alice",
+                            "patientFamilyName": "Wonderland",
+                            "prescriptionId": "42344211134",
+                            "dateOfBirth": "2020-11-13T20:20:39+00:00"
+                        }
+                    })
+                })
+            },
+            curlCommand: (store: Store) => `const getCredentialOffer = await fetch("${BASE_URL}/issue-credentials/credential-offers/invitation", {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: ${body ? `JSON.stringify(${JSON.stringify(body)})` : 'undefined'}
+    body: JSON.stringify({
+        "goalCode": "issue-vc",
+        "goal": "To Issue a Medical Prescription Credential",
+        "issuingDID": publishResponse.scheduledOperation?.didRef,
+        "validityPeriod": 3600,
+        "automaticIssuance": true,
+        "credentialFormat": "SDJWT",
+        "claims": {
+            "patientId": "#d4aab32e1",
+            "patientName": "Alice",
+            "patientFamilyName": "Wonderland",
+            "prescriptionId": "42344211134",
+            "dateOfBirth": "2020-11-13T20:20:39+00:00"
+        }
+    })
 });
 const credentialOfferResponse = await getCredentialOffer.json();
 console.log('Credential Offer:', { invitationUrl: credentialOfferResponse.invitation.invitationUrl });`,

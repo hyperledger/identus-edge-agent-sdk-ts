@@ -12,17 +12,17 @@ export type ApiCall = {
     title: string,
     description: string,
     method: string,
-    endpoint: (store: Store) => string,
-    requestBody: (store: Store) => any,
-    curlCommand: (url: string, method: string, body?: string | null) => string
+
+    request: (store: Store) => Promise<Response>
+    curlCommand: (store: Store) => string
 }
 export type InteractiveProps = {
     loading: boolean,
-    setLoading:  React.Dispatch<React.SetStateAction<boolean>>,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     app: ReturnType<typeof useMountedApp>,
-    step: Step, 
+    step: Step,
     store: Store,
-    messages:SDK.Domain.Message[]
+    messages: SDK.Domain.Message[]
 }
 export type Component = (props: InteractiveProps) => React.JSX.Element | null;
 export type Content = CodeBlock | ApiCall | Component;

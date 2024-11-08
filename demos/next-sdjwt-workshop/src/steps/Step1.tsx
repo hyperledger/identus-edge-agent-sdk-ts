@@ -46,13 +46,13 @@ export default {
             <p className="text-xl font-semibold text-blue-700 mt-4">Loading the services</p>
             <p>Inside the demo directory, ./demos/next-sdjwt-workshop, run docker compose</p>
             <p>Before you continue, please make sure the following ports are free on your local machine: <br />
-                - <strong>8085</strong> agent REST api<br />
-                - <strong>8090</strong> agent DID Comm<br />
-                - <strong>8080</strong> mediator DID Comm<br />
-                - <strong>3000</strong> website<br />
-                - <strong>5432</strong> DB<br />
-                - <strong>27017</strong> mongo DB<br />
-                - <strong>50053</strong> prism node<br />
+                - <strong>8085</strong> Agent REST API<br />
+                - <strong>8090</strong> Agent DIDComm<br />
+                - <strong>8080</strong> Mediator DIDComm<br />
+                - <strong>3000</strong> Website<br />
+                - <strong>5432</strong> Postgres<br />
+                - <strong>27017</strong> Mongo DB<br />
+                - <strong>50053</strong> PRISM node<br />
             </p>
         </div>
         ),

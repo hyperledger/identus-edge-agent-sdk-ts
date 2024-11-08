@@ -16,17 +16,8 @@ export const ApiCallComponent: React.FC<{
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isCurlPopupOpen, setIsCurlPopupOpen] = useState(false);
     const [requestStatus, setRequestStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-
     const { content } = props;
-
-    const url = content.endpoint(props.store);
-    const body = content.requestBody(props.store);
-
-    const curlCommand = content.curlCommand(
-        url,
-        content.method,
-        body
-    );
+    const curlCommand = content.curlCommand(props.store);
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -49,25 +40,25 @@ export const ApiCallComponent: React.FC<{
 
     const handleRunInBrowser = () => {
         setRequestStatus('loading');
-        fetch(url, {
-            method: content.method,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: content.method === "POST" ? JSON.stringify(body) : undefined,
-        })
+        content.request(props.store)
             .then(async (response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 let code = await response.text();
                 try {
-                    return JSON.parse(code)
+                    return {
+                        data: JSON.parse(code),
+                        url: response.url
+                    }
                 } catch (err) {
-                    return code
+                    return {
+                        data: code,
+                        url: response.url
+                    }
                 }
             })
-            .then((data) => {
+            .then(({ data, url }) => {
                 setResponse(data);
                 if (props.onResponse) {
                     props.onResponse(data, url);

@@ -1,6 +1,6 @@
 'use client'
 import { MEDIATOR_URL } from "@/config";
-import { NextFnProps, reduxActions } from "@/reducers/app";
+import { NextFnProps, reduxActions, Store } from "@/reducers/app";
 import React from "react";
 
 
@@ -102,12 +102,12 @@ return resolved;
                 title: 'Get the mediator DID through an API call',
                 description: `${MEDIATOR_URL}/did`,
                 method: 'GET',
-                endpoint: () => `${MEDIATOR_URL}/did`,
-                requestBody: () => undefined,
-                curlCommand: (url, method, body) => `const getMediatorDid = await fetch("${url}", {
-    method: "${method}",
-    headers: { "Content-Type": "application/json" }
-});
+                request(store: Store) {
+                    return fetch(`${MEDIATOR_URL}/did`, {
+                        method: "GET"
+                    })
+                },
+                curlCommand: (store: Store) => `const getMediatorDid = await fetch("${MEDIATOR_URL}/did");
 const mediatorDID = SDK.Domain.DID.fromString(await getMediatorDid.text());
 console.log('Mediator DID:', { did: mediatorDID });`,
             },
