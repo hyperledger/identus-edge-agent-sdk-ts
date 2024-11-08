@@ -229,7 +229,7 @@ Then("{actor} is dismissed",
 
 Then("{actor} will request {actor} to verify the anonymous credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
-    const SDK = await EdgeAgentWorkflow.instance;
+    const SDK = await EdgeAgentWorkflow.instance
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
     const claims = {
@@ -247,7 +247,7 @@ Then("{actor} will request {actor} to verify the anonymous credential",
 
 Then("{actor} will request {actor} to verify the JWT credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
-    const SDK = await EdgeAgentWorkflow.instance;
+    const SDK = await EdgeAgentWorkflow.instance
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
     const claims = {
@@ -265,7 +265,7 @@ Then("{actor} will request {actor} to verify the JWT credential",
 
 Then("{actor} will request {actor} to verify the SD+JWT credential",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
-    const SDK = await EdgeAgentWorkflow.instance;
+    const SDK = await EdgeAgentWorkflow.instance
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
     const claims: any = {
@@ -282,7 +282,7 @@ Then("{actor} will request {actor} to verify the SD+JWT credential",
 
 Then("{actor} will request {actor} to verify the SD+JWT credential with non-existing claims",
   async function (verifierEdgeAgent: Actor, holderEdgeAgent: Actor) {
-    const SDK = await EdgeAgentWorkflow.instance;
+    const SDK = await EdgeAgentWorkflow.instance
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
     const claims: any = {
@@ -301,7 +301,6 @@ When("{actor} sends the verification proof", async (edgeAgent: Actor) => {
   await EdgeAgentWorkflow.waitForProofRequest(edgeAgent)
   await EdgeAgentWorkflow.presentVerificationRequest(edgeAgent)
 })
-
 
 Then("{actor} should receive an exception when trying to use a wrong anoncred credential", async (edgeAgent: Actor) => {
   await EdgeAgentWorkflow.waitForProofRequest(edgeAgent)

@@ -1,5 +1,6 @@
 import { appendFile, writeFileSync } from "fs"
 import crypto from "crypto"
+import { Buffer } from 'buffer';
 
 export class Utils {
   static async asyncFilter<T>(arr: T[], predicate: (value: T, index: number, array: T[]) => Promise<boolean>) {
@@ -52,5 +53,10 @@ export class Utils {
       result += randomDigit.toString()
     }
     return result
+  }
+
+  static decodeBase64URL(encodedString: string): string {
+    const buffer = Buffer.from(encodedString, "base64url")
+    return buffer.toString("utf8");
   }
 }
