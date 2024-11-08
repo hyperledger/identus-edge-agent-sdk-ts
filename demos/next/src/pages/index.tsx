@@ -59,18 +59,14 @@ const Agent: React.FC<{}> = props => {
   return (
     <>
       <div className="mx-10 mt-5 mb-30">
-
-
         <PageHeader>
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
             Edge Agent
           </h1>
         </PageHeader>
-
         <DBConnect>
           <Box>
             <div>
-
               {state === "running" && (
                 <>
 
@@ -79,10 +75,8 @@ const Agent: React.FC<{}> = props => {
                   }) : <>Listening for new messages</>}
                 </>
               )}
-
               {state !== "running" && <>Start the agent first</>}
             </div>
-
             {error instanceof Error && (
               <pre>
                 Error: {error.message}

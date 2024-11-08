@@ -1,8 +1,10 @@
+'use client'
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import SDK from "@hyperledger/identus-edge-agent-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { DBPreload, Message, Credential, Mediator } from "@/actions/types";
 import { acceptCredentialOffer, acceptPresentationRequest, connectDatabase, initAgent, rejectCredentialOffer, sendMessage, startAgent, stopAgent } from "../actions";
+import { useMountedApp } from "./store";
 
 const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19";
 
@@ -10,20 +12,39 @@ export type ApiCall = {
     title: string,
     description: string,
     method: string,
-    endpoint: (store: Store) => string,
-    requestBody: (store: Store) => any,
-    curlCommand: (url: string, method: string, body?: string | null) => string
-}
 
-export type Component = (props: any) => React.JSX.Element;
+    request: (store: Store) => Promise<Response>
+    curlCommand: (store: Store) => string
+}
+export type InteractiveProps = {
+    loading: boolean,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    app: ReturnType<typeof useMountedApp>,
+    step: Step,
+    store: Store,
+    messages: SDK.Domain.Message[]
+}
+export type Component = (props: InteractiveProps) => React.JSX.Element | null;
 export type Content = CodeBlock | ApiCall | Component;
 export type Store = { [name: string]: any }
+export type NextFnProps = {
+    store: Store,
+    loadAgent: (store: Store) => Promise<SDK.Agent>,
+    setNextBusy: React.Dispatch<React.SetStateAction<boolean>>,
+    setStore: React.Dispatch<React.SetStateAction<Store>>,
+    app: ReturnType<typeof useMountedApp>
+}
+export type NextFN = (
+    options: NextFnProps
+) => Promise<void>
+
 export type Step = {
     title: string,
     description: string,
     content: Content[],
-    onNext?: (store: Store) => Promise<void>
+    onNext?: NextFN
 }
+
 export type CodeBlock = {
     language: string,
     code: string
@@ -343,6 +364,8 @@ const appSlice = createSlice({
             const message = action.meta.arg.message;
             state.messages = state.messages.map((currentMessage) => {
                 if (currentMessage.id === message.id) {
+                    debugger;
+
                     return {
                         ...currentMessage,
                         isAnswering: true,
