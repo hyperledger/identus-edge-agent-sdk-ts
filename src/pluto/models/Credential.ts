@@ -39,17 +39,15 @@ export interface Credential extends Model {
 export const CredentialSchema = schemaFactory<Credential>(schema => {
   schema.addProperty("string", "recoveryId");
   schema.addProperty("string", "dataJson");
-
   schema.addProperty("string", "issuer");
   schema.addProperty("string", "subject");
   schema.addProperty("string", "credentialCreated");
   schema.addProperty("string", "credentialUpdated");
   schema.addProperty("string", "credentialSchema");
-  schema.addProperty("string", "validUntil");
+  schema.addProperty("number", "validUntil");
   schema.addProperty("boolean", "revoked");
-
   schema.setEncrypted("dataJson");
-  schema.setVersion(1);
+  schema.setVersion(2);
 
   //V1
   schema.addProperty("string", "id");
@@ -77,8 +75,15 @@ export const CredentialMigration: MigrationStrategies = {
         ...document,
         id: Buffer.from(sha256.hash(Buffer.from(anoncredsStr))).toString('hex')
       }
-
     }
     throw new PlutoError.UnknownCredentialTypeError();
+  },
+  2: function (document) {
+    return {
+      ...document,
+      validUntil: typeof document.validUntil !== "number" ?
+        parseInt(document.validUntil) :
+        document.validUntil
+    }
   }
 }
