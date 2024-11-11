@@ -1,5 +1,5 @@
 import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
-import { LastResponse, PatchRequest, PostRequest, Send } from "@serenity-js/rest"
+import { GetRequest, LastResponse, PatchRequest, PostRequest, Send } from "@serenity-js/rest"
 import { Ensure, equals } from "@serenity-js/assertions"
 import { HttpStatusCode } from "axios"
 import { Expectations } from "../screenplay/Expectations"
@@ -15,6 +15,7 @@ import {
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
 import SDK from "@hyperledger/identus-edge-agent-sdk"
+import { JWTRevocationStatus } from "@hyperledger/identus-edge-agent-sdk/build/domain"
 
 export class CloudAgentWorkflow {
   static async createConnection(cloudAgent: Actor, label?: string, goalCode?: string, goal?: string) {
@@ -94,17 +95,17 @@ export class CloudAgentWorkflow {
   }
 
   static async offerSDJWTCredential(cloudAgent: Actor) {
-    const credential = new CreateIssueCredentialRecordRequest();
-    credential.validityPeriod = 360000;
+    const credential = new CreateIssueCredentialRecordRequest()
+    credential.validityPeriod = 360000
     credential.claims = {
       "automationRequired": "required value",
-    };
-    credential.automaticIssuance = true;
-    credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did;
+    }
+    credential.automaticIssuance = true
+    credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did
     credential.connectionId = await cloudAgent.answer<string>(
       Notepad.notes().get("connectionId")
-    );
-    credential.credentialFormat = "SDJWT";
+    )
+    credential.credentialFormat = "SDJWT"
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("issue-credentials/credential-offers").with(credential)),
       Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
@@ -288,14 +289,47 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async getCredential(cloudAgent: Actor, recordId: string) {//}: Promise<Credential> {
+    await cloudAgent.attemptsTo(
+      Send.a(GetRequest.to(`issue-credentials/records/${recordId}`)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok))
+    )
+    return await LastResponse.body().answeredBy(cloudAgent)
+  }
+
+  private static instance: typeof import("@hyperledger/identus-edge-agent-sdk").default
+
+  static async getCredentialStatusList(cloudAgent: Actor, recordIdList: string[]): Promise<Map<string, string>> {
+    CloudAgentWorkflow.instance ??= require("@hyperledger/identus-edge-agent-sdk")
+    const statusRegistry = new Map<string, string>()
+    for (const recordId of recordIdList) {
+      const credentialResponse = await this.getCredential(cloudAgent, recordId)
+      const jwtString = Utils.decodeBase64URL(credentialResponse.credential)
+      const decoded = CloudAgentWorkflow.instance.JWTCredential.fromJWS(jwtString)
+      const credentialStatus = decoded.vc.credentialStatus as JWTRevocationStatus
+      const statusList = credentialStatus.statusListCredential
+      statusRegistry.set(recordId, statusList)
+    }
+    return statusRegistry
+  }
+
   static async revokeCredential(cloudAgent: Actor, numberOfRevokedCredentials: number) {
     const revokedRecordIdList = []
     const recordIdList = await cloudAgent.answer(Notepad.notes().get("recordIdList"))
+    const statusesList = await this.getCredentialStatusList(cloudAgent, recordIdList)
     await Utils.repeat(numberOfRevokedCredentials, async () => {
       const recordId = recordIdList.shift()!
       await cloudAgent.attemptsTo(
+        Send.a(GetRequest.to(statusesList.get(recordId))),
+        Notepad.notes().set("statusListEncoded", LastResponse.body().credentialSubject.encodedList),
         Send.a(PatchRequest.to(`credential-status/revoke-credential/${recordId}`)),
-        Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok))
+        Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok)),
+        Wait.upTo(Duration.ofSeconds(60)).until(
+          Questions.httpGet(statusesList.get(recordId)),
+          Expectations.propertyIsMetFor("credentialSubject.encodedList", async (property) => {
+            return property != await cloudAgent.answer(Notepad.notes().get("statusListEncoded"))
+          })
+        )
       )
       revokedRecordIdList.push(recordId)
     })

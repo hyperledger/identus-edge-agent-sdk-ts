@@ -40,7 +40,6 @@ export class CloudAgentConfiguration {
       await axiosInstance.get(
         `did-registrar/dids/${this.publishedDid}`
       )
-      return
     } catch (err) {
       Utils.appendToNotes("DID not found. Creating a new one and publishing it.")
       this.publishedDid = await this.preparePublishedDid(Curve.Secp256k1)
@@ -52,7 +51,6 @@ export class CloudAgentConfiguration {
       await axiosInstance.get(
         `did-registrar/dids/${this.publishedEd25519Did}`
       )
-      return
     } catch (err) {
       Utils.appendToNotes("Ed25519 DID not found. Creating a new one and publishing it.")
       this.publishedEd25519Did = await this.preparePublishedDid(Curve.Ed25519)
@@ -65,7 +63,6 @@ export class CloudAgentConfiguration {
       await axiosInstance.get(
         `schema-registry/schemas/${this.jwtSchemaGuid}`
       )
-      return
     } catch (err) {
       Utils.appendToNotes("JWT Schema not found. Creating a new one.")
       this.jwtSchemaGuid = await this.prepareJwtSchema(this.publishedDid)
@@ -77,7 +74,6 @@ export class CloudAgentConfiguration {
       await axiosInstance.get(
         `schema-registry/schemas/${this.sdJWTSchemaGuid}`
       )
-      return
     } catch (err) {
       Utils.appendToNotes("SDJWT Schema not found. Creating a new one.")
       this.sdJWTSchemaGuid = await this.prepareJwtSchema(this.publishedEd25519Did)
@@ -111,13 +107,13 @@ export class CloudAgentConfiguration {
 
     const assertionKey = new ManagedDIDKeyTemplate()
     assertionKey.id = "key-assertion-1"
-    assertionKey.purpose = Purpose.AssertionMethod;
-    assertionKey.curve = curve;
+    assertionKey.purpose = Purpose.AssertionMethod
+    assertionKey.curve = curve
 
     const authenticationKey = new ManagedDIDKeyTemplate()
     authenticationKey.id = "key-authentication-1"
-    authenticationKey.purpose = Purpose.Authentication;
-    assertionKey.curve = curve;
+    authenticationKey.purpose = Purpose.Authentication
+    assertionKey.curve = curve
 
     creationData.documentTemplate.publicKeys = [
       assertionKey,
@@ -125,10 +121,16 @@ export class CloudAgentConfiguration {
     ]
     creationData.documentTemplate.services = []
 
-    const creationResponse = await axiosInstance.post(
-      "did-registrar/dids",
-      creationData
-    )
+    let creationResponse
+    try {
+      creationResponse = await axiosInstance.post(
+        "did-registrar/dids",
+        creationData
+      )
+    } catch (e) {
+      console.log(e)
+    }
+
     const longFormDid = creationResponse.data.longFormDid
     const publicationResponse = await axiosInstance.post(
       `did-registrar/dids/${longFormDid}/publications`
@@ -257,6 +259,7 @@ export class CloudAgentConfiguration {
 
 export const axiosInstance = axios.create({
   baseURL: CloudAgentConfiguration.agentUrl,
+  insecureHTTPParser: true,
   timeout: 60000,
   headers: {
     Accept: "application/json,application/xml",
