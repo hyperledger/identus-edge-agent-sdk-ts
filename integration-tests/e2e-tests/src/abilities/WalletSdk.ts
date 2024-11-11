@@ -1,11 +1,11 @@
 import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
 import type SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
-import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
+import { axiosInstance, CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
 import { randomUUID, UUID } from "crypto"
 
-let instance: typeof import("@hyperledger/identus-edge-agent-sdk").default;
+let instance: typeof import("@hyperledger/identus-edge-agent-sdk").default
 // fallback in any case of dangling sdk agents
 export const agentList: Map<string, WalletSdk> = new Map()
 
@@ -15,24 +15,17 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
 
   async resolve(didString: string): Promise<SDK.Domain.DIDDocument> {
     const { Domain } = await WalletSdk.loadSDK()
-    const url = `${CloudAgentConfiguration.agentUrl}dids/${didString}`;
-    const response = await fetch(url, {
-      "headers": {
-        "accept": "*/*",
-        "accept-language": "en",
-        "cache-control": "no-cache",
-        "pragma": "no-cache",
-        "sec-gpc": "1"
-      },
-      "method": "GET",
-      "mode": "cors",
-      "credentials": "omit"
+
+    const response = await axiosInstance.get(`dids/${didString}`, {
+      headers: {
+        Accept: "*/*"
+      }
     })
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
+    if (response.status != 200) {
+      throw new Error("Failed to fetch data")
     }
-    const data: any = await response.json();
-    const didDocument = data.didDocument;
+    const data = response.data
+    const didDocument = data.didDocument
 
     const servicesProperty = new Domain.Services(
       didDocument.service
@@ -40,9 +33,9 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
     const verificationMethodsProperty = new Domain.VerificationMethods(
       didDocument.verificationMethod
     )
-    const coreProperties: SDK.Domain.DIDDocumentCoreProperty[] = [];
-    const authenticate: SDK.Domain.Authentication[] = [];
-    const assertion: SDK.Domain.AssertionMethod[] = [];
+    const coreProperties: SDK.Domain.DIDDocumentCoreProperty[] = []
+    const authenticate: SDK.Domain.Authentication[] = []
+    const assertion: SDK.Domain.AssertionMethod[] = []
 
     for (const verificationMethod of didDocument.verificationMethod) {
       const isAssertion = didDocument.assertionMethod.find((method) => method === verificationMethod.id)
@@ -51,20 +44,20 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
       }
       const isAuthentication = didDocument.authentication.find((method) => method === verificationMethod.id)
       if (isAuthentication) {
-        authenticate.push(new Domain.Authentication([isAuthentication], [verificationMethod]));
+        authenticate.push(new Domain.Authentication([isAuthentication], [verificationMethod]))
       }
     }
 
-    coreProperties.push(...authenticate);
-    coreProperties.push(servicesProperty);
-    coreProperties.push(verificationMethodsProperty);
+    coreProperties.push(...authenticate)
+    coreProperties.push(servicesProperty)
+    coreProperties.push(verificationMethodsProperty)
 
     const resolved = new Domain.DIDDocument(
       Domain.DID.fromString(didString),
       coreProperties
-    );
+    )
 
-    return resolved;
+    return resolved
   }
 }
 
@@ -120,9 +113,9 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   static execute(callback: (sdk: SDK.Agent, messages: {
-    credentialOfferStack: SDK.Domain.Message[];
-    issuedCredentialStack: SDK.Domain.Message[];
-    proofRequestStack: SDK.Domain.Message[];
+    credentialOfferStack: SDK.Domain.Message[]
+    issuedCredentialStack: SDK.Domain.Message[]
+    proofRequestStack: SDK.Domain.Message[]
     revocationStack: SDK.Domain.Message[],
     presentationMessagesStack: SDK.Domain.Message[]
 
@@ -139,7 +132,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   static async loadSDK() {
-    instance ??= require("@hyperledger/identus-edge-agent-sdk");
+    instance ??= require("@hyperledger/identus-edge-agent-sdk")
     return instance
   }
 
@@ -162,9 +155,9 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
       Castor
     } = await WalletSdk.loadSDK()
 
-    const resolvers = [ShortFormDIDResolverSample];
+    const resolvers = [ShortFormDIDResolverSample]
     const apollo = new Apollo()
-    const castor = new Castor(apollo, resolvers);
+    const castor = new Castor(apollo, resolvers)
 
     this.store = new Store({
       name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
@@ -249,7 +242,7 @@ class MessageQueue {
   }
 
   async processMessages() {
-    const SDK = await WalletSdk.loadSDK();
+    const SDK = await WalletSdk.loadSDK()
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
         const message: SDK.Domain.Message = this.dequeue()

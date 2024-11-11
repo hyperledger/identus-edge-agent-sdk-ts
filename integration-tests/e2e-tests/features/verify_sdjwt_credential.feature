@@ -1,4 +1,4 @@
-@sdjwt @credential @sdkverificationsd
+@sdjwt @credential @sdkverification
 Feature: Verify SD+JWT presentation
   The Edge Agent should be able to receive a verifiable credential from Cloud Agent and then send a presentation to another edge agent who will verify it
 
