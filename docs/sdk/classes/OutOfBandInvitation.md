@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L12)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L12)
 
 ## Properties
 
@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L16)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L16)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L13)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L13)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L17)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L17)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L14)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L14)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L15)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L15)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L10)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L10)
 
 ## Accessors
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L20)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L20)
 
 ## Methods
 
@@ -143,4 +143,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L34)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L34)

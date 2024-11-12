@@ -49,7 +49,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L7)
+[src/domain/models/CredentialMetadata.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L7)
 
 ## Properties
 
@@ -59,7 +59,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L10)
+[src/domain/models/CredentialMetadata.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L10)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L9)
+[src/domain/models/CredentialMetadata.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L9)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L8)
+[src/domain/models/CredentialMetadata.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L8)
 
 ___
 
@@ -96,7 +96,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L5)
+[src/domain/models/CredentialMetadata.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L5)
 
 ## Methods
 
@@ -118,7 +118,7 @@ Check the CredentialType of this Metadata
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L19)
+[src/domain/models/CredentialMetadata.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L19)
 
 ___
 
@@ -136,4 +136,4 @@ JSON
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:28](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/CredentialMetadata.ts#L28)
+[src/domain/models/CredentialMetadata.ts:28](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/CredentialMetadata.ts#L28)

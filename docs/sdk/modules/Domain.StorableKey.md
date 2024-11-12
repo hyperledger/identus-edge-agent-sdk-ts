@@ -35,4 +35,4 @@ Nomenclature:
 
 #### Defined in
 
-[src/domain/models/keyManagement/StorableKey.ts:26](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/keyManagement/StorableKey.ts#L26)
+[src/domain/models/keyManagement/StorableKey.ts:26](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/keyManagement/StorableKey.ts#L26)

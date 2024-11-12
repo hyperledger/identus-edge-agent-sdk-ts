@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/DIDDocument.ts#L37)
+[src/domain/models/DIDDocument.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/DIDDocument.ts#L37)
 
 ## Properties
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:38](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/DIDDocument.ts#L38)
+[src/domain/models/DIDDocument.ts:38](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/DIDDocument.ts#L38)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:40](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/DIDDocument.ts#L40)
+[src/domain/models/DIDDocument.ts:40](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/DIDDocument.ts#L40)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/DIDDocument.ts#L39)
+[src/domain/models/DIDDocument.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/DIDDocument.ts#L39)
 
 ## Accessors
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:43](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/DIDDocument.ts#L43)
+[src/domain/models/DIDDocument.ts:43](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/DIDDocument.ts#L43)

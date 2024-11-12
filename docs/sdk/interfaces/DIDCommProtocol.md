@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[src/mercury/DIDCommProtocol.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/mercury/DIDCommProtocol.ts#L4)
+[src/mercury/DIDCommProtocol.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/mercury/DIDCommProtocol.ts#L4)
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[src/mercury/DIDCommProtocol.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/mercury/DIDCommProtocol.ts#L14)
+[src/mercury/DIDCommProtocol.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/mercury/DIDCommProtocol.ts#L14)

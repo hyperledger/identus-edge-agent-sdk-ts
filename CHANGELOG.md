@@ -1,3 +1,11 @@
+## [6.3.2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.1...v6.3.2) (2024-11-12)
+
+
+### Bug Fixes
+
+* export Pluto models ([#332](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/332)) ([09a1504](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/09a15046403a2249034c5ff5dfc7e6e562cd9171))
+* implementing the Hyperledger Identus SDJWT workshop ([#323](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/323)) ([4718a5c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/4718a5c4eae35fd03454dceafc1623e15fe3adb5))
+
 ## [6.3.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.0...v6.3.1) (2024-11-06)
 
 

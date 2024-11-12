@@ -30,7 +30,7 @@ Declaration merge to contain key conversion functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/keyManagement/exportable/ExportableKey.ts#L25)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/keyManagement/exportable/ExportableKey.ts#L25)
 
 ## Functions
 
@@ -64,4 +64,4 @@ object with exportable functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/keyManagement/exportable/ExportableKey.ts#L54)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/keyManagement/exportable/ExportableKey.ts#L54)

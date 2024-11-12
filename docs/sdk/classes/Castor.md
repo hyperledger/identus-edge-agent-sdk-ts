@@ -54,7 +54,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L65)
+[src/castor/Castor.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L65)
 
 ## Properties
 
@@ -64,7 +64,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L55)
+[src/castor/Castor.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L55)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[src/castor/Castor.ts:56](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L56)
+[src/castor/Castor.ts:56](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L56)
 
 ## Methods
 
@@ -115,7 +115,7 @@ const peerDid = await castor.createPeerDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L200)
+[src/castor/Castor.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L200)
 
 ___
 
@@ -164,7 +164,7 @@ const prismDid = await castor.createPrismDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:120](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L120)
+[src/castor/Castor.ts:120](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L120)
 
 ___
 
@@ -186,7 +186,7 @@ Extracts the verificationMethods from an array of CoreProperties inside a DID Do
 
 #### Defined in
 
-[src/castor/Castor.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L247)
+[src/castor/Castor.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L247)
 
 ___
 
@@ -213,7 +213,7 @@ Returns ecnumbasis from a valid DID and its related publicKey
 
 #### Defined in
 
-[src/castor/Castor.ts:406](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L406)
+[src/castor/Castor.ts:406](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L406)
 
 ___
 
@@ -250,7 +250,7 @@ const parsedPrismDid = castor.parseDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L90)
+[src/castor/Castor.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L90)
 
 ___
 
@@ -288,7 +288,7 @@ const didDocument = await castor.resolveDID("did:prism:123456")
 
 #### Defined in
 
-[src/castor/Castor.ts:225](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L225)
+[src/castor/Castor.ts:225](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L225)
 
 ___
 
@@ -340,4 +340,4 @@ const isValid = castor.verifySignature(
 
 #### Defined in
 
-[src/castor/Castor.ts:291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/castor/Castor.ts#L291)
+[src/castor/Castor.ts:291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/castor/Castor.ts#L291)

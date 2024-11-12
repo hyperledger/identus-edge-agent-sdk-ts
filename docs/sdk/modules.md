@@ -79,6 +79,7 @@
 
 ### Type Aliases
 
+- [CollectionList](modules.md#collectionlist)
 - [ConnectionEventArg](modules.md#connectioneventarg)
 - [EventCallback](modules.md#eventcallback)
 - [MessageEventArg](modules.md#messageeventarg)
@@ -95,6 +96,7 @@
 ### Functions
 
 - [isPresentationDefinitionRequestType](modules.md#ispresentationdefinitionrequesttype)
+- [makeCollections](modules.md#makecollections)
 
 ## References
 
@@ -104,13 +106,23 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 ## Type Aliases
 
+### CollectionList
+
+Ƭ **CollectionList**: `Record`\<`string`, `CollectionCreate`\>
+
+#### Defined in
+
+[src/pluto/rxdb/collections.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/pluto/rxdb/collections.ts#L17)
+
+___
+
 ### ConnectionEventArg
 
 Ƭ **ConnectionEventArg**: [`DIDPair`](classes/Domain.DIDPair.md)
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/types/index.ts#L49)
+[src/edge-agent/types/index.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/types/index.ts#L49)
 
 ___
 
@@ -134,7 +146,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/types/index.ts#L51)
+[src/edge-agent/types/index.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/types/index.ts#L51)
 
 ___
 
@@ -144,7 +156,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/types/index.ts#L48)
+[src/edge-agent/types/index.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/types/index.ts#L48)
 
 ___
 
@@ -154,7 +166,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/types.ts#L101)
+[src/edge-agent/protocols/types.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/types.ts#L101)
 
 ___
 
@@ -164,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/protocols/types.ts#L86)
+[src/edge-agent/protocols/types.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/protocols/types.ts#L86)
 
 ___
 
@@ -174,7 +186,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/edge-agent/types/index.ts#L50)
+[src/edge-agent/types/index.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/edge-agent/types/index.ts#L50)
 
 ## Variables
 
@@ -184,7 +196,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -194,7 +206,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pollux/models/JWTVerifiableCredential.ts#L22)
+[src/pollux/models/JWTVerifiableCredential.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/pollux/models/JWTVerifiableCredential.ts#L22)
 
 ___
 
@@ -204,7 +216,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
+[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
 
 ## Functions
 
@@ -231,4 +243,24 @@ request is PresentationDefinitionRequest\<Type\>
 
 #### Defined in
 
-[src/pollux/utils/claims.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/pollux/utils/claims.ts#L88)
+[src/pollux/utils/claims.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/pollux/utils/claims.ts#L88)
+
+___
+
+### makeCollections
+
+▸ **makeCollections**(`additional?`): [`CollectionList`](modules.md#collectionlist)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `additional?` | [`CollectionList`](modules.md#collectionlist) |
+
+#### Returns
+
+[`CollectionList`](modules.md#collectionlist)
+
+#### Defined in
+
+[src/pluto/rxdb/collections.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/pluto/rxdb/collections.ts#L19)

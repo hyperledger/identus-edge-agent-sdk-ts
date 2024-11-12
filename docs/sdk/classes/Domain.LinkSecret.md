@@ -43,7 +43,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/LinkSecret.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/LinkSecret.ts#L8)
+[src/domain/models/LinkSecret.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/LinkSecret.ts#L8)
 
 ## Properties
 
@@ -53,7 +53,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/LinkSecret.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/LinkSecret.ts#L10)
+[src/domain/models/LinkSecret.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/LinkSecret.ts#L10)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/LinkSecret.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/LinkSecret.ts#L9)
+[src/domain/models/LinkSecret.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/LinkSecret.ts#L9)
 
 ___
 
@@ -80,7 +80,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/LinkSecret.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/LinkSecret.ts#L6)
+[src/domain/models/LinkSecret.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/LinkSecret.ts#L6)
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/LinkSecret.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/LinkSecret.ts#L4)
+[src/domain/models/LinkSecret.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/LinkSecret.ts#L4)

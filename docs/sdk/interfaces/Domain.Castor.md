@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/buildingBlocks/Castor.ts#L11)
+[src/domain/buildingBlocks/Castor.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/buildingBlocks/Castor.ts#L11)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/buildingBlocks/Castor.ts#L6)
+[src/domain/buildingBlocks/Castor.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/buildingBlocks/Castor.ts#L6)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/buildingBlocks/Castor.ts#L21)
+[src/domain/buildingBlocks/Castor.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/buildingBlocks/Castor.ts#L21)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/buildingBlocks/Castor.ts#L5)
+[src/domain/buildingBlocks/Castor.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/buildingBlocks/Castor.ts#L5)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/buildingBlocks/Castor.ts#L15)
+[src/domain/buildingBlocks/Castor.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/buildingBlocks/Castor.ts#L15)
 
 ___
 
@@ -143,4 +143,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Castor.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/buildingBlocks/Castor.ts#L16)
+[src/domain/buildingBlocks/Castor.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/buildingBlocks/Castor.ts#L16)

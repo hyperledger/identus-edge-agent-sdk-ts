@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:423](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/VerifiableCredential.ts#L423)
+[src/domain/models/VerifiableCredential.ts:423](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/VerifiableCredential.ts#L423)
 
 ## Properties
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:424](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/VerifiableCredential.ts#L424)
+[src/domain/models/VerifiableCredential.ts:424](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/VerifiableCredential.ts#L424)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:425](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/VerifiableCredential.ts#L425)
+[src/domain/models/VerifiableCredential.ts:425](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/VerifiableCredential.ts#L425)
 
 ## Accessors
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:430](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/c632f0efed4b3d905476bd3d4312ebd50a8d0a12/src/domain/models/VerifiableCredential.ts#L430)
+[src/domain/models/VerifiableCredential.ts:430](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/09a15046403a2249034c5ff5dfc7e6e562cd9171/src/domain/models/VerifiableCredential.ts#L430)
