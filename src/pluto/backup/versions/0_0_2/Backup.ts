@@ -18,19 +18,13 @@ export class BackupTask implements IBackupTask {
     const dids = didModels.map(this.mapDid);
     const did_pairs = await this.getDidPairBackups();
     const keys = await this.getKeyBackups(didModels);
-    const link_secret = await this.getLinkSecretBackup();
-    const messages = await this.getMessageBackups();
-    const mediators = await this.getMediatorBackups();
 
-    const json: Domain.Backup.v0_0_1 = {
-      version: "0.0.1",
+    const json: Domain.Backup.v0_0_2 = {
+      version: "0.0.2",
       credentials,
       dids,
       did_pairs,
       keys,
-      link_secret,
-      messages,
-      mediators
     };
 
     return json;
@@ -83,21 +77,6 @@ export class BackupTask implements IBackupTask {
     return linksecret?.secret ?? undefined;
   }
 
-  async getMediatorBackups(): Promise<Domain.Backup.v0_0_1.Mediator[]> {
-    const mediators = await this.Pluto.getAllMediators();
-    const mapped = mediators.map<Domain.Backup.v0_0_1.Mediator>(x => ({
-      holder_did: x.hostDID.toString(),
-      mediator_did: x.mediatorDID.toString(),
-      routing_did: x.routingDID.toString(),
-    }));
-
-    return mapped;
-  }
-
-  async getMessageBackups(): Promise<Domain.Backup.v0_0_1.Message[]> {
-    const messageModels = await this.Repositories.Messages.getModels();
-    return messageModels.map(x => base64url.baseEncode(Buffer.from(x.dataJson)));
-  }
 
   private mapCredential = (model: Models.Credential): Domain.Backup.v0_0_1.Credential => {
     const isJWT = model.recoveryId === JWTVerifiableCredentialRecoveryId;
