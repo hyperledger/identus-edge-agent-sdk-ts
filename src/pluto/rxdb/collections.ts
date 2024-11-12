@@ -1,4 +1,4 @@
-import { MigrationStrategies, RxCollectionCreator, RxJsonSchema } from "rxdb";
+import { MigrationStrategies, RxJsonSchema } from "rxdb";
 import * as Models from "../models";
 import { Schema } from "../models/Schema";
 
