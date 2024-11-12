@@ -1,9 +1,8 @@
 import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 
 import { Pluto } from "../../src/pluto/Pluto";
-import InMemoryStore from "../fixtures/inmemory";
 import * as Domain from "../../src/domain";
-import { Apollo, Store } from "../../src";
+import { Apollo, RIDBStore, Store } from "../../src";
 import { randomUUID } from "crypto";
 
 describe("Pluto", () => {
@@ -11,14 +10,10 @@ describe("Pluto", () => {
 
   beforeEach(async () => {
     const apollo = new Apollo();
-    const store = new Store({
-      name: "randomdb" + randomUUID(),
-      storage: InMemoryStore,
-      password: 'random12434',
-      ignoreDuplicate: true
-    })
+    const store = new RIDBStore({
+      password: 'random12434'
+    });
     instance = new Pluto(store, apollo);
-
     await instance.start();
   });
 

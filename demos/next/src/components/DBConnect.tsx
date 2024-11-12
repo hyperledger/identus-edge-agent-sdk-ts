@@ -1,3 +1,5 @@
+'use client';
+
 import { useMountedApp } from "@/reducers/store";
 import { useState } from "react";
 

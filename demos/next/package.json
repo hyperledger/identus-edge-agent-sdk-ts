@@ -14,6 +14,7 @@
     "@noble/hashes": "^1.3.3",
     "@pluto-encrypted/indexdb": "^1.12.2",
     "@reduxjs/toolkit": "^1.9.5",
+    "@trust0/ridb": "/Users/ribo/Projects/personal/ridb-rust/ts",
     "crypto": "^1.0.1",
     "fs": "^0.0.1-security",
     "jose": "^5.2.0",

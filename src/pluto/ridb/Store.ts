@@ -1,4 +1,4 @@
-import { RIDB, RIDBTypes } from '@trust0/ridb';
+import { BaseStorage, RIDB } from '@trust0/ridb';
 import { makeCollections } from './collections';
 import type { Pluto } from "../Pluto";
 import { MangoQuery } from 'rxdb';
@@ -7,10 +7,11 @@ import { Model } from '../models';
 type ExtractSchemas = ReturnType<typeof makeCollections>['schemas'];
 export class RIDBStore implements Pluto.Store {
     private _db: RIDB<ExtractSchemas>;
-    constructor() {
+    constructor(db: string) {
 
         const { schemas, migrations } = makeCollections();
         this._db = new RIDB<typeof schemas>({
+            dbName: db,
             schemas,
             migrations: migrations as any
         });
@@ -45,7 +46,7 @@ export class RIDBStore implements Pluto.Store {
     }
 
     async start(options: {
-        storageType?: typeof RIDBTypes.BaseStorage;
+        storageType?: typeof BaseStorage;
         password?: string;
     }) {
         await this._db.start(options)

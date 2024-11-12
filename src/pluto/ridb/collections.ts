@@ -1,13 +1,13 @@
 
-import { type RIDBTypes } from '@trust0/ridb';
 
 
 
+import { SchemaTypeRecord, MigrationPathsForSchemas } from "@trust0/ridb";
 import * as Models from "../models";
 
 export type CollectionCreate = {
-    schemas: RIDBTypes.SchemaTypeRecord,
-    migrations: RIDBTypes.MigrationPathsForSchemas<any>
+    schemas: SchemaTypeRecord,
+    migrations: MigrationPathsForSchemas<any>
 };
 
 export type CollectionList = Record<string, CollectionCreate>;

@@ -5,14 +5,11 @@ addRxPlugin(RxDBDevModePlugin);
 
 import { AnyAction, ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
 import SDK from "@hyperledger/identus-edge-agent-sdk";
-import { sha512 } from '@noble/hashes/sha512'
 import { RootState, reduxActions } from "@/reducers/app";
-import IndexDB from '@pluto-encrypted/indexdb'
 import { PresentationClaims } from "../../../../src/domain";
-
+import { StorageType } from "@trust0/ridb";
 
 const Agent = SDK.Agent;
-const BasicMessage = SDK.BasicMessage;
 const OfferCredential = SDK.OfferCredential;
 const ListenerKey = SDK.ListenerKey;
 const IssueCredential = SDK.IssueCredential;
@@ -307,6 +304,7 @@ export const initAgent = createAsyncThunk<
             agent,
         })
     } catch (err) {
+        debugger;
         return api.rejectWithValue(err as Error);
     }
 })
@@ -321,13 +319,13 @@ export const connectDatabase = createAsyncThunk<
     { state: { app: RootState } }
 >("connectDatabase", async (options, api) => {
     try {
-        const hashedPassword = sha512(options.encryptionKey)
+        const hashedPassword = Buffer.from(options.encryptionKey).toString()
         const apollo = new SDK.Apollo();
-        const store = new SDK.Store({
-            name: "test",
-            storage: IndexDB,
-            password: Buffer.from(hashedPassword).toString("hex")
-        });
+        const store = new SDK.RIDBStore({
+            dbName: 'test',
+            storageType: StorageType.IndexDB,
+            password: hashedPassword
+        })
         const db = new SDK.Pluto(store, apollo);
         await db.start();
         const messages = await db.getAllMessages()
@@ -340,6 +338,8 @@ export const connectDatabase = createAsyncThunk<
         );
         return api.fulfillWithValue({ db });
     } catch (err) {
+        console.log(err)
+        debugger;
         return api.rejectWithValue(err as Error);
     }
 });

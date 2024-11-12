@@ -20,7 +20,6 @@ addRxPlugin(RxDBDevModePlugin);
 const apollo = new Apollo();
 const castor = new Castor(apollo);
 
-
 let sandbox: sinon.SinonSandbox;
 describe("Pluto", () => {
 

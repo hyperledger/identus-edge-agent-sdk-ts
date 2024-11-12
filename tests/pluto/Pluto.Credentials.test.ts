@@ -4,7 +4,7 @@ import { Pluto } from "../../src/pluto/Pluto";
 import InMemoryStore from "../fixtures/inmemory";
 import * as Fixtures from "../fixtures";
 import * as Domain from "../../src/domain";
-import { AnonCredsCredential, Apollo, JWTCredential, Store } from "../../src";
+import { AnonCredsCredential, Apollo, JWTCredential, RIDBStore, Store } from "../../src";
 import { randomUUID } from "crypto";
 
 describe("Pluto", () => {
@@ -12,11 +12,8 @@ describe("Pluto", () => {
 
   beforeEach(async () => {
     const apollo = new Apollo();
-    const store = new Store({
-      name: "randomdb" + randomUUID(),
-      storage: InMemoryStore,
-      password: 'random12434',
-      ignoreDuplicate: true
+    const store = new RIDBStore({
+      password: 'random12434'
     });
     instance = new Pluto(store, apollo);
 

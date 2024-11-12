@@ -8,9 +8,8 @@ import { X25519PrivateKey } from "../../src/apollo/utils/X25519PrivateKey";
 import { Ed25519PrivateKey } from "../../src/apollo/utils/Ed25519PrivateKey";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
 
-import { Apollo, Store } from "../../src";
+import { Apollo, RIDBStore } from "../../src";
 import { Pluto } from "../../src/pluto/Pluto";
-import InMemoryStore from "../fixtures/inmemory";
 import * as Fixtures from "../fixtures";
 
 describe("Pluto", () => {
@@ -18,12 +17,10 @@ describe("Pluto", () => {
 
   beforeEach(async () => {
     const apollo = new Apollo();
-    const store = new Store({
-      name: "randomdb" + randomUUID(),
-      storage: InMemoryStore,
-      password: 'random12434',
-      ignoreDuplicate: true
-    }); instance = new Pluto(store, apollo);
+    const store = new RIDBStore({
+      password: 'random12434'
+    });
+    instance = new Pluto(store, apollo);
 
     await instance.start();
   });

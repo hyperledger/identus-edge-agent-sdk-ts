@@ -9,7 +9,7 @@ describe("Pluto", () => {
 
   beforeEach(async () => {
     const apollo = new Apollo();
-    const store = new RIDBStore();
+    const store = new RIDBStore("test");
     instance = new Pluto(store, apollo);
     await instance.start({
       password: 'random12434',
