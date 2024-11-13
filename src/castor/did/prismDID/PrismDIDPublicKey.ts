@@ -56,7 +56,6 @@ export class PrismDIDPublicKey {
           [KeyProperties.curve]: Curve.ED25519,
           [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
         })
-
       }
       if (curve === Curve.X25519) {
         return apollo.createPublicKey({
@@ -96,8 +95,8 @@ export class PrismDIDPublicKey {
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
     const curve = this.keyData.curve;
     const usage = getProtosUsage(this.usage);
-    const encoded = this.keyData.getEncoded()
     if (curve === Curve.SECP256K1) {
+      const encoded = this.keyData.getEncoded()
       const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
       const yBytes = encoded.slice(
         1 + ECConfig.PRIVATE_KEY_BYTE_SIZE,
@@ -118,7 +117,7 @@ export class PrismDIDPublicKey {
       usage: usage,
       compressed_ec_key_data: new Protos.io.iohk.atala.prism.protos.CompressedECKeyData({
         curve: this.keyData.curve,
-        data: encoded,
+        data: this.keyData.raw,
       }),
     });
   }

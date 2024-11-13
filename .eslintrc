@@ -18,13 +18,11 @@
   ],
   "plugins": [
     "@typescript-eslint",
-    "react",
     "unused-imports"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended"
   ],
   "rules": {
     "comma-dangle": 0,
@@ -48,11 +46,7 @@
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": "off"
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
+  "settings": {},
   "env": {
     "browser": true,
     "node": true,

@@ -1,5 +1,5 @@
 import * as Domain from "../../domain";
-import { JsonObj, asArray, asJsonObj, isArray, isNil, isObject, notEmptyString } from "../../utils";
+import { JsonObj, asArray, asJsonObj, isArray, isObject, notEmptyString } from "../../utils";
 import { Task } from "../../utils/tasks";
 import { InvitationIsInvalidError } from "../../domain/models/errors/Agent";
 import { OutOfBandInvitation } from "../protocols/invitation/v2/OutOfBandInvitation";
@@ -33,8 +33,6 @@ export class ParseOOBInvitation extends Task<OutOfBandInvitation, Args> {
       && isObject(msg.body)
       && isArray(msg.body.accept)
       && msg.body.accept.every(notEmptyString)
-      && (isNil(msg.body.goal) || notEmptyString(msg.body.goal))
-      && (isNil(msg.body.goal_code) || notEmptyString(msg.body.goal_code))
     );
 
     if (valid === false) {

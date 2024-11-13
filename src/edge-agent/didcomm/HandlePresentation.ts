@@ -9,7 +9,7 @@ interface Args {
   presentation: Presentation;
 }
 
-export class HandlePresentation extends Task<boolean, Args>{
+export class HandlePresentation extends Task<boolean, Args> {
   async run(ctx: DIDCommContext) {
     const { presentation } = this.args;
     const attachment = presentation.attachments.at(0);

@@ -6,6 +6,30 @@ import { acceptCredentialOffer, acceptPresentationRequest, connectDatabase, init
 
 const defaultMediatorDID = "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19";
 
+export type ApiCall = {
+    title: string,
+    description: string,
+    method: string,
+    endpoint: (store: Store) => string,
+    requestBody: (store: Store) => any,
+    curlCommand: (url: string, method: string, body?: string | null) => string
+}
+
+export type Component = (props: any) => React.JSX.Element;
+export type Content = CodeBlock | ApiCall | Component;
+export type Store = { [name: string]: any }
+export type Step = {
+    title: string,
+    description: string,
+    content: Content[],
+    onNext?: (store: Store) => Promise<void>
+}
+export type CodeBlock = {
+    language: string,
+    code: string
+}
+
+
 class TraceableError extends Error {
 
     constructor(...params) {
@@ -160,6 +184,19 @@ const appSlice = createSlice({
                 ...nonExisting
             ]);
         },
+        "updateAgent": (
+            state,
+            action: PayloadAction<{ agent: SDK.Agent, selfDID: SDK.Domain.DID, pluto: SDK.Domain.Pluto }>
+        ) => {
+            state.agent.isStarting = false;
+            state.agent.hasStarted = true;
+            state.agent.instance = action.payload.agent;
+            state.agent.selfDID = action.payload.selfDID;
+            state.db.hasConnected = true;
+            state.db.isConnecting = false;
+            state.db.instance = action.payload.pluto;
+            state.db.connected = true;
+        },
     },
     extraReducers: (builder) => {
 
@@ -173,10 +210,10 @@ const appSlice = createSlice({
             state.agent.hasSentMessage = false;
             let credentialFormat = SDK.Domain.CredentialType.Unknown;
             try {
-              credentialFormat = action.meta.arg.message.credentialFormat;
+                credentialFormat = action.meta.arg.message.credentialFormat;
             }
-            catch {}
-      
+            catch { }
+
             state.messages.push({
                 ...action.meta.arg.message,
                 isAnswering: true,

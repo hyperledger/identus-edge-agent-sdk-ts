@@ -12,14 +12,14 @@ class InvalidHashingAlgorithm extends Error {
 }
 
 export const hashSync = (data: string | Uint8Array, alg: string) => {
-  if (alg === Alg.SHA256) {
+  //TODO: We consider hashing as uppercase without slash but our dependencies use it with lowercase and -
+  const safeAlg = alg.replace(/-/gmi, "").toUpperCase()
+  if (safeAlg === Alg.SHA256) {
     return Uint8Array.from(Hashing.sha256().update(data).digest());
   }
-
-  if (alg === Alg.SHA512) {
+  if (safeAlg === Alg.SHA512) {
     return Uint8Array.from(Hashing.sha512().update(data).digest());
   }
-
   throw new InvalidHashingAlgorithm();
 };
 

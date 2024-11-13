@@ -59,21 +59,21 @@ export function getProtosUsage(
 export function getUsageId(keyUsage: Usage, index = 0): string {
   switch (keyUsage) {
     case Usage.MASTER_KEY:
-      return `master${index}`;
+      return `master-${index}`;
     case Usage.ISSUING_KEY:
-      return `issuing${index}`;
+      return `issuing-${index}`;
     case Usage.KEY_AGREEMENT_KEY:
-      return `agreement${index}`;
+      return `agreement-${index}`;
     case Usage.AUTHENTICATION_KEY:
-      return `authentication${index}`;
+      return `authentication-${index}`;
     case Usage.REVOCATION_KEY:
-      return `revocation${index}`;
+      return `revocation-${index}`;
     case Usage.CAPABILITY_DELEGATION_KEY:
-      return `delegation${index}`;
+      return `delegation-${index}`;
     case Usage.CAPABILITY_INVOCATION_KEY:
-      return `invocation${index}`;
+      return `invocation-${index}`;
     default:
-      return `unknown${index}`;
+      return `unknown-${index}`;
   }
 }
 

@@ -1,0 +1,12 @@
+{
+  "name": "@identus-edge-agent-sdk/integration-tests-esm",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "sdk": "file:../../../"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

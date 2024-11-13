@@ -151,6 +151,7 @@ describe("Keys", () => {
             seed: seedHex,
           };
           const privateKey = apollo.createPrivateKey(createKeyArgs);
+
           const derived = privateKey.isDerivable() && privateKey.derive(path.toString());
           expect(derived).to.not.equal(false);
 
@@ -162,6 +163,7 @@ describe("Keys", () => {
           const raw1 = (derived as PrivateKey).getEncoded().toString();
           const raw2 = withDerivationPath.getEncoded().toString();
           const raw3 = privateKey.getEncoded().toString();
+
           expect(raw1).to.equal(raw2);
           expect(raw1).to.not.equal(raw3);
         });

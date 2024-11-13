@@ -96,7 +96,6 @@ export default function App() {
                     </Box>
                 </DBConnect>
             </div>
-            <FooterNavigation />
         </>
     );
 }

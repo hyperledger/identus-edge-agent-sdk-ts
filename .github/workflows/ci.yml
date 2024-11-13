@@ -53,6 +53,14 @@ jobs:
       - name: Run coverage test
         run: npm run coverage
 
+      - name: Test integration node-cjs
+        working-directory: integration-tests/node/cjs
+        run: npm i && node test.cjs
+
+      - name: Test integration node-esm
+        working-directory: integration-tests/node/esm
+        run: npm i && node test.mjs
+
       - name: Npm audit
         uses: oke-py/npm-audit-action@v2.4.4
         with:

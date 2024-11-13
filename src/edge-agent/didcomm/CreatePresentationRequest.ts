@@ -18,7 +18,6 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
     const didDocument = await ctx.Castor.resolveDID(toDID.toString());
     const peerDIDTask = new CreatePeerDID({ services: didDocument.services, updateMediator: true });
     const newPeerDID = await ctx.run(peerDIDTask);
-
     if (type === Domain.CredentialType.AnonCreds) {
       if (!validatePresentationClaims(claims, Domain.CredentialType.AnonCreds)) {
         throw new Domain.PolluxError.InvalidPresentationDefinitionError("Anoncreds Claims are invalid");
@@ -30,6 +29,31 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
         new Domain.PresentationOptions({}, Domain.CredentialType.AnonCreds)
       );
 
+      return this.createRequest(
+        type,
+        presentationDefinitionRequest,
+        newPeerDID,
+        toDID
+      );
+    }
+
+    if (type === Domain.CredentialType.SDJWT) {
+      if (!validatePresentationClaims(claims, Domain.CredentialType.SDJWT)) {
+        throw new Domain.PolluxError.InvalidPresentationDefinitionError("SD+JWT Claims are invalid");
+      }
+      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
+        type,
+        claims,
+        new Domain.PresentationOptions({
+          sdjwt: {
+            jwtAlg: [
+              Domain.curveToAlg(Domain.Curve.SECP256K1)
+            ]
+          },
+          challenge: "Sign this text " + uuid(),
+          domain: 'N/A'
+        }, type)
+      );
       return this.createRequest(
         type,
         presentationDefinitionRequest,
@@ -52,7 +76,7 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
           },
           challenge: "Sign this text " + uuid(),
           domain: 'N/A'
-        })
+        }, type)
       );
 
       return this.createRequest(
@@ -72,7 +96,7 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
     from: Domain.DID,
     to: Domain.DID
   ) {
-    const attachmentFormat = type === Domain.CredentialType.JWT ?
+    const attachmentFormat = type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT ?
       Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS :
       Domain.AttachmentFormats.ANONCREDS_PROOF_REQUEST;
 

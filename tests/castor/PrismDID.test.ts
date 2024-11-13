@@ -18,11 +18,11 @@ const apollo = new Apollo();
 const castor = new Castor(apollo);
 
 describe("PrismDID", () => {
-  const secpDid = "did:prism:74f299ab7e5b2d127802b6a7093f5b9dd642e95aadf858cade6ec9af6929a487:CscBCsQBElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9hdXRoZW50aWNhdGlvbjAQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw";
+  const secpDid = "did:prism:032e7383265cab026f4bdf8b903f8f78840fefc5b201ccce06fc263f7b3be5df:CskBCsYBEl0KCG1hc3Rlci0wEAFCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfosSZQoQYXV0aGVudGljYXRpb24tMBAEQk8KCXNlY3AyNTZrMRIg_SAyFMBU6TtKBZGW7OZ4kiO2bb5gxzoBusPd48olCP4aINmWxrmlC5cbMq-ArXQPxLO4O-Hv27mgwHv5l4k0CH6L";
   const secpMultibase = "zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt";
-  const ed25519Did = "did:prism:30dc8276c5facc040dab037dd8c5c6d0e3218720a1e1c241c0341fcfea83cc60:Co0CCooCElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9hdXRoZW50aWNhdGlvbjAQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJECghpc3N1aW5nMBACSjYKB0VkMjU1MTkSK2RtNWYyR2RSNUJhSHBSeEI4YlRFbHZFXzBnSUMycDQwNE1zeDlzd0o5MTQ";
+  const ed25519Did = "did:prism:fc9fcaead407285991cdf1d27819720d8923e96274794c24977045e00b72e4c7:CqUBCqIBEl0KCG1hc3Rlci0wEAFCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfosSQQoQYXV0aGVudGljYXRpb24tMBAESisKB0VkMjU1MTkSIHZuX9hnUeQWh6UcQfG0xJbxP9ICAtqeNODLMfbMCfde";
   const ed25519Multibase = "z8yJizaEga14wo4pHUDBXCnrp5A9WbFDuk5DZnPq5mCHK";
-  const x25519Did = "did:prism:a5cce445f3e013fc2fa76914742b8b493b436251a29727ea57a4708b80fa3a68:CowCCokCElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9hdXRoZW50aWNhdGlvbjAQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJDCghpc3N1aW5nMBACSjUKBlgyNTUxORIrX1BqSGVmRmg5SDdxSDNWdDdNTzhWRU4tRjJQbFdjWHpkeHc2TFBreEVHRQ";
+  const x25519Did = "did:prism:5911e7a69ef3d1af144fa2192190c3576ce8087e2444f93b5b6cf12a71156e5f:CqQBCqEBEl0KCG1hc3Rlci0wEAFCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfosSQAoQYXV0aGVudGljYXRpb24tMBAESioKBlgyNTUxORIg_PjHefFh9H7qH3Vt7MO8VEN-F2PlWcXzdxw6LPkxEGE";
   const x25519Multibase = "zJ2VmASEaRF41F4BQSydGNi7zd5ud5YhqXxTKicPGd5FN";
 
   describe("PrismDidPublicKey", () => {
@@ -84,13 +84,13 @@ describe("PrismDID", () => {
 
   describe("createPrismDID", () => {
     it("Should create a prismDID from a PublicKey (SECP256K1)", async () => {
-      const result = await castor.createPrismDID(Fixtures.Keys.secp256K1.publicKey, []);
+      const result = await castor.createPrismDID(Fixtures.Keys.secp256K1.publicKey, [], [Fixtures.Keys.secp256K1]);
       expect(result).not.to.be.null;
       expect(result.toString()).to.equal(secpDid);
     });
 
     it("Should create a prismDID from a KeyPair (SECP256K1)", async () => {
-      const result = await castor.createPrismDID(Fixtures.Keys.secp256K1, []);
+      const result = await castor.createPrismDID(Fixtures.Keys.secp256K1, [], [Fixtures.Keys.secp256K1]);
       expect(result).not.to.be.null;
       expect(result.toString()).to.equal(secpDid);
     });
@@ -110,7 +110,8 @@ describe("PrismDID", () => {
   describe("Integration Tests", () => {
     describe("DIDDocument", () => {
       test("real example resolves correctly", async () => {
-        const didStr = "did:prism:73196107e806b084d44339c847a3ae8dd279562f23895583f62cc91a2ee5b8fe:CnsKeRI8CghtYXN0ZXItMBABSi4KCXNlY3AyNTZrMRIhArrplJNfQYxthryRU87XdODy-YWUh5mqrvIfAdoZFeJBEjkKBWtleS0wEAJKLgoJc2VjcDI1NmsxEiEC8rsFplfYvRLazdWWi3LNR1gaAQXb-adVhZacJT4ntwE";
+
+        const didStr = "did:prism:032e7383265cab026f4bdf8b903f8f78840fefc5b201ccce06fc263f7b3be5df:CskBCsYBEl0KCG1hc3Rlci0wEAFCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfosSZQoQYXV0aGVudGljYXRpb24tMBAEQk8KCXNlY3AyNTZrMRIg_SAyFMBU6TtKBZGW7OZ4kiO2bb5gxzoBusPd48olCP4aINmWxrmlC5cbMq-ArXQPxLO4O-Hv27mgwHv5l4k0CH6L";
         const sut = await castor.resolveDID(didStr);
 
         expect(sut).to.be.instanceOf(DIDDocument);
@@ -125,18 +126,18 @@ describe("PrismDID", () => {
         expect(cp0vm0?.controller).to.eq(didStr);
         expect(cp0vm0?.id).to.eq(`${didStr}#master-0`);
         expect(cp0vm0?.publicKeyJwk).to.be.undefined;
-        expect(cp0vm0?.publicKeyMultibase).to.eq("zRDBW15pMDuec8faAkL7oEjQhtk8S7FmFm1oE5DgPHpBLM3E5huETfpyS388WqXGsvddpmNkhA3bh3vcsASCZMTaM");
+        expect(cp0vm0?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
         expect(cp0vm0?.type).to.eq("Secp256k1");
 
         const cp1 = sut.coreProperties.at(1) as Authentication;
         expect(cp1).to.be.instanceOf(Authentication);
-        expect(cp1.urls).to.include(`${didStr}#key-0`);
+        expect(cp1.urls).to.include(`${didStr}#authentication-0`);
         const cp1vm0 = cp1.verificationMethods.at(0);
         expect(cp1vm0).to.be.instanceOf(VerificationMethod);
         expect(cp1vm0?.controller).to.eq(didStr);
-        expect(cp1vm0?.id).to.eq(`${didStr}#key-0`);
+        expect(cp1vm0?.id).to.eq(`${didStr}#authentication-0`);
         expect(cp1vm0?.publicKeyJwk).to.be.undefined;
-        expect(cp1vm0?.publicKeyMultibase).to.eq("zSKufitbSMxJ2R7o5ivGubwYHfRU1jQ6soSKzH4p7yDQP5vXmwjjnaSjXCDmtriay93hm7B4erFqxNzrSiwT9PFqZ");
+        expect(cp1vm0?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
         expect(cp1vm0?.type).to.eq("Secp256k1");
 
         const cp2 = sut.coreProperties.at(2) as Services;
@@ -153,20 +154,20 @@ describe("PrismDID", () => {
         expect(cp3v0?.controller).to.eq(didStr);
         expect(cp3v0?.id).to.eq(`${didStr}#master-0`);
         expect(cp3v0?.publicKeyJwk).to.be.undefined;
-        expect(cp3v0?.publicKeyMultibase).to.eq("zRDBW15pMDuec8faAkL7oEjQhtk8S7FmFm1oE5DgPHpBLM3E5huETfpyS388WqXGsvddpmNkhA3bh3vcsASCZMTaM");
+        expect(cp3v0?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
         expect(cp3v0?.type).to.eq("Secp256k1");
 
         const cp3v1 = cp3.values.at(1);
         expect(cp3v1).to.be.instanceOf(VerificationMethod);
         expect(cp3v1?.controller).to.eq(didStr);
-        expect(cp3v1?.id).to.eq(`${didStr}#key-0`);
+        expect(cp3v1?.id).to.eq(`${didStr}#authentication-0`);
         expect(cp3v1?.publicKeyJwk).to.be.undefined;
-        expect(cp3v1?.publicKeyMultibase).to.eq("zSKufitbSMxJ2R7o5ivGubwYHfRU1jQ6soSKzH4p7yDQP5vXmwjjnaSjXCDmtriay93hm7B4erFqxNzrSiwT9PFqZ");
+        expect(cp3v1?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
         expect(cp3v1?.type).to.eq("Secp256k1");
       });
 
       const masterKeyId = getUsageId(Usage.MASTER_KEY);
-      const authKeyId = getUsageId(Usage.AUTHENTICATION_KEY);
+      const authenticationKeyId = getUsageId(Usage.AUTHENTICATION_KEY);
 
       const testVerificationMethod = (sut: any, didStr: string, keyId: string, keyMultibase: string, curve: Curve) => {
         expect(sut).to.be.instanceOf(VerificationMethod);
@@ -178,7 +179,11 @@ describe("PrismDID", () => {
       };
 
       test("master key", async () => {
-        const prismDid = await castor.createPrismDID(Fixtures.Keys.secp256K1, [], []);
+        const prismDid = await castor.createPrismDID(
+          Fixtures.Keys.secp256K1,
+          [],
+          [Fixtures.Keys.secp256K1,]
+        );
         const sut = await castor.resolveDID(prismDid.toString());
 
         expect(sut).not.to.be.null;
@@ -188,15 +193,16 @@ describe("PrismDID", () => {
         const masterProp = sut.coreProperties.at(0) as Authentication;
         expect(masterProp).to.be.instanceOf(Authentication);
         expect(masterProp.urls[0]).to.eq(`${secpDid}#${masterKeyId}`);
+
         const mastervm0 = masterProp.verificationMethods.at(0);
         testVerificationMethod(mastervm0, secpDid, masterKeyId, secpMultibase, Curve.SECP256K1);
 
         // authentication key correctly encoded > decoded
         const authProp = sut.coreProperties.at(1) as Authentication;
         expect(authProp).to.be.instanceOf(Authentication);
-        expect(authProp.urls[0]).to.eq(`${secpDid}#${authKeyId}`);
+        expect(authProp.urls[0]).to.eq(`${secpDid}#${authenticationKeyId}`);
         const authvm0 = authProp.verificationMethods.at(0);
-        testVerificationMethod(authvm0, secpDid, authKeyId, secpMultibase, Curve.SECP256K1);
+        testVerificationMethod(authvm0, secpDid, authenticationKeyId, secpMultibase, Curve.SECP256K1);
 
         // no services given - so empty
         const services = sut.coreProperties.at(2) as Services;
@@ -212,44 +218,42 @@ describe("PrismDID", () => {
         testVerificationMethod(vm0, secpDid, masterKeyId, secpMultibase, Curve.SECP256K1);
 
         const vm1 = verificationMethods.values.at(1);
-        testVerificationMethod(vm1, secpDid, authKeyId, secpMultibase, Curve.SECP256K1);
+        testVerificationMethod(vm1, secpDid, authenticationKeyId, secpMultibase, Curve.SECP256K1);
       });
 
       test("issuing keys", async () => {
-        const expectedDid = "did:prism:44a6f5f04609666ce54770e5d9ab67801b41d8e66e4e1cfdf9a2e75ef5bda3e2:CtICCs8CElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9hdXRoZW50aWNhdGlvbjAQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJECghpc3N1aW5nMBACSjYKB0VkMjU1MTkSK2RtNWYyR2RSNUJhSHBSeEI4YlRFbHZFXzBnSUMycDQwNE1zeDlzd0o5MTQSQwoIaXNzdWluZzEQAko1CgZYMjU1MTkSK19QakhlZkZoOUg3cUgzVnQ3TU84VkVOLUYyUGxXY1h6ZHh3NkxQa3hFR0U";
+        const expectedDid = "did:prism:4bc64000a571d546caa789e24c1ad58eb13a06ce597f475b533a164fe969ac52:CucBCuQBEl0KCG1hc3Rlci0wEAFCTwoJc2VjcDI1NmsxEiD9IDIUwFTpO0oFkZbs5niSI7ZtvmDHOgG6w93jyiUI_hog2ZbGuaULlxsyr4CtdA_Es7g74e_buaDAe_mXiTQIfosSQQoQYXV0aGVudGljYXRpb24tMBAESisKB0VkMjU1MTkSIHZuX9hnUeQWh6UcQfG0xJbxP9ICAtqeNODLMfbMCfdeEkAKEGF1dGhlbnRpY2F0aW9uLTEQBEoqCgZYMjU1MTkSIPz4x3nxYfR-6h91bezDvFRDfhdj5VnF83ccOiz5MRBh";
         const prismDid = await castor.createPrismDID(Fixtures.Keys.secp256K1, [], [ed25519, x25519]);
         const sut = await castor.resolveDID(prismDid.toString());
 
-        expect(sut.coreProperties).to.be.an("array").to.have.length(6);
+        //Lowering to 5 as we are no longer creating the MasterKey additionally as an Issuing key
+        expect(sut.coreProperties).to.be.an("array").to.have.length(5);
 
         // index 2 & 3 should be issuing keys
 
         // no services given - so empty
-        const services = sut.coreProperties.at(4) as Services;
+        const services = sut.coreProperties.at(3) as Services;
         expect(services).to.be.instanceOf(Services);
         expect(services.values).to.be.empty;
 
         // 2 issuing keys given - 4 total
-        const verificationMethods = sut.coreProperties.at(5) as VerificationMethods;
+        const verificationMethods = sut.coreProperties.at(4) as VerificationMethods;
         expect(verificationMethods).to.be.instanceOf(VerificationMethods);
-        expect(verificationMethods.values).to.have.length(4);
+        expect(verificationMethods.values).to.have.length(3);
 
         const vm0 = verificationMethods.values.at(0);
         testVerificationMethod(vm0, expectedDid, masterKeyId, secpMultibase, Curve.SECP256K1);
 
-        const vm1 = verificationMethods.values.at(1);
-        testVerificationMethod(vm1, expectedDid, authKeyId, secpMultibase, Curve.SECP256K1);
+        const vm2 = verificationMethods.values.at(1);
+        testVerificationMethod(vm2, expectedDid, getUsageId(Usage.AUTHENTICATION_KEY, 0), ed25519Multibase, Curve.ED25519);
 
-        const vm2 = verificationMethods.values.at(2);
-        testVerificationMethod(vm2, expectedDid, getUsageId(Usage.ISSUING_KEY, 0), ed25519Multibase, Curve.ED25519);
-
-        const vm3 = verificationMethods.values.at(3);
-        testVerificationMethod(vm3, expectedDid, getUsageId(Usage.ISSUING_KEY, 1), x25519Multibase, Curve.X25519);
+        const vm3 = verificationMethods.values.at(2);
+        testVerificationMethod(vm3, expectedDid, getUsageId(Usage.AUTHENTICATION_KEY, 1), x25519Multibase, Curve.X25519);
       });
     });
 
     it("Should correctly create a prismDID from an existing HexKey", async () => {
-      const didExample = "did:prism:03425669b4d84b21a323c60bb41601eb22906b1a6427be3126277420faa6d1f3:CscBCsQBElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIDS5zeYUkLCSAJLI6aLXRTPRxstCLPUEI6TgBrAVCHkwGiDk-ffklrHIFW7pKkT8i-YksXi-XXi5h31czUMaVClcpxJkCg9hdXRoZW50aWNhdGlvbjAQBEJPCglzZWNwMjU2azESIDS5zeYUkLCSAJLI6aLXRTPRxstCLPUEI6TgBrAVCHkwGiDk-ffklrHIFW7pKkT8i-YksXi-XXi5h31czUMaVClcpw";
+      const didExample = "did:prism:4a1525a94cc3d91af5584c2335e57969c10fe945a8b665d0bdadabbfc5f6ec99:CmEKXxJdCghtYXN0ZXItMBABQk8KCXNlY3AyNTZrMRIgNLnN5hSQsJIAksjpotdFM9HGy0Is9QQjpOAGsBUIeTAaIOT59-SWscgVbukqRPyL5iSxeL5deLmHfVzNQxpUKVyn";
       const resolvedDID = await castor.resolveDID(didExample);
 
       const pubHex = "0434b9cde61490b0920092c8e9a2d74533d1c6cb422cf50423a4e006b015087930e4f9f7e496b1c8156ee92a44fc8be624b178be5d78b9877d5ccd431a54295ca7";

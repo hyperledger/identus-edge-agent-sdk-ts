@@ -1,5 +1,5 @@
 import { Actor, Duration, Notepad, Wait } from "@serenity-js/core"
-import { LastResponse, PatchRequest, PostRequest, Send } from "@serenity-js/rest"
+import { GetRequest, LastResponse, PatchRequest, PostRequest, Send } from "@serenity-js/rest"
 import { Ensure, equals } from "@serenity-js/assertions"
 import { HttpStatusCode } from "axios"
 import { Expectations } from "../screenplay/Expectations"
@@ -14,6 +14,8 @@ import {
 } from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
+import { JWTRevocationStatus } from "@hyperledger/identus-edge-agent-sdk/build/domain"
 
 export class CloudAgentWorkflow {
   static async createConnection(cloudAgent: Actor, label?: string, goalCode?: string, goal?: string) {
@@ -92,6 +94,25 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async offerSDJWTCredential(cloudAgent: Actor) {
+    const credential = new CreateIssueCredentialRecordRequest()
+    credential.validityPeriod = 360000
+    credential.claims = {
+      "automationRequired": "required value",
+    }
+    credential.automaticIssuance = true
+    credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did
+    credential.connectionId = await cloudAgent.answer<string>(
+      Notepad.notes().get("connectionId")
+    )
+    credential.credentialFormat = "SDJWT"
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("issue-credentials/credential-offers").with(credential)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set("recordId", LastResponse.body().recordId)
+    )
+  }
+
   static async offerAnonymousCredential(cloudAgent: Actor) {
     const credential: CreateIssueCredentialRecordRequest = {
       claims: {
@@ -129,6 +150,28 @@ export class CloudAgentWorkflow {
     proof.trustIssuers = [CloudAgentConfiguration.publishedDid]
 
     presentProofRequest.proofs = [proof]
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations").with(presentProofRequest)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set("presentationId", LastResponse.body().presentationId)
+    )
+  }
+
+  static async askForSDJWTPresentProof(cloudAgent: Actor) {
+    const presentProofRequest = new RequestPresentationInput()
+    presentProofRequest.connectionId = await cloudAgent.answer(
+      Notepad.notes().get("connectionId")
+    )
+    presentProofRequest.options = new Options()
+    presentProofRequest.options.challenge = randomUUID()
+    presentProofRequest.options.domain = CloudAgentConfiguration.agentUrl
+    const proof = new ProofRequestAux()
+    proof.schemaId = "https://schema.org/Person"
+    proof.trustIssuers = [CloudAgentConfiguration.publishedEd25519Did]
+    presentProofRequest.proofs = [proof]
+    presentProofRequest.credentialFormat = "SDJWT"
+    presentProofRequest.claims = {}
 
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("present-proof/presentations").with(presentProofRequest)),
@@ -246,14 +289,47 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async getCredential(cloudAgent: Actor, recordId: string) {//}: Promise<Credential> {
+    await cloudAgent.attemptsTo(
+      Send.a(GetRequest.to(`issue-credentials/records/${recordId}`)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok))
+    )
+    return await LastResponse.body().answeredBy(cloudAgent)
+  }
+
+  private static instance: typeof import("@hyperledger/identus-edge-agent-sdk").default
+
+  static async getCredentialStatusList(cloudAgent: Actor, recordIdList: string[]): Promise<Map<string, string>> {
+    CloudAgentWorkflow.instance ??= require("@hyperledger/identus-edge-agent-sdk")
+    const statusRegistry = new Map<string, string>()
+    for (const recordId of recordIdList) {
+      const credentialResponse = await this.getCredential(cloudAgent, recordId)
+      const jwtString = Utils.decodeBase64URL(credentialResponse.credential)
+      const decoded = CloudAgentWorkflow.instance.JWTCredential.fromJWS(jwtString)
+      const credentialStatus = decoded.vc.credentialStatus as JWTRevocationStatus
+      const statusList = credentialStatus.statusListCredential
+      statusRegistry.set(recordId, statusList)
+    }
+    return statusRegistry
+  }
+
   static async revokeCredential(cloudAgent: Actor, numberOfRevokedCredentials: number) {
     const revokedRecordIdList = []
     const recordIdList = await cloudAgent.answer(Notepad.notes().get("recordIdList"))
+    const statusesList = await this.getCredentialStatusList(cloudAgent, recordIdList)
     await Utils.repeat(numberOfRevokedCredentials, async () => {
       const recordId = recordIdList.shift()!
       await cloudAgent.attemptsTo(
+        Send.a(GetRequest.to(statusesList.get(recordId))),
+        Notepad.notes().set("statusListEncoded", LastResponse.body().credentialSubject.encodedList),
         Send.a(PatchRequest.to(`credential-status/revoke-credential/${recordId}`)),
-        Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok))
+        Ensure.that(LastResponse.status(), equals(HttpStatusCode.Ok)),
+        Wait.upTo(Duration.ofSeconds(60)).until(
+          Questions.httpGet(statusesList.get(recordId)),
+          Expectations.propertyIsMetFor("credentialSubject.encodedList", async (property) => {
+            return property != await cloudAgent.answer(Notepad.notes().get("statusListEncoded"))
+          })
+        )
       )
       revokedRecordIdList.push(recordId)
     })

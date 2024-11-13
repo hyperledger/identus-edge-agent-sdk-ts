@@ -1,7 +1,9 @@
-
-import React, { useEffect, useState } from "react";
 import '../app/index.css'
+
+import React, { useEffect } from "react";
+import SDK from '@hyperledger/identus-edge-agent-sdk';
 import { FooterNavigation } from "@/components/FooterNavigation";
+
 import { Box } from "@/app/Box";
 import { useMountedApp } from "@/reducers/store";
 import { DBConnect } from "@/components/DBConnect";
@@ -11,10 +13,7 @@ import { PageHeader } from "@/components/PageHeader";
 export default function App() {
 
     const app = useMountedApp();
-    const agent = app.agent.instance;
-    const [state, setState] = useState<string>(agent && agent.state !== undefined ? agent.state : "loading");
-
-    const [connections, setConnections] = React.useState<any>([]);
+    const [connections, setConnections] = React.useState<SDK.Domain.DIDPair[]>([]);
 
     useEffect(() => {
         setConnections(app.connections)
@@ -36,7 +35,6 @@ export default function App() {
                                 <p className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
                                     No connections.
                                 </p>
-
                                 :
                                 null
                         }
@@ -50,7 +48,6 @@ export default function App() {
                     </Box>
                 </DBConnect>
             </div>
-            <FooterNavigation />
         </>
     );
 }

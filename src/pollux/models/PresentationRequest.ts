@@ -1,5 +1,6 @@
 import { AttachmentFormats, CredentialType, PresentationDefinitionRequest } from "../../domain";
 import type * as Anoncreds from "anoncreds-wasm";
+import type { PresentationFrame } from '@sd-jwt/types';
 
 export interface JWTJson {
   options: {
@@ -12,13 +13,12 @@ export interface JWTJson {
 }
 
 export type SDJWTJson = {
-  claims: {
-    [name: string]: any
-  },
-  options: {
-    challenge: string,
-    domain: string
-  }
+  options?: {
+    presentationFrame?: PresentationFrame<any>
+  };
+  presentation_definition: {
+    id: string;
+  };
 }
 
 /**

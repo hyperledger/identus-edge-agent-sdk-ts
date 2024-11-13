@@ -3,7 +3,76 @@ import { useState } from "react";
 import { useMountedApp } from "@/reducers/store";
 import { AgentRequire } from "./AgentRequire";
 import { Loading } from "./Loading";
+import { Credential } from "./Credential";
 
+function MessageTitle(props) {
+  const { message, title } = props;
+  return <div className="text-xl font-bold">
+    <b>{title}: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
+  </div>
+}
+
+function CredentialDisplay(props) {
+  const { message } = props;
+  const attachments = message.attachments.reduce((acc, x) => {
+    if ("base64" in x.data) {
+      if (x.format === SDK.Domain.AttachmentFormats.JWT) {
+        const decoded = Buffer.from(x.data.base64, "base64").toString();
+        return acc.concat(
+          SDK.JWTCredential.fromJWS(decoded)
+        );
+      }
+      if (x.format === SDK.Domain.AttachmentFormats.SDJWT) {
+        const decoded = Buffer.from(x.data.base64, "base64").toString();
+        return acc.concat(
+          SDK.SDJWTCredential.fromJWS(decoded)
+        );
+      }
+      const decoded = Buffer.from(x.data.base64, "base64").toString();
+      try {
+        const parsed = JSON.parse(decoded);
+        return acc.concat(parsed);
+      } catch (err) {
+
+      }
+    }
+    return acc;
+  }, []);
+
+  const attachment = attachments.at(0);
+  const parsed = { ...message };
+  if (typeof parsed.body === "string") {
+    (parsed as any).body = JSON.parse(parsed.body);
+  }
+  const format = message.attachments?.at(0).format;
+  return (
+    <div className="w-full mt-5 p-0 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <div className="pt-6 px-6">
+        <MessageTitle message={message} title={`Credential (${format})`} />
+      </div>
+
+      <div className="p-0  space-y-6">
+        <Credential credential={attachment} />
+      </div>
+    </div>
+  );
+}
+
+function CredentialRequestMessage(message: SDK.Domain.Message) {
+  const parsed = { ...message };
+  if (typeof parsed.body === "string") {
+    (parsed as any).body = JSON.parse(parsed.body);
+  }
+  const format = parsed.body.formats?.at(0)?.format ?? 'unknown';
+  return <div
+    className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
+  >
+    <div>
+      <MessageTitle message={message} title="Credential Request" />
+      <p>You requested the Credential through this Credential Request Message of type {format}</p>
+    </div>
+  </div>;
+}
 
 const InputFields: React.FC<{ fields: SDK.Domain.InputField[]; }> = props => {
   return <>
@@ -205,67 +274,11 @@ export function Message({ message }) {
   }
 
   if (message.piuri === "https://didcomm.org/issue-credential/3.0/request-credential") {
-    return <div
-      className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
-    >
-      <div>
-        <b>Credential Request: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
-        <pre style={{
-          textAlign: "left",
-          wordWrap: "break-word",
-          wordBreak: "break-all",
-          whiteSpace: "pre-wrap",
-        }}
-        >
-          {JSON.stringify(parsed.body, null, 2)}
-        </pre>
-        {attachments.length > 0 && (
-          <pre style={{
-            textAlign: "left",
-            wordWrap: "break-word",
-            wordBreak: "break-all",
-            whiteSpace: "pre-wrap",
-          }}
-          >
-            <b>Attachments:</b>
-            {attachments.map(x => JSON.stringify(x, null, 2))}
-          </pre>
-        )}
-
-      </div>
-    </div>;
+    return <CredentialRequestMessage {...message} />
   }
 
   if (message.piuri === "https://didcomm.org/issue-credential/3.0/issue-credential") {
-    return <div
-      className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
-    >
-      <div>
-        <b>Credential Issued: </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
-        <pre style={{
-          textAlign: "left",
-          wordWrap: "break-word",
-          wordBreak: "break-all",
-          whiteSpace: "pre-wrap",
-        }}
-        >
-          {JSON.stringify(parsed.body, null, 2)}
-        </pre>
-        {attachments.length > 0 && (
-          <pre style={{
-            textAlign: "left",
-            wordWrap: "break-word",
-            wordBreak: "break-all",
-            whiteSpace: "pre-wrap",
-          }}
-          >
-            <b>Attachments:</b>
-            {attachments.map(x => JSON.stringify(x, null, 2))}
-          </pre>
-        )}
-
-      </div>
-    </div>;
+    return <CredentialDisplay message={message} />
   }
 
   if (message.piuri === "https://didcomm.org/issue-credential/3.0/offer-credential") {
@@ -410,23 +423,330 @@ export function Message({ message }) {
   if (message.piuri === "https://didcomm.atalaprism.io/present-proof/3.0/request-presentation") {
     const requestPresentationMessage = SDK.RequestPresentation.fromMessage(message);
     const requestPresentation = requestPresentationMessage.decodedAttachments.at(0);
-
+    const requestPresentationFormat = requestPresentationMessage.attachments.at(0)?.format;
     const shouldRespond = isReceived && !hasResponse;
+    if (requestPresentationFormat === SDK.Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
 
-    if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.JWT)) {
+      if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.SDJWT)) {
+        const credentials: SDK.Domain.Credential[] = app.credentials.filter((c) => c instanceof SDK.SDJWTCredential);
+        const fields: SDK.Domain.InputField[] = requestPresentation.presentation_definition ?
+          requestPresentation.presentation_definition.input_descriptors.at(0)?.constraints.fields ?? [] :
+          [];
 
-      const credentials: SDK.Domain.Credential[] = app.credentials;
-      const fields: SDK.Domain.InputField[] = requestPresentation.presentation_definition ?
-        requestPresentation.presentation_definition.input_descriptors.at(0)?.constraints.fields ?? [] :
-        [];
+        return <div
+          className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
+        >
+          <div>
+            <p
+              className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
+              <b>SDJWT Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
+            </p>
 
+            <InputFields fields={fields} />
+
+            {shouldRespond && <AgentRequire>
+              {
+                message?.isAnswering && <Loading />
+              }
+              {
+                !message?.isAnswering && <>
+                  {
+                    message?.error && <p>{JSON.stringify(message.error.message)}</p>
+                  }
+
+                  <button
+                    onClick={() => {
+                      if (collapsed) {
+                        setCollapsed(false);
+                      }
+                    }}
+                    id="dropdownRadioBgHoverButton"
+                    data-dropdown-toggle="dropdownRadioBgHover"
+                    style={{ height: 47 }}
+                    className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    Accept with Credential <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                    </svg>
+                  </button>
+
+                  <div id="dropdownRadioBgHover" className={(collapsed ? 'hidden ' : '') + `z-10  bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}>
+                    <ul className="px-5 py-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
+                      {
+                        credentials.map((credential, i) => {
+                          const fields = credential.claims.reduce<any>((all, claim) => [
+                            ...all,
+                            Object.keys(claim).slice(0, 3).join(",")
+                          ], []);
+                          let credentialText = `Credential with ${fields}`;
+                          if (credential.issuer) {
+                            credentialText += ` from ${credential.issuer.slice(0, 30)}...`;
+                          }
+                          return <li key={`cred${i}`}>
+                            <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              {
+                                app.agent.isSendingMessage === false && <button
+                                  onClick={() => {
+                                    if (!agent) {
+                                      throw new Error("Start the agent first");
+                                    }
+                                    app.acceptPresentationRequest({
+                                      agent,
+                                      message,
+                                      credential
+                                    });
+                                    setCollapsed(true);
+                                  }}
+                                >
+                                  <span className="ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 overflow-x-auto h-auto">
+                                    {credentialText}
+                                  </span>
+                                </button>
+                              }
+
+                              {
+                                app.agent.isSendingMessage === true && <button><Loading /></button>
+                              }
+                            </div>
+                          </li>;
+                        })
+                      }
+                    </ul>
+                  </div>
+
+                  <button className="mt-5 mx-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                    if (!app.db.instance) {
+                      throw new Error("Start the db first");
+                    }
+                    app.rejectCredentialOffer({ message: message, pluto: app.db.instance });
+                  }}>Reject</button>
+                </>
+              }
+            </AgentRequire>}
+
+          </div>
+        </div>;
+
+      }
+
+      if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.JWT)) {
+
+        const credentials: SDK.Domain.Credential[] = app.credentials.filter((c) => c instanceof SDK.JWTCredential);
+        const fields: SDK.Domain.InputField[] = requestPresentation.presentation_definition ?
+          requestPresentation.presentation_definition.input_descriptors.at(0)?.constraints.fields ?? [] :
+          [];
+
+        return <div
+          className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
+        >
+          <div>
+            <p
+              className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
+              <b>JWT Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
+            </p>
+
+            <InputFields fields={fields} />
+
+            {shouldRespond && <AgentRequire>
+              {
+                message?.isAnswering && <Loading />
+              }
+              {
+                !message?.isAnswering && <>
+                  {
+                    message?.error && <p>{JSON.stringify(message.error.message)}</p>
+                  }
+
+                  <button
+                    onClick={() => {
+                      if (collapsed) {
+                        setCollapsed(false);
+                      }
+                    }}
+                    id="dropdownRadioBgHoverButton"
+                    data-dropdown-toggle="dropdownRadioBgHover"
+                    style={{ height: 47 }}
+                    className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    Accept with Credential <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                    </svg>
+                  </button>
+
+                  <div id="dropdownRadioBgHover" className={(collapsed ? 'hidden ' : '') + `z-10  bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}>
+                    <ul className="px-5 py-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
+                      {
+                        credentials.map((credential, i) => {
+                          const fields = credential.claims.reduce<any>((all, claim) => [
+                            ...all,
+                            Object.keys(claim).slice(0, 3).join(",")
+                          ], []);
+                          let credentialText = `Credential with ${fields}`;
+                          if (credential.issuer) {
+                            credentialText += ` from ${credential.issuer.slice(0, 30)}...`;
+                          }
+                          return <li key={`cred${i}`}>
+                            <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              {
+                                app.agent.isSendingMessage === false && <button
+                                  onClick={() => {
+                                    if (!agent) {
+                                      throw new Error("Start the agent first");
+                                    }
+                                    app.acceptPresentationRequest({
+                                      agent,
+                                      message,
+                                      credential
+                                    });
+                                    setCollapsed(true);
+                                  }}
+                                >
+                                  <span className="ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 overflow-x-auto h-auto">
+                                    {credentialText}
+                                  </span>
+                                </button>
+                              }
+
+                              {
+                                app.agent.isSendingMessage === true && <button><Loading /></button>
+                              }
+                            </div>
+                          </li>;
+                        })
+                      }
+                    </ul>
+                  </div>
+
+                  <button className="mt-5 mx-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                    if (!app.db.instance) {
+                      throw new Error("Start the db first");
+                    }
+                    app.rejectCredentialOffer({ message: message, pluto: app.db.instance });
+                  }}>Reject</button>
+                </>
+              }
+            </AgentRequire>}
+
+          </div>
+        </div>;
+
+      }
+
+      if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.AnonCreds)) {
+        const credentials = app.credentials;
+        const fields =
+          Object.keys(requestPresentation.requested_attributes || []).reduce(
+            (_, key) => ([
+              ..._,
+              {
+                name: key, path: [key],
+              }
+            ]), []
+          );
+        return <div
+          className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
+        >
+          <div>
+            <p
+              className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
+              <b>Anoncreds Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
+            </p>
+
+            <InputFields fields={fields} />
+
+            {shouldRespond && <AgentRequire>
+              {
+                message?.isAnswering && <Loading />
+              }
+              {
+                !message?.isAnswering && <>
+                  {
+                    message?.error && <p>{JSON.stringify(message.error.message)}</p>
+                  }
+
+                  <button
+                    onClick={() => {
+                      if (collapsed) {
+                        setCollapsed(false);
+                      }
+                    }}
+                    id="dropdownRadioBgHoverButton"
+                    data-dropdown-toggle="dropdownRadioBgHover"
+                    style={{ height: 47 }}
+                    className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    Accept with Credential <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                    </svg>
+                  </button>
+
+                  <div id="dropdownRadioBgHover" className={(collapsed ? 'hidden ' : '') + `z-10  bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}>
+                    <ul className="px-5 py-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
+                      {
+                        credentials.map((credential, i) => {
+                          const fields = credential.claims.reduce<any>((all, claim) => [
+                            ...all,
+                            Object.keys(claim).slice(0, 3).join(",")
+                          ], []);
+                          let credentialText = `Credential with ${fields}`;
+                          if (credential.issuer) {
+                            credentialText += ` from ${credential.issuer.slice(0, 30)}...`;
+                          }
+                          return <li key={`cred${i}`}>
+                            <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              {
+                                app.agent.isSendingMessage === false && <button
+                                  onClick={() => {
+                                    if (!agent) {
+                                      throw new Error("Start the agent first");
+                                    }
+                                    app.acceptPresentationRequest({
+                                      agent,
+                                      message,
+                                      credential
+                                    });
+                                    setCollapsed(true);
+                                  }}
+                                >
+                                  <span className="ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 overflow-x-auto h-auto">
+                                    {credentialText}
+                                  </span>
+                                </button>
+                              }
+                              {
+                                app.agent.isSendingMessage === true && <button><Loading /></button>
+                              }
+                            </div>
+                          </li>;
+                        })
+                      }
+                    </ul>
+                  </div>
+
+                  <button className="mt-5 mx-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
+                    if (!app.db.instance) {
+                      throw new Error("Start the db first");
+                    }
+                    app.rejectCredentialOffer({ message: message, pluto: app.db.instance });
+                  }}>Reject</button>
+                </>
+              }
+            </AgentRequire>}
+
+          </div>
+        </div>;
+
+
+      }
+    } else {
+
+      const verificationType = requestPresentationMessage.attachments.at(0)?.format;
+      const credentials: SDK.Domain.Credential[] = app.credentials.filter((credential) => credential.credentialType == verificationType);
+      const fields = Object.keys(requestPresentation?.claims ?? {}).map((field) => ({ name: field, path: [`$.${field}`] }))
       return <div
         className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
       >
         <div>
           <p
             className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-            <b>JWT Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
+            <b>Cloud Agent [{verificationType?.toUpperCase()}] Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
           </p>
 
           <InputFields fields={fields} />
@@ -489,7 +809,6 @@ export function Message({ message }) {
                                 </span>
                               </button>
                             }
-
                             {
                               app.agent.isSendingMessage === true && <button><Loading /></button>
                             }
@@ -515,113 +834,10 @@ export function Message({ message }) {
 
     }
 
-    if (SDK.isPresentationDefinitionRequestType(requestPresentation, SDK.Domain.CredentialType.AnonCreds)) {
-      const credentials = app.credentials;
-      const fields =
-        Object.keys(requestPresentation.requested_attributes || []).reduce(
-          (_, key) => ([
-            ..._,
-            {
-              name: key, path: [key],
-            }
-          ]), []
-        );
-      return <div
-        className="w-full mt-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
-      >
-        <div>
-          <p
-            className=" text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-            <b>Anoncreds Verification request </b> {message.id} {message.direction === 1 ? 'received' : 'sent'}
-          </p>
-
-          <InputFields fields={fields} />
-
-          {shouldRespond && <AgentRequire>
-            {
-              message?.isAnswering && <Loading />
-            }
-            {
-              !message?.isAnswering && <>
-                {
-                  message?.error && <p>{JSON.stringify(message.error.message)}</p>
-                }
-
-                <button
-                  onClick={() => {
-                    if (collapsed) {
-                      setCollapsed(false);
-                    }
-                  }}
-                  id="dropdownRadioBgHoverButton"
-                  data-dropdown-toggle="dropdownRadioBgHover"
-                  style={{ height: 47 }}
-                  className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                  Accept with Credential <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                  </svg>
-                </button>
-
-                <div id="dropdownRadioBgHover" className={(collapsed ? 'hidden ' : '') + `z-10  bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}>
-                  <ul className="px-5 py-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
-                    {
-                      credentials.map((credential, i) => {
-                        const fields = credential.claims.reduce<any>((all, claim) => [
-                          ...all,
-                          Object.keys(claim).slice(0, 3).join(",")
-                        ], []);
-                        let credentialText = `Credential with ${fields}`;
-                        if (credential.issuer) {
-                          credentialText += ` from ${credential.issuer.slice(0, 30)}...`;
-                        }
-                        return <li key={`cred${i}`}>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            {
-                              app.agent.isSendingMessage === false && <button
-                                onClick={() => {
-                                  if (!agent) {
-                                    throw new Error("Start the agent first");
-                                  }
-                                  app.acceptPresentationRequest({
-                                    agent,
-                                    message,
-                                    credential
-                                  });
-                                  setCollapsed(true);
-                                }}
-                              >
-                                <span className="ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 overflow-x-auto h-auto">
-                                  {credentialText}
-                                </span>
-                              </button>
-                            }
-                            {
-                              app.agent.isSendingMessage === true && <button><Loading /></button>
-                            }
-                          </div>
-                        </li>;
-                      })
-                    }
-                  </ul>
-                </div>
-
-                <button className="mt-5 mx-5 inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900" style={{ width: 120 }} onClick={() => {
-                  if (!app.db.instance) {
-                    throw new Error("Start the db first");
-                  }
-                  app.rejectCredentialOffer({ message: message, pluto: app.db.instance });
-                }}>Reject</button>
-              </>
-            }
-          </AgentRequire>}
-
-        </div>
-      </div>;
 
 
-    }
 
-    return <>Unsupported</>;
+    return <>Unsupported {message.piuri}</>;
   }
 
   return <div
