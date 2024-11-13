@@ -30,6 +30,11 @@ All documentation on how to deploy each service is inside the workshop just open
 2. Mediator
 3. Typescript SDK
 
+# Requirements
+
+1. Docker (Required Update to latest version if you are on Mac)
+2. Node LTS (>=20.X)
+
 # Workshop
 
 In order to run this workshop you must run the following commands:
