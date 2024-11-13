@@ -151,7 +151,7 @@ async function wait(callback) {
     const prismDidResponse = await registerPrismDid.json();
     console.log('Prism DID created:', { longFormDid: prismDidResponse.longFormDid });
 
-    const publishPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids/${prismDidResponse.longFormDid}/publications\`, {
+    const publishPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids/\${prismDidResponse.longFormDid}/publications\`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }
     });
@@ -304,7 +304,7 @@ async function wait(callback) {
                     await agent.sendMessage(presentation.makeMessage());
                     try {
                         await wait(async () => {
-                            const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/${presentationId}\`, {
+                            const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/\${presentationId}\`, {
                                 method: "GET",
                                 headers: { "Content-Type": "application/json" }
                             });
