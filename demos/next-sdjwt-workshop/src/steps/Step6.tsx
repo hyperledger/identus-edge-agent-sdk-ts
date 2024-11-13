@@ -61,6 +61,7 @@ import {
     sha512
 } from '@noble/hashes/sha512'
 import InMemory from '@pluto-encrypted/inmemory'
+
 class ShortFormDIDResolverSample {
     method = "prism";
 
@@ -109,6 +110,21 @@ class ShortFormDIDResolverSample {
     }
 }
 
+async function wait(callback) {
+    const start = Date.now()
+    return new Promise(async (resolve, reject) => {
+        const interval = setInterval(async () => {
+            let result = await callback()
+            if (result) {
+                clearInterval(interval)
+                resolve("")
+            }
+            if (Date.now() - start > 30 * 1000) {
+                reject("timeout")
+            }
+        }, 1000)
+    })
+}
 
 (async () => {
     const registerPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids\`, {
@@ -135,7 +151,7 @@ class ShortFormDIDResolverSample {
     const prismDidResponse = await registerPrismDid.json();
     console.log('Prism DID created:', { longFormDid: prismDidResponse.longFormDid });
 
-    const publishPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids/\${prismDidResponse.longFormDid}/publications\`, {
+    const publishPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids/${prismDidResponse.longFormDid}/publications\`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }
     });
@@ -286,12 +302,19 @@ class ShortFormDIDResolverSample {
                     const requestPresentation = SDK.RequestPresentation.fromMessage(message);
                     const presentation = await agent.createPresentationForRequestProof(requestPresentation, credential);
                     await agent.sendMessage(presentation.makeMessage());
-                    const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/\${presentationId}\`, {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" }
-                    });
-                    const verificationResponse = await verifyPresentation.json();
-                    console.log('Verification Result:', { isValid: verificationResponse.status === "PresentationVerified" });
+                    try {
+                        await wait(async () => {
+                            const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/${presentationId}\`, {
+                                method: "GET",
+                                headers: { "Content-Type": "application/json" }
+                            });
+                            const verificationResponse = await verifyPresentation.json();
+                            return verificationResponse.status === "PresentationVerified"
+                        })
+                        console.log('Verification Result:', { isValid: true });
+                    } catch (e) {
+                        console.log('Verification Result:', { isValid: false });
+                    }
                 }
             }
         }

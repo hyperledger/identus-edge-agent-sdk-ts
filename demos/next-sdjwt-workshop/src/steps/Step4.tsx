@@ -134,7 +134,7 @@ await agent.acceptInvitation(parsed, 'SampleCredentialOfferOOB');
                 <p className="text-gray-600 my-4 leading-relaxed">You can listen for new Credential Offers in your <i>index.mjs</i> by adding some code into the message event listener we added earlier:</p>
                 <CodeComponent content={{
                     code: `let credential;
-agent.addListener(SDK.ListenerKey.MESSAGE, (messages) => {
+agent.addListener(SDK.ListenerKey.MESSAGE, async (messages) => {
     for (const message of messages) {
         if (message.piuri === SDK.ProtocolType.DidcommOfferCredential) {
             console.log('Credential Offer:', message);
@@ -158,7 +158,7 @@ agent.addListener(SDK.ListenerKey.MESSAGE, (messages) => {
                         <p className="text-gray-600 my-4 leading-relaxed">In the <i>index.mjs</i> workshop file, we are now going to extend our message listener to listen for the Issued Credential message:</p>
                         <CodeComponent content={{
                             code: `let credential;
-agent.addListener(SDK.ListenerKey.MESSAGE, (messages) => {
+agent.addListener(SDK.ListenerKey.MESSAGE, async (messages) => {
     for (const message of messages) {
         if (message instanceof SDK.Domain.Message) {
             if (message.piuri === SDK.ProtocolType.DidcommOfferCredential) {
