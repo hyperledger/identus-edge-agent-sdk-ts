@@ -149,7 +149,7 @@ const agent = await SDK.Agent.initialize({
             </div>),
             {
                 language: 'typescript',
-                code: `agent.addListener(SDK.ListenerKey.MESSAGE, (messages) => {
+                code: `agent.addListener(SDK.ListenerKey.MESSAGE, async (messages) => {
     //Your custom logic here
 });`,
             },

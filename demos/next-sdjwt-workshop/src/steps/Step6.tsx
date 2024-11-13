@@ -109,6 +109,26 @@ class ShortFormDIDResolverSample {
     }
 }
 
+async function verifyCondition(callback) {
+    try {
+        const start = Date.now()
+        await new Promise(async (resolve, reject) => {
+            const interval = setInterval(async () => {
+                let result = await callback()
+                if (result) {
+                    clearInterval(interval)
+                    resolve("")
+                }
+                if (Date.now() - start > 60 * 1000) {
+                    reject("timeout")
+                }
+            }, 1000)
+        })
+        return true
+    } catch (e) {
+        return false
+    }
+}
 
 (async () => {
     const registerPrismDid = await fetch(\`http://localhost:3000/cloud-agent/did-registrar/dids\`, {
@@ -286,12 +306,16 @@ class ShortFormDIDResolverSample {
                     const requestPresentation = SDK.RequestPresentation.fromMessage(message);
                     const presentation = await agent.createPresentationForRequestProof(requestPresentation, credential);
                     await agent.sendMessage(presentation.makeMessage());
-                    const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/\${presentationId}\`, {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" }
-                    });
-                    const verificationResponse = await verifyPresentation.json();
-                    console.log('Verification Result:', { isValid: verificationResponse.status === "PresentationVerified" });
+                    const verificationResult = await verifyCondition(async () => {
+                        const verifyPresentation = await fetch(\`http://localhost:3000/cloud-agent/present-proof/presentations/\${presentationId}\`, {
+                            method: "GET",
+                            headers: { "Content-Type": "application/json" }
+                        });
+                        const verificationResponse = await verifyPresentation.json();
+                        console.log('Verification Check:', verificationResponse.status)
+                        return verificationResponse.status === "PresentationVerified"
+                    })
+                    console.log('Verification Result:', { isValid: verificationResult });
                 }
             }
         }
