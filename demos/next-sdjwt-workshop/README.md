@@ -35,7 +35,7 @@ All documentation on how to deploy each service is inside the workshop just open
 In order to run this workshop you must run the following commands:
 
 ```bash
-git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git
+git clone https://github.com/hyperledger/identus-edge-agent-sdk-ts.git
 ```
 
 Then, move to the demo directory in ./demos/next-sdjwt-workshop
