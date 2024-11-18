@@ -23,9 +23,8 @@ export class EdgeAgentWorkflow {
     )
   }
 
-  static async acceptCredentialOfferInvitation(edgeAgent: Actor): Promise<void> {
-    await this.connect(edgeAgent)
-  }
+  static acceptCredentialOfferInvitation = this.connect
+  static acceptPresentationInvitation = this.connect
 
   static async waitForCredentialOffer(edgeAgent: Actor, numberOfCredentialOffer: number) {
     await edgeAgent.attemptsTo(
@@ -33,20 +32,6 @@ export class EdgeAgentWorkflow {
         WalletSdk.credentialOfferStackSize(),
         equals(numberOfCredentialOffer)
       )
-    )
-  }
-
-  // NOTE: sometimes the listener fails, so we have to fallback to
-  // the messages in pluto
-  static async loadMessagesFromPluto (edgeAgent: Actor) {
-    await edgeAgent.attemptsTo(
-      WalletSdk.execute(async (sdk, messages) => {
-        const msgs = await sdk.pluto.getAllMessages()
-
-        await Promise.all(
-          msgs.map(msg => messages.enqueue(msg))
-        )
-      })
     )
   }
 
@@ -172,9 +157,11 @@ export class EdgeAgentWorkflow {
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
         const credential = credentials[0]
+
         const requestPresentationMessage = RequestPresentation.fromMessage(
           messages.proofRequestStack.shift()!,
         )
+
         const presentation = await sdk.createPresentationForRequestProof(
           requestPresentationMessage,
           credential,
@@ -184,8 +171,7 @@ export class EdgeAgentWorkflow {
         } catch (e) {
           //
         }
-      }
-      )
+      })
     )
   }
 

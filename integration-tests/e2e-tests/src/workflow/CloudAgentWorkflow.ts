@@ -115,6 +115,40 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async createConnectionlessPresentationInvitation(cloudAgent: Actor) {
+    const proof = new ProofRequestAux()
+    proof.schemaId = "https://schema.org/Person"
+    proof.trustIssuers = [CloudAgentConfiguration.publishedDid]
+
+    const presentProofRequest = {
+      options: {
+        challenge: randomUUID(), // random seed prover has to sign to prevent replay attacks
+        domain: CloudAgentConfiguration.agentUrl
+      },
+      goalCode: 'present-vp',
+      goal: 'Request presentation',
+      credentialFormat: 'JWT',
+      proofs: [
+        proof
+      ]
+    }
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations/invitation").with(presentProofRequest)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set(
+        "invitation",
+        LastResponse.body().invitation.invitationUrl
+      ),
+      Notepad.notes().set(
+        "presentationId",
+        LastResponse.body().presentationId
+      )
+    )
+  }
+
+  
+
   static async offerCredential(cloudAgent: Actor) {
     const credential = new CreateIssueCredentialRecordRequest()
     credential.claims = {

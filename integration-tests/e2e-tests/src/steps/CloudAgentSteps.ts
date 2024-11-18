@@ -109,3 +109,6 @@ Given("{actor} has a connectionless credential offer invitation", async function
   await CloudAgentWorkflow.createConnectionlessCredentialOfferInvitation(cloudAgent)
 })
 
+Given("{actor} has a connectionless presentation invitation", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.createConnectionlessPresentationInvitation(cloudAgent)
+})

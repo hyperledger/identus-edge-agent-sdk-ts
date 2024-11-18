@@ -117,8 +117,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     issuedCredentialStack: SDK.Domain.Message[]
     proofRequestStack: SDK.Domain.Message[]
     revocationStack: SDK.Domain.Message[],
-    presentationMessagesStack: SDK.Domain.Message[],
-    enqueue(message: SDK.Domain.Message): Promise<void>
+    presentationMessagesStack: SDK.Domain.Message[]
 
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
@@ -127,12 +126,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
         issuedCredentialStack: WalletSdk.as(actor).messages.issuedCredentialStack,
         proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack,
         revocationStack: WalletSdk.as(actor).messages.revocationStack,
-        presentationMessagesStack: WalletSdk.as(actor).messages.presentationMessagesStack,
-
-        enqueue: async (message: SDK.Domain.Message) => {
-          // Ensure to call the async method properly
-          await WalletSdk.as(actor).messages.enqueue(message);
-        }
+        presentationMessagesStack: WalletSdk.as(actor).messages.presentationMessagesStack
       })
     })
   }
@@ -272,7 +266,7 @@ class MessageQueue {
         } else if (piUri === SDK.ProtocolType.DidcommPresentation) {
           this.presentationMessagesStack.push(message)
         } else {
-          console.log(piUri)
+          console.warn('Unhandled messaged with piuri', piUri)
         }
       } else {
         clearInterval(this.processingId!)
