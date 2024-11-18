@@ -316,3 +316,49 @@ Then("{actor} should see the verification proof is verified false", async (edgeA
   await EdgeAgentWorkflow.waitForPresentationMessage(edgeAgent)
   await EdgeAgentWorkflow.verifyPresentation(edgeAgent, false)
 })
+
+
+When("{actor} accepts the connectionless credential offer invitation",
+  async function (edgeAgent: Actor) {
+    await EdgeAgentWorkflow.acceptCredentialOfferInvitation(edgeAgent)
+  }
+)
+
+Then("{actor} should receive the connectionless credential offer",
+  async function (edgeAgent: Actor) {
+    try {
+      await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, 1)
+    } catch (error) {
+      // NOTE: sometimes the listener fails, so we fall back to getting the messages from
+      // pluto
+      await EdgeAgentWorkflow.loadMessagesFromPluto(edgeAgent)
+      await EdgeAgentWorkflow.waitForCredentialOffer(edgeAgent, 1)
+    }
+  }
+)
+
+When("{actor} accepts the connectionless credential offer",
+  async function (edgeAgent: Actor) {
+    await EdgeAgentWorkflow.acceptCredential(edgeAgent)
+  }
+)
+
+Then("{actor} should receive the connectionless credential",
+  async function (edgeAgent: Actor) {
+    try {
+      await EdgeAgentWorkflow.waitToReceiveCredentialIssuance(edgeAgent, 1)
+    } catch (error) {
+      // NOTE: sometimes the listener fails, so we fall back to getting the messages from
+      // pluto
+      await EdgeAgentWorkflow.loadMessagesFromPluto(edgeAgent)
+      await EdgeAgentWorkflow.waitToReceiveCredentialIssuance(edgeAgent, 1)
+    }
+  }
+)
+
+Then("{actor} processes the issued connectionless credential from {actor}",
+  async function (edgeAgent: Actor, cloudAgent: Actor) {
+    const recordId = await cloudAgent.answer<string>(Notepad.notes().get("recordId"))
+    await EdgeAgentWorkflow.processIssuedCredential(edgeAgent, recordId)
+  }
+)

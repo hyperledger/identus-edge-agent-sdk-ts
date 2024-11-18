@@ -54,6 +54,16 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async verifyNoConnection(cloudAgent: Actor) {
+    const connectionId = await cloudAgent.answer(
+      Notepad.notes().get("connectionId")
+    ).catch(() => null)
+  
+    await cloudAgent.attemptsTo(
+      Ensure.that(connectionId, equals(null))
+    )
+  }
+
   static async verifyCredentialState(cloudAgent: Actor, recordId: string, state: string) {
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(60)).until(
@@ -71,6 +81,36 @@ export class CloudAgentWorkflow {
       Wait.upTo(Duration.ofSeconds(60)).until(
         Questions.httpGet(`present-proof/presentations/${presentationId}`),
         Expectations.propertyValueToBe("status", state)
+      )
+    )
+  }
+
+  static async createConnectionlessCredentialOfferInvitation(cloudAgent: Actor) {
+    const credentialOffer = {
+      claims: {
+        emailAddress: "sampleEmail",
+        familyName: "",
+        dateOfIssuance: "2023-01-01T02:02:02Z",
+        drivingLicenseID: "",
+        drivingClass: 1,
+      },
+      goalCode: "issue-vc",
+      goal: "Request issuance",
+      credentialFormat: "JWT",
+      issuingDID: CloudAgentConfiguration.publishedDid,
+      automaticIssuance: true
+    }
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("issue-credentials/credential-offers/invitation").with(credentialOffer)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set(
+        "invitation",
+        LastResponse.body().invitation.invitationUrl
+      ),
+      Notepad.notes().set(
+        "recordId",
+        LastResponse.body().recordId
       )
     )
   }

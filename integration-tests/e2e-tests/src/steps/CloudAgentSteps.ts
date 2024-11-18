@@ -10,7 +10,8 @@ Given("{actor} has a connection invitation with '{}', '{}' and '{}' parameters",
     const goalCode = rawGoalCode == "null" ? undefined : rawGoalCode
     const goal = rawGoal == "null" ? undefined : rawGoal
     await CloudAgentWorkflow.createConnection(cloudAgent, label, goalCode, goal)
-  })
+  }
+)
 
 Given("{actor} is connected to {actor}", async function (cloudAgent: Actor, edgeAgent: Actor) {
   await CloudAgentWorkflow.createConnection(cloudAgent)
@@ -92,9 +93,19 @@ Then("{actor} should see the present-proof is not verified", async (cloudAgent: 
   await CloudAgentWorkflow.verifyPresentProof(cloudAgent, "PresentationFailed")
 })
 
+
 Then("{actor} should see all credentials were accepted", async (cloudAgent: Actor) => {
   const recordIdList = await cloudAgent.answer<string[]>(Notepad.notes().get("recordIdList"))
   for (const recordId of recordIdList) {
     await CloudAgentWorkflow.verifyCredentialState(cloudAgent, recordId, "CredentialSent")
   }
 })
+
+Given("{actor} is not connected to Edge Agent", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.verifyNoConnection(cloudAgent) 
+})
+
+Given("{actor} has a connectionless credential offer invitation", async function (cloudAgent: Actor) {
+  await CloudAgentWorkflow.createConnectionlessCredentialOfferInvitation(cloudAgent)
+})
+

@@ -23,12 +23,30 @@ export class EdgeAgentWorkflow {
     )
   }
 
+  static async acceptCredentialOfferInvitation(edgeAgent: Actor): Promise<void> {
+    await this.connect(edgeAgent)
+  }
+
   static async waitForCredentialOffer(edgeAgent: Actor, numberOfCredentialOffer: number) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(60)).until(
         WalletSdk.credentialOfferStackSize(),
         equals(numberOfCredentialOffer)
       )
+    )
+  }
+
+  // NOTE: sometimes the listener fails, so we have to fallback to
+  // the messages in pluto
+  static async loadMessagesFromPluto (edgeAgent: Actor) {
+    await edgeAgent.attemptsTo(
+      WalletSdk.execute(async (sdk, messages) => {
+        const msgs = await sdk.pluto.getAllMessages()
+
+        await Promise.all(
+          msgs.map(msg => messages.enqueue(msg))
+        )
+      })
     )
   }
 

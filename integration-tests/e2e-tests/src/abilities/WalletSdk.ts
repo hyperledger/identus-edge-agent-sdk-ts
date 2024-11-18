@@ -117,7 +117,8 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     issuedCredentialStack: SDK.Domain.Message[]
     proofRequestStack: SDK.Domain.Message[]
     revocationStack: SDK.Domain.Message[],
-    presentationMessagesStack: SDK.Domain.Message[]
+    presentationMessagesStack: SDK.Domain.Message[],
+    enqueue(message: SDK.Domain.Message): Promise<void>
 
   }) => Promise<void>): Interaction {
     return Interaction.where("#actor uses wallet sdk", async actor => {
@@ -126,7 +127,12 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
         issuedCredentialStack: WalletSdk.as(actor).messages.issuedCredentialStack,
         proofRequestStack: WalletSdk.as(actor).messages.proofRequestStack,
         revocationStack: WalletSdk.as(actor).messages.revocationStack,
-        presentationMessagesStack: WalletSdk.as(actor).messages.presentationMessagesStack
+        presentationMessagesStack: WalletSdk.as(actor).messages.presentationMessagesStack,
+
+        enqueue: async (message: SDK.Domain.Message) => {
+          // Ensure to call the async method properly
+          await WalletSdk.as(actor).messages.enqueue(message);
+        }
       })
     })
   }

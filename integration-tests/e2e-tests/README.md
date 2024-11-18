@@ -9,14 +9,14 @@ This guide shows you how to run the end-to-end tests
 - Copy `.env.example` to `.env`
 - Fill the required properties
 
-| Property                 | Description                                                 |
-| ------------------------ | ----------------------------------------------------------- |
-| MEDIATOR_OOB_URL         | URL that returns the OOB url                                |
-| AGENT_URL                | URL for Cloud Agent - should end with a forward slash ("/") |
-| APIKEY                   | (Optional) Apikey authentication                            |
-| PUBLISHED_DID            | (Optional) Existing DID                                     |
-| JWT_SCHEMA_GUID          | (Optional) Existing jwt schema guid                         |
-| ANONCRED_DEFINITION_GUID | (Optional) Existing anoncred definition guid                |
+| Property                 | Description                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------|
+| MEDIATOR_OOB_URL         | URL that returns the OOB url (e.g. https://mediator.mydomain.com/invitationOOB)                             |
+| AGENT_URL                | URL for Cloud Agent - should end with a forward slash ("/") (e.g. https://issuer.mydomain.com/cloud-agent/) |
+| APIKEY                   | (Optional) Apikey authentication                                                                            |
+| PUBLISHED_DID            | (Optional) Existing DID                                                                                     |
+| JWT_SCHEMA_GUID          | (Optional) Existing jwt schema guid                                                                         |
+| ANONCRED_DEFINITION_GUID | (Optional) Existing anoncred definition guid                                                                |
 
 ### Compile the SDK
 
