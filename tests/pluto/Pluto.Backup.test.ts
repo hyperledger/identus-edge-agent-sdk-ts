@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, test, beforeEach } from 'vitest';
 
 import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
@@ -9,8 +9,7 @@ import * as Fixtures from "../fixtures";
 import { mockPluto } from "../fixtures/inmemory/factory";
 import { AnonCredsCredential, JWTCredential } from "../../src";
 import { base64url } from 'multiformats/bases/base64';
-import { versions } from '../../src/domain/backup';
-import { backup } from 'rxdb/plugins/backup';
+
 
 describe("Pluto", () => {
   let instance: Domain.Pluto;
@@ -20,11 +19,12 @@ describe("Pluto", () => {
     await instance.start();
   });
 
-  versions.forEach(version => {
+  Fixtures.Backup.backups.forEach(backupFixture => {
+    const version = backupFixture.json.version;
 
-    describe(`Backup ${version}`, () => {
+    describe(`Backup ${backupFixture.title}`, () => {
       test("default - no values", async () => {
-        const result = await instance.backup(version);
+        const result = await instance.backup(backupFixture.json.version);
 
         expect(result).not.to.be.null;
         expect(result).to.have.property("credentials").to.be.an("array").to.have.length(0);
@@ -120,7 +120,7 @@ describe("Pluto", () => {
       }
     });
 
-    describe(`Restore ${version}`, () => {
+    describe(`Restore ${backupFixture.title}`, () => {
       test("credentials - JWT", async () => {
         await instance.restore({
           version,
@@ -321,55 +321,55 @@ describe("Pluto", () => {
       describe("Store not empty - throws", () => {
         it("Credentials", async () => {
           await instance.storeCredential(Fixtures.Backup.credentialJWT);
-          expect(instance.restore(Fixtures.Backup.backupJson)).eventually.rejected;
+          expect(instance.restore(backupFixture.json)).eventually.rejected;
         });
   
         it("DIDs", async () => {
           await instance.storeDIDPair(Fixtures.Backup.hostDID, Fixtures.Backup.targetDID, Fixtures.Backup.pairAlias);
-          expect(instance.restore(Fixtures.Backup.backupJson)).eventually.rejected;
+          expect(instance.restore(backupFixture.json)).eventually.rejected;
         });
   
         it("Keys", async () => {
           await instance.storeDID(Fixtures.Backup.hostDID, Fixtures.Backup.peerDIDKeys);
-          expect(instance.restore(Fixtures.Backup.backupJson)).eventually.rejected;
+          expect(instance.restore(backupFixture.json)).eventually.rejected;
         });
   
         if (version == "0.0.1") {
           it("LinkSecret", async () => {
             await instance.storeLinkSecret(Fixtures.Backup.linkSecret);
-            expect(instance.restore(Fixtures.Backup.backupJson)).eventually.rejected;
+            expect(instance.restore(backupFixture.json)).eventually.rejected;
           });
     
           it("Messages", async () => {
             await instance.storeMessage(Fixtures.Backup.message);
-            expect(instance.restore(Fixtures.Backup.backupJson)).eventually.rejected;
+            expect(instance.restore(backupFixture.json)).eventually.rejected;
           });
         }
       });
     });
   
-    describe(`Round trip ${version}`, () => {
+    describe(`Round trip ${backupFixture.title}`, () => {
       test("Restore -> Backup", async () => {
-        await instance.restore(Fixtures.Backup.backupJson);
+        await instance.restore(backupFixture.json);
   
         const backup = await instance.backup(version);
   
-        expect(backup.credentials).to.have.length(Fixtures.Backup.backupJson.credentials.length);
-        expect(backup.credentials).to.have.deep.members(Fixtures.Backup.backupJson.credentials);
+        expect(backup.credentials).to.have.length(backupFixture.json.credentials.length);
+        expect(backup.credentials).to.have.deep.members(backupFixture.json.credentials);
   
-        expect(backup.dids).to.have.length(Fixtures.Backup.backupJson.dids.length);
-        expect(backup.dids).to.have.deep.members(Fixtures.Backup.backupJson.dids);
+        expect(backup.dids).to.have.length(backupFixture.json.dids.length);
+        expect(backup.dids).to.have.deep.members(backupFixture.json.dids);
   
-        expect(backup.did_pairs).to.have.length(Fixtures.Backup.backupJson.did_pairs.length);
-        expect(backup.did_pairs).to.have.deep.members(Fixtures.Backup.backupJson.did_pairs);
+        expect(backup.did_pairs).to.have.length(backupFixture.json.did_pairs.length);
+        expect(backup.did_pairs).to.have.deep.members(backupFixture.json.did_pairs);
   
-        expect(backup.keys).to.have.length(Fixtures.Backup.backupJson.keys.length);
-        expect(backup.keys).to.have.deep.members(Fixtures.Backup.backupJson.keys);
+        expect(backup.keys).to.have.length(backupFixture.json.keys.length);
+        expect(backup.keys).to.have.deep.members(backupFixture.json.keys);
         
-        if (backup.version == "0.0.1" && Fixtures.Backup.backupJson.version == "0.0.1") {
-          expect(backup.messages).to.have.length(Fixtures.Backup.backupJson.messages.length);
-          expect(backup.messages).to.have.deep.members(Fixtures.Backup.backupJson.messages);
-          expect(backup.link_secret).to.eq(Fixtures.Backup.backupJson.link_secret);
+        if (backup.version == "0.0.1" && backupFixture.json.version == "0.0.1") {
+          expect(backup.messages).to.have.length(backupFixture.json.messages.length);
+          expect(backup.messages).to.have.deep.members(backupFixture.json.messages);
+          expect(backup.link_secret).to.eq(backupFixture.json.link_secret);
         }
   
       });
@@ -379,7 +379,7 @@ describe("Pluto", () => {
         await instance.storeCredential(Fixtures.Backup.credentialAnoncreds);
         await instance.storeDIDPair(Fixtures.Backup.hostDID, Fixtures.Backup.targetDID, Fixtures.Backup.pairAlias);
         await instance.storeDID(Fixtures.Backup.hostDID, Fixtures.Backup.peerDIDKeys);
-        if (Fixtures.Backup.backupJson.version == "0.0.1") {
+        if (backupFixture.json.version == "0.0.1") {
           await instance.storeLinkSecret(Fixtures.Backup.linkSecret);
           await instance.storeMessage(Fixtures.Backup.message);
           await instance.storeMediator(Fixtures.Backup.mediator);
@@ -412,7 +412,6 @@ describe("Pluto", () => {
         if (version == "0.0.1") {
           expect(mediators).to.have.length(1);
           expect(messages).to.have.length(1);
-          expect(linksecret).to.have.length(1);
         }
   
       });

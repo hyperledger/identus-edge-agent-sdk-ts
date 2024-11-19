@@ -1,11 +1,22 @@
+import Pako from "pako";
 import * as Domain from "../domain";
 import Agent from "./Agent";
+import { Version } from "../domain/backup";
 import { isObject, validateSafe } from "../utils";
+
 
 /**
  * define Agent requirements for Backup
  */
 type BackupAgent = Pick<Agent, "apollo" | "pluto" | "pollux" | "seed">;
+
+type MasterKey = Domain.PrivateKey & Domain.ExportableKey.Common & Domain.ExportableKey.JWK & Domain.ExportableKey.PEM
+
+export type BackupOptions = {
+  version?: Version
+  key?: MasterKey
+  compress?: boolean
+}
 
 export class AgentBackup {
   constructor(
@@ -13,43 +24,69 @@ export class AgentBackup {
   ) {}
 
   /**
-   * create JWE of data stored in Pluto
+   * Creates a JWE (JSON Web Encryption) containing the backup data stored in Pluto.
+   * The data can optionally be encrypted using a custom master key and can be compressed.
    * 
-   * @returns {string}
-   * @see restore
+   * @param {BackupOptions} [options] - Optional settings for the backup.
+   * @param {Version} [options.version] - Specifies the version of the backup data.
+   * @param {MasterKey} [options.key] - Custom master key used for encrypting the backup.
+   * @param {boolean} [options.compress] - If true, compresses the JWE using DEFLATE.
+   * 
+   * @returns {Promise<string>} - A promise that resolves to the JWE string.
+   * 
+   * @see restore - Method to restore data from a JWE string.
    */
-  async createJWE(): Promise<string> {
+  async createJWE(options?: BackupOptions): Promise<string> {
     await this.Agent.pollux.start();
-    const backup = await this.Agent.pluto.backup();
-    const masterSk = await this.masterSk();
+    
+    const backup = await this.Agent.pluto.backup(options?.version);
+    const backupStr = options?.compress ? this.compress(JSON.stringify(backup)) : JSON.stringify(backup);
+    const masterSk = options?.key ?? await this.masterSk();
     const jwk = masterSk.to.JWK();
-    const jwe = this.Agent.pollux.jwe.JWE.encrypt(
-      JSON.stringify(backup),
+    
+    return this.Agent.pollux.jwe.JWE.encrypt(
+      backupStr,
       JSON.stringify(jwk),
-      'backup'
+      'backup',
     );
-    return jwe;
   }
 
   /**
-   * decode JWE and save data to store
+   * Decodes a JWE (JSON Web Encryption) string and restores the backup data to the store.
+   * If the JWE is compressed (Base64-encoded), it will attempt to decompress it first.
    * 
-   * @param jwe 
-   * @see backup
+   * @param {string} jwe - The JWE string containing the encrypted backup data.
+   * @param {MasterKey} [key] - Optional custom master key used for decrypting the JWE. 
+   *                            If not provided, the default master key is used.
+   * 
+   * @returns {Promise<void>} - A promise that resolves when the data is successfully restored.
+   * 
+   * @see createJWE - Method to create a JWE from the stored backup data.
    */
-  async restore(jwe: string) {
+  async restore(jwe: string, key?: MasterKey) {
     await this.Agent.pollux.start();
-    const masterSk = await this.masterSk();
+    const masterSk = key ?? await this.masterSk();
+
     const jwk = masterSk.to.JWK();
     const decoded = this.Agent.pollux.jwe.JWE.decrypt(
       jwe,
       'backup',
-      JSON.stringify(jwk)
+      JSON.stringify(jwk),
     );
-    const jsonStr = Buffer.from(decoded).toString();
-    const json = JSON.parse(jsonStr);
-    const backup = this.parseBackupJson(json);
+    let jsonStr: string;
+    try {
+      jsonStr = this.decopress(new TextDecoder().decode(decoded));
+    } catch {
+      jsonStr = Buffer.from(decoded).toString();
+    }    
+    const json = JSON.parse(jsonStr);    
+    const backup = this.parseBackupJson(json);    
     await this.Agent.pluto.restore(backup);
+  }
+
+  getStringByteLength(str: string) {
+    const encoder = new TextEncoder();
+    return encoder.encode(str).length;
   }
 
   private parseBackupJson(json: unknown): Domain.Backup.Schema {
@@ -60,10 +97,45 @@ export class AgentBackup {
           if (validateSafe(json, Domain.Backup.v0_0_1)) {
             return json;
           }
+          break;
+        case "0.0.2":
+          if (validateSafe(json, Domain.Backup.v0_0_2)) {
+            return json;
+          }
       }
     }
 
     throw new Domain.AgentError.BackupVersionError();
+  }
+
+  /**
+ * Compresses a JSON object into a Base64-encoded string using DEFLATE.
+ * 
+ * - Uses `level: 9` for maximum compression and `strategy: Z_FILTERED` 
+ *   (optimized for repetitive patterns, common in JSON data).
+ * - Converts the JSON to a string, compresses it, and encodes it in Base64.
+ * 
+ * @param {unknown} json - The JSON object to compress.
+ * @returns {string} - The Base64-encoded compressed string.
+ */
+  private compress(json: unknown): string {
+    // Strategy 1 is 
+    return Buffer.from(Pako.deflate(JSON.stringify(json), {level: 9, strategy: 1})).toString('base64');
+  }
+
+  /**
+ * Decompresses a Base64-encoded string into its original JSON representation.
+ * 
+ * - Decodes the Base64 string to a binary buffer.
+ * - Uses DEFLATE to decompress the data and converts it back to a JSON string.
+ * - Parses and returns the JSON object.
+ * 
+ * @param {string} data - The Base64-encoded compressed string.
+ * @returns {string} - The decompressed JSON string.
+ */
+  private decopress(data: string): string {
+    const compressedData = Buffer.from(data, 'base64');
+    return JSON.parse(Pako.inflate(compressedData, {to: 'string'}));
   }
 
   /**
