@@ -54,8 +54,24 @@ export default {
                 - <strong>27017</strong> Mongo DB<br />
                 - <strong>50053</strong> PRISM node<br />
             </p>
+            <p className="mt-5">You will also need to setup a GITHUB_TOKEN in your environment by creating a <a
+                className="text-blue-700 hover:text-blue-900 font-bold"
+                href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry" target="_blank">
+                Github PAT</a> token with read:packages permissions enabled.</p>
+
+            <p>After you created your PAT token you can login to ghrc.io docker registry by running this in your machine:</p>
         </div>
+
         ),
+        {
+            language: 'bash',
+            code: `echo 'YOUR_TOKEN' | docker login ghcr.io -u YOUR_USERNAME --password-stdin`,
+        },
+        () => {
+            return <div className="py-2 text-gray-600 transition duration-200">
+                <p>Once setup you can pull docker images and setup the environments by running this command: </p>
+            </div>
+        },
         {
             language: 'bash',
             code: `docker compose up`,

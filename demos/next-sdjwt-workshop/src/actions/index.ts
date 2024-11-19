@@ -7,7 +7,7 @@ import { AnyAction, ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
 import SDK from "@hyperledger/identus-edge-agent-sdk";
 import { sha512 } from '@noble/hashes/sha512'
 import { RootState, reduxActions } from "@/reducers/app";
-import IndexDB from '@pluto-encrypted/indexdb'
+import InMemory from '@pluto-encrypted/inmemory'
 import { PresentationClaims } from "../../../../src/domain";
 
 
@@ -327,7 +327,7 @@ export const connectDatabase = createAsyncThunk<
         const apollo = new SDK.Apollo();
         const store = new SDK.Store({
             name: "test",
-            storage: IndexDB,
+            storage: InMemory,
             password: Buffer.from(hashedPassword).toString("hex")
         });
         const db = new SDK.Pluto(store, apollo);
