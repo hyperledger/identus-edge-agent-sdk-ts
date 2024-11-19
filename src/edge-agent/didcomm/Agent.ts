@@ -321,7 +321,12 @@ export default class DIDCommAgent {
   }
 
   /**
-   * Handle an invitation to create a connection
+   * Handle an invitation based on it's type
+   * 
+   * - `PrismOnboardingInvitation`: creates a new connection
+   * - `OutOfBandInvitation`: 
+   *     - no Attachment: creates a new connection
+   *     - with Attachment: stores / emits the attached message
    * 
    * @async
    * @param {InvitationType} invitation - an OOB or PrismOnboarding invitation
