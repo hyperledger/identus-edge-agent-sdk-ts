@@ -1,6 +1,6 @@
 # Identus TypeScript SDK
 
-[![Coverage Status](https://coveralls.io/repos/github/hyperledger/identus-edge-agent-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/hyperledger/identus-edge-agent-sdk-ts?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/hyperledger/identus-edge-agent-sdk-ts/badge.svg?branch=main)](https://coveralls.io/github/hyperledger/identus-edge-agent-sdk-ts?branch=main)
 
 ---
 
