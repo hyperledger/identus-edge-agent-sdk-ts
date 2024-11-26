@@ -9,13 +9,13 @@ import { Arrayable, asArray } from "../utils";
 
 /**
  * Pluto implementation
- * 
+ *
  * Structure:
  * - Pluto class is an orchestration layer
  * - Repositories handle mapping Domain <-> Storable Models
  * - Models suggest db structure
  * - Store abstracts db implementation
- * 
+ *
  * Pluto:
  * - always handles Domain classes
  * - manage relationships
@@ -24,19 +24,19 @@ import { Arrayable, asArray } from "../utils";
  * - return null
  * - naming convention
  *   - (get/store) (Domain name Pluralized) ie getCredentials
- * 
+ *
  * Models:
  * - naming convention
  *   - alias for optional names
  *   - name for required identifiers
  *   - dataJson for JSON.stringified objects
- * 
+ *
  * Store:
  * - simplified interface
  * - crud interactions
  * - only use Models
- * 
- * 
+ *
+ *
  * Future:
  *  - versioning
  *  - migrations
@@ -51,13 +51,13 @@ export namespace Pluto {
 
     /**
      * Run a query to fetch data from the Store
-     * 
+     *
      * @param table table name
      * @param query a MangoQuery object, a set of values and operators defining the query
-     * 
+     *
      * properties within an object will be AND'ed
      * different objects will be OR'd
-     * 
+     *
      * @example
      * search for a model in TableOne with uuid and name
      * ```ts
@@ -73,14 +73,14 @@ export namespace Pluto {
      * ```ts
      *   store.query("TableOne")
      * ```
-     * 
+     *
      * @returns relevant Models
      */
     query<T extends Models.Model>(table: string, query?: MangoQuery<T>): Promise<T[]>;
 
     /**
      * Persist new data in the Store.
-     * 
+     *
      * @param table table name
      * @param model object to save
      */
@@ -88,15 +88,15 @@ export namespace Pluto {
 
     /**
      * Updating a new row in the Store
-     * @param table 
-     * @param model 
+     * @param table
+     * @param model
      */
     update<T extends Models.Model>(table: string, model: T): Promise<void>;
 
     /**
      * Deleting a  row in the Store
-     * @param table 
-     * @param model 
+     * @param table
+     * @param model
      */
     delete(table: string, uuid: string): Promise<void>;
   }
@@ -300,8 +300,14 @@ export class Pluto implements Domain.Pluto {
     }
   }
 
-  async getMessage(id: string): Promise<Domain.Message | null> {
-    return await this.Repositories.Messages.findOne({ id });
+  async getMessage(id: string): Promise<Domain.Message> {
+    const message = await this.Repositories.Messages.findOne({ id });
+
+    if (!message) {
+      throw new Error(`Message with ID ${id} not found`);
+    }
+
+    return message;
   }
 
   async getAllMessages(): Promise<Domain.Message[]> {
