@@ -1,0 +1,13 @@
+{
+  "name": "@identus-edge-agent-sdk/integration-tests-ts-mjs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "test": "node ./build/ts-esm/src/index.js"
+  },
+  "dependencies": {
+    "sdk": "file:../../../"
+  }
+}
