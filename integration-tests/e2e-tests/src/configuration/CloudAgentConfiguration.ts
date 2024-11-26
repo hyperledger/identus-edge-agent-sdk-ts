@@ -205,6 +205,7 @@ export class CloudAgentConfiguration {
     try {
       assert(this.anoncredDefinitionGuid != null)
       assert(this.anoncredDefinitionGuid != "")
+
       await axiosInstance.get(
         `credential-definition-registry/definitions/${this.anoncredDefinitionGuid}`
       )
