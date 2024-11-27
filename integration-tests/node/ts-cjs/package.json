@@ -1,0 +1,13 @@
+{
+  "name": "@identus-edge-agent-sdk/integration-tests-ts-cjs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "npx tsc",
+    "test": "node ./build/ts-cjs/src/index.js"
+  },
+  "dependencies": {
+    "sdk": "file:../../../"
+  }
+}

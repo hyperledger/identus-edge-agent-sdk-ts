@@ -61,6 +61,14 @@ jobs:
         working-directory: integration-tests/node/esm
         run: npm i && node test.mjs
 
+      - name: Test integration ts-cjs
+        working-directory: integration-tests/node/ts-cjs
+        run: npm i && npm run build && npm t
+
+      - name: Test integration ts-esm
+        working-directory: integration-tests/node/ts-esm
+        run: npm i && npm run build && npm t
+
       - name: Npm audit
         uses: oke-py/npm-audit-action@v2.4.4
         with:
