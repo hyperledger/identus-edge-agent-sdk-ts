@@ -13,8 +13,8 @@ export interface IssueCredentialBody extends CredentialBody {
 }
 
 export interface PrismRevocationBody {
-  issueCredentialProtocolThreadId: string
-  comment?: string
+  issueCredentialProtocolThreadId: string;
+  comment?: string;
 }
 
 export interface MediationGrantBody {
@@ -28,10 +28,6 @@ export interface OfferCredentialBody extends CredentialBody {
 }
 export interface ProposeCredentialBody extends CredentialBody {
   credential_preview: CredentialPreview;
-}
-
-export interface ParsedCredentialFormat<T> {
-  body: T;
 }
 
 export interface MediationKeysUpdateListBody {
@@ -75,7 +71,7 @@ export interface ProblemReportBody {
   code: string,
   comment: string,
   args: string[],
-  escalate_to: string
+  escalate_to: string;
 }
 
 export interface RequestPresentationBody extends PresentationBody {

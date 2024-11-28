@@ -9,7 +9,6 @@ const runTests = (describe, test, assert, SDK) => {
     assert("Domain" in SDK);
     assert("Mercury" in SDK);
     assert("Pluto" in SDK);
-    assert("Pollux" in SDK);
 
     // misc modules
     assert("ApiImpl" in SDK);
@@ -64,9 +63,6 @@ const runTests = (describe, test, assert, SDK) => {
 
     // ?? should be in Pluto
     assert("Store" in SDK);
-
-    // ?? shouldnt be exported
-    assert("isPresentationDefinitionRequestType" in SDK);
   });
 
   describe("Modules", () => {
@@ -126,21 +122,21 @@ const runTests = (describe, test, assert, SDK) => {
       });
     });
 
-    describe("Pollux", () => {
-      test("instantiates", async () => {
-        const apollo = new SDK.Apollo();
-        const castor = new SDK.Castor(apollo);
-        const pollux = new SDK.Pollux(apollo, castor);
-        assert(pollux instanceof SDK.Pollux);
-        assert(pollux.revealCredentialFields instanceof Function);
-        assert(pollux.isCredentialRevoked instanceof Function);
-        assert(pollux.parseCredential instanceof Function);
-        assert(pollux.processCredentialOffer instanceof Function);
-        assert(pollux.createPresentationSubmission instanceof Function);
-        assert(pollux.verifyPresentationSubmission instanceof Function);
-        assert(pollux.createPresentationDefinitionRequest instanceof Function);
-      });
-    });
+    // describe("Pollux", () => {
+    //   test("instantiates", async () => {
+    //     const apollo = new SDK.Apollo();
+    //     const castor = new SDK.Castor(apollo);
+    //     const pollux = new SDK.Pollux(apollo, castor);
+    //     assert(pollux instanceof SDK.Pollux);
+    //     assert(pollux.revealCredentialFields instanceof Function);
+    //     assert(pollux.isCredentialRevoked instanceof Function);
+    //     assert(pollux.parseCredential instanceof Function);
+    //     assert(pollux.processCredentialOffer instanceof Function);
+    //     assert(pollux.createPresentationSubmission instanceof Function);
+    //     assert(pollux.verifyPresentationSubmission instanceof Function);
+    //     assert(pollux.createPresentationDefinitionRequest instanceof Function);
+    //   });
+    // });
   });
 
   test("Agent starts", async () => {

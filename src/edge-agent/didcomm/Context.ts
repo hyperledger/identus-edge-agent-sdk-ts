@@ -1,18 +1,10 @@
+import { PluginManager } from "../../plugins";
 import { Task } from "../../utils/tasks";
 import { ConnectionsManager } from "../connectionsManager/ConnectionsManager";
 import { MediatorHandler } from "../types";
 
-interface Deps {
+export type DIDCommContext = Task.Context<{
   ConnectionManager: ConnectionsManager;
   MediationHandler: MediatorHandler;
-}
-
-export class DIDCommContext extends Task.Context<Deps> {
-  get ConnectionManager() {
-    return this.getProp("ConnectionManager");
-  }
-
-  get MediationHandler() {
-    return this.getProp("MediationHandler");
-  }
-}
+  Plugins: PluginManager;
+}>;

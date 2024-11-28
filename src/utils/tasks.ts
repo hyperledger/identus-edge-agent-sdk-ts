@@ -19,7 +19,7 @@ export abstract class Task<T, Args = unknown> {
     this.args = args ?? {} as Args;
   }
 
-  abstract run(ctx?: Task.Context): Promise<T>;
+  abstract run(ctx: Task.Context<any>): Promise<T>;
 
   // return loggable information
   log(): unknown {
@@ -33,49 +33,58 @@ export namespace Task {
   // === Context ===
   // ================================
 
+  /**
+   * Context is provided to running tasks
+   * it optimistically provides access to Components
+   */
+  export type Context<T = JsonObj> = ContextProxy & Required<Context.Base> & T;
+
   export namespace Context {
-    export type Options = Config & Deps;
+    export type Options = Config & Base;
 
     export interface Config {
       logger?: ILogger;
       logLevel?: LogLevel;
     }
 
-    // dependencies
-    export interface Deps {
+    // base components
+    export interface Base {
       Api?: Domain.Api;
       Apollo?: Domain.Apollo;
       Castor?: Domain.Castor;
       Mercury?: Domain.Mercury;
-      Pollux?: Domain.Pollux;
       Pluto?: Domain.Pluto;
       Seed?: Domain.Seed;
     }
+
+    export const make = <T extends Partial<Options>>(modules: T): Context<T> => {
+      const instance = new ContextProxy(modules);
+      return instance as Context<T>;
+    };
   }
 
   /**
-   * 
+   * Context using proxy so we can extend arbitrarily
    */
-  export class Context<T extends JsonObj = JsonObj> {
-    private readonly logger: ILogger;
+  class ContextProxy {
+    public readonly logger: ILogger;
+    private readonly modules: JsonObj = {};
+    private readonly _proxy: any;
 
-    constructor(
-      private readonly opts: Context.Options & T
-    ) {
+    constructor(private readonly opts: JsonObj) {
       this.logger = opts.logger ?? new ConsoleLogger(opts.logLevel);
-    }
 
-    get Api(): Domain.Api { return this.getProp("Api"); }
-    get Apollo(): Domain.Apollo { return this.getProp("Apollo"); }
-    get Castor(): Domain.Castor { return this.getProp("Castor"); }
-    get Mercury(): Domain.Mercury { return this.getProp("Mercury"); }
-    get Pollux(): Domain.Pollux { return this.getProp("Pollux"); }
-    get Pluto(): Domain.Pluto { return this.getProp("Pluto"); }
-    get Seed(): Domain.Seed { return this.getProp("Seed"); }
+      const get = (target: any, prop: string) => {
+        // return target.opts[prop] ?? target.modules[prop] ?? undefined;
+        const ref = target[prop] ?? target.opts[prop] ?? target.modules[prop] ?? undefined;
+        // ?? tmp work around context propagation
+        return ref instanceof Runner
+          ? ref.withContext(this._proxy)
+          : ref;
+      };
 
-    protected getProp<K extends keyof (Context.Deps & T)>(key: K) {
-      const prop = expect(this.opts[key], `Context missing prop: ${key.toString()}`);
-      return prop;
+      this._proxy = new Proxy(this, { get });
+      return this._proxy;
     }
 
     async run<T>(task: Task<T, any>): Promise<T> {
@@ -91,7 +100,34 @@ export namespace Task {
       }
     }
 
+    // TODO improve with logging and error checking
+    extend(deps: JsonObj): this {
+      Object.entries(deps).forEach(([key, value]) => {
+        this.modules[key] = value;
+      });
+
+      return this;
+    }
   }
+
+  export abstract class Runner {
+    private context?: Context;
+
+    // ? tmp work around context propagation
+    abstract clone(): Runner;
+
+    withContext(ctx: Context) {
+      const clone = this.clone();
+      clone.context = ctx;
+      return clone;
+    }
+
+    protected runTask<T>(task: Task<T>): Promise<T> {
+      const ctx = expect(this.context, `${this.constructor.name}: no Context available`);
+      return ctx.run(task);
+    }
+  }
+
 
   // ================================
   // === Logger ===
@@ -161,5 +197,4 @@ export namespace Task {
       }
     }
   }
-
 }

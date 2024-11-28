@@ -22,7 +22,7 @@ const testConfig = {
     reporters: ['verbose'],
     coverage: {
         provider: 'istanbul',
-        reporter: isCI ? ['json-summary', 'lcov'] : ['json-summary', "html"],
+        reporter: isCI ? ['json-summary', 'lcov'] : ['text', 'lcov'],
         thresholds: {
             "branches": 63,
             "functions": 75,

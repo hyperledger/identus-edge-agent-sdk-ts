@@ -5,7 +5,6 @@ export { default as Castor } from "./castor/Castor";
 export * as Domain from "./domain";
 export { default as Mercury } from "./mercury/Mercury";
 export * from "./pluto";
-export { default as Pollux } from "./pollux/Pollux";
 
 // alias DIDCommAgent as Agent to hide breaking changes
 export { default as Agent } from "./edge-agent/didcomm/Agent";
@@ -47,10 +46,13 @@ export * from "./apollo/utils/Ed25519KeyPair";
 export * from "./apollo/utils/X25519PrivateKey";
 export * from "./apollo/utils/X25519PublicKey";
 export * from "./apollo/utils/X25519KeyPair";
-export * from "./pollux/models/AnonCredsVerifiableCredential";
-export * from "./pollux/models/JWTVerifiableCredential";
-export * from "./pollux/models/SDJWTVerifiableCredential";
-
-export { isPresentationDefinitionRequestType } from './pollux/utils/claims';
 
 export { KeyProperties } from "./domain/models/KeyProperties";
+export { JWTCredential, JWTVerifiableCredentialRecoveryId } from "./pollux/models/JWTVerifiableCredential";
+export { SDJWTCredential, SDJWTVerifiableCredentialRecoveryId } from "./pollux/models/SDJWTVerifiableCredential";
+export * from "./pollux/models/AnonCredsVerifiableCredential";
+
+import AnoncredsPlugin from "./plugins/internal/anoncreds";
+export const Plugins = {
+  Anoncreds: AnoncredsPlugin
+};

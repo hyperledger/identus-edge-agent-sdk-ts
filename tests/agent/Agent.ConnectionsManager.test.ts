@@ -6,6 +6,7 @@ import { Apollo, BasicMediatorHandler, Castor, ConnectionsManager, MediatorStore
 import { Curve, KeyTypes, Mercury, Service, ServiceEndpoint } from "../../src/domain";
 import { MercuryStub } from "./mocks/MercuryMock";
 import { AgentOptions } from "../../src/edge-agent/types";
+import DIDCommAgent from '../../src/edge-agent/didcomm/Agent';
 
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
@@ -18,16 +19,14 @@ const castor = new Castor(apollo)
 const pluto: Pluto = null as any;
 
 async function createBasicMediationHandler(
-    ConnectionsManager: any,
-    BasicMediatorHandler: any,
+    cmCtor: typeof ConnectionsManager,
+    mhCtor: typeof BasicMediatorHandler,
     services: Service[],
     options?: AgentOptions
-): Promise<
-    {
-        manager: ConnectionsManager,
-        handler: BasicMediatorHandler
-    }
-> {
+): Promise<{
+  manager: ConnectionsManager,
+  handler: BasicMediatorHandler
+}> {
     const seed = apollo.createRandomSeed().seed;
     const keypair = apollo.createPrivateKey({
         type: KeyTypes.EC,
@@ -35,7 +34,7 @@ async function createBasicMediationHandler(
         seed: Buffer.from(seed.value).toString("hex"),
     });
     const mediatorDID = await castor.createPrismDID(keypair.publicKey(), services);
-    const handler = new BasicMediatorHandler(
+    const handler = new mhCtor(
         mediatorDID,
         mercury,
         store
@@ -46,20 +45,17 @@ async function createBasicMediationHandler(
         mediatorDID: mediatorDID
     }
 
-    const pollux: Pollux = null as any;
-    const manager = new ConnectionsManager(
-        castor,
-        mercury,
-        pluto,
-        pollux,
-        handler,
-        [],
-        options
-    )
-    return {
-        manager,
-        handler
-    }
+    const pluto = null as any;
+    const agent = DIDCommAgent.initialize({
+      mediatorDID,
+      pluto,
+      castor,
+      mercury,
+    });
+    (agent as any).mediationHandler = handler;
+    const manager = new cmCtor(agent, options);
+    
+    return { manager, handler };
 }
 
 
@@ -191,7 +187,7 @@ describe("ConnectionsManager tests", () => {
         manager.stopFetchingMessages()
     })
 
-    it("Should not use websockets if the mediator'd did endpoint uri does not contain ws or wss for more than the agent has opted in", async () => {
+    it("Should not use websockets if the mediator did endpoint uri does not contain ws or wss for more than the agent has opted in", async () => {
         const services = [
             new Service(
                 "#didcomm-1",

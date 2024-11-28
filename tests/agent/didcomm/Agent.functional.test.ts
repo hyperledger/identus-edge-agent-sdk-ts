@@ -28,21 +28,18 @@ describe("Agent", () => {
     describe("Persistence", () => {
       test("start() called for Startable dependencies", async () => {
         const spyPluto = vi.spyOn(agent.pluto, "start");
-        const spyPollux = vi.spyOn(agent.pollux, "start");
         const spyMediator = vi.spyOn(agent.connectionManager, "startMediator");
         const spyMessages = vi.spyOn(agent.connectionManager, "startFetchingMessages");
 
         await agent.start();
 
         expect(spyPluto).toHaveBeenCalledOnce();
-        expect(spyPollux).toHaveBeenCalledOnce();
         expect(spyMediator).toHaveBeenCalledOnce();
         expect(spyMessages).toHaveBeenCalledOnce();
       });
 
       test("calling start() twice should not throw", async () => {
         const spyPluto = vi.spyOn(agent.pluto, "start");
-        const spyPollux = vi.spyOn(agent.pollux, "start");
         const spyMediator = vi.spyOn(agent.connectionManager, "startMediator");
         const spyMessages = vi.spyOn(agent.connectionManager, "startFetchingMessages");
 
@@ -50,14 +47,12 @@ describe("Agent", () => {
         await agent.start();
 
         expect(spyPluto).toHaveBeenCalledOnce();
-        expect(spyPollux).toHaveBeenCalledOnce();
         expect(spyMediator).toHaveBeenCalledOnce();
         expect(spyMessages).toHaveBeenCalledOnce();
       });
 
       test("stop() called for Startable dependencies", async () => {
         const spyPluto = vi.spyOn(agent.pluto, "stop");
-        const spyPollux = vi.spyOn(agent.pollux, "stop");
         const spyEvents = vi.spyOn(agent.connectionManager, "stopAllEvents");
         const spyMessages = vi.spyOn(agent.connectionManager, "stopFetchingMessages");
 
@@ -65,7 +60,6 @@ describe("Agent", () => {
         await agent.stop();
 
         expect(spyPluto).toHaveBeenCalledOnce();
-        expect(spyPollux).toHaveBeenCalledOnce();
         expect(spyEvents).toHaveBeenCalledOnce();
         expect(spyMessages).toHaveBeenCalledOnce();
       });
