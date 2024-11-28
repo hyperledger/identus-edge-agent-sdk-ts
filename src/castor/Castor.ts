@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { secp256k1 } from "@noble/curves/secp256k1";
 import { SHA256 } from "@stablelib/sha256";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
@@ -16,14 +17,15 @@ import {
 
 import * as DIDParser from "./parser/DIDParser";
 import * as Protos from "./protos/node_models";
-
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
 import {
+  CastorError,
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
   getUsageId,
+  PrivateKey,
   Usage,
 } from "../domain";
 
@@ -41,6 +43,7 @@ import { PublicKey, Curve } from "../domain/models";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 import { PrismDIDPublicKey } from "./did/prismDID/PrismDIDPublicKey";
+import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 
 type ExtraResolver = new (apollo: Apollo) => DIDResolver;
 /**
@@ -92,6 +95,116 @@ export default class Castor implements CastorInterface {
   }
 
   /**
+   * Creates a DID operation.
+   * @param {PrivateKey} key
+   * @param {Service[]} services
+   * @param {PublicKey[]} authenticationKeys
+   * @param {PublicKey[]} issuanceKeys
+   * @returns {Promise<{operationHex: string, metadataBody: {v: number, c: string[]}, did: DID}>}
+   */
+  async createOperation(
+    key: PrivateKey,
+    services?: Service[] | undefined,
+    authenticationKeys: (PublicKey)[] = [],
+    issuanceKeys: (PublicKey)[] = [],
+  ) {
+    function splitStringIntoChunks(input: string, chunkSize: number = 64): string[] {
+      const buffer = Buffer.from(input, 'utf-8');
+      const chunks: string[] = [];
+      for (let i = 0; i < buffer.length; i += chunkSize) {
+        chunks.push(buffer.slice(i, i + chunkSize).toString('utf-8'));
+      }
+      return chunks;
+    }
+    const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
+    const masterPublicKey = "publicKey" in key ? key.publicKey() : key;
+    const masterPk = new PrismDIDPublicKey(
+      getUsageId(Usage.MASTER_KEY),
+      Usage.MASTER_KEY,
+      masterPublicKey,
+    ).toProto();
+    didPublicKeys.push(masterPk);
+    if (authenticationKeys.length) {
+      for (const [index, authenticationKey] of authenticationKeys.entries()) {
+        const pk = authenticationKey
+        const prismDIDPublicKey = new PrismDIDPublicKey(
+          getUsageId(Usage.AUTHENTICATION_KEY, index),
+          Usage.AUTHENTICATION_KEY,
+          pk,
+        )
+        didPublicKeys.push(prismDIDPublicKey.toProto())
+      }
+    }
+    if (issuanceKeys.length) {
+      for (const [index, issuanceKey] of issuanceKeys.entries()) {
+        const pk = issuanceKey
+        const prismDIDPublicKey = new PrismDIDPublicKey(
+          getUsageId(Usage.ISSUING_KEY, index),
+          Usage.ISSUING_KEY,
+          pk,
+        )
+        didPublicKeys.push(prismDIDPublicKey.toProto())
+      }
+    }
+    const didCreationData =
+      new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
+        public_keys: didPublicKeys,
+        services: services?.map((service) => {
+          return new Protos.io.iohk.atala.prism.protos.Service({
+            service_endpoint: [service.serviceEndpoint.uri],
+            id: service.id,
+            type: service.type.at(0),
+          });
+        }),
+      });
+    const didOperation =
+      new Protos.io.iohk.atala.prism.protos.CreateDIDOperation({
+        did_data: didCreationData,
+      });
+    const operation = new Protos.io.iohk.atala.prism.protos.AtalaOperation({
+      create_did: didOperation,
+    });
+    const encodedState = operation.serializeBinary();
+    const encodedStateHash = (new SHA256()).update(encodedState).digest()
+    if (key.isSignable() && key instanceof Secp256k1PrivateKey) {
+      const signature = secp256k1.sign(
+        encodedStateHash,
+        key.raw
+      )
+      const signedOperation = Protos.io.iohk.atala.prism.protos.SignedAtalaOperation.fromObject({
+        signature: signature.toCompactRawBytes(),
+        operation,
+        signed_with: masterPk.id
+      })
+      const block = Protos.io.iohk.atala.prism.protos.AtalaBlock.fromObject({
+        operations: [
+          signedOperation
+        ]
+      })
+      const atalaObject = Protos.io.iohk.atala.prism.protos.AtalaObject.fromObject({
+        block_content: block
+      })
+      const atalaObjectHex = Buffer.from(
+        atalaObject.serialize()
+      ).toString('hex');
+      const metadataBody = {
+        "v": 1,
+        "c": splitStringIntoChunks(atalaObjectHex)
+      }
+      const stateHashHex = Buffer.from(encodedStateHash).toString("hex");
+      const base64State = base64.base64url.baseEncode(encodedState);
+      const methodSpecificId = PrismDID.parseMethodId([stateHashHex, base64State]);
+      const did = new DID("did", "prism", methodSpecificId.toString());
+      return {
+        operationHex: atalaObjectHex,
+        metadataBody: metadataBody,
+        did
+      }
+    }
+    throw new CastorError.InvalidKeyError("Cannot sign with this key")
+  }
+
+  /**
    * Creates a DID for a prism (a device or server that acts as a DID owner and controller) using a
    * given master public key and list of services.
    *
@@ -113,8 +226,10 @@ export default class Castor implements CastorInterface {
    * ```
    *
    * @async
-   * @param {PublicKey | KeyPair} masterPublicKey
+   * @param {PrivateKey | KeyPair} masterPublicKey
    * @param {?(Service[] | undefined)} [services]
+   * @param {?(PublicKey[] | undefined)} [authenticationKeys]
+   * @param {?(PublicKey[] | undefined)} [issuanceKeys]
    * @returns {Promise<DID>}
    */
   async createPrismDID(
@@ -124,7 +239,6 @@ export default class Castor implements CastorInterface {
   ): Promise<DID> {
     const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
     const masterPublicKey = "publicKey" in key ? key.publicKey : key;
-
     const masterPk = new PrismDIDPublicKey(
       getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
@@ -161,20 +275,16 @@ export default class Castor implements CastorInterface {
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation({
         did_data: didCreationData,
       });
-
     const operation = new Protos.io.iohk.atala.prism.protos.AtalaOperation({
       create_did: didOperation,
     });
-
     const encodedState = operation.serializeBinary();
     const sha256 = new SHA256();
     const stateHash = Buffer.from(
       sha256.update(encodedState).digest()
     ).toString("hex");
-
     const base64State = base64.base64url.baseEncode(encodedState);
     const methodSpecificId = PrismDID.parseMethodId([stateHash, base64State]);
-
     return new DID("did", "prism", methodSpecificId.toString());
   }
 

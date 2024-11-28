@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cardano-sdk/core": "^0.41.4",
+    "@cardano-sdk/dapp-connector": "^0.12.44",
+    "@cardano-sdk/tx-construction": "^0.21.13",
+    "@cardano-sdk/util": "^0.15.5",
+    "@emurgo/cardano-serialization-lib-browser": "^13.2.0",
     "@heroicons/react": "^1.0.6",
     "@hyperledger/identus-edge-agent-sdk": "../..",
     "@noble/hashes": "^1.3.3",
