@@ -1,7 +1,6 @@
 import * as didResolver from "did-resolver";
 import { base64url } from "multiformats/bases/base64";
 import { base58btc } from 'multiformats/bases/base58';
-import { defaultHashConfig, defaultSaltGen } from "./config";
 import { VerificationKeyType } from "../../../castor/types";
 import {
     Castor,
@@ -10,16 +9,11 @@ import {
     VerificationMethods,
     Services,
     PublicKey,
-    PrivateKey,
-    Signer,
-    Hasher,
-    Verifier,
     Curve,
     Apollo,
     KeyProperties,
     KeyTypes
 } from "../../../domain";
-
 
 /**
  * JWTCore
@@ -92,22 +86,6 @@ export abstract class JWTCore {
         };
     }
 
-    protected getSKConfig(privateKey: PrivateKey): { signAlg: string, signer: Signer, hasher: Hasher, hasherAlg: string } {
-        return {
-            signAlg: privateKey.alg,
-            signer: async (data) => {
-                if (!privateKey.isSignable()) {
-                    throw new Error("Cannot sign with this key");
-                }
-                const signature = privateKey.sign(Buffer.from(data));
-                const signatureEncoded = base64url.baseEncode(signature)
-                return signatureEncoded
-            },
-            ...defaultHashConfig,
-            ...defaultSaltGen
-        };
-    }
-
     protected getPKInstance(verificationMethod: didResolver.VerificationMethod) {
         let pk: PublicKey | undefined = undefined
         if (verificationMethod.publicKeyMultibase) {
@@ -148,20 +126,4 @@ export abstract class JWTCore {
         }
         throw new Error("Not supported")
     }
-
-    protected getPKConfig(publicKey: PublicKey): { signAlg: string, verifier: Verifier, hasher: Hasher, hasherAlg: string } {
-        return {
-            signAlg: publicKey.alg,
-            verifier: async (data, signatureEncoded) => {
-                if (!publicKey.canVerify()) {
-                    throw new Error("Cannot verify with this key");
-                }
-                const signature = Buffer.from(base64url.baseDecode(signatureEncoded))
-                return publicKey.verify(Buffer.from(data), signature)
-            },
-            ...defaultHashConfig,
-            ...defaultSaltGen
-        }
-    }
-
 }

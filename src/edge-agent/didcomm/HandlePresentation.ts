@@ -31,7 +31,7 @@ export class HandlePresentation extends Task<boolean, Args> {
     return verified;
   }
 
-  private async getPresentationDefinitionByThid(ctx: DIDCommContext, thid: string): Promise<Domain.PresentationDefinitionRequest> {
+  private async getPresentationDefinitionByThid(ctx: DIDCommContext, thid: string) {
     const allMessages = await ctx.Pluto.getAllMessages();
     const message = allMessages.find((message) => {
       return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation;

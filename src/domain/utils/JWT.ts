@@ -21,6 +21,16 @@ export namespace JWT {
     data: string;
   }
 
+  export enum Claims {
+    iss = "iss",
+    sub = "sub",
+    aud = "aud",
+    nbf = "nbf",
+    exp = "exp",
+    iat = 'iat',
+    jti = "jti",
+    // rexp
+  }
 
   /**
    * Creates a signed JWT 

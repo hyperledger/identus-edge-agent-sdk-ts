@@ -1,3 +1,2 @@
-import Pollux from "./Pollux";
-
-export default Pollux;
+import { PlugPol } from "./PlugPol";
+export default PlugPol;

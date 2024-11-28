@@ -1,4 +1,5 @@
 import * as Domain from "../../domain";
+import { JsonObj } from "../../utils";
 import { Task } from "../../utils/tasks";
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { DIDCommContext } from "./Context";
@@ -26,7 +27,7 @@ export class HandleIssueCredential extends Task<Domain.Credential, Args> {
       throw new Error("No thid");
     }
 
-    const parseOpts: Domain.CredentialIssueOptions = {
+    const parseOpts: JsonObj = {
       type: credentialType,
     };
 

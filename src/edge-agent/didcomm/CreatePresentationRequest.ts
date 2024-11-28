@@ -1,6 +1,5 @@
 import { uuid } from "@stablelib/uuid";
 import * as Domain from "../../domain";
-import { validatePresentationClaims } from "../../pollux/utils/claims";
 import { RequestPresentation } from "../protocols/proofPresentation";
 import { CreatePeerDID } from "./CreatePeerDID";
 import { Task } from "../../utils/tasks";
@@ -118,4 +117,43 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
       uuid()
     );
   }
+}
+
+// TODO this belongs in Pollux?
+function validatePresentationClaims<T extends Domain.CredentialType>(claims: any, type: T): claims is Domain.PresentationClaims<T> {
+  if (type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT) {
+    if (claims.schema && typeof claims.schema !== 'string') {
+      return false;
+    }
+    if (claims.issuer && typeof claims.issuer !== 'string') {
+      return false;
+    }
+    if (!claims.claims) {
+      return false;
+    }
+    Object.keys(claims.claims).forEach((field) => {
+      const filter = claims.claims[field];
+
+      if (!filter.type || typeof filter.type !== 'string') {
+        return false;
+      }
+      if (filter.pattern && typeof filter.pattern !== 'string') {
+        return false;
+      }
+      if (filter.pattern && typeof filter.pattern !== 'string') {
+        return false;
+      }
+      if (filter.enum && Array.isArray(filter.enum)) {
+        return false;
+      }
+      if (filter.const && Array.isArray(filter.const)) {
+        return false;
+      }
+      if (filter.value && typeof filter.value !== 'string' && typeof filter.value !== 'number') {
+        return false;
+      }
+    });
+  }
+  //Anoncreds validation is better handled by anoncreds-loader
+  return true;
 }

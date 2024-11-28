@@ -1,30 +1,38 @@
 import { AnonCredsCredential } from "../../pollux/models/AnonCredsVerifiableCredential";
 import { PresentationRequest } from "../../pollux/models/PresentationRequest";
 import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { AttachmentFormats, CredentialType, DID, LinkSecret, PresentationClaims, PresentationDefinitionRequest, PresentationOptions, PresentationSubmission, PrivateKey } from "../models";
-import { Credential, CredentialRequestOptions } from "../models/Credential";
+import { Credential } from "../models/Credential";
 import type * as Anoncreds from "anoncreds-wasm";
 import { SDJWTCredential } from "../../pollux/models/SDJWTVerifiableCredential";
+import {
+  AttachmentFormats,
+  CredentialType,
+  DID,
+  LinkSecret,
+  PresentationClaims,
+  PresentationDefinitionRequest,
+  PresentationOptions,
+  PresentationSubmission,
+  PrivateKey
+} from "../models";
+import { JsonObj } from "../../utils";
 
 export type CredentialRequestTuple<
   T1 = Anoncreds.CredentialRequestType,
   T2 = Anoncreds.CredentialRequestMetadataType
 > = [T1, T2];
 
-
-
 export type CredentialOfferJWTBasePayload = {
   options: {
     challenge: string;
     domain: string;
-  }
-}
+  };
+};
 
 export type CredentialOfferPayloads = {
   [CredentialType.AnonCreds]: Anoncreds.CredentialOfferType;
   [CredentialType.JWT]: CredentialOfferJWTBasePayload;
   [CredentialType.SDJWT]: CredentialOfferJWTBasePayload;
-
   [CredentialType.Unknown]: unknown;
   [CredentialType.W3C]: unknown;
 };
@@ -42,7 +50,6 @@ export type ProcessedCredentialOfferPayloads = {
   [CredentialType.W3C]: unknown;
 };
 
-
 /**
  * Pollux
  * handle Credential related tasks
@@ -50,33 +57,31 @@ export type ProcessedCredentialOfferPayloads = {
 export interface Pollux {
 
   revealCredentialFields: (credential: Credential, fields: string[], linkSecret?: string) => Promise<{
-    [name: string]: any
+    [name: string]: any;
   }>;
 
   isCredentialRevoked: (credential: Credential) => Promise<boolean>;
 
   parseCredential: (
     credentialBuffer: Uint8Array,
-    options?: { type: CredentialType;[name: string]: any; }
+    options?: JsonObj
   ) => Promise<Credential>;
 
-  processCredentialOffer<
-    Types extends CredentialOfferTypes
-  >(
+  processCredentialOffer<Types extends CredentialOfferTypes>(
     offer: CredentialOfferPayloads[Types],
-    options: CredentialRequestOptions
+    options: JsonObj
   ): Promise<ProcessedCredentialOfferPayloads[Types]>;
 
   createPresentationSubmission(
     presentationDefinition: PresentationDefinitionRequest<CredentialType.JWT>,
     credential: Credential,
     privateKey: PrivateKey
-  ): Promise<PresentationSubmission<CredentialType.JWT>>
+  ): Promise<PresentationSubmission<CredentialType.JWT>>;
   createPresentationSubmission(
     presentationDefinition: PresentationDefinitionRequest<CredentialType.AnonCreds>,
     credential: Credential,
     privateKey: LinkSecret
-  ): Promise<PresentationSubmission<CredentialType.AnonCreds>>
+  ): Promise<PresentationSubmission<CredentialType.AnonCreds>>;
 
   /**
    * Process a PresentationSubmission, resolve the issuer did and verify the credential and the holder signature
@@ -86,17 +91,9 @@ export interface Pollux {
    * @returns {boolean} true if the submission is valid or false if it is not
    */
   verifyPresentationSubmission(
-    presentationSubmission: PresentationSubmission<CredentialType.JWT>,
-    options?: Pollux.verifyPresentationSubmission.options.JWT
-  ): Promise<boolean>
-  verifyPresentationSubmission(
-    presentationSubmission: PresentationSubmission<CredentialType.AnonCreds>,
-    options?: Pollux.verifyPresentationSubmission.options.Anoncreds
-  ): Promise<boolean>
-  verifyPresentationSubmission(
     presentationSubmission: PresentationSubmission,
-    options?: Pollux.verifyPresentationSubmission.options.JWT | Pollux.verifyPresentationSubmission.options.Anoncreds
-  ): Promise<boolean>
+    options?: Pollux.verifyPresentationSubmission.options
+  ): Promise<boolean>;
 
   /**
    * Creates a PresentationDefinitionRequest object for oob Verifications
@@ -108,9 +105,7 @@ export interface Pollux {
     type: T,
     claims: PresentationClaims<T>,
     options: PresentationOptions
-  ): Promise<PresentationDefinitionRequest<T>>
-
-
+  ): Promise<PresentationDefinitionRequest<T>>;
 
   /**
    * Process a PresentationRequest with Credential to create a Presentation.
@@ -138,12 +133,12 @@ export namespace Pollux {
       export interface JWT {
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.JWT>,
         challenge?: string,
-        domain?: string
+        domain?: string;
       }
       export interface SDJWT {
         issuer: DID,
         presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.SDJWT>,
-        requiredClaims?: string[]
+        requiredClaims?: string[];
       }
     }
   }
@@ -159,7 +154,7 @@ export namespace Pollux {
       }
       export interface SDJWT {
         privateKey: PrivateKey;
-        presentationFrame: Record<string, boolean>
+        presentationFrame: Record<string, boolean>;
       }
     }
   }

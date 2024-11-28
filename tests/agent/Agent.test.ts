@@ -35,8 +35,7 @@ import { CredentialPreview } from "../../src/edge-agent/protocols/issueCredentia
 import { RequestCredential } from "../../src/edge-agent/protocols/issueCredential/RequestCredential";
 import { IssueCredential } from "../../src/edge-agent/protocols/issueCredential/IssueCredential";
 import { base64url } from "multiformats/bases/base64";
-import Pollux from "../../src/pollux/Pollux";
-import { AnoncredsLoader } from "../../src/pollux/AnoncredsLoader";
+import { Pollux } from "../../src/";
 import { RequestPresentation } from "../../src/edge-agent/protocols/proofPresentation/RequestPresentation";
 import { Presentation } from "../../src/edge-agent/protocols/proofPresentation/Presentation";
 import { JWTCredential } from "../../src/pollux/models/JWTVerifiableCredential";
@@ -97,7 +96,7 @@ describe("Agent Tests", () => {
 
     pluto = new Pluto(store, apollo);
     const mercury = new Mercury(castor, didProtocol, httpManager);
-    const polluxInstance = new Pollux(apollo, castor);
+    // const polluxInstance = new Pollux(apollo, castor);
     const seed: Seed = {
       value: new Uint8Array([69, 191, 35, 232, 213, 102, 3, 93, 180, 106, 224, 144, 79, 171, 79, 223, 154, 217, 235, 232, 96, 30, 248, 92, 100, 38, 38, 42, 101, 53, 2, 247, 56, 111, 148, 220, 237, 122, 15, 120, 55, 82, 89, 150, 35, 45, 123, 135, 159, 140, 52, 127, 239, 148, 150, 109, 86, 145, 77, 109, 47, 60, 20, 16])
     };
@@ -134,7 +133,7 @@ describe("Agent Tests", () => {
     //   }
     // );
 
-    await polluxInstance.start();
+    // await polluxInstance.start();
 
     pollux = agent.pollux;
   });
@@ -354,7 +353,6 @@ describe("Agent Tests", () => {
 
       describe("Should create a credential request from a valid didcomm CredentialOffer Message", () => {
         it(`CredentialType [${CredentialType.AnonCreds}]`, async () => {
-          const anonCreds = await AnoncredsLoader.getInstance();
           const linkSecret = Fixtures.Credentials.Anoncreds.linkSecret;
 
           sandbox

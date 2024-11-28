@@ -24,7 +24,7 @@ class Connection {
     public readonly issuerMeta: OIDC.IssuerMetadata,
     public readonly scopes: string[],
     public readonly tokenResponse: TokenResponse,
-  ) { }
+  ) {}
 }
 
 // TODO make startable interface
@@ -47,9 +47,15 @@ export class OIDCAgent {
     public readonly seed?: Domain.Seed,
     public readonly api?: Domain.Api,
   ) {
-    this.pollux = new Pollux(apollo, castor);
     this.seed = seed ?? apollo.createRandomSeed().seed;
     this.api = api ?? new FetchApi();
+    this.pollux = new Pollux({
+      Apollo: this.apollo,
+      Castor: this.castor,
+      Pluto: this.pluto,
+      Seed: this.seed,
+      Api: this.api,
+    });
   }
 
   /**
@@ -85,14 +91,14 @@ export class OIDCAgent {
     if (this.state === AgentState.STOPPED) {
       this.state = AgentState.STARTING;
       await this.pluto.start();
-      await this.pollux.start();
+      // await this.pollux.start();
       this.state = AgentState.RUNNING;
     }
     return this.state;
   }
 
   async stop(): Promise<void> {
-    this.state = AgentState.STOPPED
+    this.state = AgentState.STOPPED;
   }
 
   private runTask<T>(task: Task<T>): Promise<T> {
@@ -126,7 +132,7 @@ export class OIDCAgent {
    * @returns {AttributeType}
    */
   revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    return this.pollux.revealCredentialFields(credential, fields);
   }
 
   /**

@@ -31,7 +31,7 @@ export default class Agent {
    */
   public state: AgentState = AgentState.STOPPED;
   public backup: AgentBackup;
-  public readonly pollux: Pollux;
+  public readonly pollux: Domain.Pollux;
 
   /**
    * Creates an instance of Agent.
@@ -50,8 +50,15 @@ export default class Agent {
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
     public readonly api: Domain.Api = new FetchApi(),
   ) {
-    this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
+    // this.pollux = new Pollux(apollo, castor);
+    this.pollux = new Pollux({
+      Apollo: this.apollo,
+      Castor: this.castor,
+      Pluto: this.pluto,
+      Seed: this.seed,
+      Api: this.api,
+    });
   }
 
   /**
@@ -93,7 +100,7 @@ export default class Agent {
     if (this.state === AgentState.STOPPED) {
       this.state = AgentState.STARTING;
       await this.pluto.start();
-      await this.pollux.start();
+      // await this.pollux.start();
     }
 
     return this.state;

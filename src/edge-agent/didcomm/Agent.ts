@@ -82,8 +82,15 @@ export default class DIDCommAgent {
     public readonly api: Domain.Api = new FetchApi(),
     options?: AgentOptions
   ) {
-    this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
+    // this.pollux = new Pollux(apollo, castor);
+    this.pollux = new Pollux({
+      Api: this.api,
+      Apollo: this.apollo,
+      Castor: this.castor,
+      Mercury: this.mercury,
+      Pluto: this.pluto,
+    });
   }
 
   /**
@@ -120,8 +127,15 @@ export default class DIDCommAgent {
     const mercury = params.mercury ?? new Mercury(castor, didcomm, api);
     const store = new PublicMediatorStore(pluto);
     const handler = new BasicMediatorHandler(mediatorDID, mercury, store);
-    const pollux = new Pollux(apollo, castor);
+    // const pollux = new Pollux(apollo, castor);
     const seed = params.seed ?? apollo.createRandomSeed().seed;
+    const pollux = new Pollux({
+      Api: api,
+      Apollo: apollo,
+      Castor: castor,
+      Mercury: mercury,
+      Pluto: pluto,
+    });
 
     const manager = new ConnectionsManager(
       castor,
@@ -147,7 +161,6 @@ export default class DIDCommAgent {
 
     return agent;
   }
-
 
   /**
    * Asyncronously start the agent
@@ -181,12 +194,12 @@ export default class DIDCommAgent {
       throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
     }
 
-    const storedLinkSecret = await this.pluto.getLinkSecret();
-    if (storedLinkSecret == null) {
-      const secret = this.pollux.anoncreds.createLinksecret();
-      const linkSecret = new Domain.LinkSecret(secret);
-      await this.pluto.storeLinkSecret(linkSecret);
-    }
+    // const storedLinkSecret = await this.pluto.getLinkSecret();
+    // if (storedLinkSecret == null) {
+    //   const secret = this.pollux.anoncreds.createLinksecret();
+    //   const linkSecret = new Domain.LinkSecret(secret);
+    //   await this.pluto.storeLinkSecret(linkSecret);
+    // }
 
     return this.state;
   }
@@ -462,7 +475,7 @@ export default class DIDCommAgent {
    * @returns {AttributeType}
    */
   async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    return this.pollux.revealCredentialFields(credential, fields);
   }
 
   /**

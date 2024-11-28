@@ -5,7 +5,7 @@ export { default as Castor } from "./castor/Castor";
 export * as Domain from "./domain";
 export { default as Mercury } from "./mercury/Mercury";
 export * from "./pluto";
-export { default as Pollux } from "./pollux/Pollux";
+export { PlugPol as Pollux } from "./pollux/PlugPol";
 
 // alias DIDCommAgent as Agent to hide breaking changes
 export { default as Agent } from "./edge-agent/didcomm/Agent";

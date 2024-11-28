@@ -97,7 +97,7 @@ async function createSDJWTVerificationTestCase<T extends SdJwtVcPayload>(
     issuerPrv: PrivateKey,
     payload: T,
     presentationFrame: PresentationFrame<T>,
-    disclosure: DisclosureFrame<T>
+    disclosure: DisclosureFrame<T>;
     claims: Claims;
   }
 ) {
@@ -775,7 +775,7 @@ describe("Pollux", () => {
     let apollo: Apollo;
     let castor: Castor;
     let jwt: JWT;
-    let sdJwt: SDJWT
+    let sdJwt: SDJWT;
     let pollux: Pollux;
 
     beforeEach(async () => {
@@ -790,7 +790,7 @@ describe("Pollux", () => {
       apollo = new Apollo();
       castor = new Castor(apollo);
       jwt = new JWT(apollo, castor);
-      sdJwt = new SDJWT(apollo, castor)
+      sdJwt = new SDJWT(apollo, castor);
       pollux = new Pollux(
         apollo,
         castor,

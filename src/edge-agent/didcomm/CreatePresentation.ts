@@ -33,7 +33,7 @@ export class CreatePresentation extends Task<Presentation, Args> {
       await this.handlePresentationDefinitionRequest(ctx, presentationRequest, credential) :
       await this.handlePresentationRequest(ctx, presentationRequest, credential);
 
-    const mimeType = typeof proof !== 'string' ? 'application/json' : undefined
+    const mimeType = typeof proof !== 'string' ? 'application/json' : undefined;
     const presentationAttachment = Domain.AttachmentDescriptor.build(
       proof,
       uuid(),
@@ -66,18 +66,18 @@ export class CreatePresentation extends Task<Presentation, Args> {
     }
     const attachmentFormat = attachment.format ?? 'unknown';
     if (attachmentFormat === Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS) {
-      return Domain.AttachmentFormats.PRESENTATION_EXCHANGE_SUBMISSION
+      return Domain.AttachmentFormats.PRESENTATION_EXCHANGE_SUBMISSION;
     }
     if (credential.credentialType === Domain.CredentialType.AnonCreds) {
-      return Domain.AttachmentFormats.ANONCREDS_PROOF
+      return Domain.AttachmentFormats.ANONCREDS_PROOF;
     }
     if (credential.credentialType === Domain.CredentialType.JWT) {
-      return Domain.AttachmentFormats.JWT
+      return Domain.AttachmentFormats.JWT;
     }
     if (credential.credentialType === Domain.CredentialType.SDJWT) {
-      return Domain.AttachmentFormats.SDJWT
+      return Domain.AttachmentFormats.SDJWT;
     }
-    return undefined
+    return undefined;
   }
 
   /**
@@ -140,7 +140,7 @@ export class CreatePresentation extends Task<Presentation, Args> {
         const { sub } = await ctx.Pollux.revealCredentialFields(
           credential,
           ['subject', 'sub']
-        )
+        );
         const privateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(Domain.DID.fromString(sub));
         const privateKey = privateKeys.at(0);
         if (!privateKey) {
@@ -178,14 +178,14 @@ export class CreatePresentation extends Task<Presentation, Args> {
 
   private async handlePresentationRequest(
     ctx: DIDCommContext,
-    request: PresentationRequest<any>,
+    request: PresentationRequest<any, any>,
     credential: Domain.Credential
   ): Promise<string> {
     if (credential instanceof SDJWTCredential && request.isType(Domain.AttachmentFormats.SDJWT)) {
       if (!credential.isProvable()) {
         throw new Error("Credential is not Provable");
       }
-      const disclosed = await ctx.Pollux.revealCredentialFields(credential, ['subject', 'sub'])
+      const disclosed = await ctx.Pollux.revealCredentialFields(credential, ['subject', 'sub']);
       const subjectDID = Domain.DID.from(disclosed.sub);
 
       const prismPrivateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(subjectDID);
