@@ -124,6 +124,14 @@ export function PageHeader({ children }) {
                     </li>
                     <li>
                         <Link
+                            href="/dids"
+                            className="px-4 py-2 hover:bg-gray-700 rounded"
+                        >
+                            DIDS
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
                             href="/verification"
                             className="px-4 py-2 hover:bg-gray-700 rounded"
                         >

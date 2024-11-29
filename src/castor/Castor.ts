@@ -108,7 +108,7 @@ export default class Castor implements CastorInterface {
     authenticationKeys: (PublicKey)[] = [],
     issuanceKeys: (PublicKey)[] = [],
   ) {
-    function splitStringIntoChunks(input: string, chunkSize: number = 64): string[] {
+    function splitStringIntoChunks(input: string, chunkSize = 64): string[] {
       const buffer = Buffer.from(input, 'utf-8');
       const chunks: string[] = [];
       for (let i = 0; i < buffer.length; i += chunkSize) {
