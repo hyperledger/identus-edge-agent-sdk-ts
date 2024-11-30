@@ -172,7 +172,7 @@ export default class Castor implements CastorInterface {
         key.raw
       )
       const signedOperation = Protos.io.iohk.atala.prism.protos.SignedAtalaOperation.fromObject({
-        signature: signature.toCompactRawBytes(),
+        signature: signature.toDERRawBytes(),
         operation,
         signed_with: masterPk.id
       })
