@@ -56,16 +56,18 @@ export class AgentBackup {
    * If the JWE is compressed (Base64-encoded), it will attempt to decompress it first.
    * 
    * @param {string} jwe - The JWE string containing the encrypted backup data.
-   * @param {MasterKey} [key] - Optional custom master key used for decrypting the JWE. 
-   *                            If not provided, the default master key is used.
+   * @param {BackupOptions} [options] - Optional settings for the backup.
+   * @param {Version} [options.version] - Specifies the version of the restore data.
+   * @param {MasterKey} [options.key] - Custom master key used for decrypting the backup.
+   * @param {boolean} [options.compress] - If true, compresses the JWE using INFLATE.
    * 
    * @returns {Promise<void>} - A promise that resolves when the data is successfully restored.
    * 
    * @see createJWE - Method to create a JWE from the stored backup data.
    */
-  async restore(jwe: string, key?: MasterKey) {
+  async restore(jwe: string, options?: BackupOptions) {
     await this.Agent.pollux.start();
-    const masterSk = key ?? await this.masterSk();
+    const masterSk = options?.key ?? await this.masterSk();
 
     const jwk = masterSk.to.JWK();
     const decoded = this.Agent.pollux.jwe.JWE.decrypt(
@@ -74,19 +76,14 @@ export class AgentBackup {
       JSON.stringify(jwk),
     );
     let jsonStr: string;
-    try {
-      jsonStr = this.decopress(new TextDecoder().decode(decoded));
-    } catch {
+    if (options?.compress) {
+      jsonStr = this.decompress(new TextDecoder().decode(decoded));
+    } else {
       jsonStr = Buffer.from(decoded).toString();
     }    
     const json = JSON.parse(jsonStr);    
     const backup = this.parseBackupJson(json);    
     await this.Agent.pluto.restore(backup);
-  }
-
-  getStringByteLength(str: string) {
-    const encoder = new TextEncoder();
-    return encoder.encode(str).length;
   }
 
   private parseBackupJson(json: unknown): Domain.Backup.Schema {
@@ -133,7 +130,7 @@ export class AgentBackup {
  * @param {string} data - The Base64-encoded compressed string.
  * @returns {string} - The decompressed JSON string.
  */
-  private decopress(data: string): string {
+  private decompress(data: string): string {
     const compressedData = Buffer.from(data, 'base64');
     return JSON.parse(Pako.inflate(compressedData, {to: 'string'}));
   }

@@ -279,7 +279,7 @@ describe("Agent Tests", () => {
 
         test("restore", async () => {
           const stubRestore = sandbox.stub(pluto, "restore");
-          await agent.backup.restore(backupFixture.jwe, backupFixture.options.key);
+          await agent.backup.restore(backupFixture.jwe, backupFixture.options);
           const expected = JSON.parse(JSON.stringify(backupFixture.json));
           expect(stubRestore).to.have.been.calledWith(expected);
         });
@@ -291,7 +291,7 @@ describe("Agent Tests", () => {
           const spyRestore = sandbox.spy(pluto, "restore");
 
           const jwe = await agent.backup.createJWE(backupFixture.options);
-          await agent.backup.restore(jwe, backupFixture.options.key);
+          await agent.backup.restore(jwe, backupFixture.options);
 
           expect(jwe).to.be.a("string");
 
