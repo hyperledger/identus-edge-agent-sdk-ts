@@ -166,6 +166,8 @@ export default class Castor implements CastorInterface {
     });
     const encodedState = operation.serializeBinary();
     const encodedStateHash = (new SHA256()).update(encodedState).digest()
+
+
     if (key.isSignable() && key instanceof Secp256k1PrivateKey) {
       const signature = secp256k1.sign(
         encodedStateHash,
@@ -187,6 +189,8 @@ export default class Castor implements CastorInterface {
       const atalaObjectHex = Buffer.from(
         atalaObject.serialize()
       ).toString('hex');
+
+
       const metadataBody = {
         "v": 1,
         "c": splitStringIntoChunks(atalaObjectHex)
@@ -196,7 +200,7 @@ export default class Castor implements CastorInterface {
       const methodSpecificId = PrismDID.parseMethodId([stateHashHex, base64State]);
       const did = new DID("did", "prism", methodSpecificId.toString());
       return {
-        operationHex: atalaObjectHex,
+        atalaObjectHex: atalaObjectHex,
         metadataBody: metadataBody,
         did
       }
