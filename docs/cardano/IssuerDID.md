@@ -1,3 +1,50 @@
+<p align="center">
+  <a href="https://www.hyperledger.org/projects/identus">
+    <img src="https://cdn.jsdelivr.net/gh/hyperledger/identus@v2.13/resources/images/hyperledger-identus.svg" alt="identus-logo" width="513px" height="99px" />
+  </a>
+  <br>
+  <i> <font size="18">Issuer DID Tutorial</font> </i>
+  <br>
+</p>
+<hr>
+
+# What will u learn in this tutorial?
+
+1. Integrating the [CIP-30](https://cips.cardano.org/cip/CIP-30) Protol to interact with existing Cardano Web Wallets in Browsers extensions.
+
+2. Create an internal transaction metadata using [Cardano serialisation lib](https://github.com/Emurgo/cardano-serialization-lib/tree/master)
+
+3. Submit the Transaction on Cardano
+
+4. Resolve the DID we just created using the [Prism resolver](https://neoprism.patlo.dev/resolver)
+
+## Pre requisites
+
+This tutorial is developed using React application and nextJS + Typescript.
+
+You will need to create a [blockfrost](https://blockfrost.io/dashboard) API token and a project.
+
+Install the following packages into your project
+
+```
+npm i @hyperledger/identus-edge-agent-sdk -S
+npm i @cardano-sdk/dapp-connector -S
+npm i @emurgo/cardano-serialization-lib-browser -S
+```
+
+## Getting started
+
+First configure your environmnet, create a .env.local file in the app directory and add:
+
+```
+NEXT_PUBLIC_BLOCKFROST_API_KEY=[[ your blockfrost api key]]
+```
+
+You can see this in realtime working in our [next js demo](https://github.com/hyperledger/identus-edge-agent-sdk-ts/tree/main/demos/next) follow the required steps in the README.md file.
+
+Once you load the website using the menu, click "DIDS". You will be able to select the Wallet of your choice to create the Cardano transaction for a published did. You can do by following the UI/UX steps or by checking the following example source-code:
+
+```typescript
 import React, { useEffect, useState } from "react";
 import SDK from "@hyperledger/identus-edge-agent-sdk";
 import '../app/index.css'
@@ -412,3 +459,4 @@ const Agent: React.FC<{}> = props => {
 };
 
 export default Agent;
+```
