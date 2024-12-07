@@ -150,6 +150,7 @@ export const backups : { title: string, json: Schema, options: BackupOptions, jw
       version: '0.0.1',
       compress: true,
       key: masterKeyExample as any,
+      excludes: ['messages', 'mediators', 'link_secret'],
     },
     json: {
       credentials: [
