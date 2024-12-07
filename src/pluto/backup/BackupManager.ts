@@ -42,20 +42,16 @@ export class BackupManager {
     switch (version) {
       case "0.0.1":
         return new Versions.v0_0_1.BackupTask(this.Pluto, this.Repositories);
-      case "0.0.2":
-        return new Versions.v0_0_2.BackupTask(this.Pluto, this.Repositories);
     }
 
     throw new Domain.PlutoError.BackupNotFoundError();
   }
 
   private getRestoreTask(backup: Domain.Backup.Schema): IRestoreTask {
-    backup.version = backup.version ?? Domain.Backup.defaultVersion;
-    switch (backup.version) {
+    const version = backup.version ?? Domain.Backup.defaultVersion;
+    switch (version) {
       case "0.0.1":
         return new Versions.v0_0_1.RestoreTask(this.Pluto, backup);
-      case "0.0.2":
-        return new Versions.v0_0_2.RestoreTask(this.Pluto, backup);
     }
 
     throw new Domain.PlutoError.RestoreNotFoundError();

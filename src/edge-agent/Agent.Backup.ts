@@ -95,10 +95,6 @@ export class AgentBackup {
             return json;
           }
           break;
-        case "0.0.2":
-          if (validateSafe(json, Domain.Backup.v0_0_2)) {
-            return json;
-          }
       }
     }
 
