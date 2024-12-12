@@ -1,22 +1,35 @@
-import { JWTCredential } from "../../pollux/models/JWTVerifiableCredential";
-import { JWTCore } from "./jwt/JWTCore";
 import { base64url } from "multiformats/bases/base64";
-import { JsonObj, isNil } from "../../utils";
-import * as Domain from "../../domain";
+import * as Domain from "../../../domain";
+import { JWTCredential } from "../../models/JWTVerifiableCredential";
+import { Task, isNil } from "../../../utils";
+import { CreateJWT } from "./CreateJwt";
+import { PKInstance } from "./PKInstance";
+import { ResolveDID } from "./ResolveDID";
 
-export class JWT extends JWTCore {
+
+export class JWT extends Task.Runner {
+  clone() {
+    return new JWT();
+  }
+
   async decode(jws: string) {
     return Domain.JWT.decode(jws);
   }
 
-  async sign(options: {
-    issuerDID: Domain.DID,
-    privateKey: Domain.PrivateKey,
+  /**
+   * Creates a signed JWT from a DID and Key
+   * 
+   * @param issuer 
+   * @param privateKey 
+   * @param payload 
+   * @returns 
+   */
+  signWithDID(
+    did: Domain.DID,
     payload: Partial<Domain.JWT.Payload>,
-    header?: JsonObj,
-  }): Promise<string> {
-    const { issuerDID, privateKey, payload, header } = options;
-    return Domain.JWT.sign(issuerDID, privateKey, payload, header);
+    header?: Partial<Domain.JWT.Header>
+  ): Promise<string> {
+    return this.runTask(new CreateJWT({ did, payload, header }));
   }
 
   async verify(options: {
@@ -26,8 +39,9 @@ export class JWT extends JWTCore {
   }): Promise<boolean> {
     try {
       const { issuerDID, jws, holderDID } = options;
-      const resolved = await this.resolve(issuerDID.toString());
+      const resolved = await this.runTask(new ResolveDID({ did: issuerDID.toString() }));
       const verificationMethods = resolved.didDocument?.verificationMethod;
+
       if (!verificationMethods) {
         throw new Error("Invalid did document");
       }
@@ -42,9 +56,11 @@ export class JWT extends JWTCore {
       }
 
       const decoded = await this.decode(jws);
-      const verified = verificationMethods.some(vm => {
+      let verified = true;
+
+      for (const vm of verificationMethods) {
         try {
-          const pk = this.getPKInstance(vm);
+          const pk = await this.runTask(new PKInstance({ verificationMethod: vm }));
 
           if (isNil(pk) || !pk.canVerify()) {
             throw new Error("Invalid key verification method type found");
@@ -52,12 +68,15 @@ export class JWT extends JWTCore {
 
           const decodedSignature = base64url.baseDecode(decoded.signature);
           const passed = pk.verify(Buffer.from(decoded.data), Buffer.from(decodedSignature));
-          return passed;
+
+          if (!passed) {
+            throw new Error("failed");
+          }
         }
         catch {
-          return false;
+          verified = false;
         }
-      });
+      }
 
       return verified;
     } catch {

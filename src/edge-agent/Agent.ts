@@ -7,6 +7,7 @@ import { SignWithDID } from "./didFunctions/Sign";
 import { CreatePrismDID } from "./didFunctions/CreatePrismDID";
 import { FetchApi } from "./helpers/FetchApi";
 import { Task } from "../utils/tasks";
+import { RevealCredentialFields } from "./helpers/RevealCredentialFields";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -31,7 +32,7 @@ export default class Agent {
    */
   public state: AgentState = AgentState.STOPPED;
   public backup: AgentBackup;
-  public readonly pollux: Pollux;
+  public readonly pollux: Domain.Pollux;
 
   /**
    * Creates an instance of Agent.
@@ -50,8 +51,15 @@ export default class Agent {
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
     public readonly api: Domain.Api = new FetchApi(),
   ) {
-    this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
+    // this.pollux = new Pollux(apollo, castor);
+    this.pollux = new Pollux({
+      Apollo: this.apollo,
+      Castor: this.castor,
+      Pluto: this.pluto,
+      Seed: this.seed,
+      Api: this.api,
+    });
   }
 
   /**
@@ -93,7 +101,7 @@ export default class Agent {
     if (this.state === AgentState.STOPPED) {
       this.state = AgentState.STARTING;
       await this.pluto.start();
-      await this.pollux.start();
+      // await this.pollux.start();
     }
 
     return this.state;
@@ -121,15 +129,16 @@ export default class Agent {
    * @returns {AttributeType}
    */
   async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    const task = new RevealCredentialFields({ credential, fields });
+    return this.runTask(task);
   }
 
   isCredentialRevoked(credential: Domain.Credential) {
-    return this.pollux.isCredentialRevoked(credential);
+    return this.pollux.handle("revocation-check", "prism/jwt", credential);
   }
 
   private runTask<T>(task: Task<T>) {
-    const ctx = new Task.Context({
+    const ctx = Task.Context.make({
       Api: this.api,
       Apollo: this.apollo,
       Castor: this.castor,

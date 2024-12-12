@@ -1,13 +1,16 @@
+import jweWasm from "jwe-wasm/jwe_rust_bg.wasm";
 import * as Domain from "../domain";
 import Agent from "./Agent";
-import { isObject, validateSafe } from "../utils";
+import { isNil, isObject, validateSafe } from "../utils";
 
 /**
  * define Agent requirements for Backup
  */
-type BackupAgent = Pick<Agent, "apollo" | "pluto" | "pollux" | "seed">;
+type BackupAgent = Pick<Agent, "apollo" | "pluto" | "seed">;
 
 export class AgentBackup {
+  private _jwe: typeof import("jwe-wasm") | undefined;
+
   constructor(
     public readonly Agent: BackupAgent
   ) {}
@@ -19,16 +22,16 @@ export class AgentBackup {
    * @see restore
    */
   async createJWE(): Promise<string> {
-    await this.Agent.pollux.start();
     const backup = await this.Agent.pluto.backup();
     const masterSk = await this.masterSk();
     const jwk = masterSk.to.JWK();
-    const jwe = this.Agent.pollux.jwe.JWE.encrypt(
+    const JWE = await this.getJWE();
+    const encrypted = JWE.encrypt(
       JSON.stringify(backup),
       JSON.stringify(jwk),
       'backup'
     );
-    return jwe;
+    return encrypted;
   }
 
   /**
@@ -38,10 +41,10 @@ export class AgentBackup {
    * @see backup
    */
   async restore(jwe: string) {
-    await this.Agent.pollux.start();
     const masterSk = await this.masterSk();
     const jwk = masterSk.to.JWK();
-    const decoded = this.Agent.pollux.jwe.JWE.decrypt(
+    const JWE = await this.getJWE();
+    const decoded = JWE.decrypt(
       jwe,
       'backup',
       JSON.stringify(jwk)
@@ -81,5 +84,16 @@ export class AgentBackup {
       throw new Domain.AgentError.KeyNotExportableError();
     }
     return masterKey;
+  }
+
+  private async getJWE() {
+    if (isNil(this._jwe)) {
+      const module = await import("jwe-wasm");
+      const wasmInstance = module.initSync({ module: jweWasm });
+      await module.default(wasmInstance);
+      this._jwe = module;
+    }
+
+    return this._jwe.JWE;
   }
 }

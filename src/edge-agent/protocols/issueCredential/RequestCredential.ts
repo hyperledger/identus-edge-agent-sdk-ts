@@ -3,7 +3,6 @@ import { uuid } from "@stablelib/uuid";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
-import { CredentialFormat } from "./CredentialFormat";
 import { CredentialBody } from "../types";
 import { parseCredentialAttachments, parseCredentialBody } from "../../helpers/ProtocolHelpers";
 
@@ -60,26 +59,13 @@ export class RequestCredential {
     credentials: Map<string, T> = new Map()
   ): RequestCredential {
     const { formats, attachments } = parseCredentialAttachments(credentials);
-    const requestCredentialBody = createRequestCredentialBody(formats);
 
     return new RequestCredential(
-      requestCredentialBody,
+      { formats },
       attachments,
       fromDID,
       toDID,
       thid
     );
   }
-}
-
-export function createRequestCredentialBody(
-  formats: CredentialFormat[],
-  goalCode?: string,
-  comment?: string
-): CredentialBody {
-  return {
-    formats,
-    goalCode,
-    comment,
-  };
 }

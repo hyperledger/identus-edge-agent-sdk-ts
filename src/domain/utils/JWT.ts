@@ -1,8 +1,6 @@
-import { JWTPayload, Signer, createJWT } from "did-jwt";
+import { JWTPayload } from "did-jwt";
 import { base64url } from "multiformats/bases/base64";
-import { DID, PrivateKey } from "..";
-import { asJsonObj, isNil } from "../../utils/guards";
-// ??? shouldnt be importing Pollux error
+import { isNil } from "../../utils/guards";
 import { InvalidJWTString } from "../models/errors/Pollux";
 
 export namespace JWT {
@@ -21,42 +19,21 @@ export namespace JWT {
     data: string;
   }
 
+  export enum Claims {
+    iss = "iss",
+    sub = "sub",
+    aud = "aud",
+    nbf = "nbf",
+    exp = "exp",
+    iat = 'iat',
+    jti = "jti",
+    // rexp
+  }
 
-  /**
-   * Creates a signed JWT 
-   * 
-   * @param issuer 
-   * @param privateKey 
-   * @param payload 
-   * @returns 
-   */
-  export const sign = async (
-    issuer: DID,
-    privateKey: PrivateKey,
-    payload: Partial<Payload>,
-    header?: Partial<Header>
-  ): Promise<string> => {
-    if (!privateKey.isSignable()) {
-      throw new Error("Key is not signable");
-    }
-
-    const signer: Signer = async (data: any) => {
-      const signature = privateKey.sign(Buffer.from(data));
-      const encoded = base64url.baseEncode(signature);
-      return encoded;
-    };
-
-    const jwt = await createJWT(
-      payload,
-      { issuer: issuer.toString(), signer },
-      { alg: privateKey.alg, ...asJsonObj(header) }
-    );
-
-    return jwt;
-  };
 
   /**
    * decode a JWT into its parts
+   * TODO move this to JWT component - needs removing from JWTCredential first
    * 
    * @param jws 
    * @returns 

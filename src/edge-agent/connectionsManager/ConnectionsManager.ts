@@ -1,4 +1,4 @@
-import { DID, Message, MessageDirection, Pollux } from "../../domain";
+import { DID, Message, MessageDirection } from "../../domain";
 import { Castor } from "../../domain/buildingBlocks/Castor";
 import { Mercury } from "../../domain/buildingBlocks/Mercury";
 import { Pluto } from "../../domain/buildingBlocks/Pluto";
@@ -18,6 +18,7 @@ import { RevocationNotification } from "../protocols/revocation/RevocationNotfii
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { HandleIssueCredential } from "../didcomm/HandleIssueCredential";
 import { Task } from "../../utils/tasks";
+import PlugPol from "../../pollux";
 
 
 /**
@@ -71,7 +72,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     public castor: Castor,
     public mercury: Mercury,
     public pluto: Pluto,
-    public pollux: Pollux,
+    public pollux: PlugPol,
     public mediationHandler: MediatorHandler,
     public pairings: DIDPair[] = [],
     public options?: AgentOptions
@@ -161,7 +162,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         if (matchingMessages.length > 0) {
           for (const message of matchingMessages) {
             const issueCredential = IssueCredential.fromMessage(message);
-            const ctx = new Task.Context({ Pluto: this.pluto, Pollux: this.pollux });
+            const ctx = Task.Context.make({ Pluto: this.pluto, Pollux: this.pollux });
             const task = new HandleIssueCredential({ issueCredential });
             const credential = await ctx.run(task);
 
