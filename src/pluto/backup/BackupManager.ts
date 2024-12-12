@@ -4,6 +4,7 @@ import { Pluto } from "../Pluto";
 import { PlutoRepositories } from "../repositories";
 import { isEmpty } from "../../utils";
 import { IBackupTask, IRestoreTask } from "./versions/interfaces";
+import { Version } from "../../domain/backup";
 
 /**
  * BackupManager
@@ -21,7 +22,7 @@ export class BackupManager {
    * @param version - backup schema version
    * @returns {Promise<Domain.Backup.Schema>}
    */
-  backup(version?: string) {
+  backup(version?: Version) {
     const task = this.getBackupTask(version);
     return task.run();
   }
@@ -37,7 +38,7 @@ export class BackupManager {
     await task.run();
   }
 
-  private getBackupTask(version: string = Domain.Backup.defaultVersion): IBackupTask {
+  private getBackupTask(version: Version = Domain.Backup.defaultVersion): IBackupTask {
     switch (version) {
       case "0.0.1":
         return new Versions.v0_0_1.BackupTask(this.Pluto, this.Repositories);
@@ -48,7 +49,6 @@ export class BackupManager {
 
   private getRestoreTask(backup: Domain.Backup.Schema): IRestoreTask {
     const version = backup.version ?? Domain.Backup.defaultVersion;
-
     switch (version) {
       case "0.0.1":
         return new Versions.v0_0_1.RestoreTask(this.Pluto, backup);
