@@ -2,9 +2,16 @@ import { JsonObj } from "../../../utils";
 
 // Open Enterprise Agent specific
 export namespace OEA {
-  export const JWT_VC = 'jwt_vc';
-  export const JWT_VP = 'jwt_vp';
-  export const SDJWT = "sdjwt";
+  export const PRISM_JWT = "prism/jwt";
+  export const PRISM_SDJWT = "vc+sd-jwt";
+
+  export interface CredentialOffer {
+    options: {
+      challenge: string;
+      domain: string;
+    };
+  }
+
 
   export enum DescriptorItemFormat {
     JWT_VC = 'jwt_vc',
@@ -12,10 +19,49 @@ export namespace OEA {
     SDJWT = 'sdjwt',
   }
 
+  export type JWTPresentationClaims = {
+    schema?: string;
+    issuer?: string;
+    claims: JsonObj<InputFieldFilter>;
+  };
+
+  export type SDJWTPresentationClaims = {
+    schema?: string;
+    issuer?: string;
+    claims: JsonObj<InputFieldFilter>;
+  };
+
+  export type SDJWTPresentationSubmission = {
+    disclosures: any[],
+    protected: string,
+    payload: string,
+    signature: string;
+  };
+
+  export interface PresentationSubmission {
+    presentation_submission: {
+      id: string;
+      definition_id: string;
+      descriptor_map: DescriptorItem[];
+    };
+    verifiablePresentation: string[];
+  }
+
+  export interface DescriptorItem {
+    id: string;
+    format: string;
+    path: string;
+    path_nested?: DescriptorItem;
+  }
+
   export interface PresentationRequest {
+    options: {
+      challenge: string;
+      domain: string;
+    };
     presentation_definition: {
-      id: string,
-      input_descriptors: InputDescriptor[],
+      id: string;
+      input_descriptors: InputDescriptor[];
       format?: DefinitionFormat;
     };
   }
@@ -66,59 +112,4 @@ export namespace OEA {
     PREFERRED = "preferred"
   }
 
-  export type JWTPresentationClaims = {
-    schema?: string;
-    issuer?: string;
-    claims: JsonObj<InputFieldFilter>;
-  };
-
-
-  export type SDJWTPresentationClaims = {
-    schema?: string;
-    issuer?: string;
-    claims: JsonObj<InputFieldFilter>;
-  };
-
-  export interface PresentationSubmission {
-    presentation_submission: {
-      id: string;
-      definition_id: string;
-      descriptor_map: DescriptorItem[];
-    };
-    verifiablePresentation: string[];
-  }
-
-  export interface DescriptorItem {
-    id: string;
-    format: string;
-    path: string;
-    path_nested?: DescriptorItem;
-  }
-
-  export type PresentationExchangeDefinitionRequest = {
-    presentation_definition: {
-      id: string,
-      input_descriptors: OEA.InputDescriptor[],
-      format?: OEA.DefinitionFormat;
-    };
-  };
-
-
-
-
-  export type SDJWTPresentationExchangeSubmission = {
-    presentation_submission: {
-      id: string,
-      definition_id: string,
-      descriptor_map: DescriptorItem[];
-    },
-    verifiablePresentation: string[],
-  };
-
-  export type SDJWTPresentationSubmission = {
-    disclosures: any[],
-    protected: string,
-    payload: string,
-    signature: string;
-  };
 }

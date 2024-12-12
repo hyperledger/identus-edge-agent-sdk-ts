@@ -18,7 +18,7 @@ describe("OIDC Tasks", () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    ctx = new Task.Context({
+    ctx = Task.Context.make({
       Api: { request: vi.fn() }
     });
   });
@@ -28,7 +28,7 @@ describe("OIDC Tasks", () => {
   });
 
   describe("parseCredentialOffer", () => {
-    test("valid offer - json - returns offer", async () => {
+    test.only("valid offer - json - returns offer", async () => {
       const task = new ParseCredentialOffer({ value: Fixtures.OIDC.credentialOfferJson });
       const result = await ctx.run(task);
       expect(result).to.deep.eq(Fixtures.OIDC.credentialOfferJson);

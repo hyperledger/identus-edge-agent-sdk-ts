@@ -1,28 +1,11 @@
-// TODO remove this when Pollux breaking changes come through
+// TODO remove this when removing fn from Agent
 import { OEA } from "../../pollux/plugins/oea/types";
-import {
-  Claims as ACClaims,
-  PresentationRequest as ACPresReq,
-  PresentationSubmission as ACPresSub
-} from "../../pollux/plugins/anoncreds/types";
-import { JsonObj } from "../../utils";
+import { Claims as ACClaims } from "../../pollux/plugins/anoncreds/types";
 
 export type PresentationClaims<T extends CredentialType = CredentialType.JWT> =
   T extends CredentialType.JWT ? OEA.JWTPresentationClaims :
   T extends CredentialType.SDJWT ? OEA.SDJWTPresentationClaims :
   T extends CredentialType.AnonCreds ? ACClaims :
-  never;
-
-export type PresentationDefinitionRequest<T extends CredentialType = CredentialType.JWT> =
-  T extends CredentialType.JWT ? OEA.PresentationExchangeDefinitionRequest :
-  T extends CredentialType.SDJWT ? OEA.PresentationExchangeDefinitionRequest :
-  T extends CredentialType.AnonCreds ? ACPresReq :
-  never;
-
-export type PresentationSubmission<T extends CredentialType = CredentialType.JWT> =
-  T extends CredentialType.JWT ? OEA.PresentationSubmission :
-  T extends CredentialType.SDJWT ? OEA.PresentationSubmission :
-  T extends CredentialType.AnonCreds ? ACPresSub :
   never;
 // ODOT
 
@@ -103,65 +86,3 @@ export type W3CVerifiablePresentationProof = {
   challenge: string,
   domain: string;
 };
-
-
-// TODO remove with breaking changes
-export class PresentationOptions {
-  constructor(
-    private data: any = {},
-    private type: CredentialType = CredentialType.JWT
-  ) {}
-
-  get options() {
-    if (this.type === CredentialType.AnonCreds) {
-      return new AnoncredsPresentationOptions(this.data);
-    }
-    if (this.type === CredentialType.JWT) {
-      return new JWTPresentationOptions(this.data);
-    }
-    if (this.type === CredentialType.SDJWT) {
-      return new SDJWPresentationOptions(this.data);
-    }
-    throw new Error("Not supported" + this.type);
-  }
-}
-
-export class AnoncredsPresentationOptions {
-  constructor(_data: any) {}
-}
-
-interface PresentationJWTOptions {
-  jwtAlg?: string[],
-}
-
-export class SDJWPresentationOptions {
-  public name: string;
-  public purpose: string;
-  public sdjwt?: PresentationJWTOptions;
-
-  constructor(options: JsonObj) {
-    this.name = options.name ?? "Presentation";
-    this.purpose = options.purpose ?? "Verifying Credentials";
-    this.sdjwt = options.sdjwt ?? {
-      jwtAlg: [JWT_ALG.EdDSA],
-    };
-  }
-}
-
-export class JWTPresentationOptions {
-  public name: string;
-  public purpose: string;
-  public challenge: string;
-  public domain: string;
-  public jwt?: PresentationJWTOptions;
-
-  constructor(options: JsonObj) {
-    this.name = options.name ?? "Presentation";
-    this.purpose = options.purpose ?? "Verifying Credentials";
-    this.challenge = options.challenge;
-    this.domain = options.domain ?? 'N/A';
-    this.jwt = options.jwt ?? {
-      jwtAlg: [JWT_ALG.ES256K],
-    };
-  }
-}

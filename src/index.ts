@@ -50,7 +50,9 @@ export * from "./apollo/utils/X25519KeyPair";
 export * from "./pollux/models/AnonCredsVerifiableCredential";
 export * from "./pollux/models/JWTVerifiableCredential";
 export * from "./pollux/models/SDJWTVerifiableCredential";
-
-export { isPresentationDefinitionRequestType } from './pollux/utils/claims';
-
 export { KeyProperties } from "./domain/models/KeyProperties";
+
+import AnoncredsModule from "./pollux/plugins/anoncreds/Plugin";
+export const Modules = {
+  Anoncreds: AnoncredsModule
+};

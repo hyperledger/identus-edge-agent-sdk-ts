@@ -13,6 +13,7 @@ import * as DIDfns from "../didFunctions";
 import * as Tasks from "./tasks";
 import * as Errors from "./errors";
 import { JsonObj, expect } from "../../utils";
+import { RevealCredentialFields } from "../helpers/RevealCredentialFields";
 
 /**
  * https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
@@ -102,7 +103,7 @@ export class OIDCAgent {
   }
 
   private runTask<T>(task: Task<T>): Promise<T> {
-    const ctx = new Task.Context({
+    const ctx = Task.Context.make({
       Api: this.api,
       Apollo: this.apollo,
       Castor: this.castor,
@@ -120,7 +121,7 @@ export class OIDCAgent {
    * @returns 
    */
   isCredentialRevoked(credential: Domain.Credential) {
-    return this.pollux.isCredentialRevoked(credential);
+    return this.pollux.handle("revocation-check", "prism/jwt", credential);
   }
 
   /**
@@ -132,7 +133,8 @@ export class OIDCAgent {
    * @returns {AttributeType}
    */
   revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields);
+    const task = new RevealCredentialFields({ credential, fields });
+    return this.runTask(task);
   }
 
   /**

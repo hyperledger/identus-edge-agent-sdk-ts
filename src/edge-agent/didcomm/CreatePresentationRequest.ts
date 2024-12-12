@@ -13,74 +13,30 @@ interface Args {
 
 export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
   async run(ctx: DIDCommContext) {
+    // TODO temp workaround until functions removed
     const { claims, toDID, type } = this.args;
     const didDocument = await ctx.Castor.resolveDID(toDID.toString());
     const peerDIDTask = new CreatePeerDID({ services: didDocument.services, updateMediator: true });
     const newPeerDID = await ctx.run(peerDIDTask);
+
     if (type === Domain.CredentialType.AnonCreds) {
-      if (!validatePresentationClaims(claims, Domain.CredentialType.AnonCreds)) {
-        throw new Domain.PolluxError.InvalidPresentationDefinitionError("Anoncreds Claims are invalid");
-      }
-
-      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
-        type,
-        claims,
-        new Domain.PresentationOptions({}, Domain.CredentialType.AnonCreds)
-      );
+      const presentationDefinition = await ctx.Anoncreds.createPresentationDefinition(claims as any);
 
       return this.createRequest(
         type,
-        presentationDefinitionRequest,
+        presentationDefinition,
         newPeerDID,
         toDID
       );
     }
 
-    if (type === Domain.CredentialType.SDJWT) {
-      if (!validatePresentationClaims(claims, Domain.CredentialType.SDJWT)) {
-        throw new Domain.PolluxError.InvalidPresentationDefinitionError("SD+JWT Claims are invalid");
-      }
-      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
-        type,
-        claims,
-        new Domain.PresentationOptions({
-          sdjwt: {
-            jwtAlg: [
-              Domain.curveToAlg(Domain.Curve.SECP256K1)
-            ]
-          },
-          challenge: "Sign this text " + uuid(),
-          domain: 'N/A'
-        }, type)
-      );
-      return this.createRequest(
-        type,
-        presentationDefinitionRequest,
-        newPeerDID,
-        toDID
-      );
-    }
-
-    if (type === Domain.CredentialType.JWT) {
-      if (!validatePresentationClaims(claims, Domain.CredentialType.JWT)) {
-        throw new Domain.PolluxError.InvalidPresentationDefinitionError("JWT Claims are invalid");
-      }
-
-      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
-        type,
-        claims,
-        new Domain.PresentationOptions({
-          jwt: {
-            jwtAlg: [Domain.curveToAlg(Domain.Curve.SECP256K1)]
-          },
-          challenge: "Sign this text " + uuid(),
-          domain: 'N/A'
-        }, type)
-      );
+    if (type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT) {
+      const claimsCast = claims as Domain.PresentationClaims<Domain.CredentialType.JWT>;
+      const presentationDefinition = await ctx.DIF.createPresentationDefinition(claimsCast.claims, claimsCast);
 
       return this.createRequest(
         type,
-        presentationDefinitionRequest,
+        presentationDefinition,
         newPeerDID,
         toDID
       );
@@ -91,13 +47,13 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
 
   private createRequest(
     type: Domain.CredentialType,
-    definition: Domain.PresentationDefinitionRequest<any>,
+    definition: any,
     from: Domain.DID,
     to: Domain.DID
   ) {
-    const attachmentFormat = type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT ?
-      Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS :
-      Domain.AttachmentFormats.ANONCREDS_PROOF_REQUEST;
+    const attachmentFormat = type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT
+      ? "dif/presentation-exchange/definitions@v1.0"
+      : "anoncreds/proof-request@v1.0";
 
     return new RequestPresentation(
       {
@@ -117,43 +73,4 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
       uuid()
     );
   }
-}
-
-// TODO this belongs in Pollux?
-function validatePresentationClaims<T extends Domain.CredentialType>(claims: any, type: T): claims is Domain.PresentationClaims<T> {
-  if (type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT) {
-    if (claims.schema && typeof claims.schema !== 'string') {
-      return false;
-    }
-    if (claims.issuer && typeof claims.issuer !== 'string') {
-      return false;
-    }
-    if (!claims.claims) {
-      return false;
-    }
-    Object.keys(claims.claims).forEach((field) => {
-      const filter = claims.claims[field];
-
-      if (!filter.type || typeof filter.type !== 'string') {
-        return false;
-      }
-      if (filter.pattern && typeof filter.pattern !== 'string') {
-        return false;
-      }
-      if (filter.pattern && typeof filter.pattern !== 'string') {
-        return false;
-      }
-      if (filter.enum && Array.isArray(filter.enum)) {
-        return false;
-      }
-      if (filter.const && Array.isArray(filter.const)) {
-        return false;
-      }
-      if (filter.value && typeof filter.value !== 'string' && typeof filter.value !== 'number') {
-        return false;
-      }
-    });
-  }
-  //Anoncreds validation is better handled by anoncreds-loader
-  return true;
 }

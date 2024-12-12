@@ -7,6 +7,7 @@ import { SignWithDID } from "./didFunctions/Sign";
 import { CreatePrismDID } from "./didFunctions/CreatePrismDID";
 import { FetchApi } from "./helpers/FetchApi";
 import { Task } from "../utils/tasks";
+import { RevealCredentialFields } from "./helpers/RevealCredentialFields";
 
 enum AgentState {
   STOPPED = "stopped",
@@ -128,15 +129,16 @@ export default class Agent {
    * @returns {AttributeType}
    */
   async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    const task = new RevealCredentialFields({ credential, fields });
+    return this.runTask(task);
   }
 
   isCredentialRevoked(credential: Domain.Credential) {
-    return this.pollux.isCredentialRevoked(credential);
+    return this.pollux.handle("revocation-check", "prism/jwt", credential);
   }
 
   private runTask<T>(task: Task<T>) {
-    const ctx = new Task.Context({
+    const ctx = Task.Context.make({
       Api: this.api,
       Apollo: this.apollo,
       Castor: this.castor,

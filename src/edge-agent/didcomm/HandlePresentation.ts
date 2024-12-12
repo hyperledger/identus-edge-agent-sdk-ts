@@ -1,5 +1,4 @@
 import * as Domain from "../../domain";
-import { asJsonObj } from "../../utils";
 import { Task } from "../../utils/tasks";
 import { Presentation } from "../protocols/proofPresentation";
 import { ProtocolType } from "../protocols/ProtocolTypes";
@@ -13,6 +12,7 @@ export class HandlePresentation extends Task<boolean, Args> {
   async run(ctx: DIDCommContext) {
     const { presentation } = this.args;
     const attachment = presentation.attachments.at(0);
+
     if (!attachment) {
       throw new Domain.AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing");
     }
@@ -20,18 +20,22 @@ export class HandlePresentation extends Task<boolean, Args> {
       throw new Domain.AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");
     }
 
-    // TODO fix types with validation
-    const presentationSubmission = asJsonObj(attachment.payload) as any;
-    const presentationDefinitionRequest = await this.getPresentationDefinitionByThid(ctx, presentation.thid);
-    const verified = await ctx.Pollux.verifyPresentationSubmission(
-      presentationSubmission,
-      { presentationDefinitionRequest }
+    const presReq = await this.getPresentationRequest(ctx, presentation.thid);
+
+    const verified = await ctx.Pollux.handle(
+      "presentation-verify",
+      attachment.format,
+      {
+        presentation: attachment.payload,
+        presentationRequest: presReq,
+        thid: presentation.thid,
+      }
     );
 
-    return verified;
+    return verified.data;
   }
 
-  private async getPresentationDefinitionByThid(ctx: DIDCommContext, thid: string) {
+  private async getPresentationRequest(ctx: DIDCommContext, thid: string) {
     const allMessages = await ctx.Pluto.getAllMessages();
     const message = allMessages.find((message) => {
       return message.thid === thid && message.piuri === ProtocolType.DidcommRequestPresentation;
@@ -42,8 +46,8 @@ export class HandlePresentation extends Task<boolean, Args> {
       if (!attachment) {
         throw new Domain.AgentError.UnsupportedAttachmentType("Invalid presentation message, attachment missing");
       }
-      const presentationDefinitionRequest = Domain.Message.Attachment.extractJSON(attachment);
-      return presentationDefinitionRequest;
+      const presentationRequest = Domain.Message.Attachment.extractJSON(attachment);
+      return presentationRequest;
     }
 
     throw new Domain.AgentError.UnsupportedAttachmentType("Cannot find any message with that threadID");

@@ -1,9 +1,8 @@
-// import { Anoncreds } from "../domain/models/Anoncreds";
 import type * as Anoncreds from "anoncreds-wasm";
-
-
-
 import wasmBuffer from 'anoncreds-wasm/anoncreds_wasm_bg.wasm';
+import * as Types from "./types";
+import { isNil } from "../../../utils";
+
 /**
  * @class AnoncredsLoader
  * handle loading and access of anoncreds library
@@ -11,140 +10,209 @@ import wasmBuffer from 'anoncreds-wasm/anoncreds_wasm_bg.wasm';
  */
 export class AnoncredsLoader {
   private static instance: AnoncredsLoader;
-  private loaded = false;
   private pkg: typeof Anoncreds | undefined;
 
-  static async getInstance() {
-    if (AnoncredsLoader.instance === undefined) {
-      AnoncredsLoader.instance = new AnoncredsLoader();
-      await this.instance.load();
+  private async getInstance() {
+    if (isNil(AnoncredsLoader.instance)) {
+      AnoncredsLoader.instance = this;
+      await this.load();
     }
+
     return AnoncredsLoader.instance;
   }
 
   private async load() {
-    this.pkg ??= await import("anoncreds-wasm").then(async module => {
-      const wasmInstance = module.initSync({ module: wasmBuffer });
-      await module.default(wasmInstance);
-      return module
-    });
-  }
+    try {
 
-  private get wasm() {
-    if (this.pkg === undefined) {
-      throw new Error("Load wasm first");
+      this.pkg ??= await import("anoncreds-wasm").then(async module => {
+        const wasmInstance = module.initSync({ module: wasmBuffer });
+        await module.default(wasmInstance);
+        return module;
+      });
     }
-    return this.pkg;
+    catch (e) {
+      throw new Error();
+    }
   }
 
-  createLinksecret(): string {
-    return this.wasm.Prover.createLinkSecret().toString();
+  private async wasm() {
+    const instance = await this.getInstance();
+    return instance.pkg!;
   }
 
-  createCredentialRequest(
+  async createLinksecret() {
+    const wasm = await this.wasm();
+    return wasm.Prover.createLinkSecret().toString();
+  }
+
+  async createCredentialRequest(
     credentialOffer: Anoncreds.CredentialOfferType,
     credentialDefinition: Anoncreds.CredentialDefinitionType,
     linkSecret: string,
     linkSecretId: string
-  ): [Anoncreds.CredentialRequestType, Anoncreds.CredentialRequestMetadataType] {
-    const result = this.wasm.Prover.createCredentialRequest(
-      this.wasm.CredentialDefinition.from(credentialDefinition),
-      this.wasm.LinkSecret.fromString(linkSecret),
+  ): Promise<[Anoncreds.CredentialRequestType, Anoncreds.CredentialRequestMetadataType]> {
+    const wasm = await this.wasm();
+    const result = wasm.Prover.createCredentialRequest(
+      wasm.CredentialDefinition.from(credentialDefinition),
+      wasm.LinkSecret.fromString(linkSecret),
       linkSecretId,
-      this.wasm.CredentialOffer.from(credentialOffer),
+      wasm.CredentialOffer.from(credentialOffer),
     );
-    return [result.request.toJSON(), result.metadata.toJSON()]
+    return [result.request.toJSON(), result.metadata.toJSON()];
   }
 
-  processCredential(
+  async processCredential(
     credentialDefinition: Anoncreds.CredentialDefinitionType,
     credential: Anoncreds.CredentialType,
     credentialRequestMeta: Anoncreds.CredentialRequestMetadataType,
     linkSecret: string
-  ): Anoncreds.CredentialType {
-    const result = this.wasm.Prover.processCredential(
-      this.wasm.Credential.from(credential),
-      this.wasm.CredentialRequestMetadata.from(credentialRequestMeta),
-      this.wasm.LinkSecret.fromString(linkSecret),
-      this.wasm.CredentialDefinition.from(credentialDefinition),
+  ): Promise<Anoncreds.CredentialType> {
+    const wasm = await this.wasm();
+    const result = wasm.Prover.processCredential(
+      wasm.Credential.from(credential),
+      wasm.CredentialRequestMetadata.from(credentialRequestMeta),
+      wasm.LinkSecret.fromString(linkSecret),
+      wasm.CredentialDefinition.from(credentialDefinition),
     );
     return result.toJSON();
   }
 
 
-  private loadAnoncredsSchemas(
+  private async loadAnoncredsSchemas(
     schemas: Record<string, Anoncreds.CredentialSchemaType>,
-  ): Record<string, Anoncreds.CredentialSchema> {
+  ): Promise<Record<string, Anoncreds.CredentialSchema>> {
+    const wasm = await this.wasm();
     return Object.keys(schemas).reduce<Record<string, Anoncreds.CredentialSchema>>((all, current) => {
       return {
         ...all,
-        [current]: this.wasm.CredentialSchema.from(schemas[current])
-      }
-    }, {})
+        [current]: wasm.CredentialSchema.from(schemas[current])
+      };
+    }, {});
   }
 
-  private loadAnoncredsDefinitions(
+  private async loadAnoncredsDefinitions(
     definitions: Record<string, Anoncreds.CredentialDefinitionType>,
-  ): Record<string, Anoncreds.CredentialDefinition> {
+  ): Promise<Record<string, Anoncreds.CredentialDefinition>> {
+    const wasm = await this.wasm();
     return Object.keys(definitions).reduce<Record<string, Anoncreds.CredentialDefinition>>((all, current) => {
       return {
         ...all,
-        [current]: this.wasm.CredentialDefinition.from(definitions[current])
-      }
-    }, {})
+        [current]: wasm.CredentialDefinition.from(definitions[current])
+      };
+    }, {});
   }
 
-  createPresentation(
+  async createPresentation(
     presentationRequest: Anoncreds.PresentationRequestType,
     schemas: Record<string, Anoncreds.CredentialSchemaType>,
     credentialDefinitions: Record<string, Anoncreds.CredentialDefinitionType>,
     credential: Anoncreds.CredentialType,
     linkSecret: string
-  ): Anoncreds.PresentationType {
-    return this.wasm.Prover.createPresentation(
-      this.wasm.PresentationRequest.from(presentationRequest),
-      this.wasm.Credential.from(credential),
-      this.wasm.LinkSecret.fromString(linkSecret),
-      this.loadAnoncredsSchemas(schemas),
-      this.loadAnoncredsDefinitions(credentialDefinitions),
+  ): Promise<Anoncreds.PresentationType> {
+    const wasm = await this.wasm();
+    const loadedSchemas = await this.loadAnoncredsSchemas(schemas);
+    const loadedDefinitions = await this.loadAnoncredsDefinitions(credentialDefinitions);
+
+    return wasm.Prover.createPresentation(
+      wasm.PresentationRequest.from(presentationRequest),
+      wasm.Credential.from(credential),
+      wasm.LinkSecret.fromString(linkSecret),
+      loadedSchemas,
+      loadedDefinitions,
     ).toJSON();
   }
 
-  verifyPresentation(
+  async verifyPresentation(
     presentation: Anoncreds.PresentationType,
     presentationRequest: Anoncreds.PresentationRequestType,
     schemas: Record<string, Anoncreds.CredentialSchemaType>,
     credentialDefinitions: Record<string, Anoncreds.CredentialDefinitionType>,
-  ): boolean {
-    return this.wasm.Verifier.verifyPresentation(
-      this.wasm.Presentation.from(presentation),
-      this.wasm.PresentationRequest.from(presentationRequest),
-      this.loadAnoncredsSchemas(schemas),
-      this.loadAnoncredsDefinitions(credentialDefinitions),
+  ): Promise<boolean> {
+    const wasm = await this.wasm();
+    const loadedSchemas = await this.loadAnoncredsSchemas(schemas);
+    const loadedDefinitions = await this.loadAnoncredsDefinitions(credentialDefinitions);
+
+    return wasm.Verifier.verifyPresentation(
+      wasm.Presentation.from(presentation),
+      wasm.PresentationRequest.from(presentationRequest),
+      loadedSchemas,
+      loadedDefinitions,
     );
   }
 
-  createPresentationRequest(
+  async createPresentationRequest(
     name: string,
     version: string,
     requested_attributes: Anoncreds.RequestedPredicates,
     requested_predicates: Anoncreds.RequestedAttributes
-  ): Anoncreds.PresentationRequest {
-    return this.wasm.Verifier.createPresentationRequest(
+  ): Promise<Anoncreds.PresentationRequest> {
+    const wasm = await this.wasm();
+    return wasm.Verifier.createPresentationRequest(
       name,
       version,
       requested_attributes,
       requested_predicates
-    )
+    );
   }
 
-  createNonce(): string {
-    return this.wasm.Verifier.createNonce()
+  /**
+   * wrapper to transmute claims into anoncreds
+   * @param claims 
+   * @returns 
+   */
+  async createPresentationDefinition(claims: Types.Claims) {
+    const predicatePaths = Object.keys(claims.predicates ?? {});
+
+    const requestedPredicates = predicatePaths.reduce<Types.RequestedPredicates>((all, predicateName, i) => {
+      const claimPredicate = (claims.predicates ?? {})[predicateName];
+
+      const pType = claimPredicate.$gt ? '>' :
+        claimPredicate.$gte ? '>=' :
+          claimPredicate.$lt ? '<' :
+            claimPredicate.$lte ? '<=' :
+              undefined;
+
+      const pValue = claimPredicate.$gt ? claimPredicate.$gt :
+        claimPredicate.$gte ? claimPredicate.$gte :
+          claimPredicate.$lt ? claimPredicate.$lt :
+            claimPredicate.$lte ? claimPredicate.$lte :
+              undefined;
+
+      if (!pType || !pValue) {
+        throw new Error("TO-DO improve, should return valid ptype");
+      }
+
+      return {
+        ...all,
+        [`${claimPredicate.name}${i > 0 ? '_' + i : ''}`]: {
+          name: claimPredicate.name,
+          p_type: pType,
+          p_value: pValue
+        }
+      };
+    }, {});
+
+    const nonce = await this.createNonce();
+    const presentationRequest: Types.PresentationRequest = {
+      nonce,
+      name: "presentation_request",
+      version: "0.1",
+      requested_attributes: claims.attributes ?? {},
+      requested_predicates: requestedPredicates
+    };
+
+    return presentationRequest;
   }
 
-  isValidPresentation(presentation: Anoncreds.PresentationType) {
+  async createNonce(): Promise<string> {
+    const wasm = await this.wasm();
+    return wasm.Verifier.createNonce();
+  }
+
+  async isValidPresentation(presentation: Anoncreds.PresentationType) {
     try {
-      this.wasm.Presentation.from(presentation)
+      const wasm = await this.wasm();
+      wasm.Presentation.from(presentation);
       return true;
     } catch (err) {
       return false;

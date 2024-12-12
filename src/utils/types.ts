@@ -24,3 +24,10 @@ export type Arrayable<T> = T | T[];
  * where the key does not definitely result in a T
  */
 export type JsonObj<T = any> = Record<string, T | undefined>;
+
+/**
+ * Flatten intersect to show single interface
+ * 
+ * Usage: `type flat = Normalize<A & B>`
+ */
+export type Normalize<T> = T extends object ? { [P in keyof T]: T[P] } : T;

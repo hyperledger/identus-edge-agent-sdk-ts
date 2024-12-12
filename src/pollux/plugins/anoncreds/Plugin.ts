@@ -1,41 +1,24 @@
-import type { CredentialDefinitionType, CredentialSchemaType } from "anoncreds-wasm";
-import * as Domain from "../../../domain";
-import { Pollux } from "../../types";
-import { Task } from "../../../utils";
-import { CreatePresentationProof } from "./CreatePresentationProof";
-import { CreatePresentationRequest } from "./CreatePresentationRequest";
-import { CreatePresentationSubmission } from "./CreatePresentationSubmission";
-import { ParseCredential } from "./ParseCredential";
-import { RevealCredentialFields } from "./RevealCredentialFields";
-import { VerifyPresentationSubmission } from "./VerifyPresentationSubmission";
+import { Plugin } from "../../../plugins";
+import * as Types from "./types";
+
 import { AnoncredsLoader } from "./AnoncredsLoader";
+import { CredentialIssue } from "./CredentialIssue";
+import { CredentialOffer } from "./CredentialOffer";
+import { PresentationRequest } from "./PresentationRequest";
+import { PresentationVerify } from "./PresentationVerify";
 
-export class ACContext extends Task.Context {
-  public readonly Anoncreds = new AnoncredsLoader();
+type MyPlugin = Plugin.ExtractExtension<typeof plugin>;
 
-  async fetchSchema(schemaUri: string) {
-    const response = await this.Api.request("GET", schemaUri);
-    // TODO validate <Anoncreds.CredentialSchemaType>
-    return response.body as CredentialSchemaType;
-  }
-
-  async fetchCredentialDefinition(credentialDefinitionId: string) {
-    const response = await this.Api.request("GET", credentialDefinitionId);
-    // TODO validate <Anoncreds.CredentialSchemaType> & move to standalone task
-    return response.body as CredentialDefinitionType;
-  }
+declare module "../../../utils/tasks" {
+  interface Extension extends MyPlugin {}
 }
 
-export const Plugin: Pollux.Plugin = {
-  type: Domain.CredentialType.AnonCreds,
-  // version: "",
-  context: ACContext,
-  tasks: [
-    CreatePresentationProof,
-    CreatePresentationRequest,
-    CreatePresentationSubmission,
-    ParseCredential,
-    RevealCredentialFields,
-    VerifyPresentationSubmission,
-  ],
-};
+const plugin = new Plugin()
+  .extend("Anoncreds", new AnoncredsLoader());
+
+plugin.register(Types.CREDENTIAL_ISSUE, CredentialIssue);
+plugin.register(Types.CREDENTIAL_OFFER, CredentialOffer);
+plugin.register(Types.PRESENTATION, PresentationVerify);
+plugin.register(Types.PRESENTATION_REQUEST, PresentationRequest);
+
+export default plugin;
