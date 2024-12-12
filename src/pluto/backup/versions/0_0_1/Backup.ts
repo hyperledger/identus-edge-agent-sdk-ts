@@ -68,7 +68,6 @@ export class BackupTask implements IBackupTask {
           index: key.index,
           did: did?.uuid,
         };
-
         return acc.concat(backup);
       }
 
