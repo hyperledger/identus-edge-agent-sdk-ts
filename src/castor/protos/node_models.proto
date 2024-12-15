@@ -50,6 +50,17 @@ enum KeyUsage {
     CAPABILITY_DELEGATION_KEY = 7;
 }
 
+message AtalaBlock {
+  reserved 1; // Represents the version of the block. Deprecated
+  repeated SignedAtalaOperation operations = 2; // A signed operation, necessary to post anything on the blockchain.
+}
+
+message AtalaObject {
+  reserved 1, 2, 3; // Removed block_hash field.
+  reserved "block_hash", "block_operation_count", "block_byte_length";
+  AtalaBlock block_content = 4; // The block content.
+}
+
 /**
  * Holds the necessary data to recover an Elliptic Curve (EC)'s public key.
  * @exclude TODO: Consider renaming this to ECPublicKeyData.

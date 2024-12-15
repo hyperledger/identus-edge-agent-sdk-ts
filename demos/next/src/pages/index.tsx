@@ -7,16 +7,14 @@ import { useMountedApp } from "@/reducers/store";
 import { Message } from "@/components/Message";
 import { PageHeader } from "@/components/PageHeader";
 
+
 const ListenerKey = SDK.ListenerKey;
 const Agent: React.FC<{}> = props => {
   const app = useMountedApp();
   const { db, mediatorDID, initAgent } = app;
-
   const agent = app.agent.instance;
-
   const [state, setState] = useState<string>(agent && agent.state !== undefined ? agent.state : "loading");
   const [error] = React.useState<any>();
-
   const [messages, setNewMessage] = React.useState<SDK.Domain.Message[]>([]);
 
   const handleMessages = async (
@@ -45,10 +43,14 @@ const Agent: React.FC<{}> = props => {
     }
   }, [app.agent, db]);
 
+
+
   useEffect(() => {
+
     if (agent) {
       agent.addListener(ListenerKey.MESSAGE, handleMessages);
     }
+
     return () => {
       if (agent) {
         agent.removeListener(ListenerKey.MESSAGE, handleMessages);
@@ -89,7 +91,5 @@ const Agent: React.FC<{}> = props => {
 
   );
 };
-
-
 
 export default Agent

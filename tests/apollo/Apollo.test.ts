@@ -29,7 +29,6 @@ import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/
 import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
 import { DerivationAxis } from "../../src/domain/models/derivation/DerivationAxis";
 import ApolloPKG from "@hyperledger/identus-apollo";
-import { normaliseDER } from "../../src/domain/utils/DER";
 import { hash, hashSync } from '../../src/domain/utils/hash';
 import { randomBytes } from "../../src/domain/utils/randomBytes";
 
@@ -237,10 +236,9 @@ describe("Apollo", () => {
         Int8Array.from(text)
       )
     );
-    const normalisedRaw = normaliseDER(signed);
     const signature = pk.canVerify() && pk.verify(text, signed);
     expect(signature).to.eq(true);
-    const normalisedSignature = pk.canVerify() && pk.verify(text, normalisedRaw);
+    const normalisedSignature = pk.canVerify() && pk.verify(text, signed);
     expect(normalisedSignature).to.eq(true);
   });
 

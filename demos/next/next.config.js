@@ -9,6 +9,11 @@ const nextConfig = {
                 path: false,
             };
         }
+        config.experiments = {
+            ...config.experiments,
+            asyncWebAssembly: true,
+            syncWebAssembly: true
+        }
         return config;
     },
 }
