@@ -1,377 +1,260 @@
-import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
-import * as sinon from "sinon";
-
+import { describe, expect, test } from 'vitest';
 import * as Domain from "../../src/domain";
-import { Apollo, Castor, Pollux, Store } from "../../src";
+import { Store } from "../../src";
 import * as Models from "../../src/pluto/models";
-
-import { addRxPlugin } from "rxdb";
-import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
-
-import InMemory from "../fixtures/inmemory";
-import { makeCollections } from "../../src/pluto/rxdb/collections";
-import * as Fixtures from "../fixtures";
 import { schemaFactory } from "../../src/pluto/models/Schema";
 import { Credential } from "../../src/pluto/models";
-import { CredentialRepository, KeyRepository } from "../../src/pluto/repositories";
+import { addRxPlugin } from "rxdb";
+import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
+import InMemory from "../fixtures/inmemory";
 
 addRxPlugin(RxDBDevModePlugin);
 
-const apollo = new Apollo();
-const castor = new Castor(apollo);
-
-
-let sandbox: sinon.SinonSandbox;
 describe("Pluto", () => {
+  const createStore = (name: string, collections?: any) => {
+    const store = new Store({
+      name: `testingdb_${name}`,
+      password: 'random12434',
+      ignoreDuplicate: true,
+      storage: InMemory,
+    }, collections);
 
-    beforeEach(async () => {
-        sandbox = sinon.createSandbox();
+    return store;
+  };
 
+  describe("Migrations", () => {
+    test("Should migrate old keys to new keys to add the derivationSchema", async () => {
+      const keySchemaV0 = schemaFactory<Models.Key>(schema => {
+        schema.setRequired("recoveryId", "rawHex");
+        schema.addProperty("string", "recoveryId");
+        schema.addProperty("string", "rawHex");
+        schema.addProperty("string", "alias");
+        schema.addProperty("number", "index");
+        schema.setEncrypted("rawHex");
+        schema.setVersion(0);
+      });
+
+      const storeName = "01";
+      const store = createStore(storeName, {
+        keys: { schema: keySchemaV0 }
+      });
+
+      const keyModel = {
+        uuid: "2de42de2-a80e-46bc-bc4c-a8fdd82e420a",
+        recoveryId: "secp256k1+priv",
+        rawHex: "2db6bcbd6be588b4c7b16e54628c79546b69b38b0eaeb13fad8d0776a1c0c0dd",
+      };
+
+      await store.start();
+      await store.insert("keys", keyModel);
+
+      const keys = await store.query("keys");
+      expect(keys).toHaveLength(1);
+
+      const newStore = createStore(storeName);
+      await newStore.start();
+
+      const newKeys = await newStore.query("keys");
+      expect(newKeys).toHaveLength(1);
     });
 
-    afterEach(async () => {
-        sandbox.restore();
+    const credentialSchemaV0 = schemaFactory<Credential>(schema => {
+      schema.addProperty("string", "recoveryId");
+      schema.addProperty("string", "dataJson");
+      schema.addProperty("string", "issuer");
+      schema.addProperty("string", "subject");
+      schema.addProperty("string", "credentialCreated");
+      schema.addProperty("string", "credentialUpdated");
+      schema.addProperty("string", "credentialSchema");
+      schema.addProperty("string", "validUntil");
+      schema.addProperty("boolean", "revoked");
+      schema.setEncrypted("dataJson");
+      schema.setRequired("recoveryId", "dataJson");
+      schema.setVersion(0);
+    });
+    test("Should migrate old anoncreds v0Credentials into v1 credentials", async () => {
+      const storeName = "02";
+      const store = createStore(storeName, {
+        credentials: { schema: credentialSchemaV0 }
+      });
+
+      const expectedId = "573a02645feca44ff2d2e9c8a6dd6ba6e0e42a56e6bf0857b9abbe7fee29054c";
+      const credentialModel = {
+        uuid: "713936f3-6c3d-4438-b543-a0323e39a15c",
+        recoveryId: "anonCreds+credential",
+        dataJson: "{\"revoked\":false,\"schema_id\":\"did:web:xyz/resource/schema\",\"cred_def_id\":\"did:web:xyz/resource/definition\",\"values\":{\"age\":{\"raw\":\"20\",\"encoded\":\"20\"},\"name\":{\"raw\":\"test\",\"encoded\":\"72155939486846849509759369733266486982821795810448245423168957390607644363272\"}},\"signature\":{\"p_credential\":{\"m_2\":\"39702101542446551449599512570205753411910971587693193774973368496099338901770\",\"a\":\"2718470338205757926379713357116130132630608195848785532661868933235964178110376232347164346744724644524242121054948526425734089759584373025648813223749851859530038845351838506042168245505452036526834989207512156424940409624412038988799177223939012719509211520403483879871984121748219743484676789259064502319233012894588826890157557918401726579571185438078182335935119726229771173249334914111652166540255118320113166282542070431330561059636838167476574086959056139244841802400034024366008665053230092211444731035937616962893207367913786448204502631125912581277490325308715800990256310082092637475542478176267968761998\",\"e\":\"259344723055062059907025491480697571938277889515152306249728583105665800713306759149981690559193987143012367913206299323899696942213235956742929817700916329254685999530897448784179\",\"v\":\"8053975388528556509137929461840265504721640627001697506953780310691703021160834517825760183678531903159700443092251539816307634956871956159034730752279815062673592930821045420513913001068302847805831595783347349080204293172932223016362778694783408478282470110442423277695708801319757646121587083313642715384082630244911579354309988982541888961459074810380132374716860389364707939714944009928199436954986824139851990380536395874214934121865594099452519193363870023326088692249561571432538935621210063673998589060339307972572327785216933754718377239209239099019352537235031406765388281933899071428084718770969143404844747199313231367210476846134573888091768447506004920395099359668748459231185535963906050019436248702776866785327067752313070293450425693737187645991215075576930829850189976102809613193737026042396920858746\"}},\"signature_correctness_proof\":{\"se\":\"1411743568706134508853788979643844773973895975216868709067594405334807583171509653154230048241547301249613098585195981973836494218703449682100170020862717598441567466187710007619727788178738799457667290632443852484517221898504622514081721674267830730864164156444275723551498692255347088421033736945194391045725037426853689740889578404557440558006040713112471201427307176235498757574280802327895794421170193656901486779503771227387213874113021188740572820452083231107110323352743969300796132139334008742147578009466232756207318288737672859647405539518949180917788433818859905634734837464560465164762099094413530948374\",\"c\":\"63316290146843924303458233899031533139200861453278723311347288340447029667460\"}}",
+        issuer: undefined,
+        subject: undefined,
+        credentialCreated: undefined,
+        credentialUpdated: undefined,
+        credentialSchema: undefined,
+        validUntil: undefined,
+        revoked: false,
+      };
+
+      await store.start();
+      await store.insert("credentials", credentialModel);
+      const [v0Credential] = await store.query("credentials", {
+        selector: {
+          uuid: credentialModel.uuid
+        }
+      });
+
+      expect(v0Credential).not.toBe(undefined);
+      expect(v0Credential).not.toHaveProperty("id");
+
+      const currentStore = createStore(storeName);
+      await currentStore.start();
+
+      const [v1Credential] = await currentStore.query("credentials", {
+        selector: {
+          uuid: credentialModel.uuid
+        }
+      });
+
+      expect(v1Credential).not.toBe(undefined);
+      expect(v1Credential).toHaveProperty("id", expectedId);
     });
 
-    describe("Migrations", () => {
+    test("Should migrate old jwt v0Credentials into v1 credentials", async () => {
+      const storeName = "03";
+      const store = createStore(storeName, {
+        credentials: { schema: credentialSchemaV0 }
+      });
+      await store.start();
 
-        test("Should migrate old keys to new keys to add the derivationSchema", async () => {
-            const store = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            }, {
-                keys: {
-                    schema: schemaFactory<Models.Key>(schema => {
-                        schema.setRequired("recoveryId", "rawHex");
-                        schema.addProperty("string", "recoveryId");
-                        schema.addProperty("string", "rawHex");
-                        schema.addProperty("string", "alias");
-                        schema.addProperty("number", "index");
-                        schema.setEncrypted("rawHex");
-                        schema.setVersion(0);
-                    })
-                }
-            });
 
-            const keyRepository = new KeyRepository(store, apollo);
-            const key = keyRepository.toModel(Fixtures.Keys.secp256K1.privateKey)
+      const expectedId = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkaWQ6cHJpc206MjU3MTlhOTZiMTUxMjA3MTY5ODFhODQzMGFkMGNiOTY4ZGQ1MzQwNzM1OTNjOGNkM2YxZDI3YTY4MDRlYzUwZTpDcG9DQ3BjQ0Vsb0tCV3RsZVMweEVBSkNUd29KYzJWamNESTFObXN4RWlBRW9TQ241dHlEYTZZNnItSW1TcXBKOFkxbWo3SkMzX29VekUwTnl5RWlDQm9nc2dOYWVSZGNDUkdQbGU4MlZ2OXRKZk53bDZyZzZWY2hSM09xaGlWYlRhOFNXd29HWVhWMGFDMHhFQVJDVHdvSmMyVmpjREkxTm1zeEVpRE1rQmQ2RnRpb0prM1hPRnUtX2N5NVhtUi00dFVRMk5MR2lXOGFJU29ta1JvZzZTZGU5UHduRzBRMFNCVG1GU1REYlNLQnZJVjZDVExYcmpJSnR0ZUdJbUFTWEFvSGJXRnpkR1Z5TUJBQlFrOEtDWE5sWTNBeU5UWnJNUklnTzcxMG10MVdfaXhEeVFNM3hJczdUcGpMQ05PRFF4Z1ZoeDVzaGZLTlgxb2FJSFdQcnc3SVVLbGZpYlF0eDZKazRUU2pnY1dOT2ZjT3RVOUQ5UHVaN1Q5dCIsInN1YiI6ImRpZDpwcmlzbTpiZWVhNTIzNGFmNDY4MDQ3MTRkOGVhOGVjNzdiNjZjYzdmM2U4MTVjNjhhYmI0NzVmMjU0Y2Y5YzMwNjI2NzYzOkNzY0JDc1FCRW1RS0QyRjFkR2hsYm5ScFkyRjBhVzl1TUJBRVFrOEtDWE5sWTNBeU5UWnJNUklnZVNnLTJPTzFKZG5welVPQml0eklpY1hkZnplQWNUZldBTi1ZQ2V1Q2J5SWFJSlE0R1RJMzB0YVZpd2NoVDNlMG5MWEJTNDNCNGo5amxzbEtvMlpsZFh6akVsd0tCMjFoYzNSbGNqQVFBVUpQQ2dselpXTndNalUyYXpFU0lIa29QdGpqdFNYWjZjMURnWXJjeUluRjNYODNnSEUzMWdEZm1BbnJnbThpR2lDVU9Ca3lOOUxXbFlzSElVOTN0Snkxd1V1TndlSV9ZNWJKU3FObVpYVjg0dyIsIm5iZiI6MTY4NTYzMTk5NSwiZXhwIjoxNjg1NjM1NTk1LCJ2YyI6eyJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sIkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImFkZGl0aW9uYWxQcm9wMiI6IlRlc3QzIiwiaWQiOiJkaWQ6cHJpc206YmVlYTUyMzRhZjQ2ODA0NzE0ZDhlYThlYzc3YjY2Y2M3ZjNlODE1YzY4YWJiNDc1ZjI1NGNmOWMzMDYyNjc2MzpDc2NCQ3NRQkVtUUtEMkYxZEdobGJuUnBZMkYwYVc5dU1CQUVRazhLQ1hObFkzQXlOVFpyTVJJZ2VTZy0yT08xSmRucHpVT0JpdHpJaWNYZGZ6ZUFjVGZXQU4tWUNldUNieUlhSUpRNEdUSTMwdGFWaXdjaFQzZTBuTFhCUzQzQjRqOWpsc2xLbzJabGRYempFbHdLQjIxaGMzUmxjakFRQVVKUENnbHpaV053TWpVMmF6RVNJSGtvUHRqanRTWFo2YzFEZ1lyY3lJbkYzWDgzZ0hFMzFnRGZtQW5yZ204aUdpQ1VPQmt5TjlMV2xZc0hJVTkzdEp5MXdVdU53ZUlfWTViSlNxTm1aWFY4NHcifSwiZXhwaXJhdGlvbkRhdGUiOiIxOTcwLTAxLTIwVDEyOjEzOjU1LjU5NVoiLCJpc3N1YW5jZURhdGUiOiIxOTcwLTAxLTIwVDEyOjEzOjUxLjk5NVoiLCJpc3N1ZXIiOiJkaWQ6cGVlcjoyLkV6NkxTbXM1NTVZaEZ0aG4xV1Y4Y2lEQnBabTg2aEs5dHA4M1dvakpVbXhQR2sxaFouVno2TWttZEJqTXlCNFRTNVViYlF3NTRzem04eXZNTWYxZnRHVjJzUVZZQXhhZVdoRS5TZXlKcFpDSTZJbTVsZHkxcFpDSXNJblFpT2lKa2JTSXNJbk1pT2lKb2RIUndjem92TDIxbFpHbGhkRzl5TG5KdmIzUnphV1F1WTJ4dmRXUWlMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAifSwianRpIjoiZXlKaGJHY2lPaUpGVXpJMU5rc2lmUS5leUpwYzNNaU9pSmthV1E2Y0hKcGMyMDZNalUzTVRsaE9UWmlNVFV4TWpBM01UWTVPREZoT0RRek1HRmtNR05pT1RZNFpHUTFNelF3TnpNMU9UTmpPR05rTTJZeFpESTNZVFk0TURSbFl6VXdaVHBEY0c5RFEzQmpRMFZzYjB0Q1YzUnNaVk13ZUVWQlNrTlVkMjlLWXpKV2FtTkVTVEZPYlhONFJXbEJSVzlUUTI0MWRIbEVZVFpaTm5JdFNXMVRjWEJLT0ZreGJXbzNTa016WDI5VmVrVXdUbmw1UldsRFFtOW5jMmRPWVdWU1pHTkRVa2RRYkdVNE1sWjJPWFJLWms1M2JEWnlaelpXWTJoU00wOXhhR2xXWWxSaE9GTlhkMjlIV1ZoV01HRkRNSGhGUVZKRFZIZHZTbU15Vm1walJFa3hUbTF6ZUVWcFJFMXJRbVEyUm5ScGIwcHJNMWhQUm5VdFgyTjVOVmh0VWkwMGRGVlJNazVNUjJsWE9HRkpVMjl0YTFKdlp6WlRaR1U1VUhkdVJ6QlJNRk5DVkcxR1UxUkVZbE5MUW5aSlZqWkRWRXhZY21wSlNuUjBaVWRKYlVGVFdFRnZTR0pYUm5wa1IxWjVUVUpCUWxGck9FdERXRTVzV1ROQmVVNVVXbkpOVWtsblR6Y3hNRzEwTVZkZmFYaEVlVkZOTTNoSmN6ZFVjR3BNUTA1UFJGRjRaMVpvZURWemFHWkxUbGd4YjJGSlNGZFFjbmMzU1ZWTGJHWnBZbEYwZURaS2F6UlVVMnBuWTFkT1QyWmpUM1JWT1VRNVVIVmFOMVE1ZENJc0luTjFZaUk2SW1ScFpEcHdjbWx6YlRwaVpXVmhOVEl6TkdGbU5EWTRNRFEzTVRSa09HVmhPR1ZqTnpkaU5qWmpZemRtTTJVNE1UVmpOamhoWW1JME56Vm1NalUwWTJZNVl6TXdOakkyTnpZek9rTnpZMEpEYzFGQ1JXMVJTMFF5UmpGa1IyaHNZbTVTY0ZreVJqQmhWemwxVFVKQlJWRnJPRXREV0U1c1dUTkJlVTVVV25KTlVrbG5aVk5uTFRKUFR6RktaRzV3ZWxWUFFtbDBla2xwWTFoa1pucGxRV05VWmxkQlRpMVpRMlYxUTJKNVNXRkpTbEUwUjFSSk16QjBZVlpwZDJOb1ZETmxNRzVNV0VKVE5ETkNOR281YW14emJFdHZNbHBzWkZoNmFrVnNkMHRDTWpGb1l6TlNiR05xUVZGQlZVcFFRMmRzZWxwWFRuZE5hbFV5WVhwRlUwbElhMjlRZEdwcWRGTllXalpqTVVSbldYSmplVWx1UmpOWU9ETm5TRVV6TVdkRVptMUJibkpuYlRocFIybERWVTlDYTNsT09VeFhiRmx6U0VsVk9UTjBTbmt4ZDFWMVRuZGxTVjlaTldKS1UzRk9iVnBZVmpnMGR5SXNJbTVpWmlJNk1UWTROVFl6TVRrNU5Td2laWGh3SWpveE5qZzFOak0xTlRrMUxDSjJZeUk2ZXlKamNtVmtaVzUwYVdGc1UzVmlhbVZqZENJNmV5SmhaR1JwZEdsdmJtRnNVSEp2Y0RJaU9pSlVaWE4wTXlJc0ltbGtJam9pWkdsa09uQnlhWE50T21KbFpXRTFNak0wWVdZME5qZ3dORGN4TkdRNFpXRTRaV00zTjJJMk5tTmpOMll6WlRneE5XTTJPR0ZpWWpRM05XWXlOVFJqWmpsak16QTJNalkzTmpNNlEzTmpRa056VVVKRmJWRkxSREpHTVdSSGFHeGlibEp3V1RKR01HRlhPWFZOUWtGRlVXczRTME5ZVG14Wk0wRjVUbFJhY2sxU1NXZGxVMmN0TWs5UE1VcGtibkI2VlU5Q2FYUjZTV2xqV0dSbWVtVkJZMVJtVjBGT0xWbERaWFZEWW5sSllVbEtVVFJIVkVrek1IUmhWbWwzWTJoVU0yVXdia3hZUWxNME0wSTBhamxxYkhOc1MyOHlXbXhrV0hwcVJXeDNTMEl5TVdoak0xSnNZMnBCVVVGVlNsQkRaMng2V2xkT2QwMXFWVEpoZWtWVFNVaHJiMUIwYW1wMFUxaGFObU14UkdkWmNtTjVTVzVHTTFnNE0yZElSVE14WjBSbWJVRnVjbWR0T0dsSGFVTlZUMEpyZVU0NVRGZHNXWE5JU1ZVNU0zUktlVEYzVlhWT2QyVkpYMWsxWWtwVGNVNXRXbGhXT0RSM0luMHNJblI1Y0dVaU9sc2lWbVZ5YVdacFlXSnNaVU55WldSbGJuUnBZV3dpWFN3aVFHTnZiblJsZUhRaU9sc2lhSFIwY0hNNlhDOWNMM2QzZHk1M015NXZjbWRjTHpJd01UaGNMMk55WldSbGJuUnBZV3h6WEM5Mk1TSmRmWDAueDBTRjE3WTBWQ0RtdDdIY2VPZFR4Zkhsb2ZzWm1ZMThSbjZWUWIwLXIta19CbTNoVGkxLWsydmtkakIyNWhkeHlUQ3Z4YW0tQWtBUC1BZzNBaG41TmciLCJhdWQiOiJkaWQ6cHJpc206YmVlYTUyMzRhZjQ2ODA0NzE0ZDhlYThlYzc3YjY2Y2M3ZjNlODE1YzY4YWJiNDc1ZjI1NGNmOWMzMDYyNjc2MzpDc2NCQ3NRQkVtUUtEMkYxZEdobGJuUnBZMkYwYVc5dU1CQUVRazhLQ1hObFkzQXlOVFpyTVJJZ2VTZy0yT08xSmRucHpVT0JpdHpJaWNYZGZ6ZUFjVGZXQU4tWUNldUNieUlhSUpRNEdUSTMwdGFWaXdjaFQzZTBuTFhCUzQzQjRqOWpsc2xLbzJabGRYempFbHdLQjIxaGMzUmxjakFRQVVKUENnbHpaV053TWpVMmF6RVNJSGtvUHRqanRTWFo2YzFEZ1lyY3lJbkYzWDgzZ0hFMzFnRGZtQW5yZ204aUdpQ1VPQmt5TjlMV2xZc0hJVTkzdEp5MXdVdU53ZUlfWTViSlNxTm1aWFY4NHcifQ==.18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM";
+      const credentialModel = {
+        uuid: "0988b493-091d-4407-b3d4-12852dcc5e9d",
+        recoveryId: "jwt+credential",
+        dataJson: "{\"id\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkaWQ6cHJpc206MjU3MTlhOTZiMTUxMjA3MTY5ODFhODQzMGFkMGNiOTY4ZGQ1MzQwNzM1OTNjOGNkM2YxZDI3YTY4MDRlYzUwZTpDcG9DQ3BjQ0Vsb0tCV3RsZVMweEVBSkNUd29KYzJWamNESTFObXN4RWlBRW9TQ241dHlEYTZZNnItSW1TcXBKOFkxbWo3SkMzX29VekUwTnl5RWlDQm9nc2dOYWVSZGNDUkdQbGU4MlZ2OXRKZk53bDZyZzZWY2hSM09xaGlWYlRhOFNXd29HWVhWMGFDMHhFQVJDVHdvSmMyVmpjREkxTm1zeEVpRE1rQmQ2RnRpb0prM1hPRnUtX2N5NVhtUi00dFVRMk5MR2lXOGFJU29ta1JvZzZTZGU5UHduRzBRMFNCVG1GU1REYlNLQnZJVjZDVExYcmpJSnR0ZUdJbUFTWEFvSGJXRnpkR1Z5TUJBQlFrOEtDWE5sWTNBeU5UWnJNUklnTzcxMG10MVdfaXhEeVFNM3hJczdUcGpMQ05PRFF4Z1ZoeDVzaGZLTlgxb2FJSFdQcnc3SVVLbGZpYlF0eDZKazRUU2pnY1dOT2ZjT3RVOUQ5UHVaN1Q5dCIsInN1YiI6ImRpZDpwcmlzbTpiZWVhNTIzNGFmNDY4MDQ3MTRkOGVhOGVjNzdiNjZjYzdmM2U4MTVjNjhhYmI0NzVmMjU0Y2Y5YzMwNjI2NzYzOkNzY0JDc1FCRW1RS0QyRjFkR2hsYm5ScFkyRjBhVzl1TUJBRVFrOEtDWE5sWTNBeU5UWnJNUklnZVNnLTJPTzFKZG5welVPQml0eklpY1hkZnplQWNUZldBTi1ZQ2V1Q2J5SWFJSlE0R1RJMzB0YVZpd2NoVDNlMG5MWEJTNDNCNGo5amxzbEtvMlpsZFh6akVsd0tCMjFoYzNSbGNqQVFBVUpQQ2dselpXTndNalUyYXpFU0lIa29QdGpqdFNYWjZjMURnWXJjeUluRjNYODNnSEUzMWdEZm1BbnJnbThpR2lDVU9Ca3lOOUxXbFlzSElVOTN0Snkxd1V1TndlSV9ZNWJKU3FObVpYVjg0dyIsIm5iZiI6MTY4NTYzMTk5NSwiZXhwIjoxNjg1NjM1NTk1LCJ2YyI6eyJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sIkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImFkZGl0aW9uYWxQcm9wMiI6IlRlc3QzIiwiaWQiOiJkaWQ6cHJpc206YmVlYTUyMzRhZjQ2ODA0NzE0ZDhlYThlYzc3YjY2Y2M3ZjNlODE1YzY4YWJiNDc1ZjI1NGNmOWMzMDYyNjc2MzpDc2NCQ3NRQkVtUUtEMkYxZEdobGJuUnBZMkYwYVc5dU1CQUVRazhLQ1hObFkzQXlOVFpyTVJJZ2VTZy0yT08xSmRucHpVT0JpdHpJaWNYZGZ6ZUFjVGZXQU4tWUNldUNieUlhSUpRNEdUSTMwdGFWaXdjaFQzZTBuTFhCUzQzQjRqOWpsc2xLbzJabGRYempFbHdLQjIxaGMzUmxjakFRQVVKUENnbHpaV053TWpVMmF6RVNJSGtvUHRqanRTWFo2YzFEZ1lyY3lJbkYzWDgzZ0hFMzFnRGZtQW5yZ204aUdpQ1VPQmt5TjlMV2xZc0hJVTkzdEp5MXdVdU53ZUlfWTViSlNxTm1aWFY4NHcifSwiZXhwaXJhdGlvbkRhdGUiOiIxOTcwLTAxLTIwVDEyOjEzOjU1LjU5NVoiLCJpc3N1YW5jZURhdGUiOiIxOTcwLTAxLTIwVDEyOjEzOjUxLjk5NVoiLCJpc3N1ZXIiOiJkaWQ6cGVlcjoyLkV6NkxTbXM1NTVZaEZ0aG4xV1Y4Y2lEQnBabTg2aEs5dHA4M1dvakpVbXhQR2sxaFouVno2TWttZEJqTXlCNFRTNVViYlF3NTRzem04eXZNTWYxZnRHVjJzUVZZQXhhZVdoRS5TZXlKcFpDSTZJbTVsZHkxcFpDSXNJblFpT2lKa2JTSXNJbk1pT2lKb2RIUndjem92TDIxbFpHbGhkRzl5TG5KdmIzUnphV1F1WTJ4dmRXUWlMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAifSwianRpIjoiZXlKaGJHY2lPaUpGVXpJMU5rc2lmUS5leUpwYzNNaU9pSmthV1E2Y0hKcGMyMDZNalUzTVRsaE9UWmlNVFV4TWpBM01UWTVPREZoT0RRek1HRmtNR05pT1RZNFpHUTFNelF3TnpNMU9UTmpPR05rTTJZeFpESTNZVFk0TURSbFl6VXdaVHBEY0c5RFEzQmpRMFZzYjB0Q1YzUnNaVk13ZUVWQlNrTlVkMjlLWXpKV2FtTkVTVEZPYlhONFJXbEJSVzlUUTI0MWRIbEVZVFpaTm5JdFNXMVRjWEJLT0ZreGJXbzNTa016WDI5VmVrVXdUbmw1UldsRFFtOW5jMmRPWVdWU1pHTkRVa2RRYkdVNE1sWjJPWFJLWms1M2JEWnlaelpXWTJoU00wOXhhR2xXWWxSaE9GTlhkMjlIV1ZoV01HRkRNSGhGUVZKRFZIZHZTbU15Vm1walJFa3hUbTF6ZUVWcFJFMXJRbVEyUm5ScGIwcHJNMWhQUm5VdFgyTjVOVmh0VWkwMGRGVlJNazVNUjJsWE9HRkpVMjl0YTFKdlp6WlRaR1U1VUhkdVJ6QlJNRk5DVkcxR1UxUkVZbE5MUW5aSlZqWkRWRXhZY21wSlNuUjBaVWRKYlVGVFdFRnZTR0pYUm5wa1IxWjVUVUpCUWxGck9FdERXRTVzV1ROQmVVNVVXbkpOVWtsblR6Y3hNRzEwTVZkZmFYaEVlVkZOTTNoSmN6ZFVjR3BNUTA1UFJGRjRaMVpvZURWemFHWkxUbGd4YjJGSlNGZFFjbmMzU1ZWTGJHWnBZbEYwZURaS2F6UlVVMnBuWTFkT1QyWmpUM1JWT1VRNVVIVmFOMVE1ZENJc0luTjFZaUk2SW1ScFpEcHdjbWx6YlRwaVpXVmhOVEl6TkdGbU5EWTRNRFEzTVRSa09HVmhPR1ZqTnpkaU5qWmpZemRtTTJVNE1UVmpOamhoWW1JME56Vm1NalUwWTJZNVl6TXdOakkyTnpZek9rTnpZMEpEYzFGQ1JXMVJTMFF5UmpGa1IyaHNZbTVTY0ZreVJqQmhWemwxVFVKQlJWRnJPRXREV0U1c1dUTkJlVTVVV25KTlVrbG5aVk5uTFRKUFR6RktaRzV3ZWxWUFFtbDBla2xwWTFoa1pucGxRV05VWmxkQlRpMVpRMlYxUTJKNVNXRkpTbEUwUjFSSk16QjBZVlpwZDJOb1ZETmxNRzVNV0VKVE5ETkNOR281YW14emJFdHZNbHBzWkZoNmFrVnNkMHRDTWpGb1l6TlNiR05xUVZGQlZVcFFRMmRzZWxwWFRuZE5hbFV5WVhwRlUwbElhMjlRZEdwcWRGTllXalpqTVVSbldYSmplVWx1UmpOWU9ETm5TRVV6TVdkRVptMUJibkpuYlRocFIybERWVTlDYTNsT09VeFhiRmx6U0VsVk9UTjBTbmt4ZDFWMVRuZGxTVjlaTldKS1UzRk9iVnBZVmpnMGR5SXNJbTVpWmlJNk1UWTROVFl6TVRrNU5Td2laWGh3SWpveE5qZzFOak0xTlRrMUxDSjJZeUk2ZXlKamNtVmtaVzUwYVdGc1UzVmlhbVZqZENJNmV5SmhaR1JwZEdsdmJtRnNVSEp2Y0RJaU9pSlVaWE4wTXlJc0ltbGtJam9pWkdsa09uQnlhWE50T21KbFpXRTFNak0wWVdZME5qZ3dORGN4TkdRNFpXRTRaV00zTjJJMk5tTmpOMll6WlRneE5XTTJPR0ZpWWpRM05XWXlOVFJqWmpsak16QTJNalkzTmpNNlEzTmpRa056VVVKRmJWRkxSREpHTVdSSGFHeGlibEp3V1RKR01HRlhPWFZOUWtGRlVXczRTME5ZVG14Wk0wRjVUbFJhY2sxU1NXZGxVMmN0TWs5UE1VcGtibkI2VlU5Q2FYUjZTV2xqV0dSbWVtVkJZMVJtVjBGT0xWbERaWFZEWW5sSllVbEtVVFJIVkVrek1IUmhWbWwzWTJoVU0yVXdia3hZUWxNME0wSTBhamxxYkhOc1MyOHlXbXhrV0hwcVJXeDNTMEl5TVdoak0xSnNZMnBCVVVGVlNsQkRaMng2V2xkT2QwMXFWVEpoZWtWVFNVaHJiMUIwYW1wMFUxaGFObU14UkdkWmNtTjVTVzVHTTFnNE0yZElSVE14WjBSbWJVRnVjbWR0T0dsSGFVTlZUMEpyZVU0NVRGZHNXWE5JU1ZVNU0zUktlVEYzVlhWT2QyVkpYMWsxWWtwVGNVNXRXbGhXT0RSM0luMHNJblI1Y0dVaU9sc2lWbVZ5YVdacFlXSnNaVU55WldSbGJuUnBZV3dpWFN3aVFHTnZiblJsZUhRaU9sc2lhSFIwY0hNNlhDOWNMM2QzZHk1M015NXZjbWRjTHpJd01UaGNMMk55WldSbGJuUnBZV3h6WEM5Mk1TSmRmWDAueDBTRjE3WTBWQ0RtdDdIY2VPZFR4Zkhsb2ZzWm1ZMThSbjZWUWIwLXIta19CbTNoVGkxLWsydmtkakIyNWhkeHlUQ3Z4YW0tQWtBUC1BZzNBaG41TmciLCJhdWQiOiJkaWQ6cHJpc206YmVlYTUyMzRhZjQ2ODA0NzE0ZDhlYThlYzc3YjY2Y2M3ZjNlODE1YzY4YWJiNDc1ZjI1NGNmOWMzMDYyNjc2MzpDc2NCQ3NRQkVtUUtEMkYxZEdobGJuUnBZMkYwYVc5dU1CQUVRazhLQ1hObFkzQXlOVFpyTVJJZ2VTZy0yT08xSmRucHpVT0JpdHpJaWNYZGZ6ZUFjVGZXQU4tWUNldUNieUlhSUpRNEdUSTMwdGFWaXdjaFQzZTBuTFhCUzQzQjRqOWpsc2xLbzJabGRYempFbHdLQjIxaGMzUmxjakFRQVVKUENnbHpaV053TWpVMmF6RVNJSGtvUHRqanRTWFo2YzFEZ1lyY3lJbkYzWDgzZ0hFMzFnRGZtQW5yZ204aUdpQ1VPQmt5TjlMV2xZc0hJVTkzdEp5MXdVdU53ZUlfWTViSlNxTm1aWFY4NHcifQ==.18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM\",\"revoked\":false,\"vc\":{\"type\":[\"VerifiableCredential\"],\"@context\":[\"https://www.w3.org/2018/credentials/v1\"],\"credentialSubject\":{\"additionalProp2\":\"Test3\",\"id\":\"did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w\"},\"expirationDate\":\"1970-01-20T12:13:55.595Z\",\"issuanceDate\":\"1970-01-20T12:13:51.995Z\",\"issuer\":\"did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOiJodHRwczovL21lZGlhdG9yLnJvb3RzaWQuY2xvdWQiLCJhIjpbImRpZGNvbW0vdjIiXX0\"},\"aud\":\"did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w\",\"exp\":1685635595,\"jti\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkaWQ6cHJpc206MjU3MTlhOTZiMTUxMjA3MTY5ODFhODQzMGFkMGNiOTY4ZGQ1MzQwNzM1OTNjOGNkM2YxZDI3YTY4MDRlYzUwZTpDcG9DQ3BjQ0Vsb0tCV3RsZVMweEVBSkNUd29KYzJWamNESTFObXN4RWlBRW9TQ241dHlEYTZZNnItSW1TcXBKOFkxbWo3SkMzX29VekUwTnl5RWlDQm9nc2dOYWVSZGNDUkdQbGU4MlZ2OXRKZk53bDZyZzZWY2hSM09xaGlWYlRhOFNXd29HWVhWMGFDMHhFQVJDVHdvSmMyVmpjREkxTm1zeEVpRE1rQmQ2RnRpb0prM1hPRnUtX2N5NVhtUi00dFVRMk5MR2lXOGFJU29ta1JvZzZTZGU5UHduRzBRMFNCVG1GU1REYlNLQnZJVjZDVExYcmpJSnR0ZUdJbUFTWEFvSGJXRnpkR1Z5TUJBQlFrOEtDWE5sWTNBeU5UWnJNUklnTzcxMG10MVdfaXhEeVFNM3hJczdUcGpMQ05PRFF4Z1ZoeDVzaGZLTlgxb2FJSFdQcnc3SVVLbGZpYlF0eDZKazRUU2pnY1dOT2ZjT3RVOUQ5UHVaN1Q5dCIsInN1YiI6ImRpZDpwcmlzbTpiZWVhNTIzNGFmNDY4MDQ3MTRkOGVhOGVjNzdiNjZjYzdmM2U4MTVjNjhhYmI0NzVmMjU0Y2Y5YzMwNjI2NzYzOkNzY0JDc1FCRW1RS0QyRjFkR2hsYm5ScFkyRjBhVzl1TUJBRVFrOEtDWE5sWTNBeU5UWnJNUklnZVNnLTJPTzFKZG5welVPQml0eklpY1hkZnplQWNUZldBTi1ZQ2V1Q2J5SWFJSlE0R1RJMzB0YVZpd2NoVDNlMG5MWEJTNDNCNGo5amxzbEtvMlpsZFh6akVsd0tCMjFoYzNSbGNqQVFBVUpQQ2dselpXTndNalUyYXpFU0lIa29QdGpqdFNYWjZjMURnWXJjeUluRjNYODNnSEUzMWdEZm1BbnJnbThpR2lDVU9Ca3lOOUxXbFlzSElVOTN0Snkxd1V1TndlSV9ZNWJKU3FObVpYVjg0dyIsIm5iZiI6MTY4NTYzMTk5NSwiZXhwIjoxNjg1NjM1NTk1LCJ2YyI6eyJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sIkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImFkZGl0aW9uYWxQcm9wMiI6IlRlc3QzIiwiaWQiOiJkaWQ6cHJpc206YmVlYTUyMzRhZjQ2ODA0NzE0ZDhlYThlYzc3YjY2Y2M3ZjNlODE1YzY4YWJiNDc1ZjI1NGNmOWMzMDYyNjc2MzpDc2NCQ3NRQkVtUUtEMkYxZEdobGJuUnBZMkYwYVc5dU1CQUVRazhLQ1hObFkzQXlOVFpyTVJJZ2VTZy0yT08xSmRucHpVT0JpdHpJaWNYZGZ6ZUFjVGZXQU4tWUNldUNieUlhSUpRNEdUSTMwdGFWaXdjaFQzZTBuTFhCUzQzQjRqOWpsc2xLbzJabGRYempFbHdLQjIxaGMzUmxjakFRQVVKUENnbHpaV053TWpVMmF6RVNJSGtvUHRqanRTWFo2YzFEZ1lyY3lJbkYzWDgzZ0hFMzFnRGZtQW5yZ204aUdpQ1VPQmt5TjlMV2xZc0hJVTkzdEp5MXdVdU53ZUlfWTViSlNxTm1aWFY4NHcifSwiZXhwaXJhdGlvbkRhdGUiOiIxOTcwLTAxLTIwVDEyOjEzOjU1LjU5NVoiLCJpc3N1YW5jZURhdGUiOiIxOTcwLTAxLTIwVDEyOjEzOjUxLjk5NVoiLCJpc3N1ZXIiOiJkaWQ6cGVlcjoyLkV6NkxTbXM1NTVZaEZ0aG4xV1Y4Y2lEQnBabTg2aEs5dHA4M1dvakpVbXhQR2sxaFouVno2TWttZEJqTXlCNFRTNVViYlF3NTRzem04eXZNTWYxZnRHVjJzUVZZQXhhZVdoRS5TZXlKcFpDSTZJbTVsZHkxcFpDSXNJblFpT2lKa2JTSXNJbk1pT2lKb2RIUndjem92TDIxbFpHbGhkRzl5TG5KdmIzUnphV1F1WTJ4dmRXUWlMQ0poSWpwYkltUnBaR052YlcwdmRqSWlYWDAifSwianRpIjoiZXlKaGJHY2lPaUpGVXpJMU5rc2lmUS5leUpwYzNNaU9pSmthV1E2Y0hKcGMyMDZNalUzTVRsaE9UWmlNVFV4TWpBM01UWTVPREZoT0RRek1HRmtNR05pT1RZNFpHUTFNelF3TnpNMU9UTmpPR05rTTJZeFpESTNZVFk0TURSbFl6VXdaVHBEY0c5RFEzQmpRMFZzYjB0Q1YzUnNaVk13ZUVWQlNrTlVkMjlLWXpKV2FtTkVTVEZPYlhONFJXbEJSVzlUUTI0MWRIbEVZVFpaTm5JdFNXMVRjWEJLT0ZreGJXbzNTa016WDI5VmVrVXdUbmw1UldsRFFtOW5jMmRPWVdWU1pHTkRVa2RRYkdVNE1sWjJPWFJLWms1M2JEWnlaelpXWTJoU00wOXhhR2xXWWxSaE9GTlhkMjlIV1ZoV01HRkRNSGhGUVZKRFZIZHZTbU15Vm1walJFa3hUbTF6ZUVWcFJFMXJRbVEyUm5ScGIwcHJNMWhQUm5VdFgyTjVOVmh0VWkwMGRGVlJNazVNUjJsWE9HRkpVMjl0YTFKdlp6WlRaR1U1VUhkdVJ6QlJNRk5DVkcxR1UxUkVZbE5MUW5aSlZqWkRWRXhZY21wSlNuUjBaVWRKYlVGVFdFRnZTR0pYUm5wa1IxWjVUVUpCUWxGck9FdERXRTVzV1ROQmVVNVVXbkpOVWtsblR6Y3hNRzEwTVZkZmFYaEVlVkZOTTNoSmN6ZFVjR3BNUTA1UFJGRjRaMVpvZURWemFHWkxUbGd4YjJGSlNGZFFjbmMzU1ZWTGJHWnBZbEYwZURaS2F6UlVVMnBuWTFkT1QyWmpUM1JWT1VRNVVIVmFOMVE1ZENJc0luTjFZaUk2SW1ScFpEcHdjbWx6YlRwaVpXVmhOVEl6TkdGbU5EWTRNRFEzTVRSa09HVmhPR1ZqTnpkaU5qWmpZemRtTTJVNE1UVmpOamhoWW1JME56Vm1NalUwWTJZNVl6TXdOakkyTnpZek9rTnpZMEpEYzFGQ1JXMVJTMFF5UmpGa1IyaHNZbTVTY0ZreVJqQmhWemwxVFVKQlJWRnJPRXREV0U1c1dUTkJlVTVVV25KTlVrbG5aVk5uTFRKUFR6RktaRzV3ZWxWUFFtbDBla2xwWTFoa1pucGxRV05VWmxkQlRpMVpRMlYxUTJKNVNXRkpTbEUwUjFSSk16QjBZVlpwZDJOb1ZETmxNRzVNV0VKVE5ETkNOR281YW14emJFdHZNbHBzWkZoNmFrVnNkMHRDTWpGb1l6TlNiR05xUVZGQlZVcFFRMmRzZWxwWFRuZE5hbFV5WVhwRlUwbElhMjlRZEdwcWRGTllXalpqTVVSbldYSmplVWx1UmpOWU9ETm5TRVV6TVdkRVptMUJibkpuYlRocFIybERWVTlDYTNsT09VeFhiRmx6U0VsVk9UTjBTbmt4ZDFWMVRuZGxTVjlaTldKS1UzRk9iVnBZVmpnMGR5SXNJbTVpWmlJNk1UWTROVFl6TVRrNU5Td2laWGh3SWpveE5qZzFOak0xTlRrMUxDSjJZeUk2ZXlKamNtVmtaVzUwYVdGc1UzVmlhbVZqZENJNmV5SmhaR1JwZEdsdmJtRnNVSEp2Y0RJaU9pSlVaWE4wTXlJc0ltbGtJam9pWkdsa09uQnlhWE50T21KbFpXRTFNak0wWVdZME5qZ3dORGN4TkdRNFpXRTRaV00zTjJJMk5tTmpOMll6WlRneE5XTTJPR0ZpWWpRM05XWXlOVFJqWmpsak16QTJNalkzTmpNNlEzTmpRa056VVVKRmJWRkxSREpHTVdSSGFHeGlibEp3V1RKR01HRlhPWFZOUWtGRlVXczRTME5ZVG14Wk0wRjVUbFJhY2sxU1NXZGxVMmN0TWs5UE1VcGtibkI2VlU5Q2FYUjZTV2xqV0dSbWVtVkJZMVJtVjBGT0xWbERaWFZEWW5sSllVbEtVVFJIVkVrek1IUmhWbWwzWTJoVU0yVXdia3hZUWxNME0wSTBhamxxYkhOc1MyOHlXbXhrV0hwcVJXeDNTMEl5TVdoak0xSnNZMnBCVVVGVlNsQkRaMng2V2xkT2QwMXFWVEpoZWtWVFNVaHJiMUIwYW1wMFUxaGFObU14UkdkWmNtTjVTVzVHTTFnNE0yZElSVE14WjBSbWJVRnVjbWR0T0dsSGFVTlZUMEpyZVU0NVRGZHNXWE5JU1ZVNU0zUktlVEYzVlhWT2QyVkpYMWsxWWtwVGNVNXRXbGhXT0RSM0luMHNJblI1Y0dVaU9sc2lWbVZ5YVdacFlXSnNaVU55WldSbGJuUnBZV3dpWFN3aVFHTnZiblJsZUhRaU9sc2lhSFIwY0hNNlhDOWNMM2QzZHk1M015NXZjbWRjTHpJd01UaGNMMk55WldSbGJuUnBZV3h6WEM5Mk1TSmRmWDAueDBTRjE3WTBWQ0RtdDdIY2VPZFR4Zkhsb2ZzWm1ZMThSbjZWUWIwLXIta19CbTNoVGkxLWsydmtkakIyNWhkeHlUQ3Z4YW0tQWtBUC1BZzNBaG41TmciLCJhdWQiOiJkaWQ6cHJpc206YmVlYTUyMzRhZjQ2ODA0NzE0ZDhlYThlYzc3YjY2Y2M3ZjNlODE1YzY4YWJiNDc1ZjI1NGNmOWMzMDYyNjc2MzpDc2NCQ3NRQkVtUUtEMkYxZEdobGJuUnBZMkYwYVc5dU1CQUVRazhLQ1hObFkzQXlOVFpyTVJJZ2VTZy0yT08xSmRucHpVT0JpdHpJaWNYZGZ6ZUFjVGZXQU4tWUNldUNieUlhSUpRNEdUSTMwdGFWaXdjaFQzZTBuTFhCUzQzQjRqOWpsc2xLbzJabGRYempFbHdLQjIxaGMzUmxjakFRQVVKUENnbHpaV053TWpVMmF6RVNJSGtvUHRqanRTWFo2YzFEZ1lyY3lJbkYzWDgzZ0hFMzFnRGZtQW5yZ204aUdpQ1VPQmt5TjlMV2xZc0hJVTkzdEp5MXdVdU53ZUlfWTViSlNxTm1aWFY4NHcifQ==.18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM\",\"iss\":\"did:prism:25719a96b15120716981a8430ad0cb968dd534073593c8cd3f1d27a6804ec50e:CpoCCpcCEloKBWtleS0xEAJCTwoJc2VjcDI1NmsxEiAEoSCn5tyDa6Y6r-ImSqpJ8Y1mj7JC3_oUzE0NyyEiCBogsgNaeRdcCRGPle82Vv9tJfNwl6rg6VchR3OqhiVbTa8SWwoGYXV0aC0xEARCTwoJc2VjcDI1NmsxEiDMkBd6FtioJk3XOFu-_cy5XmR-4tUQ2NLGiW8aISomkRog6Sde9PwnG0Q0SBTmFSTDbSKBvIV6CTLXrjIJtteGImASXAoHbWFzdGVyMBABQk8KCXNlY3AyNTZrMRIgO710mt1W_ixDyQM3xIs7TpjLCNODQxgVhx5shfKNX1oaIHWPrw7IUKlfibQtx6Jk4TSjgcWNOfcOtU9D9PuZ7T9t\",\"sub\":\"did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w\",\"nbf\":1685631995}",
+        issuer: "did:prism:25719a96b15120716981a8430ad0cb968dd534073593c8cd3f1d27a6804ec50e:CpoCCpcCEloKBWtleS0xEAJCTwoJc2VjcDI1NmsxEiAEoSCn5tyDa6Y6r-ImSqpJ8Y1mj7JC3_oUzE0NyyEiCBogsgNaeRdcCRGPle82Vv9tJfNwl6rg6VchR3OqhiVbTa8SWwoGYXV0aC0xEARCTwoJc2VjcDI1NmsxEiDMkBd6FtioJk3XOFu-_cy5XmR-4tUQ2NLGiW8aISomkRog6Sde9PwnG0Q0SBTmFSTDbSKBvIV6CTLXrjIJtteGImASXAoHbWFzdGVyMBABQk8KCXNlY3AyNTZrMRIgO710mt1W_ixDyQM3xIs7TpjLCNODQxgVhx5shfKNX1oaIHWPrw7IUKlfibQtx6Jk4TSjgcWNOfcOtU9D9PuZ7T9t",
+        subject: "did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w",
+        credentialCreated: undefined,
+        credentialUpdated: undefined,
+        credentialSchema: undefined,
+        validUntil: 1685635595,
+        revoked: false,
+      };
 
-            delete (key as any).derivationSchema;
-            delete (key as any).derivationSchema
+      await store.insert("credentials", credentialModel);
+      const [v0Credential] = await store.query("credentials", {
+        selector: {
+          uuid: credentialModel.uuid
+        }
+      });
 
-            await store.start();
+      expect(v0Credential).not.toBe(undefined);
+      expect(v0Credential).not.toHaveProperty("id");
 
-            await store.insert("keys", key);
-            const oldKeys = await store.query("keys")
+      const currentStore = createStore(storeName);
+      await currentStore.start();
 
-            expect(oldKeys).not.toBe(undefined);
+      const [v1Credential] = await currentStore.query("credentials", {
+        selector: {
+          uuid: credentialModel.uuid
+        }
+      });
 
-            const currentStore = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            });
+      expect(v1Credential).not.toBe(undefined);
+      expect(v1Credential).toHaveProperty("id", expectedId);
+    });
 
-            await currentStore.start();
+    test("Should run the migration which adds renames the schema attribute to name", async () => {
+      const did = Domain.DID.fromString("did:prism:123456");
+      const store = createStore("04");
+      await store.start();
+      await store.insert("dids", {
+        schema: did.schema,
+        method: did.method,
+        uuid: did.toString()
+      });
 
-            const keys = await currentStore.query("keys")
-            expect(keys).not.toBe(undefined);
-            expect(keys.length).toBe(1);
-        });
+      const newDIDSchema = Object.assign({}, Models.DIDSchema);
+      newDIDSchema.properties['name'] = {
+        type: 'string',
+      };
+      newDIDSchema.version = 1;
+      newDIDSchema.required.push('name');
 
-        test("Should migrate old anoncreds v0Credentials into v1 credentials", async () => {
-            const pollux = new Pollux(apollo, castor);
-            const encodeToBuffer = (cred: object) => {
-                const json = JSON.stringify(cred);
-                return Buffer.from(json);
-            };
-            const payload = Fixtures.Credentials.Anoncreds.credentialIssued;
-            const encoded = encodeToBuffer(payload);
-            sandbox.stub(pollux as any, "fetchCredentialDefinition").resolves({});
-            sandbox.stub(pollux, "anoncreds").get(() => ({
-                processCredential: sandbox.stub().returns(payload)
-            }));
+      delete newDIDSchema.properties['schema'];
 
-            const result = await pollux.parseCredential(Buffer.from(encoded), {
-                type: Domain.CredentialType.AnonCreds,
-                linkSecret: "linkSecret",
-                credentialMetadata: {} as any
-            });
-
-            const store = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            }, {
-                credentials: {
-                    schema: schemaFactory<Credential>(schema => {
-                        schema.addProperty("string", "recoveryId");
-                        schema.addProperty("string", "dataJson");
-                        schema.addProperty("string", "issuer");
-                        schema.addProperty("string", "subject");
-                        schema.addProperty("string", "credentialCreated");
-                        schema.addProperty("string", "credentialUpdated");
-                        schema.addProperty("string", "credentialSchema");
-                        schema.addProperty("string", "validUntil");
-                        schema.addProperty("boolean", "revoked");
-                        schema.setEncrypted("dataJson");
-                        schema.setRequired("recoveryId", "dataJson");
-                        schema.setVersion(0);
-                    })
-                }
-            });
-
-            const credentialRepository = new CredentialRepository(store);
-
-            const credentialModel = credentialRepository.toModel(result) as any
-            delete credentialModel.id
-
-            await store.start();
-            await store.insert("credentials", credentialModel);
-            const [v0Credential] = await store.query("credentials", {
-                selector: {
-                    uuid: credentialModel.uuid
-                }
-            })
-
-            expect(v0Credential).not.toBe(undefined);
-            expect(v0Credential).not.toHaveProperty("id");
-
-            const currentStore = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            });
-
-            await currentStore.start();
-
-            const [v1Credential] = await currentStore.query("credentials", {
-                selector: {
-                    uuid: credentialModel.uuid
-                }
-            })
-
-            expect(v1Credential).not.toBe(undefined);
-            expect(v1Credential).toHaveProperty("id");
-            expect(v1Credential.id).toBe(result.id)
-
-        });
-
-        test("Should migrate old jwt v0Credentials into v1 credentials", async () => {
-            const pollux = new Pollux(apollo, castor);
-            const jwtParts = [
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-                "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidHlwZSI6Imp3dCJ9",
-                "18bn-r7uRWAG4FCFBjxemKvFYPCAoJTOHaHthuXh5nM",
-            ];
-            const encodeJWTCredential = (cred: object): string => {
-                const json = JSON.stringify(cred);
-                const encoded = Buffer.from(json).toString("base64");
-                return `${jwtParts[0]}.${encoded}.${jwtParts[2]}`;
-            };
-
-            const jwtPayload = Fixtures.Credentials.JWT.credentialPayload;
-            const encoded = encodeJWTCredential(jwtPayload);
-            const result = await pollux.parseCredential(Buffer.from(encoded), {
-                type: Domain.CredentialType.JWT,
-            });
-
-            const store = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            }, {
-                credentials: {
-                    schema: schemaFactory<Credential>(schema => {
-                        schema.addProperty("string", "recoveryId");
-                        schema.addProperty("string", "dataJson");
-                        schema.addProperty("string", "issuer");
-                        schema.addProperty("string", "subject");
-                        schema.addProperty("string", "credentialCreated");
-                        schema.addProperty("string", "credentialUpdated");
-                        schema.addProperty("string", "credentialSchema");
-                        schema.addProperty("string", "validUntil");
-                        schema.addProperty("boolean", "revoked");
-                        schema.setEncrypted("dataJson");
-                        schema.setRequired("recoveryId", "dataJson");
-                        schema.setVersion(0);
-                    })
-                }
-            });
-
-            await store.start();
-
-            const credentialRepository = new CredentialRepository(store);
-
-            const credentialModel = credentialRepository.toModel(result) as any
-            delete credentialModel.id
-
-            await store.insert("credentials", credentialModel);
-            const [v0Credential] = await store.query("credentials", {
-                selector: {
-                    uuid: credentialModel.uuid
-                }
-            })
-
-            expect(v0Credential).not.toBe(undefined);
-            expect(v0Credential).not.toHaveProperty("id");
-
-            const currentStore = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            });
-
-            await currentStore.start();
-
-            const [v1Credential] = await currentStore.query("credentials", {
-                selector: {
-                    uuid: credentialModel.uuid
-                }
-            })
-
-            expect(v1Credential).not.toBe(undefined);
-            expect(v1Credential).toHaveProperty("id");
-            expect(v1Credential.id).toBe(result.id)
-        })
-
-        test("Should run the migration which adds renames the schema attribute to name", async () => {
-
-            const did = Domain.DID.fromString("did:prism:123456")
-            const store = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            })
-
-            await store.start()
-
-            await store.insert("dids", {
-                schema: did.schema,
-                method: did.method,
-                uuid: did.toString()
-            });
-
-            const newDIDSchema = Object.assign({}, Models.DIDSchema)
-            newDIDSchema.properties['name'] = {
-                type: 'string',
+      const migrationStore = createStore("04", {
+        dids: {
+          schema: newDIDSchema,
+          migrationStrategies: {
+            // 1 means, this transforms data from version 0 to version 1
+            1: async function (oldDoc, collection) {
+              oldDoc.name = oldDoc.schema;
+              delete oldDoc.schema;
+              return oldDoc;
             }
-            newDIDSchema.version = 1;
-            newDIDSchema.required.push('name')
+          }
+        }
+      });
 
-            delete newDIDSchema.properties['schema']
+      await migrationStore.start();
 
-            const migrationStore = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            }, {
-                dids: {
-                    schema: newDIDSchema,
-                    migrationStrategies: {
-                        // 1 means, this transforms data from version 0 to version 1
-                        1: async function (oldDoc, collection) {
-                            oldDoc.name = oldDoc.schema;
-                            delete oldDoc.schema;
-                            return oldDoc;
-                        }
-                    }
-                }
+      const dids = await migrationStore.query("dids");
 
-            })
-
-            await migrationStore.start();
-
-            const dids = await migrationStore.query("dids");
-
-            expect(dids).not.toBe(undefined);
-            expect(Array.isArray(dids)).toBe(true);
-            expect(dids.length).toBe(1);
-            expect(dids[0]).toHaveProperty("name");
-            expect(dids[0]).not.toHaveProperty("schema");
-            expect(dids[0]['name']).toBe("did")
-
-        });
-
-        test("Should run the migration correctly when a complete model is being moved somewhere else", async () => {
-            const did = Domain.DID.fromString("did:prism:123456")
-            const store = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            }, makeCollections())
-
-            const newDIDSchema = Object.assign({}, Models.DIDSchema)
-            newDIDSchema.properties['name'] = {
-                type: 'string',
-            }
-            newDIDSchema.required.push('name')
-
-            delete newDIDSchema.properties['schema']
-
-            const migrationStore = new Store({
-                name: "randomdb",
-                storage: InMemory,
-                password: 'random12434',
-                ignoreDuplicate: true
-            }, {
-                dids: {
-                    schema: {
-                        ...Models.DIDSchema,
-                        version: 1
-                    },
-                    migrationStrategies: {
-                        1: async function (doc, collection) {
-                            const schema = doc.schema;
-                            const collections = collection.database.collections;
-                            delete doc.schema;
-                            await collections.newdids.insert({
-                                ...doc,
-                                uuid: '1234567',
-                                name: schema
-                            })
-                            return null
-                        }
-                    }
-                },
-                newdids: {
-                    schema: newDIDSchema
-                }
-            })
-
-            await store.start()
-            await store.insert("dids", {
-                schema: did.schema,
-                method: did.method,
-                uuid: did.toString()
-            });
-
-            await migrationStore.start();
-
-
-            const dids = await migrationStore.query("dids");
-            const newDids = await migrationStore.query('newdids');
-
-            expect(dids).not.toBe(undefined);
-            expect(Array.isArray(dids)).toBe(true);
-            expect(dids.length).toBe(0);
-
-            expect(newDids).not.toBe(undefined);
-            expect(Array.isArray(newDids)).toBe(true);
-            expect(newDids.length).toBe(1);
-            expect(newDids[0]).toHaveProperty("name");
-            expect(newDids[0]).not.toHaveProperty("schema");
-            expect(newDids[0]['name']).toBe("did")
-        })
+      expect(dids).not.toBe(undefined);
+      expect(Array.isArray(dids)).toBe(true);
+      expect(dids.length).toBe(1);
+      expect(dids[0]).toHaveProperty("name");
+      expect(dids[0]).not.toHaveProperty("schema");
+      expect(dids[0]['name']).toBe("did");
     });
+
+    test("Should run the migration correctly when a complete model is being moved somewhere else", async () => {
+      const did = Domain.DID.fromString("did:prism:123456");
+      const storeName = "05";
+      const store = createStore(storeName, {
+        dids: {
+          schema: { ...Models.DIDSchema, version: 0 },
+        },
+      });
+
+      const migrationStore = createStore(storeName, {
+        newdids: {
+          schema: { ...Models.DIDSchema },
+        },
+        dids: {
+          schema: {
+            ...Models.DIDSchema,
+            version: 1
+          },
+          migrationStrategies: {
+            // move and delete all
+            1: async (doc, collection) => {
+              const collections = collection.database.collections;
+              await collections.newdids.insert({ ...doc, uuid: "123" });
+              return null;
+            }
+          }
+        }
+      });
+
+      await store.start();
+      await store.insert("dids", {
+        schema: did.schema,
+        method: did.method,
+        uuid: did.toString()
+      });
+
+      await migrationStore.start();
+
+
+      const dida = await store.query("dids");
+      const dids = await migrationStore.query("dids");
+      const newDids = await migrationStore.query('newdids');
+
+      expect(dids).not.toBe(undefined);
+      expect(Array.isArray(dids)).toBe(true);
+      expect(dids.length).toBe(0);
+
+      expect(newDids).to.be.an("array");
+      expect(newDids.length).toBe(1);
+    });
+  });
 });
