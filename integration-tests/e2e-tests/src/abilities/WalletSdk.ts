@@ -266,7 +266,7 @@ class MessageQueue {
         } else if (piUri === SDK.ProtocolType.DidcommPresentation) {
           this.presentationMessagesStack.push(message)
         } else {
-          console.log(piUri)
+          console.warn('Unhandled messaged with piuri', piUri)
         }
       } else {
         clearInterval(this.processingId!)
