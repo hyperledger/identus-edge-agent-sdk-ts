@@ -41,7 +41,7 @@ export interface Pluto {
   /**
    * create a Backup object from the stored data
    */
-  backup(): Promise<Backup.Schema>;
+  backup(version?: Backup.Version): Promise<Backup.Schema>;
 
   /**
    * load the given data into the store
