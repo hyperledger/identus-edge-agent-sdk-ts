@@ -74,7 +74,7 @@ npm run dev
 ```
 
 ### Implementing storage for the SDK
-Pluto, the SDK storage layer, is not a complete solution and requires some work. To make this as simple as possible there are multiple options of different complexity provided. These options are discussed in more detail in the Pluto module.
+Pluto, the SDK storage layer, is not a complete solution and requires some work. To make this as simple as possible, there are multiple options of different complexity provided. These options are discussed in more detail in the Pluto module. 
 [Read more here.](./src/pluto/README.md)
 
 > [!WARNING]  
