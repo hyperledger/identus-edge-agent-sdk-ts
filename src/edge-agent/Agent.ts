@@ -2,18 +2,13 @@ import * as Domain from "../domain";
 import Apollo from "../apollo";
 import Castor from "../castor";
 import Pollux from "../pollux";
+import { Startable } from "../domain/protocols/Startable";
 import { AgentBackup } from "./Agent.Backup";
 import { SignWithDID } from "./didFunctions/Sign";
 import { CreatePrismDID } from "./didFunctions/CreatePrismDID";
 import { FetchApi } from "./helpers/FetchApi";
 import { Task } from "../utils/tasks";
-
-enum AgentState {
-  STOPPED = "stopped",
-  STARTING = "starting",
-  RUNNING = "running",
-  STOPPING = "stopping",
-}
+import { notNil } from "../utils";
 
 /**
  * Edge agent implementation
@@ -22,14 +17,7 @@ enum AgentState {
  * @class Agent
  * @typedef {Agent}
  */
-export default class Agent {
-  /**
-   * Agent state
-   *
-   * @public
-   * @type {AgentState}
-   */
-  public state: AgentState = AgentState.STOPPED;
+export default class Agent extends Startable.Controller {
   public backup: AgentBackup;
   public readonly pollux: Pollux;
 
@@ -50,6 +38,7 @@ export default class Agent {
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
     public readonly api: Domain.Api = new FetchApi(),
   ) {
+    super();
     this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
   }
@@ -83,33 +72,17 @@ export default class Agent {
     return agent;
   }
 
-  /**
-   * Asyncronously start the agent
-   *
-   * @async
-   * @returns {Promise<AgentState>}
-   */
-  async start(): Promise<AgentState> {
-    if (this.state === AgentState.STOPPED) {
-      this.state = AgentState.STARTING;
-      await this.pluto.start();
-      await this.pollux.start();
-    }
-
-    return this.state;
+  protected async _start() {
+    await this.pluto.start();
+    await this.pollux.start();
   }
 
-  /**
-   * Asyncronously stop the agent and any side task that is running
-   *
-   * @async
-   * @returns {Promise<void>}
-   */
-  async stop(): Promise<void> {
-    if (this.state !== AgentState.RUNNING) {
-      return;
+  protected async _stop() {
+    await this.pollux.stop();
+
+    if (notNil(this.pluto.stop)) {
+      await this.pluto.stop();
     }
-    this.state = AgentState.STOPPED;
   }
 
   /**

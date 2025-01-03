@@ -7,12 +7,13 @@ import { AuthorizationRequest } from "./protocols/AuthorizationRequest";
 import { TokenResponse } from "./protocols/TokenResponse";
 import { TokenRequest } from "./protocols/TokenRequest";
 import { CredentialRequest } from "./protocols/CredentialRequest";
+import { Startable } from "../../domain/protocols/Startable";
 import { FetchApi } from "../helpers/FetchApi";
 import { Task } from "../../utils/tasks";
 import * as DIDfns from "../didFunctions";
 import * as Tasks from "./tasks";
 import * as Errors from "./errors";
-import { JsonObj, expect } from "../../utils";
+import { JsonObj, expect, notNil } from "../../utils";
 
 /**
  * https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
@@ -24,20 +25,11 @@ class Connection {
     public readonly issuerMeta: OIDC.IssuerMetadata,
     public readonly scopes: string[],
     public readonly tokenResponse: TokenResponse,
-  ) { }
+  ) {}
 }
 
-// TODO make startable interface
-enum AgentState {
-  STOPPED = "stopped",
-  STARTING = "starting",
-  RUNNING = "running",
-  STOPPING = "stopping",
-}
-
-export class OIDCAgent {
+export class OIDCAgent extends Startable.Controller {
   private connections: Connection[] = [];
-  public state = AgentState.STOPPED;
   public readonly pollux: Pollux;
 
   constructor(
@@ -47,6 +39,7 @@ export class OIDCAgent {
     public readonly seed?: Domain.Seed,
     public readonly api?: Domain.Api,
   ) {
+    super();
     this.pollux = new Pollux(apollo, castor);
     this.seed = seed ?? apollo.createRandomSeed().seed;
     this.api = api ?? new FetchApi();
@@ -81,18 +74,17 @@ export class OIDCAgent {
     return agent;
   }
 
-  async start() {
-    if (this.state === AgentState.STOPPED) {
-      this.state = AgentState.STARTING;
-      await this.pluto.start();
-      await this.pollux.start();
-      this.state = AgentState.RUNNING;
-    }
-    return this.state;
+  protected async _start() {
+    await this.pluto.start();
+    await this.pollux.start();
   }
 
-  async stop(): Promise<void> {
-    this.state = AgentState.STOPPED
+  protected async _stop() {
+    await this.pollux.stop();
+
+    if (notNil(this.pluto.stop)) {
+      await this.pluto.stop();
+    }
   }
 
   private runTask<T>(task: Task<T>): Promise<T> {
