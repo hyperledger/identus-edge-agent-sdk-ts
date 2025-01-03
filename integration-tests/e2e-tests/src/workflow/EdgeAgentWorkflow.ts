@@ -23,6 +23,9 @@ export class EdgeAgentWorkflow {
     )
   }
 
+  static acceptCredentialOfferInvitation = this.connect
+  static acceptPresentationInvitation = this.connect
+
   static async waitForCredentialOffer(edgeAgent: Actor, numberOfCredentialOffer: number) {
     await edgeAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(60)).until(
@@ -154,9 +157,11 @@ export class EdgeAgentWorkflow {
       WalletSdk.execute(async (sdk, messages) => {
         const credentials = await sdk.verifiableCredentials()
         const credential = credentials[0]
+
         const requestPresentationMessage = RequestPresentation.fromMessage(
           messages.proofRequestStack.shift()!,
         )
+
         const presentation = await sdk.createPresentationForRequestProof(
           requestPresentationMessage,
           credential,
@@ -166,8 +171,7 @@ export class EdgeAgentWorkflow {
         } catch (e) {
           //
         }
-      }
-      )
+      })
     )
   }
 

@@ -54,6 +54,16 @@ export class CloudAgentWorkflow {
     )
   }
 
+  static async verifyNoConnection(cloudAgent: Actor) {
+    const connectionId = await cloudAgent.answer(
+      Notepad.notes().get("connectionId")
+    ).catch(() => null)
+  
+    await cloudAgent.attemptsTo(
+      Ensure.that(connectionId, equals(null))
+    )
+  }
+
   static async verifyCredentialState(cloudAgent: Actor, recordId: string, state: string) {
     await cloudAgent.attemptsTo(
       Wait.upTo(Duration.ofSeconds(60)).until(
@@ -74,6 +84,70 @@ export class CloudAgentWorkflow {
       )
     )
   }
+
+  static async createConnectionlessCredentialOfferInvitation(cloudAgent: Actor) {
+    const credentialOffer = {
+      claims: {
+        emailAddress: "sampleEmail",
+        familyName: "",
+        dateOfIssuance: "2023-01-01T02:02:02Z",
+        drivingLicenseID: "",
+        drivingClass: 1,
+      },
+      goalCode: "issue-vc",
+      goal: "Request issuance",
+      credentialFormat: "JWT",
+      issuingDID: CloudAgentConfiguration.publishedDid,
+      automaticIssuance: true
+    }
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("issue-credentials/credential-offers/invitation").with(credentialOffer)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set(
+        "invitation",
+        LastResponse.body().invitation.invitationUrl
+      ),
+      Notepad.notes().set(
+        "recordId",
+        LastResponse.body().recordId
+      )
+    )
+  }
+
+  static async createConnectionlessPresentationInvitation(cloudAgent: Actor) {
+    const proof = new ProofRequestAux()
+    proof.schemaId = "https://schema.org/Person"
+    proof.trustIssuers = [CloudAgentConfiguration.publishedDid]
+
+    const presentProofRequest = {
+      options: {
+        challenge: randomUUID(), // random seed prover has to sign to prevent replay attacks
+        domain: CloudAgentConfiguration.agentUrl
+      },
+      goalCode: 'present-vp',
+      goal: 'Request presentation',
+      credentialFormat: 'JWT',
+      proofs: [
+        proof
+      ]
+    }
+
+    await cloudAgent.attemptsTo(
+      Send.a(PostRequest.to("present-proof/presentations/invitation").with(presentProofRequest)),
+      Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
+      Notepad.notes().set(
+        "invitation",
+        LastResponse.body().invitation.invitationUrl
+      ),
+      Notepad.notes().set(
+        "presentationId",
+        LastResponse.body().presentationId
+      )
+    )
+  }
+
+  
 
   static async offerCredential(cloudAgent: Actor) {
     const credential = new CreateIssueCredentialRecordRequest()
