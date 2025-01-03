@@ -5,7 +5,7 @@ import { PeerDID } from "../peer-did/PeerDID";
 import { BackupManager } from "./backup/BackupManager";
 import { PlutoRepositories, repositoryFactory } from "./repositories";
 import { Arrayable, asArray, notNil } from "../utils";
-import { Startable } from "../utils/startable";
+import { Startable } from "../domain/protocols/Startable";
 import { Version } from "../domain/backup";
 
 
@@ -109,8 +109,7 @@ export namespace Pluto {
   }
 }
 
-export class Pluto implements Domain.Pluto {
-  public state = Startable.State.STOPPED;
+export class Pluto extends Startable.Controller implements Domain.Pluto {
   public BackupMgr: BackupManager;
   private Repositories: PlutoRepositories;
 
@@ -118,24 +117,29 @@ export class Pluto implements Domain.Pluto {
     private readonly store: Pluto.Store,
     private readonly keyRestoration: Domain.KeyRestoration
   ) {
+    super();
     this.Repositories = repositoryFactory(store, keyRestoration);
     this.BackupMgr = new BackupManager(this, this.Repositories);
   }
 
-  async start() {
-    await Startable.start(this, async () => {
-      if (notNil(this.store.start)) {
-        await this.store.start();
-      }
-    });
+  // TODO breaking change workarounds
+  override async start(): Promise<any> {
+    return await super.start();
+  }
+  override async stop(): Promise<any> {
+    return await super.stop();
   }
 
-  async stop() {
-    await Startable.stop(this, async () => {
-      if (notNil(this.store.stop)) {
-        await this.store.stop();
-      }
-    });
+  protected async _start() {
+    if (notNil(this.store.start)) {
+      await this.store.start();
+    }
+  }
+
+  protected async _stop() {
+    if (notNil(this.store.stop)) {
+      await this.store.stop();
+    }
   }
 
   /** Backups **/

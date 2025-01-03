@@ -2,12 +2,12 @@ import * as Domain from "../domain";
 import Apollo from "../apollo";
 import Castor from "../castor";
 import Pollux from "../pollux";
+import { Startable } from "../domain/protocols/Startable";
 import { AgentBackup } from "./Agent.Backup";
 import { SignWithDID } from "./didFunctions/Sign";
 import { CreatePrismDID } from "./didFunctions/CreatePrismDID";
 import { FetchApi } from "./helpers/FetchApi";
 import { Task } from "../utils/tasks";
-import { Startable } from "../utils/startable";
 import { notNil } from "../utils";
 
 /**
@@ -17,14 +17,7 @@ import { notNil } from "../utils";
  * @class Agent
  * @typedef {Agent}
  */
-export default class Agent implements Startable.Controller {
-  /**
-   * Agent state
-   *
-   * @public
-   * @type {Startable.State}
-   */
-  public state = Startable.State.STOPPED;
+export default class Agent extends Startable.Controller {
   public backup: AgentBackup;
   public readonly pollux: Pollux;
 
@@ -45,6 +38,7 @@ export default class Agent implements Startable.Controller {
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
     public readonly api: Domain.Api = new FetchApi(),
   ) {
+    super();
     this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
   }
@@ -78,31 +72,17 @@ export default class Agent implements Startable.Controller {
     return agent;
   }
 
-  /**
-   * Asyncronously start the agent
-   *
-   * @returns {Promise<AgentState>}
-   */
-  start(): Promise<Startable.State> {
-    return Startable.start(this, async () => {
-      await this.pluto.start();
-      await this.pollux.start();
-    });
+  protected async _start() {
+    await this.pluto.start();
+    await this.pollux.start();
   }
 
-  /**
-   * Asyncronously stop the agent and any side task that is running
-   *
-   * @returns {Promise<Startable.State>}
-   */
-  stop(): Promise<Startable.State> {
-    return Startable.stop(this, async () => {
-      await this.pollux.stop();
+  protected async _stop() {
+    await this.pollux.stop();
 
-      if (notNil(this.pluto.stop)) {
-        await this.pluto.stop();
-      }
-    });
+    if (notNil(this.pluto.stop)) {
+      await this.pluto.stop();
+    }
   }
 
   /**

@@ -66,7 +66,7 @@ import { VerificationKeyType } from "../castor/types";
 import { revocationJsonldDocuments } from "../domain/models/revocation";
 import { Bitstring } from "./utils/Bitstring";
 import { defaultHashConfig } from "./utils/jwt/config";
-import { Startable } from "../utils/startable";
+import { Startable } from "../domain/protocols/Startable";
 
 /**
  * Implementation of Pollux
@@ -75,11 +75,10 @@ import { Startable } from "../utils/startable";
  * @class Pollux
  * @typedef {Pollux}
  */
-export default class Pollux implements IPollux, Startable.Controller {
+export default class Pollux extends Startable.Controller implements IPollux {
   private _anoncreds: AnoncredsLoader | undefined;
   private _jwe: typeof import("jwe-wasm") | undefined;
   private _pako = pako;
-  public state = Startable.State.STOPPED;
 
   constructor(
     private apollo: Apollo,
@@ -88,6 +87,7 @@ export default class Pollux implements IPollux, Startable.Controller {
     private JWT = new JWTClass(apollo, castor),
     private SDJWT = new SDJWTClass(apollo, castor)
   ) {
+    super();
   }
 
   get anoncreds() {
@@ -104,20 +104,16 @@ export default class Pollux implements IPollux, Startable.Controller {
     return this._jwe;
   }
 
-  start(): Promise<Startable.State> {
-    return Startable.start(this, async () => {
-      this._anoncreds = await AnoncredsLoader.getInstance();
-      this._jwe ??= await import("jwe-wasm").then(async module => {
-        const wasmInstance = module.initSync({ module: wasmBuffer });
-        await module.default(wasmInstance);
-        return module;
-      });
+  protected async _start() {
+    this._anoncreds = await AnoncredsLoader.getInstance();
+    this._jwe ??= await import("jwe-wasm").then(async module => {
+      const wasmInstance = module.initSync({ module: wasmBuffer });
+      await module.default(wasmInstance);
+      return module;
     });
   }
 
-  async stop(): Promise<Startable.State> {
-    return Startable.stop(this, async () => {});
-  }
+  protected async _stop() {}
 
   async revealCredentialFields(
     credential: Credential,
