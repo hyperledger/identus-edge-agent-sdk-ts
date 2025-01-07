@@ -13,6 +13,7 @@ import * as Fixtures from "../fixtures";
 import {
   Api,
   AttachmentDescriptor,
+  AttachmentFormats,
   Credential,
   CredentialMetadata,
   CredentialType,
@@ -45,7 +46,7 @@ import InMemoryStore from "../fixtures/inmemory";
 import { ApiResponse, Pluto as IPluto } from "../../src/domain";
 import { Pluto } from "../../src/pluto/Pluto";
 import { RevocationNotification } from "../../src/edge-agent/protocols/revocation/RevocationNotfiication";
-import { Castor, Store } from "../../src";
+import { Castor, SDJWTCredential, Store } from "../../src";
 import { randomUUID } from "crypto";
 import { JWT } from "../../src/pollux/utils/JWT";
 import { AgentBackup } from '../../src/edge-agent/Agent.Backup';
@@ -269,7 +270,6 @@ describe("Agent Tests", () => {
     */
     Fixtures.Backup.backups.forEach(backupFixture => {
       describe(`Backup/Restore :: ${backupFixture.title}`, () => {
-        
         test("backup", async () => {
           sandbox.stub(pluto, "backup").resolves(backupFixture.json);
 
@@ -1025,6 +1025,197 @@ describe("Agent Tests", () => {
           expect(result).to.eventually.be.rejected;
 
         });
+      });
+    });
+
+    describe("initiatePresentationRequest", () => {
+      test("JWT", async () => {
+        const result = await agent.initiatePresentationRequest(CredentialType.JWT, Fixtures.DIDs.peerDID1, { claims: {} });
+
+        expect(result).toBeInstanceOf(RequestPresentation);
+        expect(result.attachments).toHaveLength(1);
+        const attached = result.attachments[0];
+        expect(attached.id).to.be.a("string");
+        expect(attached.format).toBe(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS);
+        expect(attached.mediaType).toBe("application/json");
+        const expectedBody = {
+          presentation_definition: {
+            id: expect.stringMatching(""),
+            input_descriptors: [
+              {
+                id: expect.stringMatching(""),
+                name: "Presentation",
+                purpose: "Verifying Credentials",
+                constraints: {
+                  fields: [
+                  ],
+                  limit_disclosure: "required",
+                },
+                format: {
+                  jwt: {
+                    alg: [
+                      "ES256K",
+                    ],
+                  },
+                },
+              },
+            ],
+            format: {
+              jwt: {
+                alg: [
+                  "ES256K",
+                ],
+              },
+            },
+          },
+          options: {
+            challenge: expect.stringContaining("Sign this text"),
+            domain: "N/A",
+          },
+        };
+
+        // TODO fix types
+        expect((attached.data as any).json).toEqual(expectedBody);
+        expect(attached.payload).toEqual(expectedBody);
+      });
+
+      test("SDJWT", async () => {
+        const result = await agent.initiatePresentationRequest(CredentialType.SDJWT, Fixtures.DIDs.peerDID1, { claims: {} });
+
+        expect(result).toBeInstanceOf(RequestPresentation);
+        expect(result.attachments).toHaveLength(1);
+        const attached = result.attachments[0];
+        expect(attached.id).to.be.a("string");
+        expect(attached.format).toBe(AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS);
+        expect(attached.mediaType).toBe("application/json");
+        const expectedBody = {
+          presentation_definition: {
+            id: expect.stringMatching(""),
+            input_descriptors: [
+              {
+                id: expect.stringMatching(""),
+                name: "Presentation",
+                purpose: "Verifying Credentials",
+                constraints: {
+                  fields: [
+                  ],
+                  limit_disclosure: "required",
+                },
+                format: {
+                  sdjwt: {
+                    alg: [
+                      "ES256K",
+                    ],
+                  },
+                },
+              },
+            ],
+            format: {
+              sdjwt: {
+                alg: [
+                  "ES256K",
+                ],
+              },
+            },
+          },
+          options: {},
+        };
+
+        // TODO fix types
+        expect((attached.data as any).json).toEqual(expectedBody);
+        expect(attached.payload).toEqual(expectedBody);
+      });
+    });
+
+    describe("handlePresentation", () => {
+      const jwt = new JWT(new Apollo(), CastorMock);
+      const didstr = "did:prism:da61cf65fbf04b6b9fe06fa3b577fca3e05895a13902decaad419845a20d2d78:Ct8BCtwBEnQKH2F1dGhlbnRpY2F0aW9uYXV0aGVudGljYXRpb25LZXkQBEJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-ixJkCg9tYXN0ZXJtYXN0ZXJLZXkQAUJPCglzZWNwMjU2azESIP0gMhTAVOk7SgWRluzmeJIjtm2-YMc6AbrD3ePKJQj-GiDZlsa5pQuXGzKvgK10D8SzuDvh79u5oMB7-ZeJNAh-iw";
+      const payload: JWTCredentialPayload = {
+        iss: didstr,
+        sub: didstr,
+        nbf: 23456754321,
+        exp: 2134564321,
+        vc: {
+          credentialSubject: { test: "did:prism" }
+        } as any
+      };
+
+      beforeEach(() => {
+        sandbox.stub(pluto, "getDIDPrivateKeysByDID")
+          .resolves([Fixtures.Keys.secp256K1.privateKey]);
+      });
+
+      test("JWT", async () => {
+        const presentationReq = await agent.initiatePresentationRequest(CredentialType.JWT, Fixtures.DIDs.peerDID1, {
+          claims: {
+            test: {
+              type: "string",
+              pattern: "did:prism"
+            }
+          }
+        });
+
+        const jwtString = await jwt.sign({
+          issuerDID: DID.fromString(didstr),
+          privateKey: Fixtures.Keys.secp256K1.privateKey,
+          payload: payload,
+        });
+
+        const credential = JWTCredential.fromJWS(jwtString);
+        const presentation = await agent.createPresentationForRequestProof(presentationReq, credential);
+        const result = await agent.handlePresentation(presentation);
+
+        expect(result).toBe(true);
+      });
+
+      test("SDJWT", async () => {
+        const presentationReq = await agent.initiatePresentationRequest(CredentialType.SDJWT, Fixtures.DIDs.peerDID1, {
+          claims: {
+            test: {
+              type: "string",
+              pattern: "did:prism"
+            }
+          }
+        });
+
+        const jwtString = await jwt.sign({
+          issuerDID: DID.fromString(didstr),
+          privateKey: Fixtures.Keys.secp256K1.privateKey,
+          payload: payload,
+        });
+
+        const credential = SDJWTCredential.fromJWS(jwtString);
+        const presentation = await agent.createPresentationForRequestProof(presentationReq, credential);
+        const result = await agent.handlePresentation(presentation);
+
+        expect(result).toBe(true);
+      });
+
+      test("Anoncreds", async () => {
+        sandbox.stub(pluto, "getLinkSecret").resolves(Fixtures.Credentials.Anoncreds.linkSecret);
+
+        sandbox.stub(pollux as any, "fetchSchema")
+          .resolves(Fixtures.Credentials.Anoncreds.schema);
+
+        sandbox.stub(pollux as any, "fetchCredentialDefinition")
+          .resolves(Fixtures.Credentials.Anoncreds.credentialDefinition);
+
+        const presentationReq = await agent.initiatePresentationRequest(CredentialType.AnonCreds, Fixtures.DIDs.peerDID1, {
+          attributes: {
+            attr1_referent: {
+              name: "name",
+              restrictions: {
+                cred_def_id: "did:web:xyz/resource/definition",
+              },
+            },
+          }
+        });
+
+        const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
+        const presentation = await agent.createPresentationForRequestProof(presentationReq, credential);
+        const result = await agent.handlePresentation(presentation);
+
+        expect(result).toBe(true);
       });
     });
   });
