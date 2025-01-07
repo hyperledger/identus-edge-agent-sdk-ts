@@ -8,7 +8,7 @@ import { CredentialOfferPayloads, CredentialOfferTypes, Pollux as IPollux, Proce
 import { base64, base64url } from "multiformats/bases/base64";
 import { AnoncredsLoader } from "./AnoncredsLoader";
 import * as pako from 'pako';
-import wasmBuffer from "jwe-wasm/jwe_rust_bg.wasm"
+import wasmBuffer from "jwe-wasm/jwe_rust_bg.wasm";
 import type { PresentationFrame } from '@sd-jwt/types';
 
 import {
@@ -66,6 +66,7 @@ import { VerificationKeyType } from "../castor/types";
 import { revocationJsonldDocuments } from "../domain/models/revocation";
 import { Bitstring } from "./utils/Bitstring";
 import { defaultHashConfig } from "./utils/jwt/config";
+import { Startable } from "../domain/protocols/Startable";
 
 /**
  * Implementation of Pollux
@@ -74,7 +75,7 @@ import { defaultHashConfig } from "./utils/jwt/config";
  * @class Pollux
  * @typedef {Pollux}
  */
-export default class Pollux implements IPollux {
+export default class Pollux extends Startable.Controller implements IPollux {
   private _anoncreds: AnoncredsLoader | undefined;
   private _jwe: typeof import("jwe-wasm") | undefined;
   private _pako = pako;
@@ -86,6 +87,7 @@ export default class Pollux implements IPollux {
     private JWT = new JWTClass(apollo, castor),
     private SDJWT = new SDJWTClass(apollo, castor)
   ) {
+    super();
   }
 
   get anoncreds() {
@@ -102,23 +104,32 @@ export default class Pollux implements IPollux {
     return this._jwe;
   }
 
+  protected async _start() {
+    this._anoncreds = await AnoncredsLoader.getInstance();
+    this._jwe ??= await import("jwe-wasm").then(async module => {
+      const wasmInstance = module.initSync({ module: wasmBuffer });
+      await module.default(wasmInstance);
+      return module;
+    });
+  }
+
+  protected async _stop() {}
 
   async revealCredentialFields(
     credential: Credential,
     fields: string[],
     linkSecret?: string
   ) {
-
     const type = credential.credentialType;
     if (credential instanceof AnonCredsCredential) {
       if (!linkSecret) {
-        throw new PolluxError.InvalidCredentialError("Link secret is required when revealing anoncreds fields")
+        throw new PolluxError.InvalidCredentialError("Link secret is required when revealing anoncreds fields");
       }
       const disclosedFields: { [K in keyof Credential['claims'][number]]: any } = {};
       const availableFields = fields.filter((field) =>
         credential.claims.find((claim) =>
           Object.keys(claim).includes(field)) !== undefined
-      )
+      );
 
       for (const field of availableFields) {
         disclosedFields[field] = {
@@ -126,7 +137,7 @@ export default class Pollux implements IPollux {
           restrictions: {
             cred_def_id: credential.credentialDefinitionId
           }
-        }
+        };
       }
 
       const credentialDefinitionUrl = credential.credentialDefinitionId.replace("host.docker.internal", "localhost");
@@ -147,7 +158,7 @@ export default class Pollux implements IPollux {
         },
         credential.toJSON(),
         linkSecret
-      )
+      );
       const revealedFields: { [K in keyof Credential['claims'][number]]: any } = {};
       for (const field of Object.keys(presentation.requested_proof.revealed_attrs)) {
         revealedFields[field] = presentation.requested_proof.revealed_attrs[field].raw;
@@ -160,16 +171,16 @@ export default class Pollux implements IPollux {
         const disclosed = Object.values(computed);
         const decoded = decodeSdJwtSync(credential.id, hasherSync);
         const disclosedClaim = getClaimsSync<typeof disclosedClaims>(decoded.jwt.payload, disclosed, hasherSync);
-        disclosedClaims = { ...disclosedClaims, ...disclosedClaim }
+        disclosedClaims = { ...disclosedClaims, ...disclosedClaim };
       }
-      return disclosedClaims
+      return disclosedClaims;
 
     } else {
       const claim = credential.claims.at(0);
       if (!claim) {
-        throw new PolluxError.InvalidCredentialError("Invalid claims")
+        throw new PolluxError.InvalidCredentialError("Invalid claims");
       }
-      return claim
+      return claim;
     }
   }
 
@@ -193,20 +204,20 @@ export default class Pollux implements IPollux {
 
       return this._pako.ungzip(Uint8Array.from(encodedList));
     } catch (err) {
-      throw new PolluxError.InvalidRevocationStatusResponse(`Couldn't ungzip base64 encoded list, err: ${(err as Error).message}`)
+      throw new PolluxError.InvalidRevocationStatusResponse(`Couldn't ungzip base64 encoded list, err: ${(err as Error).message}`);
     }
   }
 
   private async encode(data: any) {
     const customLoader = async (url: any) => {
-      const cached = (revocationJsonldDocuments as any)[url]
+      const cached = (revocationJsonldDocuments as any)[url];
       // istanbul ignore else
       if (cached) {
         const doc: RemoteDocument = {
           documentUrl: url,
           document: cached
-        }
-        return doc
+        };
+        return doc;
       }
       // The above ignores are justified because we are mocking the API calls
       // And always using the catched jsonLD documents for statusProof..
@@ -215,9 +226,9 @@ export default class Pollux implements IPollux {
       const doc: RemoteDocument = {
         documentUrl: url,
         document: response.body
-      }
+      };
       // istanbul ignore next
-      return doc
+      return doc;
     };
 
     const canonised = await jsonld.canonize(data, {
@@ -249,10 +260,10 @@ export default class Pollux implements IPollux {
         const { publicKeyJwk } = decodedVerificationMethod;
         const verificationMethodType = decodedVerificationMethod.type;
         if (!publicKeyJwk) {
-          throw new PolluxError.InvalidCredentialStatus("No public jwk provided")
+          throw new PolluxError.InvalidCredentialStatus("No public jwk provided");
         }
         if (verificationMethodType !== VerificationKeyType.EcdsaSecp256k1VerificationKey2019) {
-          throw new PolluxError.InvalidCredentialStatus(`Only ${VerificationKeyType.EcdsaSecp256k1VerificationKey2019} is supported`)
+          throw new PolluxError.InvalidCredentialStatus(`Only ${VerificationKeyType.EcdsaSecp256k1VerificationKey2019} is supported`);
         }
         const curve = decodedVerificationMethod.publicKeyJwk.crv;
         const kty = decodedVerificationMethod.publicKeyJwk.kty;
@@ -274,25 +285,25 @@ export default class Pollux implements IPollux {
         }
         const jwsArray = proofObject.jws.split(".");
         if (jwsArray.length !== 3) {
-          throw new PolluxError.InvalidJWTString("Credential status jwt is invalid")
+          throw new PolluxError.InvalidJWTString("Credential status jwt is invalid");
         }
         const { proof, ...cleanedPayload } = revocation;
         const payload = { ...cleanedPayload };
-        const encoded = await this.encode(payload)
+        const encoded = await this.encode(payload);
         const signature = Buffer.from(base64url.baseDecode(jwsArray[2]));
-        const signaturePayload = Buffer.from(`${jwsArray[0]}.${encoded.toString()}`)
+        const signaturePayload = Buffer.from(`${jwsArray[0]}.${encoded.toString()}`);
         const isSignatureValid = pk.verify(signaturePayload, signature);
         if (!isSignatureValid) {
           throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus invalid signature`);
         }
-        const statusListDecoded = this.extractEncodedList(revocation)
-        const bitstring = new Bitstring({ buffer: statusListDecoded })
-        return bitstring.get(statusListIndex)
+        const statusListDecoded = this.extractEncodedList(revocation);
+        const bitstring = new Bitstring({ buffer: statusListDecoded });
+        return bitstring.get(statusListIndex);
       }
       throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus proof type not supported`);
     } catch (err) {
       if (err instanceof PolluxError.InvalidRevocationStatusResponse) {
-        throw err
+        throw err;
       } else {
         throw new PolluxError.InvalidRevocationStatusResponse(`Err ${(err as Error).message}`);
       }
@@ -309,10 +320,10 @@ export default class Pollux implements IPollux {
     );
     // istanbul ignore next
     if (response.httpStatus !== 200) {
-      throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus response status code ${response.httpStatus}`)
+      throw new PolluxError.InvalidRevocationStatusResponse(`CredentialStatus response status code ${response.httpStatus}`);
     }
     // istanbul ignore next
-    return response.body
+    return response.body;
   }
 
   async isCredentialRevoked(credential: Credential): Promise<boolean> {
@@ -322,7 +333,7 @@ export default class Pollux implements IPollux {
         if (credential.credentialStatus) {
           throw new PolluxError.CredentialRevocationTypeInvalid(
             `CredentialStatus revocation type not supported`
-          )
+          );
         } else {
           //Credential is non revocable
           return false;
@@ -333,11 +344,11 @@ export default class Pollux implements IPollux {
       if (!this.extractVerificationStatusFromResponse(response.credentialSubject)) {
         throw new PolluxError.CredentialRevocationTypeInvalid(
           `CredentialStatus response revocation type not supported`
-        )
+        );
       }
       return this.verifyRevocationProof(response, revocationStatus.statusListIndex);
     }
-    throw new PolluxError.CredentialTypeNotSupported("Only JWT Credential are supported")
+    throw new PolluxError.CredentialTypeNotSupported("Only JWT Credential are supported");
   }
 
 
@@ -346,18 +357,18 @@ export default class Pollux implements IPollux {
       request: PresentationDefinitionRequest<Type>,
       type: Type,
     ): request is PresentationDefinitionRequest<Type> {
-    return isPresentationDefinitionRequestType(request, type)
+    return isPresentationDefinitionRequestType(request, type);
   }
 
   private getDescriptorItems(inputDescriptors: InputDescriptor[], credential: Credential): DescriptorItem[] {
-    const isJWT = credential instanceof JWTCredential
+    const isJWT = credential instanceof JWTCredential;
     return inputDescriptors.map(
       (inputDescriptor) => {
         if (inputDescriptor.format &&
           (!inputDescriptor.format.jwt || !inputDescriptor.format.jwt.alg) &&
           (!inputDescriptor.format.sdjwt || !inputDescriptor.format.sdjwt.alg)
         ) {
-          throw new PolluxError.InvalidDescriptorFormatError()
+          throw new PolluxError.InvalidDescriptorFormatError();
         }
         return isJWT ? {
           id: inputDescriptor.id,
@@ -372,7 +383,7 @@ export default class Pollux implements IPollux {
           id: inputDescriptor.id,
           format: DescriptorItemFormat.SDJWT,
           path: "$.verifiablePresentation[0]",
-        }
+        };
       });
   }
 
@@ -383,7 +394,7 @@ export default class Pollux implements IPollux {
     options?: {
       presentationFrame?: PresentationFrame<any>,
       domain?: string,
-      challenge?: string
+      challenge?: string;
     }
   ): Promise<PresentationSubmission<CredentialType.JWT | CredentialType.SDJWT>> {
 
@@ -393,22 +404,22 @@ export default class Pollux implements IPollux {
       if (
         !this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.JWT)
       ) {
-        throw new Error("PresentationDefinition didn't match credential type")
+        throw new Error("PresentationDefinition didn't match credential type");
       }
     } else if (credential instanceof SDJWTCredential) {
       if (
         !this.isPresentationDefinitionRequestType(presentationDefinitionRequest, CredentialType.SDJWT)
       ) {
-        throw new Error("PresentationDefinition didn't match credential type")
+        throw new Error("PresentationDefinition didn't match credential type");
       }
     }
 
-    const descriptorItems: DescriptorItem[] = this.getDescriptorItems(inputDescriptors, credential)
+    const descriptorItems: DescriptorItem[] = this.getDescriptorItems(inputDescriptors, credential);
     if (!privateKey.isSignable()) {
-      throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.")
+      throw new CastorError.InvalidKeyError("Cannot sign the proof challenge with this key.");
     }
     if (!credential.isProvable()) {
-      throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.")
+      throw new PolluxError.InvalidCredentialError("Cannot create proofs with this type of credential.");
     }
 
     const disclosedFields = await this.revealCredentialFields(credential, ['subject', 'sub']);
@@ -423,7 +434,7 @@ export default class Pollux implements IPollux {
         iss: subject,
         nbf: nbf,
         vp: credential.presentation(),
-      }
+      };
 
       const challenge = options && "challenge" in options && options?.challenge;
       const domain = options && "domain" in options && options?.domain;
@@ -453,10 +464,10 @@ export default class Pollux implements IPollux {
         jws: credential.id,
         privateKey,
         presentationFrame: presentationFrame
-      })
+      });
 
     } else {
-      throw new PolluxError.InvalidCredentialError("Expected JWT or SDJWT credential")
+      throw new PolluxError.InvalidCredentialError("Expected JWT or SDJWT credential");
     }
 
     const presentationSubmission: PresentationSubmission = {
@@ -468,9 +479,9 @@ export default class Pollux implements IPollux {
       verifiablePresentation: [
         jws
       ]
-    }
+    };
 
-    return presentationSubmission
+    return presentationSubmission;
   }
 
   private async createAnoncredsPresentationSubmission(
@@ -502,7 +513,7 @@ export default class Pollux implements IPollux {
     options?: {
       presentationFrame?: PresentationFrame<any>,
       domain?: string,
-      challenge?: string
+      challenge?: string;
     }
 
   ): Promise<PresentationSubmission<Type>> {
@@ -511,14 +522,14 @@ export default class Pollux implements IPollux {
       this.isPresentationDefinitionRequestType<CredentialType.SDJWT>(presentationDefinitionRequest, CredentialType.SDJWT)
     ) {
       if (!privateKey || !(privateKey instanceof PrivateKey)) {
-        throw new CastorError.InvalidKeyError("Required a valid private key for a JWT Presentation submission")
+        throw new CastorError.InvalidKeyError("Required a valid private key for a JWT Presentation submission");
       }
       return this.createJWTPresentationSubmission(
         presentationDefinitionRequest,
         credential,
         privateKey,
         options
-      )
+      );
     }
 
     if (this.isPresentationDefinitionRequestType<CredentialType.AnonCreds>(
@@ -526,18 +537,18 @@ export default class Pollux implements IPollux {
     ) {
 
       if (!(credential instanceof AnonCredsCredential)) {
-        throw new CastorError.InvalidKeyError("Required a valid Anoncreds Credential for Anoncreds Presentation submission")
+        throw new CastorError.InvalidKeyError("Required a valid Anoncreds Credential for Anoncreds Presentation submission");
       }
 
       if (!privateKey || !(privateKey instanceof LinkSecret)) {
-        throw new CastorError.InvalidKeyError("Required a valid link secret for a Anoncreds Presentation submission")
+        throw new CastorError.InvalidKeyError("Required a valid link secret for a Anoncreds Presentation submission");
       }
 
       return this.createAnoncredsPresentationSubmission(
         presentationDefinitionRequest,
         credential,
         privateKey
-      )
+      );
     }
 
     throw new PolluxError.InvalidPresentationDefinitionError();
@@ -547,7 +558,7 @@ export default class Pollux implements IPollux {
   private parsePresentationSubmission<
     Type extends CredentialType = CredentialType.JWT
   >(data: any, type: Type): data is PresentationSubmission<Type> {
-    return parsePresentationSubmission(this.anoncreds, data, type)
+    return parsePresentationSubmission(this.anoncreds, data, type);
   }
 
 
@@ -559,30 +570,30 @@ export default class Pollux implements IPollux {
 
     if (type === CredentialType.JWT) {
       if (!(options instanceof JWTPresentationOptions) || !options.jwt) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt or sdjwt is undefined")
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt or sdjwt is undefined");
       }
       jwtOptions = options.jwt;
       if (!jwtOptions) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt is undefined")
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt is undefined");
       }
 
       if (!jwtOptions.jwtAlg) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.");
       }
     } else {
       if (!(options instanceof SDJWPresentationOptions) || !options.sdjwt) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt or sdjwt is undefined")
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt or sdjwt is undefined");
       }
       jwtOptions = options.sdjwt;
       if (!jwtOptions) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt is undefined")
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options jwt is undefined");
       }
 
       if (!jwtOptions.jwtAlg) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.")
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation options didn't include jwtAlg, jwtVcAlg or jwtVpAlg, one of them is required.");
       }
     }
-    return jwtOptions
+    return jwtOptions;
   }
   async createPresentationDefinitionRequest<Type extends CredentialType = CredentialType.JWT>(
     type: Type,
@@ -595,16 +606,16 @@ export default class Pollux implements IPollux {
       const jwtOptions = this.validatePresentationDefinitionOptions(
         type,
         options
-      )
+      );
       if (!(options instanceof JWTPresentationOptions) && !(options instanceof SDJWPresentationOptions)) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Options must be JWTPresentationOptions or SDJWPresentationOptions for JWT")
+        throw new PolluxError.InvalidPresentationDefinitionError("Options must be JWTPresentationOptions or SDJWPresentationOptions for JWT");
       }
 
       if (
         !validatePresentationClaims(presentationClaims, CredentialType.JWT) ||
         !validatePresentationClaims(presentationClaims, CredentialType.SDJWT)
       ) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid.")
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid.");
       }
 
       const paths = Object.keys(presentationClaims.claims);
@@ -620,8 +631,8 @@ export default class Pollux implements IPollux {
             optional: false,
             filter: presentationClaims.claims[path],
             name: path
-          }
-          return inputField
+          };
+          return inputField;
         }),
         limit_disclosure: InputLimitDisclosure.REQUIRED
       };
@@ -636,7 +647,7 @@ export default class Pollux implements IPollux {
             type: "string",
             pattern: presentationClaims.issuer
           }
-        })
+        });
       }
 
       const key = type === CredentialType.JWT ? 'jwt' : 'sdjwt';
@@ -644,14 +655,14 @@ export default class Pollux implements IPollux {
         [key]: {
           alg: jwtOptions.jwtAlg ?? []
         },
-      }
+      };
       const inputDescriptor: InputDescriptor = {
         id: uuid(),
         name: options.name,
         purpose: options.purpose,
         constraints: constaints,
         format: format
-      }
+      };
 
       const presentationDefinitionOptions = options instanceof JWTPresentationOptions ?
         {
@@ -659,7 +670,7 @@ export default class Pollux implements IPollux {
           domain: options.domain
         } : {
 
-        }
+        };
       const presentationDefinitionRequest: PresentationDefinitionRequest<typeof type> = {
         presentation_definition: {
           id: uuid(),
@@ -669,17 +680,17 @@ export default class Pollux implements IPollux {
           format: format,
         },
         options: presentationDefinitionOptions
-      }
-      return presentationDefinitionRequest
+      };
+      return presentationDefinitionRequest;
     }
 
     if (type === CredentialType.AnonCreds) {
       if (!(options instanceof AnoncredsPresentationOptions)) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Required field options is undefined, should be AnoncredsPresentationOptions")
+        throw new PolluxError.InvalidPresentationDefinitionError("Required field options is undefined, should be AnoncredsPresentationOptions");
       }
 
       if (!validatePresentationClaims(presentationClaims, CredentialType.AnonCreds)) {
-        throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid for anoncreds.")
+        throw new PolluxError.InvalidPresentationDefinitionError("Presentation claims are invalid for anoncreds.");
       }
 
       const claims = presentationClaims;
@@ -702,7 +713,7 @@ export default class Pollux implements IPollux {
                   undefined;
 
           if (!pType || !pValue) {
-            throw new Error("TODO improve, should return valid ptype")
+            throw new Error("TODO improve, should return valid ptype");
           }
 
           const predicate: Anoncreds.RequestedPredicates[
@@ -711,11 +722,11 @@ export default class Pollux implements IPollux {
             name: claimPredicate.name,
             p_type: pType,
             p_value: pValue
-          }
+          };
           return {
             ...all,
             [`${claimPredicate.name}${i > 0 ? '_' + i : ''}`]: predicate
-          }
+          };
         }, {});
 
       const presentationDefinitionRequest: PresentationDefinitionRequest<CredentialType.AnonCreds> = {
@@ -724,12 +735,12 @@ export default class Pollux implements IPollux {
         version: "0.1",
         requested_attributes: claims.attributes ?? {},
         requested_predicates: requestedPredicates
-      }
+      };
 
-      return presentationDefinitionRequest
+      return presentationDefinitionRequest;
     }
 
-    throw new PolluxError.CredentialTypeNotSupported()
+    throw new PolluxError.CredentialTypeNotSupported();
 
   }
 
@@ -758,7 +769,7 @@ export default class Pollux implements IPollux {
       return options && options.presentationDefinitionRequest && typeof options.presentationDefinitionRequest === "object" ? true : false;
     }
 
-    return false
+    return false;
   }
 
   private validateInputDescriptor(
@@ -787,30 +798,30 @@ export default class Pollux implements IPollux {
                   if (filter.pattern) {
                     const pattern = new RegExp(filter.pattern);
                     if (pattern.test(fieldInVC) || fieldInVC === filter.pattern) {
-                      validClaim = true
+                      validClaim = true;
                     } else {
-                      reason = `Expected the ${path} field to be "${filter.pattern}" but got "${fieldInVC}"`
+                      reason = `Expected the ${path} field to be "${filter.pattern}" but got "${fieldInVC}"`;
                     }
                   } else if (filter.enum) {
                     if (filter.enum.includes(fieldInVC)) {
-                      validClaim = true
+                      validClaim = true;
                     } else {
-                      reason = `Expected the ${path} field to be one of ${filter.enum.join(", ")} but got ${fieldInVC}`
+                      reason = `Expected the ${path} field to be one of ${filter.enum.join(", ")} but got ${fieldInVC}`;
                     }
-                    validClaim = filter.enum.includes(fieldInVC)
+                    validClaim = filter.enum.includes(fieldInVC);
                   } else if (filter.const && fieldInVC === filter.pattern) {
                     if (fieldInVC === filter.const) {
-                      validClaim = true
+                      validClaim = true;
                     } else {
-                      reason = `Expected the ${path} field to be "${filter.const}" but got "${fieldInVC}"`
+                      reason = `Expected the ${path} field to be "${filter.const}" but got "${fieldInVC}"`;
                     }
                     validClaim = fieldInVC === filter.const;
                   }
                 } else if (!reason) {
-                  reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
+                  reason = `Expected one of the paths ${field.path.join(", ")} to exist.`;
                 }
               } else {
-                reason = `Expected one of the paths ${field.path.join(", ")} to exist.`
+                reason = `Expected one of the paths ${field.path.join(", ")} to exist.`;
               }
             }
             if (!validClaim) {
@@ -845,7 +856,7 @@ export default class Pollux implements IPollux {
           SDJWTCredential.fromJWS(jws) :
           JWTCredential.fromJWS(jws);
 
-        const issuer = presentation.issuer
+        const issuer = presentation.issuer;
         const presentationDefinitionOptions = options.presentationDefinitionRequest;
 
         if ("challenge" in presentationDefinitionOptions && "domain" in presentationDefinitionOptions) {
@@ -873,7 +884,7 @@ export default class Pollux implements IPollux {
           credentialValid = await this.JWT.verify({
             issuerDID: issuer,
             jws
-          })
+          });
 
           if (!credentialValid) {
             throw new InvalidVerifyCredentialError(jws, "Invalid Holder Presentation JWS Signature");
@@ -886,7 +897,7 @@ export default class Pollux implements IPollux {
             issuerDID: issuer,
             jws,
             requiredClaimKeys: requiredClaims
-          })
+          });
 
         }
 
@@ -903,8 +914,8 @@ export default class Pollux implements IPollux {
               `Invalid Submission, ${descriptorItem.path} of format ${DescriptorItemFormat.JWT_VP} must provide a nested_path with ${DescriptorItemFormat.JWT_VC} for JWT`
             );
           }
-          const verifiableCredentialMapper = new DescriptorPath(verifiablePresentation)
-          vc = verifiableCredentialMapper.getValue(nestedPath!.path)
+          const verifiableCredentialMapper = new DescriptorPath(verifiablePresentation);
+          vc = verifiableCredentialMapper.getValue(nestedPath!.path);
           if (!vc) {
             throw new InvalidVerifyCredentialError(jws, "Invalid Verifiable Presentation payload, cannot find vc");
           }
@@ -937,16 +948,16 @@ export default class Pollux implements IPollux {
           const claims = await this.SDJWT.reveal(
             sdjwtPresentation.core.jwt?.payload ?? {},
             sdjwtPresentation.core.disclosures ?? [],
-          )
+          );
           verifiableCredentialPropsMapper = new DescriptorPath(claims);
-          vc = presentation.id
+          vc = presentation.id;
         }
         const inputDescriptor = inputDescriptors.find((inputDescriptor) => inputDescriptor.id === descriptorItem.id);
         this.validateInputDescriptor(
           vc,
           verifiableCredentialPropsMapper,
           inputDescriptor
-        )
+        );
         return true;
       }
       throw new InvalidVerifyFormatError(
@@ -973,8 +984,8 @@ export default class Pollux implements IPollux {
     const credentialSchema =
       await this.fetchSchema(schemaUrl);
 
-    const schemas_dict = new Map<string, Anoncreds.CredentialSchemaType>()
-    const definitions_dict = new Map<string, Anoncreds.CredentialDefinitionType>()
+    const schemas_dict = new Map<string, Anoncreds.CredentialSchemaType>();
+    const definitions_dict = new Map<string, Anoncreds.CredentialDefinitionType>();
 
     definitions_dict.set(cred_def_id, credentialDefinition);
     schemas_dict.set(schema_id, credentialSchema);
@@ -985,7 +996,7 @@ export default class Pollux implements IPollux {
       options.presentationDefinitionRequest,
       Object.fromEntries(schemas_dict),
       Object.fromEntries(definitions_dict)
-    )
+    );
   }
 
   verifyPresentationSubmission(presentationSubmission: PresentationSubmission<CredentialType.AnonCreds>, options: IPollux.verifyPresentationSubmission.options.Anoncreds): Promise<boolean>;
@@ -998,22 +1009,22 @@ export default class Pollux implements IPollux {
 
     const isValidPresentationJWTSubmission = this.parsePresentationSubmission<CredentialType.JWT>(
       presentationSubmission, CredentialType.JWT
-    )
+    );
     if (isValidPresentationJWTSubmission && this.validPresentationSubmissionOptions<
       IPollux.verifyPresentationSubmission.options.JWT,
       CredentialType.JWT
     >(options, CredentialType.JWT)) {
-      return this.verifyPresentationSubmissionJWT(presentationSubmission, options)
+      return this.verifyPresentationSubmissionJWT(presentationSubmission, options);
     }
 
     const isValidPresentationSDJWTSubmission = this.parsePresentationSubmission<CredentialType.SDJWT>(
       presentationSubmission, CredentialType.SDJWT
-    )
+    );
     if (isValidPresentationSDJWTSubmission && this.validPresentationSubmissionOptions<
       IPollux.verifyPresentationSubmission.options.SDJWT,
       CredentialType.SDJWT
     >(options, CredentialType.SDJWT)) {
-      return this.verifyPresentationSubmissionJWT(presentationSubmission, options)
+      return this.verifyPresentationSubmissionJWT(presentationSubmission, options);
     }
 
     const isValidPresentationAnoncredsSubmission = this.parsePresentationSubmission<CredentialType.AnonCreds>(presentationSubmission, CredentialType.AnonCreds);
@@ -1021,11 +1032,11 @@ export default class Pollux implements IPollux {
       const validAnoncredsPresentationSubmissionOptions = this.validPresentationSubmissionOptions<
         IPollux.verifyPresentationSubmission.options.Anoncreds,
         CredentialType.AnonCreds
-      >(options, CredentialType.AnonCreds)
+      >(options, CredentialType.AnonCreds);
       if (!validAnoncredsPresentationSubmissionOptions) {
-        throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid')
+        throw new InvalidVerifyFormatError('VerifyPresentationSubmission options are invalid');
       }
-      return this.verifyPresentationSubmissionAnoncreds(presentationSubmission, options)
+      return this.verifyPresentationSubmissionAnoncreds(presentationSubmission, options);
     }
 
     throw new InvalidVerifyFormatError(
@@ -1033,42 +1044,32 @@ export default class Pollux implements IPollux {
     );
   }
 
-
-  async start() {
-    this._anoncreds = await AnoncredsLoader.getInstance();
-    this._jwe ??= await import("jwe-wasm").then(async module => {
-      const wasmInstance = module.initSync({ module: wasmBuffer });
-      await module.default(wasmInstance);
-      return module;
-    });
-  }
-
   private isOfferPayload<Type extends CredentialType>(offer: any, type: Type): offer is CredentialOfferPayloads[CredentialType.JWT] {
     if (type === CredentialType.JWT) {
       if (!offer || !offer.options) {
-        return false
+        return false;
       }
-      const options = offer.options
+      const options = offer.options;
       if (!options.challenge || typeof options.challenge !== "string") {
-        return false
+        return false;
       }
       if (!options.domain || typeof options.domain !== "string") {
-        return false
+        return false;
       }
-      return true
+      return true;
     }
     if (type === CredentialType.SDJWT) {
       if (!offer.options) {
-        return false
+        return false;
       }
-      const options = offer.options
+      const options = offer.options;
       if (!options.challenge || typeof options.challenge !== "string") {
-        return false
+        return false;
       }
       if (!options.domain || typeof options.domain !== "string") {
-        return false
+        return false;
       }
-      return true
+      return true;
     }
     if (type === CredentialType.AnonCreds) {
       if (!offer.cred_def_id || typeof offer.cred_def_id !== 'string') {
@@ -1084,11 +1085,11 @@ export default class Pollux implements IPollux {
         !offer.key_correctness_proof.c || typeof offer.key_correctness_proof.c !== 'string' ||
         !offer.key_correctness_proof.xz_cap || typeof offer.key_correctness_proof.xz_cap !== 'string' ||
         !offer.key_correctness_proof.xr_cap || !Array.isArray(offer.key_correctness_proof.xr_cap)) {
-        return false
+        return false;
       }
-      return true
+      return true;
     }
-    return true
+    return true;
   }
 
   async processCredentialOffer<
@@ -1169,7 +1170,7 @@ export default class Pollux implements IPollux {
       ) as ProcessedCredentialOfferPayloads[Types];
     }
 
-    throw new Error("Not implemented")
+    throw new Error("Not implemented");
   }
 
   /**
@@ -1288,7 +1289,7 @@ export default class Pollux implements IPollux {
       && "did" in options
       && "privateKey" in options
     ) {
-      const jwtPresentationRequest = presentationRequest
+      const jwtPresentationRequest = presentationRequest;
       const presReqJson = jwtPresentationRequest.toJSON();
       const presReqOptions = presReqJson.options;
       const kid = await this.getSigningKid(options.did, options.privateKey);
@@ -1323,8 +1324,8 @@ export default class Pollux implements IPollux {
           presentationFrame,
           privateKey: options.privateKey
         }
-      )
-      return presentationJWS
+      );
+      return presentationJWS;
     }
 
     throw new PolluxError.InvalidPresentationProofArgs();

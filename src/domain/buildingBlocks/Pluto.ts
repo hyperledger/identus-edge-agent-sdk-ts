@@ -33,10 +33,13 @@ export namespace Pluto {
  * preferred underlying storage technology, most appropriate for your use case.
  */
 export interface Pluto {
+  // TODO apply breaking change below
+  // export interface Pluto extends Startable.IController {
   /**
    * Pluto initialise function
    */
   start(): Promise<void>;
+  stop?(): Promise<void>;
 
   /**
    * create a Backup object from the stored data

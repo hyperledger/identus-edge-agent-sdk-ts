@@ -1,9 +1,9 @@
-import { vi, describe, it, expect, test, beforeEach } from 'vitest';
-import Agent from "../../src/edge-agent/Agent";
-import { Pluto } from "../../src";
-import { mockPluto } from "../fixtures/inmemory/factory";
-import * as Fixtures from "../fixtures";
-
+import { vi, describe, expect, test, beforeEach } from 'vitest';
+import { OIDCAgent as Agent } from "../../../src/edge-agent/oidc/Agent";
+import { DID } from '../../../src/domain';
+import { Pluto } from "../../../src";
+import { mockPluto } from "../../fixtures/inmemory/factory";
+import * as Fixtures from "../../fixtures";
 
 describe("Agent", () => {
   let agent: Agent;
@@ -15,20 +15,22 @@ describe("Agent", () => {
       agent = Agent.initialize({ pluto });
     });
 
-    describe("createPrismDID", () => {
-      it("default parameters - should return unique DIDs", async () => {
-        await agent.start();
-        const first = await agent.createNewPrismDID("a");
-        const second = await agent.createNewPrismDID("a");
-        expect(first).to.not.deep.eq(second);
-      });
-    });
-
     describe("Persistence", () => {
       test("start() called for Startable dependencies", async () => {
         const spyPluto = vi.spyOn(agent.pluto, "start");
         const spyPollux = vi.spyOn(agent.pollux, "start");
 
+        await agent.start();
+
+        expect(spyPluto).toHaveBeenCalledOnce();
+        expect(spyPollux).toHaveBeenCalledOnce();
+      });
+
+      test("calling start() twice should not throw", async () => {
+        const spyPluto = vi.spyOn(agent.pluto, "start");
+        const spyPollux = vi.spyOn(agent.pollux, "start");
+
+        await agent.start();
         await agent.start();
 
         expect(spyPluto).toHaveBeenCalledOnce();
@@ -45,7 +47,6 @@ describe("Agent", () => {
         expect(spyPluto).toHaveBeenCalledOnce();
         expect(spyPollux).toHaveBeenCalledOnce();
       });
-
 
       test("Start > Stop > Start - should run without errors", async () => {
         await agent.start();
