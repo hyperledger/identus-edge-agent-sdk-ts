@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:150](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L150)
+[src/domain/buildingBlocks/Pollux.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Pollux.ts#L154)

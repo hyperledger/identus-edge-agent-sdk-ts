@@ -31,6 +31,7 @@
 - [insert](Store.md#insert)
 - [query](Store.md#query)
 - [start](Store.md#start)
+- [stop](Store.md#stop)
 - [update](Store.md#update)
 
 ## Constructors
@@ -44,7 +45,7 @@
 | Name | Type |
 | :------ | :------ |
 | `options` | `RxDatabaseCreator`\<`any`, `any`\> |
-| `collections?` | `CollectionList` |
+| `collections?` | [`CollectionList`](../modules.md#collectionlist) |
 
 #### Returns
 
@@ -52,7 +53,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L14)
+[src/pluto/rxdb/Store.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L14)
 
 ## Properties
 
@@ -62,17 +63,17 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L12)
+[src/pluto/rxdb/Store.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L12)
 
 ___
 
 ### collections
 
-• `Private` `Optional` `Readonly` **collections**: `CollectionList`
+• `Private` `Optional` `Readonly` **collections**: [`CollectionList`](../modules.md#collectionlist)
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:16](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L16)
+[src/pluto/rxdb/Store.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L16)
 
 ___
 
@@ -82,7 +83,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L15)
+[src/pluto/rxdb/Store.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L15)
 
 ## Accessors
 
@@ -96,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:25](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L25)
+[src/pluto/rxdb/Store.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L25)
 
 ## Methods
 
@@ -112,7 +113,7 @@ Use with caution, this will remove all entries from database
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:98](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L98)
+[src/pluto/rxdb/Store.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L103)
 
 ___
 
@@ -129,7 +130,7 @@ and then destroy the database itself.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:110](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L110)
+[src/pluto/rxdb/Store.ts:115](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L115)
 
 ___
 
@@ -156,7 +157,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:61](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L61)
+[src/pluto/rxdb/Store.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L66)
 
 ___
 
@@ -176,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L73)
+[src/pluto/rxdb/Store.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L78)
 
 ___
 
@@ -203,7 +204,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:90](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L90)
+[src/pluto/rxdb/Store.ts:95](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L95)
 
 ___
 
@@ -223,7 +224,7 @@ Run a query to fetch data from the Store
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | `string` | Model name |
+| `name` | `string` | table name |
 | `query?` | `MangoQuery`\<`T`\> | a MangoQuery object, a set of values and operators defining the query properties within an object will be AND'ed different objects will be OR'd |
 
 #### Returns
@@ -259,7 +260,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L82)
+[src/pluto/rxdb/Store.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L87)
 
 ___
 
@@ -279,7 +280,27 @@ Start the database and build collections
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:36](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L36)
+[src/pluto/rxdb/Store.ts:36](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L36)
+
+___
+
+### stop
+
+▸ **stop**(): `Promise`\<`void`\>
+
+Handle any necessary teardown.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[Store](../interfaces/Pluto.Store.md).[stop](../interfaces/Pluto.Store.md#stop)
+
+#### Defined in
+
+[src/pluto/rxdb/Store.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L47)
 
 ___
 
@@ -312,4 +333,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/rxdb/Store.ts#L47)
+[src/pluto/rxdb/Store.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/rxdb/Store.ts#L52)

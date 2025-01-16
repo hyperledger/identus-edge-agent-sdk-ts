@@ -10,7 +10,6 @@
 
 ### Properties
 
-- [agentCredentials](ConnectionsManagerInterface.md#agentcredentials)
 - [cancellables](ConnectionsManagerInterface.md#cancellables)
 - [castor](ConnectionsManagerInterface.md#castor)
 - [mediationHandler](ConnectionsManagerInterface.md#mediationhandler)
@@ -32,23 +31,13 @@
 
 ## Properties
 
-### agentCredentials
-
-• **agentCredentials**: [`AgentCredentials`](AgentCredentials.md)
-
-#### Defined in
-
-[src/edge-agent/types/index.ts:145](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L145)
-
-___
-
 ### cancellables
 
 • **cancellables**: `CancellableTask`\<`any`\>[]
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:149](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L149)
+[src/edge-agent/types/index.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L81)
 
 ___
 
@@ -58,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:142](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L142)
+[src/edge-agent/types/index.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L75)
 
 ___
 
@@ -68,7 +57,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:146](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L146)
+[src/edge-agent/types/index.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L78)
 
 ___
 
@@ -78,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:143](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L143)
+[src/edge-agent/types/index.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L76)
 
 ___
 
@@ -88,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:147](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L147)
+[src/edge-agent/types/index.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L79)
 
 ___
 
@@ -98,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:144](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L144)
+[src/edge-agent/types/index.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L77)
 
 ___
 
@@ -108,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:150](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L150)
+[src/edge-agent/types/index.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L82)
 
 ## Methods
 
@@ -128,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:152](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L152)
+[src/edge-agent/types/index.ts:84](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L84)
 
 ___
 
@@ -148,7 +137,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:154](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L154)
+[src/edge-agent/types/index.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L86)
 
 ___
 
@@ -168,7 +157,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:155](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L155)
+[src/edge-agent/types/index.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L87)
 
 ___
 
@@ -188,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:161](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L161)
+[src/edge-agent/types/index.ts:93](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L93)
 
 ___
 
@@ -208,7 +197,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:153](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L153)
+[src/edge-agent/types/index.ts:85](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L85)
 
 ___
 
@@ -228,7 +217,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:159](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L159)
+[src/edge-agent/types/index.ts:91](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L91)
 
 ___
 
@@ -242,7 +231,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:160](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L160)
+[src/edge-agent/types/index.ts:92](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L92)
 
 ___
 
@@ -256,4 +245,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:151](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L151)
+[src/edge-agent/types/index.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L83)

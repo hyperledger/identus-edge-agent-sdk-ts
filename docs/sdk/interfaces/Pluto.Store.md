@@ -16,6 +16,7 @@
 - [insert](Pluto.Store.md#insert)
 - [query](Pluto.Store.md#query)
 - [start](Pluto.Store.md#start)
+- [stop](Pluto.Store.md#stop)
 - [update](Pluto.Store.md#update)
 
 ## Methods
@@ -39,13 +40,13 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:101](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L101)
+[src/pluto/Pluto.ts:108](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/Pluto.ts#L108)
 
 ___
 
 ### insert
 
-▸ **insert**\<`T`\>(`name`, `model`): `Promise`\<`void`\>
+▸ **insert**\<`T`\>(`table`, `model`): `Promise`\<`void`\>
 
 Persist new data in the Store.
 
@@ -59,7 +60,7 @@ Persist new data in the Store.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | `string` | table name |
+| `table` | `string` | table name |
 | `model` | `T` | object to save |
 
 #### Returns
@@ -68,13 +69,13 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:87](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L87)
+[src/pluto/Pluto.ts:94](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/Pluto.ts#L94)
 
 ___
 
 ### query
 
-▸ **query**\<`T`\>(`name`, `query?`): `Promise`\<`T`[]\>
+▸ **query**\<`T`\>(`table`, `query?`): `Promise`\<`T`[]\>
 
 Run a query to fetch data from the Store
 
@@ -88,7 +89,7 @@ Run a query to fetch data from the Store
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `name` | `string` | Model name |
+| `table` | `string` | table name |
 | `query?` | `MangoQuery`\<`T`\> | a MangoQuery object, a set of values and operators defining the query properties within an object will be AND'ed different objects will be OR'd |
 
 #### Returns
@@ -120,7 +121,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/Pluto.ts:79](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L79)
+[src/pluto/Pluto.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/Pluto.ts#L86)
 
 ___
 
@@ -137,7 +138,23 @@ Will be called first before any usage, if provided.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:50](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L50)
+[src/pluto/Pluto.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/Pluto.ts#L52)
+
+___
+
+### stop
+
+▸ **stop**(): `Promise`\<`void`\>
+
+Handle any necessary teardown.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Defined in
+
+[src/pluto/Pluto.ts:57](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/Pluto.ts#L57)
 
 ___
 
@@ -166,4 +183,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:94](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pluto/Pluto.ts#L94)
+[src/pluto/Pluto.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pluto/Pluto.ts#L101)

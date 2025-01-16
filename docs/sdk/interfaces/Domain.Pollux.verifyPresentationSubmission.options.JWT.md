@@ -8,9 +8,31 @@
 
 ### Properties
 
+- [challenge](Domain.Pollux.verifyPresentationSubmission.options.JWT.md#challenge)
+- [domain](Domain.Pollux.verifyPresentationSubmission.options.JWT.md#domain)
 - [presentationDefinitionRequest](Domain.Pollux.verifyPresentationSubmission.options.JWT.md#presentationdefinitionrequest)
 
 ## Properties
+
+### challenge
+
+• `Optional` **challenge**: `string`
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:140](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Pollux.ts#L140)
+
+___
+
+### domain
+
+• `Optional` **domain**: `string`
+
+#### Defined in
+
+[src/domain/buildingBlocks/Pollux.ts:141](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Pollux.ts#L141)
+
+___
 
 ### presentationDefinitionRequest
 
@@ -18,4 +40,4 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:139](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L139)
+[src/domain/buildingBlocks/Pollux.ts:139](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Pollux.ts#L139)

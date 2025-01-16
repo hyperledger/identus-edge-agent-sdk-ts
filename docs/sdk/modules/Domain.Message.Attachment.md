@@ -30,4 +30,4 @@ Get the presumed JSON from the attachment
 
 #### Defined in
 
-[src/domain/models/Message.ts:186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/Message.ts#L186)
+[src/domain/models/Message.ts:190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/Message.ts#L190)

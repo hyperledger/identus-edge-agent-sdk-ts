@@ -1,8 +1,8 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / KeyRestoration
+[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Protocols](../modules/Domain.Protocols.md) / KeyRestoration
 
 # Interface: KeyRestoration
 
-[Domain](../modules/Domain.md).KeyRestoration
+[Domain](../modules/Domain.md).[Protocols](../modules/Domain.Protocols.md).KeyRestoration
 
 KeyRestoration protocol defines methods for verifying and restoring cryptographic keys from raw data.
 
@@ -14,8 +14,8 @@ KeyRestoration protocol defines methods for verifying and restoring cryptographi
 
 ### Methods
 
-- [restorePrivateKey](Domain.KeyRestoration.md#restoreprivatekey)
-- [restorePublicKey](Domain.KeyRestoration.md#restorepublickey)
+- [restorePrivateKey](Domain.Protocols.KeyRestoration.md#restoreprivatekey)
+- [restorePublicKey](Domain.Protocols.KeyRestoration.md#restorepublickey)
 
 ## Methods
 
@@ -43,7 +43,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/protocols/KeyRestoration.ts#L14)
+[src/domain/protocols/KeyRestoration.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/KeyRestoration.ts#L14)
 
 ___
 
@@ -71,4 +71,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/protocols/KeyRestoration.ts#L23)
+[src/domain/protocols/KeyRestoration.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/KeyRestoration.ts#L23)

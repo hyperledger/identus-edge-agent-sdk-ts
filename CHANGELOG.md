@@ -1,3 +1,19 @@
+# [6.4.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.3...v6.4.0) (2025-01-16)
+
+
+### Bug Fixes
+
+* add information for GHRC ([#337](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/337)) ([01105a0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/01105a0950c8202a4339f96c04423ff939e482e8))
+* add listener async + wait time for presentation verified ([#336](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/336)) ([80f3370](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/80f33700fe20d22919b7cd476fea79ee2862ea97))
+* commonJs default export ([#339](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/339)) ([00ddc08](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/00ddc08e461ab83b62fa15edea4a34a8560c8d78))
+* set requirements for workshop ([#335](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/335)) ([eff3cf3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/eff3cf3284335f3af73d70294a9b26623ee0298d))
+
+
+### Features
+
+* **backup:** introduce new schema to minimize backup length ([#333](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/333)) ([2aa27f8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2aa27f855168ba65bc7db2d6f29bd24827feb181))
+* implementing Startable and propagating stop() ([#309](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/309)) ([9e459c5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9e459c504f075ac4ea839fd3d5bb36dc6579da18))
+
 # [4.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v3.1.0...v4.0.0) (2024-02-02)
 
 * fix: removing terser to allow an unminified build that is easier to d… by @elribonazo in https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/pull/127

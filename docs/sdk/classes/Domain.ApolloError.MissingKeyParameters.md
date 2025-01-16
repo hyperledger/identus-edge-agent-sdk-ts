@@ -4,9 +4,11 @@
 
 [Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).MissingKeyParameters
 
+thrown when expected parameter is missing for Key operation
+
 ## Hierarchy
 
-- `Error`
+- [`SDKError`](Domain.CommonError.SDKError.md)
 
   ↳ **`MissingKeyParameters`**
 
@@ -33,13 +35,13 @@
 
 ### constructor
 
-• **new MissingKeyParameters**(`missing`): [`MissingKeyParameters`](Domain.ApolloError.MissingKeyParameters.md)
+• **new MissingKeyParameters**(`...missing`): [`MissingKeyParameters`](Domain.ApolloError.MissingKeyParameters.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `missing` | `string`[] |
+| `...missing` | `string`[] |
 
 #### Returns
 
@@ -47,11 +49,11 @@
 
 #### Overrides
 
-Error.constructor
+[SDKError](Domain.CommonError.SDKError.md).[constructor](Domain.CommonError.SDKError.md#constructor)
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:64](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L64)
+[src/domain/models/errors/Apollo.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/errors/Apollo.ts#L79)
 
 ## Properties
 
@@ -61,7 +63,7 @@ Error.constructor
 
 #### Inherited from
 
-Error.cause
+[SDKError](Domain.CommonError.SDKError.md).[cause](Domain.CommonError.SDKError.md#cause)
 
 #### Defined in
 
@@ -75,7 +77,7 @@ ___
 
 #### Inherited from
 
-Error.message
+[SDKError](Domain.CommonError.SDKError.md).[message](Domain.CommonError.SDKError.md#message)
 
 #### Defined in
 
@@ -89,7 +91,7 @@ ___
 
 #### Inherited from
 
-Error.name
+[SDKError](Domain.CommonError.SDKError.md).[name](Domain.CommonError.SDKError.md#name)
 
 #### Defined in
 
@@ -103,7 +105,7 @@ ___
 
 #### Inherited from
 
-Error.stack
+[SDKError](Domain.CommonError.SDKError.md).[stack](Domain.CommonError.SDKError.md#stack)
 
 #### Defined in
 
@@ -138,7 +140,7 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Inherited from
 
-Error.prepareStackTrace
+[SDKError](Domain.CommonError.SDKError.md).[prepareStackTrace](Domain.CommonError.SDKError.md#preparestacktrace)
 
 #### Defined in
 
@@ -152,7 +154,7 @@ ___
 
 #### Inherited from
 
-Error.stackTraceLimit
+[SDKError](Domain.CommonError.SDKError.md).[stackTraceLimit](Domain.CommonError.SDKError.md#stacktracelimit)
 
 #### Defined in
 
@@ -179,7 +181,7 @@ Create .stack property on a target object
 
 #### Inherited from
 
-Error.captureStackTrace
+[SDKError](Domain.CommonError.SDKError.md).[captureStackTrace](Domain.CommonError.SDKError.md#capturestacktrace)
 
 #### Defined in
 
