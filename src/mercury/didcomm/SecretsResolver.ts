@@ -13,10 +13,15 @@ export class DIDCommSecretsResolver implements SecretsResolver {
   async find_secrets(secret_ids: string[]): Promise<string[]> {
     const peerDids = await this.pluto.getAllPeerDIDs();
     return secret_ids.filter((secretId) => {
-      const secretDID = DIDURLParser.parse(secretId);
-      return peerDids.find((peerDIDSecret: any) => {
-        return secretDID.did.toString() === peerDIDSecret.did.toString();
-      });
+      try {
+        const secretDID = DIDURLParser.parse(secretId);
+        return peerDids.find((peerDIDSecret: any) => {
+          return secretDID.did.toString() === peerDIDSecret.did.toString();
+        });
+      } catch (err) {
+        console.debug("Failed to parse DIDURl, using next secret")
+      }
+
     });
   }
 
@@ -33,7 +38,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
         if (property instanceof Domain.VerificationMethods) {
           const matchingValue: Domain.VerificationMethod | undefined =
             property.values.find(
-              (verificationMethod) => verificationMethod.id === secret_id
+              (verificationMethod) => found.did.toString() + verificationMethod.id === secret_id
             );
 
           if (matchingValue && matchingValue.publicKeyJwk) {

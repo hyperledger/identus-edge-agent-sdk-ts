@@ -1,4 +1,5 @@
-import { DID, DIDDocument, Service as DIDDocumentService, KeyPair } from "../models";
+import { KeyProtocol } from "../../peer-did4/input";
+import { DID, DIDDocument, Service as DIDDocumentService, KeyPair, Service } from "../models";
 import { PublicKey } from "../models";
 
 export interface Castor {
@@ -11,6 +12,10 @@ export interface Castor {
   createPeerDID(
     publicKeys: PublicKey[],
     services: DIDDocumentService[]
+  ): Promise<DID>;
+  createPeerDID4(
+    publicKeys: KeyProtocol[],
+    services: Service[]
   ): Promise<DID>;
   resolveDID(did: string): Promise<DIDDocument>;
   verifySignature(

@@ -1,4 +1,5 @@
 import * as Domain from "../../domain";
+import { JsonWebKey2020 } from "../../peer-did4/input";
 import { Task } from "../../utils/tasks";
 import { DIDCommContext } from "./Context";
 
@@ -50,7 +51,18 @@ export class CreatePeerDID extends Task<Domain.DID, Args> {
         )
       );
     }
-    const did = await ctx.Castor.createPeerDID(publicKeys, services);
+
+
+    const keySpec = publicKeys.map((pk) => {
+      const pkExpo = pk as Domain.PublicKey && Domain.ExportableKey;
+      const jwk = pkExpo.factory(pk, { pemLabel: '' }).JWK() as any
+      return {
+        type: 'JsonWebKey2020',
+        context: 'https://w3id.org/security/suites/jws-2020/v1',
+        jwk
+      } as JsonWebKey2020
+    })
+    const did = await ctx.Castor.createPeerDID4(keySpec, services);
 
     if (updateMediator) {
       await ctx.MediationHandler.updateKeyListWithDIDs([did]);

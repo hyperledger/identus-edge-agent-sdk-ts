@@ -73,6 +73,8 @@ export default class Mercury implements MercuryInterface {
     if (this.notDid(toDid)) throw new MercuryError.NoRecipientDIDSetError();
 
     const document = await this.castor.resolveDID(toDid.toString());
+
+    console.log("msg", message)
     const packedMessage = await this.packMessage(message);
     if (this.requiresForwarding(document)) {
       const mediatorDid = this.getDIDCommDID(document);
@@ -98,6 +100,12 @@ export default class Mercury implements MercuryInterface {
     return this.makeRequest<T>(service, packedMessage);
   }
 
+  private getHttpUrl(url: string) {
+    const urls = url.split(";");
+    const httpUrl = urls.find((u) => u.startsWith("http") || u.startsWith("https"))
+    return httpUrl
+  }
+
   private async makeRequest<T>(
     service: Domain.Service | URL | undefined,
     message: string
@@ -106,10 +114,11 @@ export default class Mercury implements MercuryInterface {
 
     const headers = new Map();
     headers.set("Content-type", MediaType.ContentTypeEncrypted);
-
-    const requestUrl =
-      service instanceof URL ? service.toString() : service.serviceEndpoint.uri;
-
+    const requestUrl = this.getHttpUrl(
+      service instanceof URL ? service.toString() : service.serviceEndpoint.uri
+    )
+    if (requestUrl == undefined) throw new MercuryError.NoValidServiceFoundError();
+    console.log("Making request to ", requestUrl, "and message ", message)
     const response = await this.api.request<T>(
       "POST",
       requestUrl,

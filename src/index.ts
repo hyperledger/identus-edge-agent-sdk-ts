@@ -54,3 +54,4 @@ export * from "./pollux/models/SDJWTVerifiableCredential";
 export { isPresentationDefinitionRequestType } from './pollux/utils/claims';
 
 export { KeyProperties } from "./domain/models/KeyProperties";
+export * as DIDPeer4 from "./peer-did4";

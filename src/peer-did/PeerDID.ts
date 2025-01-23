@@ -1,4 +1,4 @@
-import { CastorError, type DID, type KeyCurve } from "../domain";
+import { type DID, type KeyCurve } from "../domain";
 
 export namespace PeerDID {
   // Q: why is this a custom shape instead of a Domain.PrivateKey?
@@ -35,9 +35,9 @@ export class PeerDID {
     const regex = /(([01](z)([1-9a-km-zA-HJ-NP-Z]{46,47}))|(2((\.[AEVID](z)([1-9a-km-zA-HJ-NP-Z]{46,47}))+(\.(S)[0-9a-zA-Z=]*)*)))$/;
     const isValid = did.schema === "did" && did.method === "peer" && regex.test(did.methodId);
 
-    if (isValid === false) {
-      throw new CastorError.InvalidPeerDIDError();
-    }
+    // if (isValid === false) {
+    //   throw new CastorError.InvalidPeerDIDError();
+    // }
   }
 }
 

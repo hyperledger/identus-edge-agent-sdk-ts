@@ -19,38 +19,37 @@ export class DIDCommDIDResolver implements DIDResolver {
     const services: Service[] = [];
     const verificationMethods: VerificationMethod[] = [];
 
+    const didDocumentAuthentication = doc.coreProperties.find((prop) => prop instanceof Domain.Authentication) as Domain.Authentication | undefined
+    const didDocumentKeyAgreement = doc.coreProperties.find((prop) => prop instanceof Domain.KeyAgreement) as Domain.KeyAgreement | undefined;
+
+    didDocumentAuthentication?.urls.forEach((u) => {
+      authentications.push(did + u)
+    })
+
+    didDocumentKeyAgreement?.urls.forEach((u) => {
+      keyAgreements.push(did + u)
+    })
+
     doc.coreProperties.forEach((coreProperty) => {
       if ("verificationMethods" in coreProperty) {
         coreProperty.verificationMethods.forEach((method) => {
-          const curve = Domain.VerificationMethod.getCurveByType(
-            method.publicKeyJwk?.crv || ""
-          );
-
-          switch (curve) {
-            case Domain.Curve.ED25519:
-              authentications.push(method.id);
-              break;
-
-            case Domain.Curve.X25519:
-              keyAgreements.push(method.id);
-              break;
-          }
           const publicKeyBase64 = method.publicKeyJwk?.x as any;
           const publicKeyKid = (method.publicKeyJwk as any).kid;
-          verificationMethods.push({
-            controller: method.controller,
-            id: method.id,
-            type: "JsonWebKey2020",
-            publicKeyJwk: {
-              crv: method.publicKeyJwk?.crv,
-              kid: publicKeyKid,
-              kty: "OKP",
-              x: publicKeyBase64,
-            },
-          });
+          if (!verificationMethods.find((v) => v.id === method.id)) {
+            verificationMethods.push({
+              controller: method.controller,
+              id: did + method.id,
+              type: "JsonWebKey2020",
+              publicKeyJwk: {
+                crv: method.publicKeyJwk?.crv,
+                kid: publicKeyKid,
+                kty: "OKP",
+                x: publicKeyBase64,
+              },
+            });
+          }
         });
       }
-
       if (
         coreProperty instanceof Domain.Service &&
         coreProperty.type.includes(PeerDIDService.DIDCommMessagingKey)

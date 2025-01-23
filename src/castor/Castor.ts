@@ -17,7 +17,6 @@ import {
 
 import * as DIDParser from "./parser/DIDParser";
 import * as Protos from "./protos/node_models";
-import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
 import {
@@ -44,6 +43,9 @@ import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 import { PrismDIDPublicKey } from "./did/prismDID/PrismDIDPublicKey";
 import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
+import { inputDocFromKeysAndServices, KeyProtocol } from "../peer-did4/input";
+import { DIDPeer4 } from "..";
+import { PeerDID4Resolver } from "./resolver/PeerDID4Resolver";
 
 type ExtraResolver = new (apollo: Apollo) => DIDResolver;
 /**
@@ -68,7 +70,8 @@ export default class Castor implements CastorInterface {
   constructor(apollo: Apollo, extraResolvers: ExtraResolver[] = []) {
     this.apollo = apollo;
     this.resolvers = [
-      new PeerDIDResolver(),
+
+      new PeerDID4Resolver(),
       new LongFormPrismDIDResolver(this.apollo),
       ...extraResolvers.map((Resolver) => new Resolver(apollo))
     ];
@@ -318,6 +321,29 @@ export default class Castor implements CastorInterface {
     const peerDIDOperation = new PeerDIDCreate();
     const peerDID = peerDIDOperation.createPeerDID(publicKeys, services);
     return peerDID.did;
+  }
+
+
+  async createPeerDID4(
+    publicKeys: KeyProtocol[],
+    services: Service[]
+  ): Promise<DID> {
+
+    const document = inputDocFromKeysAndServices(publicKeys, services);
+    document.verificationMethod.forEach((v: any) => {
+      //TODO improve by key type
+      const keyType = v.publicKeyJwk.crv;
+      if (keyType == Curve.ED25519) {
+        document.authentication = [v.id]
+        document.assertionMethod = [v.id]
+        document.capabilityInvocation = [v.id]
+        document.capabilityDelegation = [v.id]
+      } else {
+        document.keyAgreement = [v.id];
+      }
+    })
+    const did = await DIDPeer4.encode(document);
+    return DID.fromString(did)
   }
 
   /**
