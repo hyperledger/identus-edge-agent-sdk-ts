@@ -100,6 +100,7 @@ export class CloudAgentWorkflow {
     credential.claims = {
       "automationRequired": "required value",
     }
+    credential.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.jwtSchemaGuid}`
     credential.automaticIssuance = true
     credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did
     credential.connectionId = await cloudAgent.answer<string>(
