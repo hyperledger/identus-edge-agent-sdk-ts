@@ -43,7 +43,10 @@
     "docs": "npx typedoc --options typedoc.js",
     "prepare": "npx husky",
     "preinstall": "sh preinstall.sh",
-    "postinstall": "sh postinstall.sh"
+    "postinstall": "sh postinstall.sh",
+    "protos": "npm run protos:node && npm run protos:common",
+    "protos:node": "protoc -I=src --proto_path=castor/protos --ts_out=castor/protos  castor/protos/node_models.proto",
+    "protos:common": "protoc -I=src --proto_path=castor/protos --ts_out=castor/protos  castor/protos/common_models.proto"
   },
   "author": "IOHK",
   "repository": {
@@ -92,6 +95,7 @@
     "husky": "^9.0.11",
     "jwe-wasm": "./externals/generated/jwe-wasm",
     "prettier": "^3.0.2",
+    "protoc-gen-ts": "^0.8.7",
     "rxdb": "^14.17.1",
     "semantic-release": "^24.0.0",
     "sinon": "^18.0.0",

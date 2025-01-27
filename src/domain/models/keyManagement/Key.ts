@@ -1,5 +1,5 @@
 import { DerivableKey } from "./DerivableKey";
-import { ApolloError } from "../Errors";
+import { ApolloError, CastorError } from "../Errors";
 import { KeyProperties } from "../KeyProperties";
 import { SignableKey } from "./SignableKey";
 import { StorableKey } from "./StorableKey";
@@ -46,6 +46,70 @@ export function getProtosUsage(
     default:
       return KeyUsage.UNKNOWN_KEY;
   }
+}
+
+/**
+ * Return usage from a verification method id
+ * 
+ * @param id: string - verification method id string
+ * @returns {Usage}
+ */
+export function getUsageFromId(id: string): {
+  usage: Usage,
+  index: number
+} {
+  const regex = /#([a-zA-Z]+)-(\d+)/;
+  const [_, methodId, methodIndex] = id.match(regex) || [];
+  if (methodId === undefined || methodIndex === undefined) {
+    throw new CastorError.MethodIdIsDoesNotSatisfyRegex("Verification method id does not contain fragment")
+  }
+  const index = parseInt(methodIndex);
+  if (methodId === "master") {
+    return {
+      usage: Usage.MASTER_KEY,
+      index
+    };
+  }
+  if (methodId === "issuing") {
+    return {
+      usage: Usage.ISSUING_KEY,
+      index
+    };
+  }
+  if (methodId === "agreement") {
+    return {
+      usage: Usage.KEY_AGREEMENT_KEY,
+      index
+    };
+  }
+  if (methodId === "authentication") {
+    return {
+      usage: Usage.AUTHENTICATION_KEY,
+      index
+    };
+  }
+  if (methodId === "revocation") {
+    return {
+      usage: Usage.REVOCATION_KEY,
+      index
+    };
+  }
+  if (methodId === "delegation") {
+    return {
+      usage: Usage.CAPABILITY_DELEGATION_KEY,
+      index
+    };
+  }
+  if (methodId === "invocation") {
+    return {
+      usage: Usage.CAPABILITY_INVOCATION_KEY,
+      index
+    };
+  }
+  return {
+    usage: Usage.UNKNOWN_KEY,
+    index
+  };
 }
 
 /**
