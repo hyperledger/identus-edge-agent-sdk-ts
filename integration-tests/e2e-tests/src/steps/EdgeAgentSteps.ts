@@ -268,9 +268,9 @@ Then("{actor} will request {actor} to verify the SD+JWT credential",
     const SDK = await EdgeAgentWorkflow.instance
     await EdgeAgentWorkflow.createPeerDids(holderEdgeAgent, 1)
     const holderDID = await holderEdgeAgent.answer(Notepad.notes().get("lastPeerDID"))
-    const claims: any = {
+    const claims = {
       claims: {
-        automationRequired: {
+        "automation-required": {
           type: "string",
           pattern: "required value"
         }
