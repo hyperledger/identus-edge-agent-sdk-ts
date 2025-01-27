@@ -98,9 +98,9 @@ export class CloudAgentWorkflow {
     const credential = new CreateIssueCredentialRecordRequest()
     credential.validityPeriod = 360000
     credential.claims = {
-      "automationRequired": "required value",
+      "automation-required": "required value",
     }
-    credential.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.jwtSchemaGuid}`
+    credential.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.sdJWTSchemaGuid}`
     credential.automaticIssuance = true
     credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did
     credential.connectionId = await cloudAgent.answer<string>(
