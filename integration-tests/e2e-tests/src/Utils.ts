@@ -1,6 +1,6 @@
 import { appendFile, writeFileSync } from "fs"
 import crypto from "crypto"
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer"
 
 export class Utils {
   static async asyncFilter<T>(arr: T[], predicate: (value: T, index: number, array: T[]) => Promise<boolean>) {
@@ -13,7 +13,7 @@ export class Utils {
   }
 
   static appendToNotes(message: string) {
-    console.info("Adding to notes:", message)
+    console.info(message)
     appendFile("notes", message + "\n", (err) => {
       if (err) console.error(err)
     })
@@ -57,6 +57,6 @@ export class Utils {
 
   static decodeBase64URL(encodedString: string): string {
     const buffer = Buffer.from(encodedString, "base64url")
-    return buffer.toString("utf8");
+    return buffer.toString("utf8")
   }
 }

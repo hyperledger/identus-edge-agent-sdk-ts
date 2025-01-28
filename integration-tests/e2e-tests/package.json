@@ -17,10 +17,10 @@
   },
   "homepage": "https://github.com/input-output-hk/atala-prism-wallet-sdk-ts-e2e",
   "dependencies": {
-    "@amagyar-iohk/identus-cloud-agent-client-ts": "^1.36.1",
+    "@amagyar-iohk/identus-cloud-agent-client-ts": "1.40.1-b791ad2",
     "@cucumber/cucumber": "^10.3.1",
     "@cucumber/pretty-formatter": "^1.0.0",
-    "@hyperledger/identus-edge-agent-sdk": "../../",
+    "@hyperledger/identus-edge-agent-sdk": "../..",
     "@serenity-js/assertions": "^3.29.2",
     "@serenity-js/console-reporter": "^3.29.2",
     "@serenity-js/core": "^3.29.2",

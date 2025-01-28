@@ -14,7 +14,6 @@ import {
 } from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
-import SDK from "@hyperledger/identus-edge-agent-sdk"
 import { JWTRevocationStatus } from "@hyperledger/identus-edge-agent-sdk/build/domain"
 
 export class CloudAgentWorkflow {
@@ -75,18 +74,17 @@ export class CloudAgentWorkflow {
     )
   }
 
-  static async offerCredential(cloudAgent: Actor) {
+  static async offerJwtCredential(cloudAgent: Actor) {
     const credential = new CreateIssueCredentialRecordRequest()
     credential.claims = {
       "automation-required": "required value",
     }
     credential.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.jwtSchemaGuid}`
     credential.automaticIssuance = true
-    credential.issuingDID = CloudAgentConfiguration.publishedDid
+    credential.issuingDID = CloudAgentConfiguration.publishedSecp256k1Did
     credential.connectionId = await cloudAgent.answer<string>(
       Notepad.notes().get("connectionId")
     )
-
     await cloudAgent.attemptsTo(
       Send.a(PostRequest.to("issue-credentials/credential-offers").with(credential)),
       Ensure.that(LastResponse.status(), equals(HttpStatusCode.Created)),
@@ -98,10 +96,11 @@ export class CloudAgentWorkflow {
     const credential = new CreateIssueCredentialRecordRequest()
     credential.validityPeriod = 360000
     credential.claims = {
-      "automationRequired": "required value",
+      "automation-required": "required value",
     }
     credential.automaticIssuance = true
     credential.issuingDID = CloudAgentConfiguration.publishedEd25519Did
+    credential.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.sdJwtSchemaGuid}`
     credential.connectionId = await cloudAgent.answer<string>(
       Notepad.notes().get("connectionId")
     )
@@ -121,7 +120,7 @@ export class CloudAgentWorkflow {
         "gender": "M"
       },
       automaticIssuance: true,
-      issuingDID: CloudAgentConfiguration.publishedDid,
+      issuingDID: CloudAgentConfiguration.publishedSecp256k1Did,
       connectionId: await cloudAgent.answer<string>(
         Notepad.notes().get("connectionId")
       ),
@@ -146,8 +145,8 @@ export class CloudAgentWorkflow {
     presentProofRequest.options.domain = CloudAgentConfiguration.agentUrl
 
     const proof = new ProofRequestAux()
-    proof.schemaId = "https://schema.org/Person"
-    proof.trustIssuers = [CloudAgentConfiguration.publishedDid]
+    proof.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.jwtSchemaGuid}`
+    proof.trustIssuers = [CloudAgentConfiguration.publishedSecp256k1Did]
 
     presentProofRequest.proofs = [proof]
 
@@ -167,7 +166,7 @@ export class CloudAgentWorkflow {
     presentProofRequest.options.challenge = randomUUID()
     presentProofRequest.options.domain = CloudAgentConfiguration.agentUrl
     const proof = new ProofRequestAux()
-    proof.schemaId = "https://schema.org/Person"
+    proof.schemaId = `${CloudAgentConfiguration.agentUrl}schema-registry/schemas/${CloudAgentConfiguration.jwtSchemaGuid}`
     proof.trustIssuers = [CloudAgentConfiguration.publishedEd25519Did]
     presentProofRequest.proofs = [proof]
     presentProofRequest.credentialFormat = "SDJWT"

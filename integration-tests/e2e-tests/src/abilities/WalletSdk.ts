@@ -1,21 +1,16 @@
 import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
-import type SDK from "@hyperledger/identus-edge-agent-sdk"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
 import { axiosInstance, CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
 import { randomUUID, UUID } from "crypto"
 
-let instance: typeof import("@hyperledger/identus-edge-agent-sdk").default
-// fallback in any case of dangling sdk agents
 export const agentList: Map<string, WalletSdk> = new Map()
-
 
 class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
   method: string = "prism"
 
   async resolve(didString: string): Promise<SDK.Domain.DIDDocument> {
-    const { Domain } = await WalletSdk.loadSDK()
-
     const response = await axiosInstance.get(`dids/${didString}`, {
       headers: {
         Accept: "*/*"
@@ -27,10 +22,10 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
     const data = response.data
     const didDocument = data.didDocument
 
-    const servicesProperty = new Domain.Services(
+    const servicesProperty = new SDK.Domain.Services(
       didDocument.service
     )
-    const verificationMethodsProperty = new Domain.VerificationMethods(
+    const verificationMethodsProperty = new SDK.Domain.VerificationMethods(
       didDocument.verificationMethod
     )
     const coreProperties: SDK.Domain.DIDDocumentCoreProperty[] = []
@@ -40,11 +35,11 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
     for (const verificationMethod of didDocument.verificationMethod) {
       const isAssertion = didDocument.assertionMethod.find((method) => method === verificationMethod.id)
       if (isAssertion) {
-        assertion.push(new Domain.AssertionMethod([isAssertion], [verificationMethod]))
+        assertion.push(new SDK.Domain.AssertionMethod([isAssertion], [verificationMethod]))
       }
       const isAuthentication = didDocument.authentication.find((method) => method === verificationMethod.id)
       if (isAuthentication) {
-        authenticate.push(new Domain.Authentication([isAuthentication], [verificationMethod]))
+        authenticate.push(new SDK.Domain.Authentication([isAuthentication], [verificationMethod]))
       }
     }
 
@@ -52,8 +47,8 @@ class ShortFormDIDResolverSample implements SDK.Domain.DIDResolver {
     coreProperties.push(servicesProperty)
     coreProperties.push(verificationMethodsProperty)
 
-    const resolved = new Domain.DIDDocument(
-      Domain.DID.fromString(didString),
+    const resolved = new SDK.Domain.DIDDocument(
+      SDK.Domain.DID.fromString(didString),
       coreProperties
     )
 
@@ -131,11 +126,6 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
   }
 
-  static async loadSDK() {
-    instance ??= require("@hyperledger/identus-edge-agent-sdk")
-    return instance
-  }
-
   async discard(): Promise<void> {
     agentList.delete(this.id)
     if (this.isInitialised()) {
@@ -145,29 +135,19 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
   }
 
   async createSdk(seed: SDK.Domain.Seed = undefined) {
-    const {
-      Agent,
-      Apollo,
-      Domain,
-      ListenerKey,
-      Store,
-      Pluto,
-      Castor
-    } = await WalletSdk.loadSDK()
-
     const resolvers = [ShortFormDIDResolverSample]
-    const apollo = new Apollo()
-    const castor = new Castor(apollo, resolvers)
+    const apollo = new SDK.Apollo()
+    const castor = new SDK.Castor(apollo, resolvers)
 
-    this.store = new Store({
+    this.store = new SDK.Store({
       name: [...Array(30)].map(() => Math.random().toString(36)[2]).join(""),
       storage: InMemoryStore,
       password: "random12434",
       ignoreDuplicate: true
     })
-    const pluto = new Pluto(this.store, apollo)
-    const mediatorDID = Domain.DID.fromString(await WalletSdk.getMediatorDidThroughOob())
-    this.sdk = Agent.initialize({
+    const pluto = new SDK.Pluto(this.store, apollo)
+    const mediatorDID = SDK.Domain.DID.fromString(await WalletSdk.getMediatorDidThroughOob())
+    this.sdk = SDK.Agent.initialize({
       seed,
       apollo,
       pluto,
@@ -176,7 +156,7 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
     })
 
     this.sdk.addListener(
-      ListenerKey.MESSAGE, async (messages: SDK.Domain.Message[]) => {
+      SDK.ListenerKey.MESSAGE, async (messages: SDK.Domain.Message[]) => {
         for (const message of messages) {
           await this.messages.enqueue(message)
         }
@@ -242,7 +222,6 @@ class MessageQueue {
   }
 
   async processMessages() {
-    const SDK = await WalletSdk.loadSDK()
     this.processingId = setInterval(() => {
       if (!this.isEmpty()) {
         const message: SDK.Domain.Message = this.dequeue()
@@ -266,7 +245,7 @@ class MessageQueue {
         } else if (piUri === SDK.ProtocolType.DidcommPresentation) {
           this.presentationMessagesStack.push(message)
         } else {
-          console.log(piUri)
+          console.log("Message piuri", piUri, "not handled.")
         }
       } else {
         clearInterval(this.processingId!)

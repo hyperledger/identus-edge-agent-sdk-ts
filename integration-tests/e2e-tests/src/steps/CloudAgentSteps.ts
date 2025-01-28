@@ -26,7 +26,7 @@ Given("{actor} shares invitation to {actor}", async function (cloudAgent: Actor,
 When("{actor} offers '{int}' jwt credentials", async function (cloudAgent: Actor, numberOfCredentials: number) {
   const recordIdList = []
   await Utils.repeat(numberOfCredentials, async () => {
-    await CloudAgentWorkflow.offerCredential(cloudAgent)
+    await CloudAgentWorkflow.offerJwtCredential(cloudAgent)
     recordIdList.push(await cloudAgent.answer(Notepad.notes().get("recordId")))
   })
   await cloudAgent.attemptsTo(

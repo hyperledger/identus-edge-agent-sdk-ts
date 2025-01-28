@@ -1117,6 +1117,7 @@ export default class Pollux implements IPollux {
           vp: {
             "@context": ["https://www.w3.org/2018/presentations/v1"],
             type: ["VerifiablePresentation"],
+            verifiableCredential: []
           },
         },
         header: { kid }

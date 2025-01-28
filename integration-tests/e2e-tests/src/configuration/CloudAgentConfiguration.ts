@@ -19,10 +19,10 @@ configDotenv()
 export class CloudAgentConfiguration {
   public static mediatorOobUrl: string = process.env.MEDIATOR_OOB_URL!
   public static agentUrl: string = process.env.AGENT_URL!
-  public static publishedDid: string = process.env.PUBLISHED_DID!
+  public static publishedSecp256k1Did: string = process.env.SECP256K1_PUBLISHED_DID!
   public static publishedEd25519Did: string = process.env.ED25519_PUBLISHED_DID!
   public static jwtSchemaGuid: string = process.env.JWT_SCHEMA_GUID!
-  public static sdJWTSchemaGuid: string = process.env.SDJWT_SCHEMA_GUID!
+  public static sdJwtSchemaGuid: string = process.env.SDJWT_SCHEMA_GUID!
   public static anoncredDefinitionGuid: string = process.env.ANONCRED_DEFINITION_GUID!
   public static apiKey: string | undefined = process.env.APIKEY
 
@@ -35,14 +35,14 @@ export class CloudAgentConfiguration {
 
     //Secp256k1 prism did for jwt credentials
     try {
-      assert(this.publishedDid != null)
-      assert(this.publishedDid != "")
+      assert(this.publishedSecp256k1Did != null)
+      assert(this.publishedSecp256k1Did != "")
       await axiosInstance.get(
-        `did-registrar/dids/${this.publishedDid}`
+        `did-registrar/dids/${this.publishedSecp256k1Did}`
       )
     } catch (err) {
       Utils.appendToNotes("DID not found. Creating a new one and publishing it.")
-      this.publishedDid = await this.preparePublishedDid(Curve.Secp256k1)
+      this.publishedSecp256k1Did = await this.preparePublishedDid(Curve.Secp256k1)
     }
     //Ed25519 prism did for jwt credentials
     try {
@@ -65,30 +65,34 @@ export class CloudAgentConfiguration {
       )
     } catch (err) {
       Utils.appendToNotes("JWT Schema not found. Creating a new one.")
-      this.jwtSchemaGuid = await this.prepareJwtSchema(this.publishedDid)
+      this.jwtSchemaGuid = await this.prepareJwtSchema(this.publishedSecp256k1Did)
     }
     //SDJWT schema from Secp256k1 published did
     try {
-      assert(this.sdJWTSchemaGuid != null)
-      assert(this.sdJWTSchemaGuid != "")
+      assert(this.sdJwtSchemaGuid != null)
+      assert(this.sdJwtSchemaGuid != "")
       await axiosInstance.get(
-        `schema-registry/schemas/${this.sdJWTSchemaGuid}`
+        `schema-registry/schemas/${this.sdJwtSchemaGuid}`
       )
     } catch (err) {
-      Utils.appendToNotes("SDJWT Schema not found. Creating a new one.")
-      this.sdJWTSchemaGuid = await this.prepareJwtSchema(this.publishedEd25519Did)
+      Utils.appendToNotes("SD-JWT Schema not found. Creating a new one.")
+      this.sdJwtSchemaGuid = await this.prepareJwtSchema(this.publishedEd25519Did)
     }
 
     await this.prepareAnoncredDefinition()
 
     this.isInitialized = true
 
-    Utils.appendToNotes(`Mediator: ${this.mediatorOobUrl}`)
-    Utils.appendToNotes(`Agent: ${this.agentUrl}`)
-    Utils.appendToNotes(`DID: ${this.publishedDid}`)
-    Utils.appendToNotes(`Jwt Schema: ${this.jwtSchemaGuid}`)
+    Utils.appendToNotes("Environment")
+    Utils.appendToNotes(`  Mediator: ${this.mediatorOobUrl}`)
+    Utils.appendToNotes(`  Agent: ${this.agentUrl}`)
+    Utils.appendToNotes("DIDs")
+    Utils.appendToNotes(`  Secp256k1: ${this.publishedSecp256k1Did}`)
+    Utils.appendToNotes(`  Ed25519: ${this.publishedEd25519Did}`)
+    Utils.appendToNotes("Schemas")
+    Utils.appendToNotes(`  JWT: ${this.jwtSchemaGuid}`)
+    Utils.appendToNotes(`  SD-JWT: ${this.sdJwtSchemaGuid}`)
     Utils.appendToNotes(`Anoncred Definition: ${this.anoncredDefinitionGuid}`)
-    Utils.appendToNotes(`SDK Version: ${this.getSdkVersion()}`)
   }
 
   private static getSdkVersion(): string {
@@ -216,7 +220,7 @@ export class CloudAgentConfiguration {
     const schema = {
       name: "Automation Anoncred",
       version: "1.0",
-      issuerId: this.publishedDid,
+      issuerId: this.publishedSecp256k1Did,
       attrNames: ["name", "age", "gender"]
     }
 
@@ -225,7 +229,7 @@ export class CloudAgentConfiguration {
       version: "2.0.0",
       type: "AnoncredSchemaV1",
       schema: schema,
-      author: this.publishedDid,
+      author: this.publishedSecp256k1Did,
       tags: ["automation"],
       description: "Anoncred Schema for TS"
     }
@@ -241,7 +245,7 @@ export class CloudAgentConfiguration {
       name: "automation-anoncred-definition-" + randomUUID(),
       version: "1.0.0",
       tag: "automation-test",
-      author: this.publishedDid,
+      author: this.publishedSecp256k1Did,
       schemaId: `${this.agentUrl}schema-registry/schemas/${newSchemaGuid}/schema`,
       signatureType: "CL",
       supportRevocation: false,

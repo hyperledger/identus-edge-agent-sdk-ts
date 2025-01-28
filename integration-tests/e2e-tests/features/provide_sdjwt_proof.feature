@@ -1,5 +1,5 @@
 @sdjwt @proofsd
-Feature: Provide proof
+Feature: Provide sd-jwt proof
   The Edge Agent should provide proof to Cloud Agent
 
   Scenario: Edge Agent with a sdjwt credential should provide proof to Cloud Agent

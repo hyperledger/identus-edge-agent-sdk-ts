@@ -191,7 +191,7 @@ describe("Keys", () => {
         });
 
         test("Secp256k1 string - should return true", () => {
-          expect(privateKey.isCurve("Secp256k1")).to.be.true;
+          expect(privateKey.isCurve("secp256k1")).to.be.true;
         });
 
         test("Curve.Ed25519 enum - should return false", () => {
@@ -283,7 +283,7 @@ describe("Keys", () => {
         });
 
         test("Curve.SECP256K1 string - should return true", () => {
-          expect(publicKey.isCurve("Secp256k1")).to.be.true;
+          expect(publicKey.isCurve("secp256k1")).to.be.true;
         });
 
         test("Curve.ED25519 enum - should return false", () => {

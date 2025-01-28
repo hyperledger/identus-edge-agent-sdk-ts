@@ -74,7 +74,8 @@ export const parseProblemReportBody = (msg: Message): ProblemReportBody => {
 }
 
 export const parseCredentialBody = (msg: Message): CredentialBody => {
-  if (Object.keys(msg.body).length === 0) {
+  if (!msg.body) {
+    //TODO: The body might be empty, but it should not be undefined according to the spec
     throw new AgentError.InvalidCredentialBodyError(
       "Invalid CredentialBody Error"
     );
@@ -86,8 +87,8 @@ export const parseCredentialBody = (msg: Message): CredentialBody => {
 
   return {
     formats: asArray(msg.body.formats).map(x => parseCredentialFormat(x)),
-    goalCode: msg.body.goalCode,
-    comment: msg.body.comment,
+    goalCode: msg.body.goalCode ?? undefined,
+    comment: msg.body.comment ?? undefined,
   };
 };
 
