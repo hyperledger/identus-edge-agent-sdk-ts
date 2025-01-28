@@ -254,33 +254,7 @@
     stream-browserify "3.0.0"
 
 "@hyperledger/identus-edge-agent-sdk@../..":
-  version "3.1.0-1"
-  dependencies:
-    "@hyperledger/identus-apollo" "^1.4.4"
-    "@noble/ciphers" "^0.6.0"
-    "@scure/bip39" "^1.1.1"
-    "@sd-jwt/sd-jwt-vc" "^0.7.1"
-    "@sinclair/typebox" "^0.32.31"
-    "@stablelib/sha256" "^1.0.1"
-    "@stablelib/uuid" "^1.0.2"
-    bn.js "^5.2.1"
-    did-jwt "^8.0.4"
-    did-resolver "^4.1.0"
-    google-protobuf "^3.21.2"
-    hash.js "1.1.7"
-    isows "^1.0.3"
-    jsonld "^8.3.2"
-    multiformats "^9.9.0"
-    pako "^2.1.0"
-    patch-package "^8.0.0"
-    postinstall-postinstall "^2.1.0"
-  optionalDependencies:
-    "@esbuild/darwin-arm64" "0.15.18"
-    "@rollup/rollup-linux-x64-gnu" "^4.24.0"
-
-"@hyperledger/identus-edge-agent-sdk@../../hyperledger-identus-edge-agent-sdk-3.1.0-1.tgz":
-  version "3.1.0-1"
-  resolved "../../hyperledger-identus-edge-agent-sdk-3.1.0-1.tgz#ed6ea3e6172b2d0dbfa518590facf21e35b12ce9"
+  version "3.1.0"
   dependencies:
     "@hyperledger/identus-apollo" "^1.4.4"
     "@noble/ciphers" "^0.6.0"
