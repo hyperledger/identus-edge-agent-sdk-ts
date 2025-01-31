@@ -109,7 +109,7 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "@hyperledger/identus-apollo": "^1.4.4",
+    "@hyperledger/identus-apollo": "^1.4.5",
     "@noble/ciphers": "^0.6.0",
     "@scure/bip39": "^1.1.1",
     "@sd-jwt/sd-jwt-vc": "^0.7.1",
