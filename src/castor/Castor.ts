@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { secp256k1 } from "@noble/curves/secp256k1";
 import { SHA256 } from "@stablelib/sha256";
 import * as base64 from "multiformats/bases/base64";
 import * as base58 from "multiformats/bases/base58";
@@ -16,15 +17,18 @@ import {
 
 import * as DIDParser from "./parser/DIDParser";
 import * as Protos from "./protos/node_models";
-
 import { PeerDIDResolver } from "./resolver/PeerDIDResolver";
 import { PeerDIDCreate } from "../peer-did/PeerDIDCreate";
 import { LongFormPrismDIDResolver } from "./resolver/LongFormPrismDIDResolver";
 import {
+  CastorError,
   VerificationMethod as DIDDocumentVerificationMethod,
   VerificationMethods as DIDDocumentVerificationMethods,
+  getUsageFromId,
   getUsageId,
+  PrivateKey,
   Usage,
+  VerificationMethod,
 } from "../domain";
 
 import { JWKHelper } from "../peer-did/helpers/JWKHelper";
@@ -41,6 +45,7 @@ import { PublicKey, Curve } from "../domain/models";
 import { X25519PublicKey } from "../apollo/utils/X25519PublicKey";
 import { Ed25519PublicKey } from "../apollo/utils/Ed25519PublicKey";
 import { PrismDIDPublicKey } from "./did/prismDID/PrismDIDPublicKey";
+import { Secp256k1PrivateKey } from "../apollo/utils/Secp256k1PrivateKey";
 
 type ExtraResolver = new (apollo: Apollo) => DIDResolver;
 /**
@@ -91,6 +96,114 @@ export default class Castor implements CastorInterface {
     return DIDParser.parse(did);
   }
 
+  private getPrismDIDKeyFromVerificationMethod(verificationMethod: VerificationMethod): PrismDIDPublicKey {
+    const id = verificationMethod.id;
+    const { usage, index } = getUsageFromId(id);
+    if (verificationMethod.publicKeyJwk) {
+      const raw = base64.base64url.baseDecode(verificationMethod.publicKeyJwk.x);
+      if (verificationMethod.publicKeyJwk.crv === Curve.SECP256K1) {
+        return new PrismDIDPublicKey(
+          getUsageId(usage, index),
+          usage,
+          new Secp256k1PublicKey(raw)
+        );
+      } else if (verificationMethod.publicKeyJwk.crv === Curve.ED25519) {
+        return new PrismDIDPublicKey(
+          getUsageId(usage, index),
+          usage,
+          new Ed25519PublicKey(raw)
+        );
+      } else if (verificationMethod.publicKeyJwk.crv === Curve.X25519) {
+        return new PrismDIDPublicKey(
+          getUsageId(usage, index),
+          usage,
+          new X25519PublicKey(raw)
+        );
+      }
+    } else if (verificationMethod.publicKeyMultibase) {
+      const raw = base58.base58btc.decode(verificationMethod.publicKeyMultibase)
+      if (verificationMethod.type === Curve.SECP256K1) {
+        return new PrismDIDPublicKey(
+          getUsageId(usage, index),
+          usage,
+          new Secp256k1PublicKey(raw)
+        );
+      } else if (verificationMethod.type === Curve.ED25519) {
+        return new PrismDIDPublicKey(
+          getUsageId(usage, index),
+          usage,
+          new Ed25519PublicKey(raw)
+        );
+      } else if (verificationMethod.type === Curve.X25519) {
+        return new PrismDIDPublicKey(
+          getUsageId(usage, index),
+          usage,
+          new X25519PublicKey(raw)
+        );
+      }
+    }
+    throw new Error("No public key found in verification method")
+  }
+
+  /**
+   * Creates a Prism DID Atala Object, a buffer contained the prism did create operation.
+   * @param {PrivateKey} key
+   * @param {Service[]} services
+   * @param {PublicKey[]} authenticationKeys
+   * @param {PublicKey[]} issuanceKeys
+   * @returns {Promise<{operationHex: string, metadataBody: {v: number, c: string[]}, did: DID}>}
+   */
+  async createPrismDIDAtalaObject(
+    key: PrivateKey,
+    did: DID,
+  ) {
+    if (key.isSignable() && key instanceof Secp256k1PrivateKey) {
+      const resolved = await this.resolveDID(did.toString());
+      const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = resolved.verificationMethods.map(
+        (verificationMethod) => this.getPrismDIDKeyFromVerificationMethod(verificationMethod).toProto()
+      );
+      const didCreationData =
+        new Protos.io.iohk.atala.prism.protos.CreateDIDOperation.DIDCreationData({
+          public_keys: didPublicKeys,
+          services: resolved.services?.map((service) => {
+            return new Protos.io.iohk.atala.prism.protos.Service({
+              service_endpoint: [service.serviceEndpoint.uri],
+              id: service.id,
+              type: service.type.at(0),
+            });
+          }),
+        });
+      const didOperation =
+        new Protos.io.iohk.atala.prism.protos.CreateDIDOperation({
+          did_data: didCreationData,
+        });
+      const operation = new Protos.io.iohk.atala.prism.protos.AtalaOperation({
+        create_did: didOperation,
+      });
+      const encodedState = operation.serializeBinary();
+      const encodedStateHash = (new SHA256()).update(encodedState).digest()
+      const signature = secp256k1.sign(
+        encodedStateHash,
+        key.raw
+      )
+      const signedOperation = Protos.io.iohk.atala.prism.protos.SignedAtalaOperation.fromObject({
+        signature: signature.toDERRawBytes(),
+        operation,
+        signed_with: getUsageId(Usage.MASTER_KEY, 0)
+      })
+      const block = Protos.io.iohk.atala.prism.protos.AtalaBlock.fromObject({
+        operations: [
+          signedOperation
+        ]
+      })
+      const atalaObject = Protos.io.iohk.atala.prism.protos.AtalaObject.fromObject({
+        block_content: block
+      })
+      return atalaObject.serialize();
+    }
+    throw new CastorError.InvalidKeyError("Cannot sign with this key")
+  }
+
   /**
    * Creates a DID for a prism (a device or server that acts as a DID owner and controller) using a
    * given master public key and list of services.
@@ -113,18 +226,20 @@ export default class Castor implements CastorInterface {
    * ```
    *
    * @async
-   * @param {PublicKey | KeyPair} masterPublicKey
+   * @param {PrivateKey | KeyPair} masterPublicKey
    * @param {?(Service[] | undefined)} [services]
+   * @param {?(PublicKey[] | undefined)} [authenticationKeys]
+   * @param {?(PublicKey[] | undefined)} [issuanceKeys]
    * @returns {Promise<DID>}
    */
   async createPrismDID(
     key: PublicKey | KeyPair,
     services?: Service[] | undefined,
-    authenticationKeys: (PublicKey | KeyPair)[] = []
+    authenticationKeys: (PublicKey | KeyPair)[] = [],
+    issuanceKeys: (PublicKey | KeyPair)[] = [],
   ): Promise<DID> {
     const didPublicKeys: Protos.io.iohk.atala.prism.protos.PublicKey[] = [];
     const masterPublicKey = "publicKey" in key ? key.publicKey : key;
-
     const masterPk = new PrismDIDPublicKey(
       getUsageId(Usage.MASTER_KEY),
       Usage.MASTER_KEY,
@@ -139,6 +254,18 @@ export default class Castor implements CastorInterface {
         const prismDIDPublicKey = new PrismDIDPublicKey(
           getUsageId(Usage.AUTHENTICATION_KEY, index),
           Usage.AUTHENTICATION_KEY,
+          pk,
+        )
+        didPublicKeys.push(prismDIDPublicKey.toProto())
+      }
+    }
+
+    if (issuanceKeys.length) {
+      for (const [index, issuanceKey] of issuanceKeys.entries()) {
+        const pk = "publicKey" in issuanceKey ? issuanceKey.publicKey : issuanceKey
+        const prismDIDPublicKey = new PrismDIDPublicKey(
+          getUsageId(Usage.ISSUING_KEY, index),
+          Usage.ISSUING_KEY,
           pk,
         )
         didPublicKeys.push(prismDIDPublicKey.toProto())
@@ -161,20 +288,16 @@ export default class Castor implements CastorInterface {
       new Protos.io.iohk.atala.prism.protos.CreateDIDOperation({
         did_data: didCreationData,
       });
-
     const operation = new Protos.io.iohk.atala.prism.protos.AtalaOperation({
       create_did: didOperation,
     });
-
     const encodedState = operation.serializeBinary();
     const sha256 = new SHA256();
     const stateHash = Buffer.from(
       sha256.update(encodedState).digest()
     ).toString("hex");
-
     const base64State = base64.base64url.baseEncode(encodedState);
     const methodSpecificId = PrismDID.parseMethodId([stateHash, base64State]);
-
     return new DID("did", "prism", methodSpecificId.toString());
   }
 
