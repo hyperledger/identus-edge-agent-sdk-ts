@@ -1,13 +1,6 @@
 name: Release wallet-sdk-ts
 
 on:
-  workflow_call:
-    inputs:
-      release_candidate:
-        description: 'Release candidate'
-        default: true
-        required: true
-        type: boolean
   workflow_dispatch:
     inputs:
       release_candidate:
@@ -15,6 +8,7 @@ on:
         default: true
         required: true
         type: boolean
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -62,4 +56,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ steps.import_gpg.outputs.name }}
         run: |
           npm install
-          npx semantic-release -e ./release.config.js
+          npx semantic-release

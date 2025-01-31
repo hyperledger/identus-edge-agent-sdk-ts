@@ -1,4 +1,3 @@
-
 name: Continuous integration
 
 concurrency:
@@ -7,13 +6,12 @@ concurrency:
 on:
   pull_request:
     branches:
-      - 'main'
-      - 'release/*'
+      - "main"
+      - "release/*"
   push:
     branches:
-      - 'main'
-      - 'release/*'
-
+      - "main"
+      - "release/*"
 
 jobs:
   build-and-test:
@@ -24,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: 'true' 
+          submodules: "true"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -40,7 +38,7 @@ jobs:
       - name: Install wasm-pack
         run: |
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-          
+
       - name: Install
         run: npm install && npm i @rollup/rollup-linux-x64-gnu
 
@@ -97,3 +95,11 @@ jobs:
           name: lcov-report.zip
           path: coverage/lcov-report
           if-no-files-found: error
+
+      - name: Dispatch integration
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: input-output-hk/identus-integration
+          event-type: integration
+          client-payload: '{"component": "sdk-ts", "version": "${{ github.sha }}" }'

@@ -8,6 +8,7 @@ module.exports = {
     ['@semantic-release/release-notes-generator', { preset: "conventionalcommits" }],
     ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
     ['@semantic-release/exec', { "prepareCmd": './publish.sh ${nextRelease.version}' }],
+    ['@semantic-release/github'],
     [
       '@semantic-release/git',
       {

@@ -1,4 +1,4 @@
-## [6.4.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.3...v6.4.0) (2025-01-16)
+## [6.4.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.3...v6.4.0) (2025-01-13)
 
 ### Features
 
@@ -11,35 +11,23 @@
 * add listener async + wait time for presentation verified ([#336](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/336)) ([80f3370](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/80f33700fe20d22919b7cd476fea79ee2862ea97))
 * commonJs default export ([#339](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/339)) ([00ddc08](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/00ddc08e461ab83b62fa15edea4a34a8560c8d78))
 * set requirements for workshop ([#335](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/335)) ([eff3cf3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/eff3cf3284335f3af73d70294a9b26623ee0298d))
-## [6.3.3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.3...v6.3.3) (2024-11-13)
-
-### Features
-
-* sdk to sdk sdjwt holder verification ([#292](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/292)) ([1d841f4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/1d841f42bb311d696ed7d2c9aff2cf9293aa8217))
+## [6.3.3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.2...v6.3.3) (2024-11-13)
 
 ### Bug Fixes
 
-* adding esbuild also as optional missing dependency ([#324](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/324)) ([bd3d946](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/bd3d946d826beb78d75f0385831dc64ad61b189d))
-* anoncreds rust build failing, enable bulk-memory c flag on compilation ([#307](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/307)) ([7481938](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/74819386e633ea9d6c0cf31f2afb6776d4fc738b))
-* build single commonjs output while keeping ability to use import or require ([#320](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/320)) ([2cdbf1e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2cdbf1ede368164be3dd56f3e362e76e94d48b48))
-* e2e workflows misnamed package ([#317](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/317)) ([7c152bf](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/7c152bffe0de1de68ac1c06f96d49ebc38b64391))
-* enable building from docker ([#303](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/303)) ([e6d0008](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e6d0008dafe5db8d87f683665509722ad60a6acd))
-* export Pluto models ([#332](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/332)) ([0613bfc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0613bfcee17b106c8768b6f7a8d27076925634e0))
 * force in memory for all workshop ([#334](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/334)) ([de51db2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/de51db26dd9853d25b6837070e0ac2c53b83e068))
-* implementing the Hyperledger Identus SDJWT workshop ([#323](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/323)) ([8b0a7be](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8b0a7be2c1447ca727df72ac1ad4a859a1c0a957))
-* remove rollup dependency ([#300](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/300)) ([ff6740e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ff6740e2d5f62262b1db65f517410af2ddc11448))
 ## [6.3.2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.1...v6.3.2) (2024-11-12)
 
 ### Bug Fixes
 
-* export Pluto models ([#332](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/332)) ([09a1504](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/09a15046403a2249034c5ff5dfc7e6e562cd9171))
-* implementing the Hyperledger Identus SDJWT workshop ([#323](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/323)) ([4718a5c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/4718a5c4eae35fd03454dceafc1623e15fe3adb5))
+* export Pluto models ([#332](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/332)) ([0613bfc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0613bfcee17b106c8768b6f7a8d27076925634e0))
+* implementing the Hyperledger Identus SDJWT workshop ([#323](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/323)) ([8b0a7be](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8b0a7be2c1447ca727df72ac1ad4a859a1c0a957))
 ## [6.3.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.0...v6.3.1) (2024-11-06)
 
 ### Bug Fixes
 
-* adding esbuild also as optional missing dependency ([#324](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/324)) ([#326](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/326)) ([c632f0e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/c632f0efed4b3d905476bd3d4312ebd50a8d0a12))
-## [6.3.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.3...v6.3.0) (2024-11-05)
+* adding esbuild also as optional missing dependency ([#324](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/324)) ([bd3d946](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/bd3d946d826beb78d75f0385831dc64ad61b189d))
+## [6.3.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.2...v6.3.0) (2024-11-04)
 
 ### Features
 
@@ -51,70 +39,25 @@
 * build single commonjs output while keeping ability to use import or require ([#320](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/320)) ([2cdbf1e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2cdbf1ede368164be3dd56f3e362e76e94d48b48))
 * e2e workflows misnamed package ([#317](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/317)) ([7c152bf](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/7c152bffe0de1de68ac1c06f96d49ebc38b64391))
 * enable building from docker ([#303](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/303)) ([e6d0008](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e6d0008dafe5db8d87f683665509722ad60a6acd))
+## [6.2.2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.0...v6.2.2) (2024-10-04)
+
+### Bug Fixes
+
 * remove rollup dependency ([#300](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/300)) ([ff6740e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ff6740e2d5f62262b1db65f517410af2ddc11448))
-## [6.2.3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.0.1...v6.2.3) (2024-10-04)
+## [6.2.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.1.0...v6.2.0) (2024-10-04)
 
 ### Features
 
 * Connectionless Offer ([#293](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/293)) ([97e05e7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/97e05e7ae6b07162dfb48222ba1f42beba97fd2c))
-* Connectionless presentation ([#272](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/272)) ([d43ec60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/d43ec604b24b2b5b18a80d714a7188223f58a4bb))
-* decoupling JWT from Pollux and adding KID header to JWTs ([#271](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/271)) ([8a1ed3f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8a1ed3fb7d3df5e627c1bdaf56434ca799ab01f7))
-* errors introducing error codes and refactoring Apollo errors ([#265](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/265)) ([f99c565](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f99c565c8c0d2f97e78c8bba6a64e07e22d5a0b6))
 * integrating error reporting protocol  ([#289](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/289)) ([02430db](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/02430dbd5158607f9f9c227bb9428f3733e0388f))
 * OIDC Agent ([#278](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/278)) ([295e14f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/295e14fdcec839ecfad1190c4644a489a3d56014))
 * separate DIDCommAgent and adding Tasks ([#277](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/277)) ([3a8fd66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/3a8fd6661fae80b05e3fc98154488fc98be504a5))
 
 ### Bug Fixes
 
-* bitstring improvement and test coverage ([#270](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/270)) ([dce65b5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/dce65b56affd5ed2a17d5d82dbab3efcfb8475bb))
 * e2e cucumber import ([#291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/291)) ([e569d79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e569d799dd50c1bdc5abe26cc9e1471422c0d252))
-* external build update for new generated code ([#264](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/264)) ([460102a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/460102ac442a2b7aa41f73d91a7f1301b9686db7))
-* main branchname in semantic release config ([#279](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/279)) ([a6a72ff](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a6a72ff6f9ce61f383485202cf2349f473bbd1f4))
-* make mediator updateable in the nextjs demo ([#262](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/262)) ([99df3c0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/99df3c042cf722c9137bcd576e1ac71c44bea6db))
 * next generation building tools and testing framework ([#258](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/258)) ([54ead35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/54ead350b06df8bbe53212e7189e5762e1e9eb33))
-* nextjs demo safeBody ([#263](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/263)) ([0d09ea7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0d09ea79d9c044a9b672b0543b1c1a4bf08e4d70))
-* noble-ciphers dependency ([#284](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/284)) ([fabcc2c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/fabcc2c636b237414ad4d0b27717c9994bd1b9ca))
-* package dependencies found by mixmix ([#273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/273)) ([#275](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/275)) ([82a50d3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/82a50d36f80116f8047b6e83b9efb82690de97d6))
-* remove optional rollup dependency causing issues ([#299](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/299)) ([0ba226e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0ba226ed6412bd6c75c46b1eac74bdf03d65d3da))
-* rollup is not a optionalDependency, and is not included in our m… ([#269](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/269)) ([9ea9d42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9ea9d424eb95627fdfe90c7f6337b04b9afd47ac))
 * sdk module resolution issues ([#290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/290)) ([f53d728](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f53d72829dbb64b64b6998fdcbfcbb47c6b4361a))
-* update code-owners ([#281](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/281)) ([b8409af](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/b8409af57ed0bb987499ad5cfb1cbbef14e22b53))
-## [6.2.2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.1...v6.2.2) (2024-10-04)
-
-### Bug Fixes
-
-* remove rollup dependency ([3c504be](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/3c504bead94c87cd52de807c230d8a674846dce5))
-## [6.2.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.0...v6.2.1) (2024-10-04)
-
-### Bug Fixes
-
-* remove optional rollup dependency causing issues ([412988e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/412988e74b53c977d2db02a120bdfcde11978df5))
-## [6.2.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.0.1...v6.2.0) (2024-10-04)
-
-### Features
-
-* Connectionless Offer ([#293](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/293)) ([97e05e7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/97e05e7ae6b07162dfb48222ba1f42beba97fd2c))
-* Connectionless presentation ([#272](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/272)) ([d43ec60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/d43ec604b24b2b5b18a80d714a7188223f58a4bb))
-* decoupling JWT from Pollux and adding KID header to JWTs ([#271](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/271)) ([8a1ed3f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8a1ed3fb7d3df5e627c1bdaf56434ca799ab01f7))
-* errors introducing error codes and refactoring Apollo errors ([#265](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/265)) ([f99c565](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f99c565c8c0d2f97e78c8bba6a64e07e22d5a0b6))
-* integrating error reporting protocol  ([#289](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/289)) ([02430db](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/02430dbd5158607f9f9c227bb9428f3733e0388f))
-* OIDC Agent ([#278](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/278)) ([295e14f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/295e14fdcec839ecfad1190c4644a489a3d56014))
-* separate DIDCommAgent and adding Tasks ([#277](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/277)) ([3a8fd66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/3a8fd6661fae80b05e3fc98154488fc98be504a5))
-
-### Bug Fixes
-
-* bitstring improvement and test coverage ([#270](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/270)) ([dce65b5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/dce65b56affd5ed2a17d5d82dbab3efcfb8475bb))
-* e2e cucumber import ([#291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/291)) ([e569d79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e569d799dd50c1bdc5abe26cc9e1471422c0d252))
-* external build update for new generated code ([#264](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/264)) ([460102a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/460102ac442a2b7aa41f73d91a7f1301b9686db7))
-* main branchname in semantic release config ([#279](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/279)) ([a6a72ff](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a6a72ff6f9ce61f383485202cf2349f473bbd1f4))
-* make mediator updateable in the nextjs demo ([#262](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/262)) ([99df3c0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/99df3c042cf722c9137bcd576e1ac71c44bea6db))
-* next generation building tools and testing framework ([#258](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/258)) ([54ead35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/54ead350b06df8bbe53212e7189e5762e1e9eb33))
-* nextjs demo safeBody ([#263](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/263)) ([0d09ea7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0d09ea79d9c044a9b672b0543b1c1a4bf08e4d70))
-* noble-ciphers dependency ([#284](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/284)) ([fabcc2c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/fabcc2c636b237414ad4d0b27717c9994bd1b9ca))
-* package dependencies found by mixmix ([#273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/273)) ([#275](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/275)) ([82a50d3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/82a50d36f80116f8047b6e83b9efb82690de97d6))
-* rollup is not a optionalDependency, and is not included in our m… ([#269](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/269)) ([9ea9d42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9ea9d424eb95627fdfe90c7f6337b04b9afd47ac))
-* sdk module resolution issues ([#290](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/290)) ([f53d728](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f53d72829dbb64b64b6998fdcbfcbb47c6b4361a))
-* update code-owners ([#281](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/281)) ([b8409af](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/b8409af57ed0bb987499ad5cfb1cbbef14e22b53))
 ## [6.1.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.0.1...v6.1.0) (2024-09-12)
 
 ### Features
@@ -134,7 +77,12 @@
 * package dependencies found by mixmix ([#273](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/273)) ([#275](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/275)) ([82a50d3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/82a50d36f80116f8047b6e83b9efb82690de97d6))
 * rollup is not a optionalDependency, and is not included in our m… ([#269](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/269)) ([9ea9d42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9ea9d424eb95627fdfe90c7f6337b04b9afd47ac))
 * update code-owners ([#281](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/281)) ([b8409af](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/b8409af57ed0bb987499ad5cfb1cbbef14e22b53))
-## [6.0.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v5.0.0...v6.0.1) (2024-08-12)
+## [6.0.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.0.0...v6.0.1) (2024-08-12)
+
+### Bug Fixes
+
+* use for-loops in Pluto persistence methods ([#261](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/261)) ([2ad0d8a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2ad0d8a505e64ef956a91678df0f2a5b4ec94eec))
+## [6.0.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v5.2.0...v6.0.0) (2024-07-19)
 
 ### ⚠ BREAKING CHANGES
 
@@ -142,129 +90,48 @@
 Deprecated internal function processJWTCredential, processAnoncredsCredential and extractCredentialFormatFromMessage. Internally, in order to process any type of credential offer just call pollux.processCredentialOffer instead. In order to extract the credentialFormat from a DIDComm message if available, use message.credentialFormat (will return known CredentialType or unknown) In order to extract the payload of whatever DIDComm message, use message.payload which will decode it into the right object instance
 JWT class now needs apollo and castor in constructor as they now instantiate from JWTCore (used internally)
 Derivable Private key is not deriving using the derivationPath as a string not the DerivationPath class (used internally)
-* **sdk-verification:** Implementing DIF Presentation exchange protocol 2.0 for SDK to SDK OOB verification (#196)
 
 ### Features
 
 * add sdk jwt revocation verification ([#231](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/231)) ([197c40b](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/197c40b3fbdddaa63c46d9bb71109b8be540e8f7))
 * Backup and Restore ([#215](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/215)) ([6bcf0ea](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/6bcf0ea5cd596f818298276f1194edd2176e762f))
 * Implement sd+jwt for issuance and verification flows with cloud agent ([#228](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/228)) ([9ba1950](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9ba19504982fb09bb97bfae86747b5c7b89ef97d))
-* Implementing JWT Credential revocation notification ([#184](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/184)) ([9aa8b8b](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9aa8b8b90e7bd814cbe079db2310d30d98f80a48))
-* implementing SDK Verification Phase2 Anoncreds ([#219](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/219)) ([e80549c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e80549cb08082ccc72b0a4abc6ba2e539d9e6fb7))
-* **sdk-verification:** Implementing DIF Presentation exchange protocol 2.0 for SDK to SDK OOB verification ([#196](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/196)) ([68c9db8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/68c9db8fc9559fddeeda68f7ac60a411c4a1cf4d))
-* updating Anoncreds to io fork ([#157](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/157)) ([8987de2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8987de20f2717b328e02dd0f391dbb347856c526))
 
 ### Bug Fixes
 
-*  Rename the documentation file accordingly. ([#204](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/204)) ([90c1f54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/90c1f54d18e0164c68a858f9f214ecb0e18b04a8))
-* add compliant dates not in ms, but in seconds. ([#206](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/206)) ([76f4f48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/76f4f482bf31f3abe5695fb6d319561ca3c50f13))
 * add e2e tests for jwt revocation, sdk verification for jwt and anoncreds ([#244](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/244)) ([d464697](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/d46469705718defff318290c49704215d048242e))
 * add missing files in package to clean rxdb vulnerabilities to fix e2e  ([#233](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/233)) ([9891707](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/98917074d6acc88eebc75b677512a06227e80a5e))
-* Agent.createNewPrismDID to use derivationPath ([#158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/158)) ([06bc2cc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/06bc2cc672d3f432b9add9413af603c4a834dad1))
 * attachment descriptor parameters ([#240](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/240)) ([c83d74d](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/c83d74dd7b8d72de91a105a5fb9d3c249d9f33e7))
 * attachment encoding fallback base64 + base64url by default ([#239](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/239)) ([a22d3dd](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a22d3dd118965de2b910414d4769b7701cd5dd71))
 * build node wasm not bundled up ([#226](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/226)) ([48e78e3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/48e78e3e446df5ea10b01ace04315e446aec6126))
 * **Castor:** createPrismDID and resolveDID key id conflicts ([#243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/243)) ([f165531](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f165531f62a651e70f38dc98069314438b096cdf))
-* Compatibility issues with osx and unix platforms around the sed ([#217](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/217)) ([8287eed](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8287eed3648f413a7ecb0388f53535d8d8a90cd7))
-* ConnectionManager emit Messages ([#190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/190)) ([776e55a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/776e55abea0a52e5e1989e9633357cc0a14cba77))
 * create custom class to verify bitstring position more precisely. ([#234](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/234)) ([efb771d](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/efb771d4917902500a745eb38203dd4b81c898a2))
-* db cannot be created twice with the same name which crashes demos ([#193](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/193)) ([27f771c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/27f771c47fb5ba0efc96919a3223a64d370d916a))
-* deprecate browser demos ([#221](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/221)) ([a6f9bdb](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a6f9bdb0c877476c1189ae3204df3e49270b35bd))
 * e2e issues fix ([#236](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/236)) ([ba908b1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ba908b15338e9dd52c2d88597f0a1a86c827d198))
-* e2e issues with latest websocket changes ([#200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/200)) ([969fc06](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/969fc06cd375d0bcec833691f161bbcd6d61e885))
 * escape the `<->` sequence to fix the build error in the identus-… ([#248](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/248)) ([0a32269](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0a32269b0a753f95fd12dd220aca552a0796941a))
 * generate docs after releasing as we cannot access a package that… ([#255](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/255)) ([2be9710](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2be9710b3d0f8e8b98bb990f47462c1a88654948))
-* issue with build script not replacing some files that have been … ([#191](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/191)) ([c26f014](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/c26f01411019399e8a308195fb6a66cabcfc63f6))
 * jwe rust library for backup encryption not including the node wa… ([#237](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/237)) ([6721d8f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/6721d8f1b28fbbd4dd82e1429295cdcc0c9ad4a8))
 * Message properties body, createdTime, expiresTimePlus ([#232](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/232)) ([38de286](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/38de286227c71ce49247752430475974185f837d))
 * moving to hyperledger namespace ([#245](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/245)) ([cc83358](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/cc83358cb77ae018cfede03335c4a205f4ef8741))
-* optin to websockets for the mediator live mode as an experiment,… ([#199](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/199)) ([950bc76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/950bc76b7affb1cf804be32199ee5b32f27e62fa))
-* prevent broken links to exist in order for docs site to build pr… ([#205](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/205)) ([f33f029](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f33f029fe459a1a9b092096d21baa514144d10d4))
 * releasing to HL ([#253](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/253)) ([abb65a3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/abb65a336ae986ad2d94d5b3964d499833f66c0d))
 * remove typo in release pipeline ([#254](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/254)) ([c2d2e87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/c2d2e87a1b4e91cf8a47e592418d4075e5c1d7ee))
-* Removing the if condition in CI pipeline for release branches ([#179](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/179)) ([a8c4ebc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a8c4ebcbb788422cc993701124eb939ecbc7ccf1))
-* rename prism-agent into edge-agent ([#203](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/203)) ([2a1fa1e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2a1fa1e7f5ff3f40ee309d9ae09abad3ac251a2a))
-* rename references ([#218](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/218)) ([7d79d6f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/7d79d6fad55356ed898aacf79cebc4558892867e))
-* type references are lost in the package. ([#202](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/202)) ([86ea42e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/86ea42e70d4e74392102dc5c013b43676c09f08f))
-* update event callback argument type ([#216](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/216)) ([ec92fcb](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ec92fcb35f66944b75d7bafbfc1748cc5e01bdca))
-* updating references to Identus ([#197](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/197)) ([8fcb792](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8fcb792a50b8086a801c8f3c51517dff34a9c88b))
-* use for-loops in Pluto persistence methods ([#261](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/261)) ([2ad0d8a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2ad0d8a505e64ef956a91678df0f2a5b4ec94eec))
 * using rust dependency for jwe ([#235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/235)) ([5bbfdf5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/5bbfdf59e271b7a07a84b186f1e4e99f74f34a65))
-* wasm build folder change ([#186](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/186)) ([11ad81f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/11ad81fae0cb446a3bdf054b682d6117727851b4))
-## [6.0.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v5.0.0...v6.0.0) (2024-07-20)
-
-### ⚠ BREAKING CHANGES
-
-* Pollux instance now requires to have Apollo first constructor parameter (used internally)
-Deprecated internal function processJWTCredential, processAnoncredsCredential and extractCredentialFormatFromMessage. Internally, in order to process any type of credential offer just call pollux.processCredentialOffer instead. In order to extract the credentialFormat from a DIDComm message if available, use message.credentialFormat (will return known CredentialType or unknown) In order to extract the payload of whatever DIDComm message, use message.payload which will decode it into the right object instance
-JWT class now needs apollo and castor in constructor as they now instantiate from JWTCore (used internally)
-Derivable Private key is not deriving using the derivationPath as a string not the DerivationPath class (used internally)
-* **sdk-verification:** Implementing DIF Presentation exchange protocol 2.0 for SDK to SDK OOB verification (#196)
+## [5.2.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.1.1...v5.2.0) (2024-05-29)
 
 ### Features
 
-* add sdk jwt revocation verification ([#231](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/231)) ([115c2c6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/115c2c63b42db55abcae26b534880be6455b381c))
-* Backup and Restore ([#215](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/215)) ([bf15325](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/bf15325720db79399338adc64fee26fcc30681a2))
-* Implement sd+jwt for issuance and verification flows with cloud agent ([#228](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/228)) ([a8c0b21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a8c0b21ef51a5aab07f44187b1514613de84ad75))
-* Implementing JWT Credential revocation notification ([#184](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/184)) ([9aa8b8b](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9aa8b8b90e7bd814cbe079db2310d30d98f80a48))
-* implementing SDK Verification Phase2 Anoncreds ([#219](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/219)) ([e80549c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/e80549cb08082ccc72b0a4abc6ba2e539d9e6fb7))
-* **sdk-verification:** Implementing DIF Presentation exchange protocol 2.0 for SDK to SDK OOB verification ([#196](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/196)) ([68c9db8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/68c9db8fc9559fddeeda68f7ac60a411c4a1cf4d))
-* updating Anoncreds to io fork ([#157](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/157)) ([8987de2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8987de20f2717b328e02dd0f391dbb347856c526))
+* implementing SDK Verification Phase2 Anoncreds ([#219](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/219)) ([e80549c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/e80549cb08082ccc72b0a4abc6ba2e539d9e6fb7))
 
 ### Bug Fixes
 
-*  Rename the documentation file accordingly. ([#204](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/204)) ([90c1f54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/90c1f54d18e0164c68a858f9f214ecb0e18b04a8))
-* add compliant dates not in ms, but in seconds. ([#206](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/206)) ([76f4f48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/76f4f482bf31f3abe5695fb6d319561ca3c50f13))
-* add e2e tests for jwt revocation, sdk verification for jwt and anoncreds ([#244](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/244)) ([5c2519b](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/5c2519b6285cba24d4194f2e7816aacb60e05fd5))
-* add missing files in package to clean rxdb vulnerabilities to fix e2e  ([#233](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/233)) ([8b4c9e8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8b4c9e85f7894d4fbf670715153334d18cb8d924))
-* Agent.createNewPrismDID to use derivationPath ([#158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/158)) ([06bc2cc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/06bc2cc672d3f432b9add9413af603c4a834dad1))
-* attachment descriptor parameters ([#240](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/240)) ([2391f01](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2391f013d79f8505f1287ee1531b7c647775d18d))
-* attachment encoding fallback base64 + base64url by default ([#239](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/239)) ([78cd8f7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/78cd8f71056713d42bc944877c0cc196a34b30d5))
-* build node wasm not bundled up ([#226](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/226)) ([48e78e3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/48e78e3e446df5ea10b01ace04315e446aec6126))
-* **Castor:** createPrismDID and resolveDID key id conflicts ([#243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/243)) ([5024818](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/5024818d59a470637df4d39d9b96bc270f2451d9))
-* Compatibility issues with osx and unix platforms around the sed ([#217](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/217)) ([8287eed](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8287eed3648f413a7ecb0388f53535d8d8a90cd7))
-* ConnectionManager emit Messages ([#190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/190)) ([776e55a](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/776e55abea0a52e5e1989e9633357cc0a14cba77))
-* create custom class to verify bitstring position more precisely. ([#234](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/234)) ([255184b](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/255184b9635a8714ca5118e5108cc650d636468a))
-* db cannot be created twice with the same name which crashes demos ([#193](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/193)) ([27f771c](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/27f771c47fb5ba0efc96919a3223a64d370d916a))
-* deprecate browser demos ([#221](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/221)) ([a6f9bdb](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a6f9bdb0c877476c1189ae3204df3e49270b35bd))
-* e2e issues fix ([#236](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/236)) ([12019b9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/12019b9fcac8d2be4f2fd929c0cedeae07c41dea))
-* e2e issues with latest websocket changes ([#200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/200)) ([969fc06](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/969fc06cd375d0bcec833691f161bbcd6d61e885))
-* escape the `<->` sequence to fix the build error in the identus-… ([#248](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/248)) ([15cf694](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/15cf6947da1ad4342c46e228c277754f023fa38e))
-* generate docs after releasing as we cannot access a package that… ([#255](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/255)) ([70efa8b](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/70efa8b16122ab132f36ab1c9f2ac30b3a4b3176))
-* issue with build script not replacing some files that have been … ([#191](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/191)) ([c26f014](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/c26f01411019399e8a308195fb6a66cabcfc63f6))
-* jwe rust library for backup encryption not including the node wa… ([#237](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/237)) ([b1177a6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/b1177a6697fa12900839f40581b80a16c93f016d))
-* Message properties body, createdTime, expiresTimePlus ([#232](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/232)) ([cf7db9f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/cf7db9f82e9721357b2a59dd2b4b21bcc3ae3352))
-* moving to hyperledger namespace ([#245](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/245)) ([2139a78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2139a78a81aaf07f0526694b87636dbb615c06cb))
-* optin to websockets for the mediator live mode as an experiment,… ([#199](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/199)) ([950bc76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/950bc76b7affb1cf804be32199ee5b32f27e62fa))
-* prevent broken links to exist in order for docs site to build pr… ([#205](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/205)) ([f33f029](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f33f029fe459a1a9b092096d21baa514144d10d4))
-* releasing to HL ([#253](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/253)) ([ed0fdf3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ed0fdf3a30cd36364010524dc48273c47f5ee5c8))
-* remove typo in release pipeline ([#254](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/254)) ([34597e1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/34597e138b98eee1798b1d0da4be7a1ff0d6e951))
-* Removing the if condition in CI pipeline for release branches ([#179](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/179)) ([a8c4ebc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/a8c4ebcbb788422cc993701124eb939ecbc7ccf1))
-* rename prism-agent into edge-agent ([#203](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/203)) ([2a1fa1e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/2a1fa1e7f5ff3f40ee309d9ae09abad3ac251a2a))
-* rename references ([#218](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/218)) ([7d79d6f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/7d79d6fad55356ed898aacf79cebc4558892867e))
-* type references are lost in the package. ([#202](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/202)) ([86ea42e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/86ea42e70d4e74392102dc5c013b43676c09f08f))
-* update event callback argument type ([#216](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/216)) ([ec92fcb](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ec92fcb35f66944b75d7bafbfc1748cc5e01bdca))
-* updating references to Identus ([#197](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/197)) ([8fcb792](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/8fcb792a50b8086a801c8f3c51517dff34a9c88b))
-* using rust dependency for jwe ([#235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/235)) ([0a35296](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/0a352962816f5f889c603bf0b46438002f85eeee))
-* wasm build folder change ([#186](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/186)) ([11ad81f](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/11ad81fae0cb446a3bdf054b682d6117727851b4))
-## [5.2.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.1.1...v5.2.0) (2024-05-31)
-
-### Features
-
-* implementing SDK Verification Phase2 Anoncreds ([#219](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/219)) ([0c159f7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/0c159f7c3132e7fc65a178d605ffb60a20396e82))
-
-### Bug Fixes
-
-* build node wasm not bundled up ([#226](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/226)) ([121abdc](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/121abdcf5e5501a0e54d0ef5cd54401807b30833))
-* deprecate browser demos ([#221](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/221)) ([b0f283f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/b0f283f59b6a4c13c14db60d22e03e37dc3a8d37))
-* rename references ([#218](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/218)) ([d1b7d7f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/d1b7d7fecd3c876548319dafea8a0ca99659c9d5))
-* update event callback argument type ([#216](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/216)) ([7297d73](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/7297d73fcc7b4407adddc4330b2c1dd83e7fdc78))
+* deprecate browser demos ([#221](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/221)) ([a6f9bdb](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a6f9bdb0c877476c1189ae3204df3e49270b35bd))
+* rename references ([#218](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/218)) ([7d79d6f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/7d79d6fad55356ed898aacf79cebc4558892867e))
+* update event callback argument type ([#216](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/216)) ([ec92fcb](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/ec92fcb35f66944b75d7bafbfc1748cc5e01bdca))
 ## [5.1.1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.1.0...v5.1.1) (2024-05-17)
 
 ### Bug Fixes
 
-* Compatibility issues with osx and unix platforms around the sed ([#217](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/217)) ([47ec1c8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/47ec1c854dc419f126d426a44d238568f53ff3eb))
-## [5.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.0.0...v5.1.0) (2024-05-07)
+* Compatibility issues with osx and unix platforms around the sed ([#217](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/217)) ([8287eed](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/8287eed3648f413a7ecb0388f53535d8d8a90cd7))
+## [5.1.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v5.0.0...v5.1.0) (2024-05-02)
 
 ### ⚠ BREAKING CHANGES
 
@@ -272,26 +139,26 @@ Derivable Private key is not deriving using the derivationPath as a string not t
 
 ### Features
 
-* Implementing JWT Credential revocation notification ([#184](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/184)) ([09cd573](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/09cd573e533b5a5685eca30c52919f4d05df5490))
-* **sdk-verification:** Implementing DIF Presentation exchange protocol 2.0 for SDK to SDK OOB verification ([#196](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/196)) ([ff2901c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/ff2901c0539e0353db0c7c48e7bee84ae75ba3cc))
-* updating Anoncreds to io fork ([#157](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/157)) ([06b50c9](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/06b50c9c3f753e5f16dac11a595a535c90cec390))
+* Implementing JWT Credential revocation notification ([#184](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/184)) ([9aa8b8b](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/9aa8b8b90e7bd814cbe079db2310d30d98f80a48))
+* **sdk-verification:** Implementing DIF Presentation exchange protocol 2.0 for SDK to SDK OOB verification ([#196](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/196)) ([68c9db8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/68c9db8fc9559fddeeda68f7ac60a411c4a1cf4d))
+* updating Anoncreds to io fork ([#157](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/157)) ([8987de2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/8987de20f2717b328e02dd0f391dbb347856c526))
 
 ### Bug Fixes
 
-*  Rename the documentation file accordingly. ([#204](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/204)) ([b77230f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/b77230f5d9de271e254f107a8f1d92164630b80c))
-* add compliant dates not in ms, but in seconds. ([#206](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/206)) ([a3fc2aa](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a3fc2aa49bf664d89c47d7b1ef1346d8d00d39dc))
-* Agent.createNewPrismDID to use derivationPath ([#158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/158)) ([18cd084](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/18cd0841f68c592ca84a7bb00fda70eaa0a2f7f5))
-* ConnectionManager emit Messages ([#190](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/190)) ([08097b6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/08097b63dc131522da1b6efba31515e6b8aff821))
-* db cannot be created twice with the same name which crashes demos ([#193](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/193)) ([e39193e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/e39193efca587d84929f254555bf3d27ba0b2970))
-* e2e issues with latest websocket changes ([#200](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/200)) ([70e885b](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/70e885b7cc2b0db8ea1ac782958b8b86557ec39d))
-* issue with build script not replacing some files that have been … ([#191](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/191)) ([94a37cf](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/94a37cf8c2503d11dd9cb4ed369eb16ee8545abc))
-* optin to websockets for the mediator live mode as an experiment,… ([#199](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/199)) ([2bf406c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/2bf406c8ba7a792cceed19c6bf87bbe945ae4324))
-* prevent broken links to exist in order for docs site to build pr… ([#205](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/205)) ([74ee7a1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/74ee7a1a107dd62fc0d9ab0743f0f78f0717628a))
-* Removing the if condition in CI pipeline for release branches ([#179](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/179)) ([a7bb2e8](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a7bb2e89be95ac9008633889a4887c2456178ee8))
-* rename prism-agent into edge-agent ([#203](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/203)) ([ac1d162](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/ac1d162db5aea0c488228891fe9a7e8dc52c2b23))
-* type references are lost in the package. ([#202](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/202)) ([6c0e5fc](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/6c0e5fcb6b4944bb0292d19440067e869154494b))
-* updating references to Identus ([#197](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/197)) ([63d6703](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/63d67033869b6a9a686f49c8408a789d80e1c9fa))
-* wasm build folder change ([#186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/186)) ([f59f6c6](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/f59f6c635bcb0386831ad5e4e4e926925bce745a))
+*  Rename the documentation file accordingly. ([#204](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/204)) ([90c1f54](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/90c1f54d18e0164c68a858f9f214ecb0e18b04a8))
+* add compliant dates not in ms, but in seconds. ([#206](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/206)) ([76f4f48](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/76f4f482bf31f3abe5695fb6d319561ca3c50f13))
+* Agent.createNewPrismDID to use derivationPath ([#158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/158)) ([06bc2cc](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/06bc2cc672d3f432b9add9413af603c4a834dad1))
+* ConnectionManager emit Messages ([#190](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/190)) ([776e55a](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/776e55abea0a52e5e1989e9633357cc0a14cba77))
+* db cannot be created twice with the same name which crashes demos ([#193](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/193)) ([27f771c](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/27f771c47fb5ba0efc96919a3223a64d370d916a))
+* e2e issues with latest websocket changes ([#200](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/200)) ([969fc06](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/969fc06cd375d0bcec833691f161bbcd6d61e885))
+* issue with build script not replacing some files that have been … ([#191](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/191)) ([c26f014](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/c26f01411019399e8a308195fb6a66cabcfc63f6))
+* optin to websockets for the mediator live mode as an experiment,… ([#199](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/199)) ([950bc76](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/950bc76b7affb1cf804be32199ee5b32f27e62fa))
+* prevent broken links to exist in order for docs site to build pr… ([#205](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/205)) ([f33f029](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/f33f029fe459a1a9b092096d21baa514144d10d4))
+* Removing the if condition in CI pipeline for release branches ([#179](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/179)) ([a8c4ebc](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/a8c4ebcbb788422cc993701124eb939ecbc7ccf1))
+* rename prism-agent into edge-agent ([#203](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/203)) ([2a1fa1e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/2a1fa1e7f5ff3f40ee309d9ae09abad3ac251a2a))
+* type references are lost in the package. ([#202](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/202)) ([86ea42e](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/86ea42e70d4e74392102dc5c013b43676c09f08f))
+* updating references to Identus ([#197](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/197)) ([8fcb792](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/8fcb792a50b8086a801c8f3c51517dff34a9c88b))
+* wasm build folder change ([#186](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/issues/186)) ([11ad81f](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/11ad81fae0cb446a3bdf054b682d6117727851b4))
 ## [5.0.0](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v4.0.2...v5.0.0) (2024-05-02)
 
 ### Features
@@ -518,4 +385,3 @@ Signed-off-by: Francisco Javier Ribó Labrador <elribonazo@gmail.com>
 ### Continuous Integration
 
 * add semantic-release ([1048eb7](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/commit/1048eb7be83076fb617300188137dea945a13f07))
-## [0.0.1](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/compare/v1.0.0...v0.0.1) (2025-01-28)
