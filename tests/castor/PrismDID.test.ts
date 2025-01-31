@@ -83,6 +83,22 @@ describe("PrismDID", () => {
   });
 
   describe("createPrismDID", () => {
+    it("Should create a signed prism did AtalaObject", async () => {
+      const { publicKey, privateKey } = Fixtures.Keys.secp256K1;
+      const did = await castor.createPrismDID(publicKey);
+      const atalaObjectBuffer = await castor.createPrismDIDAtalaObject(privateKey, did);
+      const atalaObject = Protos.io.iohk.atala.prism.protos.AtalaObject.deserializeBinary(atalaObjectBuffer);
+
+      expect(atalaObject).toHaveProperty("block_content");
+      expect(atalaObject.block_content).toHaveProperty("operations");
+      expect(atalaObject.block_content.operations).toHaveLength(1);
+      expect(atalaObject.block_content.operations[0]).toHaveProperty("operation");
+      expect(atalaObject.block_content.operations[0].operation.create_did).toHaveProperty("did_data");
+      expect(atalaObject.block_content.operations[0].operation.create_did.did_data).toHaveProperty("public_keys");
+      expect(atalaObject.block_content.operations[0].operation.create_did.did_data.public_keys).toHaveLength(1);
+      expect(atalaObject.block_content.operations[0].operation.create_did.did_data.public_keys[0]).toHaveProperty("id");
+      expect(atalaObject.block_content.operations[0].operation.create_did.did_data.public_keys[0].id).to.equal(getUsageId(Usage.MASTER_KEY, 0));
+    })
     it("Should create a prismDID from a PublicKey (SECP256K1)", async () => {
       const result = await castor.createPrismDID(Fixtures.Keys.secp256K1.publicKey, [], [Fixtures.Keys.secp256K1]);
       expect(result).not.to.be.null;
