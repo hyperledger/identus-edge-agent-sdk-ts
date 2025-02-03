@@ -27,8 +27,10 @@ you need to easily create, manage, and resolve DIDs.
 
 - [createPeerDID](Castor.md#createpeerdid)
 - [createPrismDID](Castor.md#createprismdid)
+- [createPrismDIDAtalaObject](Castor.md#createprismdidatalaobject)
 - [extractVerificationMethods](Castor.md#extractverificationmethods)
 - [getEcnumbasis](Castor.md#getecnumbasis)
+- [getPrismDIDKeyFromVerificationMethod](Castor.md#getprismdidkeyfromverificationmethod)
 - [parseDID](Castor.md#parsedid)
 - [resolveDID](Castor.md#resolvedid)
 - [verifySignature](Castor.md#verifysignature)
@@ -54,7 +56,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L65)
+[src/castor/Castor.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L70)
 
 ## Properties
 
@@ -64,7 +66,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L55)
+[src/castor/Castor.ts:60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L60)
 
 ___
 
@@ -74,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/castor/Castor.ts:56](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L56)
+[src/castor/Castor.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L61)
 
 ## Methods
 
@@ -115,13 +117,13 @@ const peerDid = await castor.createPeerDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L200)
+[src/castor/Castor.ts:323](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L323)
 
 ___
 
 ### createPrismDID
 
-▸ **createPrismDID**(`key`, `services?`, `authenticationKeys?`): `Promise`\<[`DID`](Domain.DID.md)\>
+▸ **createPrismDID**(`key`, `services?`, `authenticationKeys?`, `issuanceKeys?`): `Promise`\<[`DID`](Domain.DID.md)\>
 
 Creates a DID for a prism (a device or server that acts as a DID owner and controller) using a
 given master public key and list of services.
@@ -132,7 +134,8 @@ given master public key and list of services.
 | :------ | :------ | :------ |
 | `key` | [`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md) | `undefined` |
 | `services?` | [`Service`](Domain.Service.md)[] | `undefined` |
-| `authenticationKeys` | ([`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md))[] | `[]` |
+| `authenticationKeys?` | ([`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md))[] | `[]` |
+| `issuanceKeys?` | ([`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md))[] | `[]` |
 
 #### Returns
 
@@ -164,7 +167,30 @@ const prismDid = await castor.createPrismDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:120](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L120)
+[src/castor/Castor.ts:235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L235)
+
+___
+
+### createPrismDIDAtalaObject
+
+▸ **createPrismDIDAtalaObject**(`key`, `did`): `Promise`\<`Uint8Array`\>
+
+Creates a Prism DID Atala Object, a buffer contained the prism did create operation.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | [`PrivateKey`](Domain.PrivateKey.md) |
+| `did` | [`DID`](Domain.DID.md) |
+
+#### Returns
+
+`Promise`\<`Uint8Array`\>
+
+#### Defined in
+
+[src/castor/Castor.ts:156](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L156)
 
 ___
 
@@ -186,7 +212,7 @@ Extracts the verificationMethods from an array of CoreProperties inside a DID Do
 
 #### Defined in
 
-[src/castor/Castor.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L247)
+[src/castor/Castor.ts:370](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L370)
 
 ___
 
@@ -213,7 +239,27 @@ Returns ecnumbasis from a valid DID and its related publicKey
 
 #### Defined in
 
-[src/castor/Castor.ts:406](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L406)
+[src/castor/Castor.ts:529](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L529)
+
+___
+
+### getPrismDIDKeyFromVerificationMethod
+
+▸ **getPrismDIDKeyFromVerificationMethod**(`verificationMethod`): `PrismDIDPublicKey`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `verificationMethod` | [`VerificationMethod`](Domain.VerificationMethod.md) |
+
+#### Returns
+
+`PrismDIDPublicKey`
+
+#### Defined in
+
+[src/castor/Castor.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L99)
 
 ___
 
@@ -250,7 +296,7 @@ const parsedPrismDid = castor.parseDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L90)
+[src/castor/Castor.ts:95](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L95)
 
 ___
 
@@ -288,7 +334,7 @@ const didDocument = await castor.resolveDID("did:prism:123456")
 
 #### Defined in
 
-[src/castor/Castor.ts:225](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L225)
+[src/castor/Castor.ts:348](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L348)
 
 ___
 
@@ -340,4 +386,4 @@ const isValid = castor.verifySignature(
 
 #### Defined in
 
-[src/castor/Castor.ts:291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/castor/Castor.ts#L291)
+[src/castor/Castor.ts:414](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/castor/Castor.ts#L414)

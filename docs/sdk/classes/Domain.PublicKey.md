@@ -67,7 +67,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:153](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L153)
+[src/domain/models/keyManagement/Key.ts:217](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L217)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:155](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L155)
+[src/domain/models/keyManagement/Key.ts:219](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L219)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L154)
+[src/domain/models/keyManagement/Key.ts:218](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L218)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:156](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L156)
+[src/domain/models/keyManagement/Key.ts:220](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L220)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:152](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L152)
+[src/domain/models/keyManagement/Key.ts:216](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L216)
 
 ## Accessors
 
@@ -148,7 +148,7 @@ Key.alg
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:165](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L165)
+[src/domain/models/keyManagement/Key.ts:229](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L229)
 
 ___
 
@@ -166,7 +166,7 @@ Key.curve
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:160](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L160)
+[src/domain/models/keyManagement/Key.ts:224](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L224)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/PublicKey.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/PublicKey.ts#L4)
+[src/domain/models/keyManagement/PublicKey.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/PublicKey.ts#L4)
 
 ## Methods
 
@@ -198,7 +198,7 @@ this is VerifiableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:187](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L187)
+[src/domain/models/keyManagement/Key.ts:251](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L251)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L158)
+[src/domain/models/keyManagement/Key.ts:222](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L222)
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:191](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L191)
+[src/domain/models/keyManagement/Key.ts:255](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L255)
 
 ___
 
@@ -270,7 +270,7 @@ this is T
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:195](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L195)
+[src/domain/models/keyManagement/Key.ts:259](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L259)
 
 ___
 
@@ -288,7 +288,7 @@ this is DerivableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:171](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L171)
+[src/domain/models/keyManagement/Key.ts:235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L235)
 
 ___
 
@@ -306,7 +306,7 @@ this is All
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:175](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L175)
+[src/domain/models/keyManagement/Key.ts:239](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L239)
 
 ___
 
@@ -324,7 +324,7 @@ this is SignableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:179](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L179)
+[src/domain/models/keyManagement/Key.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L243)
 
 ___
 
@@ -342,4 +342,4 @@ this is StorableKey
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/keyManagement/Key.ts#L183)
+[src/domain/models/keyManagement/Key.ts:247](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/keyManagement/Key.ts#L247)

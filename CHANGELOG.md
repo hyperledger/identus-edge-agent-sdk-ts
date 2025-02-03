@@ -1,3 +1,10 @@
+# [6.5.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.4.0...v6.5.0) (2025-02-03)
+
+
+### Features
+
+* castor create signed prism did operation ([#347](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/347)) ([1a3abf6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/1a3abf65a2f89b4ecd0f28af600329805573d6fc))
+
 # [6.4.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.3...v6.4.0) (2025-01-16)
 
 

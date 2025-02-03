@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/VerifiableCredential.ts#L183)
+[src/domain/models/VerifiableCredential.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/VerifiableCredential.ts#L183)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/VerifiableCredential.ts#L183)
+[src/domain/models/VerifiableCredential.ts:183](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/VerifiableCredential.ts#L183)
 
 ## Methods
 
@@ -84,4 +84,4 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:185](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/VerifiableCredential.ts#L185)
+[src/domain/models/VerifiableCredential.ts:185](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/VerifiableCredential.ts#L185)

@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:102](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L102)
+[src/domain/models/MessageAttachment.ts:102](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L102)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:100](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L100)
+[src/domain/models/MessageAttachment.ts:100](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L100)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:104](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L104)
+[src/domain/models/MessageAttachment.ts:104](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L104)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L103)
+[src/domain/models/MessageAttachment.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L103)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L101)
+[src/domain/models/MessageAttachment.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L101)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:109](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L109)
+[src/domain/models/MessageAttachment.ts:109](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L109)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L107)
+[src/domain/models/MessageAttachment.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L107)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:105](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L105)
+[src/domain/models/MessageAttachment.ts:105](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L105)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:106](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L106)
+[src/domain/models/MessageAttachment.ts:106](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L106)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:108](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/MessageAttachment.ts#L108)
+[src/domain/models/MessageAttachment.ts:108](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/MessageAttachment.ts#L108)

@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L99)
+[src/edge-agent/types/index.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/edge-agent/types/index.ts#L99)
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:97](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/types/index.ts#L97)
+[src/edge-agent/types/index.ts:97](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/edge-agent/types/index.ts#L97)

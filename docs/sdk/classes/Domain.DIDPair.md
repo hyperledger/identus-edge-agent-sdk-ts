@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDPair.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDPair.ts#L4)
+[src/domain/models/DIDPair.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDPair.ts#L4)
 
 ## Properties
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDPair.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDPair.ts#L5)
+[src/domain/models/DIDPair.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDPair.ts#L5)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDPair.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDPair.ts#L7)
+[src/domain/models/DIDPair.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDPair.ts#L7)
 
 ___
 
@@ -66,4 +66,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDPair.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDPair.ts#L6)
+[src/domain/models/DIDPair.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDPair.ts#L6)

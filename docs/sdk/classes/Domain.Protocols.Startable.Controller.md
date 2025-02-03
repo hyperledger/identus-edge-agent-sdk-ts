@@ -63,7 +63,7 @@ current status of the entity
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L42)
+[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L42)
 
 ## Methods
 
@@ -83,7 +83,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L51)
+[src/domain/protocols/Startable.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L51)
 
 ___
 
@@ -103,7 +103,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L60)
+[src/domain/protocols/Startable.ts:60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L60)
 
 ___
 
@@ -125,7 +125,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L62)
+[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L62)
 
 ___
 
@@ -147,4 +147,4 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L72)
+[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L72)

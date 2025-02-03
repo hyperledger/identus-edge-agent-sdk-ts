@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:112](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDDocument.ts#L112)
+[src/domain/models/DIDDocument.ts:112](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDDocument.ts#L112)
 
 ## Properties
 
@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDDocument.ts#L114)
+[src/domain/models/DIDDocument.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDDocument.ts#L114)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:113](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDDocument.ts#L113)
+[src/domain/models/DIDDocument.ts:113](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDDocument.ts#L113)
 
 ## Accessors
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDDocument.ts#L117)
+[src/domain/models/DIDDocument.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDDocument.ts#L117)
 
 ___
 
@@ -87,4 +87,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/DIDDocument.ts#L126)
+[src/domain/models/DIDDocument.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/DIDDocument.ts#L126)

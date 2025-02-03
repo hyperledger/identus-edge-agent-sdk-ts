@@ -102,7 +102,7 @@ Pollux
 
 #### Defined in
 
-[src/pollux/Pollux.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L83)
+[src/pollux/Pollux.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L83)
 
 ## Properties
 
@@ -112,7 +112,7 @@ Pollux
 
 #### Defined in
 
-[src/pollux/Pollux.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L87)
+[src/pollux/Pollux.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L87)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L88)
+[src/pollux/Pollux.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L88)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L79)
+[src/pollux/Pollux.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L79)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L80)
+[src/pollux/Pollux.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L80)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L81)
+[src/pollux/Pollux.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L81)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L86)
+[src/pollux/Pollux.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L86)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:84](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L84)
+[src/pollux/Pollux.ts:84](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L84)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:85](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L85)
+[src/pollux/Pollux.ts:85](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L85)
 
 ___
 
@@ -198,7 +198,7 @@ current status of the entity
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L42)
+[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L42)
 
 ## Accessors
 
@@ -212,7 +212,7 @@ current status of the entity
 
 #### Defined in
 
-[src/pollux/Pollux.ts:93](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L93)
+[src/pollux/Pollux.ts:93](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L93)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:100](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L100)
+[src/pollux/Pollux.ts:100](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L100)
 
 ## Methods
 
@@ -250,7 +250,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/pollux/Pollux.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L107)
+[src/pollux/Pollux.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L107)
 
 ___
 
@@ -274,7 +274,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/pollux/Pollux.ts:116](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L116)
+[src/pollux/Pollux.ts:116](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L116)
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:487](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L487)
+[src/pollux/Pollux.ts:487](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L487)
 
 ___
 
@@ -322,7 +322,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:390](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L390)
+[src/pollux/Pollux.ts:390](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L390)
 
 ___
 
@@ -356,7 +356,7 @@ Creates a PresentationDefinitionRequest object for oob Verifications
 
 #### Defined in
 
-[src/pollux/Pollux.ts:598](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L598)
+[src/pollux/Pollux.ts:598](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L598)
 
 ___
 
@@ -388,7 +388,7 @@ dependent on the CredentialType
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1260](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1260)
+[src/pollux/Pollux.ts:1260](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1260)
 
 ___
 
@@ -424,7 +424,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:507](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L507)
+[src/pollux/Pollux.ts:507](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L507)
 
 ___
 
@@ -444,7 +444,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:211](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L211)
+[src/pollux/Pollux.ts:211](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L211)
 
 ___
 
@@ -464,7 +464,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:201](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L201)
+[src/pollux/Pollux.ts:201](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L201)
 
 ___
 
@@ -484,7 +484,7 @@ credentialStatus is JWTRevocationStatus
 
 #### Defined in
 
-[src/pollux/Pollux.ts:194](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L194)
+[src/pollux/Pollux.ts:194](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L194)
 
 ___
 
@@ -504,7 +504,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:187](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L187)
+[src/pollux/Pollux.ts:187](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L187)
 
 ___
 
@@ -526,7 +526,7 @@ handle the retrieval of a Credential Definition
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1182](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1182)
+[src/pollux/Pollux.ts:1182](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1182)
 
 ___
 
@@ -546,7 +546,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:315](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L315)
+[src/pollux/Pollux.ts:315](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L315)
 
 ___
 
@@ -568,7 +568,7 @@ handle the retrieval of a Schema definition
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1199](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1199)
+[src/pollux/Pollux.ts:1199](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1199)
 
 ___
 
@@ -589,7 +589,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:363](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L363)
+[src/pollux/Pollux.ts:363](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L363)
 
 ___
 
@@ -616,7 +616,7 @@ kid (key identifier)
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1344](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1344)
+[src/pollux/Pollux.ts:1344](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1344)
 
 ___
 
@@ -640,7 +640,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:329](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L329)
+[src/pollux/Pollux.ts:329](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L329)
 
 ___
 
@@ -667,7 +667,7 @@ offer is CredentialOfferJWTBasePayload
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1047](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1047)
+[src/pollux/Pollux.ts:1047](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1047)
 
 ___
 
@@ -694,7 +694,7 @@ request is PresentationDefinitionRequest\<Type\>
 
 #### Defined in
 
-[src/pollux/Pollux.ts:355](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L355)
+[src/pollux/Pollux.ts:355](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L355)
 
 ___
 
@@ -722,7 +722,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1208](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1208)
+[src/pollux/Pollux.ts:1208](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1208)
 
 ___
 
@@ -749,7 +749,7 @@ data is PresentationSubmission\<Type\>
 
 #### Defined in
 
-[src/pollux/Pollux.ts:558](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L558)
+[src/pollux/Pollux.ts:558](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L558)
 
 ___
 
@@ -780,7 +780,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1095](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1095)
+[src/pollux/Pollux.ts:1095](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1095)
 
 ___
 
@@ -806,7 +806,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:118](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L118)
+[src/pollux/Pollux.ts:118](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L118)
 
 ___
 
@@ -828,7 +828,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L62)
+[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L62)
 
 ___
 
@@ -850,7 +850,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/protocols/Startable.ts#L72)
+[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/protocols/Startable.ts#L72)
 
 ___
 
@@ -878,7 +878,7 @@ options is Response
 
 #### Defined in
 
-[src/pollux/Pollux.ts:747](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L747)
+[src/pollux/Pollux.ts:747](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L747)
 
 ___
 
@@ -900,7 +900,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:775](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L775)
+[src/pollux/Pollux.ts:775](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L775)
 
 ___
 
@@ -921,7 +921,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:565](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L565)
+[src/pollux/Pollux.ts:565](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L565)
 
 ___
 
@@ -950,7 +950,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1002](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1002)
+[src/pollux/Pollux.ts:1002](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1002)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options`): `Promise`\<`boolean`\>
 
@@ -971,7 +971,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1003](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1003)
+[src/pollux/Pollux.ts:1003](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1003)
 
 ▸ **verifyPresentationSubmission**(`presentationSubmission`, `options`): `Promise`\<`boolean`\>
 
@@ -992,7 +992,7 @@ true if the submission is valid or false if it is not
 
 #### Defined in
 
-[src/pollux/Pollux.ts:1004](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L1004)
+[src/pollux/Pollux.ts:1004](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L1004)
 
 ___
 
@@ -1013,7 +1013,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:971](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L971)
+[src/pollux/Pollux.ts:971](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L971)
 
 ___
 
@@ -1034,7 +1034,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:836](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L836)
+[src/pollux/Pollux.ts:836](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L836)
 
 ▸ **verifyPresentationSubmissionJWT**(`presentationSubmission`, `options`): `Promise`\<`boolean`\>
 
@@ -1051,7 +1051,7 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:837](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L837)
+[src/pollux/Pollux.ts:837](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L837)
 
 ___
 
@@ -1072,4 +1072,4 @@ ___
 
 #### Defined in
 
-[src/pollux/Pollux.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/pollux/Pollux.ts#L243)
+[src/pollux/Pollux.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/pollux/Pollux.ts#L243)

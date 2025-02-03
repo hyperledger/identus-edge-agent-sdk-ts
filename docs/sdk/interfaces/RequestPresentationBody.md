@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/protocols/types.ts#L66)
+[src/edge-agent/protocols/types.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/edge-agent/protocols/types.ts#L66)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/protocols/types.ts#L65)
+[src/edge-agent/protocols/types.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/edge-agent/protocols/types.ts#L65)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/protocols/types.ts#L83)
+[src/edge-agent/protocols/types.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/edge-agent/protocols/types.ts#L83)
 
 ___
 
@@ -63,4 +63,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/edge-agent/protocols/types.ts#L82)
+[src/edge-agent/protocols/types.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/edge-agent/protocols/types.ts#L82)

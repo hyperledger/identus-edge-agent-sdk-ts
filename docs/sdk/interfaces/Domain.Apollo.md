@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Apollo.ts#L10)
+[src/domain/buildingBlocks/Apollo.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Apollo.ts#L10)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Apollo.ts#L13)
+[src/domain/buildingBlocks/Apollo.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Apollo.ts#L13)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Apollo.ts#L7)
+[src/domain/buildingBlocks/Apollo.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Apollo.ts#L7)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Apollo.ts#L9)
+[src/domain/buildingBlocks/Apollo.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Apollo.ts#L9)
 
 ___
 
@@ -111,4 +111,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/buildingBlocks/Apollo.ts#L8)
+[src/domain/buildingBlocks/Apollo.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Apollo.ts#L8)

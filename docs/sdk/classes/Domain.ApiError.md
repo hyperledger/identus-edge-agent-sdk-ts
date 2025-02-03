@@ -56,7 +56,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/Api.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/Api.ts#L52)
+[src/domain/models/Api.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/Api.ts#L52)
 
 ## Properties
 
@@ -66,7 +66,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/Api.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/Api.ts#L55)
+[src/domain/models/Api.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/Api.ts#L55)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Api.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/Api.ts#L53)
+[src/domain/models/Api.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/Api.ts#L53)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Api.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/bda7c5f2d075f5f1181d8e566d0db6b907796ca5/src/domain/models/Api.ts#L54)
+[src/domain/models/Api.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/Api.ts#L54)
 
 ___
 
