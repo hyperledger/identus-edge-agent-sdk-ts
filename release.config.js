@@ -2,7 +2,10 @@
  * @type {import('semantic-release').GlobalConfig}
  */
 module.exports = {
-  branches: ['main'],
+  branches: [
+    'main',
+    '+([0-9])?(.{+([0-9]),x}).x',
+  ],
   plugins: [
     ['@semantic-release/commit-analyzer', { preset: "conventionalcommits" }],
     ['@semantic-release/release-notes-generator', { preset: "conventionalcommits" }],
