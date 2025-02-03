@@ -2,7 +2,6 @@
 Feature: Provide anoncred proof
   The Edge Agent should provide anoncred proof to Cloud Agent
 
-  @test
   Scenario: Edge Agent with a credential should provide proof to Cloud Agent
     Given Cloud Agent is connected to Edge Agent
     And Edge Agent has '1' anonymous credentials issued by Cloud Agent
