@@ -1,6 +1,6 @@
 {
   "name": "@hyperledger/identus-edge-agent-sdk",
-  "version": "3.1.0",
+  "version": "6.5.0",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
   "module": "./index.mjs",

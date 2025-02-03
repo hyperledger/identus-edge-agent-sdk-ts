@@ -1,3 +1,8 @@
+## [6.5.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.4.0...v6.5.0) (2025-01-31)
+
+### Features
+
+* castor create signed prism did operation ([#347](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/347)) ([9b59124](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/9b59124cb4fe62221f1db7144f97e488cc5c15ad))
 ## [6.4.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.3.3...v6.4.0) (2025-01-13)
 
 ### Features
@@ -44,6 +49,7 @@
 ### Bug Fixes
 
 * remove rollup dependency ([#300](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/300)) ([ff6740e](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/ff6740e2d5f62262b1db65f517410af2ddc11448))
+## [6.2.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.2.0...v6.2.1) (2025-02-03)
 ## [6.2.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.1.0...v6.2.0) (2024-10-04)
 
 ### Features
