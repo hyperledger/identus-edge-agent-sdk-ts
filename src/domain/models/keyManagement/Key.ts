@@ -188,7 +188,7 @@ export enum Usage {
   UNKNOWN_KEY = "unknownKey",
 }
 export function curveToAlg(curve: string) {
-  if (curve === Curve.SECP256K1) {
+  if (curve === Curve.SECP256K1 || curve === "secp256k1") {
     return JWT_ALG.ES256K;
   }
   if (curve === Curve.ED25519 || curve === Curve.X25519) {
