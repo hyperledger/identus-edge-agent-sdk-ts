@@ -5,11 +5,7 @@ export enum Curve {
 }
 
 export function isCurve(curve: string, curveEnum: Curve): boolean {
-  if (curve === curveEnum) {
-    return true;
-  }
-  if (curve.toLocaleLowerCase() === curveEnum.toLocaleLowerCase()) {
-    return true;
-  }
-  return false;
+  return curve === curveEnum ||
+    // For backwards compatibility
+    curve === 'Secp256k1';
 }

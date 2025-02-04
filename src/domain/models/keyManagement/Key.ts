@@ -189,7 +189,7 @@ export enum Usage {
 }
 export function curveToAlg(curve: string) {
   // For backwards compatibility
-  if (curve === Curve.SECP256K1 || curve === "secp256k1") {
+  if (curve === Curve.SECP256K1 || curve === "Secp256k1") {
     return JWT_ALG.ES256K;
   }
   if (curve === Curve.ED25519 || curve === Curve.X25519) {
@@ -206,8 +206,9 @@ export function getKeyCurveByNameAndIndex(
       return { curve: Curve.X25519 };
     case Curve.ED25519:
       return { curve: Curve.ED25519 };
+
     case Curve.SECP256K1:
-    case "secp256k1":
+    case "Secp256k1": // For backwards compatibility
       return { curve: Curve.SECP256K1, index };
     default:
       throw new ApolloError.InvalidKeyCurve(name);
