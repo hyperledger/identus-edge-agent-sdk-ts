@@ -1,7 +1,6 @@
 import { SDKError } from "./Common";
-import { KeyTypes, StorableKey } from "../keyManagement";
+import { Curve, KeyTypes, StorableKey } from "../keyManagement";
 import { asArray } from "../../../utils";
-import { Curve } from "../KeyCurve";
 
 /**
  * thrown when at least one Mnemonic word does not match in the wordlist

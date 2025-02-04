@@ -4,7 +4,7 @@ import { KeyProperties } from "../KeyProperties";
 import { SignableKey } from "./SignableKey";
 import { StorableKey } from "./StorableKey";
 import { VerifiableKey } from "./VerifiableKey";
-import { KeyCurve } from "../KeyCurve";
+import { KeyCurve } from "./KeyCurve";
 import { Curve } from "./Curve";
 import { KeyTypes } from "./KeyTypes";
 import { ExportableKey } from "./exportable";
@@ -206,6 +206,7 @@ export function getKeyCurveByNameAndIndex(
     case Curve.ED25519:
       return { curve: Curve.ED25519 };
     case Curve.SECP256K1:
+    case "secp256k1":
       return { curve: Curve.SECP256K1, index };
     default:
       throw new ApolloError.InvalidKeyCurve(name);
