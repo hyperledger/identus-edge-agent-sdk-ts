@@ -17,6 +17,7 @@ import {
   PublicKey,
   Curve,
   getUsage,
+  isCurve,
 } from "../../domain/models";
 
 import * as DIDParser from "../parser/DIDParser";
@@ -92,7 +93,7 @@ export class LongFormPrismDIDResolver implements DIDResolver {
           (key: Protos.io.iohk.atala.prism.protos.PublicKey) => {
             const curve = this.getProtoCurve(key).toLocaleLowerCase()
             let pk: PublicKey;
-            if (curve === Curve.SECP256K1.toLocaleLowerCase()) {
+            if (isCurve(curve, Curve.SECP256K1)) {
               pk = key.has_compressed_ec_key_data
                 ? Secp256k1PublicKey.secp256k1FromBytes(
                   key.compressed_ec_key_data.data
@@ -101,14 +102,14 @@ export class LongFormPrismDIDResolver implements DIDResolver {
                   key.ec_key_data.x,
                   key.ec_key_data.y
                 );
-            } else if (curve === Curve.ED25519.toLocaleLowerCase()) {
+            } else if (isCurve(curve, Curve.ED25519)) {
               if (!key.has_compressed_ec_key_data) {
                 throw new Error("Expected compressed compressed key")
               }
               pk = Ed25519PublicKey.from.Buffer(
                 Buffer.from(key.compressed_ec_key_data.data)
               )
-            } else if (curve === Curve.X25519.toLocaleLowerCase()) {
+            } else if (isCurve(curve, Curve.X25519)) {
               if (!key.has_compressed_ec_key_data) {
                 throw new Error("Expected compressed compressed key")
               }

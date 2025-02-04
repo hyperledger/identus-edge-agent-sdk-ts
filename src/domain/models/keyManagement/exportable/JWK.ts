@@ -1,7 +1,7 @@
 import { base64url } from "multiformats/bases/base64";
 import { notEmptyString } from "../../../../utils";
 import { KeyProperties } from "../../KeyProperties";
-import { Curve } from "../Curve";
+import { Curve, isCurve } from "../Curve";
 import { PrivateKey } from "../PrivateKey";
 import { PublicKey } from "../PublicKey";
 
@@ -110,8 +110,8 @@ export namespace JWK {
    */
   export const fromKey = (key: PublicKey | PrivateKey, base: Base = {}): JWK => {
     const prototype = Object.getPrototypeOf(key);
-    const privateFn = key.curve === Curve.SECP256K1 ? privateKeyToEC : privateKeyToOKP;
-    const publicFn = key.curve === Curve.SECP256K1 ? publicKeyToEC : publicKeyToOKP;
+    const privateFn = isCurve(key.curve, Curve.SECP256K1) ? privateKeyToEC : privateKeyToOKP;
+    const publicFn = isCurve(key.curve, Curve.SECP256K1) ? publicKeyToEC : publicKeyToOKP;
 
     if (prototype instanceof PublicKey) {
       return Object.assign({}, base, publicFn(key as PublicKey));

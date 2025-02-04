@@ -188,6 +188,7 @@ export enum Usage {
   UNKNOWN_KEY = "unknownKey",
 }
 export function curveToAlg(curve: string) {
+  // For backwards compatibility
   if (curve === Curve.SECP256K1 || curve === "secp256k1") {
     return JWT_ALG.ES256K;
   }
@@ -259,6 +260,6 @@ export abstract class Key {
 
   isCurve<T>(curve: string): this is T {
     const keyCurve = this.keySpecification.get(KeyProperties.curve);
-    return keyCurve === curve;
+    return keyCurve === curve || keyCurve?.toLocaleLowerCase() === curve.toLowerCase();
   }
 }
