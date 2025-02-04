@@ -2,11 +2,8 @@
   <a href="https://www.hyperledger.org/projects/identus">
     <img src="https://cdn.jsdelivr.net/gh/hyperledger/identus@v2.13/resources/images/hyperledger-identus.svg" alt="identus-logo" width="513px" height="99px" />
   </a>
-  <br>
   <i> <font size="18">Cardano</font> </i>
-  <br>
 </p>
-<hr>
 
 Here, we provide you with everything you need to connect the Agent SDK in Typescript and interact with Cardano Web Wallets in order to create and manage prism:dids on chain.
 
