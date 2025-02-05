@@ -99,7 +99,9 @@ export abstract class JWTCore {
                 if (!privateKey.isSignable()) {
                     throw new Error("Cannot sign with this key");
                 }
-                const signature = privateKey.sign(Buffer.from(data));
+                const signature = Uint8Array.from(
+                    privateKey.sign(Buffer.from(data))
+                );
                 const signatureEncoded = base64url.baseEncode(signature)
                 return signatureEncoded
             },
@@ -130,18 +132,24 @@ export abstract class JWTCore {
             return pk
         }
         if (verificationMethod.publicKeyJwk) {
-            const { crv, x } = verificationMethod.publicKeyJwk;
+            const { crv, x, y } = verificationMethod.publicKeyJwk;
+            const rawKeyProperties = x !== undefined && y !== undefined ? {
+                [KeyProperties.curvePointX]: base64url.baseDecode(x!),
+                [KeyProperties.curvePointY]: base64url.baseDecode(y!)
+            } : {
+                [KeyProperties.rawKey]: base64url.baseDecode(x!)
+            }
             if (crv === Curve.ED25519) {
                 pk = this.apollo.createPublicKey({
                     [KeyProperties.curve]: Curve.ED25519,
                     [KeyProperties.type]: KeyTypes.EC,
-                    [KeyProperties.rawKey]: base64url.baseDecode(x!)
+                    ...rawKeyProperties
                 })
             } else if (crv === Curve.SECP256K1) {
                 pk = this.apollo.createPublicKey({
                     [KeyProperties.curve]: Curve.SECP256K1,
                     [KeyProperties.type]: KeyTypes.EC,
-                    [KeyProperties.rawKey]: base64url.baseDecode(x!)
+                    ...rawKeyProperties
                 })
             }
             return pk
