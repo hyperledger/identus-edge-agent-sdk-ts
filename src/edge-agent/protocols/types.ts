@@ -1,17 +1,3 @@
-import { CredentialFormat } from "./issueCredential/CredentialFormat";
-import { CredentialPreview } from "./issueCredential/CredentialPreview";
-
-export interface CredentialBody {
-  formats: CredentialFormat[];
-  goalCode?: string;
-  comment?: string;
-}
-
-export interface IssueCredentialBody extends CredentialBody {
-  moreAvailable?: string;
-  replacementId?: string;
-}
-
 export interface PrismRevocationBody {
   issueCredentialProtocolThreadId: string;
   comment?: string;
@@ -19,15 +5,6 @@ export interface PrismRevocationBody {
 
 export interface MediationGrantBody {
   routing_did: string;
-}
-
-export interface OfferCredentialBody extends CredentialBody {
-  credential_preview: CredentialPreview;
-  replacementId?: string;
-  multipleAvailable?: string;
-}
-export interface ProposeCredentialBody extends CredentialBody {
-  credential_preview: CredentialPreview;
 }
 
 export interface MediationKeysUpdateListBody {

@@ -2,11 +2,24 @@ import { uuid } from "@stablelib/uuid";
 import { AgentError } from "../../../domain/models/Errors";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { ProtocolType } from "../ProtocolTypes";
-import { CredentialFormat } from "./CredentialFormat";
-import { CredentialPreview } from "./CredentialPreview";
-import { ProposeCredential } from "./ProposeCredential";
-import { OfferCredentialBody } from "../types";
-import { parseCredentialAttachments, parseOfferCredentialMessage } from "../../helpers/ProtocolHelpers";
+import { CredentialPreview, validateCredentialPreview } from "./CredentialPreview";
+import { isNil, isObject } from "../../../utils";
+
+/**
+ * Specification: 
+ * https://github.com/decentralized-identity/waci-didcomm/tree/main/issue_credential#offer-credential
+ */
+
+export interface OfferCredentialBody {
+  // optional field that indicates the goal of the message sender
+  goal_code?: any;
+  // an optional field to help coordinate credential replacement
+  replacement_id?: string;
+  // an optional field that provides human readable information about this Credential Offer
+  comment?: string;
+  // a JSON-LD object that represents the credential data that Issuer is willing to issue
+  credential_preview: CredentialPreview;
+}
 
 export class OfferCredential {
   public static type = ProtocolType.DidcommOfferCredential;
@@ -19,11 +32,17 @@ export class OfferCredential {
     public thid?: string,
     public id: string = uuid()
   ) {
-    if (!from || !to) {
-      new AgentError.InvalidOfferCredentialMessageError(
-        "Invalid offer credential message error."
-      );
+    this.validate();
+  }
+
+  private validate() {
+    if (validateCredentialPreview(this.body.credential_preview)) {
+      return;
     }
+
+    throw new AgentError.InvalidOfferCredentialMessageError(
+      "Invalid offer credential message error."
+    );
   }
 
   makeMessage(): Message {
@@ -39,81 +58,27 @@ export class OfferCredential {
     );
   }
 
-  static makeOfferFromProposedCredential(
-    proposed: ProposeCredential
-  ): OfferCredential {
-    return new OfferCredential(
-      createOfferCredentialBody(
-        proposed.body.credential_preview,
-        proposed.body.formats,
-        proposed.body.goalCode,
-        proposed.body.comment
-      ),
-      proposed.attachments,
-      proposed.to,
-      proposed.from,
-      proposed.id
-    );
-  }
-
-  static fromMessage(fromMessage: Message): OfferCredential {
+  static fromMessage(msg: Message): OfferCredential {
     if (
-      fromMessage.piuri !== ProtocolType.DidcommOfferCredential ||
-      !fromMessage.from
+      msg.piuri !== ProtocolType.DidcommOfferCredential
+      || isNil(msg.from)
     ) {
       throw new AgentError.InvalidOfferCredentialMessageError(
         "Invalid offer credential message error."
       );
     }
-    const offerCredentialBody = parseOfferCredentialMessage(fromMessage);
+
+    if (!isObject(msg.body) || !isObject(msg.body.credential_preview)) {
+      throw new AgentError.InvalidOfferCredentialBodyError("Undefined credentialPreview");
+    }
 
     return new OfferCredential(
-      offerCredentialBody,
-      fromMessage.attachments,
-      fromMessage.from,
-      fromMessage.to,
-      fromMessage.thid,
-      fromMessage.id
+      msg.body as any,
+      msg.attachments,
+      msg.from,
+      msg.to,
+      msg.thid,
+      msg.id
     );
   }
-
-  static build<T>(
-    credentialPreview: CredentialPreview,
-    fromDID: DID,
-    toDID: DID,
-    thid?: string,
-    credentials: Map<string, T> = new Map()
-  ) {
-    const { formats, attachments } = parseCredentialAttachments(credentials);
-    const offerCredentialBody = createOfferCredentialBody(
-      credentialPreview,
-      formats
-    );
-
-    return new OfferCredential(
-      offerCredentialBody,
-      attachments,
-      fromDID,
-      toDID,
-      thid
-    );
-  }
-}
-
-export function createOfferCredentialBody(
-  credentialPreview: CredentialPreview,
-  formats: CredentialFormat[],
-  goalCode?: string,
-  comment?: string,
-  replacementId?: string,
-  multipleAvailable?: string
-): OfferCredentialBody {
-  return {
-    formats,
-    credential_preview: credentialPreview,
-    goalCode,
-    comment,
-    replacementId,
-    multipleAvailable,
-  };
 }

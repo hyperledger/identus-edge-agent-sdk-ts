@@ -3,13 +3,13 @@ import { Message } from "../../../../src/domain";
 import { AgentError } from "../../../../src/domain/models/Errors";
 import { ProposePresentation } from "../../../../src/edge-agent/protocols/proofPresentation/ProposePresentation";
 import { RequestPresentation } from "../../../../src/edge-agent/protocols/proofPresentation/RequestPresentation";
-import { DIDTest } from "../../helpers/DID";
 import * as Messages from "../../../fixtures/messages";
+import * as Fixtures from "../../../fixtures";
 
 describe("ProofPresentation->RequestPresentation Tests", () => {
   it("Should create a RequestPresentation from a valid ProposePresentationMessage", async () => {
-    const fromDID = DIDTest.fromIndex(0);
-    const toDID = DIDTest.fromIndex(1);
+    const fromDID = Fixtures.DIDs.peerDID1;
+    const toDID = Fixtures.DIDs.peerDID2;
 
     const validRequestPresentation = new RequestPresentation(
       {
@@ -52,8 +52,8 @@ describe("ProofPresentation->RequestPresentation Tests", () => {
     }).to.throw(AgentError.InvalidRequestPresentationMessageError);
   });
   it("Should start a RequestPresentation from a valid ProposalMessage", () => {
-    const fromDID = DIDTest.fromIndex(0);
-    const toDID = DIDTest.fromIndex(1);
+    const fromDID = Fixtures.DIDs.peerDID1;
+    const toDID = Fixtures.DIDs.peerDID2;
     const validProposalRequest = new ProposePresentation(
       {
         proofTypes: [{ schema: "testSchema" }],

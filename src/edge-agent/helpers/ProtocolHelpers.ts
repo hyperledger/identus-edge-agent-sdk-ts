@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AttachmentDescriptor, Message } from "../../domain";
 import { AgentError } from "../../domain/models/Errors";
-import { asArray, isArray, isEmpty, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
-import { ProtocolType } from "../protocols/ProtocolTypes";
+import { isArray, isEmpty, isNil, isString, notEmptyString, notNil } from "../../utils";
 import { CredentialFormat } from "../protocols/issueCredential/CredentialFormat";
 import {
-  ProposeCredentialBody,
-  OfferCredentialBody,
-  IssueCredentialBody,
-  CredentialBody,
   MediationGrantBody,
   PresentationBody,
   RequestPresentationBody,
@@ -40,17 +35,6 @@ export const parseCredentialAttachments = (credentials: Map<string, any>) => {
   );
 };
 
-const parseCredentialFormat = (value: unknown): CredentialFormat => {
-  if (!isObject(value) || isNil(value.attach_id) || isNil(value.format)) {
-    throw new AgentError.InvalidCredentialFormats();
-  }
-
-  return {
-    attach_id: value.attach_id,
-    format: value.format,
-  };
-};
-
 export const parseBasicMessageBody = (msg: Message): BasicMessageBody => {
   if (notEmptyString(msg.body.content)) {
     return {
@@ -68,82 +52,12 @@ export const parseProblemReportBody = (msg: Message): ProblemReportBody => {
     isArray(msg.body.args) && isEmpty(msg.body.args)
   ) {
     const { code, comment, escalate_to, args } = msg.body;
-    return { code, comment, escalate_to, args }
+    return { code, comment, escalate_to, args };
   }
-  throw new AgentError.InvalidProblemReportBodyError()
-}
-
-export const parseCredentialBody = (msg: Message): CredentialBody => {
-  if (Object.keys(msg.body).length === 0) {
-    throw new AgentError.InvalidCredentialBodyError(
-      "Invalid CredentialBody Error"
-    );
-  }
-
-  if (notNil(msg.body.formats) && !isArray(msg.body.formats)) {
-    throw new AgentError.InvalidCredentialFormats();
-  }
-
-  return {
-    formats: asArray(msg.body.formats).map(x => parseCredentialFormat(x)),
-    goalCode: msg.body.goalCode,
-    comment: msg.body.comment,
-  };
+  throw new AgentError.InvalidProblemReportBodyError();
 };
 
-export const parseOfferCredentialMessage = (msg: Message): OfferCredentialBody => {
-  if (msg.piuri !== ProtocolType.DidcommOfferCredential) {
-    throw new AgentError.UnknownCredentialBodyError();
-  }
 
-  if (isNil(msg.body.credential_preview)) {
-    throw new AgentError.InvalidOfferCredentialBodyError("Undefined credentialPreview");
-  }
-
-  const credentialBody = parseCredentialBody(msg);
-
-  return {
-    ...credentialBody,
-    credential_preview: msg.body.credential_preview,
-    replacementId: msg.body.replacementId,
-    multipleAvailable: msg.body.multipleAvailable,
-  };
-};
-
-export const parseIssueCredentialMessage = (msg: Message): IssueCredentialBody => {
-  if (msg.piuri !== ProtocolType.DidcommIssueCredential) {
-    throw new AgentError.UnknownCredentialBodyError();
-  }
-
-  if (notNil(msg.body.replacementId) && !isString(msg.body.replacementId)) {
-    throw new AgentError.InvalidIssueCredentialBodyError(
-      "Invalid replacementId, should be a string"
-    );
-  }
-
-  const credentialBody = parseCredentialBody(msg);
-
-  return {
-    ...credentialBody,
-    replacementId: msg.body.replacementId,
-    moreAvailable: msg.body.moreAvailable,
-  };
-};
-
-export const parseProposeCredentialMessage = (msg: Message): ProposeCredentialBody => {
-  if (isNil(msg.body.credential_preview)) {
-    throw new AgentError.InvalidProposeCredentialBodyError(
-      "Undefined credentialPreview"
-    );
-  }
-
-  const credentialBody = parseCredentialBody(msg);
-
-  return {
-    ...credentialBody,
-    credential_preview: msg.body.credential_preview,
-  };
-};
 
 export const parseMediationGrantMessage = (msg: Message): MediationGrantBody => {
   if (isNil(msg.body.routing_did)) {
