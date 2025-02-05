@@ -93,11 +93,3 @@ jobs:
           name: lcov-report.zip
           path: coverage/lcov-report
           if-no-files-found: error
-
-      - name: Dispatch integration
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.ATALA_GITHUB_TOKEN }}
-          repository: input-output-hk/identus-integration
-          event-type: integration
-          client-payload: '{"component": "sdk-ts", "version": "${{ github.sha }}" }'

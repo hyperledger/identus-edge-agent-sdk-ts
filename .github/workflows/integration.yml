@@ -1,0 +1,20 @@
+name: Integration
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  integrate:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dispatch integration
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.ATALA_GITHUB_TOKEN }}
+          repository: input-output-hk/identus-integration
+          event-type: integration
+          client-payload: '{"component": "sdk-ts", "version": "${{ github.sha }}" }'
