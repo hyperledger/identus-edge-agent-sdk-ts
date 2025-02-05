@@ -7,7 +7,6 @@ import { SDJWTCredential } from "../../pollux/models/SDJWTVerifiableCredential";
 import { Presentation, RequestPresentation } from "../protocols/proofPresentation";
 import { DIDCommContext } from "./Context";
 import { Task } from "../../utils/tasks";
-import { isCurve } from "../../domain";
 
 /**
  * Asyncronously create a verifiablePresentation from a valid stored verifiableCredential
@@ -190,7 +189,7 @@ export class CreatePresentation extends Task<Presentation, Args> {
       const subjectDID = Domain.DID.from(disclosed.sub);
 
       const prismPrivateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(subjectDID);
-      const prismPrivateKey = prismPrivateKeys.find((key) => isCurve(key.curve, Domain.Curve.ED25519));
+      const prismPrivateKey = prismPrivateKeys.find((key) => key.curve === Domain.Curve.ED25519);
 
       if (prismPrivateKey === undefined) {
         throw new Domain.AgentError.CannotFindDIDPrivateKey();
@@ -219,7 +218,7 @@ export class CreatePresentation extends Task<Presentation, Args> {
       }
       const subjectDID = Domain.DID.from(credential.subject);
       const prismPrivateKeys = await ctx.Pluto.getDIDPrivateKeysByDID(subjectDID);
-      const prismPrivateKey = prismPrivateKeys.find((key) => isCurve(key.curve, Domain.Curve.SECP256K1));
+      const prismPrivateKey = prismPrivateKeys.find((key) => key.curve === Domain.Curve.SECP256K1);
       if (prismPrivateKey === undefined) {
         throw new Domain.AgentError.CannotFindDIDPrivateKey();
       }

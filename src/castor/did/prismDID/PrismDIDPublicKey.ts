@@ -3,7 +3,7 @@ import { Curve, getProtosUsage, getUsage, PublicKey, Usage } from "../../../doma
 import { ApolloError, CastorError } from "../../../domain/models/Errors";
 import * as Protos from "../../protos/node_models";
 
-import { Apollo, isCurve, KeyProperties, KeyTypes } from "../../../domain";
+import { Apollo, KeyProperties, KeyTypes } from "../../../domain";
 
 export class PrismDIDPublicKey {
 
@@ -50,14 +50,14 @@ export class PrismDIDPublicKey {
   ) {
     const curve = this.getProtoCurve(proto);
     if (proto.has_compressed_ec_key_data) {
-      if (isCurve(curve, Curve.ED25519)) {
+      if (curve === Curve.ED25519) {
         return apollo.createPublicKey({
           [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.ED25519,
           [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
         })
       }
-      if (isCurve(curve, Curve.X25519)) {
+      if (curve === Curve.X25519) {
         return apollo.createPublicKey({
           [KeyProperties.type]: KeyTypes.Curve25519,
           [KeyProperties.curve]: Curve.X25519,
@@ -75,13 +75,13 @@ export class PrismDIDPublicKey {
     const id = proto.id;
     const usage = getUsage(proto.usage);
     const curve = this.getProtoCurve(proto);
-    if (isCurve(curve, Curve.SECP256K1)) {
+    if (curve === Curve.SECP256K1) {
       return new PrismDIDPublicKey(
         id,
         usage,
         this.fromSecp256k1Proto(apollo, proto)
       );
-    } else if (isCurve(curve, Curve.ED25519) || isCurve(curve, Curve.X25519)) {
+    } else if (curve === Curve.ED25519 || curve === Curve.X25519) {
       return new PrismDIDPublicKey(
         id,
         usage,
@@ -95,7 +95,7 @@ export class PrismDIDPublicKey {
   toProto(): Protos.io.iohk.atala.prism.protos.PublicKey {
     const curve = this.keyData.curve;
     const usage = getProtosUsage(this.usage);
-    if (isCurve(curve, Curve.SECP256K1)) {
+    if (curve === Curve.SECP256K1) {
       const encoded = this.keyData.getEncoded()
       const xBytes = encoded.slice(1, 1 + ECConfig.PRIVATE_KEY_BYTE_SIZE);
       const yBytes = encoded.slice(

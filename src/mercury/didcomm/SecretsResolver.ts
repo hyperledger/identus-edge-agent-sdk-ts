@@ -2,7 +2,6 @@ import type { Secret, SecretsResolver } from "didcomm-wasm";
 import * as Domain from "../../domain";
 import * as DIDURLParser from "../../castor/parser/DIDUrlParser";
 import { PeerDID } from "../../peer-did/PeerDID";
-import { isCurve } from "../../domain";
 
 export class DIDCommSecretsResolver implements SecretsResolver {
   constructor(
@@ -57,7 +56,7 @@ export class DIDCommSecretsResolver implements SecretsResolver {
     publicKeyJWK: Domain.PublicKeyJWK
   ): Secret {
     const privateKeyBuffer = peerDid.privateKeys.find(
-      (key) => isCurve(key.keyCurve.curve, Domain.Curve.X25519)
+      (key) => key.keyCurve.curve === Domain.Curve.X25519
     );
     if (!privateKeyBuffer) {
       throw new Error(`Invalid PrivateKey Curve ${Domain.Curve.X25519}`);

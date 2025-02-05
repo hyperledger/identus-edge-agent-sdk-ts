@@ -2,7 +2,6 @@ import { base58btc } from "multiformats/bases/base58";
 import * as Domain from "../../domain";
 import { expect } from "../../utils";
 import { Task } from "../../utils/tasks";
-import { isCurve } from "../../domain";
 
 /**
  * Asyncronously sign with a DID
@@ -24,7 +23,7 @@ export class CreateJWT extends Task<string, Args> {
   async run(ctx: Task.Context) {
     const keys = await ctx.Pluto.getDIDPrivateKeysByDID(this.args.did);
     const secpKey = expect(
-      keys.find(x => isCurve(x.curve, Domain.Curve.SECP256K1)),
+      keys.find(x => x.curve === Domain.Curve.SECP256K1),
       "key not found"
     );
 

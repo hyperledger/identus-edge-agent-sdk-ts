@@ -5,7 +5,7 @@ import { SignableKey } from "./SignableKey";
 import { StorableKey } from "./StorableKey";
 import { VerifiableKey } from "./VerifiableKey";
 import { KeyCurve } from "./KeyCurve";
-import { Curve, isCurve } from "./Curve";
+import { Curve } from "./Curve";
 import { KeyTypes } from "./KeyTypes";
 import { ExportableKey } from "./exportable";
 import { JWT_ALG } from "../VerifiableCredential";
@@ -188,10 +188,10 @@ export enum Usage {
   UNKNOWN_KEY = "unknownKey",
 }
 export function curveToAlg(curve: string) {
-  if (isCurve(curve, Curve.SECP256K1)) {
+  if (curve === Curve.SECP256K1) {
     return JWT_ALG.ES256K;
   }
-  if (isCurve(curve, Curve.ED25519) || isCurve(curve, Curve.X25519)) {
+  if (curve === Curve.ED25519 || curve === Curve.X25519) {
     return JWT_ALG.EdDSA;
   }
   return JWT_ALG.unknown;
@@ -205,9 +205,7 @@ export function getKeyCurveByNameAndIndex(
       return { curve: Curve.X25519 };
     case Curve.ED25519:
       return { curve: Curve.ED25519 };
-
     case Curve.SECP256K1:
-    case "Secp256k1": // For backwards compatibility
       return { curve: Curve.SECP256K1, index };
     default:
       throw new ApolloError.InvalidKeyCurve(name);

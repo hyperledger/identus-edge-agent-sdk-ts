@@ -20,27 +20,6 @@ describe("Apollo", () => {
     const seedHex = "947877896c61a5c64f266adbebbc69a2a01f1a2cfbf72c08a11c693d0429ccded34bdc0c28b5be910a5095b97e7bc6e3e209527ce8e75f9964d25cd6f6ad63e0";
 
     describe("Secp256k1", () => {
-      it("Should allow creating a key with the curve secp256k1 and Secp256k1 in uppercase for backwards compatibility", () => {
-        const sk = apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
-          [KeyProperties.curve]: Curve.SECP256K1,
-          [KeyProperties.seed]: seedHex,
-        });
-        assert.equal(sk.isCurve(Curve.SECP256K1), true)
-        assert.equal(sk.isCurve("Secp256k1"), true)
-        assert.equal(sk.isCurve(Curve.ED25519), false)
-
-
-        const sk2 = apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
-          [KeyProperties.curve]: "Secp256k1",
-          [KeyProperties.seed]: seedHex,
-        });
-        assert.equal(sk2.isCurve(Curve.SECP256K1), true)
-        assert.equal(sk2.isCurve("Secp256k1"), true)
-        assert.equal(sk2.isCurve(Curve.ED25519), false)
-      });
-
       it("KeyProperties.type - missing - throws", () => {
         const sut = () => apollo.createPrivateKey({
           [KeyProperties.curve]: Curve.SECP256K1,

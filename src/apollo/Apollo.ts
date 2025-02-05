@@ -15,7 +15,6 @@ import {
   SeedWords,
   StorableKey,
   KeyRestoration,
-  isCurve,
 } from "../domain";
 
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
@@ -225,7 +224,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     const keyData = parameters[KeyProperties.rawKey];
 
     if (keyType === KeyTypes.EC) {
-      if (isCurve(curve, Curve.ED25519)) {
+      if (curve === Curve.ED25519) {
         if (keyData) {
           return new Ed25519PublicKey(keyData);
         }
@@ -233,7 +232,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey);
       }
 
-      if (isCurve(curve, Curve.SECP256K1)) {
+      if (curve === Curve.SECP256K1) {
         if (keyData) {
           return new Secp256k1PublicKey(keyData);
         } else {
@@ -250,7 +249,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     }
 
     if (keyType === KeyTypes.Curve25519) {
-      if (isCurve(curve, Curve.X25519)) {
+      if (curve === Curve.X25519) {
         if (keyData) {
           return new X25519PublicKey(keyData);
         }
@@ -337,7 +336,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     const keyData = parameters[KeyProperties.rawKey];
 
     if (keyType === KeyTypes.EC) {
-      if (isCurve(curve, Curve.ED25519)) {
+      if (curve === Curve.ED25519) {
         if (keyData) {
           return new Ed25519PrivateKey(keyData);
         }
@@ -367,7 +366,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
         return keyPair.privateKey;
       }
 
-      if (isCurve(curve, Curve.SECP256K1)) {
+      if (curve === Curve.SECP256K1) {
         if (keyData) {
           return new Secp256k1PrivateKey(keyData);
         }
@@ -413,7 +412,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     }
 
     if (keyType === KeyTypes.Curve25519) {
-      if (isCurve(curve, Curve.X25519)) {
+      if (curve === Curve.X25519) {
         if (keyData) {
           return new X25519PrivateKey(keyData);
         }
