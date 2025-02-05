@@ -29,6 +29,16 @@ describe("Apollo", () => {
         assert.equal(sk.isCurve(Curve.SECP256K1), true)
         assert.equal(sk.isCurve("Secp256k1"), true)
         assert.equal(sk.isCurve(Curve.ED25519), false)
+
+
+        const sk2 = apollo.createPrivateKey({
+          [KeyProperties.type]: KeyTypes.EC,
+          [KeyProperties.curve]: "Secp256k1",
+          [KeyProperties.seed]: seedHex,
+        });
+        assert.equal(sk2.isCurve(Curve.SECP256K1), true)
+        assert.equal(sk2.isCurve("Secp256k1"), true)
+        assert.equal(sk2.isCurve(Curve.ED25519), false)
       });
 
       it("KeyProperties.type - missing - throws", () => {
