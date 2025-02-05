@@ -5,7 +5,7 @@ import { SignableKey } from "./SignableKey";
 import { StorableKey } from "./StorableKey";
 import { VerifiableKey } from "./VerifiableKey";
 import { KeyCurve } from "./KeyCurve";
-import { Curve } from "./Curve";
+import { Curve, isCurve } from "./Curve";
 import { KeyTypes } from "./KeyTypes";
 import { ExportableKey } from "./exportable";
 import { JWT_ALG } from "../VerifiableCredential";
@@ -188,11 +188,10 @@ export enum Usage {
   UNKNOWN_KEY = "unknownKey",
 }
 export function curveToAlg(curve: string) {
-  // For backwards compatibility
-  if (curve === Curve.SECP256K1 || curve === "Secp256k1") {
+  if (isCurve(curve, Curve.SECP256K1)) {
     return JWT_ALG.ES256K;
   }
-  if (curve === Curve.ED25519 || curve === Curve.X25519) {
+  if (isCurve(curve, Curve.ED25519) || isCurve(curve, Curve.X25519)) {
     return JWT_ALG.EdDSA;
   }
   return JWT_ALG.unknown;

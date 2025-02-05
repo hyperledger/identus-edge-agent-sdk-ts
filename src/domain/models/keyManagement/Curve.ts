@@ -5,7 +5,10 @@ export enum Curve {
 }
 
 export function isCurve(curve: string, curveEnum: Curve): boolean {
-  return curve === curveEnum ||
+  if (curveEnum === Curve.SECP256K1) {
     // For backwards compatibility
-    curve === 'Secp256k1';
+    return curve === curveEnum ||
+      curve === 'Secp256k1';
+  }
+  return curve === curveEnum;
 }
