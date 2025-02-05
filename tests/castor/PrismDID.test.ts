@@ -78,7 +78,7 @@ describe("PrismDID", () => {
       );
       const masterPkProto = masterPk.toProto();
 
-      expect(() => PrismDIDPublicKey.fromProto(apollo, masterPkProto)).to.throw(`16: Invalid key curve: ${unsupportedCurve}. Valid options are: X25519, Ed25519, Secp256k1`);
+      expect(() => PrismDIDPublicKey.fromProto(apollo, masterPkProto)).to.throw(`16: Invalid key curve: ${unsupportedCurve}. Valid options are: X25519, Ed25519, secp256k1`);
     });
   });
 
@@ -143,7 +143,7 @@ describe("PrismDID", () => {
         expect(cp0vm0?.id).to.eq(`${didStr}#master-0`);
         expect(cp0vm0?.publicKeyJwk).to.be.undefined;
         expect(cp0vm0?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
-        expect(cp0vm0?.type).to.eq("Secp256k1");
+        expect(cp0vm0?.type).to.eq(Curve.SECP256K1);
 
         const cp1 = sut.coreProperties.at(1) as Authentication;
         expect(cp1).to.be.instanceOf(Authentication);
@@ -154,7 +154,7 @@ describe("PrismDID", () => {
         expect(cp1vm0?.id).to.eq(`${didStr}#authentication-0`);
         expect(cp1vm0?.publicKeyJwk).to.be.undefined;
         expect(cp1vm0?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
-        expect(cp1vm0?.type).to.eq("Secp256k1");
+        expect(cp1vm0?.type).to.eq(Curve.SECP256K1);
 
         const cp2 = sut.coreProperties.at(2) as Services;
         expect(cp2).to.be.instanceOf(Services);
@@ -171,7 +171,7 @@ describe("PrismDID", () => {
         expect(cp3v0?.id).to.eq(`${didStr}#master-0`);
         expect(cp3v0?.publicKeyJwk).to.be.undefined;
         expect(cp3v0?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
-        expect(cp3v0?.type).to.eq("Secp256k1");
+        expect(cp3v0?.type).to.eq(Curve.SECP256K1);
 
         const cp3v1 = cp3.values.at(1);
         expect(cp3v1).to.be.instanceOf(VerificationMethod);
@@ -179,7 +179,7 @@ describe("PrismDID", () => {
         expect(cp3v1?.id).to.eq(`${didStr}#authentication-0`);
         expect(cp3v1?.publicKeyJwk).to.be.undefined;
         expect(cp3v1?.publicKeyMultibase).to.eq("zSXxpYB6edvxvWxRTo3kMUoTTQVHpbNnXo2Z1AjLA78iqLdK2kVo5xw9rGg8uoEgmhxYahNur3RvV7HnaktWBqkXt");
-        expect(cp3v1?.type).to.eq("Secp256k1");
+        expect(cp3v1?.type).to.eq(Curve.SECP256K1);
       });
 
       const masterKeyId = getUsageId(Usage.MASTER_KEY);

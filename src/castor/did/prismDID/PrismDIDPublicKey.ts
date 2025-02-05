@@ -75,7 +75,7 @@ export class PrismDIDPublicKey {
     const id = proto.id;
     const usage = getUsage(proto.usage);
     const curve = this.getProtoCurve(proto);
-    if (curve === Curve.SECP256K1.toLocaleLowerCase()) {
+    if (curve === Curve.SECP256K1) {
       return new PrismDIDPublicKey(
         id,
         usage,

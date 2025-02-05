@@ -4,7 +4,7 @@ import { KeyProperties } from "../KeyProperties";
 import { SignableKey } from "./SignableKey";
 import { StorableKey } from "./StorableKey";
 import { VerifiableKey } from "./VerifiableKey";
-import { KeyCurve } from "../KeyCurve";
+import { KeyCurve } from "./KeyCurve";
 import { Curve } from "./Curve";
 import { KeyTypes } from "./KeyTypes";
 import { ExportableKey } from "./exportable";
@@ -258,6 +258,6 @@ export abstract class Key {
 
   isCurve<T>(curve: string): this is T {
     const keyCurve = this.keySpecification.get(KeyProperties.curve);
-    return keyCurve === curve;
+    return keyCurve === curve || keyCurve?.toLocaleLowerCase() === curve.toLowerCase();
   }
 }
