@@ -27,8 +27,6 @@ export interface AttachmentLinkData {
 
 export type AttachmentJsonData = {
   json: any;
-} | {
-  data: any;
 };
 
 export type AttachmentData =

@@ -5,9 +5,9 @@ import { ProtocolType } from "../ProtocolTypes";
 import { PickupAttachment } from "../types";
 
 type PickupResponse =
-  | { type: "status"; message: Message }
-  | { type: "delivery"; message: Message }
-  | { type: 'report', message: Message };
+  | { type: "status"; message: Message; }
+  | { type: "delivery"; message: Message; }
+  | { type: 'report', message: Message; };
 
 export class PickupRunner {
   private message: PickupResponse;
@@ -41,9 +41,7 @@ export class PickupRunner {
     } else if (Message.isJsonAttachment(attachment.data)) {
       return {
         attachmentId: attachment.id,
-        data: "data" in attachment.data ?
-          JSON.stringify(attachment.data.data) :
-          JSON.stringify(attachment.data.json),
+        data: JSON.stringify(attachment.data.json),
       };
     }
 
@@ -56,7 +54,7 @@ export class PickupRunner {
     return attachment !== null;
   }
 
-  async run(): Promise<Array<{ attachmentId: string; message: Message }>> {
+  async run(): Promise<Array<{ attachmentId: string; message: Message; }>> {
     if (this.message.type === "delivery") {
       return Promise.all(
         this.message.message.attachments
@@ -73,7 +71,7 @@ export class PickupRunner {
           attachmentId: this.message.message.id,
           message: this.message.message
         }
-      ]
+      ];
     }
 
     return [];

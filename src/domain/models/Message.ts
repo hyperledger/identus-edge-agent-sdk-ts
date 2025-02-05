@@ -142,7 +142,8 @@ export class Message implements Pluto.Storable {
   }
 
   static isJsonAttachment(data: any): data is AttachmentJsonData {
-    return data.data !== undefined || data.json !== undefined;
+    // data.data handled for backwards compatibility with stored messages
+    return data.json !== undefined || data.data !== undefined;
   }
 }
 
@@ -173,12 +174,9 @@ export namespace Message {
       }
 
       if (isJson(attachment.data)) {
-        let decoded: any;
-        if ("data" in attachment.data) {
-          decoded = attachment.data.data;
-        } else if ("json" in attachment.data) {
-          decoded = attachment.data.json;
-        }
+        // data.data handled for backwards compatibility
+        const decoded = attachment.data.json ?? (attachment.data as any).data;
+
         return typeof decoded === "object"
           ? decoded
           : JSON.parse(decoded);
@@ -193,8 +191,8 @@ export namespace Message {
     };
 
     const isJson = (data: AttachmentData): data is AttachmentJsonData => {
-      // ?? why do we mutate json -> data in didcomm Wrapper
-      return "data" in data || "json" in data;
+      // data.data handled for backwards compatibility
+      return "json" in data || "data" in data;
     };
   }
 }
