@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / MediatorStore
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / MediatorStore
 
 # Interface: MediatorStore
 
@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:167](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L167)
+[src/edge-agent/types/index.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/types/index.ts#L99)
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:165](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/types/index.ts#L165)
+[src/edge-agent/types/index.ts:97](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/types/index.ts#L97)

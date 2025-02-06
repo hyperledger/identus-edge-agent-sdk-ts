@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidVerifyCredentialError
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / InvalidVerifyCredentialError
 
 # Class: InvalidVerifyCredentialError
 
@@ -53,7 +53,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Pollux.ts#L68)
+[src/domain/models/errors/Pollux.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Pollux.ts#L68)
 
 ## Properties
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:68](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Pollux.ts#L68)
+[src/domain/models/errors/Pollux.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Pollux.ts#L68)
 
 ___
 

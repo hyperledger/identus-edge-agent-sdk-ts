@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / CommonError
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / CommonError
 
 # Namespace: CommonError
 
@@ -8,4 +8,7 @@
 
 ### Classes
 
-- [SomethingWentWrongError](../classes/Domain.CommonError.SomethingWentWrongError.md)
+- [ExpectError](../classes/Domain.CommonError.ExpectError.md)
+- [SDKError](../classes/Domain.CommonError.SDKError.md)
+- [UnknownError](../classes/Domain.CommonError.UnknownError.md)
+- [ValidationError](../classes/Domain.CommonError.ValidationError.md)

@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Castor
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / Castor
 
 # Class: Castor
 
@@ -27,8 +27,10 @@ you need to easily create, manage, and resolve DIDs.
 
 - [createPeerDID](Castor.md#createpeerdid)
 - [createPrismDID](Castor.md#createprismdid)
+- [createPrismDIDAtalaObject](Castor.md#createprismdidatalaobject)
 - [extractVerificationMethods](Castor.md#extractverificationmethods)
 - [getEcnumbasis](Castor.md#getecnumbasis)
+- [getPrismDIDKeyFromVerificationMethod](Castor.md#getprismdidkeyfromverificationmethod)
 - [parseDID](Castor.md#parsedid)
 - [resolveDID](Castor.md#resolvedid)
 - [verifySignature](Castor.md#verifysignature)
@@ -54,7 +56,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:66](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L66)
+[src/castor/Castor.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L70)
 
 ## Properties
 
@@ -64,7 +66,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:56](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L56)
+[src/castor/Castor.ts:60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L60)
 
 ___
 
@@ -74,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/castor/Castor.ts:57](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L57)
+[src/castor/Castor.ts:61](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L61)
 
 ## Methods
 
@@ -115,13 +117,13 @@ const peerDid = await castor.createPeerDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:207](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L207)
+[src/castor/Castor.ts:323](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L323)
 
 ___
 
 ### createPrismDID
 
-▸ **createPrismDID**(`key`, `services?`, `issuingKeys?`): `Promise`\<[`DID`](Domain.DID.md)\>
+▸ **createPrismDID**(`key`, `services?`, `authenticationKeys?`, `issuanceKeys?`): `Promise`\<[`DID`](Domain.DID.md)\>
 
 Creates a DID for a prism (a device or server that acts as a DID owner and controller) using a
 given master public key and list of services.
@@ -132,7 +134,8 @@ given master public key and list of services.
 | :------ | :------ | :------ |
 | `key` | [`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md) | `undefined` |
 | `services?` | [`Service`](Domain.Service.md)[] | `undefined` |
-| `issuingKeys` | ([`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md))[] | `[]` |
+| `authenticationKeys?` | ([`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md))[] | `[]` |
+| `issuanceKeys?` | ([`PublicKey`](Domain.PublicKey.md) \| [`KeyPair`](Domain.KeyPair.md))[] | `[]` |
 
 #### Returns
 
@@ -164,7 +167,30 @@ const prismDid = await castor.createPrismDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:121](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L121)
+[src/castor/Castor.ts:235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L235)
+
+___
+
+### createPrismDIDAtalaObject
+
+▸ **createPrismDIDAtalaObject**(`key`, `did`): `Promise`\<`Uint8Array`\>
+
+Creates a Prism DID Atala Object, a buffer contained the prism did create operation.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | [`PrivateKey`](Domain.PrivateKey.md) |
+| `did` | [`DID`](Domain.DID.md) |
+
+#### Returns
+
+`Promise`\<`Uint8Array`\>
+
+#### Defined in
+
+[src/castor/Castor.ts:156](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L156)
 
 ___
 
@@ -186,7 +212,7 @@ Extracts the verificationMethods from an array of CoreProperties inside a DID Do
 
 #### Defined in
 
-[src/castor/Castor.ts:250](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L250)
+[src/castor/Castor.ts:370](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L370)
 
 ___
 
@@ -213,7 +239,27 @@ Returns ecnumbasis from a valid DID and its related publicKey
 
 #### Defined in
 
-[src/castor/Castor.ts:409](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L409)
+[src/castor/Castor.ts:535](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L535)
+
+___
+
+### getPrismDIDKeyFromVerificationMethod
+
+▸ **getPrismDIDKeyFromVerificationMethod**(`verificationMethod`): `PrismDIDPublicKey`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `verificationMethod` | [`VerificationMethod`](Domain.VerificationMethod.md) |
+
+#### Returns
+
+`PrismDIDPublicKey`
+
+#### Defined in
+
+[src/castor/Castor.ts:99](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L99)
 
 ___
 
@@ -250,7 +296,7 @@ const parsedPrismDid = castor.parseDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:91](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L91)
+[src/castor/Castor.ts:95](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L95)
 
 ___
 
@@ -288,7 +334,7 @@ const didDocument = await castor.resolveDID("did:prism:123456")
 
 #### Defined in
 
-[src/castor/Castor.ts:232](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L232)
+[src/castor/Castor.ts:348](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L348)
 
 ___
 
@@ -319,17 +365,23 @@ This function verifies the authenticity of a signature using given DID, challeng
 ```ts
 const message = "data to sign";
 const messageBytes = new TextEncoder().encode(message);
-const signatureSecp256K1 = apollo.signStringMessage(keyPairSecp256K1.privateKey, message);
-
-const did = castor.parseDID("did:prism:123456");
-const challenge = messageBytes
-const signature = signatureSecp256K1.value;
-
-const isValid = castor.verifySignature(
-    castor.parseDID("did:prism:123456"),
-    challenge, // Uint8Array
-    signature // Uint8Array
-);
+const {mnemonics, seed} = apollo.createRandomSeed();
+const privateKey = apollo.createPublicKey({
+  type: KeyTypes.EC,
+  curve: Curve.SECP256K1,
+  seed: Buffer.from(seed.value).toString("hex"),
+  derivationPath: "m/0'/0'/0'"
+});
+if (privateKey.isSignable()) {
+  const signature = privateKey.sign(message);
+  const did = castor.parseDID("did:prism:123456");
+  const challenge = messageBytes
+  const isValid = castor.verifySignature(
+      castor.parseDID("did:prism:123456"),
+      challenge, // Uint8Array
+      signature // Uint8Array
+  );
+}
 ```
 
 **`Async`**
@@ -340,4 +392,4 @@ const isValid = castor.verifySignature(
 
 #### Defined in
 
-[src/castor/Castor.ts:294](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/castor/Castor.ts#L294)
+[src/castor/Castor.ts:420](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/castor/Castor.ts#L420)

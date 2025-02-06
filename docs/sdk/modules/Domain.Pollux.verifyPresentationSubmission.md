@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Pollux](Domain.Pollux.md) / verifyPresentationSubmission
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Pollux](Domain.Pollux.md) / verifyPresentationSubmission
 
 # Namespace: verifyPresentationSubmission
 
@@ -22,6 +22,6 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:132](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L132)
+[src/domain/buildingBlocks/Pollux.ts:132](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L132)
 
-[src/domain/buildingBlocks/Pollux.ts:133](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L133)
+[src/domain/buildingBlocks/Pollux.ts:133](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L133)

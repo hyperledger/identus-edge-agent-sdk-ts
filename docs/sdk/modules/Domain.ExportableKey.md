@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / ExportableKey
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / ExportableKey
 
 # Namespace: ExportableKey
 
@@ -30,7 +30,7 @@ Declaration merge to contain key conversion functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/exportable/ExportableKey.ts#L25)
 
 ## Functions
 
@@ -64,4 +64,4 @@ object with exportable functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:53](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L53)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/exportable/ExportableKey.ts#L54)

@@ -1,6 +1,6 @@
-[@atala/prism-wallet-sdk](README.md) / Exports
+[@hyperledger/identus-edge-agent-sdk](README.md) / Exports
 
-# @atala/prism-wallet-sdk
+# @hyperledger/identus-edge-agent-sdk
 
 ## Table of contents
 
@@ -11,6 +11,7 @@
 ### Namespaces
 
 - [Domain](modules/Domain.md)
+- [OIDC](modules/OIDC.md)
 - [PeerDID](modules/PeerDID.md)
 - [Pluto](modules/Pluto.md)
 
@@ -18,11 +19,13 @@
 
 - [AnonCredsCredentialProperties](enums/AnonCredsCredentialProperties.md)
 - [ListenerKey](enums/ListenerKey.md)
+- [ProtocolType](enums/ProtocolType.md)
 
 ### Classes
 
 - [Agent](classes/Agent.md)
 - [AnonCredsCredential](classes/AnonCredsCredential.md)
+- [ApiImpl](classes/ApiImpl.md)
 - [Apollo](classes/Apollo.md)
 - [BasicMediatorHandler](classes/BasicMediatorHandler.md)
 - [BasicMessage](classes/BasicMessage.md)
@@ -34,6 +37,7 @@
 - [JWTCredential](classes/JWTCredential.md)
 - [MediatorHandler](classes/MediatorHandler.md)
 - [Mercury](classes/Mercury.md)
+- [OIDCAgent](classes/OIDCAgent.md)
 - [OfferCredential](classes/OfferCredential.md)
 - [OutOfBandInvitation](classes/OutOfBandInvitation.md)
 - [PeerDID](classes/PeerDID-1.md)
@@ -44,13 +48,11 @@
 - [ProposePresentation](classes/ProposePresentation.md)
 - [PublicMediatorStore](classes/PublicMediatorStore.md)
 - [RequestPresentation](classes/RequestPresentation.md)
+- [SDJWTCredential](classes/SDJWTCredential.md)
 - [Store](classes/Store.md)
 
 ### Interfaces
 
-- [AgentCredentials](interfaces/AgentCredentials.md)
-- [AgentDIDHigherFunctions](interfaces/AgentDIDHigherFunctions.md)
-- [AgentInvitations](interfaces/AgentInvitations.md)
 - [AgentMessageEvents](interfaces/AgentMessageEvents.md)
 - [BasicMessageBody](interfaces/BasicMessageBody.md)
 - [ConnectionsManagerInterface](interfaces/ConnectionsManagerInterface.md)
@@ -70,23 +72,31 @@
 - [PresentationBody](interfaces/PresentationBody.md)
 - [PrismOnboardingInvitationBody](interfaces/PrismOnboardingInvitationBody.md)
 - [PrismRevocationBody](interfaces/PrismRevocationBody.md)
+- [ProblemReportBody](interfaces/ProblemReportBody.md)
 - [ProofTypes](interfaces/ProofTypes.md)
 - [ProposeCredentialBody](interfaces/ProposeCredentialBody.md)
 - [RequestPresentationBody](interfaces/RequestPresentationBody.md)
 
 ### Type Aliases
 
+- [CollectionList](modules.md#collectionlist)
+- [ConnectionEventArg](modules.md#connectioneventarg)
+- [EventCallback](modules.md#eventcallback)
+- [MessageEventArg](modules.md#messageeventarg)
 - [OutOfBandInvitationBody](modules.md#outofbandinvitationbody)
 - [ProposePresentationBody](modules.md#proposepresentationbody)
+- [RevokeEventArg](modules.md#revokeeventarg)
 
 ### Variables
 
 - [AnonCredsRecoveryId](modules.md#anoncredsrecoveryid)
 - [JWTVerifiableCredentialRecoveryId](modules.md#jwtverifiablecredentialrecoveryid)
+- [SDJWTVerifiableCredentialRecoveryId](modules.md#sdjwtverifiablecredentialrecoveryid)
 
 ### Functions
 
 - [isPresentationDefinitionRequestType](modules.md#ispresentationdefinitionrequesttype)
+- [makeCollections](modules.md#makecollections)
 
 ## References
 
@@ -96,13 +106,67 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 ## Type Aliases
 
+### CollectionList
+
+Ƭ **CollectionList**: `Record`\<`string`, `CollectionCreate`\>
+
+#### Defined in
+
+[src/pluto/rxdb/collections.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/pluto/rxdb/collections.ts#L17)
+
+___
+
+### ConnectionEventArg
+
+Ƭ **ConnectionEventArg**: [`DIDPair`](classes/Domain.DIDPair.md)
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/types/index.ts#L49)
+
+___
+
+### EventCallback
+
+Ƭ **EventCallback**: (`arg`: [`MessageEventArg`](modules.md#messageeventarg) \| [`ConnectionEventArg`](modules.md#connectioneventarg) \| [`RevokeEventArg`](modules.md#revokeeventarg)) => `void`
+
+#### Type declaration
+
+▸ (`arg`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `arg` | [`MessageEventArg`](modules.md#messageeventarg) \| [`ConnectionEventArg`](modules.md#connectioneventarg) \| [`RevokeEventArg`](modules.md#revokeeventarg) |
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/types/index.ts#L51)
+
+___
+
+### MessageEventArg
+
+Ƭ **MessageEventArg**: [`Message`](classes/Domain.Message-1.md)[]
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/types/index.ts#L48)
+
+___
+
 ### OutOfBandInvitationBody
 
 Ƭ **OutOfBandInvitationBody**: [`HandshakeRequestBody`](interfaces/HandshakeRequestBody.md)
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:93](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L93)
+[src/edge-agent/protocols/types.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/types.ts#L101)
 
 ___
 
@@ -112,7 +176,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:78](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/types.ts#L78)
+[src/edge-agent/protocols/types.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/types.ts#L86)
+
+___
+
+### RevokeEventArg
+
+Ƭ **RevokeEventArg**: [`Credential`](classes/Domain.Credential.md)
+
+#### Defined in
+
+[src/edge-agent/types/index.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/types/index.ts#L50)
 
 ## Variables
 
@@ -122,7 +196,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -132,7 +206,17 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:23](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/models/JWTVerifiableCredential.ts#L23)
+[src/pollux/models/JWTVerifiableCredential.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/pollux/models/JWTVerifiableCredential.ts#L22)
+
+___
+
+### SDJWTVerifiableCredentialRecoveryId
+
+• `Const` **SDJWTVerifiableCredentialRecoveryId**: ``"sd+jwt+credential"``
+
+#### Defined in
+
+[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
 
 ## Functions
 
@@ -159,4 +243,24 @@ request is PresentationDefinitionRequest\<Type\>
 
 #### Defined in
 
-[src/pollux/utils/claims.ts:69](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/pollux/utils/claims.ts#L69)
+[src/pollux/utils/claims.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/pollux/utils/claims.ts#L88)
+
+___
+
+### makeCollections
+
+▸ **makeCollections**(`additional?`): [`CollectionList`](modules.md#collectionlist)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `additional?` | [`CollectionList`](modules.md#collectionlist) |
+
+#### Returns
+
+[`CollectionList`](modules.md#collectionlist)
+
+#### Defined in
+
+[src/pluto/rxdb/collections.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/pluto/rxdb/collections.ts#L19)

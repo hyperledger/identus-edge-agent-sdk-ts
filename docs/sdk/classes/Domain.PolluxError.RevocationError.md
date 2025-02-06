@@ -1,51 +1,80 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / ECPublicKeyInitialization
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [PolluxError](../modules/Domain.PolluxError.md) / RevocationError
 
-# Class: ECPublicKeyInitialization
+# Class: RevocationError
 
-[Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).ECPublicKeyInitialization
+[Domain](../modules/Domain.md).[PolluxError](../modules/Domain.PolluxError.md).RevocationError
+
+general Revocation error, message should contain details
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`ECPublicKeyInitialization`**
+  ↳ **`RevocationError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApolloError.ECPublicKeyInitialization.md#constructor)
+- [constructor](Domain.PolluxError.RevocationError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApolloError.ECPublicKeyInitialization.md#cause)
-- [message](Domain.ApolloError.ECPublicKeyInitialization.md#message)
-- [name](Domain.ApolloError.ECPublicKeyInitialization.md#name)
-- [stack](Domain.ApolloError.ECPublicKeyInitialization.md#stack)
-- [prepareStackTrace](Domain.ApolloError.ECPublicKeyInitialization.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApolloError.ECPublicKeyInitialization.md#stacktracelimit)
+- [cause](Domain.PolluxError.RevocationError.md#cause)
+- [message](Domain.PolluxError.RevocationError.md#message)
+- [name](Domain.PolluxError.RevocationError.md#name)
+- [stack](Domain.PolluxError.RevocationError.md#stack)
+- [prepareStackTrace](Domain.PolluxError.RevocationError.md#preparestacktrace)
+- [stackTraceLimit](Domain.PolluxError.RevocationError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApolloError.ECPublicKeyInitialization.md#capturestacktrace)
+- [captureStackTrace](Domain.PolluxError.RevocationError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new ECPublicKeyInitialization**(): [`ECPublicKeyInitialization`](Domain.ApolloError.ECPublicKeyInitialization.md)
+• **new RevocationError**(`message?`): [`RevocationError`](Domain.PolluxError.RevocationError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
 
 #### Returns
 
-[`ECPublicKeyInitialization`](Domain.ApolloError.ECPublicKeyInitialization.md)
+[`RevocationError`](Domain.PolluxError.RevocationError.md)
 
-#### Overrides
+#### Inherited from
 
 Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:47](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L47)
+node_modules/typescript/lib/lib.es5.d.ts:1059
+
+• **new RevocationError**(`message?`, `options?`): [`RevocationError`](Domain.PolluxError.RevocationError.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+[`RevocationError`](Domain.PolluxError.RevocationError.md)
+
+#### Inherited from
+
+Error.constructor
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:1059
 
 ## Properties
 

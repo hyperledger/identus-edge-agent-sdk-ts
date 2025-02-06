@@ -1,12 +1,14 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / CouldNotParseMessageString
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / CouldNotParseMessageString
 
 # Class: CouldNotParseMessageString
 
 [Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).CouldNotParseMessageString
 
+// ??
+
 ## Hierarchy
 
-- `Error`
+- [`SDKError`](Domain.CommonError.SDKError.md)
 
   ↳ **`CouldNotParseMessageString`**
 
@@ -33,13 +35,7 @@
 
 ### constructor
 
-• **new CouldNotParseMessageString**(`message?`): [`CouldNotParseMessageString`](Domain.ApolloError.CouldNotParseMessageString.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message?` | `string` |
+• **new CouldNotParseMessageString**(): [`CouldNotParseMessageString`](Domain.ApolloError.CouldNotParseMessageString.md)
 
 #### Returns
 
@@ -47,11 +43,11 @@
 
 #### Overrides
 
-Error.constructor
+[SDKError](Domain.CommonError.SDKError.md).[constructor](Domain.CommonError.SDKError.md#constructor)
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:11](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L11)
+[src/domain/models/errors/Apollo.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Apollo.ts#L25)
 
 ## Properties
 
@@ -61,7 +57,7 @@ Error.constructor
 
 #### Inherited from
 
-Error.cause
+[SDKError](Domain.CommonError.SDKError.md).[cause](Domain.CommonError.SDKError.md#cause)
 
 #### Defined in
 
@@ -75,7 +71,7 @@ ___
 
 #### Inherited from
 
-Error.message
+[SDKError](Domain.CommonError.SDKError.md).[message](Domain.CommonError.SDKError.md#message)
 
 #### Defined in
 
@@ -89,7 +85,7 @@ ___
 
 #### Inherited from
 
-Error.name
+[SDKError](Domain.CommonError.SDKError.md).[name](Domain.CommonError.SDKError.md#name)
 
 #### Defined in
 
@@ -103,7 +99,7 @@ ___
 
 #### Inherited from
 
-Error.stack
+[SDKError](Domain.CommonError.SDKError.md).[stack](Domain.CommonError.SDKError.md#stack)
 
 #### Defined in
 
@@ -138,7 +134,7 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 #### Inherited from
 
-Error.prepareStackTrace
+[SDKError](Domain.CommonError.SDKError.md).[prepareStackTrace](Domain.CommonError.SDKError.md#preparestacktrace)
 
 #### Defined in
 
@@ -152,7 +148,7 @@ ___
 
 #### Inherited from
 
-Error.stackTraceLimit
+[SDKError](Domain.CommonError.SDKError.md).[stackTraceLimit](Domain.CommonError.SDKError.md#stacktracelimit)
 
 #### Defined in
 
@@ -179,7 +175,7 @@ Create .stack property on a target object
 
 #### Inherited from
 
-Error.captureStackTrace
+[SDKError](Domain.CommonError.SDKError.md).[captureStackTrace](Domain.CommonError.SDKError.md#capturestacktrace)
 
 #### Defined in
 

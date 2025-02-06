@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / OfferDoesntProvideEnoughInformation
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / OfferDoesntProvideEnoughInformation
 
 # Class: OfferDoesntProvideEnoughInformation
 
@@ -45,7 +45,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Agent.ts:83](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Agent.ts#L83)
+[src/domain/models/errors/Agent.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Agent.ts#L83)
 
 ## Properties
 

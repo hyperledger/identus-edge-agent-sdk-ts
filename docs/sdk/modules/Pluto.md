@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Pluto
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / Pluto
 
 # Namespace: Pluto
 
@@ -6,7 +6,7 @@ Pluto implementation
 
 Structure:
 - Pluto class is an orchestration layer
-- Repositories handle mapping Domain `<->` Storable Models
+- Repositories handle mapping between Domain and Storable Models
 - Models suggest db structure
 - Store abstracts db implementation
 
