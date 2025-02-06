@@ -90,7 +90,7 @@ preferred underlying storage technology, most appropriate for your use case.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:116](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L116)
+[src/pluto/Pluto.ts:116](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L116)
 
 ## Properties
 
@@ -100,7 +100,7 @@ preferred underlying storage technology, most appropriate for your use case.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:113](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L113)
+[src/pluto/Pluto.ts:113](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L113)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L114)
+[src/pluto/Pluto.ts:114](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L114)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:118](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L118)
+[src/pluto/Pluto.ts:118](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L118)
 
 ___
 
@@ -149,7 +149,7 @@ current status of the entity
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/protocols/Startable.ts#L42)
+[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/protocols/Startable.ts#L42)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L117)
+[src/pluto/Pluto.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L117)
 
 ## Methods
 
@@ -183,7 +183,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/pluto/Pluto.ts:133](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L133)
+[src/pluto/Pluto.ts:133](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L133)
 
 ___
 
@@ -207,7 +207,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/pluto/Pluto.ts:139](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L139)
+[src/pluto/Pluto.ts:139](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L139)
 
 ___
 
@@ -233,7 +233,7 @@ Backups *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L146)
+[src/pluto/Pluto.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L146)
 
 ___
 
@@ -259,7 +259,7 @@ Delete a previously stored messages
 
 #### Defined in
 
-[src/pluto/Pluto.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L154)
+[src/pluto/Pluto.ts:154](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L154)
 
 ___
 
@@ -279,7 +279,7 @@ Retrieve all the stored credentials
 
 #### Defined in
 
-[src/pluto/Pluto.ts:168](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L168)
+[src/pluto/Pluto.ts:168](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L168)
 
 ___
 
@@ -299,7 +299,7 @@ Retrieve all stored DID pairs (DIDComm connections).
 
 #### Defined in
 
-[src/pluto/Pluto.ts:348](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L348)
+[src/pluto/Pluto.ts:348](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L348)
 
 ___
 
@@ -319,7 +319,7 @@ Mediators *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:400](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L400)
+[src/pluto/Pluto.ts:400](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L400)
 
 ___
 
@@ -339,7 +339,7 @@ Retrieve all stored DIDComm messages.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:329](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L329)
+[src/pluto/Pluto.ts:329](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L329)
 
 ___
 
@@ -359,7 +359,7 @@ Retrieve all stored Peer DIDs.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:284](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L284)
+[src/pluto/Pluto.ts:284](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L284)
 
 ___
 
@@ -379,7 +379,7 @@ Retrieve all stored PRISM DIDs.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:246](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L246)
+[src/pluto/Pluto.ts:246](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L246)
 
 ___
 
@@ -405,7 +405,7 @@ Fetch the Credential Metadata by its name
 
 #### Defined in
 
-[src/pluto/Pluto.ts:189](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L189)
+[src/pluto/Pluto.ts:189](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L189)
 
 ___
 
@@ -431,7 +431,7 @@ Retrieve available private keys for a given DID.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:211](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L211)
+[src/pluto/Pluto.ts:211](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L211)
 
 ___
 
@@ -457,7 +457,7 @@ Retrieve the stored link secret by its name
 
 #### Defined in
 
-[src/pluto/Pluto.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L200)
+[src/pluto/Pluto.ts:200](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L200)
 
 ___
 
@@ -483,7 +483,7 @@ Retrieve a DIDComm message by ID.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:325](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L325)
+[src/pluto/Pluto.ts:325](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L325)
 
 ___
 
@@ -509,7 +509,7 @@ Retrieve a DID pair containing a given DID as either host or receiver.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:356](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L356)
+[src/pluto/Pluto.ts:356](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L356)
 
 ___
 
@@ -535,7 +535,7 @@ Retrieve a DID pair by a given pair name.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:373](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L373)
+[src/pluto/Pluto.ts:373](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L373)
 
 ___
 
@@ -555,7 +555,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:258](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L258)
+[src/pluto/Pluto.ts:258](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L258)
 
 ___
 
@@ -575,7 +575,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:384](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L384)
+[src/pluto/Pluto.ts:384](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L384)
 
 ___
 
@@ -601,7 +601,7 @@ ___
 
 #### Defined in
 
-[src/pluto/Pluto.ts:454](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L454)
+[src/pluto/Pluto.ts:454](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L454)
 
 ___
 
@@ -635,7 +635,7 @@ load the given data into the store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:150](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L150)
+[src/pluto/Pluto.ts:150](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L150)
 
 ___
 
@@ -661,7 +661,7 @@ Revoke a Credential
 
 #### Defined in
 
-[src/pluto/Pluto.ts:173](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L173)
+[src/pluto/Pluto.ts:173](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L173)
 
 ___
 
@@ -685,7 +685,7 @@ Pluto initialise function
 
 #### Defined in
 
-[src/pluto/Pluto.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L126)
+[src/pluto/Pluto.ts:126](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L126)
 
 ___
 
@@ -711,7 +711,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/pluto/Pluto.ts:129](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L129)
+[src/pluto/Pluto.ts:129](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L129)
 
 ___
 
@@ -737,7 +737,7 @@ Credentials *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:164](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L164)
+[src/pluto/Pluto.ts:164](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L164)
 
 ___
 
@@ -763,7 +763,7 @@ Credential Metadata *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:185](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L185)
+[src/pluto/Pluto.ts:185](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L185)
 
 ___
 
@@ -791,7 +791,7 @@ DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:221](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L221)
+[src/pluto/Pluto.ts:221](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L221)
 
 ___
 
@@ -819,7 +819,7 @@ DID Pairs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:336](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L336)
+[src/pluto/Pluto.ts:336](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L336)
 
 ___
 
@@ -845,7 +845,7 @@ LinkSecret *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:196](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L196)
+[src/pluto/Pluto.ts:196](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L196)
 
 ___
 
@@ -871,7 +871,7 @@ Store a mediator information.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:436](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L436)
+[src/pluto/Pluto.ts:436](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L436)
 
 ___
 
@@ -897,7 +897,7 @@ Messages *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:315](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L315)
+[src/pluto/Pluto.ts:315](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L315)
 
 ___
 
@@ -923,7 +923,7 @@ Store an array of DIDComm messages
 
 #### Defined in
 
-[src/pluto/Pluto.ts:319](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L319)
+[src/pluto/Pluto.ts:319](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L319)
 
 ___
 
@@ -950,7 +950,7 @@ Peer DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:276](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L276)
+[src/pluto/Pluto.ts:276](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L276)
 
 ___
 
@@ -978,7 +978,7 @@ Prism DIDs *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L235)
+[src/pluto/Pluto.ts:235](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L235)
 
 ___
 
@@ -1004,4 +1004,4 @@ PrivateKeys *
 
 #### Defined in
 
-[src/pluto/Pluto.ts:207](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pluto/Pluto.ts#L207)
+[src/pluto/Pluto.ts:207](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/Pluto.ts#L207)

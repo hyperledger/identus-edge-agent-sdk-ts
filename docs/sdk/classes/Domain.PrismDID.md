@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[src/domain/models/PrismDID.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/PrismDID.ts#L6)
+[src/domain/models/PrismDID.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/PrismDID.ts#L6)
 
 ## Properties
 
@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[src/domain/models/PrismDID.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/PrismDID.ts#L9)
+[src/domain/models/PrismDID.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/PrismDID.ts#L9)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/PrismDID.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/PrismDID.ts#L7)
+[src/domain/models/PrismDID.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/PrismDID.ts#L7)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/PrismDID.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/PrismDID.ts#L8)
+[src/domain/models/PrismDID.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/PrismDID.ts#L8)
 
 ## Methods
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/PrismDID.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/PrismDID.ts#L12)
+[src/domain/models/PrismDID.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/PrismDID.ts#L12)

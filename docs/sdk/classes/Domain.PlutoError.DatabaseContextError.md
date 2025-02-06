@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Pluto.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/errors/Pluto.ts#L8)
+[src/domain/models/errors/Pluto.ts:8](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/errors/Pluto.ts#L8)
 
 ## Properties
 

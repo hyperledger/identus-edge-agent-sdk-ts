@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L9)
+[src/domain/models/DIDUrl.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L9)
 
 ## Properties
 
@@ -55,7 +55,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L4)
+[src/domain/models/DIDUrl.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L4)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L7)
+[src/domain/models/DIDUrl.ts:7](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L7)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L6)
+[src/domain/models/DIDUrl.ts:6](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L6)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L5)
+[src/domain/models/DIDUrl.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L5)
 
 ## Methods
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L35)
+[src/domain/models/DIDUrl.ts:35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L35)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L25)
+[src/domain/models/DIDUrl.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L25)
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L29)
+[src/domain/models/DIDUrl.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L29)
 
 ___
 
@@ -141,4 +141,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDUrl.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/DIDUrl.ts#L21)
+[src/domain/models/DIDUrl.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/DIDUrl.ts#L21)

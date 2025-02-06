@@ -87,7 +87,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L33)
+[src/pollux/models/JWTVerifiableCredential.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L33)
 
 • **new JWTCredential**(`payload`, `revoked?`): [`JWTCredential`](JWTCredential.md)
 
@@ -108,7 +108,7 @@ Credential.constructor
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L34)
+[src/pollux/models/JWTVerifiableCredential.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L34)
 
 ## Properties
 
@@ -122,7 +122,7 @@ Credential.constructor
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L29)
+[src/pollux/models/JWTVerifiableCredential.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L29)
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L31)
+[src/pollux/models/JWTVerifiableCredential.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L31)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L30)
+[src/pollux/models/JWTVerifiableCredential.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L30)
 
 ___
 
@@ -171,7 +171,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Credential.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/Credential.ts#L17)
+[src/domain/models/Credential.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Credential.ts#L17)
 
 ## Accessors
 
@@ -185,7 +185,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:334](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L334)
+[src/pollux/models/JWTVerifiableCredential.ts:334](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L334)
 
 ___
 
@@ -203,7 +203,7 @@ Credential.claims
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L291)
+[src/pollux/models/JWTVerifiableCredential.ts:291](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L291)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:300](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L300)
+[src/pollux/models/JWTVerifiableCredential.ts:300](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L300)
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:304](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L304)
+[src/pollux/models/JWTVerifiableCredential.ts:304](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L304)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:308](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L308)
+[src/pollux/models/JWTVerifiableCredential.ts:308](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L308)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:312](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L312)
+[src/pollux/models/JWTVerifiableCredential.ts:312](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L312)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:316](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L316)
+[src/pollux/models/JWTVerifiableCredential.ts:316](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L316)
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:320](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L320)
+[src/pollux/models/JWTVerifiableCredential.ts:320](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L320)
 
 ___
 
@@ -305,7 +305,7 @@ Credential.id
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:267](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L267)
+[src/pollux/models/JWTVerifiableCredential.ts:267](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L267)
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:263](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L263)
+[src/pollux/models/JWTVerifiableCredential.ts:263](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L263)
 
 ___
 
@@ -333,7 +333,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:327](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L327)
+[src/pollux/models/JWTVerifiableCredential.ts:327](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L327)
 
 ___
 
@@ -351,7 +351,7 @@ Credential.issuer
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:341](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L341)
+[src/pollux/models/JWTVerifiableCredential.ts:341](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L341)
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:348](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L348)
+[src/pollux/models/JWTVerifiableCredential.ts:348](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L348)
 
 ___
 
@@ -379,7 +379,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:360](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L360)
+[src/pollux/models/JWTVerifiableCredential.ts:360](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L360)
 
 ___
 
@@ -397,7 +397,7 @@ Credential.subject
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:352](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L352)
+[src/pollux/models/JWTVerifiableCredential.ts:352](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L352)
 
 ___
 
@@ -411,7 +411,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:368](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L368)
+[src/pollux/models/JWTVerifiableCredential.ts:368](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L368)
 
 ___
 
@@ -425,7 +425,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:372](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L372)
+[src/pollux/models/JWTVerifiableCredential.ts:372](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L372)
 
 ___
 
@@ -439,7 +439,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:275](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L275)
+[src/pollux/models/JWTVerifiableCredential.ts:275](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L275)
 
 ___
 
@@ -453,7 +453,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:283](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L283)
+[src/pollux/models/JWTVerifiableCredential.ts:283](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L283)
 
 ## Methods
 
@@ -477,7 +477,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Credential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/Credential.ts#L19)
+[src/domain/models/Credential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Credential.ts#L19)
 
 ___
 
@@ -497,7 +497,7 @@ payload is JWTCredentialPayload
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:181](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L181)
+[src/pollux/models/JWTVerifiableCredential.ts:181](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L181)
 
 ___
 
@@ -515,7 +515,7 @@ this is ProvableCredential
 
 #### Defined in
 
-[src/domain/models/Credential.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/Credential.ts#L23)
+[src/domain/models/Credential.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Credential.ts#L23)
 
 ___
 
@@ -533,7 +533,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Credential.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/Credential.ts#L31)
+[src/domain/models/Credential.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Credential.ts#L31)
 
 ___
 
@@ -551,7 +551,7 @@ this is StorableCredential
 
 #### Defined in
 
-[src/domain/models/Credential.ts:27](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/Credential.ts#L27)
+[src/domain/models/Credential.ts:27](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Credential.ts#L27)
 
 ___
 
@@ -569,7 +569,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:376](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L376)
+[src/pollux/models/JWTVerifiableCredential.ts:376](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L376)
 
 ___
 
@@ -598,7 +598,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:411](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L411)
+[src/pollux/models/JWTVerifiableCredential.ts:411](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L411)
 
 ___
 
@@ -616,7 +616,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:393](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L393)
+[src/pollux/models/JWTVerifiableCredential.ts:393](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L393)
 
 ___
 
@@ -637,4 +637,4 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:177](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/pollux/models/JWTVerifiableCredential.ts#L177)
+[src/pollux/models/JWTVerifiableCredential.ts:177](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L177)
