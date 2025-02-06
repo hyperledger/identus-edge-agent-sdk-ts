@@ -1,39 +1,39 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / MissingChainCode
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [AgentError](../modules/Domain.AgentError.md) / InvalidProblemReportBodyError
 
-# Class: MissingChainCode
+# Class: InvalidProblemReportBodyError
 
-[Domain](../modules/Domain.md).[ApolloError](../modules/Domain.ApolloError.md).MissingChainCode
+[Domain](../modules/Domain.md).[AgentError](../modules/Domain.AgentError.md).InvalidProblemReportBodyError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`MissingChainCode`**
+  ↳ **`InvalidProblemReportBodyError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApolloError.MissingChainCode.md#constructor)
+- [constructor](Domain.AgentError.InvalidProblemReportBodyError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApolloError.MissingChainCode.md#cause)
-- [message](Domain.ApolloError.MissingChainCode.md#message)
-- [name](Domain.ApolloError.MissingChainCode.md#name)
-- [stack](Domain.ApolloError.MissingChainCode.md#stack)
-- [prepareStackTrace](Domain.ApolloError.MissingChainCode.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApolloError.MissingChainCode.md#stacktracelimit)
+- [cause](Domain.AgentError.InvalidProblemReportBodyError.md#cause)
+- [message](Domain.AgentError.InvalidProblemReportBodyError.md#message)
+- [name](Domain.AgentError.InvalidProblemReportBodyError.md#name)
+- [stack](Domain.AgentError.InvalidProblemReportBodyError.md#stack)
+- [prepareStackTrace](Domain.AgentError.InvalidProblemReportBodyError.md#preparestacktrace)
+- [stackTraceLimit](Domain.AgentError.InvalidProblemReportBodyError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApolloError.MissingChainCode.md#capturestacktrace)
+- [captureStackTrace](Domain.AgentError.InvalidProblemReportBodyError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new MissingChainCode**(`message?`): [`MissingChainCode`](Domain.ApolloError.MissingChainCode.md)
+• **new InvalidProblemReportBodyError**(`message?`): [`InvalidProblemReportBodyError`](Domain.AgentError.InvalidProblemReportBodyError.md)
 
 #### Parameters
 
@@ -43,7 +43,7 @@
 
 #### Returns
 
-[`MissingChainCode`](Domain.ApolloError.MissingChainCode.md)
+[`InvalidProblemReportBodyError`](Domain.AgentError.InvalidProblemReportBodyError.md)
 
 #### Overrides
 
@@ -51,7 +51,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:82](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Apollo.ts#L82)
+[src/domain/models/errors/Agent.ts:165](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Agent.ts#L165)
 
 ## Properties
 

@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / OutOfBandInvitation
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / OutOfBandInvitation
 
 # Class: OutOfBandInvitation
 
@@ -10,29 +10,36 @@
 
 ### Properties
 
+- [attachments](OutOfBandInvitation.md#attachments)
 - [body](OutOfBandInvitation.md#body)
+- [expiration](OutOfBandInvitation.md#expiration)
 - [from](OutOfBandInvitation.md#from)
 - [id](OutOfBandInvitation.md#id)
 - [type](OutOfBandInvitation.md#type)
 
+### Accessors
+
+- [isExpired](OutOfBandInvitation.md#isexpired)
+
 ### Methods
 
-- [parseOutOfBandInvitationFromJson](OutOfBandInvitation.md#parseoutofbandinvitationfromjson)
 - [parsePrismOnboardingInvitationFromJson](OutOfBandInvitation.md#parseprismonboardinginvitationfromjson)
 
 ## Constructors
 
 ### constructor
 
-• **new OutOfBandInvitation**(`body`, `from`, `id?`): [`OutOfBandInvitation`](OutOfBandInvitation.md)
+• **new OutOfBandInvitation**(`body`, `from`, `id?`, `attachments?`, `expiration?`): [`OutOfBandInvitation`](OutOfBandInvitation.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `body` | [`HandshakeRequestBody`](../interfaces/HandshakeRequestBody.md) |
-| `from` | `string` |
-| `id` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `body` | [`HandshakeRequestBody`](../interfaces/HandshakeRequestBody.md) | `undefined` |
+| `from` | `string` | `undefined` |
+| `id` | `string` | `undefined` |
+| `attachments` | [`AttachmentDescriptor`](Domain.AttachmentDescriptor.md)[] | `[]` |
+| `expiration` | ``null`` \| `number` | `null` |
 
 #### Returns
 
@@ -40,9 +47,19 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:12](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L12)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L12)
 
 ## Properties
+
+### attachments
+
+• **attachments**: [`AttachmentDescriptor`](Domain.AttachmentDescriptor.md)[] = `[]`
+
+#### Defined in
+
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L16)
+
+___
 
 ### body
 
@@ -50,7 +67,17 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:13](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L13)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L13)
+
+___
+
+### expiration
+
+• **expiration**: ``null`` \| `number` = `null`
+
+#### Defined in
+
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L17)
 
 ___
 
@@ -60,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:14](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L14)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L14)
 
 ___
 
@@ -70,39 +97,33 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:15](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L15)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L15)
 
 ___
 
 ### type
 
-• **type**: `ProtocolType` = `ProtocolType.Didcomminvitation`
+• **type**: [`ProtocolType`](../enums/ProtocolType.md) = `ProtocolType.Didcomminvitation`
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:10](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L10)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L10)
 
-## Methods
+## Accessors
 
-### parseOutOfBandInvitationFromJson
+### isExpired
 
-▸ **parseOutOfBandInvitationFromJson**(`json`): [`OutOfBandInvitation`](OutOfBandInvitation.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `json` | `string` |
+• `get` **isExpired**(): `boolean`
 
 #### Returns
 
-[`OutOfBandInvitation`](OutOfBandInvitation.md)
+`boolean`
 
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:39](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L39)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L20)
 
-___
+## Methods
 
 ### parsePrismOnboardingInvitationFromJson
 
@@ -118,6 +139,8 @@ ___
 
 `PrismOnboardingInvitation`
 
+**`Deprecated`**
+
 #### Defined in
 
-[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:18](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L18)
+[src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/invitation/v2/OutOfBandInvitation.ts#L34)

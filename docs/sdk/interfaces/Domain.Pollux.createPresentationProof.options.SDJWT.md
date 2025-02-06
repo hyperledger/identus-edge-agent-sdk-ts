@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Pollux](../modules/Domain.Pollux.md) / [createPresentationProof](../modules/Domain.Pollux.createPresentationProof.md) / [options](../modules/Domain.Pollux.createPresentationProof.options.md) / SDJWT
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Pollux](../modules/Domain.Pollux.md) / [createPresentationProof](../modules/Domain.Pollux.createPresentationProof.md) / [options](../modules/Domain.Pollux.createPresentationProof.options.md) / SDJWT
 
 # Interface: SDJWT
 
@@ -8,18 +8,18 @@
 
 ### Properties
 
-- [did](Domain.Pollux.createPresentationProof.options.SDJWT.md#did)
+- [presentationFrame](Domain.Pollux.createPresentationProof.options.SDJWT.md#presentationframe)
 - [privateKey](Domain.Pollux.createPresentationProof.options.SDJWT.md#privatekey)
 
 ## Properties
 
-### did
+### presentationFrame
 
-• **did**: [`DID`](../classes/Domain.DID.md)
+• **presentationFrame**: `Record`\<`string`, `boolean`\>
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:157](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L157)
+[src/domain/buildingBlocks/Pollux.ts:162](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L162)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:158](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/buildingBlocks/Pollux.ts#L158)
+[src/domain/buildingBlocks/Pollux.ts:161](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L161)

@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / PolluxError
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / PolluxError
 
 # Namespace: PolluxError
 
@@ -22,3 +22,4 @@
 - [InvalidVerifyCredentialError](../classes/Domain.PolluxError.InvalidVerifyCredentialError.md)
 - [InvalidVerifyFormatError](../classes/Domain.PolluxError.InvalidVerifyFormatError.md)
 - [NoDomainOrChallengeFound](../classes/Domain.PolluxError.NoDomainOrChallengeFound.md)
+- [RevocationError](../classes/Domain.PolluxError.RevocationError.md)

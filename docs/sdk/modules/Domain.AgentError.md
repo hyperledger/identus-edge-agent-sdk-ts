@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / AgentError
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / AgentError
 
 # Namespace: AgentError
 
@@ -26,6 +26,7 @@
 - [InvalidPickupDeliveryMessageError](../classes/Domain.AgentError.InvalidPickupDeliveryMessageError.md)
 - [InvalidPresentationBodyError](../classes/Domain.AgentError.InvalidPresentationBodyError.md)
 - [InvalidPresentationMessageError](../classes/Domain.AgentError.InvalidPresentationMessageError.md)
+- [InvalidProblemReportBodyError](../classes/Domain.AgentError.InvalidProblemReportBodyError.md)
 - [InvalidProposeCredentialBodyError](../classes/Domain.AgentError.InvalidProposeCredentialBodyError.md)
 - [InvalidProposePresentationBodyError](../classes/Domain.AgentError.InvalidProposePresentationBodyError.md)
 - [InvalidProposePresentationMessageError](../classes/Domain.AgentError.InvalidProposePresentationMessageError.md)

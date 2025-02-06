@@ -1,49 +1,54 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApiError](../modules/Domain.ApiError.md) / InvalidRequestPath
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / ApiError
 
-# Class: InvalidRequestPath
+# Class: ApiError
 
-[Domain](../modules/Domain.md).[ApiError](../modules/Domain.ApiError.md).InvalidRequestPath
+[Domain](../modules/Domain.md).ApiError
 
 ## Hierarchy
 
 - `Error`
 
-  ↳ **`InvalidRequestPath`**
+  ↳ **`ApiError`**
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](Domain.ApiError.InvalidRequestPath.md#constructor)
+- [constructor](Domain.ApiError.md#constructor)
 
 ### Properties
 
-- [cause](Domain.ApiError.InvalidRequestPath.md#cause)
-- [message](Domain.ApiError.InvalidRequestPath.md#message)
-- [name](Domain.ApiError.InvalidRequestPath.md#name)
-- [stack](Domain.ApiError.InvalidRequestPath.md#stack)
-- [prepareStackTrace](Domain.ApiError.InvalidRequestPath.md#preparestacktrace)
-- [stackTraceLimit](Domain.ApiError.InvalidRequestPath.md#stacktracelimit)
+- [body](Domain.ApiError.md#body)
+- [cause](Domain.ApiError.md#cause)
+- [message](Domain.ApiError.md#message)
+- [name](Domain.ApiError.md#name)
+- [stack](Domain.ApiError.md#stack)
+- [status](Domain.ApiError.md#status)
+- [statusText](Domain.ApiError.md#statustext)
+- [prepareStackTrace](Domain.ApiError.md#preparestacktrace)
+- [stackTraceLimit](Domain.ApiError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](Domain.ApiError.InvalidRequestPath.md#capturestacktrace)
+- [captureStackTrace](Domain.ApiError.md#capturestacktrace)
 
 ## Constructors
 
 ### constructor
 
-• **new InvalidRequestPath**(`path`): [`InvalidRequestPath`](Domain.ApiError.InvalidRequestPath.md)
+• **new ApiError**(`status`, `statusText`, `body`): [`ApiError`](Domain.ApiError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `path` | `string` |
+| `status` | `number` |
+| `statusText` | `string` |
+| `body` | `any` |
 
 #### Returns
 
-[`InvalidRequestPath`](Domain.ApiError.InvalidRequestPath.md)
+[`ApiError`](Domain.ApiError.md)
 
 #### Overrides
 
@@ -51,9 +56,19 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Api.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/errors/Api.ts#L2)
+[src/domain/models/Api.ts:52](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/Api.ts#L52)
 
 ## Properties
+
+### body
+
+• `Readonly` **body**: `any`
+
+#### Defined in
+
+[src/domain/models/Api.ts:55](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/Api.ts#L55)
+
+___
 
 ### cause
 
@@ -108,6 +123,26 @@ Error.stack
 #### Defined in
 
 node_modules/typescript/lib/lib.es5.d.ts:1055
+
+___
+
+### status
+
+• `Readonly` **status**: `number`
+
+#### Defined in
+
+[src/domain/models/Api.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/Api.ts#L53)
+
+___
+
+### statusText
+
+• `Readonly` **statusText**: `string`
+
+#### Defined in
+
+[src/domain/models/Api.ts:54](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/Api.ts#L54)
 
 ___
 

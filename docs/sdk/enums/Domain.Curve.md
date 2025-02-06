@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Curve
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Curve
 
 # Enumeration: Curve
 
@@ -20,17 +20,17 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/Curve.ts:3](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Curve.ts#L3)
+[src/domain/models/keyManagement/Curve.ts:3](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/Curve.ts#L3)
 
 ___
 
 ### SECP256K1
 
-• **SECP256K1** = ``"Secp256k1"``
+• **SECP256K1** = ``"secp256k1"``
 
 #### Defined in
 
-[src/domain/models/keyManagement/Curve.ts:4](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Curve.ts#L4)
+[src/domain/models/keyManagement/Curve.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/Curve.ts#L4)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Curve.ts:2](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/Curve.ts#L2)
+[src/domain/models/keyManagement/Curve.ts:2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/Curve.ts#L2)

@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / DescriptorItemFormat
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / DescriptorItemFormat
 
 # Enumeration: DescriptorItemFormat
 
@@ -10,6 +10,7 @@
 
 - [JWT\_VC](Domain.DescriptorItemFormat.md#jwt_vc)
 - [JWT\_VP](Domain.DescriptorItemFormat.md#jwt_vp)
+- [SDJWT](Domain.DescriptorItemFormat.md#sdjwt)
 
 ## Enumeration Members
 
@@ -19,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:19](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L19)
+[src/domain/models/VerifiableCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/VerifiableCredential.ts#L19)
 
 ___
 
@@ -29,4 +30,14 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:20](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/VerifiableCredential.ts#L20)
+[src/domain/models/VerifiableCredential.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/VerifiableCredential.ts#L20)
+
+___
+
+### SDJWT
+
+• **SDJWT** = ``"sdjwt"``
+
+#### Defined in
+
+[src/domain/models/VerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/VerifiableCredential.ts#L21)

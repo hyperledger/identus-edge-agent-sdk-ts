@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ExportableKey](../modules/Domain.ExportableKey.md) / PEM
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ExportableKey](../modules/Domain.ExportableKey.md) / PEM
 
 # Interface: PEM
 
@@ -24,4 +24,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:40](https://github.com/input-output-hk/atala-prism-wallet-sdk-ts/blob/1ffdae52df023bad4ba1a76cf6d76793dfc29b80/src/domain/models/keyManagement/exportable/ExportableKey.ts#L40)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:41](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/exportable/ExportableKey.ts#L41)
