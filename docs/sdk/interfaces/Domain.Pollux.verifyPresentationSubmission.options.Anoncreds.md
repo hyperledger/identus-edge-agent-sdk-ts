@@ -22,4 +22,4 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:136](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L136)
+[src/domain/buildingBlocks/Pollux.ts:136](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/buildingBlocks/Pollux.ts#L136)

@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:144](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L144)
+[src/domain/buildingBlocks/Pollux.ts:144](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/buildingBlocks/Pollux.ts#L144)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:145](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L145)
+[src/domain/buildingBlocks/Pollux.ts:145](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/buildingBlocks/Pollux.ts#L145)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/buildingBlocks/Pollux.ts#L146)
+[src/domain/buildingBlocks/Pollux.ts:146](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/buildingBlocks/Pollux.ts#L146)

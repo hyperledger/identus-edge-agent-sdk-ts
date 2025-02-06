@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/MessageAttachment.ts#L9)
+[src/domain/models/MessageAttachment.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/MessageAttachment.ts#L9)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/MessageAttachment.ts#L10)
+[src/domain/models/MessageAttachment.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/MessageAttachment.ts#L10)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/MessageAttachment.ts#L11)
+[src/domain/models/MessageAttachment.ts:11](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/f2306959fcea168d196649eedb6a342635865544/src/domain/models/MessageAttachment.ts#L11)
