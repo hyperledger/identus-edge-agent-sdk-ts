@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / MnemonicWordError
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / MnemonicWordError
 
 # Class: MnemonicWordError
 
@@ -53,7 +53,7 @@ thrown when at least one Mnemonic word does not match in the wordlist
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/errors/Apollo.ts#L10)
+[src/domain/models/errors/Apollo.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7eadfa3c5dda4c81079844b2a47014b3c9b03dac/src/domain/models/errors/Apollo.ts#L9)
 
 ## Properties
 

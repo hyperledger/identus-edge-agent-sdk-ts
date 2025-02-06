@@ -1,3 +1,10 @@
+## [6.5.1](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.5.0...v6.5.1) (2025-02-06)
+
+
+### Bug Fixes
+
+* adding backwards compatibility to manage key curve Secp256k1 and… ([#372](https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/372)) ([f328fbc](https://github.com/hyperledger/identus-edge-agent-sdk-ts/commit/f328fbc28a896d939d57a72d6eb2771cd38a1d1d))
+
 # [6.5.0](https://github.com/hyperledger/identus-edge-agent-sdk-ts/compare/v6.4.0...v6.5.0) (2025-02-03)
 
 

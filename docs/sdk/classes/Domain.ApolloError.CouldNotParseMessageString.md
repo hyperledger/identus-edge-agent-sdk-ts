@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / CouldNotParseMessageString
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / CouldNotParseMessageString
 
 # Class: CouldNotParseMessageString
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:26](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/errors/Apollo.ts#L26)
+[src/domain/models/errors/Apollo.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7eadfa3c5dda4c81079844b2a47014b3c9b03dac/src/domain/models/errors/Apollo.ts#L25)
 
 ## Properties
 

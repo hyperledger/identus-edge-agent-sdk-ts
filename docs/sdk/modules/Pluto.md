@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / Pluto
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / Pluto
 
 # Namespace: Pluto
 

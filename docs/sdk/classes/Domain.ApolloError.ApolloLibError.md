@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / ApolloLibError
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [ApolloError](../modules/Domain.ApolloError.md) / ApolloLibError
 
 # Class: ApolloLibError
 
@@ -53,7 +53,7 @@ thrown when Apollo library returns unexpected result
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:104](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/models/errors/Apollo.ts#L104)
+[src/domain/models/errors/Apollo.ts:103](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7eadfa3c5dda4c81079844b2a47014b3c9b03dac/src/domain/models/errors/Apollo.ts#L103)
 
 ## Properties
 

@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Pollux](Domain.Pollux.md) / [verifyPresentationSubmission](Domain.Pollux.verifyPresentationSubmission.md) / options
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Pollux](Domain.Pollux.md) / [verifyPresentationSubmission](Domain.Pollux.verifyPresentationSubmission.md) / options
 
 # Namespace: options
 

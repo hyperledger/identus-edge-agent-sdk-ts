@@ -1,4 +1,4 @@
-[@atala/prism-wallet-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Pollux](../modules/Domain.Pollux.md) / [createPresentationProof](../modules/Domain.Pollux.createPresentationProof.md) / [options](../modules/Domain.Pollux.createPresentationProof.options.md) / JWT
+[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Pollux](../modules/Domain.Pollux.md) / [createPresentationProof](../modules/Domain.Pollux.createPresentationProof.md) / [options](../modules/Domain.Pollux.createPresentationProof.options.md) / JWT
 
 # Interface: JWT
 
@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:157](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Pollux.ts#L157)
+[src/domain/buildingBlocks/Pollux.ts:157](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7eadfa3c5dda4c81079844b2a47014b3c9b03dac/src/domain/buildingBlocks/Pollux.ts#L157)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pollux.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/1a3abf65a2f89b4ecd0f28af600329805573d6fc/src/domain/buildingBlocks/Pollux.ts#L158)
+[src/domain/buildingBlocks/Pollux.ts:158](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/7eadfa3c5dda4c81079844b2a47014b3c9b03dac/src/domain/buildingBlocks/Pollux.ts#L158)

@@ -1,4 +1,4 @@
-@atala/prism-wallet-sdk / [Exports](modules.md)
+@hyperledger/identus-edge-agent-sdk / [Exports](modules.md)
 
 # Identus TypeScript SDK
 
