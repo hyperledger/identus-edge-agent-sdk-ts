@@ -61,6 +61,7 @@ const sidebars = {
         'sdk/classes/Apollo',
         'sdk/classes/Castor',
         'sdk/classes/Agent',
+        'pluto/README',
         'sdk/classes/Mercury',
         'sdk/classes/Pollux',
         {

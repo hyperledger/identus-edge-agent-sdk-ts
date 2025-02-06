@@ -53,7 +53,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Pollux.ts#L68)
+[src/domain/models/errors/Pollux.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/errors/Pollux.ts#L68)
 
 ## Properties
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/errors/Pollux.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Pollux.ts#L68)
+[src/domain/models/errors/Pollux.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/errors/Pollux.ts#L68)
 
 ___
 

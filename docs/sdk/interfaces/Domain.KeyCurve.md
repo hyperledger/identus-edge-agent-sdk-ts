@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyCurve.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/KeyCurve.ts#L4)
+[src/domain/models/keyManagement/KeyCurve.ts:4](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/keyManagement/KeyCurve.ts#L4)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyCurve.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/KeyCurve.ts#L5)
+[src/domain/models/keyManagement/KeyCurve.ts:5](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/keyManagement/KeyCurve.ts#L5)

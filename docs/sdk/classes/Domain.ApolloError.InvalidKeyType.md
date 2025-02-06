@@ -53,7 +53,7 @@ thrown when give Key Type is not supported
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:67](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/errors/Apollo.ts#L67)
+[src/domain/models/errors/Apollo.ts:67](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/errors/Apollo.ts#L67)
 
 ## Properties
 

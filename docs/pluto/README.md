@@ -1,6 +1,5 @@
 # Pluto
 
-
 Pluto is the SDK storage layer, responsible for the saving and retrieval of data within the SDK.
 As storage is a complex issue Pluto has been designed to try and enable maximum flexibility balanced with ease-of-use. Multiple levels of abstraction are provided so an implementation can be curated specifically to the use-case.
 In an effort to reduce the minimum amount of work required to get started with the SDK, implementations of the top-most abstractions are provided, but the underlying data layer is not and will require some work.
@@ -14,7 +13,7 @@ An SDK specific interface, detailing all the necessary storage functions for ope
 This interface defines the specific functions requried by the SDK, and while it's input and output are all Domain classes, it provides no opinion on how they are handled internally.
 This approach allows for maximum customisation, constrained only by the interface contract.
 
-The top level interface can be found at [SDK.Domain.Pluto](../domain/buildingBlocks/Pluto.ts) alongside our other top level interfaces.
+The top level interface can be found at [SDK.Domain.Pluto](../sdk/interfaces/Domain.Pluto-1.md) alongside our other top level interfaces.
 
 
 ```TS
@@ -43,7 +42,7 @@ A general purpose CRUD interface, with a pre-designed Table structure and signif
 Designed to be used with the existing Pluto implementation, where Pluto handles the logic and orchestration from Domain classes to Storable models, and the Store handles the persistence of those models.
 
 The Store revolves around a storable object, which is an arbitrary object with a `uuid` property that uniquely identifies the object. 
-The interface can be found at [SDK.Pluto.Store](./Pluto.ts)
+The interface can be found at [SDK.Pluto.Store](../sdk/interfaces/Pluto.Store.md)
 
 ```TS
   import SDK from "@hyperledger/identus-edge-agent-sdk";
@@ -74,7 +73,7 @@ The interface can be found at [SDK.Pluto.Store](./Pluto.ts)
 ## RxDB storage
 
 An implementation of the [RxStorage](https://rxdb.info/rx-storage.html) interface, allowing the choice and customisation of data layer using RxDB implementations.
-The SDK exports an [implementation](./rxdb/Store.ts) of the Store interface using RxDB, which only requires the storage, name and password to run.
+The SDK exports an [implementation](../sdk/classes/Store.md) of the Store interface using RxDB, which only requires the storage, name and password to run.
 
 > Note: the composed storage requires encryption capabilities.
 
@@ -100,3 +99,12 @@ The SDK exports an [implementation](./rxdb/Store.ts) of the Store interface usin
 
 > Read more about RxStorage in the RxDB docs https://rxdb.info/rx-storage.html
 
+## Implementing storage for the SDK
+Pluto, the SDK storage layer, is not a complete solution and requires some work. To make this as simple as possible, there are multiple options of different complexity provided. These options are discussed in more detail in the Pluto module. 
+
+> [!WARNING]  
+> Provided demo implementations are intentionally oversimplified and **should not** be used in production.
+
+
+### Community implementations:
+- [atala-community-projects/pluto-encrypted](https://github.com/atala-community-projects/pluto-encrypted): InMemory, IndexDB, LevelDB, as well as a test-suite to help you build your own.

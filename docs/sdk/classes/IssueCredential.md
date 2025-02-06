@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L15)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L15)
 
 ## Properties
 
@@ -59,7 +59,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L17)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L17)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L16)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L16)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L18)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L18)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L21)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L21)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L20)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L20)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L19)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L19)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L13)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:13](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L13)
 
 ## Methods
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L37)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L37)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:24](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L24)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:24](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L24)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L88)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L88)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L50)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L50)
 
 ___
 
@@ -216,4 +216,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/IssueCredential.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L72)
+[src/edge-agent/protocols/issueCredential/IssueCredential.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/IssueCredential.ts#L72)

@@ -78,13 +78,3 @@ cd demos/next
 npm i
 npm run dev
 ```
-
-### Implementing storage for the SDK
-Pluto, the SDK storage layer, is not a complete solution and requires some work. To make this as simple as possible, there are multiple options of different complexity provided. These options are discussed in more detail in the Pluto module. 
-[Read more here.](./src/pluto/README.md)
-
-> [!WARNING]  
-> Provided demo implementations are intentionally oversimplified and **should not** be used in production.
-
-#### Example community implementations:
-- [atala-community-projects/pluto-encrypted](https://github.com/atala-community-projects/pluto-encrypted): InMemory, IndexDB, LevelDB, as well as a test-suite to help you build your own.

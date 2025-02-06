@@ -32,7 +32,7 @@ create a PEM from a Key
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/PEM.ts:41](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/exportable/PEM.ts#L41)
+[src/domain/models/keyManagement/exportable/PEM.ts:41](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/keyManagement/exportable/PEM.ts#L41)
 
 ___
 
@@ -55,4 +55,4 @@ create a Uint8Array from a PEM
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/PEM.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/8455e548651bea11f474591a89d22007cfe2962c/src/domain/models/keyManagement/exportable/PEM.ts#L17)
+[src/domain/models/keyManagement/exportable/PEM.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/keyManagement/exportable/PEM.ts#L17)
