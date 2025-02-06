@@ -1,3 +1,5 @@
+const packageJson = require("./package.json");
+
 module.exports = {
     "$schema": "https://typedoc.org/schema.json",
     "entryPoints": [
@@ -5,7 +7,7 @@ module.exports = {
     ],
     "out": "./docs/sdk",
     "tsconfig": "./tsconfig.json",
-    "name": "@atala/prism-wallet-sdk",
+    "name": packageJson.name,
     "useTsLinkResolution": true,
     "hideGenerator": true,
     "entryPointStrategy": "resolve",

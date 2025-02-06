@@ -392,17 +392,23 @@ export default class Castor implements CastorInterface {
    * ```ts
    * const message = "data to sign";
    * const messageBytes = new TextEncoder().encode(message);
-   * const signatureSecp256K1 = apollo.signStringMessage(keyPairSecp256K1.privateKey, message);
-   *
-   * const did = castor.parseDID("did:prism:123456");
-   * const challenge = messageBytes
-   * const signature = signatureSecp256K1.value;
-   *
-   * const isValid = castor.verifySignature(
-   *     castor.parseDID("did:prism:123456"),
-   *     challenge, // Uint8Array
-   *     signature // Uint8Array
-   * );
+   * const {mnemonics, seed} = apollo.createRandomSeed();
+   * const privateKey = apollo.createPublicKey({
+   *   type: KeyTypes.EC,
+   *   curve: Curve.SECP256K1,
+   *   seed: Buffer.from(seed.value).toString("hex"),
+   *   derivationPath: "m/0'/0'/0'"
+   * });
+   * if (privateKey.isSignable()) {
+   *   const signature = privateKey.sign(message);
+   *   const did = castor.parseDID("did:prism:123456");
+   *   const challenge = messageBytes
+   *   const isValid = castor.verifySignature(
+   *       castor.parseDID("did:prism:123456"),
+   *       challenge, // Uint8Array
+   *       signature // Uint8Array
+   *   );
+   * }
    * ```
    *
    * @async
