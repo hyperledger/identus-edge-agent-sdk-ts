@@ -19,7 +19,7 @@ export class ForwardMessage {
   makeMessage(): Message {
     const body = JSON.stringify(this.body);
     const attachment = new AttachmentDescriptor(
-      { data: this.encryptedMessage },
+      { json: this.encryptedMessage },
       "application/json"
     );
     return new Message(body, this.id, ForwardMessage.type, this.from, this.to, [

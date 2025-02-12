@@ -1,5 +1,6 @@
 import { describe, it, expect, test, beforeEach, afterEach } from 'vitest';
 import { Message } from "../../src/domain";
+import { UnsupportedAttachmentType } from '../../src/domain/models/errors/Agent';
 
 describe("Message", () => {
   describe("fromJson", () => {
@@ -9,6 +10,52 @@ describe("Message", () => {
 
       expect(result).to.be.an.instanceOf(Message);
       expect(result.extraHeaders).to.be.an("object");
+    });
+
+    test("attachments - doesnt match - not added", () => {
+      const dataJson = {
+        body: { prop: 1 },
+        piuri: "https://didcomm.org/issue-credential/3.0/offer-credential",
+        attachments: [{
+          data: {
+            notmatch: { test: 123 }
+          },
+        }],
+      };
+      const sut = () => Message.fromJson(dataJson);
+
+      expect(sut).toThrow(UnsupportedAttachmentType);
+    });
+
+    test("attachments - matches .json payload", () => {
+      const dataJson = {
+        body: { prop: 1 },
+        piuri: "https://didcomm.org/issue-credential/3.0/offer-credential",
+        attachments: [{
+          data: {
+            json: { test: 123 }
+          },
+        }],
+      };
+      const result = Message.fromJson(dataJson);
+
+      expect(result.attachments).toHaveLength(1);
+    });
+
+    // for backwards compatibility with Pluto stored messages
+    test("attachments - matches .data payload", () => {
+      const dataJson = {
+        body: { prop: 1 },
+        piuri: "https://didcomm.org/issue-credential/3.0/offer-credential",
+        attachments: [{
+          data: {
+            data: { test: 123 }
+          },
+        }],
+      };
+      const result = Message.fromJson(dataJson);
+
+      expect(result.attachments).toHaveLength(1);
     });
   });
 });
