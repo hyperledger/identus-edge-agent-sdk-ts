@@ -2,12 +2,20 @@ import { uuid } from "@stablelib/uuid";
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
-import { CredentialFormat } from "./CredentialFormat";
-import { RequestCredential } from "./RequestCredential";
 import { base64url } from "multiformats/bases/base64";
-import { IssueCredentialBody } from "../types";
 import { isNil } from "../../../utils";
-import { parseCredentialAttachments, parseIssueCredentialMessage } from "../../helpers/ProtocolHelpers";
+
+/**
+ * Specification:
+ * https://github.com/decentralized-identity/waci-didcomm/tree/main/issue_credential#issue-credential
+ */
+
+export interface IssueCredentialBody {
+  // optional field that provides human readable information about the issued credential
+  comment?: string;
+  // optional field that provides an identifier used to manage credential replacement
+  replacement_id?: string;
+}
 
 export class IssueCredential {
   public static type = ProtocolType.DidcommIssueCredential;
@@ -47,75 +55,24 @@ export class IssueCredential {
     }, initialValue);
   }
 
-  static fromMessage(fromMessage: Message): IssueCredential {
+  static fromMessage(msg: Message): IssueCredential {
     if (
-      fromMessage.piuri !== ProtocolType.DidcommIssueCredential ||
-      isNil(fromMessage.from) ||
-      isNil(fromMessage.to)
+      msg.piuri !== ProtocolType.DidcommIssueCredential
+      || isNil(msg.from)
+      || isNil(msg.to)
     ) {
       throw new AgentError.InvalidIssueCredentialMessageError(
         "Invalid issue credential message error."
       );
     }
-    const issueCredentialBody = parseIssueCredentialMessage(fromMessage);
 
     return new IssueCredential(
-      issueCredentialBody,
-      fromMessage.attachments,
-      fromMessage.from,
-      fromMessage.to,
-      fromMessage.thid,
-      fromMessage.id
-    );
-  }
-
-  static makeIssueFromRequestCredential(msg: Message): IssueCredential {
-    const request = RequestCredential.fromMessage(msg);
-    return new IssueCredential(
-      createIssueCredentialBody(
-        request.body.formats,
-        request.body.goalCode,
-        request.body.comment
-      ),
-      request.attachments,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      request.to!,
-      request.from,
+      msg.body,
+      msg.attachments,
+      msg.from,
+      msg.to,
+      msg.thid,
       msg.id
     );
   }
-
-  static build<T>(
-    fromDID: DID,
-    toDID: DID,
-    thid?: string,
-    credentials: Map<string, T> = new Map()
-  ): IssueCredential {
-    const { formats, attachments } = parseCredentialAttachments(credentials);
-    const issueCredentialBody = createIssueCredentialBody(formats);
-
-    return new IssueCredential(
-      issueCredentialBody,
-      attachments,
-      fromDID,
-      toDID,
-      thid
-    );
-  }
-}
-
-export function createIssueCredentialBody(
-  formats: CredentialFormat[],
-  goalCode?: string,
-  comment?: string,
-  replacementId?: string,
-  moreAvailable?: string
-) {
-  return {
-    formats,
-    goalCode,
-    comment,
-    replacementId,
-    moreAvailable,
-  };
 }

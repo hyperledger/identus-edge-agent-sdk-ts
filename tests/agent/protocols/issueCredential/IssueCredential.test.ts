@@ -1,120 +1,80 @@
-import { vi, assert, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
-import { Message } from "../../../../src/domain";
-import { AgentError } from "../../../../src/domain/models/Errors";
-import {
-  createIssueCredentialBody,
-  IssueCredential,
-} from "../../../../src/edge-agent/protocols/issueCredential/IssueCredential";
-import { RequestCredential } from "../../../../src/edge-agent/protocols/issueCredential/RequestCredential";
+import { describe, expect, test } from 'vitest';
+import { AttachmentDescriptor, Message } from "../../../../src/domain";
+import { IssueCredential } from "../../../../src/edge-agent/protocols/issueCredential/IssueCredential";
 import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
-import { DIDTest } from "../../helpers/DID";
-import * as Messages from "../../../fixtures/messages";
+import * as Fixtures from "../../../fixtures";
 
 describe("IssueCredential", () => {
-  it("Should create a valid IssueCredential when valid IssueMessage is provided", () => {
-    const fromDID = DIDTest.fromIndex(0);
-    const toDID = DIDTest.fromIndex(1);
-    const validIssueCredential = new IssueCredential(
-      createIssueCredentialBody([
-        {
-          attach_id: "test1",
-          format: "test",
-        },
-      ]),
-      [],
-      fromDID,
-      toDID,
-      "1"
+  test("Should create a valid IssueCredential from valid params", () => {
+    const sut = new IssueCredential({}, [], Fixtures.DIDs.peerDID1, Fixtures.DIDs.peerDID2);
+
+    expect(sut).toBeInstanceOf(IssueCredential);
+  });
+
+  test("Should create IssueCredential with attachments", () => {
+    const json = JSON.stringify({
+      options: {
+        challenge: "fedac0c2-3250-4fb1-bfcb-b5e904058e1f",
+        domain: "domain"
+      }
+    });
+    const id = "321905d1-5f01-42b0-b0ba-39b09645eeaa";
+    const format = "JWT";
+    const attached = new AttachmentDescriptor(
+      { json },
+      undefined,
+      id,
+      undefined,
+      format
     );
-    const issueMessage = validIssueCredential.makeMessage();
-    const testIssueCredential = IssueCredential.fromMessage(issueMessage);
-    expect(validIssueCredential).to.deep.equal(testIssueCredential);
+
+    const sut = new IssueCredential({}, [attached], Fixtures.DIDs.peerDID1, Fixtures.DIDs.peerDID2);
+
+    expect(sut).toBeInstanceOf(IssueCredential);
+    expect(sut.attachments).toHaveLength(1);
+    expect(sut.attachments[0].id).toEqual(id);
+    expect(sut.attachments[0].data).toEqual({ json });
+    expect(sut.attachments[0].format).toEqual(format);
+  });
+
+  test("Should create IssueCredential with valid optional params", () => {
+    const body = { comment: "optional-comment", replacement_id: "optional" };
+    const from = Fixtures.DIDs.peerDID1;
+    const to = Fixtures.DIDs.peerDID2;
+    const thid = "test-thid";
+    const id = "test-id";
+    const sut = new IssueCredential(body, [], from, to, thid, id);
+
+    expect(sut).toBeInstanceOf(IssueCredential);
+    expect(sut.attachments).toHaveLength(0);
+    expect(sut.body).toEqual(body);
+    expect(sut.from).toBe(from);
+    expect(sut.to).toBe(to);
+    expect(sut.thid).toBe(thid);
+    expect(sut.id).toBe(id);
   });
 
   test("IssueCredential from an actual PrismAgent Message", () => {
-    const sut = IssueCredential.fromMessage(Messages.IssueCredential);
+    const sut = IssueCredential.fromMessage(Fixtures.Messages.IssueCredential);
 
     expect(sut).to.be.instanceOf(IssueCredential);
-    expect(sut.attachments).to.eq(Messages.IssueCredential.attachments);
+    expect(sut.attachments).to.eq(Fixtures.Messages.IssueCredential.attachments);
     // expect(sut.body).to.eq(Messages.IssueCredential.body);
-    expect(sut.from).to.eq(Messages.IssueCredential.from);
-    expect(sut.id).to.eq(Messages.IssueCredential.id);
-    expect(sut.thid).to.eq(Messages.IssueCredential.thid);
-    expect(sut.to).to.eq(Messages.IssueCredential.to);
+    expect(sut.from).to.eq(Fixtures.Messages.IssueCredential.from);
+    expect(sut.id).to.eq(Fixtures.Messages.IssueCredential.id);
+    expect(sut.thid).to.eq(Fixtures.Messages.IssueCredential.thid);
+    expect(sut.to).to.eq(Fixtures.Messages.IssueCredential.to);
   });
 
-  it("Should throw an error when initializing an issue credential from an invalid message", () => {
-    const fromDID = DIDTest.fromIndex(0);
-    const toDID = DIDTest.fromIndex(1);
-    const invalidIssueCredential = new Message(
-      "{}",
-      "any id",
-      "invalidType",
-      fromDID,
-      toDID
-    );
-    const invalidIssueCredential2 = new Message(
-      `{ "formats":[{"wrong": true}]}`,
-      "any id",
-      ProtocolType.DidcommIssueCredential,
-      fromDID,
-      toDID
-    );
-    assert.throws(
-      () => {
-        IssueCredential.fromMessage(invalidIssueCredential);
-      },
-      AgentError.InvalidIssueCredentialMessageError,
-      "Invalid issue credential message error."
-    );
-    assert.throws(
-      () => {
-        IssueCredential.fromMessage(invalidIssueCredential2);
-      },
-      Error,
-      "Invalid credential formats"
-    );
-  });
-  it("Should create an IssueCredential when a valid RequestMessage is provided", () => {
-    const fromDID = DIDTest.fromIndex(0);
-    const toDID = DIDTest.fromIndex(1);
-    const validRequestCredential = new RequestCredential(
-      createIssueCredentialBody([
-        {
-          attach_id: "test1",
-          format: "test",
-        },
-      ]),
-      [],
-      fromDID,
-      toDID,
-      "1"
-    );
-    const requestMessage = validRequestCredential.makeMessage();
-    const testIssueCredential =
-      IssueCredential.makeIssueFromRequestCredential(requestMessage);
+  describe("fromMessage", () => {
+    test("piuri invalid - throws", () => {
+      const piuri = ProtocolType.DidcommBasicMessage;
+      const from = Fixtures.DIDs.peerDID1;
+      const msg = new Message({}, "id", piuri, from);
 
-    expect(validRequestCredential.from.toString()).to.equal(
-      testIssueCredential.to.toString()
-    );
-    expect(validRequestCredential.to?.toString()).to.equal(
-      testIssueCredential.from?.toString()
-    );
-    expect(validRequestCredential.attachments).to.deep.equal(
-      testIssueCredential.attachments
-    );
+      const sut = () => IssueCredential.fromMessage(msg);
 
-    expect(validRequestCredential.id).to.equal(testIssueCredential.thid);
-    expect(validRequestCredential.body.goalCode).to.equal(
-      testIssueCredential.body.goalCode
-    );
-
-    expect(validRequestCredential.body.comment).to.equal(
-      testIssueCredential.body.comment
-    );
-
-    expect(validRequestCredential.body.formats).to.deep.equal(
-      testIssueCredential.body.formats
-    );
+      expect(sut).toThrow("Invalid issue credential message error.");
+    });
   });
 });

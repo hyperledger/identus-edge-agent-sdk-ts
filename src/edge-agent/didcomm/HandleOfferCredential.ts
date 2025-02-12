@@ -50,7 +50,7 @@ export class HandleOfferCredential extends Task<RequestCredential, Args> {
         attach_id: response.id,
         format: `${response.format}`,
       }],
-      goalCode: offer.body.goalCode,
+      goal_code: offer.body.goal_code,
       comment: offer.body.comment,
     },
       [response],

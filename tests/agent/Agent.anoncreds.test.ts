@@ -97,15 +97,17 @@ describe("Agent Tests", () => {
     });
 
     describe("prepareRequestCredentialWithIssuer", () => {
-      const credentialPreview: CredentialPreview = {
+      const credential_preview: CredentialPreview = {
         type: ProtocolType.DidcommCredentialPreview,
-        attributes: [
-          {
-            name: "name",
-            value: "javi",
-            mimeType: "text",
-          },
-        ],
+        body: {
+          attributes: [
+            {
+              name: "name",
+              value: "javi",
+              media_type: "text",
+            },
+          ],
+        }
       };
       const mypeerDID = new DID(
         "did",
@@ -117,27 +119,21 @@ describe("Agent Tests", () => {
       );
 
       const createOffer = (credType: CredentialType) => {
-        const credentialMap = new Map();
+        let attach;
         if (credType === CredentialType.JWT) {
-          credentialMap.set(
-            CredentialType.JWT,
-            Fixtures.Credentials.JWT.credentialPayload
-          );
+          attach = AttachmentDescriptor.build(Fixtures.Credentials.JWT.credentialPayload);
         } else if (credType === CredentialType.AnonCreds) {
-          credentialMap.set(credType, Fixtures.Credentials.Anoncreds.credentialOffer);
+          attach = AttachmentDescriptor.build(Fixtures.Credentials.Anoncreds.credentialOffer);
         } else if (credType === CredentialType.SDJWT) {
-          credentialMap.set(
-            CredentialType.SDJWT,
-            Fixtures.Credentials.SDJWT.credentialPayloadEncoded
-          );
+          attach = AttachmentDescriptor.build(Fixtures.Credentials.SDJWT.credentialPayloadEncoded);
         }
 
-        return OfferCredential.build(
-          credentialPreview,
+        return new OfferCredential(
+          { credential_preview },
+          [attach],
           mypeerDID,
           validPeerDID,
           "threadID123456",
-          credentialMap
         );
       };
 
@@ -189,7 +185,7 @@ describe("Agent Tests", () => {
 
       it("no attachment - throws", () => {
         const issueCredential = new IssueCredential(
-          { formats: [] },
+          {},
           [],
           new DID("did", "prism", "from"),
           new DID("did", "prism", "to")
@@ -205,7 +201,7 @@ describe("Agent Tests", () => {
         vi.spyOn(pluto, "getCredentialMetadata").mockResolvedValue(null);
 
         const issueCredential = new IssueCredential(
-          { formats: [{ attach_id: "attach_id", format: CredentialType.AnonCreds }] },
+          {},
           [new AttachmentDescriptor({ base64: base64Data }, "attach_1", undefined, undefined, "anoncreds/credential@v1.0")],
           new DID("did", "prism", "from"),
           new DID("did", "prism", "to"),
@@ -231,7 +227,7 @@ describe("Agent Tests", () => {
         const base64Data = base64url.baseEncode(encoded);
 
         const issueCredential = new IssueCredential(
-          { formats: [{ attach_id: "attach_id", format: CredentialType.AnonCreds }] },
+          {},
           [new AttachmentDescriptor({ base64: base64Data }, "attach_1", undefined, undefined, "anoncreds/credential@v1.0")],
           new DID("did", "prism", "from"),
           new DID("did", "prism", "to"),
