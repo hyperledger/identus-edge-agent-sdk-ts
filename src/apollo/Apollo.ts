@@ -15,8 +15,6 @@ import {
   SeedWords,
   StorableKey,
   KeyRestoration,
-  JWK,
-  KeyPair,
 } from "../domain";
 
 import { Ed25519PrivateKey } from "./utils/Ed25519PrivateKey";
@@ -28,13 +26,9 @@ import { Secp256k1PublicKey } from "./utils/Secp256k1PublicKey";
 import { Ed25519PublicKey } from "./utils/Ed25519PublicKey";
 import { X25519PublicKey } from "./utils/X25519PublicKey";
 
-import { expect, isEmpty, notEmptyString } from "../utils";
+import { isEmpty, notEmptyString } from "../utils";
 import ApolloPKG from "@hyperledger/identus-apollo";
 import { PrismDerivationPath } from "../domain/models/derivation/schemas/PrismDerivation";
-import { isECJWK, isOKPJWK } from "./utils/jwk";
-import { base64url } from "multiformats/bases/base64";
-import { Secp256k1KeyPair } from "./utils/Secp256k1KeyPair";
-
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
@@ -119,126 +113,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   static Secp256k1PrivateKey = Secp256k1PrivateKey;
   static Ed25519PrivateKey = Ed25519PrivateKey;
   static X25519PrivateKey = X25519PrivateKey;
-
-  fromJWKEC(jwk: JWK.EC): KeyPair | PrivateKey | PublicKey {
-    const kty = expect(jwk.kty);
-    const crv = expect(jwk.crv);
-
-    if (jwk.x !== undefined) {
-      if (crv === Curve.SECP256K1) {
-        if (jwk.y === undefined) {
-          throw new Error("Missing y coordinate");
-        }
-        let pk: Secp256k1PublicKey;
-        let sk: Secp256k1PrivateKey;
-        pk = this.createPublicKey({
-          [KeyProperties.curve]: Curve.SECP256K1,
-          [KeyProperties.type]: KeyTypes.EC,
-          [KeyProperties.curvePointX]: base64url.baseDecode(jwk.x),
-          [KeyProperties.curvePointY]: base64url.baseDecode(jwk.y)
-        }) as Secp256k1PublicKey;
-        if (jwk.d !== undefined) {
-          sk = this.createPrivateKey({
-            [KeyProperties.curve]: Curve.SECP256K1,
-            [KeyProperties.type]: KeyTypes.EC,
-            [KeyProperties.rawKey]: base64url.baseDecode(jwk.d)
-          }) as Secp256k1PrivateKey;
-          return new Secp256k1KeyPair(sk, pk);
-        }
-        return pk;
-      }
-      throw new Error(`Invalid KeyType ${kty}, Curve ${crv}, only secp256k1 can restore from x and ycoordinates.`);
-    }
-
-    if (jwk.d !== undefined) {
-      if (crv !== Curve.SECP256K1 && crv !== Curve.ED25519 && crv !== Curve.X25519) {
-        throw new Error(`Invalid KeyType ${kty}, Curve ${crv}, only secp256k1, ed25519 and x25519 can restore from d private key.`);
-      }
-      return this.createPrivateKey({
-        [KeyProperties.curve]: Curve.SECP256K1,
-        [KeyProperties.type]: KeyTypes.EC,
-        [KeyProperties.rawKey]: base64url.baseDecode(jwk.d)
-      })
-    }
-
-    throw new Error("Invalid JWK, either x or d must be present when using key type EC.");
-  }
-
-  fromJWKOKP(jwk: JWK.OKP): KeyPair | PrivateKey | PublicKey {
-    const kty = expect(jwk.kty);
-    const crv = expect(jwk.crv);
-    const x = expect(jwk.d);
-
-    if (crv === Curve.SECP256K1) {
-      const pk = this.createPublicKey({
-        [KeyProperties.curve]: Curve.SECP256K1,
-        [KeyProperties.type]: KeyTypes.OKP,
-        [KeyProperties.rawKey]: base64url.baseDecode(x)
-      }) as Secp256k1PublicKey;
-      if (jwk.d !== undefined) {
-        const sk = this.createPrivateKey({
-          [KeyProperties.curve]: Curve.SECP256K1,
-          [KeyProperties.type]: KeyTypes.OKP,
-          [KeyProperties.rawKey]: base64url.baseDecode(jwk.d)
-        }) as Secp256k1PrivateKey;
-        return new Secp256k1KeyPair(sk, pk);
-      }
-      return pk;
-    }
-
-    if (crv === Curve.ED25519) {
-      const pk = this.createPublicKey({
-        [KeyProperties.curve]: Curve.ED25519,
-        [KeyProperties.type]: KeyTypes.OKP,
-        [KeyProperties.rawKey]: base64url.baseDecode(x)
-      }) as Ed25519PublicKey;
-      if (jwk.d !== undefined) {
-        const sk = this.createPrivateKey({
-          [KeyProperties.curve]: Curve.ED25519,
-          [KeyProperties.type]: KeyTypes.OKP,
-          [KeyProperties.rawKey]: base64url.baseDecode(jwk.d)
-        }) as Ed25519PrivateKey;
-        return new Ed25519KeyPair(sk, pk);
-      }
-      return pk;
-    }
-
-    if (crv === Curve.X25519) {
-      const pk = this.createPublicKey({
-        [KeyProperties.curve]: Curve.X25519,
-        [KeyProperties.type]: KeyTypes.OKP,
-        [KeyProperties.rawKey]: base64url.baseDecode(x)
-      }) as X25519PublicKey;
-      if (jwk.d !== undefined) {
-        const sk = this.createPrivateKey({
-          [KeyProperties.curve]: Curve.X25519,
-          [KeyProperties.type]: KeyTypes.OKP,
-          [KeyProperties.rawKey]: base64url.baseDecode(jwk.d)
-        }) as X25519PrivateKey;
-        return new X25519KeyPair(sk, pk);
-      }
-      return pk;
-    }
-
-    throw new Error(`Invalid KeyType ${kty}, Curve ${crv}, only secp256k1, ed25519 and x25519 can restore from d private key.`);
-  }
-
-  fromJWK(jwk: JWK): KeyPair | PrivateKey | PublicKey {
-    const kty = expect(jwk.kty);
-    const isEC = isECJWK(jwk);
-    const isOKP = isOKPJWK(jwk);
-
-    if (isEC) {
-      return this.fromJWKEC(jwk);
-    }
-
-    if (isOKP) {
-      return this.fromJWKOKP(jwk);
-    }
-
-    throw new Error(`Invalid KeyType ${kty}, only EC and OKP are supported.`);
-  }
-
 
   /**
    * Creates a random set of mnemonic phrases that can be used as a seed for generating a private key.
