@@ -1,4 +1,4 @@
-import { PrivateKey, PublicKey, Seed, SeedWords } from "../models";
+import { JWK, KeyPair, PrivateKey, PublicKey, Seed, SeedWords } from "../models";
 
 import { KeyProperties } from "../models/KeyProperties";
 import { MnemonicWordList } from "../models/WordList";
@@ -13,4 +13,5 @@ export interface Apollo {
   createPublicKey(parameters: {
     [name: KeyProperties | string]: any;
   }): PublicKey;
+  fromJWK(jwk: JWK): KeyPair | PublicKey;
 }
