@@ -1,5 +1,5 @@
 import { Ability, Discardable, Initialisable, Interaction, Question, QuestionAdapter } from "@serenity-js/core"
-import type SDK from "@hyperledger/identus-edge-agent-sdk"
+import SDK from "@hyperledger/identus-edge-agent-sdk"
 import axios from "axios"
 import { axiosInstance, CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import InMemoryStore from "../configuration/inmemory"
@@ -173,7 +173,8 @@ export class WalletSdk extends Ability implements Initialisable, Discardable {
       pluto,
       mediatorDID,
       castor
-    })
+    });
+    this.sdk.plugins.register(SDK.Plugins.Anoncreds);
 
     this.sdk.addListener(
       ListenerKey.MESSAGE, async (messages: SDK.Domain.Message[]) => {

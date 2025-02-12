@@ -1,62 +1,66 @@
 import Pako from "pako";
+import jweWasm from "jwe-wasm/jwe_rust_bg.wasm";
 import * as Domain from "../domain";
 import Agent from "./Agent";
 import { Version } from "../domain/backup";
-import { isObject, validateSafe } from "../utils";
+import { isNil, isObject, notNil, validateSafe } from "../utils";
 
 
 /**
  * define Agent requirements for Backup
  */
-type BackupAgent = Pick<Agent, "apollo" | "pluto" | "pollux" | "seed">;
+type BackupAgent = Pick<Agent, "apollo" | "pluto" | "seed">;
 type BackupExclude = "messages" | "mediators" | "link_secret";
-
-type MasterKey = Domain.PrivateKey & Domain.ExportableKey.Common & Domain.ExportableKey.JWK & Domain.ExportableKey.PEM
+type MasterKey = Domain.PrivateKey & Domain.ExportableKey.Common & Domain.ExportableKey.JWK & Domain.ExportableKey.PEM;
 
 export type BackupOptions = {
-  version?: Version
-  key?: MasterKey
-  compress?: boolean
-  excludes?: BackupExclude[]
-}
+  version?: Version;
+  key?: MasterKey;
+  compress?: boolean;
+  excludes?: BackupExclude[];
+};
 
 export class AgentBackup {
+  private _jwe: typeof import("jwe-wasm") | undefined;
+
   constructor(
     public readonly Agent: BackupAgent
   ) {}
 
   /**
- * Creates a JWE (JSON Web Encryption) containing the backup data stored in Pluto.
- * The data can optionally be encrypted using a custom master key, compressed, 
- * and filtered to exclude specified fields.
- * 
- * @param {BackupOptions} [options] - Optional settings for the backup.
- * @param {Version} [options.version] - Specifies the version of the backup data.
- * @param {MasterKey} [options.key] - Custom master key used for encrypting the backup.
- * @param {boolean} [options.compress] - If true, compresses the JWE using DEFLATE.
- * @param {BackupExclude[]} [options.excludes] - Keys to exclude from the backup data 
- * (e.g., "messages", "mediators", "link_secret"). Arrays are cleared, and strings are set to empty strings.
- * 
- * @returns {Promise<string>} - A promise that resolves to the JWE string.
- * 
- * @see restore - Method to restore data from a JWE string.
- */
+   * Creates a JWE (JSON Web Encryption) containing the backup data stored in Pluto.
+   * The data can optionally be encrypted using a custom master key, compressed, 
+   * and filtered to exclude specified fields.
+   * 
+   * @param {BackupOptions} [options] - Optional settings for the backup.
+   * @param {Version} [options.version] - Specifies the version of the backup data.
+   * @param {MasterKey} [options.key] - Custom master key used for encrypting the backup.
+   * @param {boolean} [options.compress] - If true, compresses the JWE using DEFLATE.
+   * @param {BackupExclude[]} [options.excludes] - Keys to exclude from the backup data 
+   * (e.g., "messages", "mediators", "link_secret"). Arrays are cleared, and strings are set to empty strings.
+   * 
+   * @returns {Promise<string>} - A promise that resolves to the JWE string.
+   * 
+   * @see restore - Method to restore data from a JWE string.
+   */
   async createJWE(options?: BackupOptions): Promise<string> {
-    await this.Agent.pollux.start();
-    
     let backup = await this.Agent.pluto.backup(options?.version);
+
     if (options?.excludes && Array.isArray(options.excludes)) {
       backup = this.applyExclusions(backup, options.excludes);
     }
+
     const backupStr = options?.compress ? this.compress(JSON.stringify(backup)) : JSON.stringify(backup);
-    const masterSk = options?.key ?? await this.masterSk();
+    const masterSk = await this.masterSk(options);
     const jwk = masterSk.to.JWK();
-    
-    return this.Agent.pollux.jwe.JWE.encrypt(
+    const JWE = await this.getJWE();
+    const encrypted = JWE.encrypt(
       backupStr,
       JSON.stringify(jwk),
       'backup',
     );
+
+    return encrypted;
   }
 
   /**
@@ -74,11 +78,10 @@ export class AgentBackup {
    * @see createJWE - Method to create a JWE from the stored backup data.
    */
   async restore(jwe: string, options?: BackupOptions) {
-    await this.Agent.pollux.start();
-    const masterSk = options?.key ?? await this.masterSk();
-
+    const masterSk = await this.masterSk(options);
     const jwk = masterSk.to.JWK();
-    const decoded = this.Agent.pollux.jwe.JWE.decrypt(
+    const JWE = await this.getJWE();
+    const decoded = JWE.decrypt(
       jwe,
       'backup',
       JSON.stringify(jwk),
@@ -88,9 +91,9 @@ export class AgentBackup {
       jsonStr = this.decompress(new TextDecoder().decode(decoded));
     } else {
       jsonStr = Buffer.from(decoded).toString();
-    }    
-    const json = JSON.parse(jsonStr);    
-    const backup = this.parseBackupJson(json);    
+    }
+    const json = JSON.parse(jsonStr);
+    const backup = this.parseBackupJson(json);
     await this.Agent.pluto.restore(backup);
   }
 
@@ -120,7 +123,7 @@ export class AgentBackup {
  */
   private compress(json: unknown): string {
     // Strategy 1 is 
-    return Buffer.from(Pako.deflate(JSON.stringify(json), {level: 9, strategy: 1})).toString('base64');
+    return Buffer.from(Pako.deflate(JSON.stringify(json), { level: 9, strategy: 1 })).toString('base64');
   }
 
   /**
@@ -135,25 +138,33 @@ export class AgentBackup {
  */
   private decompress(data: string): string {
     const compressedData = Buffer.from(data, 'base64');
-    return JSON.parse(Pako.inflate(compressedData, {to: 'string'}));
+    return JSON.parse(Pako.inflate(compressedData, { to: 'string' }));
   }
 
   /**
    * create a JWK for the MasterKey (X25519)
    * @returns JWK
    */
-  private async masterSk() {
+  private async masterSk(options?: BackupOptions) {
+    const optKey = options?.key;
+    if (notNil(optKey)) {
+      return optKey;
+    }
+
     const masterKey = this.Agent.apollo.createPrivateKey({
       [Domain.KeyProperties.type]: Domain.KeyTypes.Curve25519,
       [Domain.KeyProperties.curve]: Domain.Curve.X25519,
       [Domain.KeyProperties.seed]: Buffer.from(this.Agent.seed.value).toString("hex"),
       [Domain.KeyProperties.derivationPath]: "m/0'/0'/0'"
     });
+
     if (!masterKey.isExportable()) {
       throw new Domain.AgentError.KeyNotExportableError();
     }
+
     return masterKey;
   }
+
   /**
  * Modifies the backup object by applying exclusions.
  * Sets excluded array values to empty arrays and string values to empty strings.
@@ -163,7 +174,7 @@ export class AgentBackup {
  * @returns {Domain.Backup.Schema} The modified backup object.
  */
   private applyExclusions(backup: Domain.Backup.Schema, excludes: BackupExclude[]): Domain.Backup.Schema {
-    const tmp = {...backup};
+    const tmp = { ...backup };
     for (const exclude of excludes) {
       switch (exclude) {
         case "messages":
@@ -176,5 +187,16 @@ export class AgentBackup {
       }
     }
     return tmp;
+  }
+
+  private async getJWE() {
+    if (isNil(this._jwe)) {
+      const module = await import("jwe-wasm");
+      const wasmInstance = module.initSync({ module: jweWasm });
+      await module.default(wasmInstance);
+      this._jwe = module;
+    }
+
+    return this._jwe.JWE;
   }
 }

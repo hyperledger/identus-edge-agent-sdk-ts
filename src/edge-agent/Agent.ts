@@ -1,7 +1,6 @@
 import * as Domain from "../domain";
 import Apollo from "../apollo";
 import Castor from "../castor";
-import Pollux from "../pollux";
 import { Startable } from "../domain/protocols/Startable";
 import { AgentBackup } from "./Agent.Backup";
 import { SignWithDID } from "./didFunctions/Sign";
@@ -9,6 +8,8 @@ import { CreatePrismDID } from "./didFunctions/CreatePrismDID";
 import { FetchApi } from "./helpers/FetchApi";
 import { Task } from "../utils/tasks";
 import { notNil } from "../utils";
+import { RevealCredentialFields } from "./helpers/RevealCredentialFields";
+import { RunProtocol } from "./helpers/RunProtocol";
 
 /**
  * Edge agent implementation
@@ -19,7 +20,6 @@ import { notNil } from "../utils";
  */
 export default class Agent extends Startable.Controller {
   public backup: AgentBackup;
-  public readonly pollux: Pollux;
 
   /**
    * Creates an instance of Agent.
@@ -39,7 +39,6 @@ export default class Agent extends Startable.Controller {
     public readonly api: Domain.Api = new FetchApi(),
   ) {
     super();
-    this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
   }
 
@@ -74,12 +73,9 @@ export default class Agent extends Startable.Controller {
 
   protected async _start() {
     await this.pluto.start();
-    await this.pollux.start();
   }
 
   protected async _stop() {
-    await this.pollux.stop();
-
     if (notNil(this.pluto.stop)) {
       await this.pluto.stop();
     }
@@ -94,20 +90,26 @@ export default class Agent extends Startable.Controller {
    * @returns {AttributeType}
    */
   async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    const task = new RevealCredentialFields({ credential, fields });
+    return this.runTask(task);
   }
 
-  isCredentialRevoked(credential: Domain.Credential) {
-    return this.pollux.isCredentialRevoked(credential);
+  async isCredentialRevoked(credential: Domain.Credential): Promise<boolean> {
+    const result = await this.runTask(new RunProtocol({
+      type: "revocation-check",
+      pid: "prism/jwt",
+      data: { credential }
+    }));
+
+    return result.data;
   }
 
   private runTask<T>(task: Task<T>) {
-    const ctx = new Task.Context({
+    const ctx = Task.Context.make({
       Api: this.api,
       Apollo: this.apollo,
       Castor: this.castor,
       Pluto: this.pluto,
-      Pollux: this.pollux,
       Seed: this.seed,
     });
 

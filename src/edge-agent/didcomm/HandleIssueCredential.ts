@@ -1,5 +1,7 @@
 import * as Domain from "../../domain";
+import { expect } from "../../utils";
 import { Task } from "../../utils/tasks";
+import { RunProtocol } from "../helpers/RunProtocol";
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { DIDCommContext } from "./Context";
 
@@ -14,44 +16,27 @@ interface Args {
 export class HandleIssueCredential extends Task<Domain.Credential, Args> {
   async run(ctx: DIDCommContext) {
     const { issueCredential } = this.args;
-    const message = issueCredential.makeMessage();
-    const credentialType = message.credentialFormat;
-    const attachment = message.attachments.at(0);
-
-    if (!attachment) {
-      throw new Error("No attachment");
-    }
-
-    if (!issueCredential.thid) {
-      throw new Error("No thid");
-    }
-
-    const parseOpts: Domain.CredentialIssueOptions = {
-      type: credentialType,
-    };
-
-    const payload = typeof attachment.payload === 'string' ? attachment.payload : JSON.stringify(attachment.payload);
-    const credData = Uint8Array.from(Buffer.from(payload));
-
-    if (credentialType === Domain.CredentialType.AnonCreds) {
-      const linkSecret = await ctx.Pluto.getLinkSecret();
-      parseOpts.linkSecret = linkSecret?.secret;
-
-      const credentialMetadata = await ctx.Pluto.getCredentialMetadata(
-        issueCredential.thid
-      );
-
-      if (!credentialMetadata || !credentialMetadata.isType(Domain.CredentialType.AnonCreds)) {
-        throw new Error("Invalid credential Metadata");
+    const attachment = expect(issueCredential.attachments.at(0), "Invalid attachment");
+    const format = expect(attachment.format, "Invalid attachment");
+    const result = await ctx.run(new RunProtocol({
+      type: "credential-issue",
+      pid: format,
+      // ?? flatten data and move thid to context
+      data: {
+        data: attachment.payload,
+        thid: issueCredential.thid
       }
+    }));
 
-      parseOpts.credentialMetadata = credentialMetadata.toJSON();
+    const credential = result.pid === "credential"
+      ? result.data
+      : null;
+
+    if (credential instanceof Domain.Credential) {
+      await ctx.Pluto.storeCredential(credential);
+      return credential;
     }
 
-    const credential = await ctx.Pollux.parseCredential(credData, parseOpts);
-
-    await ctx.Pluto.storeCredential(credential);
-
-    return credential;
+    throw new Error("invalid Credential issued");
   }
 }

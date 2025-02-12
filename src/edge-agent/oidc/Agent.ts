@@ -1,7 +1,6 @@
 import * as Domain from "../../domain";
 import Apollo from "../../apollo";
 import Castor from "../../castor";
-import Pollux from "../../pollux";
 import { OIDC } from "./types";
 import { AuthorizationRequest } from "./protocols/AuthorizationRequest";
 import { TokenResponse } from "./protocols/TokenResponse";
@@ -14,6 +13,11 @@ import * as DIDfns from "../didFunctions";
 import * as Tasks from "./tasks";
 import * as Errors from "./errors";
 import { JsonObj, expect, notNil } from "../../utils";
+import { RevealCredentialFields } from "../helpers/RevealCredentialFields";
+import { RunProtocol } from "../helpers/RunProtocol";
+import { PluginManager } from "../../plugins";
+import OEAPlugin from "../../plugins/internal/oea";
+import DIFPlugin from "../../plugins/internal/dif";
 
 /**
  * https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
@@ -30,7 +34,7 @@ class Connection {
 
 export class OIDCAgent extends Startable.Controller {
   private connections: Connection[] = [];
-  public readonly pollux: Pollux;
+  public readonly plugins: PluginManager;
 
   constructor(
     public readonly apollo: Domain.Apollo,
@@ -40,9 +44,11 @@ export class OIDCAgent extends Startable.Controller {
     public readonly api?: Domain.Api,
   ) {
     super();
-    this.pollux = new Pollux(apollo, castor);
     this.seed = seed ?? apollo.createRandomSeed().seed;
     this.api = api ?? new FetchApi();
+    this.plugins = new PluginManager();
+    this.plugins.register(DIFPlugin);
+    this.plugins.register(OEAPlugin);
   }
 
   /**
@@ -76,24 +82,20 @@ export class OIDCAgent extends Startable.Controller {
 
   protected async _start() {
     await this.pluto.start();
-    await this.pollux.start();
   }
 
   protected async _stop() {
-    await this.pollux.stop();
-
     if (notNil(this.pluto.stop)) {
       await this.pluto.stop();
     }
   }
 
   private runTask<T>(task: Task<T>): Promise<T> {
-    const ctx = new Task.Context({
+    const ctx = Task.Context.make({
       Api: this.api,
       Apollo: this.apollo,
       Castor: this.castor,
       Pluto: this.pluto,
-      Pollux: this.pollux,
       Seed: this.seed,
     });
 
@@ -105,8 +107,14 @@ export class OIDCAgent extends Startable.Controller {
    * @param credential 
    * @returns 
    */
-  isCredentialRevoked(credential: Domain.Credential) {
-    return this.pollux.isCredentialRevoked(credential);
+  async isCredentialRevoked(credential: Domain.Credential): Promise<boolean> {
+    const result = await this.runTask(new RunProtocol({
+      type: "revocation-check",
+      pid: "prism/jwt",
+      data: { credential }
+    }));
+
+    return result.data;
   }
 
   /**
@@ -118,7 +126,8 @@ export class OIDCAgent extends Startable.Controller {
    * @returns {AttributeType}
    */
   revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    const task = new RevealCredentialFields({ credential, fields });
+    return this.runTask(task);
   }
 
   /**

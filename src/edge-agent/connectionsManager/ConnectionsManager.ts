@@ -1,7 +1,4 @@
-import { DID, Message, MessageDirection, Pollux } from "../../domain";
-import { Castor } from "../../domain/buildingBlocks/Castor";
-import { Mercury } from "../../domain/buildingBlocks/Mercury";
-import { Pluto } from "../../domain/buildingBlocks/Pluto";
+import { DID, Message, MessageDirection } from "../../domain";
 import { DIDPair } from "../../domain/models/DIDPair";
 import { AgentError } from "../../domain/models/Errors";
 import { AgentMessageEvents } from "../Agent.MessageEvents";
@@ -9,7 +6,6 @@ import { CancellableTask } from "../helpers/Task";
 import {
   AgentMessageEvents as AgentMessageEventsClass,
   AgentOptions,
-  ConnectionsManager as ConnectionsManagerClass,
   ListenerKey,
   MediatorHandler,
 } from "../types";
@@ -17,7 +13,7 @@ import { ProtocolType } from "../protocols/ProtocolTypes";
 import { RevocationNotification } from "../protocols/revocation/RevocationNotfiication";
 import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { HandleIssueCredential } from "../didcomm/HandleIssueCredential";
-import { Task } from "../../utils/tasks";
+import DIDCommAgent from "../didcomm/Agent";
 
 
 /**
@@ -28,7 +24,7 @@ import { Task } from "../../utils/tasks";
  * @class ConnectionsManager
  * @typedef {ConnectionsManager}
  */
-export class ConnectionsManager implements ConnectionsManagerClass {
+export class ConnectionsManager {
   /**
    * An array with cancellable tasks, mainly used to store one or multiple didcomm
    * connections in storage implementation at the same time. All of them can be cancelled
@@ -57,6 +53,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    */
   public events: AgentMessageEventsClass;
 
+  public pairings: DIDPair[] = [];
+
   /**
    * Creates an instance of ConnectionsManager.
    *
@@ -68,15 +66,14 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    * @param {DIDPair[]} [pairings=[]]
    */
   constructor(
-    public castor: Castor,
-    public mercury: Mercury,
-    public pluto: Pluto,
-    public pollux: Pollux,
-    public mediationHandler: MediatorHandler,
-    public pairings: DIDPair[] = [],
+    private readonly agent: DIDCommAgent,
     public options?: AgentOptions
   ) {
     this.events = new AgentMessageEvents();
+  }
+
+  get mediationHandler(): MediatorHandler {
+    return this.agent.mediationHandler;
   }
 
   get withWebsocketsExperiment() {
@@ -92,7 +89,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    */
   async startMediator(): Promise<void> {
     const mediationHandler =
-      await this.mediationHandler.bootRegisteredMediator();
+      await this.agent.mediationHandler.bootRegisteredMediator();
 
     if (!mediationHandler) {
       throw new AgentError.NoMediatorAvailableError();
@@ -120,7 +117,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    */
   async awaitMessageResponse(id: string): Promise<Message | undefined> {
     console.log("Deprecated, use agent.addListener('THREAD-{{Your thread || messageId}}', fn), this method does not support live-mode.");
-    const messages = await this.mediationHandler.pickupUnreadMessages(10);
+    const messages = await this.agent.mediationHandler.pickupUnreadMessages(10);
     return messages.find(x => x.message.thid === id)?.message;
   }
 
@@ -133,7 +130,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     attachmentId: string;
     message: Message;
   }[] = []): Promise<void> {
-    if (!this.mediationHandler.mediator) {
+    if (!this.agent.mediationHandler.mediator) {
       throw new AgentError.NoMediatorAvailableError();
     }
 
@@ -143,11 +140,11 @@ export class ConnectionsManager implements ConnectionsManagerClass {
       const messageIds = received.map(x => x.attachmentId);
 
       if (messages.length > 0) {
-        await this.pluto.storeMessages(messages);
+        await this.agent.pluto.storeMessages(messages);
       }
 
       const revokeMessages = messages.filter(x => x.piuri === ProtocolType.PrismRevocation);
-      const allMessages = await this.pluto.getAllMessages();
+      const allMessages = await this.agent.pluto.getAllMessages();
 
       for (const message of revokeMessages) {
         const revokeMessage = RevocationNotification.fromMessage(message);
@@ -161,17 +158,17 @@ export class ConnectionsManager implements ConnectionsManagerClass {
         if (matchingMessages.length > 0) {
           for (const message of matchingMessages) {
             const issueCredential = IssueCredential.fromMessage(message);
-            const ctx = new Task.Context({ Pluto: this.pluto, Pollux: this.pollux });
+            // const ctx = Task.Context.make({ Pluto: this.agent.pluto, Pollux: this.pollux });
             const task = new HandleIssueCredential({ issueCredential });
-            const credential = await ctx.run(task);
+            const credential = await (this.agent as any).runTask(task);
 
-            await this.pluto.revokeCredential(credential);
+            await this.agent.pluto.revokeCredential(credential);
             this.events.emit(ListenerKey.REVOKE, credential);
           }
         }
       }
       if (messageIds.length) {
-        await this.mediationHandler.registerMessagesAsRead(messageIds);
+        await this.agent.mediationHandler.registerMessagesAsRead(messageIds);
       }
 
       this.events.emit(ListenerKey.MESSAGE, messages);
@@ -193,7 +190,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     }
 
     const storeDIDPairTask = new CancellableTask<DIDPair>(async () => {
-      await this.pluto.storeDIDPair(paired.host, paired.receiver, paired.name);
+      await this.agent.pluto.storeDIDPair(paired.host, paired.receiver, paired.name);
       this.events.emit(ListenerKey.CONNECTION, paired);
       return paired;
     });
@@ -241,7 +238,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    * @returns {Promise<void>}
    */
   async registerMediator(hostDID: DID): Promise<void> {
-    await this.mediationHandler.achieveMediation(hostDID);
+    await this.agent.mediationHandler.achieveMediation(hostDID);
   }
 
   /**
@@ -253,8 +250,8 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    */
   async sendMessage(message: Message): Promise<Message | undefined> {
     message.direction = MessageDirection.SENT;
-    await this.pluto.storeMessage(message);
-    return this.mercury.sendMessageParseMessage(message);
+    await this.agent.pluto.storeMessage(message);
+    return this.agent.mercury.sendMessageParseMessage(message);
   }
 
   /**
@@ -263,11 +260,11 @@ export class ConnectionsManager implements ConnectionsManagerClass {
    * @param {number} iterationPeriod
    */
   async startFetchingMessages(iterationPeriod: number): Promise<void> {
-    if (this.cancellable || !this.mediationHandler.mediator) {
+    if (this.cancellable || !this.agent.mediationHandler.mediator) {
       return;
     }
-    const currentMediator = this.mediationHandler.mediator.mediatorDID;
-    const resolvedMediator = await this.castor.resolveDID(currentMediator.toString());
+    const currentMediator = this.agent.mediationHandler.mediator.mediatorDID;
+    const resolvedMediator = await this.agent.castor.resolveDID(currentMediator.toString());
     const hasWebsocket = resolvedMediator.services.find(({ serviceEndpoint: { uri } }) =>
     (
       uri.startsWith("ws://") ||
@@ -276,7 +273,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     );
     if (hasWebsocket && this.withWebsocketsExperiment) {
       this.cancellable = new CancellableTask(async (signal) => {
-        this.mediationHandler.listenUnreadMessages(
+        this.agent.mediationHandler.listenUnreadMessages(
           signal,
           hasWebsocket.serviceEndpoint.uri,
           (messages) => this.processMessages(messages)
@@ -285,7 +282,7 @@ export class ConnectionsManager implements ConnectionsManagerClass {
     } else {
       const timeInterval = Math.max(iterationPeriod, 5) * 1000;
       this.cancellable = new CancellableTask(async () => {
-        const unreadMessages = await this.mediationHandler.pickupUnreadMessages(10);
+        const unreadMessages = await this.agent.mediationHandler.pickupUnreadMessages(10);
         await this.processMessages(unreadMessages);
       }, timeInterval);
     }

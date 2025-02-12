@@ -1,7 +1,5 @@
-import { CredentialType, LinkSecret } from ".";
+import { CredentialType } from "./VerifiableCredential";
 import { Pluto } from "../buildingBlocks/Pluto";
-import { DID } from "./DID";
-import { KeyPair } from "./KeyPair";
 
 type Claim = Record<string, any>;
 
@@ -30,13 +28,13 @@ export abstract class Credential implements Pluto.Storable {
 
   isRevoked() {
     const revoked = this.properties.get("revoked");
-    return revoked === true
+    return revoked === true;
   }
 }
 
 export interface ProvableCredential {
   presentation(): unknown;
-  verifiableCredential(): unknown
+  verifiableCredential(): unknown;
 }
 
 export interface StorableCredential {
@@ -53,18 +51,4 @@ export interface StorableCredential {
     revoked?: boolean;
     availableClaims?: string[];
   };
-}
-
-export interface CredentialRequestOptions {
-  keyPair?: KeyPair;
-  did?: DID;
-  linkSecret?: LinkSecret;
-  [name: string]: any;
-}
-
-export interface CredentialIssueOptions {
-  type: CredentialType;
-  linkSecret?: string;
-  credentialMetadata?: Record<string, any>;
-  [name: string]: any;
 }

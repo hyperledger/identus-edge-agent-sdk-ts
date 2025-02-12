@@ -27,18 +27,22 @@ import { HandleOfferCredential } from "./HandleOfferCredential";
 import { HandlePresentation } from "./HandlePresentation";
 import { CreatePresentation } from "./CreatePresentation";
 import { ProtocolType } from "../protocols/ProtocolTypes";
-import Pollux from "../../pollux";
 import Apollo from "../../apollo";
 import Castor from "../../castor";
 import * as DIDfns from "../didFunctions";
 import { Task } from "../../utils/tasks";
-import { DIDCommContext } from "./Context";
 import { FetchApi } from "../helpers/FetchApi";
 import { ParsePrismInvitation } from "./ParsePrismInvitation";
 import { ParseInvitation } from "./ParseInvitation";
 import { HandleOOBInvitation } from "./HandleOOBInvitation";
 import { Startable } from "../../domain/protocols/Startable";
 import { notNil } from "../../utils";
+import { RevealCredentialFields } from "../helpers/RevealCredentialFields";
+import { RunProtocol } from "../helpers/RunProtocol";
+import { asJsonObj, expect } from "../../utils";
+import { PluginManager } from "../../plugins";
+import OEAPlugin from "../../plugins/internal/oea";
+import DIFPlugin from "../../plugins/internal/dif";
 
 /**
  * Edge agent implementation
@@ -49,7 +53,10 @@ import { notNil } from "../../utils";
  */
 export default class DIDCommAgent extends Startable.Controller {
   public backup: AgentBackup;
-  public readonly pollux: Pollux;
+  public readonly plugins: PluginManager;
+
+  public readonly connectionManager: ConnectionsManager;
+  public readonly mediationHandler: MediatorHandler;
 
 
   /**
@@ -64,15 +71,21 @@ export default class DIDCommAgent extends Startable.Controller {
     public readonly castor: Domain.Castor,
     public readonly pluto: Domain.Pluto,
     public readonly mercury: Domain.Mercury,
-    public readonly mediationHandler: MediatorHandler,
-    public readonly connectionManager: ConnectionsManager,
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
     public readonly api: Domain.Api = new FetchApi(),
     options?: AgentOptions
   ) {
     super();
-    this.pollux = new Pollux(apollo, castor);
     this.backup = new AgentBackup(this);
+    const store = new PublicMediatorStore(pluto);
+    const mediatorDID = expect(options?.mediatorDID);
+    this.mediationHandler = new BasicMediatorHandler(mediatorDID, mercury, store);
+    this.connectionManager = new ConnectionsManager(this, options);
+
+    this.backup = new AgentBackup(this);
+    this.plugins = new PluginManager();
+    this.plugins.register(DIFPlugin);
+    this.plugins.register(OEAPlugin);
   }
 
   /**
@@ -107,40 +120,30 @@ export default class DIDCommAgent extends Startable.Controller {
     const castor = params.castor ?? new Castor(apollo);
     const didcomm = new DIDCommWrapper(apollo, castor, pluto);
     const mercury = params.mercury ?? new Mercury(castor, didcomm, api);
-    const store = new PublicMediatorStore(pluto);
-    const handler = new BasicMediatorHandler(mediatorDID, mercury, store);
-    const pollux = new Pollux(apollo, castor);
     const seed = params.seed ?? apollo.createRandomSeed().seed;
-
-    const manager = new ConnectionsManager(
-      castor,
-      mercury,
-      pluto,
-      pollux,
-      handler,
-      [],
-      params.options
-    );
 
     const agent = new DIDCommAgent(
       apollo,
       castor,
       pluto,
       mercury,
-      handler,
-      manager,
       seed,
       api,
-      params.options
+      { mediatorDID, ...asJsonObj(params.options) }
     );
 
     return agent;
   }
 
+  /**
+   * Asyncronously start the agent
+   *
+   * @async
+   * @returns {Promise<AgentState>}
+   */
   protected async _start() {
     try {
       await this.pluto.start();
-      await this.pollux.start();
       await this.connectionManager.startMediator();
     }
     catch (e) {
@@ -153,25 +156,17 @@ export default class DIDCommAgent extends Startable.Controller {
       }
     }
 
-    if (this.connectionManager.mediationHandler.mediator !== undefined) {
+    if (this.mediationHandler.mediator !== undefined) {
       await this.connectionManager.startFetchingMessages(5);
     }
     else {
       throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
-    }
-
-    const storedLinkSecret = await this.pluto.getLinkSecret();
-    if (storedLinkSecret == null) {
-      const secret = this.pollux.anoncreds.createLinksecret();
-      const linkSecret = new Domain.LinkSecret(secret);
-      await this.pluto.storeLinkSecret(linkSecret);
     }
   }
 
   protected async _stop() {
     await this.connectionManager.stopAllEvents();
     await this.connectionManager.stopFetchingMessages();
-    await this.pollux.stop();
 
     if (notNil(this.pluto.stop)) {
       await this.pluto.stop();
@@ -215,18 +210,19 @@ export default class DIDCommAgent extends Startable.Controller {
   }
 
   private runTask<T>(task: Task<T>) {
-    const ctx = new DIDCommContext({
+    const ctx = Task.Context.make({
       ConnectionManager: this.connectionManager,
       MediationHandler: this.mediationHandler,
+      Plugins: this.plugins,
       Mercury: this.mercury,
       Api: this.api,
       Apollo: this.apollo,
       Castor: this.castor,
       Pluto: this.pluto,
-      Pollux: this.pollux,
       Seed: this.seed,
     });
 
+    ctx.extend(this.plugins.getModules());
     return ctx.run(task);
   }
 
@@ -419,11 +415,20 @@ export default class DIDCommAgent extends Startable.Controller {
    * @param credential 
    * @returns 
    */
-  isCredentialRevoked(credential: Domain.Credential) {
-    return this.pollux.isCredentialRevoked(credential);
+  async isCredentialRevoked(credential: Domain.Credential): Promise<boolean> {
+    const task = new RunProtocol({
+      type: "revocation-check",
+      pid: "prism/jwt",
+      data: { credential }
+    });
+
+    const result = await this.runTask(task);
+    return result.data;
   }
 
   /**
+   * @deprecated
+   * 
    * This method can be used by holders in order to disclose the value of a Credential
    * JWT are just encoded plainText
    * Anoncreds will really need to be disclosed as the fields are encoded.
@@ -432,7 +437,8 @@ export default class DIDCommAgent extends Startable.Controller {
    * @returns {AttributeType}
    */
   async revealCredentialFields(credential: Domain.Credential, fields: string[], linkSecret: string) {
-    return this.pollux.revealCredentialFields(credential, fields, linkSecret);
+    const task = new RevealCredentialFields({ credential, fields });
+    return this.runTask(task);
   }
 
   /**

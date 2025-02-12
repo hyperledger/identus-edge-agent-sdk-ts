@@ -27,23 +27,19 @@ describe("Agent", () => {
     describe("Persistence", () => {
       test("start() called for Startable dependencies", async () => {
         const spyPluto = vi.spyOn(agent.pluto, "start");
-        const spyPollux = vi.spyOn(agent.pollux, "start");
 
         await agent.start();
 
         expect(spyPluto).toHaveBeenCalledOnce();
-        expect(spyPollux).toHaveBeenCalledOnce();
       });
 
       test("stop() called for Startable dependencies", async () => {
         const spyPluto = vi.spyOn(agent.pluto, "stop");
-        const spyPollux = vi.spyOn(agent.pollux, "stop");
 
         await agent.start();
         await agent.stop();
 
         expect(spyPluto).toHaveBeenCalledOnce();
-        expect(spyPollux).toHaveBeenCalledOnce();
       });
 
 

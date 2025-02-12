@@ -1,10 +1,14 @@
 import { uuid } from "@stablelib/uuid";
 import * as Domain from "../../domain";
-import { validatePresentationClaims } from "../../pollux/utils/claims";
 import { RequestPresentation } from "../protocols/proofPresentation";
 import { CreatePeerDID } from "./CreatePeerDID";
 import { Task } from "../../utils/tasks";
 import { DIDCommContext } from "./Context";
+import { Context as ACContext } from "../../plugins/internal/anoncreds";
+import { Context as DIFContext } from "../../plugins/internal/dif";
+
+// TODO tmp workaround using plugins in Agent task
+type TaskContext = DIDCommContext & ACContext & DIFContext;
 
 interface Args {
   type: Domain.CredentialType;
@@ -13,75 +17,30 @@ interface Args {
 }
 
 export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
-  async run(ctx: DIDCommContext) {
+  async run(ctx: TaskContext) {
     const { claims, toDID, type } = this.args;
     const didDocument = await ctx.Castor.resolveDID(toDID.toString());
     const peerDIDTask = new CreatePeerDID({ services: didDocument.services, updateMediator: true });
     const newPeerDID = await ctx.run(peerDIDTask);
+
     if (type === Domain.CredentialType.AnonCreds) {
-      if (!validatePresentationClaims(claims, Domain.CredentialType.AnonCreds)) {
-        throw new Domain.PolluxError.InvalidPresentationDefinitionError("Anoncreds Claims are invalid");
-      }
-
-      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
-        type,
-        claims,
-        new Domain.PresentationOptions({}, Domain.CredentialType.AnonCreds)
-      );
+      const presentationDefinition = await ctx.Anoncreds.createPresentationDefinition(claims as any);
 
       return this.createRequest(
         type,
-        presentationDefinitionRequest,
+        presentationDefinition,
         newPeerDID,
         toDID
       );
     }
 
-    if (type === Domain.CredentialType.SDJWT) {
-      if (!validatePresentationClaims(claims, Domain.CredentialType.SDJWT)) {
-        throw new Domain.PolluxError.InvalidPresentationDefinitionError("SD+JWT Claims are invalid");
-      }
-      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
-        type,
-        claims,
-        new Domain.PresentationOptions({
-          sdjwt: {
-            jwtAlg: [
-              Domain.curveToAlg(Domain.Curve.SECP256K1)
-            ]
-          },
-          challenge: "Sign this text " + uuid(),
-          domain: 'N/A'
-        }, type)
-      );
-      return this.createRequest(
-        type,
-        presentationDefinitionRequest,
-        newPeerDID,
-        toDID
-      );
-    }
-
-    if (type === Domain.CredentialType.JWT) {
-      if (!validatePresentationClaims(claims, Domain.CredentialType.JWT)) {
-        throw new Domain.PolluxError.InvalidPresentationDefinitionError("JWT Claims are invalid");
-      }
-
-      const presentationDefinitionRequest = await ctx.Pollux.createPresentationDefinitionRequest(
-        type,
-        claims,
-        new Domain.PresentationOptions({
-          jwt: {
-            jwtAlg: [Domain.curveToAlg(Domain.Curve.SECP256K1)]
-          },
-          challenge: "Sign this text " + uuid(),
-          domain: 'N/A'
-        }, type)
-      );
+    if (type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT) {
+      const claimsCast = claims as Domain.PresentationClaims<Domain.CredentialType.JWT>;
+      const presentationDefinition = await ctx.DIF.createPresentationDefinition(claimsCast.claims, claimsCast);
 
       return this.createRequest(
         type,
-        presentationDefinitionRequest,
+        presentationDefinition,
         newPeerDID,
         toDID
       );
@@ -92,13 +51,13 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
 
   private createRequest(
     type: Domain.CredentialType,
-    definition: Domain.PresentationDefinitionRequest<any>,
+    definition: any,
     from: Domain.DID,
     to: Domain.DID
   ) {
-    const attachmentFormat = type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT ?
-      Domain.AttachmentFormats.PRESENTATION_EXCHANGE_DEFINITIONS :
-      Domain.AttachmentFormats.ANONCREDS_PROOF_REQUEST;
+    const attachmentFormat = type === Domain.CredentialType.JWT || type === Domain.CredentialType.SDJWT
+      ? "dif/presentation-exchange/definitions@v1.0"
+      : "anoncreds/proof-request@v1.0";
 
     return new RequestPresentation(
       {

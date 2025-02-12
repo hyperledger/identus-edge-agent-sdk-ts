@@ -14,8 +14,6 @@ import {
 } from "@amagyar-iohk/identus-cloud-agent-client-ts"
 import { CloudAgentConfiguration } from "../configuration/CloudAgentConfiguration"
 import { Utils } from "../Utils"
-import SDK from "@hyperledger/identus-edge-agent-sdk"
-import { JWTRevocationStatus } from "@hyperledger/identus-edge-agent-sdk/build/domain"
 
 export class CloudAgentWorkflow {
   static async createConnection(cloudAgent: Actor, label?: string, goalCode?: string, goal?: string) {
@@ -306,7 +304,7 @@ export class CloudAgentWorkflow {
       const credentialResponse = await this.getCredential(cloudAgent, recordId)
       const jwtString = Utils.decodeBase64URL(credentialResponse.credential)
       const decoded = CloudAgentWorkflow.instance.JWTCredential.fromJWS(jwtString)
-      const credentialStatus = decoded.vc.credentialStatus as JWTRevocationStatus
+      const credentialStatus = decoded.vc.credentialStatus as any
       const statusList = credentialStatus.statusListCredential
       statusRegistry.set(recordId, statusList)
     }

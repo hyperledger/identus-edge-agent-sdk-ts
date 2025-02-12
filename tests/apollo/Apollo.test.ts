@@ -29,8 +29,6 @@ import { PrismDerivationPath } from "../../src/domain/models/derivation/schemas/
 import { DeprecatedDerivationPath } from "../../src/domain/models/derivation/schemas/DeprecatedDerivation";
 import { DerivationAxis } from "../../src/domain/models/derivation/DerivationAxis";
 import ApolloPKG from "@hyperledger/identus-apollo";
-import { hash, hashSync } from '../../src/domain/utils/hash';
-import { randomBytes } from "../../src/domain/utils/randomBytes";
 
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 chai.use(chaiAsPromised);
@@ -201,22 +199,6 @@ describe("Apollo", () => {
         publicKey.canVerify() && publicKey.verify(text, Buffer.from(signature));
       expect(verified).to.be.equal(true);
     }
-  });
-
-  it("Should test our hashing libraries", async () => {
-    const text = "test";
-    const validHashing = ["SHA256", "SHA512"];
-    validHashing.forEach((alg) => {
-      expect(() => hashSync(text, alg)).to.not.be.undefined;
-      expect(hash(text, alg)).to.eventually.not.be.undefined;
-    });
-  });
-
-  it("Should generate random bytes", async () => {
-    const initValue = new Uint8Array(64);
-    const initHex = Buffer.from(initValue).toString('hex');
-    const random = randomBytes(initValue);
-    expect(initHex).to.not.deep.eq(Buffer.from(random).toString('hex'));
   });
 
   it("Should should normalise SECP256K1 der signature from apollo", async () => {

@@ -7,7 +7,7 @@ import type {
   Attachment,
   AttachmentData,
 } from "didcomm-wasm";
-import wasmBuffer from "didcomm-wasm/didcomm_js_bg.wasm"
+import wasmBuffer from "didcomm-wasm/didcomm_js_bg.wasm";
 
 import * as Domain from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
@@ -38,7 +38,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       await module.default(wasmInstance);
       return module;
     });
-    return this.didcomm!;
+    return this.didcomm;
   }
 
   private doesRequireReturnRoute(type: string) {
