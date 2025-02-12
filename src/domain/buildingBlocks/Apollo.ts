@@ -1,4 +1,4 @@
-import { Curve, JWK, KeyPair, KeyTypes, PrivateKey, PublicKey, Seed, SeedWords } from "../models";
+import { PrivateKey, PublicKey, Seed, SeedWords } from "../models";
 
 import { KeyProperties } from "../models/KeyProperties";
 import { MnemonicWordList } from "../models/WordList";
