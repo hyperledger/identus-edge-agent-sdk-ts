@@ -34,15 +34,9 @@ export interface PrismOnboardingInvitationBody {
   from: string;
 }
 
-export interface PresentationBody {
-  goalCode?: string;
-  comment?: string;
-}
-
 export interface BasicMessageBody {
   content: string;
 }
-
 
 export interface ProblemReportBody {
   code: string,
@@ -50,20 +44,6 @@ export interface ProblemReportBody {
   args: string[],
   escalate_to: string;
 }
-
-export interface RequestPresentationBody extends PresentationBody {
-  willConfirm?: boolean;
-  proofTypes: ProofTypes[];
-}
-
-export type ProposePresentationBody = RequestPresentationBody;
-
-export interface ProofTypes {
-  schema?: string;
-  requiredFields?: string[];
-  trustIssuers?: string[];
-}
-
 
 export interface HandshakeRequestBody {
   goalCode?: string;

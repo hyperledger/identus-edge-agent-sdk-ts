@@ -1,29 +1,43 @@
 import { uuid } from "@stablelib/uuid";
-
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { parseProposePresentationMessage } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
-import { ProposePresentationBody } from "../types";
-import { RequestPresentation } from "./RequestPresentation";
+import { isString, notNil } from "../../../utils";
+
+/**
+ * Specification:
+ * https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md#propose-presentation
+ */
+
+export interface ProposePresentationBody {
+  // optional field that indicates the goal of the message sender
+  goal_code?: string;
+  // a field that provides some human readable information about the proposed presentation
+  comment?: string;
+}
 
 export class ProposePresentation {
   public static type = ProtocolType.DidcommProposePresentation;
-  public body: ProposePresentationBody;
+
   constructor(
-    body: ProposePresentationBody,
+    public body: ProposePresentationBody,
     public attachments: AttachmentDescriptor[],
     public from: DID,
     public to: DID,
     public thid?: string,
     public id: string = uuid()
   ) {
-    this.body = {
-      willConfirm: body.willConfirm !== undefined ? body.willConfirm : false,
-      proofTypes: body.proofTypes,
-      goalCode: body.goalCode,
-      comment: body.comment,
-    };
+    this.validate();
+  }
+
+  private validate() {
+    if (notNil(this.body.goal_code) && !isString(this.body.goal_code)) {
+      throw new Error("Invalid goalCode");
+    }
+
+    if (notNil(this.body.comment) && !isString(this.body.comment)) {
+      throw new Error("Invalid comment");
+    }
   }
 
   makeMessage(): Message {
@@ -48,28 +62,13 @@ export class ProposePresentation {
       throw new AgentError.InvalidProposePresentationMessageError();
     }
 
-    const requestPresentationBody = parseProposePresentationMessage(fromMessage);
-
     return new ProposePresentation(
-      requestPresentationBody,
+      fromMessage.body,
       fromMessage.attachments,
       fromMessage.from,
       fromMessage.to,
       fromMessage.thid,
       fromMessage.id
-    );
-  }
-
-  static makeProposalFromRequest(message: Message): ProposePresentation {
-    const request = RequestPresentation.fromMessage(message);
-    const proposePresentationBody = parseProposePresentationMessage(message);
-
-    return new ProposePresentation(
-      proposePresentationBody,
-      request.attachments,
-      request.to,
-      request.from,
-      message.id
     );
   }
 }
