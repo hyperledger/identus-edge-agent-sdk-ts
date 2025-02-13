@@ -44,7 +44,7 @@ export class CreatePresentation extends Task<Presentation, Args> {
     const presentation = new Presentation(
       {
         comment: request.body.comment,
-        goalCode: request.body.goalCode
+        goal_code: request.body.goal_code
       },
       [
         presentationAttachment,

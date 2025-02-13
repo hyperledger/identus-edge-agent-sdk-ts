@@ -1,34 +1,53 @@
 import { uuid } from "@stablelib/uuid";
-
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { parseRequestPresentationMessage } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
-import { RequestPresentationBody } from "../types";
-import { ProposePresentation } from "./ProposePresentation";
+import { isString, notNil } from "../../../utils";
+
+/**
+ * Specification:
+ * https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md#request-presentation
+ */
+
+export interface RequestPresentationBody {
+  // optional field that indicates the goal of the message sender
+  goal_code?: string;
+  // a field that provides some human readable information about this request for a presentation
+  comment?: string;
+  // an optional field that defaults to false to indicate that the verifier will or will not send a post-presentation confirmation ack message
+  will_confirm?: boolean;
+}
 
 export class RequestPresentation {
   public static type = ProtocolType.DidcommRequestPresentation;
-  public body: RequestPresentationBody;
 
   constructor(
-    body: RequestPresentationBody,
+    public body: RequestPresentationBody,
     public attachments: AttachmentDescriptor[],
     public from: DID,
     public to: DID,
     public thid?: string,
     public id: string = uuid()
   ) {
-    this.body = {
-      willConfirm: body.willConfirm !== undefined ? body.willConfirm : false,
-      proofTypes: body.proofTypes,
-      goalCode: body.goalCode,
-      comment: body.comment,
-    };
+    this.validate();
   }
 
   get decodedAttachments() {
     return this.attachments.map((attachment) => attachment.payload);
+  }
+
+  private validate() {
+    if (notNil(this.body.goal_code) && !isString(this.body.goal_code)) {
+      throw new Error("Invalid goalCode");
+    }
+
+    if (notNil(this.body.comment) && !isString(this.body.comment)) {
+      throw new Error("Invalid comment");
+    }
+
+    if (notNil(this.body.will_confirm) && typeof this.body.will_confirm !== "boolean") {
+      throw new Error("Invalid willConfirm");
+    }
   }
 
   makeMessage(): Message {
@@ -52,28 +71,14 @@ export class RequestPresentation {
     ) {
       throw new AgentError.InvalidRequestPresentationMessageError();
     }
-    const requestPresentationBody = parseRequestPresentationMessage(fromMessage);
 
     return new RequestPresentation(
-      requestPresentationBody,
+      fromMessage.body,
       fromMessage.attachments,
       fromMessage.from,
       fromMessage.to,
       fromMessage.thid,
       fromMessage.id
-    );
-  }
-
-  static makeRequestFromProposal(message: Message): RequestPresentation {
-    const request = ProposePresentation.fromMessage(message);
-    const requestPresentationBody = parseRequestPresentationMessage(message);
-
-    return new RequestPresentation(
-      requestPresentationBody,
-      request.attachments,
-      request.to,
-      request.from,
-      message.id
     );
   }
 }

@@ -60,9 +60,7 @@ export class CreatePresentationRequest extends Task<RequestPresentation, Args> {
       : "anoncreds/proof-request@v1.0";
 
     return new RequestPresentation(
-      {
-        proofTypes: [],
-      },
+      {},
       [
         Domain.AttachmentDescriptor.build(
           { json: definition },

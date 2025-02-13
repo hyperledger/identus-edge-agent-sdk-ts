@@ -1,13 +1,12 @@
-import { vi, assert, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { AttachmentDescriptor, Message } from "../../../../src/domain";
-import { AgentError } from "../../../../src/domain/models/Errors";
 import { RequestCredential } from "../../../../src/edge-agent/protocols/issueCredential/RequestCredential";
 import * as Fixtures from "../../../fixtures";
 import { InvalidCredentialFormats } from '../../../../src/domain/models/errors/Agent';
 import { ProtocolType } from '../../../../src';
 
 describe("RequestCredential", () => {
-  it("Should create a valid RequestCredential from valid params", () => {
+  test("Should create a valid RequestCredential from valid params", () => {
     const validRequestCredential = new RequestCredential({ formats: [] }, [], Fixtures.DIDs.peerDID1);
 
     expect(validRequestCredential).toBeInstanceOf(RequestCredential);
