@@ -86,6 +86,7 @@ export class CloudAgentConfiguration {
     Utils.appendToNotes(`Mediator: ${this.mediatorOobUrl}`)
     Utils.appendToNotes(`Agent: ${this.agentUrl}`)
     Utils.appendToNotes(`DID: ${this.publishedDid}`)
+    Utils.appendToNotes(`Ed25519: ${this.publishedEd25519Did}`)
     Utils.appendToNotes(`Jwt Schema: ${this.jwtSchemaGuid}`)
     Utils.appendToNotes(`Anoncred Definition: ${this.anoncredDefinitionGuid}`)
     Utils.appendToNotes(`SDK Version: ${this.getSdkVersion()}`)

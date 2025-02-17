@@ -1,6 +1,6 @@
 {
   "name": "@hyperledger/identus-edge-agent-sdk",
-  "version": "3.1.0",
+  "version": "6.5.1",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
   "module": "./index.mjs",
@@ -87,6 +87,7 @@
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "didcomm-wasm": "./externals/generated/didcomm-wasm",
     "esbuild": "0.21.5",
     "eslint": "^8.36.0",
