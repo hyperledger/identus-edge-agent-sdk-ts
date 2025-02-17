@@ -6,7 +6,7 @@
 
 > NOTE:
 >
-> Please follow the [Quick started guide](../../docs/quick-start) to complete steps 1, 2
+> Please follow the [Quick started guide](/home/quick-start) to complete steps 1, 2
 
 
 ## Flow
