@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - "main"
-
+    tags:
+      - "v*"
 jobs:
-  integrate:
-    name: Build and test
+  integrate-revision:
+    if: github.ref == 'refs/heads/main'
+    name: Integrate revision
     runs-on: ubuntu-latest
 
     steps:
@@ -17,4 +19,22 @@ jobs:
           token: ${{ secrets.ATALA_GITHUB_TOKEN }}
           repository: input-output-hk/identus-integration
           event-type: integration
-          client-payload: '{"component": "sdk-ts", "version": "${{ github.sha }}" }'
+          client-payload: '{"component": "sdk-ts", "release": false, "version": "${{ github.sha }}" }'
+
+  integrate-release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Integrate release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get tag
+        id: tag
+        run: echo "name=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+
+      - name: Dispatch integration
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.ATALA_GITHUB_TOKEN }}
+          repository: input-output-hk/identus-integration
+          event-type: integration
+          client-payload: '{"component": "sdk-ts", "release": true, "version": "${{ steps.tag.outputs.name }}" }'
