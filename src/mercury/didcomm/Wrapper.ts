@@ -7,7 +7,7 @@ import type {
   Attachment,
   AttachmentData,
 } from "didcomm-wasm";
-import wasmBuffer from "didcomm-wasm/didcomm_js_bg.wasm"
+import wasmBuffer from "didcomm-wasm/didcomm_js_bg.wasm";
 
 import * as Domain from "../../domain";
 import { DIDCommDIDResolver } from "./DIDResolver";
@@ -38,7 +38,7 @@ export class DIDCommWrapper implements DIDCommProtocol {
       await module.default(wasmInstance);
       return module;
     });
-    return this.didcomm!;
+    return this.didcomm;
   }
 
   private doesRequireReturnRoute(type: string) {
@@ -174,29 +174,11 @@ export class DIDCommWrapper implements DIDCommProtocol {
   private parseAttachmentDataToDomain(
     data: AttachmentData
   ): Domain.AttachmentData {
-    if ("base64" in data) {
-      const parsed: Domain.AttachmentBase64 = {
-        base64: data.base64,
-      };
-
-      return parsed;
-    }
-
-    if ("json" in data) {
-      const parsed: Domain.AttachmentJsonData = {
-        data: data.json,
-      };
-
-      return parsed;
-    }
-
-    if ("links" in data) {
-      const parsed: Domain.AttachmentLinkData = {
-        hash: data.hash,
-        links: data.links,
-      };
-
-      return parsed;
+    if ("base64" in data
+      || "json" in data
+      || "links" in data
+    ) {
+      return data;
     }
 
     throw new MercuryError.UnknownAttachmentDataError();
@@ -246,14 +228,6 @@ export class DIDCommWrapper implements DIDCommProtocol {
         json: typeof data.json === "string" ?
           JSON.parse(data.json) :
           data.json,
-      };
-
-      return parsed;
-    }
-
-    if ("data" in data) {
-      const parsed: JsonAttachmentData = {
-        json: JSON.parse(data.data),
       };
 
       return parsed;

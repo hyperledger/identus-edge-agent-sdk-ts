@@ -7,12 +7,6 @@ import {
 import { InvalidCredentialError } from "../../domain/models/errors/Pollux";
 import {
   CredentialType,
-  JWTCredentialPayload,
-  JWTPresentationPayload,
-  JWTVerifiableCredentialProperties,
-  JWTVerifiablePresentationProperties,
-  JWTVerifiableCredentialProperties as JWT_VC_PROPS,
-  JWTVerifiablePresentationProperties as JWT_VP_PROPS,
   W3CVerifiableCredential,
   W3CVerifiableCredentialContext,
   W3CVerifiableCredentialType,
@@ -21,6 +15,38 @@ import {
 
 export const JWTVerifiableCredentialRecoveryId = "jwt+credential";
 
+export enum JWT_VC_PROPS {
+  vc = "vc",
+  revoked = "revoked"
+}
+
+export enum JWT_VP_PROPS {
+  nonce = 'nonce',
+  vp = 'vp'
+}
+
+export interface JWTCredentialPayload {
+  [JWT.Claims.iss]: string;
+  [JWT.Claims.jti]?: string;
+  [JWT.Claims.nbf]: number;
+  [JWT.Claims.exp]: number;
+  [JWT.Claims.sub]: string;
+  [JWT.Claims.aud]?: string;
+  [JWT_VC_PROPS.revoked]?: boolean;
+  [JWT_VC_PROPS.vc]: W3CVerifiableCredential;
+}
+
+export interface JWTPresentationPayload {
+  [JWT.Claims.iss]?: string;
+  [JWT.Claims.jti]?: string;
+  [JWT.Claims.aud]?: string;
+  [JWT.Claims.nbf]?: number;
+  [JWT.Claims.exp]?: number;
+  [JWT_VP_PROPS.nonce]?: string;
+  [JWT_VP_PROPS.vp]: W3CVerifiablePresentation;
+}
+
+
 
 export class JWTCredential
   extends Credential
@@ -28,7 +54,7 @@ export class JWTCredential
 
   public credentialType = CredentialType.JWT;
   public recoveryId = JWTVerifiableCredentialRecoveryId;
-  public properties = new Map<JWT_VC_PROPS | JWT_VP_PROPS, any>();
+  public properties = new Map<JWT.Claims | JWT_VC_PROPS | JWT_VP_PROPS, any>();
 
   constructor(payload: string, revoked?: boolean);
   constructor(payload: JWTCredentialPayload | JWTPresentationPayload, revoked?: boolean);
@@ -73,81 +99,81 @@ export class JWTCredential
         );
       }
 
-      if (payload[JWT_VC_PROPS.aud]) {
+      if (payload[JWT.Claims.aud]) {
         this.properties.set(
-          JWT_VC_PROPS.aud,
-          payload[JWT_VC_PROPS.aud]
+          JWT.Claims.aud,
+          payload[JWT.Claims.aud]
         );
       }
 
-      if (payload[JWT_VC_PROPS.exp]) {
+      if (payload[JWT.Claims.exp]) {
         this.properties.set(
-          JWT_VC_PROPS.exp,
-          payload[JWT_VC_PROPS.exp]
+          JWT.Claims.exp,
+          payload[JWT.Claims.exp]
         );
       }
 
       if (originalString) {
         this.properties.set(
-          JWT_VC_PROPS.jti,
+          JWT.Claims.jti,
           originalString
         );
       }
 
-      if (payload[JWT_VC_PROPS.iss]) {
+      if (payload[JWT.Claims.iss]) {
         this.properties.set(
-          JWT_VC_PROPS.iss,
-          payload[JWT_VC_PROPS.iss]
+          JWT.Claims.iss,
+          payload[JWT.Claims.iss]
         );
       }
 
-      if (payload[JWT_VC_PROPS.sub]) {
+      if (payload[JWT.Claims.sub]) {
         this.properties.set(
-          JWT_VC_PROPS.sub,
-          payload[JWT_VC_PROPS.sub]
+          JWT.Claims.sub,
+          payload[JWT.Claims.sub]
         );
       }
 
-      if (payload[JWT_VC_PROPS.nbf]) {
+      if (payload[JWT.Claims.nbf]) {
         this.properties.set(
-          JWT_VC_PROPS.nbf,
-          payload[JWT_VC_PROPS.nbf]
+          JWT.Claims.nbf,
+          payload[JWT.Claims.nbf]
         );
       }
     } else {
       //Set properties for a JWTCredential Presentation
-      if (payload[JWT_VP_PROPS.iss]) {
+      if (payload[JWT.Claims.iss]) {
         this.properties.set(
-          JWT_VP_PROPS.iss,
-          payload[JWT_VP_PROPS.iss]
+          JWT.Claims.iss,
+          payload[JWT.Claims.iss]
         );
       }
 
       if (originalString) {
         this.properties.set(
-          JWT_VC_PROPS.jti,
+          JWT.Claims.jti,
           originalString
         );
       }
 
-      if (payload[JWT_VP_PROPS.aud]) {
+      if (payload[JWT.Claims.aud]) {
         this.properties.set(
-          JWT_VP_PROPS.aud,
-          payload[JWT_VP_PROPS.aud]
+          JWT.Claims.aud,
+          payload[JWT.Claims.aud]
         );
       }
 
-      if (payload[JWT_VP_PROPS.nbf]) {
+      if (payload[JWT.Claims.nbf]) {
         this.properties.set(
-          JWT_VP_PROPS.nbf,
-          payload[JWT_VP_PROPS.nbf]
+          JWT.Claims.nbf,
+          payload[JWT.Claims.nbf]
         );
       }
 
-      if (payload[JWT_VP_PROPS.exp]) {
+      if (payload[JWT.Claims.exp]) {
         this.properties.set(
-          JWT_VP_PROPS.exp,
-          payload[JWT_VP_PROPS.exp]
+          JWT.Claims.exp,
+          payload[JWT.Claims.exp]
         );
       }
 
@@ -158,10 +184,10 @@ export class JWTCredential
         );
       }
 
-      if (payload[JWT_VP_PROPS.nbf]) {
+      if (payload[JWT.Claims.nbf]) {
         this.properties.set(
-          JWT_VP_PROPS.nbf,
-          payload[JWT_VP_PROPS.nbf]
+          JWT.Claims.nbf,
+          payload[JWT.Claims.nbf]
         );
       }
 
@@ -183,78 +209,77 @@ export class JWTCredential
 
     if (hasJWTCredentialRequiredProperties) {
 
-      if (typeof payload[JWTVerifiableCredentialProperties.iss] !== 'undefined' &&
-        typeof payload[JWTVerifiableCredentialProperties.iss] !== 'string') {
+      if (typeof payload[JWT.Claims.iss] !== 'undefined' &&
+        typeof payload[JWT.Claims.iss] !== 'string') {
         throw new InvalidCredentialError("Invalid iss in credential payload should be string");
       }
 
-      if (typeof payload[JWTVerifiableCredentialProperties.nbf] !== 'undefined' &&
-        typeof payload[JWTVerifiableCredentialProperties.nbf] !== 'number') {
+      if (typeof payload[JWT.Claims.nbf] !== 'undefined' &&
+        typeof payload[JWT.Claims.nbf] !== 'number') {
         throw new InvalidCredentialError("Invalid nbf in credential payload should be number");
       }
 
-      if (typeof payload[JWTVerifiableCredentialProperties.exp] !== 'undefined' &&
-        typeof payload[JWTVerifiableCredentialProperties.exp] !== 'number') {
+      if (typeof payload[JWT.Claims.exp] !== 'undefined' &&
+        typeof payload[JWT.Claims.exp] !== 'number') {
         throw new InvalidCredentialError("Invalid exp in credential payload should be number");
       }
 
-      if (typeof payload[JWTVerifiableCredentialProperties.sub] !== 'undefined' &&
-        typeof payload[JWTVerifiableCredentialProperties.sub] !== 'string') {
+      if (typeof payload[JWT.Claims.sub] !== 'undefined' &&
+        typeof payload[JWT.Claims.sub] !== 'string') {
         throw new InvalidCredentialError("Invalid sub in credential payload should be string");
       }
 
 
-      if (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'undefined' &&
-        (typeof payload[JWTVerifiableCredentialProperties.aud] !== 'string' &&
-          !Array.isArray(payload[JWTVerifiableCredentialProperties.aud]))) {
+      if (typeof payload[JWT.Claims.aud] !== 'undefined' &&
+        (typeof payload[JWT.Claims.aud] !== 'string' &&
+          !Array.isArray(payload[JWT.Claims.aud]))) {
         throw new InvalidCredentialError("Invalid aud in credential payload should be string");
       }
 
 
-      if (typeof payload[JWTVerifiableCredentialProperties.revoked] !== 'undefined' &&
-        typeof payload[JWTVerifiableCredentialProperties.revoked] !== 'boolean') {
+      if (typeof payload[JWT_VC_PROPS.revoked] !== 'undefined' &&
+        typeof payload[JWT_VC_PROPS.revoked] !== 'boolean') {
         throw new InvalidCredentialError("Invalid revoked in credential payload should be boolean");
       }
 
       //TODO: Improve validation of VC
-      if (typeof payload[JWTVerifiableCredentialProperties.vc] !== 'undefined' &&
-        typeof payload[JWTVerifiableCredentialProperties.vc] !== 'object') {
+      if (typeof payload[JWT_VC_PROPS.vc] !== 'undefined' &&
+        typeof payload[JWT_VC_PROPS.vc] !== 'object') {
         throw new InvalidCredentialError("Invalid vc in credential payload should be an object");
       }
 
     } else {
-      if (typeof payload[JWTVerifiablePresentationProperties.iss] !== 'undefined' &&
-        typeof payload[JWTVerifiablePresentationProperties.iss] !== 'string') {
+      if (typeof payload[JWT.Claims.iss] !== 'undefined' &&
+        typeof payload[JWT.Claims.iss] !== 'string') {
         throw new InvalidCredentialError("Invalid iss in presentation payload should be string");
       }
 
-      if (typeof payload[JWTVerifiablePresentationProperties.aud] !== 'undefined' &&
-        (typeof payload[JWTVerifiablePresentationProperties.aud] !== 'string' &&
-          !Array.isArray(payload[JWTVerifiablePresentationProperties.aud]))) {
+      if (typeof payload[JWT.Claims.aud] !== 'undefined' &&
+        (typeof payload[JWT.Claims.aud] !== 'string' &&
+          !Array.isArray(payload[JWT.Claims.aud]))) {
         throw new InvalidCredentialError("Invalid aud in presentation payload should be string");
       }
 
-      if (typeof payload[JWTVerifiablePresentationProperties.nonce] !== 'undefined' &&
-        typeof payload[JWTVerifiablePresentationProperties.nonce] !== 'string') {
+      if (typeof payload[JWT_VP_PROPS.nonce] !== 'undefined' &&
+        typeof payload[JWT_VP_PROPS.nonce] !== 'string') {
         throw new InvalidCredentialError("Invalid nonce in presentation payload should be string");
       }
 
-      if (typeof payload[JWTVerifiablePresentationProperties.nbf] !== 'undefined' &&
-        typeof payload[JWTVerifiablePresentationProperties.nbf] !== 'number') {
+      if (typeof payload[JWT.Claims.nbf] !== 'undefined' &&
+        typeof payload[JWT.Claims.nbf] !== 'number') {
         throw new InvalidCredentialError("Invalid nbf in presentation payload should be number");
       }
 
-      if (typeof payload[JWTVerifiablePresentationProperties.exp] !== 'undefined' &&
-        typeof payload[JWTVerifiablePresentationProperties.exp] !== 'number') {
+      if (typeof payload[JWT.Claims.exp] !== 'undefined' &&
+        typeof payload[JWT.Claims.exp] !== 'number') {
         throw new InvalidCredentialError("Invalid exp in presentation payload should be number");
       }
 
       //TODO: Improve validation of VP
-      if (typeof payload[JWTVerifiablePresentationProperties.vp] !== 'undefined' &&
-        typeof payload[JWTVerifiablePresentationProperties.vp] !== 'object') {
+      if (typeof payload[JWT_VP_PROPS.vp] !== 'undefined' &&
+        typeof payload[JWT_VP_PROPS.vp] !== 'object') {
         throw new InvalidCredentialError("Invalid vp in presentation payload should be an object");
       }
-
     }
 
     return payload.vc !== undefined;
@@ -266,9 +291,9 @@ export class JWTCredential
 
   get id() {
     if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
-      return this.properties.get(JWT_VC_PROPS.jti);
+      return this.properties.get(JWT.Claims.jti);
     } else {
-      return this.properties.get(JWT_VP_PROPS.jti);
+      return this.properties.get(JWT.Claims.jti);
     }
   }
 
@@ -319,29 +344,29 @@ export class JWTCredential
 
   get expirationDate() {
     const exp = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
-      this.properties.get(JWT_VC_PROPS.exp) :
-      this.properties.get(JWT_VP_PROPS.exp);
+      this.properties.get(JWT.Claims.exp) :
+      this.properties.get(JWT.Claims.exp);
     return exp ? new Date(exp * 1000).toISOString() : undefined;
   }
 
   get issuanceDate() {
     const nbf = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
-      this.properties.get(JWT_VC_PROPS.nbf) :
-      this.properties.get(JWT_VP_PROPS.nbf);
+      this.properties.get(JWT.Claims.nbf) :
+      this.properties.get(JWT.Claims.nbf);
     return new Date(nbf * 1000).toISOString();
   }
 
   get audience() {
     const aud = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
-      this.properties.get(JWT_VC_PROPS.aud) :
-      this.properties.get(JWT_VP_PROPS.aud);
+      this.properties.get(JWT.Claims.aud) :
+      this.properties.get(JWT.Claims.aud);
     return aud;
   }
 
   get issuer() {
     const iss = this.isCredentialPayload(Object.fromEntries(this.properties)) ?
-      this.properties.get(JWT_VC_PROPS.iss) :
-      this.properties.get(JWT_VP_PROPS.iss);
+      this.properties.get(JWT.Claims.iss) :
+      this.properties.get(JWT.Claims.iss);
     return iss;
   }
 
@@ -351,7 +376,7 @@ export class JWTCredential
 
   get subject(): string {
     if (this.isCredentialPayload(Object.fromEntries(this.properties))) {
-      return this.properties.get(JWT_VC_PROPS.sub);
+      return this.properties.get(JWT.Claims.sub);
     } else {
       throw new InvalidCredentialError("Subject is only available in a VC");
     }
@@ -417,10 +442,10 @@ export class JWTCredential
       recoveryId: this.recoveryId,
       credentialData: JSON.stringify(data),
       issuer: this.issuer,
-      subject: this.properties.get(JWT_VC_PROPS.sub),
+      subject: this.properties.get(JWT.Claims.sub),
       validUntil: this.isCredentialPayload(Object.fromEntries(this.properties)) ?
-        this.getProperty(JWT_VC_PROPS.exp) :
-        this.getProperty(JWT_VP_PROPS.exp),
+        this.getProperty(JWT.Claims.exp) :
+        this.getProperty(JWT.Claims.exp),
       availableClaims: claims,
       revoked: this.revoked
     };

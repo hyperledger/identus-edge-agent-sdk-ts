@@ -1,41 +1,52 @@
 import { uuid } from "@stablelib/uuid";
 import { SDJwt, Jwt } from "@sd-jwt/core";
 import { Disclosure } from '@sd-jwt/utils';
-
 import {
-    Pluto,
-    StorableCredential,
-    Credential,
-    CredentialType,
-    SDJWTVerifiableCredentialProperties as SDJWT_VP_PROPS,
-    ProvableCredential,
-    W3CVerifiablePresentation,
-    W3CVerifiableCredentialContext,
-    W3CVerifiableCredentialType,
-    PolluxError
+  Pluto,
+  StorableCredential,
+  Credential,
+  CredentialType,
+  ProvableCredential,
+  W3CVerifiablePresentation,
+  W3CVerifiableCredentialContext,
+  W3CVerifiableCredentialType,
+  PolluxError,
+  JWT
 } from "../../domain";
-import { defaultHashConfig } from "../utils/jwt/config";
+import { defaultHashConfig } from "../utils/jwt/SDJWT";
+
 
 export const SDJWTVerifiableCredentialRecoveryId = "sd+jwt+credential";
+
+
+export enum SDJWT_VP_PROPS {
+  vct = "vct",
+  revoked = "revoked",
+  _sd_alg = "_sd_alg",
+  _sd = "_sd",
+  disclosures = "disclosures"
+}
+
 
 export class SDJWTCredential extends Credential implements ProvableCredential, StorableCredential, Pluto.Storable {
     credentialType: CredentialType = CredentialType.SDJWT
     public recoveryId = SDJWTVerifiableCredentialRecoveryId;
 
     get id() {
-        return this.properties.get(SDJWT_VP_PROPS.jti);
+        return this.properties.get(JWT.Claims.jti);
     }
 
     get issuer() {
-        return this.claims.at(0)?.iss ?? this.properties.get(SDJWT_VP_PROPS.iss);
+        return this.claims.at(0)?.iss ?? this.properties.get(JWT.Claims.iss);
     }
 
     get subject() {
-        return this.claims.at(0)?.sub ?? this.properties.get(SDJWT_VP_PROPS.sub);
+        const sub = this.claims.at(0)?.sub ?? this.properties.get(JWT.Claims.sub);
+        return sub instanceof Disclosure ? sub.value : sub;
     }
 
     public uuid: string = uuid();
-    public properties: Map<SDJWT_VP_PROPS, any> = new Map();
+    public properties: Map<JWT.Claims | SDJWT_VP_PROPS, any> = new Map();
     public claims: Record<string, any>[] = [];
     public core: SDJwt;
 
@@ -74,50 +85,29 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
         }
 
         if (payload.iss) {
-            this.properties.set(
-                SDJWT_VP_PROPS.iss,
-                payload.iss
-            );
+            this.properties.set(JWT.Claims.iss, payload.iss);
         }
 
         if (payload.sub) {
-            this.properties.set(
-                SDJWT_VP_PROPS.sub,
-                payload.sub
-            );
+            this.properties.set(JWT.Claims.sub, payload.sub);
         }
 
-        this.properties.set(
-            SDJWT_VP_PROPS.jti,
-            jwt.encodeJwt()
-        );
+        this.properties.set(JWT.Claims.jti, jwt.encodeJwt());
 
         if (payload.nbf) {
-            this.properties.set(
-                SDJWT_VP_PROPS.nbf,
-                payload.nbf
-            );
+            this.properties.set(JWT.Claims.nbf, payload.nbf);
         }
 
         if (payload.exp) {
-            this.properties.set(
-                SDJWT_VP_PROPS.exp,
-                payload.exp
-            );
+            this.properties.set(JWT.Claims.exp, payload.exp);
         }
 
         if (payload.aud) {
-            this.properties.set(
-                SDJWT_VP_PROPS.aud,
-                payload.aud
-            );
+            this.properties.set(JWT.Claims.aud, payload.aud);
         }
 
         if (payload.vct) {
-            this.properties.set(
-                SDJWT_VP_PROPS.vct,
-                payload.vct
-            );
+            this.properties.set(SDJWT_VP_PROPS.vct, payload.vct);
         }
 
         if (payload._sd) {
@@ -171,37 +161,35 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
             recoveryId: this.recoveryId,
             credentialData: JSON.stringify(data),
             issuer: this.issuer,
-            subject: this.properties.get(SDJWT_VP_PROPS.sub),
-            validUntil: this.getProperty(SDJWT_VP_PROPS.exp),
+            subject: this.properties.get(JWT.Claims.sub),
+            validUntil: this.getProperty(JWT.Claims.exp),
             availableClaims: claims,
             revoked: this.revoked
         };
     }
 
     static fromJWS<E extends Record<string, any> = Record<string, any>>(
-        jws: string,
-        revoked = false,
+      jws: string,
+      revoked = false,
     ): SDJWTCredential {
-        const { hasherSync, hasherAlg } = defaultHashConfig;
-        const jwt = new Jwt(Jwt.decodeJWT(jws))
-        const disclosures = jws.split("~").slice(1).filter((k) => k)
-        const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync<E>(disclosure, {
-            hasher: hasherSync,
-            alg: hasherAlg
-        }))
-        const loaded = new SDJwt(
-            {
-                jwt: jwt,
-                disclosures: computed
-            }
-        )
-        const claims: Record<string, Disclosure<E>> = {};
-        for (const disclosure of computed) {
-            if (disclosure.key) {
-                claims[disclosure.key] = disclosure
-            }
+      const jwt = new Jwt(Jwt.decodeJWT(jws));
+      const disclosures = jws.split("~").slice(1).filter((k) => k);
+      const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync<E>(disclosure, {
+        alg: defaultHashConfig.hasherAlg,
+        hasher: defaultHashConfig.hasher,
+      }));
+      const loaded = new SDJwt(
+        {
+          jwt: jwt,
+          disclosures: computed
         }
-        return new SDJWTCredential(loaded, [claims], revoked);
+      );
+      const claims: Record<string, Disclosure<E>> = {};
+      for (const disclosure of computed) {
+        if (disclosure.key) {
+          claims[disclosure.key] = disclosure;
+        }
+      }
+      return new SDJWTCredential(loaded, [claims], revoked);
     }
-
-} 
+}

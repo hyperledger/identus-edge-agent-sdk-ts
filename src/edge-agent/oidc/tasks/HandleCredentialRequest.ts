@@ -3,6 +3,7 @@ import * as Domain from "../../../domain";
 import { CredentialRequest } from "../protocols/CredentialRequest";
 import { Task } from "../../../utils/tasks";
 import { validate } from "../../../utils";
+import { JWTCredential } from "../../../pollux/models/JWTVerifiableCredential";
 
 interface Args {
   request: CredentialRequest;
@@ -19,9 +20,9 @@ export class HandleCredentialRequest extends Task<Domain.Credential, Args> {
     );
 
     validate(response.body, TB.Object({ credential: TB.String() }));
-    const rawCred = Buffer.from(response.body.credential);
-    const credential = await ctx.Pollux.parseCredential(rawCred, { type: Domain.CredentialType.JWT });
 
-    return credential;
+    const credential = JWTCredential.fromJWS(response.body.credential);
+
+    return credential as Domain.Credential;
   }
 }

@@ -23,6 +23,7 @@ export enum InvitationTypes {
 
 
 export type AgentOptions = {
+  mediatorDID?: DID;
   experiments?: {
     liveMode?: boolean;
   };

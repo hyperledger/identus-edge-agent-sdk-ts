@@ -4,7 +4,7 @@ import { TokenResponse } from "../protocols/TokenResponse";
 import { JsonObj, expect, notNil } from "../../../utils";
 import { Task } from "../../../utils/tasks";
 import { CreatePrismDID } from "../../didFunctions/CreatePrismDID";
-import { CreateJWT } from "../../didFunctions/CreateJwt";
+import { CreateJWT } from "../../../pollux/utils/jwt/CreateJwt";
 import { InvalidCredentialConfigurationIds } from "../errors";
 
 interface Args {

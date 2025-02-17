@@ -4,13 +4,12 @@ import { AgentError } from "../../../../src/domain/models/Errors";
 import { parsePresentationMessage } from "../../../../src/edge-agent/helpers/ProtocolHelpers";
 import { Presentation } from "../../../../src/edge-agent/protocols/proofPresentation/Presentation";
 import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
-import { PresentationBody } from "../../../../src/edge-agent/protocols/types";
-import { DIDTest } from "../../helpers/DID";
+import * as Fixtures from "../../../fixtures";
 
 describe("ProofPresentation -> Presentation Tests", () => {
   it("Should create a Presentation from a valid PresentationMessage", async () => {
-    const fromDID = DIDTest.fromIndex(0);
-    const toDID = DIDTest.fromIndex(1);
+    const fromDID = Fixtures.DIDs.peerDID1;
+    const toDID = Fixtures.DIDs.peerDID2;
     const msg = new Message("{}", undefined, ProtocolType.DidcommPresentation);
     const presentationBody = parsePresentationMessage(msg);
     const validPresentation = new Presentation(

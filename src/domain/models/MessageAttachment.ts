@@ -27,9 +27,7 @@ export interface AttachmentLinkData {
 
 export type AttachmentJsonData = {
   json: any;
-} | {
-  data: any
-}
+};
 
 export type AttachmentData =
   | AttachmentJsonData
@@ -49,10 +47,10 @@ export class AttachmentDescriptor {
     public readonly lastModTime?: string,
     public readonly byteCount?: number,
     public readonly description?: string
-  ) { }
+  ) {}
 
   get payload() {
-    return Message.Attachment.extractJSON(this)
+    return Message.Attachment.extractJSON(this);
   }
 
   static build<T>(
@@ -82,7 +80,7 @@ export class AttachmentDescriptor {
         description
       );
     }
-    const attachment = payload as AttachmentJsonData
+    const attachment = payload as AttachmentJsonData;
     return new AttachmentDescriptor(
       attachment,
       mediaType,
@@ -95,17 +93,3 @@ export class AttachmentDescriptor {
     );
   }
 }
-
-export enum AttachmentFormats {
-  ANONCREDS_OFFER = "anoncreds/credential-offer@v1.0",
-  ANONCREDS_REQUEST = "anoncreds/credential-request@v1.0",
-  ANONCREDS_ISSUE = "anoncreds/credential@v1.0",
-  ANONCREDS_PROOF_REQUEST = "anoncreds/proof-request@v1.0",
-  ANONCREDS_PROOF = "anoncreds/proof@v1.0",
-  PRESENTATION_EXCHANGE_DEFINITIONS = "dif/presentation-exchange/definitions@v1.0",
-  PRESENTATION_EXCHANGE_SUBMISSION = "dif/presentation-exchange/submission@v1.0",
-  JWT = "prism/jwt",
-  SDJWT = "vc+sd-jwt",
-  AnonCreds = "AnonCreds",
-}
-

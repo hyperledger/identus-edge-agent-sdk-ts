@@ -4,13 +4,12 @@ import { Message } from "../../../../src/domain";
 import { HandshakeRequest } from "../../../../src/edge-agent/protocols/connection/HandshakeRequest";
 import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
 import { HandshakeRequestBody } from "../../../../src/edge-agent/protocols/types";
-import { DIDTest } from "../../helpers/DID";
+import * as Fixtures from "../../../fixtures";
 
 describe("HandShakeRequest Test", () => {
   it("Should create a HandshakeRequest from a valid HandShakeRequest Message", () => {
-    const fromDID = DIDTest.fromIndex(1);
-    const toDID = DIDTest.fromIndex(2);
-
+    const fromDID = Fixtures.DIDs.peerDID1;
+    const toDID = Fixtures.DIDs.peerDID2;
     const request = new HandshakeRequest(
       {
         goal: "Test",
@@ -35,8 +34,8 @@ describe("HandShakeRequest Test", () => {
   });
 
   it("Should create HandShakeRequest from a valid InvitationMessage", () => {
-    const fromDID = DIDTest.fromIndex(1);
-    const toDID = DIDTest.fromIndex(2);
+    const fromDID = Fixtures.DIDs.peerDID1;
+    const toDID = Fixtures.DIDs.peerDID2;
     const body: HandshakeRequestBody = {
       goal: "Test",
       goalCode: "123",
@@ -51,7 +50,7 @@ describe("HandShakeRequest Test", () => {
       toDID
     );
 
-    const selfDID = DIDTest.fromIndex(2);
+    const selfDID = Fixtures.DIDs.peerDID3;
 
     const request = HandshakeRequest.fromMessage(exampleMessage, selfDID);
 

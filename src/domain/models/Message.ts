@@ -4,11 +4,10 @@ import {
   AttachmentBase64,
   AttachmentData,
   AttachmentDescriptor,
-  AttachmentFormats,
   AttachmentJsonData,
 } from "./MessageAttachment";
 import { AgentError } from "./Errors";
-import { CredentialType, JsonString } from ".";
+import { JsonString } from ".";
 import { Pluto } from "../buildingBlocks/Pluto";
 import { JsonObj, asJsonObj, isArray, isNil, isObject, isString, notEmptyString, notNil } from "../../utils";
 import { base64, base64url } from "multiformats/bases/base64";
@@ -40,31 +39,6 @@ export class Message implements Pluto.Storable {
   ) {
     this.uuid = Pluto.makeUUID();
     this.body = asJsonObj(body);
-  }
-
-  get credentialFormat() {
-    const [attachment] = this.attachments;
-    if (!attachment) {
-      throw new Error("Required Attachment");
-    }
-
-    const format = this.body.formats?.find((format: any) => format.attach_id === attachment.id)?.format ?? attachment.format;
-    if (
-      format === AttachmentFormats.AnonCreds ||
-      format === AttachmentFormats.ANONCREDS_PROOF_REQUEST ||
-      format === AttachmentFormats.ANONCREDS_OFFER ||
-      format === AttachmentFormats.ANONCREDS_ISSUE ||
-      format === AttachmentFormats.ANONCREDS_REQUEST
-    ) {
-      return CredentialType.AnonCreds;
-    }
-    if (format === CredentialType.JWT) {
-      return CredentialType.JWT;
-    }
-    if (format === CredentialType.SDJWT) {
-      return CredentialType.SDJWT;
-    }
-    return CredentialType.Unknown;
   }
 
   static fromJson(jsonString: JsonString | any): Message {
@@ -168,7 +142,8 @@ export class Message implements Pluto.Storable {
   }
 
   static isJsonAttachment(data: any): data is AttachmentJsonData {
-    return data.data !== undefined || data.json !== undefined;
+    // data.data handled for backwards compatibility with stored messages
+    return data.json !== undefined || data.data !== undefined;
   }
 }
 
@@ -178,7 +153,8 @@ const decodeBase64 = (data: string) => {
   } catch (err) {
     return base64.baseDecode(data);
   }
-}
+};
+
 export namespace Message {
   export namespace Attachment {
     /**
@@ -198,12 +174,9 @@ export namespace Message {
       }
 
       if (isJson(attachment.data)) {
-        let decoded: any;
-        if ("data" in attachment.data) {
-          decoded = attachment.data.data;
-        } else if ("json" in attachment.data) {
-          decoded = attachment.data.json;
-        }
+        // data.data handled for backwards compatibility
+        const decoded = attachment.data.json ?? (attachment.data as any).data;
+
         return typeof decoded === "object"
           ? decoded
           : JSON.parse(decoded);
@@ -218,8 +191,8 @@ export namespace Message {
     };
 
     const isJson = (data: AttachmentData): data is AttachmentJsonData => {
-      // ?? why do we mutate json -> data in didcomm Wrapper
-      return "data" in data || "json" in data;
+      // data.data handled for backwards compatibility
+      return "json" in data || "data" in data;
     };
   }
 }

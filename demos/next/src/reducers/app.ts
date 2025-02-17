@@ -98,7 +98,12 @@ export const initialState: RootState = {
     }
 }
 
-export type ExtendedMessage = SDK.Domain.Message & { isAnswering: boolean; hasAnswered: boolean, error: TraceableError | null }
+export type ExtendedMessage = SDK.Domain.Message & { 
+  credentialFormat: SDK.Domain.CredentialType;
+  isAnswering: boolean; 
+  hasAnswered: boolean, 
+  error: TraceableError | null 
+}
 
 export type RootState = {
     errors: TraceableError[];
@@ -209,8 +214,26 @@ const appSlice = createSlice({
             state.agent.isSendingMessage = true;
             state.agent.hasSentMessage = false;
             let credentialFormat = SDK.Domain.CredentialType.Unknown;
+
             try {
-                credentialFormat = action.meta.arg.message.credentialFormat;
+                const msg = action.meta.arg.message;
+                const [attachment] = msg.attachments;
+
+                if (!attachment) {
+                  throw new Error("Required Attachment");
+                }
+            
+                const format = msg.body.formats?.find((format: any) => format.attach_id === attachment.id)?.format ?? attachment.format;
+
+                if (typeof format === "string" && format.startsWith("anoncreds/")) {
+                  credentialFormat = SDK.Domain.CredentialType.AnonCreds;
+                }
+                if (format === SDK.Domain.CredentialType.JWT) {
+                  credentialFormat = SDK.Domain.CredentialType.JWT;
+                }
+                if (format === SDK.Domain.CredentialType.SDJWT) {
+                  credentialFormat = SDK.Domain.CredentialType.SDJWT;
+                }
             }
             catch { }
 
