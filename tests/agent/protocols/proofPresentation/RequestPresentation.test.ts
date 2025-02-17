@@ -1,32 +1,86 @@
-import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
-import { Message } from "../../../../src/domain";
-import { AgentError } from "../../../../src/domain/models/Errors";
-import { ProposePresentation } from "../../../../src/edge-agent/protocols/proofPresentation/ProposePresentation";
+import { describe, expect, test } from 'vitest';
+import { AttachmentDescriptor, Message } from "../../../../src/domain";
 import { RequestPresentation } from "../../../../src/edge-agent/protocols/proofPresentation/RequestPresentation";
+import { ProtocolType } from '../../../../src';
 import * as Messages from "../../../fixtures/messages";
 import * as Fixtures from "../../../fixtures";
 
-describe("ProofPresentation->RequestPresentation Tests", () => {
-  it("Should create a RequestPresentation from a valid ProposePresentationMessage", async () => {
-    const fromDID = Fixtures.DIDs.peerDID1;
-    const toDID = Fixtures.DIDs.peerDID2;
+describe("RequestPresentation", () => {
+  test("Should create a RequestPresentation from valid params", async () => {
+    const sut = new RequestPresentation({}, [], Fixtures.DIDs.peerDID1, Fixtures.DIDs.peerDID2);
 
-    const validRequestPresentation = new RequestPresentation(
-      {
-        proofTypes: [{ schema: "testSchema" }],
-      },
-      [],
-      fromDID,
-      toDID,
-      "1"
+    expect(sut).toBeInstanceOf(RequestPresentation);
+  });
+
+  test("Should create Presentation with attachments", () => {
+    const json = JSON.stringify({
+      options: {
+        challenge: "fedac0c2-3250-4fb1-bfcb-b5e904058e1f",
+        domain: "domain"
+      }
+    });
+    const id = "321905d1-5f01-42b0-b0ba-39b09645eeaa";
+    const format = "JWT";
+    const attached = new AttachmentDescriptor(
+      { json },
+      undefined,
+      id,
+      undefined,
+      format
     );
 
-    const requestPresentationMessage = validRequestPresentation.makeMessage();
-    const testRequestPresentation = RequestPresentation.fromMessage(
-      requestPresentationMessage
-    );
+    const sut = new RequestPresentation({}, [attached], Fixtures.DIDs.peerDID2, Fixtures.DIDs.peerDID3);
 
-    expect(validRequestPresentation).to.deep.equal(testRequestPresentation);
+    expect(sut).toBeInstanceOf(RequestPresentation);
+    expect(sut.attachments).toHaveLength(1);
+    expect(sut.attachments[0].id).toEqual(id);
+    expect(sut.attachments[0].data).toEqual({ json });
+    expect(sut.attachments[0].format).toEqual(format);
+  });
+
+  test("Should create RequestPresentation with valid optional params", () => {
+    const comment = "test-comment";
+    const goal_code = "test-goal-code";
+    const body = { comment, goal_code };
+    const from = Fixtures.DIDs.peerDID1;
+    const to = Fixtures.DIDs.peerDID2;
+    const thid = "test-thid";
+    const id = "test-id";
+    const sut = new RequestPresentation(body, [], from, to, thid, id);
+
+    expect(sut).toBeInstanceOf(RequestPresentation);
+    expect(sut.body.comment).toEqual(comment);
+    expect(sut.body.goal_code).toEqual(goal_code);
+
+    expect(sut.attachments).toHaveLength(0);
+    expect(sut.body).toEqual(body);
+    expect(sut.from).toBe(from);
+    expect(sut.to).toBe(to);
+    expect(sut.thid).toBe(thid);
+    expect(sut.id).toBe(id);
+  });
+
+  describe("fromMessage", () => {
+    test("piuri invalid - throws", () => {
+      const piuri = ProtocolType.DidcommBasicMessage;
+      const from = Fixtures.DIDs.peerDID1;
+      const to = Fixtures.DIDs.peerDID2;
+      const msg = new Message({}, "id", piuri, from, to);
+
+      const sut = () => RequestPresentation.fromMessage(msg);
+
+      expect(sut).toThrow("Invalid Request Presentation Message");
+    });
+
+    test("from missing - throws", () => {
+      const piuri = ProtocolType.DidcommProposeCredential;
+      const to = Fixtures.DIDs.peerDID2;
+      const msg = new Message({}, "id", piuri, null as any, to);
+
+      const sut = () => RequestPresentation.fromMessage(msg);
+
+      expect(sut).toThrow("Invalid Request Presentation Message");
+    });
   });
 
   test("RequestPresentation from an actual PrismAgent Message", () => {
@@ -39,54 +93,5 @@ describe("ProofPresentation->RequestPresentation Tests", () => {
     expect(sut.id).to.deep.eq(Messages.RequestPresentationJWT.id);
     expect(sut.thid).to.deep.eq(Messages.RequestPresentationJWT.thid);
     expect(sut.to).to.deep.eq(Messages.RequestPresentationJWT.to);
-  });
-
-  it("Should throw an error when invalid propose message is used to initialise RequestPresentation", () => {
-    const invalidRequestPresentation = new Message(
-      "{}",
-      undefined,
-      "InvalidType"
-    );
-    expect(() => {
-      RequestPresentation.fromMessage(invalidRequestPresentation);
-    }).to.throw(AgentError.InvalidRequestPresentationMessageError);
-  });
-  it("Should start a RequestPresentation from a valid ProposalMessage", () => {
-    const fromDID = Fixtures.DIDs.peerDID1;
-    const toDID = Fixtures.DIDs.peerDID2;
-    const validProposalRequest = new ProposePresentation(
-      {
-        proofTypes: [{ schema: "testSchema" }],
-      },
-      [],
-      fromDID,
-      toDID,
-      "1"
-    );
-
-    const proposalMessage = validProposalRequest.makeMessage();
-    const testProposePresentation =
-      RequestPresentation.makeRequestFromProposal(proposalMessage);
-
-    expect(validProposalRequest.from.toString()).to.equal(
-      testProposePresentation.to.toString()
-    );
-
-    expect(validProposalRequest.to.toString()).to.equal(
-      testProposePresentation.from.toString()
-    );
-
-    expect(validProposalRequest.attachments).to.deep.equal(
-      testProposePresentation.attachments
-    );
-
-    expect(validProposalRequest.id).to.equal(testProposePresentation.thid);
-    expect(validProposalRequest.body.goalCode).to.equal(
-      testProposePresentation.body.goalCode
-    );
-
-    expect(validProposalRequest.body.comment).to.equal(
-      testProposePresentation.body.comment
-    );
   });
 });

@@ -574,7 +574,7 @@ describe("Agent Tests", () => {
           const credential = new AnonCredsCredential(Fixtures.Credentials.Anoncreds.credential);
           const attachment = new AttachmentDescriptor(Fixtures.PresentationRequests.AnoncredsAttachment.data, "attach_1", undefined, undefined, "anoncreds/proof-request@v1.0");
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [attachment],
             didFrom,
             didTo
@@ -598,7 +598,7 @@ describe("Agent Tests", () => {
           const credential = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
           const attach = AttachmentDescriptor.build(Fixtures.PresentationRequests.JWTAttachment.data, undefined, undefined, undefined, CredentialType.JWT);
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [attach],
             didFrom,
             didTo
@@ -617,7 +617,7 @@ describe("Agent Tests", () => {
 
           expect(result).to.have.property("body");
           expect(result.body).to.have.property("comment", request.body.comment);
-          expect(result.body).to.have.property("goalCode", request.body.goalCode);
+          expect(result.body).to.have.property("goal_code", request.body.goal_code);
 
           expect(result).to.have.property("from", request.to);
           expect(result).to.have.property("to", request.from);
@@ -627,7 +627,7 @@ describe("Agent Tests", () => {
         test("Attachment format - not JWT - throws", async () => {
           const credential = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [{ ...Fixtures.PresentationRequests.JWTAttachment, format: "wrong" }],
             didFrom,
             didTo
@@ -648,7 +648,7 @@ describe("Agent Tests", () => {
           } as any);
 
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [Fixtures.PresentationRequests.JWTAttachment],
             didFrom,
             didTo
@@ -671,7 +671,7 @@ describe("Agent Tests", () => {
           } as any);
 
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [Fixtures.PresentationRequests.JWTAttachment],
             didFrom,
             didTo
@@ -687,7 +687,7 @@ describe("Agent Tests", () => {
         test("RequestPresentation.attachments - empty - throws", async () => {
           const credential = JWTCredential.fromJWS(Fixtures.Credentials.JWT.credentialPayloadEncoded);
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [],
             didFrom,
             didTo
@@ -700,7 +700,7 @@ describe("Agent Tests", () => {
 
         test("Credential - not matched - throws", async () => {
           const request = new RequestPresentation(
-            { proofTypes: [] },
+            {},
             [Fixtures.PresentationRequests.JWTAttachment],
             didFrom,
             didTo
