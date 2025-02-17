@@ -2,12 +2,6 @@ name: Release wallet-sdk-ts
 
 on:
   workflow_dispatch:
-    inputs:
-      release_candidate:
-        description: 'Release candidate'
-        default: true
-        required: true
-        type: boolean
 
 jobs:
   release:
