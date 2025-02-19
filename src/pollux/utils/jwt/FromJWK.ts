@@ -2,8 +2,7 @@ import { Domain } from "../../..";
 import { expect, Task } from "../../../utils";
 
 import { base64url } from "multiformats/bases/base64";
-import { ApolloError, Curve, JWK, KeyPair, KeyProperties, KeyTypes, PrivateKey, PublicKey } from "../../../domain";
-import { InvalidECParameters } from "../../../domain/models/errors/Apollo";
+import { ApolloError, Curve, JWK, KeyPair, KeyProperties, KeyTypes, PolluxError, PrivateKey, PublicKey } from "../../../domain";
 
 
 export function isECJWK(jwk: JWK): jwk is JWK.EC {
@@ -21,16 +20,22 @@ export function isOKPJWK(jwk: JWK): jwk is JWK.OKP {
 }
 
 
-export function decodeJWKECParameter(coordinate: 'x' | 'y' | 'd', jwk: JWK.EC): Uint8Array {
+export function decodeJWKParameter(
+    coordinate: 'x' | 'y' | 'd',
+    jwk: JWK.EC | JWK.OKP
+): Uint8Array {
     if (!jwk[coordinate]) {
-        throw new InvalidECParameters(coordinate);
+        throw new PolluxError.InvalidJWKParameters(coordinate, `Missing JWK Parameter`);
     }
-    const coordinateValue = jwk[coordinate]!;
+    const coordinateValue = jwk[coordinate];
     try {
+        if (typeof coordinateValue !== 'string') {
+            throw new PolluxError.InvalidJWKParameters(coordinate, `Invalid JWK Parameter, not string`);
+        }
         const decoded = base64url.baseDecode(coordinateValue);
         return new Uint8Array(decoded);
     } catch (err) {
-        throw new InvalidECParameters(coordinate);
+        throw new PolluxError.InvalidJWKParameters(coordinate, `Invalid JWK Parameter, not base64url encoded`);
     }
 }
 
@@ -43,39 +48,49 @@ export interface Args {
 
 export class FromJWK extends Task<Domain.PublicKey | Domain.KeyPair, Args> {
 
+    private isSupportedCurve(crv: string): void {
+        const keys = Object.values(Curve);
+        if (!keys.includes(crv as Curve)) {
+            throw new ApolloError.InvalidKeyCurve(crv);
+        }
+    }
+
     private fromJWKEC(apollo: Domain.Apollo, jwk: JWK.EC): KeyPair | PrivateKey | PublicKey {
-        const crv = expect(jwk.crv);
+        const crv = expect(jwk.crv, new PolluxError.InvalidJWKParameters(['crv'], 'Missing JWK Parameter'));
+        this.isSupportedCurve(crv);
+
         const withCoordinates =
             jwk.x !== undefined ||
             jwk.y !== undefined;
 
+        const keyType = crv === Curve.X25519 ? KeyTypes.Curve25519 : KeyTypes.EC;
         if (withCoordinates) {
-            const decodedX = decodeJWKECParameter('x', jwk);
-            const decodedY = decodeJWKECParameter('y', jwk);
+            const decodedX = decodeJWKParameter('x', jwk);
+            const decodedY = decodeJWKParameter('y', jwk);
 
             if (crv === Curve.SECP256K1) {
                 let pk: PublicKey;
                 let sk: PrivateKey;
 
                 pk = apollo.createPublicKey({
-                    [KeyProperties.curve]: Curve.SECP256K1,
-                    [KeyProperties.type]: KeyTypes.EC,
+                    [KeyProperties.curve]: crv,
+                    [KeyProperties.type]: keyType,
                     [KeyProperties.curvePointX]: decodedX,
                     [KeyProperties.curvePointY]: decodedY
                 });
 
                 if (jwk.d !== undefined) {
-                    const decodedD = decodeJWKECParameter('d', jwk);
+                    const decodedD = decodeJWKParameter('d', jwk);
                     sk = apollo.createPrivateKey({
-                        [KeyProperties.curve]: Curve.SECP256K1,
-                        [KeyProperties.type]: KeyTypes.EC,
+                        [KeyProperties.curve]: crv,
+                        [KeyProperties.type]: keyType,
                         [KeyProperties.rawKey]: decodedD
                     });
 
                     const keypair: Domain.KeyPair = {
                         privateKey: sk,
                         publicKey: pk,
-                        curve: Curve.SECP256K1
+                        curve: crv
                     }
                     return keypair;
                 }
@@ -86,39 +101,36 @@ export class FromJWK extends Task<Domain.PublicKey | Domain.KeyPair, Args> {
         }
 
         if (jwk.d !== undefined) {
-            if (crv !== Curve.SECP256K1 && crv !== Curve.ED25519 && crv !== Curve.X25519) {
-                throw new ApolloError.InvalidKeyCurve();
-            }
-            const decodedD = decodeJWKECParameter('d', jwk);
+            const decodedD = decodeJWKParameter('d', jwk);
             return apollo.createPrivateKey({
-                [KeyProperties.curve]: Curve.SECP256K1,
-                [KeyProperties.type]: KeyTypes.EC,
+                [KeyProperties.curve]: crv,
+                [KeyProperties.type]: keyType,
                 [KeyProperties.rawKey]: decodedD
             })
         }
 
-        throw new ApolloError.InvalidECParameters(['d', 'x and y']);
+        throw new PolluxError.InvalidJWK('Required property x+y or d is missing in EC JWK');
     }
 
     private fromJWKOKP(apollo: Domain.Apollo, jwk: JWK.OKP): KeyPair | PublicKey {
-        const crv = expect(jwk.crv);
-        const x = expect(jwk.d);
+        const crv = expect(jwk.crv, new PolluxError.InvalidJWKParameters(['crv']));
+        this.isSupportedCurve(crv);
 
-        if (crv !== Curve.SECP256K1 && crv !== Curve.ED25519 && crv !== Curve.X25519) {
-            throw new ApolloError.InvalidKeyCurve();
-        }
+        expect(jwk.x, new PolluxError.InvalidJWKParameters(['x'], 'Missing JWK Parameter x'));
+
+        const keyType = crv === Curve.X25519 ? KeyTypes.Curve25519 : KeyTypes.EC;
 
         const pk = apollo.createPublicKey({
             [KeyProperties.curve]: crv,
-            [KeyProperties.type]: KeyTypes.OKP,
-            [KeyProperties.rawKey]: base64url.baseDecode(x)
+            [KeyProperties.type]: keyType,
+            [KeyProperties.rawKey]: decodeJWKParameter('x', jwk)
         });
 
         if (jwk.d !== undefined) {
             const sk = apollo.createPrivateKey({
                 [KeyProperties.curve]: crv,
-                [KeyProperties.type]: KeyTypes.OKP,
-                [KeyProperties.rawKey]: base64url.baseDecode(jwk.d)
+                [KeyProperties.type]: keyType,
+                [KeyProperties.rawKey]: decodeJWKParameter('d', jwk)
             });
             const keypair: Domain.KeyPair = {
                 privateKey: sk,
@@ -127,22 +139,22 @@ export class FromJWK extends Task<Domain.PublicKey | Domain.KeyPair, Args> {
             }
             return keypair;
         }
+
         return pk;
     }
 
     async run(ctx: Task.Context): Promise<Domain.PublicKey | Domain.KeyPair> {
         const jwk = this.args.jwk;
-        const kty = expect(jwk.kty);
+        const kty = expect(jwk.kty, new PolluxError.InvalidJWKParameters(['kty'], 'Missing JWK Parameter kty'));
         const isEC = isECJWK(jwk);
         const isOKP = isOKPJWK(jwk);
-
         if (isEC) {
             return this.fromJWKEC(ctx.Apollo, jwk);
         }
         if (isOKP) {
             return this.fromJWKOKP(ctx.Apollo, jwk);
         }
-        throw new ApolloError.InvalidKeyType(kty, [KeyTypes.EC, KeyTypes.OKP]);
+        throw new ApolloError.InvalidKeyType(kty, [KeyTypes.EC]);
     }
 
 }

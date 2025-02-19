@@ -1,3 +1,5 @@
+import { SDKError } from "./Common";
+
 export class InvalidCredentialError extends Error {
     constructor(message?: string) {
         super(message || "Invalid credential error");
@@ -15,6 +17,23 @@ export class InvalidPresentationProofArgs extends Error {
         super(message || "Invalid presentation proof arguments");
     }
 }
+
+
+export class InvalidJWKParameters extends SDKError {
+    constructor(parameters: string | string[], message?: string) {
+        const isSingle = typeof parameters === "string" || parameters.length === 1;
+        const error = `${message || "Invalid JWK parameter"}${isSingle ? ":" : "s:"}`;
+        super(19, `${error} ${typeof parameters === "string" ? parameters : parameters.join(", ")}`);
+    }
+}
+
+export class InvalidJWK extends SDKError {
+    constructor(message: string) {
+        super(20, message || `Missing or invalid JWK`);
+
+    }
+}
+
 
 export class CredentialRevocationTypeInvalid extends Error {
     constructor(message?: string) {
@@ -85,4 +104,4 @@ export class InvalidDescriptorFormatError extends Error {
 /**
  * general Revocation error, message should contain details
  */
-export class RevocationError extends Error {}
+export class RevocationError extends Error { }
