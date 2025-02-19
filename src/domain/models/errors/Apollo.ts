@@ -53,8 +53,7 @@ export class KeyRestoratonFailed extends SDKError {
  * thrown when given Key Curve is not supported
  */
 export class InvalidKeyCurve extends SDKError {
-  constructor(keyCurve?: string) {
-    const options = Object.values(Curve);
+  constructor(keyCurve?: string, options = Object.values(Curve)) {
     const msg = `Invalid key curve: ${keyCurve ?? "undefined"}. Valid options are: ${options.join(", ")}`;
     super(16, msg);
   }
@@ -64,8 +63,7 @@ export class InvalidKeyCurve extends SDKError {
  * thrown when give Key Type is not supported
  */
 export class InvalidKeyType extends SDKError {
-  constructor(keyType?: string) {
-    const options = Object.values(KeyTypes);
+  constructor(keyType?: string, options = Object.values(KeyTypes)) {
     const msg = `Invalid key type: ${keyType ?? "undefined"}. Valid options are: ${options.join(", ")}`;
     super(17, msg);
   }
@@ -77,6 +75,16 @@ export class InvalidKeyType extends SDKError {
 export class MissingKeyParameters extends SDKError {
   constructor(...missing: string[]) {
     super(18, `Missing key parameters: ${missing.join(", ")}`);
+  }
+}
+
+export class InvalidECParameters extends SDKError {
+  constructor(parameters: string | string[]) {
+    if (typeof parameters === "string") {
+      super(19, `Missing or invalid JWK parameter: ${parameters}`);
+    } else {
+      super(19, `Missing or invalid JWK parameters: ${parameters.join(", ")}`);
+    }
   }
 }
 
