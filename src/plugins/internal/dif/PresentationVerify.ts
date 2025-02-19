@@ -90,7 +90,6 @@ export class PresentationVerify extends Plugins.Task<Args> {
       presentation.core.jwt?.payload ?? {},
       presentation.core.disclosures ?? [],
     );
-
     const verifiableCredentialPropsMapper = new DescriptorPath(claims);
     const inputDescriptor = inputDescriptors.find(
       (inputDescriptor) => inputDescriptor.id === item.id
