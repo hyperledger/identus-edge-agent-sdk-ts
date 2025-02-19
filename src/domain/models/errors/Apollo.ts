@@ -78,16 +78,6 @@ export class MissingKeyParameters extends SDKError {
   }
 }
 
-export class InvalidECParameters extends SDKError {
-  constructor(parameters: string | string[]) {
-    if (typeof parameters === "string") {
-      super(19, `Missing or invalid JWK parameter: ${parameters}`);
-    } else {
-      super(19, `Missing or invalid JWK parameters: ${parameters.join(", ")}`);
-    }
-  }
-}
-
 /**
  * thrown when failing to create a key
  */
