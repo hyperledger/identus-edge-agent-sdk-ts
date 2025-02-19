@@ -184,7 +184,7 @@ describe("Plugins - DIF", () => {
           const sut = new PresentationVerify({ presentation, presentationRequest: failRequest });
           const result = ctx.run(sut);
 
-          await expect(result).rejects.toThrow('Verification failed for credential (eyJhbGciOi...): reason -> Invalid Claim: Expected the $.credentialSubject.course field to be "not the expected pattern" but got "Identus Training course Certification 2024"');
+          await expect(result).rejects.toThrow('Verification failed for credential (eyJhbGciOi...): reason -> Invalid Claim: Expected the $.vc.credentialSubject.course field to be "not the expected pattern" but got "Identus Training course Certification 2024"');
         });
 
         test("invalid presentation - not an object - returns false", async () => {
