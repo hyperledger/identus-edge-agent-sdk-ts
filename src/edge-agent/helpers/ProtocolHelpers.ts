@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AttachmentDescriptor, Message } from "../../domain";
 import { AgentError } from "../../domain/models/Errors";
-import { isArray, isEmpty, isNil, notEmptyString } from "../../utils";
+import { isArray, isEmpty, notEmptyString } from "../../utils";
 import { CredentialFormat } from "../protocols/issueCredential/CredentialFormat";
-import { MediationGrantBody, BasicMessageBody, ProblemReportBody } from "../protocols/types";
+import { BasicMessageBody, ProblemReportBody } from "../protocols/types";
 
 export const parseCredentialAttachments = (credentials: Map<string, any>) => {
   const initialValue = {
@@ -48,18 +48,4 @@ export const parseProblemReportBody = (msg: Message): ProblemReportBody => {
     return { code, comment, escalate_to, args };
   }
   throw new AgentError.InvalidProblemReportBodyError();
-};
-
-
-
-export const parseMediationGrantMessage = (msg: Message): MediationGrantBody => {
-  if (isNil(msg.body.routing_did)) {
-    throw new AgentError.InvalidMediationGrantBodyError(
-      "Undefined routingDid"
-    );
-  }
-
-  return {
-    routing_did: msg.body.routing_did,
-  };
 };

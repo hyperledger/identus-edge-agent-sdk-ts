@@ -3,10 +3,6 @@ export interface PrismRevocationBody {
   comment?: string;
 }
 
-export interface MediationGrantBody {
-  routing_did: string;
-}
-
 export interface MediationKeysUpdateListBody {
   updates: Array<{
     recipient_did: string;

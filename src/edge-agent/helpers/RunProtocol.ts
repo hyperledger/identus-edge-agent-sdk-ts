@@ -1,5 +1,5 @@
 import { Payload } from "../../domain/protocols/Payload";
-import { JsonObj, isObject, notEmptyString, notNil } from "../../utils";
+import { JsonObj, expect, isObject, notEmptyString, notNil } from "../../utils";
 import { Task } from "../../utils/tasks";
 import { DIDCommContext } from "../didcomm/Context";
 import { JWT, SDJWT } from "../../pollux/utils/jwt";
@@ -7,8 +7,11 @@ import { Plugins } from "../../plugins";
 import { Domain } from "../..";
 
 interface IArgs<T extends string, D extends JsonObj> {
+  // generalized type of protocol
   type: T;
+  // specific protocol identifier
   pid: string;
+  // relevant protocol data
   data: D;
 }
 
@@ -40,7 +43,10 @@ type Args =
 
 export class RunProtocol extends Task<Payload, Args> {
   async run(ctx: DIDCommContext) {
-    const protocolCtor = ctx.Plugins.findProtocol(this.args.type, this.args.pid);
+    const taskCtor = expect(
+      ctx.Plugins.findProtocol(this.args.type, this.args.pid),
+      `Protocol handler not found for ${this.args.pid} (${this.args.type})`
+    );
 
     const internalModules: Plugins.InternalModules = {
       JWT: new JWT(),
@@ -49,7 +55,7 @@ export class RunProtocol extends Task<Payload, Args> {
 
     ctx.extend(internalModules);
 
-    const task = new protocolCtor(this.args.data);
+    const task = new taskCtor(this.args.data);
     const result = await ctx.run(task);
     this.assertPayload(result);
     return result;

@@ -1,6 +1,7 @@
 import { notNil } from "../utils";
 import { Plugin } from ".";
 
+// TODO comments
 export class PluginManager {
   private readonly plugins: Plugin[] = [];
 
@@ -10,7 +11,7 @@ export class PluginManager {
 
   getModules() {
     const modules = this.plugins
-      .map(x => x.extensions)
+      .map(x => Object.fromEntries(x.modules))
       .reduce((acc, x) => Object.assign(acc, x), {});
 
     return modules;
@@ -25,6 +26,6 @@ export class PluginManager {
       }
     }
 
-    throw new Error(`Protocol handler not found for ${id} (${type})`);
+    return null;
   }
 }
