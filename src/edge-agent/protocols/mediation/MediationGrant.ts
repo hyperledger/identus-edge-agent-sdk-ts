@@ -12,6 +12,7 @@ export class MediationGrant {
 
   static fromMessage(fromMessage: Message): MediationGrant {
     if (fromMessage.piuri !== ProtocolType.DidcommMediationGrant) {
+      // ?? wrong error message
       throw new AgentError.InvalidMediationGrantMessageError(
         "Invalid request credential message error."
       );
