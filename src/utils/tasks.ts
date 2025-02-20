@@ -91,11 +91,11 @@ export namespace Task {
       const taskName = task.constructor.name;
 
       try {
-        this.logger.debug(`${taskName}: Run`, task.log());
+        this.logger.debug(`Run: ${taskName}`, task.log());
         return await task.run(this);
       }
       catch (err) {
-        this.logger.warn(`Fail: ${taskName}`, task.log(), err);
+        this.logger.debug(`Fail: ${taskName}`, err);
         throw err;
       }
     }
@@ -134,9 +134,21 @@ export namespace Task {
   // ================================
 
   interface ILogger {
+    /**
+     * very verbose information for debugging purposes
+     */
     debug(message: string, ...params: any[]): void;
+    /**
+     * verbose information about normal operation
+     */
     info(message: string, ...params: any[]): void;
+    /**
+     * expected information that might warrant require attention
+     */
     warn(message: string, ...params: any[]): void;
+    /**
+     * unexpected or critical information
+     */
     error(message: string, ...params: any[]): void;
   }
 
