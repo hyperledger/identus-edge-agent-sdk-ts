@@ -36,7 +36,7 @@ export class Secp256k1PublicKey extends PublicKey implements StorableKey, Export
     );
   }
 
-  get native() {
+  private get native() {
     return ApolloSDK.utils.KMMECSecp256k1PublicKey.Companion.secp256k1FromBytes(
       Int8Array.from(this.raw)
     );
