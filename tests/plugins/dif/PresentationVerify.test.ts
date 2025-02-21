@@ -354,6 +354,46 @@ describe("Plugins - DIF", () => {
       await expect(result).rejects.toThrow("Verification failed for credential (eyJ0eXAiOi...): reason -> Invalid Claim: Expected one of the paths $.vc.credentialSubject.course, $.credentialSubject.course, $.course to exist.");
     });
 
+    test("Should Verify false when at least one of the input_descriptors does not match the presentation", async () => {
+      const failRequest: DIF.Presentation.Request = JSON.parse(JSON.stringify(presentationRequest));
+
+      //Valid input descriptor
+      failRequest.presentation_definition.input_descriptors[0].constraints.fields = [{
+        path: [
+          "$.vc.credentialSubject.course",
+          "$.credentialSubject.course",
+          "$.course",
+        ],
+        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+        optional: false,
+        filter: {
+          type: "string",
+          pattern: "Identus Training course Certification 2024",
+        },
+        name: "course",
+      }];
+
+      //Invalid input descriptor 
+      failRequest.presentation_definition.input_descriptors[0].constraints.fields = [{
+        path: [
+          "$.vc.credentialSubject.firstname",
+          "$.credentialSubject.firstname",
+          "$.firstname",
+        ],
+        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+        optional: false,
+        filter: {
+          type: "string",
+          pattern: "not hola",
+        },
+        name: "firstname",
+      }];
+      const sut = new PresentationVerify({ presentation, presentationRequest: failRequest });
+      const result = ctx.run(sut);
+
+      await expect(result).rejects.toThrow('Verification failed for credential (eyJ0eXAiOi...): reason -> Invalid Claim: Expected the $.vc.credentialSubject.firstname field to be "not hola" but got "hola"');
+    });
+
     // for use with PresentationFrame feature [https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362]
     // test("Should Verify false when the verifier asks for a field that was not disclosed by the user", async () => {
     /*
