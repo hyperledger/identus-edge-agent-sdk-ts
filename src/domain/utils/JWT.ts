@@ -3,7 +3,7 @@ import { base64url } from "multiformats/bases/base64";
 import { isNil } from "../../utils/guards";
 import { InvalidJWTString } from "../models/errors/Pollux";
 import { SdJwtVcPayload, } from "@sd-jwt/sd-jwt-vc";
-import type { DisclosureFrame as DisclosureFrameType, PresentationFrame } from '@sd-jwt/types';
+import type { DisclosureFrame as DisclosureFrameType } from '@sd-jwt/types';
 
 
 export namespace SDJWT {

@@ -1,11 +1,8 @@
 import { base58btc } from "multiformats/bases/base58";
-import { base64url } from "multiformats/bases/base64";
 import * as Domain from "../../../domain";
-import { asJsonObj, expect, notNil } from "../../../utils";
+import { expect, notNil } from "../../../utils";
 import { Task } from "../../../utils/tasks";
 import { SdJwtVcPayload, } from "@sd-jwt/sd-jwt-vc";
-import { SDJWT } from "./SDJWT";
-import { DIDCommContext } from "../../../edge-agent/didcomm/Context";
 import { Plugins } from "../../../plugins";
 /**
  * Asyncronously sign with a DID
