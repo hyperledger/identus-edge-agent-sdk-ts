@@ -79,20 +79,18 @@ export class PresentationVerify extends Plugins.Task<Args> {
       }
     }
 
-
-    // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/366
-    // should fail when credential invalid - requiredClaims need to be passed
-    // const requiredClaims = asArray(this.args.requiredClaims);
-    // const credentialValid = await ctx.SDJWT.verify({
-    //   issuerDID: issuer,
-    //   jws,
-    //   requiredClaimKeys: requiredClaims
-    // });
+    // https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/366
+    // We won't be using the requiredClaims field of the SDJWT Verification
+    // IT conflicts a little with our presentation exchange protocol approach
+    // Where each claim can be present in different places
+    // Instead, we disclose or reveal all the available claims and process them 
+    // with the presentation definition constraints
 
     const claims = await ctx.SDJWT.reveal(
       presentation.core.jwt?.payload ?? {},
       presentation.core.disclosures ?? [],
     );
+
     const verifiableCredentialPropsMapper = new DescriptorPath(claims);
     const inputDescriptor = inputDescriptors.find(
       (inputDescriptor) => inputDescriptor.id === item.id
@@ -318,6 +316,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
     const fields = constraints.fields;
 
     if (constraints.limit_disclosure === "required") {
+
       for (const field of fields) {
         const paths = [...field.path];
         const optional = field.optional;
@@ -328,7 +327,9 @@ export class PresentationVerify extends Plugins.Task<Args> {
             const [path] = paths.splice(0, 1);
             try {
               this.validateField(vc, descriptorMapper, path, field);
-              return true;
+              //if field is valid, stop searching paths
+              error = undefined;
+              break;
             } catch (err) {
               //set error and continue to see if other paths succeed
               error ??= err as Error;

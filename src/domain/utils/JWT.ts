@@ -2,6 +2,21 @@ import { JWTPayload } from "did-jwt";
 import { base64url } from "multiformats/bases/base64";
 import { isNil } from "../../utils/guards";
 import { InvalidJWTString } from "../models/errors/Pollux";
+import { SdJwtVcPayload, } from "@sd-jwt/sd-jwt-vc";
+import type { DisclosureFrame as DisclosureFrameType, PresentationFrame } from '@sd-jwt/types';
+
+
+export namespace SDJWT {
+  export interface Header {
+    typ: string;
+    alg: string;
+    [key: string]: any;
+  }
+
+  export type Payload = SdJwtVcPayload;
+  export type DisclosureFrame<T extends SdJwtVcPayload> = DisclosureFrameType<T>;
+}
+
 
 export namespace JWT {
   export interface Header {

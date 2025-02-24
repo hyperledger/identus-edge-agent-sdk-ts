@@ -1,12 +1,23 @@
-import { vi, describe, expect, test, beforeEach } from 'vitest';
+import { describe, expect, test, beforeEach } from 'vitest';
+import type { DisclosureFrame, PresentationFrame, } from '@sd-jwt/types';
+
 import { DIF } from '../../../src/plugins/internal/dif/types';
 import { Task } from '../../../src/utils';
 import { Apollo, Castor } from '../../../src';
 import { JWT, SDJWT } from "../../../src/pollux/utils/jwt";
 import { PresentationVerify } from '../../../src/plugins/internal/dif/PresentationVerify';
+import { Curve, KeyTypes, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from '../../../src/domain';
+import { CreateSDJWT } from '../../../src/pollux/utils/jwt/CreateSDJWT';
+import { DIFModule } from '../../../src/plugins/internal/dif/module';
 
 describe("Plugins - DIF", () => {
-  let ctx: Task.Context;
+  let ctx: Task.Context<{
+    SDJWT: SDJWT,
+    JWT: JWT,
+    Apollo: Apollo,
+    Castor: Castor,
+    DIF: DIFModule
+  }>;
 
   beforeEach(() => {
     const apollo = new Apollo();
@@ -16,6 +27,7 @@ describe("Plugins - DIF", () => {
       Castor: castor,
       JWT: new JWT(),
       SDJWT: new SDJWT(),
+      DIF: new DIFModule(),
     });
   });
 
@@ -394,38 +406,152 @@ describe("Plugins - DIF", () => {
       await expect(result).rejects.toThrow('Verification failed for credential (eyJ0eXAiOi...): reason -> Invalid Claim: Expected the $.vc.credentialSubject.firstname field to be "not hola" but got "hola"');
     });
 
-    // for use with PresentationFrame feature [https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362]
-    // test("Should Verify false when the verifier asks for a field that was not disclosed by the user", async () => {
-    /*
-      //At the presentation level the holder chooses which fields it wants to disclose to verifier
-      // presentationFrame: {
-      //   vc: {
-      //     credentialSubject: {
-      //       firstname: true,
-      //       email: false
-      //     }
-      //   }
-      // },
-      // const presentationSubmissionJSON = await pollux.createPresentationSubmission<CredentialType.SDJWT>(
-      //   presentationDefinition,
-      //   jwtCredential,
-      //   holderPrv,
-      //   { presentationFrame }
-      // );
-      //   jws = await this.SDJWT.createPresentationFor<any>({
-      //     jws: credential.id,
-      //     privateKey,
-      //     presentationFrame
-      //   });
+    test("Should Verify false when the verifier asks for a field that was not disclosed by the user", async () => {
+      const issuerSeed = ctx.Apollo.createRandomSeed().seed;
+      const holderSeed = ctx.Apollo.createRandomSeed().seed;
 
-      // requiredClaims: ['vc.credentialSubject.email']
-    //*/
-    //   const sut = ctx.run(new PresentationVerify({ presentation, presentationRequest }));
+      const issuerMasterSK = ctx.Apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
+      const issuerAuthenticationSK = ctx.Apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.ED25519,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
 
-    //   // Fails despite the verifier asked for the email, the holder rejected disclosing it
-    //   expect(sut).to.eventually.be.rejectedWith(
-    //     "Invalid Claim: Expected one of the paths $.vc.credentialSubject.email, $.credentialSubject.email, $.email to exist."
-    //   );
-    // });
+      const holderMasterSK = ctx.Apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.SECP256K1,
+        seed: Buffer.from(issuerSeed.value).toString("hex"),
+      });
+      const holderAuthenticationSK = ctx.Apollo.createPrivateKey({
+        type: KeyTypes.EC,
+        curve: Curve.ED25519,
+        seed: Buffer.from(holderSeed.value).toString("hex"),
+      });
+
+      const issuerDID = await ctx.Castor.createPrismDID(
+        issuerMasterSK.publicKey(),
+        [],
+        [
+          issuerAuthenticationSK.publicKey()
+        ]
+      );
+
+      const holderDID = await ctx.Castor.createPrismDID(
+        holderMasterSK.publicKey(),
+        [],
+        [
+          holderAuthenticationSK.publicKey()
+        ]
+      );
+
+      const currentDate = new Date();
+      const nextMonthDate = new Date(currentDate);
+      nextMonthDate.setMonth(currentDate.getMonth() + 1);
+      const issuanceDate = currentDate.getTime();
+      const expirationDate = nextMonthDate.getTime();
+
+      const payload = {
+        iss: issuerDID.toString(),
+        nbf: issuanceDate,
+        exp: expirationDate,
+        sub: holderDID.toString(),
+        vc: {
+          "@context": [W3CVerifiableCredentialContext.credential],
+          type: [W3CVerifiableCredentialType.credential],
+          issuer: issuerDID.toString(),
+          issuanceDate: new Date(issuanceDate).toISOString(),
+          credentialSubject: {
+            firstname: "hola",
+            email: 'secret@email.com'
+          },
+        },
+        vct: issuerDID.toString()
+      };
+
+      const claims = {
+        firstname: {
+          type: 'string',
+          pattern: 'hola'
+        },
+        email: {
+          type: 'string',
+          pattern: '*'
+        }
+      }
+
+      const presentationFrame: PresentationFrame<typeof payload> = {
+        vc: {
+          credentialSubject: {
+            firstname: true,
+            email: false
+          }
+        }
+      }
+
+      const disclosureFrame: DisclosureFrame<typeof payload> = {
+        _sd: ["vc"],
+        vc: {
+          _sd: [
+            "@context",
+            "credentialSubject",
+            "issuanceDate",
+            "issuer",
+            "type"
+          ],
+          credentialSubject: {
+            _sd: ['email', 'firstname']
+          }
+        }
+      }
+
+      const createSDJWT = new CreateSDJWT<typeof payload>({
+        did: issuerDID,
+        payload,
+        privateKey: issuerAuthenticationSK,
+        disclosureFrame
+      });
+
+      const jwt = await ctx.run(createSDJWT);
+
+      const presentationDefinition = await ctx.DIF.createPresentationDefinition(claims, {
+        issuer: issuerDID.toString()
+      });
+
+      const presentationSubmissionJWS = await ctx.SDJWT.createPresentationFor<typeof payload>({
+        jws: jwt,
+        privateKey: issuerAuthenticationSK,
+        presentationFrame
+      });
+
+      const [descriptor] = presentationDefinition.presentation_definition.input_descriptors;
+      const presentation: DIF.EmbedTarget = {
+        presentation_submission: {
+          id: "f28b346e-c20e-4651-8c24-7f41a576cf26",
+          definition_id: "acd86273-5017-4980-a9be-dab6c725c811",
+          descriptor_map: [
+            {
+              id: descriptor.id,
+              format: "sdjwt" as any,
+              path: "$.verifiablePresentation[0]",
+            },
+          ],
+        },
+        verifiablePresentation: [
+          presentationSubmissionJWS
+        ],
+      };
+
+      const sut = ctx.run(new PresentationVerify({
+        presentation,
+        presentationRequest: presentationDefinition
+      }));
+
+      await expect(sut).rejects.toThrow('Verification failed for credential (eyJ0eXAiOi...): reason -> Invalid Claim: Expected one of the paths $.vc.credentialSubject.email, $.credentialSubject.email, $.email to exist.');
+
+    })
   });
 });

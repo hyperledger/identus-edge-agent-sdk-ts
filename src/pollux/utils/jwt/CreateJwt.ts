@@ -73,7 +73,7 @@ export class CreateJWT extends Task<string, Args> {
    * @param privateKey 
    * @returns {string} kid (key identifier)
    */
-  private async getSigningKid(ctx: Task.Context, did: Domain.DID, privateKey: Domain.PrivateKey) {
+  async getSigningKid(ctx: Task.Context, did: Domain.DID, privateKey: Domain.PrivateKey) {
     const pubKey = privateKey.publicKey();
     const encoded = base58btc.encode(pubKey.to.Buffer());
     const document = await ctx.Castor.resolveDID(did.toString());
