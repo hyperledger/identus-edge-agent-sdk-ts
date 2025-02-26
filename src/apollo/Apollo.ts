@@ -29,7 +29,6 @@ import { X25519PublicKey } from "./utils/X25519PublicKey";
 import { isEmpty, notEmptyString } from "../utils";
 import ApolloPKG from "@hyperledger/identus-apollo";
 import { PrismDerivationPath } from "../domain/models/derivation/schemas/PrismDerivation";
-
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
@@ -114,7 +113,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   static Secp256k1PrivateKey = Secp256k1PrivateKey;
   static Ed25519PrivateKey = Ed25519PrivateKey;
   static X25519PrivateKey = X25519PrivateKey;
-
 
   /**
    * Creates a random set of mnemonic phrases that can be used as a seed for generating a private key.
