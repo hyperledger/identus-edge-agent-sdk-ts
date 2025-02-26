@@ -1,34 +1,84 @@
-import { vi, describe, it, expect, test, beforeEach, afterEach } from 'vitest';
-import { Message } from "../../../../src/domain";
-import { AgentError } from "../../../../src/domain/models/Errors";
-import { parsePresentationMessage } from "../../../../src/edge-agent/helpers/ProtocolHelpers";
+import { describe, expect, test } from 'vitest';
+import { AttachmentDescriptor, Message } from "../../../../src/domain";
 import { Presentation } from "../../../../src/edge-agent/protocols/proofPresentation/Presentation";
-import { ProtocolType } from "../../../../src/edge-agent/protocols/ProtocolTypes";
+import { ProtocolType } from '../../../../src';
 import * as Fixtures from "../../../fixtures";
 
-describe("ProofPresentation -> Presentation Tests", () => {
-  it("Should create a Presentation from a valid PresentationMessage", async () => {
-    const fromDID = Fixtures.DIDs.peerDID1;
-    const toDID = Fixtures.DIDs.peerDID2;
-    const msg = new Message("{}", undefined, ProtocolType.DidcommPresentation);
-    const presentationBody = parsePresentationMessage(msg);
-    const validPresentation = new Presentation(
-      presentationBody,
-      [],
-      fromDID,
-      toDID
-    );
+describe("Presentation", () => {
+  test("Should create a Presentation from valid params", () => {
+    const sut = new Presentation({}, [], Fixtures.DIDs.peerDID1, Fixtures.DIDs.peerDID2);
 
-    const presentationMessage = validPresentation.makeMessage();
-    const testPresentation = Presentation.fromMessage(presentationMessage);
-
-    expect(validPresentation).to.deep.equal(testPresentation);
+    expect(sut).toBeInstanceOf(Presentation);
   });
 
-  it("Should throw an error when invalid request message is used to initialise Presentation", () => {
-    const invalidPresentation = new Message("{}", undefined, "InvalidType");
-    expect(() => {
-      Presentation.fromMessage(invalidPresentation);
-    }).to.throw(AgentError.InvalidPresentationMessageError);
+  test("Should create Presentation with attachments", () => {
+    const json = JSON.stringify({
+      options: {
+        challenge: "fedac0c2-3250-4fb1-bfcb-b5e904058e1f",
+        domain: "domain"
+      }
+    });
+    const id = "321905d1-5f01-42b0-b0ba-39b09645eeaa";
+    const format = "JWT";
+    const attached = new AttachmentDescriptor(
+      { json },
+      undefined,
+      id,
+      undefined,
+      format
+    );
+
+    const sut = new Presentation({}, [attached], Fixtures.DIDs.peerDID2, Fixtures.DIDs.peerDID3);
+
+    expect(sut).toBeInstanceOf(Presentation);
+    expect(sut.attachments).toHaveLength(1);
+    expect(sut.attachments[0].id).toEqual(id);
+    expect(sut.attachments[0].data).toEqual({ json });
+    expect(sut.attachments[0].format).toEqual(format);
+  });
+
+  test("Should create Presentation with valid optional params", () => {
+    const comment = "test-comment";
+    const goal_code = "test-goal-code";
+    const body = { comment, goal_code };
+    const from = Fixtures.DIDs.peerDID1;
+    const to = Fixtures.DIDs.peerDID2;
+    const thid = "test-thid";
+    const id = "test-id";
+    const sut = new Presentation(body, [], from, to, thid, id);
+
+    expect(sut).toBeInstanceOf(Presentation);
+    expect(sut.body.comment).toEqual(comment);
+    expect(sut.body.goal_code).toEqual(goal_code);
+
+    expect(sut.attachments).toHaveLength(0);
+    expect(sut.body).toEqual(body);
+    expect(sut.from).toBe(from);
+    expect(sut.to).toBe(to);
+    expect(sut.thid).toBe(thid);
+    expect(sut.id).toBe(id);
+  });
+
+  describe("fromMessage", () => {
+    test("piuri invalid - throws", () => {
+      const piuri = ProtocolType.DidcommBasicMessage;
+      const from = Fixtures.DIDs.peerDID1;
+      const to = Fixtures.DIDs.peerDID2;
+      const msg = new Message({}, "id", piuri, from, to);
+
+      const sut = () => Presentation.fromMessage(msg);
+
+      expect(sut).toThrow("Invalid Presentation Message");
+    });
+
+    test("from missing - throws", () => {
+      const piuri = ProtocolType.DidcommProposeCredential;
+      const to = Fixtures.DIDs.peerDID2;
+      const msg = new Message({}, "id", piuri, null as any, to);
+
+      const sut = () => Presentation.fromMessage(msg);
+
+      expect(sut).toThrow("Invalid Presentation Message");
+    });
   });
 });

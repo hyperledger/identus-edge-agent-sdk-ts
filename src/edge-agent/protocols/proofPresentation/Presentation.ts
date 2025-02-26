@@ -1,11 +1,20 @@
 import { uuid } from "@stablelib/uuid";
-
 import { AttachmentDescriptor, DID, Message } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
-import { parsePresentationMessage } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
-import { PresentationBody } from "../types";
-import { RequestPresentation } from "./RequestPresentation";
+import { isString, notNil } from "../../../utils";
+
+/**
+ * Specification:
+ * https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md#presentation
+ */
+
+export interface PresentationBody {
+  // optional field that indicates the goal of the message sender
+  goal_code?: string;
+  // a field that provides some human readable information about this presentation
+  comment?: string;
+}
 
 export class Presentation {
   public static type = ProtocolType.DidcommPresentation;
@@ -17,7 +26,19 @@ export class Presentation {
     public to: DID,
     public thid?: string,
     public id: string = uuid()
-  ) {}
+  ) {
+    this.validate();
+  }
+
+  private validate() {
+    if (notNil(this.body.goal_code) && !isString(this.body.goal_code)) {
+      throw new AgentError.InvalidPresentationBodyError("Invalid goalCode");
+    }
+
+    if (notNil(this.body.comment) && !isString(this.body.comment)) {
+      throw new AgentError.InvalidPresentationBodyError("Invalid comment");
+    }
+  }
 
   makeMessage(): Message {
     const body = JSON.stringify(this.body);
@@ -40,28 +61,14 @@ export class Presentation {
     ) {
       throw new AgentError.InvalidPresentationMessageError();
     }
-    const issueCredentialBody = parsePresentationMessage(fromMessage);
 
     return new Presentation(
-      issueCredentialBody,
+      fromMessage.body,
       fromMessage.attachments,
       fromMessage.from,
       fromMessage.to,
       fromMessage.thid,
       fromMessage.id
-    );
-  }
-
-  static makePresentationFromRequest(message: Message): Presentation {
-    const request = RequestPresentation.fromMessage(message);
-    const presentationBody = parsePresentationMessage(message);
-
-    return new Presentation(
-      presentationBody,
-      request.attachments,
-      request.to,
-      request.from,
-      message.id
     );
   }
 }
