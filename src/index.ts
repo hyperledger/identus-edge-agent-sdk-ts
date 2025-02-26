@@ -17,18 +17,12 @@ export { OfferCredential } from "./edge-agent/protocols/issueCredential/OfferCre
 export { HandshakeRequest } from './edge-agent/protocols/connection/HandshakeRequest';
 export { OutOfBandInvitation } from './edge-agent/protocols/invitation/v2/OutOfBandInvitation';
 export * from "./edge-agent/protocols/proofPresentation";
-export * from "./edge-agent/connectionsManager/ConnectionsManager";
-export * from "./edge-agent/mediator/BasicMediatorHandler";
-export * from "./edge-agent/mediator/PlutoMediatorStore";
+export * from "./edge-agent/connections/ConnectionsManager";
 export * from "./mercury/didcomm/Wrapper";
 export { FetchApi as ApiImpl } from "./edge-agent/helpers/FetchApi";
 export { ListenerKey } from "./edge-agent/types";
 export * from './peer-did/PeerDID';
 export type {
-  MediatorHandler,
-  ConnectionsManager as ConnectionsManagerInterface,
-  MediatorStore,
-  AgentMessageEvents,
   EventCallback,
   MessageEventArg,
   ConnectionEventArg,
