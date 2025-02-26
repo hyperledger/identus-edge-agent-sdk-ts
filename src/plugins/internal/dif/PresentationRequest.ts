@@ -1,4 +1,5 @@
 import { uuid } from "@stablelib/uuid";
+import type { Extensible, PresentationFrame } from '@sd-jwt/types';
 import * as Domain from "../../../domain";
 import { JWTCredential } from "../../../pollux/models/JWTVerifiableCredential";
 import { SDJWTCredential } from "../../../pollux/models/SDJWTVerifiableCredential";
@@ -12,6 +13,7 @@ import { Plugins } from "../../../plugins";
 interface Args {
   credential: Domain.Credential;
   presentationRequest: DIF.Presentation.Request;
+  presentationFrame?: PresentationFrame<Extensible>;
 }
 
 export class PresentationRequest extends Plugins.Task<Args> {
@@ -79,9 +81,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
       return ctx.SDJWT.createPresentationFor({
         jws: this.args.credential.id,
         privateKey,
-        // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362
-        // feature presentationFrame / frame
-        // presentationFrame: this.args.presentationFrame
+        presentationFrame: this.args.presentationFrame
       });
     }
 
