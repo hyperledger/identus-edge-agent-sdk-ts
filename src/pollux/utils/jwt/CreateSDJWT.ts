@@ -3,6 +3,8 @@ import * as Domain from "../../../domain";
 import { expect, notNil } from "../../../utils";
 import { Task } from "../../../utils/tasks";
 import { SdJwtVcPayload, } from "@sd-jwt/sd-jwt-vc";
+import type { DisclosureFrame } from '@sd-jwt/types';
+
 import { Plugins } from "../../../plugins";
 /**
  * Asyncronously sign with a DID
@@ -14,12 +16,12 @@ import { Plugins } from "../../../plugins";
  * @returns {string}
  */
 
-interface Args<T extends Domain.SDJWT.Payload = Domain.SDJWT.Payload> {
+interface Args<T extends SdJwtVcPayload = SdJwtVcPayload> {
     did: Domain.DID;
     privateKey?: Domain.PrivateKey;
     payload: T;
-    header?: Partial<Domain.SDJWT.Header>;
-    disclosureFrame: Domain.SDJWT.DisclosureFrame<T>;
+    header?: Partial<Domain.JWT.Header>;
+    disclosureFrame: DisclosureFrame<T>;
 }
 
 export class CreateSDJWT<T extends SdJwtVcPayload = SdJwtVcPayload> extends Task<string, Args<T>> {
