@@ -30,7 +30,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
     const descriptorMap = inputDescriptors.map<DIF.Presentation.Submission.DescriptorItem>((inputDescriptor) => {
       if (credential instanceof SDJWTCredential) {
         return {
-          format: "sdjwt" as any,
+          format: "sd_jwt",
           id: inputDescriptor.id,
           path: "$.verifiablePresentation[0]",
         };
@@ -43,7 +43,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
           path: "$.verifiablePresentation[0]",
           path_nested: {
             id: inputDescriptor.id,
-            format: 'jwt_vc',
+            format: "jwt_vc",
             path: "$.vp.verifiableCredential[0]",
           }
         };

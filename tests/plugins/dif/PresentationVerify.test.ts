@@ -245,7 +245,7 @@ describe("Plugins - DIF", () => {
         descriptor_map: [
           {
             id: "c3fd00a4-129d-49dc-a640-d84ad32826d9",
-            format: "sdjwt" as any,
+            format: "sd_jwt" as any,
             path: "$.verifiablePresentation[0]",
           },
         ],

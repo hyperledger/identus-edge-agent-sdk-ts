@@ -2,8 +2,6 @@ export namespace DIF {
   export const PRESENTATION_REQUEST = 'dif/presentation-exchange/definitions@v1.0';
   export const PRESENTATION = 'dif/presentation-exchange/submission@v1.0';
 
-  export type formats = "jwt" | "jwt_vc" | "jwt_vp";
-
   export namespace Presentation {
     export interface Definition {
       id: string;
@@ -66,8 +64,7 @@ export namespace DIF {
     }
 
     export namespace Submission {
-      export type Format = "jwt" | "jwt_vc" | "jwt_vp";
-
+      export type Format = "sd_jwt" | "jwt_vp" | "jwt_vc";
       export interface DescriptorItem {
         id: string;
         format: Format;
