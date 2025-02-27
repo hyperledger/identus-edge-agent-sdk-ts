@@ -1,8 +1,5 @@
-import {
-  AgentMessageEvents as AgentMessageEventsClass,
-  EventCallback,
-  ListenerKey,
-} from "./types";
+import { expect, notNil } from "../utils";
+import { EventCallback, ListenerKey } from "./types";
 
 /**
  * An extension for the Edge agent that gives it capability of
@@ -11,9 +8,9 @@ import {
  *
  * @export
  * @class AgentMessageEvents
- * @typedef {AgentMessageEvents}
+ * @typedef {EventsManager}
  */
-export class AgentMessageEvents implements AgentMessageEventsClass {
+export class EventsManager {
   private events: Map<ListenerKey, Set<EventCallback>> = new Map();
 
   /**
@@ -29,8 +26,8 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
     if (!this.events.has(eventName)) {
       this.events.set(eventName, new Set());
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const callbacks = this.events.get(eventName)!;
+
+    const callbacks = expect(this.events.get(eventName));
     callbacks.add(callback);
     return callbacks.size - 1;
   }
@@ -45,8 +42,10 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
    */
   public removeListener(eventName: ListenerKey, callback: EventCallback): void {
     const callbacks = this.events.get(eventName);
-    if (!callbacks) return;
-    callbacks.delete(callback);
+
+    if (notNil(callbacks)) {
+      callbacks.delete(callback);
+    }
   }
 
   /**
@@ -58,9 +57,11 @@ export class AgentMessageEvents implements AgentMessageEventsClass {
    */
   public emit(eventName: ListenerKey, data: any): void {
     const callbacks = this.events.get(eventName);
-    if (!callbacks) return;
-    for (const callback of callbacks) {
-      callback(data);
+
+    if (notNil(callbacks)) {
+      for (const callback of callbacks) {
+        callback(data);
+      }
     }
   }
 }
