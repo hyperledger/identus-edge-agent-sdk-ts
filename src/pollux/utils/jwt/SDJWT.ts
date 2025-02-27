@@ -1,9 +1,9 @@
 import Hashing from "hash.js";
 import { base64url } from "multiformats/bases/base64";
-import { SDJWTVCConfig, SDJwtVcInstance, } from '@sd-jwt/sd-jwt-vc';
+import { SDJWTVCConfig, SDJwtVcInstance, SdJwtVcPayload, } from '@sd-jwt/sd-jwt-vc';
 import { Disclosure } from '@sd-jwt/utils';
 import { decodeSdJwtSync, getClaimsSync } from '@sd-jwt/decode';
-import type { Extensible, PresentationFrame } from '@sd-jwt/types';
+import type { DisclosureFrame, Extensible, PresentationFrame } from '@sd-jwt/types';
 import * as Domain from '../../../domain';
 import { SDJWTCredential } from '../../models/SDJWTVerifiableCredential';
 import { Task, notNil } from "../../../utils";
@@ -31,6 +31,23 @@ export class SDJWT extends Task.Runner {
 
   decode(jws: string) {
     return decodeSdJwtSync(jws, defaultHashConfig.hasher);
+  }
+
+  async sign<E extends Extensible>(options: {
+    issuerDID: Domain.DID,
+    privateKey: Domain.PrivateKey,
+    payload: SdJwtVcPayload,
+    disclosureFrame: DisclosureFrame<E>
+    kid?: string | undefined
+
+  }): Promise<string> {
+    const config = this.getSKConfig(options.privateKey)
+    const sdjwt = new SDJwtVcInstance(config);
+    return sdjwt.issue(
+      options.payload,
+      options.disclosureFrame,
+      options.kid ? { header: { kid: options.kid } } : undefined
+    )
   }
 
   async verify(options: {
@@ -99,9 +116,9 @@ export class SDJWT extends Task.Runner {
 
   private getPKConfig(publicKey: Domain.PublicKey): SDJWTVCConfig {
     return {
-      hashAlg: defaultHashConfig.hasherAlg,
+      hashAlg: defaultHashConfig.hasherAlg.toLocaleLowerCase(),
       hasher: defaultHashConfig.hasher,
-      signAlg: publicKey.alg,
+      signAlg: publicKey.alg.toLocaleLowerCase(),
       verifier: async (data: any, signatureEncoded: any) => {
         if (!publicKey.canVerify()) {
           throw new Error("Cannot verify with this key");
@@ -109,14 +126,33 @@ export class SDJWT extends Task.Runner {
         const signature = Buffer.from(base64url.baseDecode(signatureEncoded));
         return publicKey.verify(Buffer.from(data), signature);
       },
+      saltGenerator: this.saltGenerator
     };
+  }
+
+
+  private saltGenerator(length: number): string {
+    function randomBytes(bytes: Uint8Array): Uint8Array {
+      if (crypto && typeof crypto.getRandomValues === 'function') {
+        return crypto.getRandomValues(bytes);
+      }
+      throw new Error('crypto.getRandomValues must be defined');
+    }
+    if (length <= 0) {
+      return '';
+    }
+    const array = randomBytes(new Uint8Array(length / 2));
+    const salt = Array.from(array, (byte) =>
+      byte.toString(16).padStart(2, '0'),
+    ).join('');
+    return salt;
   }
 
   protected getSKConfig(privateKey: Domain.PrivateKey): SDJWTVCConfig {
     return {
-      hashAlg: defaultHashConfig.hasherAlg,
+      hashAlg: defaultHashConfig.hasherAlg.toLocaleLowerCase(),
       hasher: defaultHashConfig.hasher,
-      signAlg: privateKey.alg,
+      signAlg: privateKey.alg.toLocaleLowerCase(),
       signer: async (data: any) => {
         if (!privateKey.isSignable()) {
           throw new Error("Cannot sign with this key");
@@ -125,6 +161,7 @@ export class SDJWT extends Task.Runner {
         const signatureEncoded = base64url.baseEncode(signature);
         return signatureEncoded;
       },
+      saltGenerator: this.saltGenerator
     };
   }
 }

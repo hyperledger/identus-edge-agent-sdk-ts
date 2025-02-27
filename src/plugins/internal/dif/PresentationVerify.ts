@@ -294,6 +294,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
     const fields = constraints.fields;
 
     if (constraints.limit_disclosure === "required") {
+
       for (const field of fields) {
         const paths = [...field.path];
         const optional = field.optional;
@@ -304,7 +305,9 @@ export class PresentationVerify extends Plugins.Task<Args> {
             const [path] = paths.splice(0, 1);
             try {
               this.validateField(vc, descriptorMapper, path, field);
-              return true;
+              //if field is valid, stop searching paths
+              error = undefined;
+              break;
             } catch (err) {
               //set error and continue to see if other paths succeed
               error ??= err as Error;
