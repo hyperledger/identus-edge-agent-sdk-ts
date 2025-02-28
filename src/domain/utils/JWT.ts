@@ -1,4 +1,3 @@
-import { JWTPayload } from "did-jwt";
 import { base64url } from "multiformats/bases/base64";
 import { isNil } from "../../utils/guards";
 import { InvalidJWTString } from "../models/errors/Pollux";
