@@ -106,7 +106,6 @@ export class PresentationVerify extends Plugins.Task<Args> {
     try {
       const revocationTask = new IsCredentialRevoked({ credential: credential });
       const isRevoked = await ctx.run(revocationTask);
-
       if (isRevoked.data) {
         throw new Domain.PolluxError.InvalidVerifyCredentialError(credential.id, "Invalid Verifiable Presentation, credential is revoked");
       }
@@ -117,11 +116,6 @@ export class PresentationVerify extends Plugins.Task<Args> {
         throw new Domain.PolluxError.InvalidVerifyCredentialError(credential.id, `Invalid Verifiable Presentation, could not verify if the credential is revoked, reason: ${(err as Error).message}`);
       }
     }
-
-    //TOOD: VC Subject must match the Holder's presentation DID, a holder should never create a presentation on a credential that was not issued to him
-    // if (verifiableCredential.subject !== issuer) {
-    //   throw new Domain.PolluxError.InvalidVerifyCredentialError(vc, "Invalid Verifiable Presentation payload, the credential has been issued to another holder");
-    // 
 
     const mapper = new DescriptorPath(credential);
     for (const inputDescriptor of inputDescriptors) {
