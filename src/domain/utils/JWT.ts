@@ -2,6 +2,7 @@ import { JWTPayload } from "did-jwt";
 import { base64url } from "multiformats/bases/base64";
 import { isNil } from "../../utils/guards";
 import { InvalidJWTString } from "../models/errors/Pollux";
+import { JWTCredentialPayload, JWTPresentationPayload } from "../../pollux/models/JWTVerifiableCredential";
 
 
 export namespace JWT {
@@ -11,7 +12,7 @@ export namespace JWT {
     [key: string]: any;
   }
 
-  export type Payload = JWTPayload;
+  export type Payload = JWTCredentialPayload | JWTPresentationPayload;
 
   export interface DecodedObj {
     header: Header;

@@ -23,21 +23,9 @@ export enum CredentialType {
   Unknown = "Unknown"
 }
 
-
-export enum W3CVerifiableCredentialContext {
-  credential = "https://www.w3.org/2018/credentials/v1",
-  revocation = "https://w3id.org/vc/status-list/2021/v1"
-}
-
-export enum W3CVerifiableCredentialType {
-  presentation = "VerifiablePresentation",
-  credential = "VerifiableCredential",
-  revocation = "StatusList2021Credential"
-}
-
 export type W3CVerifiableCredential = {
-  "@context": [W3CVerifiableCredentialContext.credential],
-  type: [W3CVerifiableCredentialType.credential],
+  "@context": ["https://www.w3.org/2018/credentials/v1"],
+  type: ["VerifiableCredential"],
   issuer: string,
   issuanceDate: string,
   issued?: string,
@@ -73,10 +61,10 @@ export type W3CVerifiableCredential = {
 
 export type W3CVerifiablePresentation = {
   "@context": [
-    W3CVerifiableCredentialContext.credential
+    "https://www.w3.org/2018/presentations/v1"
   ],
   type: [
-    W3CVerifiableCredentialType.presentation
+    "VerifiablePresentation"
   ],
   verifiableCredential: string[],
   proof?: W3CVerifiablePresentationProof;

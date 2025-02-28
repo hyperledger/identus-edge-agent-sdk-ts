@@ -6,9 +6,10 @@ import { Task } from '../../../src/utils';
 import { Apollo, Castor } from '../../../src';
 import { JWT, SDJWT } from "../../../src/pollux/utils/jwt";
 import { PresentationVerify } from '../../../src/plugins/internal/dif/PresentationVerify';
-import { Curve, KeyTypes, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from '../../../src/domain';
+import { Curve, KeyTypes } from '../../../src/domain';
 import { CreateSDJWT } from '../../../src/pollux/utils/jwt/CreateSDJWT';
 import { DIFModule } from '../../../src/plugins/internal/dif/module';
+import { JWTCredentialPayload, JWTPresentationPayload } from '../../../src/pollux/models/JWTVerifiableCredential';
 
 describe("Plugins - DIF", () => {
   let ctx: Task.Context<{
@@ -33,33 +34,6 @@ describe("Plugins - DIF", () => {
 
   describe("PresentationVerify", () => {
     describe("JWT", () => {
-      const issuerDID = "did:prism:0858c30daf6d0cc3e0b1ae31b7cb212f4446a6e0f47a5926b3ba7dc64986157b:CmEKXxJdCghtYXN0ZXItMBABQk8KCXNlY3AyNTZrMRIgM3HxlER-HNHG59NAGoJJ7OdA5XlQAbOU5JqPGmnkZiQaIFYj9QUSo_xiemYiLHlBBkwHjZZKR1FjSA2OlgKI9iC9";
-      const issuerPK = {
-        curve: "Secp256k1",
-        hex: "ad29fa414bdc84737fba87743e7b9f876e278a18d0036ab782042e0c6e7a4672"
-      };
-      const holderDID = "did:prism:38e78e4dd9711c49a1fb533b0247c5a26516e38e99a259cd21ff5b84097533d6:CmEKXxJdCghtYXN0ZXItMBABQk8KCXNlY3AyNTZrMRIgp6Bi0cCJRnOQQxeL5RXjW7v1zKJrJQ7Wcoxy5OGV3HkaID3gsu86_sFD09sWeR7O8aQCVeludTW5aYSPoPiQEgBi";
-      const holderPK = {
-        curve: "Secp256k1",
-        hex: "e7e232848313a57c5161a9d6e1813db133ae9f1baffb3c5e82dba220746bf18a"
-      };
-      const jwt = "eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ.eyJpYXQiOjE3MzY1MTEzNzcsImV4cCI6MTczOTE4OTc3NzYyNiwiaXNzIjoiZGlkOnByaXNtOjA4NThjMzBkYWY2ZDBjYzNlMGIxYWUzMWI3Y2IyMTJmNDQ0NmE2ZTBmNDdhNTkyNmIzYmE3ZGM2NDk4NjE1N2I6Q21FS1h4SmRDZ2h0WVhOMFpYSXRNQkFCUWs4S0NYTmxZM0F5TlRack1SSWdNM0h4bEVSLUhOSEc1OU5BR29KSjdPZEE1WGxRQWJPVTVKcVBHbW5rWmlRYUlGWWo5UVVTb194aWVtWWlMSGxCQmt3SGpaWktSMUZqU0EyT2xnS0k5aUM5IiwibmJmIjoxNzM2NTExMzc3NjI2LCJzdWIiOiJkaWQ6cHJpc206MzhlNzhlNGRkOTcxMWM0OWExZmI1MzNiMDI0N2M1YTI2NTE2ZTM4ZTk5YTI1OWNkMjFmZjViODQwOTc1MzNkNjpDbUVLWHhKZENnaHRZWE4wWlhJdE1CQUJRazhLQ1hObFkzQXlOVFpyTVJJZ3A2QmkwY0NKUm5PUVF4ZUw1UlhqVzd2MXpLSnJKUTdXY294eTVPR1YzSGthSUQzZ3N1ODZfc0ZEMDlzV2VSN084YVFDVmVsdWRUVzVhWVNQb1BpUUVnQmkiLCJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIl0sImlzc3VlciI6ImRpZDpwcmlzbTowODU4YzMwZGFmNmQwY2MzZTBiMWFlMzFiN2NiMjEyZjQ0NDZhNmUwZjQ3YTU5MjZiM2JhN2RjNjQ5ODYxNTdiOkNtRUtYeEpkQ2dodFlYTjBaWEl0TUJBQlFrOEtDWE5sWTNBeU5UWnJNUklnTTNIeGxFUi1ITkhHNTlOQUdvSko3T2RBNVhsUUFiT1U1SnFQR21ua1ppUWFJRllqOVFVU29feGllbVlpTEhsQkJrd0hqWlpLUjFGalNBMk9sZ0tJOWlDOSIsImlzc3VhbmNlRGF0ZSI6IjIwMjUtMDEtMTBUMTI6MTY6MTcuNjI2WiIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImNvdXJzZSI6IklkZW50dXMgVHJhaW5pbmcgY291cnNlIENlcnRpZmljYXRpb24gMjAyNCJ9fX0.SGpkR7YG-yYyNxZ4w_UF1yueu2gf73R-BktKX_mPZth2s4pOdr5NFuz3M6faFBZKTbD5ydGHFE4bbWLk09vB2g";
-      const payload = {
-        iss: issuerDID,
-        nbf: 1736511377626,
-        exp: 1739189777626,
-        sub: holderDID,
-        vc: {
-          "@context": ["https://www.w3.org/2018/credentials/v1"],
-          type: ["VerifiableCredential"],
-          issuer: issuerDID,
-          issuanceDate: "2025-01-10T12:16:17.626Z",
-          credentialSubject: {
-            course: "Identus Training course Certification 2024",
-          },
-        },
-      };
-
       const presentation: DIF.EmbedTarget = {
         presentation_submission: {
           id: "0b17b996-7d52-4b2a-81fd-e6ffcd6dd188",
@@ -245,11 +219,837 @@ describe("Plugins - DIF", () => {
 
           expect(result.data).toBe(false);
         });
+
+        test("Should verify false when presentation is valid using jwt_vc and jwt_vp with nested paths but presentation signature is invalid", async () => {
+          const issuerSeed = ctx.Apollo.createRandomSeed().seed;
+          const holderSeed = ctx.Apollo.createRandomSeed().seed;
+
+          const issuerMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+          const issuerAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+
+          const holderMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+          const holderAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+
+          const issuerDID = await ctx.Castor.createPrismDID(
+            issuerMasterSK.publicKey(),
+            [],
+            [
+              issuerAuthenticationSK.publicKey()
+            ]
+          );
+
+          const holderDID = await ctx.Castor.createPrismDID(
+            holderMasterSK.publicKey(),
+            [],
+            [
+              holderAuthenticationSK.publicKey()
+            ]
+          );
+
+          const currentDate = new Date();
+          const nextMonthDate = new Date(currentDate);
+          nextMonthDate.setMonth(currentDate.getMonth() + 1);
+          const issuanceDate = currentDate.getTime();
+          const expirationDate = nextMonthDate.getTime();
+
+          const vcPayload: JWTCredentialPayload = {
+            iss: issuerDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            sub: holderDID.toString(),
+            vc: {
+              "@context": ["https://www.w3.org/2018/credentials/v1"],
+              type: ["VerifiableCredential"],
+              issuer: issuerDID.toString(),
+              issuanceDate: new Date(issuanceDate).toISOString(),
+              credentialSubject: {
+                firstname: "John Doe",
+                email: 'demo@email.com',
+                course: "Identus Training course Certification 2024",
+              },
+            },
+          };
+
+          const jwt = await ctx.JWT.signWithDID(issuerDID, vcPayload, undefined, issuerAuthenticationSK);
+
+          const vpPayload: JWTPresentationPayload = {
+            iss: holderDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            vp: {
+              "@context": ["https://www.w3.org/2018/presentations/v1"],
+              type: ["VerifiablePresentation"],
+              verifiableCredential: [
+                jwt
+              ]
+            }
+          };
+          const presentationJWT = await ctx.JWT.signWithDID(holderDID, vpPayload, undefined, issuerAuthenticationSK)
+
+
+          const presentation: DIF.EmbedTarget = {
+            presentation_submission: {
+              id: "0b17b996-7d52-4b2a-81fd-e6ffcd6dd188",
+              definition_id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              descriptor_map: [{
+                id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                format: "jwt_vp",
+                path: "$.verifiablePresentation[0]",
+                path_nested: {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  format: "jwt_vc",
+                  path: "$.vp.verifiableCredential[0]",
+                },
+              },
+              ],
+            },
+            verifiablePresentation: [
+              presentationJWT
+            ]
+          };
+
+          const presentationRequest: DIF.Presentation.Request = {
+            presentation_definition: {
+              id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              input_descriptors: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  name: "Presentation",
+                  purpose: "Verifying Credentials",
+                  constraints: {
+                    fields: [
+                      {
+                        path: [
+                          "$.vc.credentialSubject.course",
+                          "$.credentialSubject.course",
+                          "$.course",
+                        ],
+                        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+                        optional: false,
+                        filter: {
+                          type: "string",
+                          pattern: "Identus Training course Certification 2024",
+                        },
+                        name: "course",
+                      },
+                      {
+                        path: [
+                          "$.vc.issuer",
+                          "$.issuer",
+                          "$.iss",
+                          "$.vc.iss",
+                        ],
+                        id: "6a6fa378-d701-43e7-81d5-ee1cd80c585e",
+                        optional: false,
+                        name: "issuer",
+                        filter: {
+                          type: "string",
+                          pattern: "did:prism:0858c30daf6d0cc3e0b1ae31b7cb212f4446a6e0f47a5926b3ba7dc64986157b:CmEKXxJdCghtYXN0ZXItMBABQk8KCXNlY3AyNTZrMRIgM3HxlER-HNHG59NAGoJJ7OdA5XlQAbOU5JqPGmnkZiQaIFYj9QUSo_xiemYiLHlBBkwHjZZKR1FjSA2OlgKI9iC9",
+                        },
+                      },
+                    ],
+                    limit_disclosure: "required",
+                  },
+                  format: {
+                    jwt: {
+                      alg: [
+                        "ES256K",
+                      ],
+                    },
+                  },
+                },
+              ],
+              format: {
+                jwt: {
+                  alg: [
+                    "ES256K",
+                  ],
+                },
+              },
+            },
+            options: {
+              challenge: "sign this",
+              domain: "N/A",
+            },
+          };
+
+
+
+
+
+          const sut = new PresentationVerify({ presentation, presentationRequest, });
+          const result = ctx.run(sut);
+
+          await expect(result).rejects.toThrow(
+            `Verification failed for credential (eyJhbGciOi...): reason -> Invalid Verifiable Presentation JWS Signature`
+          );
+        })
+
+
+
+        test("Should verify false when presentation is valid using jwt_vc and jwt_vp with nested paths but credential signature is invalid", async () => {
+          const issuerSeed = ctx.Apollo.createRandomSeed().seed;
+          const holderSeed = ctx.Apollo.createRandomSeed().seed;
+
+          const issuerMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+          const issuerAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+
+          const holderMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+          const holderAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+
+          const issuerDID = await ctx.Castor.createPrismDID(
+            issuerMasterSK.publicKey(),
+            [],
+            [
+              issuerAuthenticationSK.publicKey()
+            ]
+          );
+
+          const holderDID = await ctx.Castor.createPrismDID(
+            holderMasterSK.publicKey(),
+            [],
+            [
+              holderAuthenticationSK.publicKey()
+            ]
+          );
+
+          const currentDate = new Date();
+          const nextMonthDate = new Date(currentDate);
+          nextMonthDate.setMonth(currentDate.getMonth() + 1);
+          const issuanceDate = currentDate.getTime();
+          const expirationDate = nextMonthDate.getTime();
+
+          const vcPayload: JWTCredentialPayload = {
+            iss: issuerDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            sub: holderDID.toString(),
+            vc: {
+              "@context": ["https://www.w3.org/2018/credentials/v1"],
+              type: ["VerifiableCredential"],
+              issuer: issuerDID.toString(),
+              issuanceDate: new Date(issuanceDate).toISOString(),
+              credentialSubject: {
+                firstname: "John Doe",
+                email: 'demo@email.com',
+                course: "Identus Training course Certification 2024",
+              },
+            },
+          };
+
+          const jwt = await ctx.JWT.signWithDID(issuerDID, vcPayload, undefined, holderAuthenticationSK);
+
+          const vpPayload: JWTPresentationPayload = {
+            iss: holderDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            vp: {
+              "@context": ["https://www.w3.org/2018/presentations/v1"],
+              type: ["VerifiablePresentation"],
+              verifiableCredential: [
+                jwt
+              ]
+            }
+          };
+          const presentationJWT = await ctx.JWT.signWithDID(holderDID, vpPayload, undefined, holderMasterSK)
+
+
+          const presentation: DIF.EmbedTarget = {
+            presentation_submission: {
+              id: "0b17b996-7d52-4b2a-81fd-e6ffcd6dd188",
+              definition_id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              descriptor_map: [{
+                id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                format: "jwt_vp",
+                path: "$.verifiablePresentation[0]",
+                path_nested: {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  format: "jwt_vc",
+                  path: "$.vp.verifiableCredential[0]",
+                },
+              },
+              ],
+            },
+            verifiablePresentation: [
+              presentationJWT
+            ]
+          };
+
+          const presentationRequest: DIF.Presentation.Request = {
+            presentation_definition: {
+              id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              input_descriptors: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  name: "Presentation",
+                  purpose: "Verifying Credentials",
+                  constraints: {
+                    fields: [
+                      {
+                        path: [
+                          "$.vc.credentialSubject.course",
+                          "$.credentialSubject.course",
+                          "$.course",
+                        ],
+                        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+                        optional: false,
+                        filter: {
+                          type: "string",
+                          pattern: "Identus Training course Certification 2024",
+                        },
+                        name: "course",
+                      },
+                      {
+                        path: [
+                          "$.vc.issuer",
+                          "$.issuer",
+                          "$.iss",
+                          "$.vc.iss",
+                        ],
+                        id: "6a6fa378-d701-43e7-81d5-ee1cd80c585e",
+                        optional: false,
+                        name: "issuer",
+                        filter: {
+                          type: "string",
+                          pattern: "did:prism:0858c30daf6d0cc3e0b1ae31b7cb212f4446a6e0f47a5926b3ba7dc64986157b:CmEKXxJdCghtYXN0ZXItMBABQk8KCXNlY3AyNTZrMRIgM3HxlER-HNHG59NAGoJJ7OdA5XlQAbOU5JqPGmnkZiQaIFYj9QUSo_xiemYiLHlBBkwHjZZKR1FjSA2OlgKI9iC9",
+                        },
+                      },
+                    ],
+                    limit_disclosure: "required",
+                  },
+                  format: {
+                    jwt: {
+                      alg: [
+                        "ES256K",
+                      ],
+                    },
+                  },
+                },
+              ],
+              format: {
+                jwt: {
+                  alg: [
+                    "ES256K",
+                  ],
+                },
+              },
+            },
+            options: {
+              challenge: "sign this",
+              domain: "N/A",
+            },
+          };
+
+          const sut = new PresentationVerify({ presentation, presentationRequest, });
+          const result = ctx.run(sut);
+
+          await expect(result).rejects.toThrow(
+            `Verification failed for credential (eyJhbGciOi...): reason -> Invalid Verifiable Credential JWS Signature`
+          );
+        })
+
+        test("Should verify true when presentation is valid using jwt_vc and jwt_vp with nested paths", async () => {
+          const sut = new PresentationVerify({ presentation, presentationRequest, });
+          const result = await ctx.run(sut);
+
+          expect(result.data).toBe(true);
+        })
+
+        test("Should verify true when the presentation is valid,using jwt_vc only", async () => {
+
+          const issuerSeed = ctx.Apollo.createRandomSeed().seed;
+          const holderSeed = ctx.Apollo.createRandomSeed().seed;
+
+          const issuerMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+          const issuerAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+
+          const holderMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+          const holderAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+
+          const issuerDID = await ctx.Castor.createPrismDID(
+            issuerMasterSK.publicKey(),
+            [],
+            [
+              issuerAuthenticationSK.publicKey()
+            ]
+          );
+
+          const holderDID = await ctx.Castor.createPrismDID(
+            holderMasterSK.publicKey(),
+            [],
+            [
+              holderAuthenticationSK.publicKey()
+            ]
+          );
+
+          const presentationRequest: DIF.Presentation.Request = {
+            presentation_definition: {
+              id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              input_descriptors: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  name: "Presentation",
+                  purpose: "Verifying Credentials",
+                  constraints: {
+                    fields: [
+                      {
+                        path: [
+                          "$.vc.credentialSubject.course",
+                          "$.credentialSubject.course",
+                          "$.course",
+                        ],
+                        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+                        optional: false,
+                        filter: {
+                          type: "string",
+                          pattern: "Identus Training course Certification 2024",
+                        },
+                        name: "course",
+                      },
+                      {
+                        path: [
+                          "$.vc.issuer",
+                          "$.issuer",
+                          "$.iss",
+                          "$.vc.iss",
+                        ],
+                        id: "6a6fa378-d701-43e7-81d5-ee1cd80c585e",
+                        optional: false,
+                        name: "issuer",
+                        filter: {
+                          type: "string",
+                          pattern: issuerDID.toString(),
+                        },
+                      },
+                    ],
+                    limit_disclosure: "required",
+                  },
+                  format: {
+                    jwt: {
+                      alg: [
+                        "ES256K",
+                      ],
+                    },
+                  },
+                },
+              ],
+              format: {
+                jwt: {
+                  alg: [
+                    "ES256K",
+                  ],
+                },
+              },
+            },
+            options: {
+              challenge: "sign this",
+              domain: "N/A",
+            },
+          };
+
+          const currentDate = new Date();
+          const nextMonthDate = new Date(currentDate);
+          nextMonthDate.setMonth(currentDate.getMonth() + 1);
+          const issuanceDate = currentDate.getTime();
+          const expirationDate = nextMonthDate.getTime();
+
+          const payload = {
+            iss: issuerDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            sub: holderDID.toString(),
+            vc: {
+              "@context": ["https://www.w3.org/2018/credentials/v1"],
+              type: ["VerifiableCredential"],
+              issuer: issuerDID.toString(),
+              issuanceDate: new Date(issuanceDate).toISOString(),
+              credentialSubject: {
+                firstname: "John Doe",
+                email: 'demo@email.com',
+                course: "Identus Training course Certification 2024",
+              },
+            },
+          };
+
+          const jwt = await ctx.JWT.signWithDID(issuerDID, payload, undefined, issuerAuthenticationSK);
+
+          const presentation: DIF.EmbedTarget<'verifiableCredential'> = {
+            presentation_submission: {
+              id: "f28b346e-c20e-4651-8c24-7f41a576cf26",
+              definition_id: "acd86273-5017-4980-a9be-dab6c725c811",
+              descriptor_map: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  format: "jwt_vc",
+                  path: "$.verifiableCredential[0]",
+                },
+              ],
+            },
+            verifiableCredential: [
+              jwt,
+            ],
+          };
+
+
+          const sut = new PresentationVerify({ presentation, presentationRequest, });
+          const result = await ctx.run(sut);
+
+          expect(result.data).toBe(true);
+        });
+
+        test("Should verify false when the presentation is invalid, wrong signature,using jwt_vc only", async () => {
+
+          const issuerSeed = ctx.Apollo.createRandomSeed().seed;
+          const holderSeed = ctx.Apollo.createRandomSeed().seed;
+
+          const issuerMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+
+
+          const holderMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+
+          const issuerDID = await ctx.Castor.createPrismDID(issuerMasterSK.publicKey(), [], []);
+          const holderDID = await ctx.Castor.createPrismDID(holderMasterSK.publicKey(), [], []);
+
+          const presentationRequest: DIF.Presentation.Request = {
+            presentation_definition: {
+              id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              input_descriptors: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  name: "Presentation",
+                  purpose: "Verifying Credentials",
+                  constraints: {
+                    fields: [
+                      {
+                        path: [
+                          "$.vc.credentialSubject.course",
+                          "$.credentialSubject.course",
+                          "$.course",
+                        ],
+                        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+                        optional: false,
+                        filter: {
+                          type: "string",
+                          pattern: "Identus Training course Certification 2024",
+                        },
+                        name: "course",
+                      },
+                      {
+                        path: [
+                          "$.vc.issuer",
+                          "$.issuer",
+                          "$.iss",
+                          "$.vc.iss",
+                        ],
+                        id: "6a6fa378-d701-43e7-81d5-ee1cd80c585e",
+                        optional: false,
+                        name: "issuer",
+                        filter: {
+                          type: "string",
+                          pattern: issuerDID.toString(),
+                        },
+                      },
+                    ],
+                    limit_disclosure: "required",
+                  },
+                  format: {
+                    jwt: {
+                      alg: [
+                        "ES256K",
+                      ],
+                    },
+                  },
+                },
+              ],
+              format: {
+                jwt: {
+                  alg: [
+                    "ES256K",
+                  ],
+                },
+              },
+            },
+            options: {
+              challenge: "sign this",
+              domain: "N/A",
+            },
+          };
+
+          const currentDate = new Date();
+          const nextMonthDate = new Date(currentDate);
+          nextMonthDate.setMonth(currentDate.getMonth() + 1);
+          const issuanceDate = currentDate.getTime();
+          const expirationDate = nextMonthDate.getTime();
+
+          const payload = {
+            iss: issuerDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            sub: issuerDID.toString(),
+            vc: {
+              "@context": ["https://www.w3.org/2018/credentials/v1"],
+              type: ["VerifiableCredential"],
+              issuer: issuerDID.toString(),
+              issuanceDate: new Date(issuanceDate).toISOString(),
+              credentialSubject: {
+                firstname: "John Doe",
+                email: 'demo@email.com',
+                course: "Identus Training course Certification 2024",
+              },
+            },
+          };
+
+          const jwt = await ctx.JWT.signWithDID(issuerDID, payload, undefined, holderMasterSK);
+
+          const presentation: DIF.EmbedTarget<'verifiableCredential'> = {
+            presentation_submission: {
+              id: "f28b346e-c20e-4651-8c24-7f41a576cf26",
+              definition_id: "acd86273-5017-4980-a9be-dab6c725c811",
+              descriptor_map: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  format: "jwt_vc",
+                  path: "$.verifiableCredential[0]",
+                },
+              ],
+            },
+            verifiableCredential: [
+              jwt,
+            ],
+          };
+
+
+          const sut = new PresentationVerify({ presentation, presentationRequest, });
+          const result = ctx.run(sut);
+
+          await expect(result).rejects.toThrow(
+            `Verification failed for credential (eyJhbGciOi...): reason -> Invalid Verifiable Credential JWS Signature`
+          );
+
+        });
+
+        test("Should verify false when the presentation is invalid wrong issuer did,using jwt_vc only", async () => {
+
+          const issuerSeed = ctx.Apollo.createRandomSeed().seed;
+          const holderSeed = ctx.Apollo.createRandomSeed().seed;
+
+          const issuerMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+          const issuerAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(issuerSeed.value).toString("hex"),
+          });
+
+          const holderMasterSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.SECP256K1,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+          const holderAuthenticationSK = ctx.Apollo.createPrivateKey({
+            type: KeyTypes.EC,
+            curve: Curve.ED25519,
+            seed: Buffer.from(holderSeed.value).toString("hex"),
+          });
+
+          const issuerDID = await ctx.Castor.createPrismDID(
+            issuerMasterSK.publicKey(),
+            [],
+            [
+              issuerAuthenticationSK.publicKey()
+            ]
+          );
+
+          const holderDID = await ctx.Castor.createPrismDID(
+            holderMasterSK.publicKey(),
+            [],
+            [
+              holderAuthenticationSK.publicKey()
+            ]
+          );
+
+          const presentationRequest: DIF.Presentation.Request = {
+            presentation_definition: {
+              id: "ba7814d4-4bdf-42a5-a3f9-a2e86419e6c4",
+              input_descriptors: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  name: "Presentation",
+                  purpose: "Verifying Credentials",
+                  constraints: {
+                    fields: [
+                      {
+                        path: [
+                          "$.vc.credentialSubject.course",
+                          "$.credentialSubject.course",
+                          "$.course",
+                        ],
+                        id: "c9c60d68-a25d-4ab0-8968-8d270ad95590",
+                        optional: false,
+                        filter: {
+                          type: "string",
+                          pattern: "Identus Training course Certification 2024",
+                        },
+                        name: "course",
+                      },
+                      {
+                        path: [
+                          "$.vc.issuer",
+                          "$.issuer",
+                          "$.iss",
+                          "$.vc.iss",
+                        ],
+                        id: "6a6fa378-d701-43e7-81d5-ee1cd80c585e",
+                        optional: false,
+                        name: "issuer",
+                        filter: {
+                          type: "string",
+                          pattern: holderDID.toString(),
+                        },
+                      },
+                    ],
+                    limit_disclosure: "required",
+                  },
+                  format: {
+                    jwt: {
+                      alg: [
+                        "ES256K",
+                      ],
+                    },
+                  },
+                },
+              ],
+              format: {
+                jwt: {
+                  alg: [
+                    "ES256K",
+                  ],
+                },
+              },
+            },
+            options: {
+              challenge: "sign this",
+              domain: "N/A",
+            },
+          };
+
+          const currentDate = new Date();
+          const nextMonthDate = new Date(currentDate);
+          nextMonthDate.setMonth(currentDate.getMonth() + 1);
+          const issuanceDate = currentDate.getTime();
+          const expirationDate = nextMonthDate.getTime();
+
+          const payload = {
+            iss: issuerDID.toString(),
+            nbf: issuanceDate,
+            exp: expirationDate,
+            sub: holderDID.toString(),
+            vc: {
+              "@context": ["https://www.w3.org/2018/credentials/v1"],
+              type: ["VerifiableCredential"],
+              issuer: issuerDID.toString(),
+              issuanceDate: new Date(issuanceDate).toISOString(),
+              credentialSubject: {
+                firstname: "John Doe",
+                email: 'demo@email.com',
+                course: "Identus Training course Certification 2024",
+              },
+            },
+          };
+
+          const jwt = await ctx.JWT.signWithDID(issuerDID, payload, undefined, issuerAuthenticationSK);
+
+          const presentation: DIF.EmbedTarget<'verifiableCredential'> = {
+            presentation_submission: {
+              id: "f28b346e-c20e-4651-8c24-7f41a576cf26",
+              definition_id: "acd86273-5017-4980-a9be-dab6c725c811",
+              descriptor_map: [
+                {
+                  id: "9e50eb6b-e7fc-46a8-bd91-7d53ac4adc53",
+                  format: "jwt_vc",
+                  path: "$.verifiableCredential[0]",
+                },
+              ],
+            },
+            verifiableCredential: [
+              jwt,
+            ],
+          };
+
+
+          const sut = new PresentationVerify({ presentation, presentationRequest, });
+          const result = ctx.run(sut);
+
+          await expect(result).rejects.toThrow(
+            `Verification failed for credential (eyJraWQiOi...): reason -> Invalid Claim: Expected the $.vc.issuer field to be "${holderDID.toString()}" but got "${issuerDID.toString()}"`
+          );
+
+        });
       });
     });
   });
 
   describe("SDJWT", () => {
+
     const presentation: DIF.EmbedTarget = {
       presentation_submission: {
         id: "f28b346e-c20e-4651-8c24-7f41a576cf26",
@@ -257,7 +1057,7 @@ describe("Plugins - DIF", () => {
         descriptor_map: [
           {
             id: "c3fd00a4-129d-49dc-a640-d84ad32826d9",
-            format: "sd_jwt" as any,
+            format: "sd_jwt",
             path: "$.verifiablePresentation[0]",
           },
         ],
@@ -424,7 +1224,7 @@ describe("Plugins - DIF", () => {
       const holderMasterSK = ctx.Apollo.createPrivateKey({
         type: KeyTypes.EC,
         curve: Curve.SECP256K1,
-        seed: Buffer.from(issuerSeed.value).toString("hex"),
+        seed: Buffer.from(holderSeed.value).toString("hex"),
       });
       const holderAuthenticationSK = ctx.Apollo.createPrivateKey({
         type: KeyTypes.EC,
@@ -460,8 +1260,8 @@ describe("Plugins - DIF", () => {
         exp: expirationDate,
         sub: holderDID.toString(),
         vc: {
-          "@context": [W3CVerifiableCredentialContext.credential],
-          type: [W3CVerifiableCredentialType.credential],
+          "@context": ["https://www.w3.org/2018/credentials/v1"],
+          type: ["VerifiableCredential"],
           issuer: issuerDID.toString(),
           issuanceDate: new Date(issuanceDate).toISOString(),
           credentialSubject: {

@@ -169,11 +169,14 @@ export class PresentationVerify extends Plugins.Task<Args> {
     descriptorItem: DIF.Presentation.Submission.DescriptorItem,
     value: any,
   ): Promise<boolean> {
-
+    const isPresentation = descriptorItem.format === "jwt_vp" ? true : false;
     if (descriptorItem.path_nested) {
       const credential = await this.getCredential(ctx, descriptorItem, value);
       if (!credential) {
-        throw new Domain.PolluxError.InvalidVerifyCredentialError(value, "Invalid Presentation Credential JWS Signature");
+        throw new Domain.PolluxError.InvalidVerifyCredentialError(
+          value,
+          `Invalid ${isPresentation ? 'Verifiable Presentation' : 'Verifiable Credential'} JWS Signature`
+        );
       }
       const nestedMapper = new DescriptorPath(credential);
       const nestedValue = nestedMapper.getValue(descriptorItem.path_nested.path);
@@ -193,7 +196,10 @@ export class PresentationVerify extends Plugins.Task<Args> {
     const credential = await this.getCredential(ctx, descriptorItem, value);
     if (!credential) {
       //TODO: Improve this error, can be presentation or credential
-      throw new Domain.PolluxError.InvalidVerifyCredentialError(value, "Invalid Presentation Credential JWS Signature");
+      throw new Domain.PolluxError.InvalidVerifyCredentialError(
+        value,
+        `Invalid ${isPresentation ? 'Verifiable Presentation' : 'Verifiable Credential'} JWS Signature`
+      );
     }
 
     return credential instanceof JWTCredential ?

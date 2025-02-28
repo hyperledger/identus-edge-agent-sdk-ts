@@ -74,8 +74,7 @@ export namespace DIF {
     }
   }
 
-  export interface EmbedTarget {
+  export type EmbedTarget<T extends string = 'verifiablePresentation'> = {
     presentation_submission: Presentation.Submission;
-    verifiablePresentation: string[];
-  }
+  } & { [k in T]?: string[] }
 }

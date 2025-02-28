@@ -8,8 +8,6 @@ import { InvalidCredentialError } from "../../domain/models/errors/Pollux";
 import {
   CredentialType,
   W3CVerifiableCredential,
-  W3CVerifiableCredentialContext,
-  W3CVerifiableCredentialType,
   W3CVerifiablePresentation,
 } from "../../domain/models/VerifiableCredential";
 
@@ -27,19 +25,21 @@ export enum JWT_VP_PROPS {
 
 export interface JWTCredentialPayload {
   [JWT.Claims.iss]: string;
+  [JWT.Claims.iat]?: number;
   [JWT.Claims.jti]?: string;
-  [JWT.Claims.nbf]: number;
-  [JWT.Claims.exp]: number;
+  [JWT.Claims.nbf]?: number;
+  [JWT.Claims.exp]?: number;
   [JWT.Claims.sub]: string;
-  [JWT.Claims.aud]?: string;
+  [JWT.Claims.aud]?: string | string[];
   [JWT_VC_PROPS.revoked]?: boolean;
   [JWT_VC_PROPS.vc]: W3CVerifiableCredential;
 }
 
 export interface JWTPresentationPayload {
   [JWT.Claims.iss]?: string;
+  [JWT.Claims.iat]?: number;
   [JWT.Claims.jti]?: string;
-  [JWT.Claims.aud]?: string;
+  [JWT.Claims.aud]?: string | string[];
   [JWT.Claims.nbf]?: number;
   [JWT.Claims.exp]?: number;
   [JWT_VP_PROPS.nonce]?: string;
@@ -404,10 +404,10 @@ export class JWTCredential
     }
     return {
       "@context": [
-        W3CVerifiableCredentialContext.credential
+        "https://www.w3.org/2018/presentations/v1"
       ],
       type: [
-        W3CVerifiableCredentialType.presentation
+        "VerifiablePresentation"
       ],
       verifiableCredential: [
         this.id
@@ -420,12 +420,8 @@ export class JWTCredential
       throw new InvalidCredentialError("Invalid payload is not VC");
     }
     return {
-      "@context": [
-        W3CVerifiableCredentialContext.credential
-      ],
-      type: [
-        W3CVerifiableCredentialType.credential
-      ],
+      "@context": ["https://www.w3.org/2018/credentials/v1"],
+      type: ["VerifiableCredential"],
       issuer: this.issuer,
       issuanceDate: this.issuanceDate,
       expirationDate: this.expirationDate,
