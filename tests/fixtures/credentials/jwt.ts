@@ -1,4 +1,4 @@
-import { AttachmentDescriptor, CredentialType, W3CVerifiableCredential, W3CVerifiableCredentialContext, W3CVerifiableCredentialType } from "../../../src/domain";
+import { AttachmentDescriptor, CredentialType, W3CVerifiableCredential } from "../../../src/domain";
 import { OfferCredential } from "../../../src/edge-agent/protocols/issueCredential/OfferCredential";
 import { list } from "../dids";
 
@@ -52,19 +52,19 @@ export const credentialOfferMessage = new OfferCredential(
 );
 
 export const credentialAgent: W3CVerifiableCredential = {
-  "@context": [W3CVerifiableCredentialContext.credential],
+  "@context": ["https://www.w3.org/2018/credentials/v1"],
   credentialSubject: {
     additionalProp2: "Test3",
     id: "did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w",
   },
-  type: [W3CVerifiableCredentialType.credential],
+  type: ["VerifiableCredential"],
   issuer: "did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w",
   issuanceDate: new Date().toISOString(),
 };
 
 export const credential: W3CVerifiableCredential = {
-  type: [W3CVerifiableCredentialType.credential],
-  "@context": [W3CVerifiableCredentialContext.credential],
+  type: ["VerifiableCredential"],
+  "@context": ["https://www.w3.org/2018/credentials/v1"],
   credentialSubject: {
     additionalProp2: 'Test3',
     id: 'did:prism:beea5234af46804714d8ea8ec77b66cc7f3e815c68abb475f254cf9c30626763:CscBCsQBEmQKD2F1dGhlbnRpY2F0aW9uMBAEQk8KCXNlY3AyNTZrMRIgeSg-2OO1JdnpzUOBitzIicXdfzeAcTfWAN-YCeuCbyIaIJQ4GTI30taViwchT3e0nLXBS43B4j9jlslKo2ZldXzjElwKB21hc3RlcjAQAUJPCglzZWNwMjU2azESIHkoPtjjtSXZ6c1DgYrcyInF3X83gHE31gDfmAnrgm8iGiCUOBkyN9LWlYsHIU93tJy1wUuNweI_Y5bJSqNmZXV84w'

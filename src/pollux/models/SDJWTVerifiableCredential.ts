@@ -2,16 +2,14 @@ import { uuid } from "@stablelib/uuid";
 import { SDJwt, Jwt } from "@sd-jwt/core";
 import { Disclosure } from '@sd-jwt/utils';
 import {
-  Pluto,
-  StorableCredential,
-  Credential,
-  CredentialType,
-  ProvableCredential,
-  W3CVerifiablePresentation,
-  W3CVerifiableCredentialContext,
-  W3CVerifiableCredentialType,
-  PolluxError,
-  JWT
+    Pluto,
+    StorableCredential,
+    Credential,
+    CredentialType,
+    ProvableCredential,
+    W3CVerifiablePresentation,
+    PolluxError,
+    JWT
 } from "../../domain";
 import { defaultHashConfig } from "../utils/jwt/SDJWT";
 
@@ -20,11 +18,11 @@ export const SDJWTVerifiableCredentialRecoveryId = "sd+jwt+credential";
 
 
 export enum SDJWT_VP_PROPS {
-  vct = "vct",
-  revoked = "revoked",
-  _sd_alg = "_sd_alg",
-  _sd = "_sd",
-  disclosures = "disclosures"
+    vct = "vct",
+    revoked = "revoked",
+    _sd_alg = "_sd_alg",
+    _sd = "_sd",
+    disclosures = "disclosures"
 }
 
 
@@ -137,10 +135,10 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
     presentation(): W3CVerifiablePresentation {
         return {
             "@context": [
-                W3CVerifiableCredentialContext.credential
+                "https://www.w3.org/2018/presentations/v1"
             ],
             type: [
-                W3CVerifiableCredentialType.presentation
+                "VerifiablePresentation"
             ],
             verifiableCredential: [
                 this.id
@@ -169,27 +167,27 @@ export class SDJWTCredential extends Credential implements ProvableCredential, S
     }
 
     static fromJWS<E extends Record<string, any> = Record<string, any>>(
-      jws: string,
-      revoked = false,
+        jws: string,
+        revoked = false,
     ): SDJWTCredential {
-      const jwt = new Jwt(Jwt.decodeJWT(jws));
-      const disclosures = jws.split("~").slice(1).filter((k) => k);
-      const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync<E>(disclosure, {
-        alg: defaultHashConfig.hasherAlg,
-        hasher: defaultHashConfig.hasher,
-      }));
-      const loaded = new SDJwt(
-        {
-          jwt: jwt,
-          disclosures: computed
+        const jwt = new Jwt(Jwt.decodeJWT(jws));
+        const disclosures = jws.split("~").slice(1).filter((k) => k);
+        const computed = disclosures.map((disclosure) => Disclosure.fromEncodeSync<E>(disclosure, {
+            alg: defaultHashConfig.hasherAlg,
+            hasher: defaultHashConfig.hasher,
+        }));
+        const loaded = new SDJwt(
+            {
+                jwt: jwt,
+                disclosures: computed
+            }
+        );
+        const claims: Record<string, Disclosure<E>> = {};
+        for (const disclosure of computed) {
+            if (disclosure.key) {
+                claims[disclosure.key] = disclosure;
+            }
         }
-      );
-      const claims: Record<string, Disclosure<E>> = {};
-      for (const disclosure of computed) {
-        if (disclosure.key) {
-          claims[disclosure.key] = disclosure;
-        }
-      }
-      return new SDJWTCredential(loaded, [claims], revoked);
+        return new SDJWTCredential(loaded, [claims], revoked);
     }
 }
