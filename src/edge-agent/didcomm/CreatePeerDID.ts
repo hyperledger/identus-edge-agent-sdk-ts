@@ -1,6 +1,8 @@
 import * as Domain from "../../domain";
 import { Task } from "../../utils/tasks";
+import { MediationKeysUpdateList } from "../protocols/mediation/MediationKeysUpdateList";
 import { DIDCommContext } from "./Context";
+import { Send } from "./Send";
 
 /**
  * Asyncronously create and store a new peer did
@@ -33,7 +35,7 @@ export class CreatePeerDID extends Task<Domain.DID, Args> {
 
     publicKeys.push(keyAgreementPrivateKey.publicKey());
     publicKeys.push(authenticationPrivateKey.publicKey());
-    const mediatorDID = ctx.MediationHandler.mediator?.mediatorDID;
+    const mediatorDID = ctx.Connections.mediator?.uri;
 
     if (
       mediatorDID &&
@@ -53,7 +55,7 @@ export class CreatePeerDID extends Task<Domain.DID, Args> {
     const did = await ctx.Castor.createPeerDID(publicKeys, services);
 
     if (updateMediator) {
-      await ctx.MediationHandler.updateKeyListWithDIDs([did]);
+      await this.updateKeyListWithDID(ctx, did);
     }
 
     await ctx.Pluto.storeDID(did, [
@@ -62,5 +64,28 @@ export class CreatePeerDID extends Task<Domain.DID, Args> {
     ]);
 
     return did;
+  }
+
+  /**
+   * Asyncronously update the mediator with the new keyList, used during the mediation process or during DID Rotation
+   *
+   * @async
+   * @param {DID[]} did
+   * @returns {Promise<void>}
+   */
+  async updateKeyListWithDID(ctx: DIDCommContext, did: Domain.DID): Promise<void> {
+    const mediator = ctx.Connections.mediator?.asMediator();
+
+    if (!mediator) {
+      throw new Domain.AgentError.NoMediatorAvailableError();
+    }
+    const keyListUpdateMessage = new MediationKeysUpdateList(
+      mediator.hostDID,
+      mediator.mediatorDID,
+      [did]
+    ).makeMessage();
+
+    await ctx.run(new Send({ message: keyListUpdateMessage }));
+    // [ ] handle response https://github.com/hyperledger-identus/sdk-ts/issues/391
   }
 }

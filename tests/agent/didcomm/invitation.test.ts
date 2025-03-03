@@ -4,10 +4,15 @@ import chaiAsPromised from "chai-as-promised";
 import SinonChai from "sinon-chai";
 import UUIDLib from "@stablelib/uuid";
 import Agent from "../../../src/edge-agent/didcomm/Agent";
-import { AttachmentDescriptor, DID, Message, Seed } from "../../../src/domain";
+import { AttachmentDescriptor, DID, Message, MessageDirection, Seed } from "../../../src/domain";
 import { HandshakeRequest, OutOfBandInvitation, ProtocolType } from "../../../src";
 import { InvitationIsInvalidError } from "../../../src/domain/models/errors/Agent";
 import { mockPluto } from "../../fixtures/inmemory/factory";
+import { mockTask } from "../../testFns";
+import * as StartMediatorModule from '../../../src/edge-agent/didcomm/StartMediator';
+import * as StartFetchMessagesModule from '../../../src/edge-agent/didcomm/StartFetchingMessages';
+import { MediatorConnection } from '../../../src/edge-agent/connections/didcomm';
+
 chai.use(SinonChai);
 chai.use(chaiAsPromised);
 
@@ -33,14 +38,15 @@ describe("Agent", () => {
       seed,
     });
 
-    vi.spyOn(agent.connectionManager, "sendMessage").mockResolvedValue(undefined);
-    vi.spyOn(agent.connectionManager, "startMediator").mockResolvedValue();
-    vi.spyOn(agent.connectionManager, "startFetchingMessages").mockResolvedValue();
-    (agent.mediationHandler as any).mediator = {
-      hostDID: DID.from("did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19"),
-      mediatorDID: DID.from("did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19"),
-      routingDID: DID.from("did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19"),
-    };
+    mockTask(StartFetchMessagesModule, "StartFetchingMessages");
+    mockTask(StartMediatorModule, "StartMediator");
+    agent.connections.addMediator(
+      new MediatorConnection(
+        "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19",
+        "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19",
+        "did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19",
+      )
+    );
 
     await agent.start();
   });
@@ -170,9 +176,9 @@ describe("Agent", () => {
       const did = DID.fromString("did:peer:2.Ez6LSms555YhFthn1WV8ciDBpZm86hK9tp83WojJUmxPGk1hZ.Vz6MkmdBjMyB4TS5UbbQw54szm8yvMMf1ftGV2sQVYAxaeWhE.SeyJpZCI6Im5ldy1pZCIsInQiOiJkbSIsInMiOnsidXJpIjoiaHR0cHM6Ly9tZWRpYXRvci5yb290c2lkLmNsb3VkIiwiYSI6WyJkaWRjb21tL3YyIl19fQ");
       const stubStoreDID = vi.spyOn(agent.pluto, "storeDID").mockResolvedValue();
       const stubCreateDID = vi.spyOn(agent.castor, "createPeerDID").mockResolvedValue(did);
-      const stubSendMessage = vi.spyOn(agent.connectionManager, "sendMessage").mockResolvedValue(null as any);
-      const stubAddConnection = vi.spyOn(agent.connectionManager, "addConnection").mockResolvedValue();
-      vi.spyOn(agent.mediationHandler, "updateKeyListWithDIDs").mockResolvedValue();
+      const stubSendMessage = vi.spyOn(agent.mercury, "sendMessage").mockResolvedValue(null as any);
+      const stubAddConnection = vi.spyOn(agent.connections, "add").mockResolvedValue();
+
       vi.spyOn(UUIDLib, "uuid").mockResolvedValue("123456-123456-12356-123456");
 
       const oob = new OutOfBandInvitation(
@@ -188,9 +194,12 @@ describe("Agent", () => {
       expect(stubCreateDID).toHaveBeenCalledOnce;
       expect(stubStoreDID).toHaveBeenCalledOnce;
       expect(stubAddConnection).toHaveBeenCalledOnce;
-      expect(stubSendMessage).toHaveBeenCalledWith(
-        HandshakeRequest.fromOutOfBand(oob, did).makeMessage()
-      );
+      expect(stubSendMessage).toHaveBeenCalledTimes(2);
+      const expectedMsg = {
+        ...HandshakeRequest.fromOutOfBand(oob, did).makeMessage(),
+        direction: MessageDirection.SENT
+      };
+      expect(stubSendMessage.mock.lastCall?.[0]).toEqual(expectedMsg);
     });
 
     test("Connectionless Credential Offer - stores Credential Offer", async () => {
@@ -198,7 +207,7 @@ describe("Agent", () => {
       const stubStoreDID = vi.spyOn(agent.pluto, "storeDID").mockResolvedValue();
       const stubCreateDID = vi.spyOn(agent.castor, "createPeerDID").mockResolvedValue(did);
       const stubSendMessage = vi.spyOn(agent.mercury, "sendMessage").mockResolvedValue(null as any);
-      const stubAddConnection = vi.spyOn(agent.connectionManager, "addConnection").mockResolvedValue();
+      const stubAddConnection = vi.spyOn(agent.connections, "add").mockResolvedValue();
       // const stubStoreMessage = vi.spyOn(agent.pluto, "storeMessage").mockResolvedValue();
       const stubStoreMessage = vi.fn();
       vi.spyOn(agent.pluto, "storeMessage").mockImplementation(stubStoreMessage);
