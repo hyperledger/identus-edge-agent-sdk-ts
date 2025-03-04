@@ -12,7 +12,7 @@ export class CredentialOffer extends Plugins.Task<Args> {
   async run(ctx: Plugins.Context) {
     const offer = this.args.offer;
 
-    // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/363 use CreatePrismDID
+    // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/363 use CreatePrismDID
     // CreatePrismDID needs updating to accept keytypes (both secp here)
     const getIndexTask = new PrismKeyPathIndexTask({});
     const index = await ctx.run(getIndexTask);

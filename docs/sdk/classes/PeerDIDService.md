@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / PeerDIDService
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / PeerDIDService
 
 # Class: PeerDIDService
 
@@ -46,7 +46,7 @@ Provides functionality to transfrom peerDIDServices from our interfaces into DID
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L53)
+[src/peer-did/PeerDID.ts:53](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L53)
 
 ## Properties
 
@@ -56,7 +56,7 @@ Provides functionality to transfrom peerDIDServices from our interfaces into DID
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L51)
+[src/peer-did/PeerDID.ts:51](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L51)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L50)
+[src/peer-did/PeerDID.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L50)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L49)
+[src/peer-did/PeerDID.ts:49](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L49)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L48)
+[src/peer-did/PeerDID.ts:48](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L48)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:68](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L68)
+[src/peer-did/PeerDID.ts:68](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L68)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L66)
+[src/peer-did/PeerDID.ts:66](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L66)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L65)
+[src/peer-did/PeerDID.ts:65](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L65)
 
 ## Methods
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L75)
+[src/peer-did/PeerDID.ts:75](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L75)
 
 ___
 
@@ -159,4 +159,4 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:89](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L89)
+[src/peer-did/PeerDID.ts:89](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L89)

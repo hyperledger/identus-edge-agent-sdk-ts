@@ -79,7 +79,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
       return ctx.SDJWT.createPresentationFor({
         jws: this.args.credential.id,
         privateKey,
-        // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362
+        // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/362
         // feature presentationFrame / frame
         // presentationFrame: this.args.presentationFrame
       });
@@ -96,7 +96,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
         nbf: nbf,
       };
 
-      // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/367
+      // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/367
       // handle challenge, domain and nonce according to spec https://identity.foundation/presentation-exchange/
       // const challenge = options && "challenge" in options && options?.challenge;
       // const domain = options && "domain" in options && options?.domain;

@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / OIDC
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / OIDC
 
 # Namespace: OIDC
 
@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:221](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L221)
+[src/edge-agent/oidc/types.ts:221](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L221)
 
-[src/edge-agent/oidc/types.ts:222](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L222)
+[src/edge-agent/oidc/types.ts:222](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L222)
 
 ___
 
@@ -38,9 +38,9 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L9)
+[src/edge-agent/oidc/types.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L9)
 
-[src/edge-agent/oidc/types.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L10)
+[src/edge-agent/oidc/types.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L10)
 
 ___
 
@@ -50,9 +50,9 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:73](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L73)
+[src/edge-agent/oidc/types.ts:73](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L73)
 
-[src/edge-agent/oidc/types.ts:74](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L74)
+[src/edge-agent/oidc/types.ts:74](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L74)
 
 ___
 
@@ -62,9 +62,9 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:539](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L539)
+[src/edge-agent/oidc/types.ts:539](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L539)
 
-[src/edge-agent/oidc/types.ts:540](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L540)
+[src/edge-agent/oidc/types.ts:540](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L540)
 
 ## Variables
 
@@ -74,9 +74,9 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:221](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L221)
+[src/edge-agent/oidc/types.ts:221](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L221)
 
-[src/edge-agent/oidc/types.ts:222](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L222)
+[src/edge-agent/oidc/types.ts:222](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L222)
 
 ___
 
@@ -86,9 +86,9 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:9](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L9)
+[src/edge-agent/oidc/types.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L9)
 
-[src/edge-agent/oidc/types.ts:10](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L10)
+[src/edge-agent/oidc/types.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L10)
 
 ___
 
@@ -98,9 +98,9 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:73](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L73)
+[src/edge-agent/oidc/types.ts:73](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L73)
 
-[src/edge-agent/oidc/types.ts:74](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L74)
+[src/edge-agent/oidc/types.ts:74](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L74)
 
 ___
 
@@ -110,6 +110,6 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/types.ts:539](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L539)
+[src/edge-agent/oidc/types.ts:539](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L539)
 
-[src/edge-agent/oidc/types.ts:540](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/types.ts#L540)
+[src/edge-agent/oidc/types.ts:540](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/types.ts#L540)

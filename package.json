@@ -1,5 +1,5 @@
 {
-  "name": "@hyperledger/identus-edge-agent-sdk",
+  "name": "@hyperledger/identus-sdk",
   "version": "6.5.1",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
@@ -51,7 +51,7 @@
   "author": "IOHK",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hyperledger/identus-edge-agent-sdk-ts.git"
+    "url": "https://github.com/hyperledger-identus/sdk-ts.git"
   },
   "license": "Apache-2.0",
   "keywords": [],

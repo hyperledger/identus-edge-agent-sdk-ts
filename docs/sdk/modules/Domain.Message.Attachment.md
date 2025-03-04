@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Message](Domain.Message.md) / Attachment
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Message](Domain.Message.md) / Attachment
 
 # Namespace: Attachment
 
@@ -30,4 +30,4 @@ Get the presumed JSON from the attachment
 
 #### Defined in
 
-[src/domain/models/Message.ts:190](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L190)
+[src/domain/models/Message.ts:166](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L166)

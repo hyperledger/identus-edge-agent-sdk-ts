@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / PrismRevocationBody
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / PrismRevocationBody
 
 # Interface: PrismRevocationBody
 
@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L17)
+[src/edge-agent/protocols/types.ts:3](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/types.ts#L3)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L16)
+[src/edge-agent/protocols/types.ts:2](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/types.ts#L2)

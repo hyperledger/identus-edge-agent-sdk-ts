@@ -1,4 +1,4 @@
-@hyperledger/identus-edge-agent-sdk / [Exports](modules.md)
+@hyperledger/identus-sdk / [Exports](modules.md)
 
 # Identus TypeScript SDK
 
@@ -6,7 +6,7 @@
   <img src="https://cdn.jsdelivr.net/gh/hyperledger/identus@latest/resources/images/hyperledger-identus.svg" />
 </p>
 
-[![Coverage Status](https://coveralls.io/repos/github/hyperledger/identus-edge-agent-sdk-ts/badge.svg?branch=master)](https://coveralls.io/github/hyperledger/identus-edge-agent-sdk-ts?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/hyperledger-identus/sdk-ts/badge.svg?branch=main)](https://coveralls.io/github/hyperledger-identus/sdk-ts?branch=main)
 
 ---
 
@@ -15,27 +15,28 @@ verifiable data and digital identity. Built on Cardano, as a distributed ledger,
 it offers core infrastructure for issuing DIDs (Decentralized identifiers) and 
 verifiable credentials, alongside tools and frameworks to help expand your ecosystem.
 The complete platform is separated into multiple repositories:
-* [Cloud Agent](https://github.com/hyperledger/identus-cloud-agent) - Repo that contains the Cloud Agent that provides self-sovereign identity services to build products and solutions.
-* [Mediator](https://github.com/input-output-hk/identus-prism-mediator) - Repo for the DIDComm V2 Mediator.
-* [Edge Agent SDK TS](https://github.com/hyperledger/identus-edge-agent-sdk-ts) - Repo for the Typescript version of the SDK.
+* [Cloud Agent](https://github.com/hyperledger-identus/cloud-agent) - Repo that contains the Cloud Agent that provides self-sovereign identity services to build products and solutions.
+* [Mediator](https://github.com/hyperledger-identus/mediator) - Repo for the DIDComm V2 Mediator.
+* [SDK TS](https://github.com/hyperledger-identus/sdk-ts) - Repo for the Typescript SDK.
 
-We also have edge agents for other platforms:
-* [Edge Agent SDK Swift](https://github.com/hyperledger/identus-edge-agent-sdk-swift) - Repo for the Swift version of the SDK.
-* [Edge Agent SDK KMP](https://github.com/hyperledger/identus-edge-agent-sdk-kmp) - Repo for the Kotlin Multi-Platform version of the SDK.
+We also have SDKs for other platforms:
+* [SDK Swift](https://github.com/hyperledger-identus/sdk-swift) - Repo for the Swift SDK.
+* [SDK KMP](https://github.com/hyperledger-identus/sdk-kmp) - Repo for the Kotlin Multi-Platform SDK.
 
 ## SDK Overview
 
 - Apollo: Provides a suite of necessary cryptographic operations.
 - Castor: Provides a suite of operations to create, manage and resolve decentralized identifiers.
-- Pollux: Provides a suite of operations for handling [verifiable credentials](https://github.com/hyperledger/identus-docs/blob/master/documentation/docs/concepts/glossary.md#verifiable-credentials).
 - Mercury: Provides a suite of operations for handling DIDComm V2 messages.
 - Pluto: Provides an interface for storage operations in a portable, storage-agnostic manner.
 - Agent: A component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
 
 ## Getting started
-We highly recommend you check out the [docs](https://hyperledger.github.io/identus-docs/docs/getting-started) :world_map:
+We highly recommend you check out the [docs](https://hyperledger-identus.github.io/docs/home/) :world_map:
 
 ### Install
+
+**NOTE**: The package was renamed from `@hyperledger/identus-edge-agent-sdk` to `@hyperledger/identus-sdk`. Modify the scripts if you ready to use the new package accordingly.
 
 ```bash
 npm i @hyperledger/identus-edge-agent-sdk
@@ -57,8 +58,8 @@ The demos assume building this repo from source, so you will need the following:
 
 Clone and build:
 ```bash
-git clone git@github.com:hyperledger/identus-edge-agent-sdk-ts.git --recurse-submodules
-cd identus-edge-agent-sdk-ts
+git clone git@github.com:hyperledger-identus/sdk-ts.git --recurse-submodules
+cd sdk-ts
 npm i
 npm run build
 ```

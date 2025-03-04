@@ -15,7 +15,7 @@ export class CredentialOffer extends Plugins.Task<Args> {
     }
     const offer = this.args.offer;
 
-    // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/363 use CreatePrismDID
+    // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/363 use CreatePrismDID
     const getIndexTask = new PrismKeyPathIndexTask({});
     const index = await ctx.run(getIndexTask);
 

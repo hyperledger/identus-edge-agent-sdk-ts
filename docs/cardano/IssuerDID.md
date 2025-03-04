@@ -37,7 +37,7 @@ First configure your environmnet, create a .env.local file in the app directory 
 NEXT_PUBLIC_BLOCKFROST_API_KEY=[[ your blockfrost api key]]
 ```
 
-You can see this in realtime working in our [next js demo](https://github.com/hyperledger/identus-edge-agent-sdk-ts/tree/main/demos/next) follow the required steps in the README.md file.
+You can see this in realtime working in our [next js demo](https://github.com/hyperledger-identus/sdk-ts/tree/main/demos/next) follow the required steps in the README.md file.
 
 Once you load the website using the menu, click "DIDS". You will be able to select the Wallet of your choice to create the Cardano transaction for a published did. You can do by following the UI/UX steps or by checking the following example source-code:
 

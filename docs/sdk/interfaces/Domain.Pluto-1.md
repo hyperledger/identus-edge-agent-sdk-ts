@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Pluto
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Pluto
 
 # Interface: Pluto
 
@@ -66,7 +66,7 @@ create a Backup object from the stored data
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:47](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L47)
+[src/domain/buildingBlocks/Pluto.ts:47](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L47)
 
 ___
 
@@ -88,7 +88,7 @@ Delete a previously stored messages
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:182](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L182)
+[src/domain/buildingBlocks/Pluto.ts:182](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L182)
 
 ___
 
@@ -104,7 +104,7 @@ Retrieve all the stored credentials
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:162](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L162)
+[src/domain/buildingBlocks/Pluto.ts:162](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L162)
 
 ___
 
@@ -120,7 +120,7 @@ Retrieve all stored DID pairs (DIDComm connections).
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:132](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L132)
+[src/domain/buildingBlocks/Pluto.ts:132](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L132)
 
 ___
 
@@ -136,7 +136,7 @@ Retrieve all stored mediators.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:157](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L157)
+[src/domain/buildingBlocks/Pluto.ts:157](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L157)
 
 ___
 
@@ -152,7 +152,7 @@ Retrieve all stored DIDComm messages.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:147](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L147)
+[src/domain/buildingBlocks/Pluto.ts:147](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L147)
 
 ___
 
@@ -168,7 +168,7 @@ Retrieve all stored Peer DIDs.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:122](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L122)
+[src/domain/buildingBlocks/Pluto.ts:122](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L122)
 
 ___
 
@@ -184,7 +184,7 @@ Retrieve all stored PRISM DIDs.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:117](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L117)
+[src/domain/buildingBlocks/Pluto.ts:117](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L117)
 
 ___
 
@@ -206,7 +206,7 @@ Fetch the Credential Metadata by its name
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:64](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L64)
+[src/domain/buildingBlocks/Pluto.ts:64](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L64)
 
 ___
 
@@ -228,7 +228,7 @@ Retrieve available private keys for a given DID.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:127](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L127)
+[src/domain/buildingBlocks/Pluto.ts:127](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L127)
 
 ___
 
@@ -250,7 +250,7 @@ Retrieve the stored link secret by its name
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:167](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L167)
+[src/domain/buildingBlocks/Pluto.ts:167](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L167)
 
 ___
 
@@ -272,7 +272,7 @@ Retrieve a DIDComm message by ID.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:152](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L152)
+[src/domain/buildingBlocks/Pluto.ts:152](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L152)
 
 ___
 
@@ -294,7 +294,7 @@ Retrieve a DID pair containing a given DID as either host or receiver.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:137](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L137)
+[src/domain/buildingBlocks/Pluto.ts:137](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L137)
 
 ___
 
@@ -316,7 +316,7 @@ Retrieve a DID pair by a given pair name.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:142](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L142)
+[src/domain/buildingBlocks/Pluto.ts:142](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L142)
 
 ___
 
@@ -346,7 +346,7 @@ load the given data into the store
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:53](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L53)
+[src/domain/buildingBlocks/Pluto.ts:53](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L53)
 
 ___
 
@@ -368,7 +368,7 @@ Revoke a Credential
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:177](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L177)
+[src/domain/buildingBlocks/Pluto.ts:177](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L177)
 
 ___
 
@@ -384,7 +384,7 @@ Pluto initialise function
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:41](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L41)
+[src/domain/buildingBlocks/Pluto.ts:41](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L41)
 
 ___
 
@@ -398,7 +398,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L42)
+[src/domain/buildingBlocks/Pluto.ts:42](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L42)
 
 ___
 
@@ -420,7 +420,7 @@ Store a Credential into the Database
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:112](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L112)
+[src/domain/buildingBlocks/Pluto.ts:112](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L112)
 
 ___
 
@@ -442,7 +442,7 @@ Store the Credential Metadata
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:58](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L58)
+[src/domain/buildingBlocks/Pluto.ts:58](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L58)
 
 ___
 
@@ -467,7 +467,7 @@ with optional private key(s) and alias
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L70)
+[src/domain/buildingBlocks/Pluto.ts:70](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L70)
 
 ___
 
@@ -491,7 +491,7 @@ Store a named pair of DIDs representing a DIDComm connection.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L87)
+[src/domain/buildingBlocks/Pluto.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L87)
 
 ___
 
@@ -513,7 +513,7 @@ Store a new linkSecret
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:172](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L172)
+[src/domain/buildingBlocks/Pluto.ts:172](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L172)
 
 ___
 
@@ -535,7 +535,7 @@ Store a mediator information.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:107](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L107)
+[src/domain/buildingBlocks/Pluto.ts:107](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L107)
 
 ___
 
@@ -557,7 +557,7 @@ Store a DIDComm message.
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:92](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L92)
+[src/domain/buildingBlocks/Pluto.ts:92](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L92)
 
 ___
 
@@ -579,7 +579,7 @@ Store an array of DIDComm messages
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:97](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L97)
+[src/domain/buildingBlocks/Pluto.ts:97](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L97)
 
 ___
 
@@ -606,7 +606,7 @@ use storeDID instead
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L82)
+[src/domain/buildingBlocks/Pluto.ts:82](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L82)
 
 ___
 
@@ -634,7 +634,7 @@ use storeDID instead
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L76)
+[src/domain/buildingBlocks/Pluto.ts:76](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L76)
 
 ___
 
@@ -656,4 +656,4 @@ Store a list of private keys with its metadata and a reference to the DID it bel
 
 #### Defined in
 
-[src/domain/buildingBlocks/Pluto.ts:102](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/buildingBlocks/Pluto.ts#L102)
+[src/domain/buildingBlocks/Pluto.ts:102](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Pluto.ts#L102)

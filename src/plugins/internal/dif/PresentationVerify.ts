@@ -80,7 +80,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
     }
 
 
-    // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/366
+    // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/366
     // should fail when credential invalid - requiredClaims need to be passed
     // const requiredClaims = asArray(this.args.requiredClaims);
     // const credentialValid = await ctx.SDJWT.verify({
@@ -124,7 +124,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
     const presentation = JWTCredential.fromJWS(jws);
     const issuer = presentation.issuer;
 
-    // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/367
+    // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/367
     // handle challenge, domain and nonce according to spec https://identity.foundation/presentation-exchange/
     // const presentationDefinitionOptions = presentationRequest;
 

@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / PeerDID
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / PeerDID
 
 # Namespace: PeerDID
 

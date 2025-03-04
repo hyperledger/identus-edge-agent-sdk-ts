@@ -23,7 +23,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
         throw new Domain.AgentError.CannotFindDIDPrivateKey();
       }
 
-      // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362 PresentationFrame
+      // [ ] https://github.com/hyperledger-identus/sdk-ts/issues/362 PresentationFrame
       const presentationFrame = this.args.presentationFrame ?? {};
       const presentationJWS = await ctx.SDJWT.createPresentationFor({
         jws: credential.id,
