@@ -2,9 +2,13 @@ import { uuid } from "@stablelib/uuid";
 import { AttachmentDescriptor, JsonString } from "../../../../domain";
 import { AgentError } from "../../../../domain/models/Errors";
 import { PrismOnboardingInvitation } from "../../../types";
-
 import { ProtocolType } from "../../ProtocolTypes";
-import { OutOfBandInvitationBody } from "../../types";
+
+export interface OutOfBandInvitationBody {
+  goal_code?: string;
+  goal?: string;
+  accept?: string[];
+}
 
 export class OutOfBandInvitation {
   public type = ProtocolType.Didcomminvitation;

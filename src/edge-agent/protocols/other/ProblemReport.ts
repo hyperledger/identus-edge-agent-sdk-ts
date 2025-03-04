@@ -1,50 +1,42 @@
-import { AgentError, DID, Message } from "../../../domain/models";
-import { parseProblemReportBody } from "../../helpers/ProtocolHelpers";
+import { DID, Message } from "../../../domain/models";
 import { ProtocolType } from "../ProtocolTypes";
-import { ProblemReportBody } from "../types";
 
+/**
+ * Specification:
+ * https://identity.foundation/didcomm-messaging/spec/#problem-reports
+ */
 
-
-
+export interface ProblemReportBody {
+  // https://identity.foundation/didcomm-messaging/spec/#problem-codes
+  code: string;
+  // OPTIONAL but recommended. Contains human-friendly text describing the problem
+  comment?: string,
+  // OPTIONAL. Contains situation-specific values that are interpolated into the value of `comment`
+  args?: string[],
+  // OPTIONAL. Provides a URI where additional help on the issue can be received
+  escalate_to?: string;
+}
 
 export class ProblemReport {
-    public static type = ProtocolType.ProblemReporting;
+  public static type = ProtocolType.ProblemReporting;
 
-    constructor(
-        public body: ProblemReportBody,
-        public from: DID,
-        public to: DID,
-        public thid?: string,
-    ) { }
+  constructor(
+    public body: ProblemReportBody,
+    public from: DID,
+    public to: DID,
+    public thid?: string,
+  ) {}
 
-    makeMessage(): Message {
-        const body = JSON.stringify(this.body);
-        return new Message(
-            body,
-            undefined,
-            ProblemReport.type,
-            this.from,
-            this.to,
-            [],
-            this.thid
-        );
-    }
-
-    static fromMessage(fromMessage: Message): ProblemReport {
-        if (
-            fromMessage.piuri !== ProtocolType.DidcommBasicMessage ||
-            !fromMessage.from ||
-            !fromMessage.to
-        ) {
-            throw new AgentError.InvalidBasicMessageBodyError(
-                "Invalid BasicMessage body error."
-            );
-        }
-        const problemReportBody = parseProblemReportBody(fromMessage);
-        return new ProblemReport(
-            problemReportBody,
-            fromMessage.from,
-            fromMessage.to
-        );
-    }
+  makeMessage(): Message {
+    const body = JSON.stringify(this.body);
+    return new Message(
+      body,
+      undefined,
+      ProblemReport.type,
+      this.from,
+      this.to,
+      [],
+      this.thid
+    );
+  }
 }
