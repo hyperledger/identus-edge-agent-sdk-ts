@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:86](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/DIDDocument.ts#L86)
+[src/domain/models/DIDDocument.ts:86](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L86)
 
 ## Properties
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/DIDDocument.ts#L87)
+[src/domain/models/DIDDocument.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L87)
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:88](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/DIDDocument.ts#L88)
+[src/domain/models/DIDDocument.ts:88](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L88)

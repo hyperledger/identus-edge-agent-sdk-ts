@@ -1,6 +1,6 @@
 {
   "name": "@hyperledger/identus-sdk",
-  "version": "6.5.1",
+  "version": "7.0.0-rc.1",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
   "module": "./index.mjs",

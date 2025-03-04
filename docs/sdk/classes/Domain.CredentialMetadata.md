@@ -49,7 +49,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L7)
+[src/domain/models/CredentialMetadata.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L7)
 
 ## Properties
 
@@ -59,7 +59,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L10)
+[src/domain/models/CredentialMetadata.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L10)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L9)
+[src/domain/models/CredentialMetadata.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L9)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L8)
+[src/domain/models/CredentialMetadata.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L8)
 
 ___
 
@@ -96,7 +96,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L5)
+[src/domain/models/CredentialMetadata.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L5)
 
 ## Methods
 
@@ -118,7 +118,7 @@ Check the CredentialType of this Metadata
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L19)
+[src/domain/models/CredentialMetadata.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L19)
 
 ___
 
@@ -136,4 +136,4 @@ JSON
 
 #### Defined in
 
-[src/domain/models/CredentialMetadata.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/CredentialMetadata.ts#L28)
+[src/domain/models/CredentialMetadata.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/CredentialMetadata.ts#L28)

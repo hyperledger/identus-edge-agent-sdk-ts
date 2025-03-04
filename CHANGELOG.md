@@ -1,3 +1,30 @@
+## [7.0.0-rc.1](https://github.com/hyperledger-identus/sdk-ts/compare/v6.3.3...v7.0.0-rc.1) (2025-03-04)
+
+### ⚠ BREAKING CHANGES
+
+* updating DIDComm presentation protocols (#383)
+* updating DIDComm protocols closer to specification (#373)
+* **Pollux:** plugins (#349)
+
+### Features
+
+* **backup:** introduce new schema to minimize backup length ([#333](https://github.com/hyperledger-identus/sdk-ts/issues/333)) ([2aa27f8](https://github.com/hyperledger-identus/sdk-ts/commit/2aa27f855168ba65bc7db2d6f29bd24827feb181))
+* castor create signed prism did operation ([#347](https://github.com/hyperledger-identus/sdk-ts/issues/347)) ([9b59124](https://github.com/hyperledger-identus/sdk-ts/commit/9b59124cb4fe62221f1db7144f97e488cc5c15ad))
+* implementing Startable and propagating stop() ([#309](https://github.com/hyperledger-identus/sdk-ts/issues/309)) ([9e459c5](https://github.com/hyperledger-identus/sdk-ts/commit/9e459c504f075ac4ea839fd3d5bb36dc6579da18))
+* **Pollux:** plugins ([#349](https://github.com/hyperledger-identus/sdk-ts/issues/349)) ([e2bf9bc](https://github.com/hyperledger-identus/sdk-ts/commit/e2bf9bc06cbdba0f238aa56513a8e8d5a67d0905))
+* update DIDComm json message types ([#375](https://github.com/hyperledger-identus/sdk-ts/issues/375)) ([a291e25](https://github.com/hyperledger-identus/sdk-ts/commit/a291e252b7dfdcd7167fb5d15425d82bda1f9d09))
+* updating DIDComm presentation protocols ([#383](https://github.com/hyperledger-identus/sdk-ts/issues/383)) ([fc9b17b](https://github.com/hyperledger-identus/sdk-ts/commit/fc9b17ba675efa7ca10775ac027e7d2a9ab93f89))
+* updating DIDComm protocols closer to specification ([#373](https://github.com/hyperledger-identus/sdk-ts/issues/373)) ([9f85fac](https://github.com/hyperledger-identus/sdk-ts/commit/9f85fac1bbb8b309f86b264c74a0c7bda78f76f8))
+
+### Bug Fixes
+
+* add information for GHRC ([#337](https://github.com/hyperledger-identus/sdk-ts/issues/337)) ([01105a0](https://github.com/hyperledger-identus/sdk-ts/commit/01105a0950c8202a4339f96c04423ff939e482e8))
+* add listener async + wait time for presentation verified ([#336](https://github.com/hyperledger-identus/sdk-ts/issues/336)) ([80f3370](https://github.com/hyperledger-identus/sdk-ts/commit/80f33700fe20d22919b7cd476fea79ee2862ea97))
+* adding backwards compatibility to manage key curve Secp256k1 and… ([#372](https://github.com/hyperledger-identus/sdk-ts/issues/372)) ([ebe1c80](https://github.com/hyperledger-identus/sdk-ts/commit/ebe1c80c81c0286ea8fedd184aa821d7aa2d22f8))
+* commonJs default export ([#339](https://github.com/hyperledger-identus/sdk-ts/issues/339)) ([00ddc08](https://github.com/hyperledger-identus/sdk-ts/commit/00ddc08e461ab83b62fa15edea4a34a8560c8d78))
+* improving presentation exchange verification flow ([#387](https://github.com/hyperledger-identus/sdk-ts/issues/387)) ([b74536f](https://github.com/hyperledger-identus/sdk-ts/commit/b74536f86641d3b031d019937b0d0bc6c188831e))
+* set requirements for workshop ([#335](https://github.com/hyperledger-identus/sdk-ts/issues/335)) ([eff3cf3](https://github.com/hyperledger-identus/sdk-ts/commit/eff3cf3284335f3af73d70294a9b26623ee0298d))
+
 ## [6.5.1](https://github.com/hyperledger-identus/sdk-ts/compare/v6.5.0...v6.5.1) (2025-02-06)
 
 ### Bug Fixes

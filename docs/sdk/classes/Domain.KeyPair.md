@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/KeyPair.ts#L10)
+[src/domain/models/KeyPair.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/KeyPair.ts#L10)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/KeyPair.ts#L9)
+[src/domain/models/KeyPair.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/KeyPair.ts#L9)
 
 ## Accessors
 
@@ -61,4 +61,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/KeyPair.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/KeyPair.ts#L5)
+[src/domain/models/KeyPair.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/KeyPair.ts#L5)

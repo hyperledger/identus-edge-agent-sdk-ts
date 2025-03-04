@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:4](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Mercury.ts#L4)
+[src/domain/buildingBlocks/Mercury.ts:4](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Mercury.ts#L4)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:6](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Mercury.ts#L6)
+[src/domain/buildingBlocks/Mercury.ts:6](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Mercury.ts#L6)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Mercury.ts#L7)
+[src/domain/buildingBlocks/Mercury.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Mercury.ts#L7)
 
 ___
 
@@ -95,4 +95,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Mercury.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Mercury.ts#L5)
+[src/domain/buildingBlocks/Mercury.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Mercury.ts#L5)

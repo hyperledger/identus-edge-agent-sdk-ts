@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:27](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L27)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:27](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L27)
 
 ## Properties
 
@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L29)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L29)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L28)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L28)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L30)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L30)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:33](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L33)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:33](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L33)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:32](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L32)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:32](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L32)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:31](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L31)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:31](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L31)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L25)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L25)
 
 ## Methods
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:48](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L48)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:48](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L48)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L38)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L38)
 
 ___
 
@@ -165,4 +165,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:61](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L61)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:61](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L61)

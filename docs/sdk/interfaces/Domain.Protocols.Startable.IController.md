@@ -31,7 +31,7 @@ current status of the entity
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/Startable.ts#L22)
+[src/domain/protocols/Startable.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L22)
 
 ## Methods
 
@@ -49,7 +49,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/Startable.ts#L30)
+[src/domain/protocols/Startable.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L30)
 
 ___
 
@@ -67,4 +67,4 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/Startable.ts#L38)
+[src/domain/protocols/Startable.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L38)

@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L23)
+[src/peer-did/PeerDID.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/peer-did/PeerDID.ts#L23)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L22)
+[src/peer-did/PeerDID.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/peer-did/PeerDID.ts#L22)

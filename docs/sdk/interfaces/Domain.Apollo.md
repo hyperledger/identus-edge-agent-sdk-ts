@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Apollo.ts#L10)
+[src/domain/buildingBlocks/Apollo.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Apollo.ts#L10)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Apollo.ts#L13)
+[src/domain/buildingBlocks/Apollo.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Apollo.ts#L13)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Apollo.ts#L7)
+[src/domain/buildingBlocks/Apollo.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Apollo.ts#L7)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Apollo.ts#L9)
+[src/domain/buildingBlocks/Apollo.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Apollo.ts#L9)
 
 ___
 
@@ -111,4 +111,4 @@ ___
 
 #### Defined in
 
-[src/domain/buildingBlocks/Apollo.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/buildingBlocks/Apollo.ts#L8)
+[src/domain/buildingBlocks/Apollo.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/buildingBlocks/Apollo.ts#L8)

@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/VerifiableCredential.ts#L13)
+[src/domain/models/VerifiableCredential.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L13)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/VerifiableCredential.ts#L14)
+[src/domain/models/VerifiableCredential.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L14)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/VerifiableCredential.ts#L15)
+[src/domain/models/VerifiableCredential.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L15)

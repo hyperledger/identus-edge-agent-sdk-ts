@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L14)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L14)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L12)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L12)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L9)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L9)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L10)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L10)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L18)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L18)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L13)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L13)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L15)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L15)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L16)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L16)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L11)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L11)
 
 ___
 
@@ -115,4 +115,4 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L17)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L17)

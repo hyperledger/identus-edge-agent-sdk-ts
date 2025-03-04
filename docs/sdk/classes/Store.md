@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L14)
+[src/pluto/rxdb/Store.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L14)
 
 ## Properties
 
@@ -63,7 +63,7 @@
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L12)
+[src/pluto/rxdb/Store.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L12)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L16)
+[src/pluto/rxdb/Store.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L16)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L15)
+[src/pluto/rxdb/Store.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L15)
 
 ## Accessors
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L25)
+[src/pluto/rxdb/Store.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L25)
 
 ## Methods
 
@@ -113,7 +113,7 @@ Use with caution, this will remove all entries from database
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:103](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L103)
+[src/pluto/rxdb/Store.ts:103](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L103)
 
 ___
 
@@ -130,7 +130,7 @@ and then destroy the database itself.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:115](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L115)
+[src/pluto/rxdb/Store.ts:115](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L115)
 
 ___
 
@@ -157,7 +157,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:66](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L66)
+[src/pluto/rxdb/Store.ts:66](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L66)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:78](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L78)
+[src/pluto/rxdb/Store.ts:78](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L78)
 
 ___
 
@@ -204,7 +204,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:95](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L95)
+[src/pluto/rxdb/Store.ts:95](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L95)
 
 ___
 
@@ -260,7 +260,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L87)
+[src/pluto/rxdb/Store.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L87)
 
 ___
 
@@ -280,7 +280,7 @@ Start the database and build collections
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:36](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L36)
+[src/pluto/rxdb/Store.ts:36](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L36)
 
 ___
 
@@ -300,7 +300,7 @@ Handle any necessary teardown.
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:47](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L47)
+[src/pluto/rxdb/Store.ts:47](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L47)
 
 ___
 
@@ -333,4 +333,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/rxdb/Store.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/Store.ts#L52)
+[src/pluto/rxdb/Store.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/Store.ts#L52)

@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:3](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/types.ts#L3)
+[src/edge-agent/protocols/types.ts:3](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/types.ts#L3)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:2](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/types.ts#L2)
+[src/edge-agent/protocols/types.ts:2](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/types.ts#L2)

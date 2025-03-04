@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:26](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L26)
+[src/mercury/didcomm/Wrapper.ts:26](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L26)
 
 ## Properties
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:27](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L27)
+[src/mercury/didcomm/Wrapper.ts:27](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L27)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L28)
+[src/mercury/didcomm/Wrapper.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L28)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L23)
+[src/mercury/didcomm/Wrapper.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L23)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L29)
+[src/mercury/didcomm/Wrapper.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L29)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L24)
+[src/mercury/didcomm/Wrapper.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L24)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L22)
+[src/mercury/didcomm/Wrapper.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L22)
 
 ## Methods
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:44](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L44)
+[src/mercury/didcomm/Wrapper.ts:44](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L44)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:60](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L60)
+[src/mercury/didcomm/Wrapper.ts:60](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L60)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:200](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L200)
+[src/mercury/didcomm/Wrapper.ts:200](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L200)
 
 ___
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:216](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L216)
+[src/mercury/didcomm/Wrapper.ts:216](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L216)
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:174](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L174)
+[src/mercury/didcomm/Wrapper.ts:174](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L174)
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:156](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L156)
+[src/mercury/didcomm/Wrapper.ts:156](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L156)
 
 ___
 
@@ -260,7 +260,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:187](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L187)
+[src/mercury/didcomm/Wrapper.ts:187](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L187)
 
 ___
 
@@ -280,7 +280,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:140](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L140)
+[src/mercury/didcomm/Wrapper.ts:140](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L140)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:102](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L102)
+[src/mercury/didcomm/Wrapper.ts:102](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L102)
 
 ___
 
@@ -318,4 +318,4 @@ ___
 
 #### Defined in
 
-[src/mercury/didcomm/Wrapper.ts:35](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/mercury/didcomm/Wrapper.ts#L35)
+[src/mercury/didcomm/Wrapper.ts:35](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/mercury/didcomm/Wrapper.ts#L35)

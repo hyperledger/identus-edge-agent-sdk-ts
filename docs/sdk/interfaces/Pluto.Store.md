@@ -40,7 +40,7 @@ Deleting a  row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:108](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/Pluto.ts#L108)
+[src/pluto/Pluto.ts:108](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/Pluto.ts#L108)
 
 ___
 
@@ -69,7 +69,7 @@ Persist new data in the Store.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:94](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/Pluto.ts#L94)
+[src/pluto/Pluto.ts:94](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/Pluto.ts#L94)
 
 ___
 
@@ -121,7 +121,7 @@ search for all models in TableOne
 
 #### Defined in
 
-[src/pluto/Pluto.ts:86](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/Pluto.ts#L86)
+[src/pluto/Pluto.ts:86](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/Pluto.ts#L86)
 
 ___
 
@@ -138,7 +138,7 @@ Will be called first before any usage, if provided.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/Pluto.ts#L52)
+[src/pluto/Pluto.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/Pluto.ts#L52)
 
 ___
 
@@ -154,7 +154,7 @@ Handle any necessary teardown.
 
 #### Defined in
 
-[src/pluto/Pluto.ts:57](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/Pluto.ts#L57)
+[src/pluto/Pluto.ts:57](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/Pluto.ts#L57)
 
 ___
 
@@ -183,4 +183,4 @@ Updating a new row in the Store
 
 #### Defined in
 
-[src/pluto/Pluto.ts:101](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/Pluto.ts#L101)
+[src/pluto/Pluto.ts:101](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/Pluto.ts#L101)
