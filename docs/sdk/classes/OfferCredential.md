@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / OfferCredential
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / OfferCredential
 
 # Class: OfferCredential
 
@@ -21,9 +21,8 @@
 ### Methods
 
 - [makeMessage](OfferCredential.md#makemessage)
-- [build](OfferCredential.md#build)
+- [validate](OfferCredential.md#validate)
 - [fromMessage](OfferCredential.md#frommessage)
-- [makeOfferFromProposedCredential](OfferCredential.md#makeofferfromproposedcredential)
 
 ## Constructors
 
@@ -35,7 +34,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `body` | [`OfferCredentialBody`](../interfaces/OfferCredentialBody.md) |
+| `body` | `OfferCredentialBody` |
 | `attachments` | [`AttachmentDescriptor`](Domain.AttachmentDescriptor.md)[] |
 | `from?` | [`DID`](Domain.DID.md) |
 | `to?` | [`DID`](Domain.DID.md) |
@@ -48,7 +47,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L14)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:27](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L27)
 
 ## Properties
 
@@ -58,17 +57,17 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:16](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L16)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L29)
 
 ___
 
 ### body
 
-• **body**: [`OfferCredentialBody`](../interfaces/OfferCredentialBody.md)
+• **body**: `OfferCredentialBody`
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:15](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L15)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L28)
 
 ___
 
@@ -78,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L17)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L30)
 
 ___
 
@@ -88,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:20](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L20)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:33](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L33)
 
 ___
 
@@ -98,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L19)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:32](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L32)
 
 ___
 
@@ -108,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:18](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L18)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:31](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L31)
 
 ___
 
@@ -118,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:12](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L12)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L25)
 
 ## Methods
 
@@ -132,49 +131,33 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L29)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:48](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L48)
 
 ___
 
-### build
+### validate
 
-▸ **build**\<`T`\>(`credentialPreview`, `fromDID`, `toDID`, `thid?`, `credentials?`): [`OfferCredential`](OfferCredential.md)
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `credentialPreview` | `CredentialPreview` |
-| `fromDID` | [`DID`](Domain.DID.md) |
-| `toDID` | [`DID`](Domain.DID.md) |
-| `thid?` | `string` |
-| `credentials` | `Map`\<`string`, `T`\> |
+▸ **validate**(): `void`
 
 #### Returns
 
-[`OfferCredential`](OfferCredential.md)
+`void`
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:80](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L80)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L38)
 
 ___
 
 ### fromMessage
 
-▸ **fromMessage**(`fromMessage`): [`OfferCredential`](OfferCredential.md)
+▸ **fromMessage**(`msg`): [`OfferCredential`](OfferCredential.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fromMessage` | [`Message`](Domain.Message-1.md) |
+| `msg` | [`Message`](Domain.Message-1.md) |
 
 #### Returns
 
@@ -182,24 +165,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:59](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L59)
-
-___
-
-### makeOfferFromProposedCredential
-
-▸ **makeOfferFromProposedCredential**(`proposed`): [`OfferCredential`](OfferCredential.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `proposed` | `ProposeCredential` |
-
-#### Returns
-
-[`OfferCredential`](OfferCredential.md)
-
-#### Defined in
-
-[src/edge-agent/protocols/issueCredential/OfferCredential.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L42)
+[src/edge-agent/protocols/issueCredential/OfferCredential.ts:61](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/issueCredential/OfferCredential.ts#L61)

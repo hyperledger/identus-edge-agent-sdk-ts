@@ -30,9 +30,11 @@ We also have SDKs for other platforms:
 - Agent: A component using all other building blocks, provides basic edge agent capabilities, including implementing DIDComm V2 protocols.
 
 ## Getting started
-We highly recommend you check out the [docs](https://hyperledger.github.io/identus-docs/docs/getting-started) :world_map:
+We highly recommend you check out the [docs](https://hyperledger-identus.github.io/docs/home/) :world_map:
 
 ### Install
+
+**NOTE**: The package was renamed from `@hyperledger/identus-edge-agent-sdk` to `@hyperledger/identus-sdk`. Modify the scripts if you ready to use the new package accordingly.
 
 ```bash
 npm i @hyperledger/identus-edge-agent-sdk

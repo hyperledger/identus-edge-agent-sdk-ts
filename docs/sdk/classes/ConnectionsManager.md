@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / ConnectionsManager
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / ConnectionsManager
 
 # Class: ConnectionsManager
 
@@ -8,10 +8,6 @@ responsible of managing the task to periodically fetch messages from the mediato
 
  ConnectionsManager
 
-## Implements
-
-- [`ConnectionsManagerInterface`](../interfaces/ConnectionsManagerInterface.md)
-
 ## Table of contents
 
 ### Constructors
@@ -20,19 +16,16 @@ responsible of managing the task to periodically fetch messages from the mediato
 
 ### Properties
 
+- [agent](ConnectionsManager.md#agent)
 - [cancellable](ConnectionsManager.md#cancellable)
 - [cancellables](ConnectionsManager.md#cancellables)
-- [castor](ConnectionsManager.md#castor)
 - [events](ConnectionsManager.md#events)
-- [mediationHandler](ConnectionsManager.md#mediationhandler)
-- [mercury](ConnectionsManager.md#mercury)
 - [options](ConnectionsManager.md#options)
 - [pairings](ConnectionsManager.md#pairings)
-- [pluto](ConnectionsManager.md#pluto)
-- [pollux](ConnectionsManager.md#pollux)
 
 ### Accessors
 
+- [mediationHandler](ConnectionsManager.md#mediationhandler)
 - [withWebsocketsExperiment](ConnectionsManager.md#withwebsocketsexperiment)
 
 ### Methods
@@ -53,21 +46,16 @@ responsible of managing the task to periodically fetch messages from the mediato
 
 ### constructor
 
-• **new ConnectionsManager**(`castor`, `mercury`, `pluto`, `pollux`, `mediationHandler`, `pairings?`, `options?`): [`ConnectionsManager`](ConnectionsManager.md)
+• **new ConnectionsManager**(`agent`, `options?`): [`ConnectionsManager`](ConnectionsManager.md)
 
 Creates an instance of ConnectionsManager.
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `castor` | [`Castor`](../interfaces/Domain.Castor.md) | `undefined` |
-| `mercury` | [`Mercury`](../interfaces/Domain.Mercury.md) | `undefined` |
-| `pluto` | [`Pluto`](../interfaces/Domain.Pluto-1.md) | `undefined` |
-| `pollux` | [`Pollux`](../interfaces/Domain.Pollux-1.md) | `undefined` |
-| `mediationHandler` | [`MediatorHandler`](MediatorHandler.md) | `undefined` |
-| `pairings?` | [`DIDPair`](Domain.DIDPair.md)[] | `[]` |
-| `options?` | `AgentOptions` | `undefined` |
+| Name | Type |
+| :------ | :------ |
+| `agent` | [`Agent`](Agent.md) |
+| `options?` | `AgentOptions` |
 
 #### Returns
 
@@ -75,9 +63,19 @@ Creates an instance of ConnectionsManager.
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L70)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:68](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L68)
 
 ## Properties
+
+### agent
+
+• `Private` `Readonly` **agent**: [`Agent`](Agent.md)
+
+#### Defined in
+
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:69](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L69)
+
+___
 
 ### cancellable
 
@@ -88,7 +86,7 @@ Cancellable task used to listen for new messages, stopping the Agent should also
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L49)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:45](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L45)
 
 ___
 
@@ -100,27 +98,9 @@ An array with cancellable tasks, mainly used to store one or multiple didcomm
 connections in storage implementation at the same time. All of them can be cancelled
 despite they run asyncronously when the Edge agent stops
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[cancellables](../interfaces/ConnectionsManagerInterface.md#cancellables)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:41](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L41)
-
-___
-
-### castor
-
-• **castor**: [`Castor`](../interfaces/Domain.Castor.md)
-
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[castor](../interfaces/ConnectionsManagerInterface.md#castor)
-
-#### Defined in
-
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:71](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L71)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:37](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L37)
 
 ___
 
@@ -133,35 +113,7 @@ for now when new messages arrive or didcomm connections are established in order
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:58](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L58)
-
-___
-
-### mediationHandler
-
-• **mediationHandler**: [`MediatorHandler`](MediatorHandler.md)
-
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[mediationHandler](../interfaces/ConnectionsManagerInterface.md#mediationhandler)
-
-#### Defined in
-
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L75)
-
-___
-
-### mercury
-
-• **mercury**: [`Mercury`](../interfaces/Domain.Mercury.md)
-
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[mercury](../interfaces/ConnectionsManagerInterface.md#mercury)
-
-#### Defined in
-
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L72)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L54)
 
 ___
 
@@ -171,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L77)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:70](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L70)
 
 ___
 
@@ -179,39 +131,25 @@ ___
 
 • **pairings**: [`DIDPair`](Domain.DIDPair.md)[] = `[]`
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[pairings](../interfaces/ConnectionsManagerInterface.md#pairings)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L76)
-
-___
-
-### pluto
-
-• **pluto**: [`Pluto`](../interfaces/Domain.Pluto-1.md)
-
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[pluto](../interfaces/ConnectionsManagerInterface.md#pluto)
-
-#### Defined in
-
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:73](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L73)
-
-___
-
-### pollux
-
-• **pollux**: [`Pollux`](../interfaces/Domain.Pollux-1.md)
-
-#### Defined in
-
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:74](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L74)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:56](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L56)
 
 ## Accessors
+
+### mediationHandler
+
+• `get` **mediationHandler**(): [`MediatorHandler`](MediatorHandler.md)
+
+#### Returns
+
+[`MediatorHandler`](MediatorHandler.md)
+
+#### Defined in
+
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:75](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L75)
+
+___
 
 ### withWebsocketsExperiment
 
@@ -221,13 +159,9 @@ ___
 
 `boolean`
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[withWebsocketsExperiment](../interfaces/ConnectionsManagerInterface.md#withwebsocketsexperiment)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L82)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:79](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L79)
 
 ## Methods
 
@@ -249,13 +183,9 @@ Asyncronously add a didPair (didcomm connection) into pluto
 
 **`Async`**
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[addConnection](../interfaces/ConnectionsManagerInterface.md#addconnection)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:188](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L188)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:185](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L185)
 
 ___
 
@@ -277,13 +207,9 @@ Asyncronously wait for a message response just by waiting for new messages that 
 
 **`Async`**
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[awaitMessageResponse](../interfaces/ConnectionsManagerInterface.md#awaitmessageresponse)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:121](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L121)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:118](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L118)
 
 ___
 
@@ -305,7 +231,7 @@ Find the specified did pair connection index
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:212](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L212)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:209](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L209)
 
 ___
 
@@ -326,13 +252,9 @@ This method replaces awaitMessages()
 
 `Promise`\<`void`\>
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[processMessages](../interfaces/ConnectionsManagerInterface.md#processmessages)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:132](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L132)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:129](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L129)
 
 ___
 
@@ -354,13 +276,9 @@ Asyncronously establish mediator with a mediator by providing the Host DID
 
 **`Async`**
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[registerMediator](../interfaces/ConnectionsManagerInterface.md#registermediator)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:243](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L243)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:240](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L240)
 
 ___
 
@@ -383,13 +301,9 @@ this but just means the connection will be removed from the current storage
 
 **`Async`**
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[removeConnection](../interfaces/ConnectionsManagerInterface.md#removeconnection)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:229](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L229)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:226](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L226)
 
 ___
 
@@ -411,13 +325,9 @@ Asyncronously store a message and send it as didcomm message through the mercury
 
 **`Async`**
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[sendMessage](../interfaces/ConnectionsManagerInterface.md#sendmessage)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:254](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L254)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:251](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L251)
 
 ___
 
@@ -439,7 +349,7 @@ Asyncronously start fetching new messages
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:265](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L265)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:262](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L262)
 
 ___
 
@@ -456,13 +366,9 @@ setting that one as default during the Agent start
 
 **`Async`**
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[startMediator](../interfaces/ConnectionsManagerInterface.md#startmediator)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:93](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L93)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:90](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L90)
 
 ___
 
@@ -476,13 +382,9 @@ Stops all the running events
 
 `void`
 
-#### Implementation of
-
-[ConnectionsManagerInterface](../interfaces/ConnectionsManagerInterface.md).[stopAllEvents](../interfaces/ConnectionsManagerInterface.md#stopallevents)
-
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:105](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L105)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:102](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L102)
 
 ___
 
@@ -498,4 +400,4 @@ Asyncronously stop fetching messages
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:303](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/connectionsManager/ConnectionsManager.ts#L303)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:300](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/connectionsManager/ConnectionsManager.ts#L300)

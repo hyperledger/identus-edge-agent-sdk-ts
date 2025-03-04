@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / MediationGrantBody
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / MediationGrantBody
 
 # Interface: MediationGrantBody
 
@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L21)
+[src/edge-agent/protocols/types.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/types.ts#L7)

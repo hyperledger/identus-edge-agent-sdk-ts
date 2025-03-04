@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / PeerDIDEncoded
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / PeerDIDEncoded
 
 # Interface: PeerDIDEncoded
 
@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L23)
+[src/peer-did/PeerDID.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L23)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[src/peer-did/PeerDID.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/peer-did/PeerDID.ts#L22)
+[src/peer-did/PeerDID.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/peer-did/PeerDID.ts#L22)
