@@ -1,5 +1,5 @@
-import { describe, expect, beforeEach, vi, it } from 'vitest';
-import { Apollo, Castor, Domain, Secp256k1KeyPair, Secp256k1PrivateKey, Secp256k1PublicKey } from "../../src";
+import { describe, expect, beforeEach, it } from 'vitest';
+import { Apollo, Castor, Domain, Secp256k1PrivateKey, Secp256k1PublicKey } from "../../src";
 import { Task } from '../../src/utils';
 import { FromJWK } from '../../src/pollux/utils/jwt/FromJWK';
 import { ApolloError, Curve, JWK, PolluxError, PrivateKey, PublicKey } from '../../src/domain';
