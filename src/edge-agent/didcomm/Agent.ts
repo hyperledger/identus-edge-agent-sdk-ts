@@ -6,11 +6,10 @@ import {
   InvitationType,
   ListenerKey,
   PrismOnboardingInvitation,
-  MediatorHandler,
 } from "../types";
 
 import { AgentBackup } from "../Agent.Backup";
-import { ConnectionsManager } from "../connectionsManager/ConnectionsManager";
+import { ConnectionsManager } from "../connections/ConnectionsManager";
 import { OutOfBandInvitation } from "../protocols/invitation/v2/OutOfBandInvitation";
 import { OfferCredential } from "../protocols/issueCredential/OfferCredential";
 import { RequestCredential } from "../protocols/issueCredential/RequestCredential";
@@ -18,8 +17,6 @@ import { IssueCredential } from "../protocols/issueCredential/IssueCredential";
 import { Presentation } from "../protocols/proofPresentation/Presentation";
 import { RequestPresentation } from "../protocols/proofPresentation/RequestPresentation";
 import { DIDCommWrapper } from "../../mercury/didcomm/Wrapper";
-import { PublicMediatorStore } from "../mediator/PlutoMediatorStore";
-import { BasicMediatorHandler } from "../mediator/BasicMediatorHandler";
 import { CreatePeerDID } from "./CreatePeerDID";
 import { CreatePresentationRequest } from "./CreatePresentationRequest";
 import { HandleIssueCredential } from "./HandleIssueCredential";
@@ -36,13 +33,17 @@ import { ParsePrismInvitation } from "./ParsePrismInvitation";
 import { ParseInvitation } from "./ParseInvitation";
 import { HandleOOBInvitation } from "./HandleOOBInvitation";
 import { Startable } from "../../domain/protocols/Startable";
-import { notNil } from "../../utils";
 import { RevealCredentialFields } from "../helpers/RevealCredentialFields";
 import { RunProtocol } from "../helpers/RunProtocol";
-import { asJsonObj, expect } from "../../utils";
 import { PluginManager } from "../../plugins";
 import OEAPlugin from "../../plugins/internal/oea";
 import DIFPlugin from "../../plugins/internal/dif";
+import { EventsManager } from "../Agent.MessageEvents";
+import { JobManager } from "../connections/JobManager";
+import { Send } from "./Send";
+import { asJsonObj, isNil, notNil } from "../../utils";
+import { StartMediator } from "./StartMediator";
+import { StartFetchingMessages } from "./StartFetchingMessages";
 
 /**
  * Edge agent implementation
@@ -53,18 +54,15 @@ import DIFPlugin from "../../plugins/internal/dif";
  */
 export default class DIDCommAgent extends Startable.Controller {
   public backup: AgentBackup;
+  public readonly connections: ConnectionsManager;
+  public readonly events: EventsManager;
+  public readonly jobs: JobManager;
   public readonly plugins: PluginManager;
-
-  public readonly connectionManager: ConnectionsManager;
-  public readonly mediationHandler: MediatorHandler;
-
 
   /**
    * Creates an instance of Agent.
    *
    * @constructor
-   * @param {MediatorHandler} mediationHandler
-   * @param {ConnectionsManager} connectionManager
    */
   constructor(
     public readonly apollo: Domain.Apollo,
@@ -73,16 +71,15 @@ export default class DIDCommAgent extends Startable.Controller {
     public readonly mercury: Domain.Mercury,
     public readonly seed: Domain.Seed = apollo.createRandomSeed().seed,
     public readonly api: Domain.Api = new FetchApi(),
-    options?: AgentOptions
+    private readonly options?: AgentOptions
   ) {
     super();
-    this.backup = new AgentBackup(this);
-    const store = new PublicMediatorStore(pluto);
-    const mediatorDID = expect(options?.mediatorDID);
-    this.mediationHandler = new BasicMediatorHandler(mediatorDID, mercury, store);
-    this.connectionManager = new ConnectionsManager(this, options);
 
     this.backup = new AgentBackup(this);
+    this.connections = new ConnectionsManager();
+    this.events = new EventsManager();
+    this.jobs = new JobManager();
+
     this.plugins = new PluginManager();
     this.plugins.register(DIFPlugin);
     this.plugins.register(OEAPlugin);
@@ -103,8 +100,8 @@ export default class DIDCommAgent extends Startable.Controller {
    * @returns {Agent}
    */
   static initialize(params: {
-    mediatorDID: Domain.DID | string;
     pluto: Domain.Pluto;
+    mediatorDID?: Domain.DID | string;
     api?: Domain.Api;
     apollo?: Domain.Apollo;
     castor?: Domain.Castor;
@@ -112,15 +109,14 @@ export default class DIDCommAgent extends Startable.Controller {
     seed?: Domain.Seed;
     options?: AgentOptions;
   }): DIDCommAgent {
-    const mediatorDID = Domain.DID.from(params.mediatorDID);
     const pluto = params.pluto;
-
     const api = params.api ?? new FetchApi();
     const apollo = params.apollo ?? new Apollo();
     const castor = params.castor ?? new Castor(apollo);
     const didcomm = new DIDCommWrapper(apollo, castor, pluto);
     const mercury = params.mercury ?? new Mercury(castor, didcomm, api);
     const seed = params.seed ?? apollo.createRandomSeed().seed;
+    const mediatorDID = notNil(params.mediatorDID) ? Domain.DID.from(params.mediatorDID) : undefined;
 
     const agent = new DIDCommAgent(
       apollo,
@@ -142,31 +138,21 @@ export default class DIDCommAgent extends Startable.Controller {
    * @returns {Promise<AgentState>}
    */
   protected async _start() {
-    try {
-      await this.pluto.start();
-      await this.connectionManager.startMediator();
-    }
-    catch (e) {
-      if (e instanceof Domain.AgentError.NoMediatorAvailableError) {
-        const hostDID = await this.createNewPeerDID([], false);
-        await this.connectionManager.registerMediator(hostDID);
-      }
-      else {
-        throw e;
-      }
+    await this.pluto.start();
+
+    const mediatorDID = this.currentMediatorDID;
+    if (isNil(this.connections.mediator) && notNil(mediatorDID)) {
+      await this.runTask(new StartMediator({ mediatorDID }));
     }
 
-    if (this.mediationHandler.mediator !== undefined) {
-      await this.connectionManager.startFetchingMessages(5);
-    }
-    else {
-      throw new Domain.AgentError.MediationRequestFailedError("Mediation failed");
+    if (notNil(this.connections.mediator)) {
+      await this.startFetchingMessages();
     }
   }
 
   protected async _stop() {
-    await this.connectionManager.stopAllEvents();
-    await this.connectionManager.stopFetchingMessages();
+    await this.connections.stop();
+    await this.jobs.stop();
 
     if (notNil(this.pluto.stop)) {
       await this.pluto.stop();
@@ -179,8 +165,8 @@ export default class DIDCommAgent extends Startable.Controller {
    * @param {ListenerKey} eventName
    * @param {EventCallback} callback
    */
-  addListener(eventName: ListenerKey, callback: EventCallback): void {
-    return this.connectionManager.events.addListener(eventName, callback);
+  addListener(eventName: ListenerKey, callback: EventCallback) {
+    return this.events.addListener(eventName, callback);
   }
 
   /**
@@ -191,14 +177,12 @@ export default class DIDCommAgent extends Startable.Controller {
    * @param {EventCallback} callback
    */
   removeListener(eventName: ListenerKey, callback: EventCallback): void {
-    return this.connectionManager.events.removeListener(eventName, callback);
+    return this.events.removeListener(eventName, callback);
   }
 
-  // get mediationHandler() {
-  //   return this.connectionManager.mediationHandler;
-  // }
-
   /**
+   * @deprecated
+   * 
    * Get current mediator DID if available or null
    *
    * @public
@@ -206,14 +190,17 @@ export default class DIDCommAgent extends Startable.Controller {
    * @type {DID}
    */
   get currentMediatorDID() {
-    return this.mediationHandler.mediator?.mediatorDID;
+    return notNil(this.options?.mediatorDID)
+      ? Domain.DID.from(this.options?.mediatorDID)
+      : undefined;
   }
 
   private runTask<T>(task: Task<T>) {
     const ctx = Task.Context.make({
-      ConnectionManager: this.connectionManager,
-      MediationHandler: this.mediationHandler,
+      Connections: this.connections,
       Plugins: this.plugins,
+      Events: this.events,
+      Jobs: this.jobs,
       Mercury: this.mercury,
       Api: this.api,
       Apollo: this.apollo,
@@ -385,19 +372,24 @@ export default class DIDCommAgent extends Startable.Controller {
   }
 
   /**
-   * Start fetching for new messages in such way that it can be stopped at any point in time without causing memory leaks
-   *
+   * Start the fetch messages long running job
+   * 
+   * sends a PickupRequest to all mediator connections
+   * 
    * @param {number} iterationPeriod
    */
-  async startFetchingMessages(iterationPeriod: number): Promise<void> {
-    return this.connectionManager.startFetchingMessages(iterationPeriod);
+  startFetchingMessages(period?: number): Promise<void> {
+    const useSockets = this.options?.experiments?.liveMode;
+    const task = new StartFetchingMessages({ period, useSockets });
+    return this.runTask(task);
   }
 
   /**
-   * Stops fetching messages
+   * Stop the fetch message long running job
    */
   stopFetchingMessages(): void {
-    this.connectionManager.stopFetchingMessages();
+    this.jobs.fetchMessages?.cancel();
+    this.jobs.fetchMessages = undefined;
   }
 
   /**
@@ -406,8 +398,9 @@ export default class DIDCommAgent extends Startable.Controller {
    * @param {Message} message
    * @returns {Promise<Message | undefined>}
    */
-  sendMessage(message: Domain.Message): Promise<Domain.Message | undefined> {
-    return this.connectionManager.sendMessage(message);
+  async sendMessage(message: Domain.Message): Promise<Domain.Message | undefined> {
+    const task = new Send({ message });
+    return this.runTask(task);
   }
 
   /**
@@ -525,7 +518,7 @@ export default class DIDCommAgent extends Startable.Controller {
     const task = new CreatePresentationRequest({ type, toDID, claims: presentationClaims });
     const requestPresentation = await this.runTask(task);
     const requestPresentationMessage = requestPresentation.makeMessage();
-    await this.connectionManager.sendMessage(requestPresentationMessage);
+    await this.sendMessage(requestPresentationMessage);
 
     return requestPresentation;
   }

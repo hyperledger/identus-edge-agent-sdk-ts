@@ -12,9 +12,6 @@ const runTests = (describe, test, assert, SDK) => {
 
     // misc modules
     assert("ApiImpl" in SDK);
-    assert("BasicMediatorHandler" in SDK);
-    assert("ConnectionsManager" in SDK);
-    assert("PublicMediatorStore" in SDK);
 
     // credentials
     assert("AnonCredsCredential" in SDK);
@@ -160,21 +157,13 @@ const runTests = (describe, test, assert, SDK) => {
     const pluto = new SDK.Pluto(store, apollo);
     const did = SDK.Domain.DID.from("did:peer:2.Ez6LSghwSE437wnDE1pt3X6hVDUQzSjsHzinpX3XFvMjRAm7y.Vz6Mkhh1e5CEYYq6JBUcTZ6Cp2ranCWRrv7Yax3Le4N59R6dd.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6Imh0dHA6Ly8xOTIuMTY4LjEuNDQ6ODA4MCIsImEiOlsiZGlkY29tbS92MiJdfX0.SeyJ0IjoiZG0iLCJzIjp7InVyaSI6IndzOi8vMTkyLjE2OC4xLjQ0OjgwODAvd3MiLCJhIjpbImRpZGNvbW0vdjIiXX19");
     const agent = SDK.Agent.initialize({
-      mediatorDID: did,
+      // mediatorDID: did,
       apollo,
       castor,
       pluto,
       mercury,
       seed,
     });
-
-    // hack to avoid mediation startup
-    agent.connectionManager.cancellable = { cancel: () => { } };
-    agent.mediationHandler.mediator = {
-      hostDID: did,
-      mediatorDID: did,
-      routingDID: did,
-    };
 
     await agent.start();
     assert(agent.state === "running");

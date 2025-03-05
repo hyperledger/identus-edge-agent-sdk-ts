@@ -1,5 +1,7 @@
 type Task<T> = (signal: AbortSignal) => Promise<T>;
 
+class AbortError extends Error {}
+
 export class CancellableTask<T> {
   private period?: number;
   private controller: AbortController;
@@ -11,7 +13,7 @@ export class CancellableTask<T> {
     this.cancellationToken = new Promise<T>((resolve, reject) => {
       const onAbort = () => {
         this.controller.signal.removeEventListener("abort", onAbort);
-        reject(new Error("Task was cancelled"));
+        reject(new AbortError("Task was cancelled"));
       };
       this.controller.signal.addEventListener("abort", onAbort);
       if (repeatEvery !== undefined) {
@@ -45,7 +47,14 @@ export class CancellableTask<T> {
 
   cancel() {
     this.clearTimer();
+    // swallow AbortErrors - throw otherwise
+    this.cancellationToken.catch(err => {
+      if (!(err instanceof AbortError)) {
+        throw err;
+      }
+    });
     this.controller.abort();
+
   }
 
   async then(): Promise<T> {
