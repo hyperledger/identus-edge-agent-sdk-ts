@@ -3,7 +3,7 @@ import { Curve, getProtosUsage, getUsage, PublicKey, Usage } from "../../../doma
 import { ApolloError, CastorError } from "../../../domain/models/Errors";
 import * as Protos from "../../protos/node_models";
 
-import { Apollo, KeyProperties, KeyTypes } from "../../../domain";
+import { Apollo, KeyProperties } from "../../../domain";
 
 export class PrismDIDPublicKey {
 

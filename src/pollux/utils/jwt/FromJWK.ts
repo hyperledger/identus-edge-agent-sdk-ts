@@ -2,7 +2,7 @@ import { Domain } from "../../..";
 import { expect, Task } from "../../../utils";
 
 import { base64url } from "multiformats/bases/base64";
-import { ApolloError, Curve, JWK, KeyPair, KeyProperties, KeyTypes, PolluxError, PrivateKey, PublicKey } from "../../../domain";
+import { ApolloError, Curve, JWK, KeyPair, KeyProperties, PolluxError, PrivateKey, PublicKey } from "../../../domain";
 
 export interface Args {
     jwk: Domain.JWK;
