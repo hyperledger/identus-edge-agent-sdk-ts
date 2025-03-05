@@ -29,7 +29,7 @@ describe("Pollux - JWT FromJWK", async () => {
                     k: "1234567890"
                 }
             }).run(ctx);
-            await expect(sut).rejects.toThrow(ApolloError.InvalidKeyType);
+            await expect(sut).rejects.toThrow("19: The kty field must be EC or OKP");
         });
 
         describe("EC Key type with secp256k1 curve", async () => {
@@ -147,16 +147,6 @@ describe("Pollux - JWT FromJWK", async () => {
 
 
         describe("OKP Key type", async () => {
-            it("Should throw an error if the curve is not supported", async () => {
-                const sut = new FromJWK({
-                    jwk: {
-                        ...fixTures[Curve.ED25519].public,
-                        crv: "wrong curve",
-                        x: undefined
-                    } as any
-                }).run(ctx);
-                await expect(sut).rejects.toThrow("16: Invalid key curve: wrong curve. Valid options are: X25519, Ed25519, secp256k1")
-            });
 
             const supportedCurves = [Curve.ED25519, Curve.X25519];
             const fixTures: Record<string, { private: JWK.OKP, public: JWK.OKP }> = {
@@ -191,6 +181,18 @@ describe("Pollux - JWT FromJWK", async () => {
                     }
                 }
             }
+
+            it("Should throw an error if the curve is not supported", async () => {
+                const sut = new FromJWK({
+                    jwk: {
+                        ...fixTures[Curve.ED25519].public,
+                        crv: "wrong curve",
+                        x: undefined
+                    } as any
+                }).run(ctx);
+                await expect(sut).rejects.toThrow("16: Invalid key curve: wrong curve. Valid options are: X25519, Ed25519, secp256k1")
+            });
+
 
             supportedCurves.forEach(curve => {
                 describe(`${curve} curve`, () => {

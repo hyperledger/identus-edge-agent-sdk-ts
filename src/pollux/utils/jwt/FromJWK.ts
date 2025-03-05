@@ -143,7 +143,7 @@ export class FromJWK extends Task<Domain.PublicKey | Domain.KeyPair, Args> {
         if (isOKP) {
             return this.fromJWKOKP(ctx.Apollo, jwk);
         }
-        throw new PolluxError.InvalidJWKParameters("kty", "The kty field must be EC or OKP");
+        throw new PolluxError.InvalidJWKParameters(["kty"], "The kty field must be EC or OKP");
     }
 
 }
