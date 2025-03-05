@@ -11,7 +11,7 @@ module.exports = {
     ['@semantic-release/commit-analyzer', { preset: "conventionalcommits" }],
     ['@semantic-release/release-notes-generator', { preset: "conventionalcommits" }],
     ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
-    ['@semantic-release/exec', { "prepareCmd": 'npm version "$nextRelease.version" --git-tag-version false'}],
+    ['@semantic-release/exec', { "prepareCmd": 'npm version ${nextRelease.version} --git-tag-version false'}],
     ['@semantic-release/exec', { "prepareCmd": 'npm run release' }],
     [
       '@semantic-release/git',
