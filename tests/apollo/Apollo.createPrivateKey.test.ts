@@ -26,7 +26,7 @@ describe("Apollo", () => {
           [KeyProperties.seed]: seedHex,
         });
 
-        expect(sut).to.throw(ApolloError.InvalidKeyType);
+        expect(sut).to.throw(ApolloError.InvalidKeyCurve);
       });
 
       it("KeyProperties.curve - missing - throws", () => {
