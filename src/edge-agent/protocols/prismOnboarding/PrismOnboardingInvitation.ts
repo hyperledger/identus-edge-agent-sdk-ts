@@ -1,12 +1,16 @@
-import { JsonString } from "../../../domain";
 import { AgentError } from "../../../domain/models/Errors";
 import { ProtocolType } from "../ProtocolTypes";
-import { PrismOnboardingInvitationBody } from "../types";
+
+export interface PrismOnboardingInvitationBody {
+  type: string;
+  onboardingEndpoint: string;
+  from: string;
+}
 
 export class PrismOnboardingInvitation {
   public body: PrismOnboardingInvitationBody;
 
-  constructor(jsonString: JsonString) {
+  constructor(jsonString: string) {
     const body = JSON.parse(jsonString);
     if (!this.isPrismOnboardingBody(body)) {
       throw new AgentError.InvitationIsInvalidError();

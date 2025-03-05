@@ -1,8 +1,15 @@
 import { DID, Message } from "../../../domain";
-import { AgentError } from "../../../domain/models/Errors";
-import { parseBasicMessageBody } from "../../helpers/ProtocolHelpers";
 import { ProtocolType } from "../ProtocolTypes";
-import { BasicMessageBody } from "../types";
+
+/**
+ * Specification:
+ * https://didcomm.org/basicmessage/2.0/
+ */
+
+export interface BasicMessageBody {
+  // content of the user intended message
+  content: string;
+}
 
 export class BasicMessage {
   public static type = ProtocolType.DidcommBasicMessage;
@@ -25,21 +32,5 @@ export class BasicMessage {
       [],
       this.thid
     );
-  }
-
-  static fromMessage(fromMessage: Message): BasicMessage {
-    if (
-      fromMessage.piuri !== ProtocolType.DidcommBasicMessage ||
-      !fromMessage.from ||
-      !fromMessage.to
-    ) {
-      throw new AgentError.InvalidBasicMessageBodyError(
-        "Invalid BasicMessage body error."
-      );
-    }
-
-    const proposeCredentialBody = parseBasicMessageBody(fromMessage);
-
-    return new BasicMessage(proposeCredentialBody, fromMessage.from, fromMessage.to);
   }
 }
