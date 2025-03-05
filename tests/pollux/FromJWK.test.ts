@@ -10,12 +10,10 @@ describe("Pollux - JWT FromJWK", async () => {
     }>;
     let apollo: Domain.Apollo;
     let castor: Domain.Castor;
-    let plutoMock: Domain.Pluto;
 
     beforeEach(() => {
         apollo = new Apollo();
         castor = new Castor(apollo);
-        plutoMock = { getDIDPrivateKeysByDID: vi.fn() } as any;
         ctx = Task.Context.make({
             Apollo: apollo,
         });
@@ -149,7 +147,16 @@ describe("Pollux - JWT FromJWK", async () => {
 
 
         describe("OKP Key type", async () => {
-            it("Should throw an error if the curve is not supported");
+            it("Should throw an error if the curve is not supported", async () => {
+                const sut = new FromJWK({
+                    jwk: {
+                        ...fixTures[Curve.ED25519].public,
+                        crv: "wrong curve",
+                        x: undefined
+                    } as any
+                }).run(ctx);
+                await expect(sut).rejects.toThrow("16: Invalid key curve: wrong curve. Valid options are: X25519, Ed25519, secp256k1")
+            });
 
             const supportedCurves = [Curve.ED25519, Curve.X25519];
             const fixTures: Record<string, { private: JWK.OKP, public: JWK.OKP }> = {
@@ -184,6 +191,7 @@ describe("Pollux - JWT FromJWK", async () => {
                     }
                 }
             }
+
             supportedCurves.forEach(curve => {
                 describe(`${curve} curve`, () => {
                     it(`${curve} Should throw an error if x is missing`, async () => {

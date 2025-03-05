@@ -25,7 +25,7 @@ export class AgentBackup {
 
   constructor(
     public readonly Agent: BackupAgent
-  ) {}
+  ) { }
 
   /**
    * Creates a JWE (JSON Web Encryption) containing the backup data stored in Pluto.
@@ -152,7 +152,6 @@ export class AgentBackup {
     }
 
     const masterKey = this.Agent.apollo.createPrivateKey({
-      [Domain.KeyProperties.type]: Domain.KeyTypes.Curve25519,
       [Domain.KeyProperties.curve]: Domain.Curve.X25519,
       [Domain.KeyProperties.seed]: Buffer.from(this.Agent.seed.value).toString("hex"),
       [Domain.KeyProperties.derivationPath]: "m/0'/0'/0'"

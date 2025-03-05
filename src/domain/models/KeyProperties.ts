@@ -41,11 +41,6 @@ export enum KeyProperties {
   index = "index",
 
   /**
-   * The 'type' denotes the type of the key.
-   */
-  type = "type",
-
-  /**
    * The 'curvePointX' represents the x-coordinate of a curve point for an elliptic-curve key.
    */
   curvePointX = "curvePoint.x",

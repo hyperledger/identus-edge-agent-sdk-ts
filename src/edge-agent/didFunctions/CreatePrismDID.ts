@@ -48,7 +48,6 @@ export class CreatePrismDID extends Task<Domain.DID, Args> {
     const seedHex = Buffer.from(ctx.Seed.value).toString("hex");
 
     const masterSK = ctx.Apollo.createPrivateKey({
-      [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
       [Domain.KeyProperties.curve]: Domain.Curve.SECP256K1,
       [Domain.KeyProperties.seed]: seedHex,
       [Domain.KeyProperties.derivationPath]: masterKeyDerivation.toString(),
@@ -56,7 +55,6 @@ export class CreatePrismDID extends Task<Domain.DID, Args> {
     });
 
     const edSk = ctx.Apollo.createPrivateKey({
-      [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
       [Domain.KeyProperties.curve]: Domain.Curve.ED25519,
       [Domain.KeyProperties.seed]: seedHex,
       [Domain.KeyProperties.derivationPath]: issuingDerivation.toString(),

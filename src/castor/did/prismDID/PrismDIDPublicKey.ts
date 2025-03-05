@@ -28,13 +28,11 @@ export class PrismDIDPublicKey {
     switch (proto.key_data) {
       case "compressed_ec_key_data":
         return apollo.createPublicKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
         })
       case "ec_key_data":
         return apollo.createPublicKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.curvePointX]: proto.ec_key_data.x,
           [KeyProperties.curvePointY]: proto.ec_key_data.y,
@@ -52,14 +50,12 @@ export class PrismDIDPublicKey {
     if (proto.has_compressed_ec_key_data) {
       if (curve === Curve.ED25519) {
         return apollo.createPublicKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.ED25519,
           [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
         })
       }
       if (curve === Curve.X25519) {
         return apollo.createPublicKey({
-          [KeyProperties.type]: KeyTypes.Curve25519,
           [KeyProperties.curve]: Curve.X25519,
           [KeyProperties.rawKey]: proto.compressed_ec_key_data.data
         })
