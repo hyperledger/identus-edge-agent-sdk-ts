@@ -61,7 +61,7 @@ current status of the entity
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L42)
+[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/protocols/Startable.ts#L42)
 
 ## Methods
 
@@ -81,7 +81,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:51](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L51)
+[src/domain/protocols/Startable.ts:51](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/protocols/Startable.ts#L51)
 
 ___
 
@@ -101,7 +101,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:60](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L60)
+[src/domain/protocols/Startable.ts:60](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/protocols/Startable.ts#L60)
 
 ___
 
@@ -123,7 +123,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L62)
+[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/protocols/Startable.ts#L62)
 
 ___
 
@@ -145,4 +145,4 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/protocols/Startable.ts#L72)
+[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/protocols/Startable.ts#L72)

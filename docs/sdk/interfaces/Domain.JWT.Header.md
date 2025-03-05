@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/domain/utils/JWT.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/utils/JWT.ts#L9)
+[src/domain/utils/JWT.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/utils/JWT.ts#L9)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[src/domain/utils/JWT.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/utils/JWT.ts#L8)
+[src/domain/utils/JWT.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/utils/JWT.ts#L8)

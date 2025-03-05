@@ -48,7 +48,7 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Properties
 
@@ -58,7 +58,7 @@ Creates an instance of PublicMediatorStore.
 
 #### Defined in
 
-[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:20](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/mediator/PlutoMediatorStore.ts#L20)
 
 ## Methods
 
@@ -80,7 +80,7 @@ Asyncronously fetch all the mediators from storage
 
 #### Defined in
 
-[src/edge-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/mediator/PlutoMediatorStore.ts#L40)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:40](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/mediator/PlutoMediatorStore.ts#L40)
 
 ___
 
@@ -108,4 +108,4 @@ Stores a mediator asyncronously in pluto
 
 #### Defined in
 
-[src/edge-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/mediator/PlutoMediatorStore.ts#L29)
+[src/edge-agent/mediator/PlutoMediatorStore.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/mediator/PlutoMediatorStore.ts#L29)

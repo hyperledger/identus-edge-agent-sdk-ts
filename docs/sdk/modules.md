@@ -105,7 +105,7 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 #### Defined in
 
-[src/pluto/rxdb/collections.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/collections.ts#L17)
+[src/pluto/rxdb/collections.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/pluto/rxdb/collections.ts#L17)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/types/index.ts#L50)
+[src/edge-agent/types/index.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/types/index.ts#L50)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/types/index.ts#L52)
+[src/edge-agent/types/index.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/types/index.ts#L52)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:49](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/types/index.ts#L49)
+[src/edge-agent/types/index.ts:49](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/types/index.ts#L49)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/types.ts#L54)
+[src/edge-agent/protocols/types.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/types.ts#L54)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:51](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/types/index.ts#L51)
+[src/edge-agent/types/index.ts:51](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/types/index.ts#L51)
 
 ## Variables
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/JWTVerifiableCredential.ts#L16)
+[src/pollux/models/JWTVerifiableCredential.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/pollux/models/JWTVerifiableCredential.ts#L16)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:56](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/index.ts#L56)
+[src/index.ts:56](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/index.ts#L56)
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
+[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
 
 ## Functions
 
@@ -235,4 +235,4 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/collections.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/pluto/rxdb/collections.ts#L19)
+[src/pluto/rxdb/collections.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/pluto/rxdb/collections.ts#L19)

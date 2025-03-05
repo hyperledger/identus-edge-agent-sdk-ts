@@ -63,7 +63,7 @@ Creates an instance of ConnectionsManager.
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:68](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L68)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:68](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L68)
 
 ## Properties
 
@@ -73,7 +73,7 @@ Creates an instance of ConnectionsManager.
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:69](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L69)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:69](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L69)
 
 ___
 
@@ -86,7 +86,7 @@ Cancellable task used to listen for new messages, stopping the Agent should also
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:45](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L45)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:45](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L45)
 
 ___
 
@@ -100,7 +100,7 @@ despite they run asyncronously when the Edge agent stops
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:37](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L37)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:37](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L37)
 
 ___
 
@@ -113,7 +113,7 @@ for now when new messages arrive or didcomm connections are established in order
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L54)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L54)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:70](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L70)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:70](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L70)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:56](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L56)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:56](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L56)
 
 ## Accessors
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:75](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L75)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:75](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L75)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:79](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L79)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:79](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L79)
 
 ## Methods
 
@@ -185,7 +185,7 @@ Asyncronously add a didPair (didcomm connection) into pluto
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:185](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L185)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:185](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L185)
 
 ___
 
@@ -209,7 +209,7 @@ Asyncronously wait for a message response just by waiting for new messages that 
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:118](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L118)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:118](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L118)
 
 ___
 
@@ -231,7 +231,7 @@ Find the specified did pair connection index
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:209](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L209)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:209](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L209)
 
 ___
 
@@ -254,7 +254,7 @@ This method replaces awaitMessages()
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:129](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L129)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:129](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L129)
 
 ___
 
@@ -278,7 +278,7 @@ Asyncronously establish mediator with a mediator by providing the Host DID
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:240](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L240)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:240](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L240)
 
 ___
 
@@ -303,7 +303,7 @@ this but just means the connection will be removed from the current storage
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:226](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L226)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:226](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L226)
 
 ___
 
@@ -327,7 +327,7 @@ Asyncronously store a message and send it as didcomm message through the mercury
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:251](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L251)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:251](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L251)
 
 ___
 
@@ -349,7 +349,7 @@ Asyncronously start fetching new messages
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:262](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L262)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:262](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L262)
 
 ___
 
@@ -368,7 +368,7 @@ setting that one as default during the Agent start
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:90](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L90)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:90](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L90)
 
 ___
 
@@ -384,7 +384,7 @@ Stops all the running events
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:102](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L102)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:102](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L102)
 
 ___
 
@@ -400,4 +400,4 @@ Asyncronously stop fetching messages
 
 #### Defined in
 
-[src/edge-agent/connectionsManager/ConnectionsManager.ts:300](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/connectionsManager/ConnectionsManager.ts#L300)
+[src/edge-agent/connectionsManager/ConnectionsManager.ts:300](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/connectionsManager/ConnectionsManager.ts#L300)

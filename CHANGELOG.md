@@ -1,3 +1,10 @@
+## [7.0.0-rc.2](https://github.com/hyperledger-identus/sdk-ts/compare/v7.0.0-rc.1...v7.0.0-rc.2) (2025-03-05)
+
+### Bug Fixes
+
+* set version step in the semantic release.config.js ([d44afc3](https://github.com/hyperledger-identus/sdk-ts/commit/d44afc3403bdd5cf86219cd263be20ea744f4706))
+* simplify the release scripts to use the target from the package.json ([b66d68f](https://github.com/hyperledger-identus/sdk-ts/commit/b66d68f39074051faa30d6bd0607ff475609ed0b))
+
 ## [7.0.0-rc.1](https://github.com/hyperledger-identus/sdk-ts/compare/v6.3.3...v7.0.0-rc.1) (2025-03-04)
 
 ### ⚠ BREAKING CHANGES

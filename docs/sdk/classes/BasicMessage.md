@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L10)
+[src/edge-agent/protocols/other/BasicMessage.ts:10](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L10)
 
 ## Properties
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L11)
+[src/edge-agent/protocols/other/BasicMessage.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L11)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L12)
+[src/edge-agent/protocols/other/BasicMessage.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L12)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L14)
+[src/edge-agent/protocols/other/BasicMessage.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L14)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L13)
+[src/edge-agent/protocols/other/BasicMessage.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L13)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L8)
+[src/edge-agent/protocols/other/BasicMessage.ts:8](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L8)
 
 ## Methods
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L17)
+[src/edge-agent/protocols/other/BasicMessage.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L17)
 
 ___
 
@@ -126,4 +126,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/other/BasicMessage.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/other/BasicMessage.ts#L30)
+[src/edge-agent/protocols/other/BasicMessage.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/other/BasicMessage.ts#L30)

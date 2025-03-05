@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyTypes.ts:3](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/KeyTypes.ts#L3)
+[src/domain/models/keyManagement/KeyTypes.ts:3](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/KeyTypes.ts#L3)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyTypes.ts:2](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/KeyTypes.ts#L2)
+[src/domain/models/keyManagement/KeyTypes.ts:2](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/KeyTypes.ts#L2)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/KeyTypes.ts:4](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/KeyTypes.ts#L4)
+[src/domain/models/keyManagement/KeyTypes.ts:4](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/KeyTypes.ts#L4)

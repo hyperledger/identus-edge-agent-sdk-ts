@@ -32,7 +32,7 @@ All supported backup schemas
 
 #### Defined in
 
-[src/domain/backup/index.ts:6](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/index.ts#L6)
+[src/domain/backup/index.ts:6](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/index.ts#L6)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/index.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/index.ts#L7)
+[src/domain/backup/index.ts:7](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/index.ts#L7)
 
 ___
 
@@ -52,11 +52,11 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/v0_0_1.ts#L39)
+[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/v0_0_1.ts#L39)
 
-[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/v0_0_1.ts#L50)
+[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/v0_0_1.ts#L50)
 
-[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/v0_0_1.ts#L52)
+[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/v0_0_1.ts#L52)
 
 ## Variables
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/domain/backup/index.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/index.ts#L9)
+[src/domain/backup/index.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/index.ts#L9)
 
 ___
 
@@ -76,11 +76,11 @@ ___
 
 #### Defined in
 
-[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/v0_0_1.ts#L39)
+[src/domain/backup/v0_0_1.ts:39](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/v0_0_1.ts#L39)
 
-[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/v0_0_1.ts#L50)
+[src/domain/backup/v0_0_1.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/v0_0_1.ts#L50)
 
-[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/v0_0_1.ts#L52)
+[src/domain/backup/v0_0_1.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/v0_0_1.ts#L52)
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[src/domain/backup/index.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/backup/index.ts#L11)
+[src/domain/backup/index.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/backup/index.ts#L11)

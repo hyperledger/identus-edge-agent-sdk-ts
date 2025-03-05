@@ -53,7 +53,7 @@ thrown when at least one Mnemonic word does not match in the wordlist
 
 #### Defined in
 
-[src/domain/models/errors/Apollo.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/errors/Apollo.ts#L9)
+[src/domain/models/errors/Apollo.ts:9](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/errors/Apollo.ts#L9)
 
 ## Properties
 

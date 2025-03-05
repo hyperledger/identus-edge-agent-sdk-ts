@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:112](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L112)
+[src/domain/models/DIDDocument.ts:112](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/DIDDocument.ts#L112)
 
 ## Properties
 
@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:114](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L114)
+[src/domain/models/DIDDocument.ts:114](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/DIDDocument.ts#L114)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:113](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L113)
+[src/domain/models/DIDDocument.ts:113](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/DIDDocument.ts#L113)
 
 ## Accessors
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:117](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L117)
+[src/domain/models/DIDDocument.ts:117](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/DIDDocument.ts#L117)
 
 ___
 
@@ -87,4 +87,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:126](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L126)
+[src/domain/models/DIDDocument.ts:126](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/DIDDocument.ts#L126)

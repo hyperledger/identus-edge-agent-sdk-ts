@@ -56,7 +56,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:70](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L70)
+[src/castor/Castor.ts:70](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L70)
 
 ## Properties
 
@@ -66,7 +66,7 @@ Creates an instance of Castor as soon as a valid cryptographic interface is prov
 
 #### Defined in
 
-[src/castor/Castor.ts:60](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L60)
+[src/castor/Castor.ts:60](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L60)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/castor/Castor.ts:61](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L61)
+[src/castor/Castor.ts:61](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L61)
 
 ## Methods
 
@@ -117,7 +117,7 @@ const peerDid = await castor.createPeerDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:323](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L323)
+[src/castor/Castor.ts:323](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L323)
 
 ___
 
@@ -167,7 +167,7 @@ const prismDid = await castor.createPrismDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:235](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L235)
+[src/castor/Castor.ts:235](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L235)
 
 ___
 
@@ -190,7 +190,7 @@ Creates a Prism DID Atala Object, a buffer contained the prism did create operat
 
 #### Defined in
 
-[src/castor/Castor.ts:156](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L156)
+[src/castor/Castor.ts:156](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L156)
 
 ___
 
@@ -212,7 +212,7 @@ Extracts the verificationMethods from an array of CoreProperties inside a DID Do
 
 #### Defined in
 
-[src/castor/Castor.ts:370](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L370)
+[src/castor/Castor.ts:370](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L370)
 
 ___
 
@@ -239,7 +239,7 @@ Returns ecnumbasis from a valid DID and its related publicKey
 
 #### Defined in
 
-[src/castor/Castor.ts:535](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L535)
+[src/castor/Castor.ts:535](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L535)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[src/castor/Castor.ts:99](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L99)
+[src/castor/Castor.ts:99](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L99)
 
 ___
 
@@ -296,7 +296,7 @@ const parsedPrismDid = castor.parseDID(
 
 #### Defined in
 
-[src/castor/Castor.ts:95](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L95)
+[src/castor/Castor.ts:95](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L95)
 
 ___
 
@@ -334,7 +334,7 @@ const didDocument = await castor.resolveDID("did:prism:123456")
 
 #### Defined in
 
-[src/castor/Castor.ts:348](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L348)
+[src/castor/Castor.ts:348](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L348)
 
 ___
 
@@ -392,4 +392,4 @@ if (privateKey.isSignable()) {
 
 #### Defined in
 
-[src/castor/Castor.ts:420](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/castor/Castor.ts#L420)
+[src/castor/Castor.ts:420](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/castor/Castor.ts#L420)

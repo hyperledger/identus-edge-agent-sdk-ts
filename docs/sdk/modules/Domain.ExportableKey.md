@@ -30,7 +30,7 @@ Declaration merge to contain key conversion functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/exportable/ExportableKey.ts#L25)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:25](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/exportable/ExportableKey.ts#L25)
 
 ## Functions
 
@@ -64,4 +64,4 @@ object with exportable functions
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/exportable/ExportableKey.ts#L54)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/exportable/ExportableKey.ts#L54)

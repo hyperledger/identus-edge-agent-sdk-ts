@@ -56,7 +56,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/Api.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/Api.ts#L52)
+[src/domain/models/Api.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/Api.ts#L52)
 
 ## Properties
 
@@ -66,7 +66,7 @@ Error.constructor
 
 #### Defined in
 
-[src/domain/models/Api.ts:55](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/Api.ts#L55)
+[src/domain/models/Api.ts:55](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/Api.ts#L55)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Api.ts:53](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/Api.ts#L53)
+[src/domain/models/Api.ts:53](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/Api.ts#L53)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Api.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/Api.ts#L54)
+[src/domain/models/Api.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/Api.ts#L54)
 
 ___
 

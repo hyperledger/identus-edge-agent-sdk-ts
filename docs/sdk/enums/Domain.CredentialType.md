@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L22)
+[src/domain/models/VerifiableCredential.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L22)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L19)
+[src/domain/models/VerifiableCredential.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L19)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:20](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L20)
+[src/domain/models/VerifiableCredential.ts:20](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L20)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L23)
+[src/domain/models/VerifiableCredential.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L23)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L21)
+[src/domain/models/VerifiableCredential.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L21)

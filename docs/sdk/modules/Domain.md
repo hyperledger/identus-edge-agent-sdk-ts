@@ -143,7 +143,7 @@ Re-exports [Startable](Domain.Protocols.Startable.md)
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:32](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/MessageAttachment.ts#L32)
+[src/domain/models/MessageAttachment.ts:32](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/MessageAttachment.ts#L32)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/MessageAttachment.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/MessageAttachment.ts#L28)
+[src/domain/models/MessageAttachment.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/MessageAttachment.ts#L28)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/DIDDocument.ts:99](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/DIDDocument.ts#L99)
+[src/domain/models/DIDDocument.ts:99](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/DIDDocument.ts#L99)
 
 ___
 
@@ -182,9 +182,9 @@ Default is all
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/exportable/ExportableKey.ts#L12)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:12](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/exportable/ExportableKey.ts#L12)
 
-[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
+[src/domain/models/keyManagement/exportable/ExportableKey.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/exportable/ExportableKey.ts#L24)
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Api.ts:1](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/Api.ts#L1)
+[src/domain/models/Api.ts:1](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/Api.ts#L1)
 
 ___
 
@@ -206,9 +206,9 @@ JWK
 
 #### Defined in
 
-[src/domain/models/keyManagement/exportable/JWK.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/exportable/JWK.ts#L11)
+[src/domain/models/keyManagement/exportable/JWK.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/exportable/JWK.ts#L11)
 
-[src/domain/models/keyManagement/exportable/JWK.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/exportable/JWK.ts#L17)
+[src/domain/models/keyManagement/exportable/JWK.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/exportable/JWK.ts#L17)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/index.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/index.ts#L23)
+[src/domain/models/index.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/index.ts#L23)
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/WordList.ts:1](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/WordList.ts#L1)
+[src/domain/models/WordList.ts:1](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/WordList.ts#L1)
 
 ___
 
@@ -244,7 +244,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L5)
+[src/domain/models/VerifiableCredential.ts:5](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L5)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L38)
+[src/domain/models/VerifiableCredential.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L38)
 
 ___
 
@@ -304,7 +304,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:74](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L74)
+[src/domain/models/VerifiableCredential.ts:74](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L74)
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/VerifiableCredential.ts:85](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/VerifiableCredential.ts#L85)
+[src/domain/models/VerifiableCredential.ts:85](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/VerifiableCredential.ts#L85)
 
 ## Functions
 
@@ -341,7 +341,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:190](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/Key.ts#L190)
+[src/domain/models/keyManagement/Key.ts:190](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/Key.ts#L190)
 
 ___
 
@@ -362,7 +362,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:199](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/Key.ts#L199)
+[src/domain/models/keyManagement/Key.ts:199](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/Key.ts#L199)
 
 ___
 
@@ -382,7 +382,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/Key.ts#L24)
+[src/domain/models/keyManagement/Key.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/Key.ts#L24)
 
 ___
 
@@ -402,7 +402,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:144](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/Key.ts#L144)
+[src/domain/models/keyManagement/Key.ts:144](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/Key.ts#L144)
 
 ___
 
@@ -429,7 +429,7 @@ Return usage from a verification method id
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:57](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/Key.ts#L57)
+[src/domain/models/keyManagement/Key.ts:57](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/Key.ts#L57)
 
 ___
 
@@ -453,4 +453,4 @@ should be unique within the Document
 
 #### Defined in
 
-[src/domain/models/keyManagement/Key.ts:123](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/domain/models/keyManagement/Key.ts#L123)
+[src/domain/models/keyManagement/Key.ts:123](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/domain/models/keyManagement/Key.ts#L123)

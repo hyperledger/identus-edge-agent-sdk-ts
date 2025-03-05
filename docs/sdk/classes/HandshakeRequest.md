@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L13)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:13](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L13)
 
 ## Properties
 
@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L14)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L14)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L15)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:15](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L15)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L18)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L18)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L17)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L17)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L16)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L16)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L11)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:11](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L11)
 
 ## Methods
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L21)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L21)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:59](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L59)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:59](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L59)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:76](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L76)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:76](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L76)
 
 ___
 
@@ -182,4 +182,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/connection/HandshakeRequest.ts:34](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/connection/HandshakeRequest.ts#L34)
+[src/edge-agent/protocols/connection/HandshakeRequest.ts:34](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/connection/HandshakeRequest.ts#L34)

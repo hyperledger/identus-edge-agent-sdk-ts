@@ -21,7 +21,7 @@ https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/p
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/ccc9c0ac7bbfa014ad60ef1b5e244665d7b8ffc1/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L18)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/d44afc3403bdd5cf86219cd263be20ea744f4706/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L18)
