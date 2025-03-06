@@ -148,7 +148,7 @@ describe("Plugins - DIF", () => {
       expect(descriptorMap).toHaveLength(1);
       expect(descriptorMap[0]).toEqual({
         id: inputDescriptor.id,
-        format: "sdjwt",
+        format: "sd_jwt",
         path: "$.verifiablePresentation[0]",
       });
     });

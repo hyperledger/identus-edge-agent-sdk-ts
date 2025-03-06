@@ -1,4 +1,5 @@
 import { uuid } from "@stablelib/uuid";
+import type { Extensible, PresentationFrame } from '@sd-jwt/types';
 import * as Domain from "../../../domain";
 import { JWTCredential } from "../../../pollux/models/JWTVerifiableCredential";
 import { SDJWTCredential } from "../../../pollux/models/SDJWTVerifiableCredential";
@@ -12,6 +13,7 @@ import { Plugins } from "../../../plugins";
 interface Args {
   credential: Domain.Credential;
   presentationRequest: DIF.Presentation.Request;
+  presentationFrame?: PresentationFrame<Extensible>;
 }
 
 export class PresentationRequest extends Plugins.Task<Args> {
@@ -30,7 +32,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
     const descriptorMap = inputDescriptors.map<DIF.Presentation.Submission.DescriptorItem>((inputDescriptor) => {
       if (credential instanceof SDJWTCredential) {
         return {
-          format: "sdjwt" as any,
+          format: "sd_jwt",
           id: inputDescriptor.id,
           path: "$.verifiablePresentation[0]",
         };
@@ -43,7 +45,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
           path: "$.verifiablePresentation[0]",
           path_nested: {
             id: inputDescriptor.id,
-            format: 'jwt_vc',
+            format: "jwt_vc",
             path: "$.vp.verifiableCredential[0]",
           }
         };
@@ -79,9 +81,7 @@ export class PresentationRequest extends Plugins.Task<Args> {
       return ctx.SDJWT.createPresentationFor({
         jws: this.args.credential.id,
         privateKey,
-        // [ ] https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362
-        // feature presentationFrame / frame
-        // presentationFrame: this.args.presentationFrame
+        presentationFrame: this.args.presentationFrame
       });
     }
 
