@@ -1,10 +1,12 @@
 import { PluginManager } from "../../plugins";
 import { Task } from "../../utils/tasks";
-import { ConnectionsManager } from "../connectionsManager/ConnectionsManager";
-import { MediatorHandler } from "../types";
+import { EventsManager } from "../Agent.MessageEvents";
+import { ConnectionsManager } from "../connections/ConnectionsManager";
+import { JobManager } from "../connections/JobManager";
 
 export type DIDCommContext = Task.Context<{
-  ConnectionManager: ConnectionsManager;
-  MediationHandler: MediatorHandler;
+  Connections: ConnectionsManager;
   Plugins: PluginManager;
+  Events: EventsManager;
+  Jobs: JobManager;
 }>;
