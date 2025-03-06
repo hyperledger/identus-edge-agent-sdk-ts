@@ -100,7 +100,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
 
   private async verifyJWTClaims(
     ctx: Context,
-    inputDescriptors: DIF.Presentation.Definition.InputDescriptor[],
+    inputDescriptor: DIF.Presentation.Definition.InputDescriptor,
     credential: JWTCredential,
   ) {
     try {
@@ -116,50 +116,34 @@ export class PresentationVerify extends Plugins.Task<Args> {
         throw new Domain.PolluxError.InvalidVerifyCredentialError(credential.id, `Invalid Verifiable Presentation, could not verify if the credential is revoked, reason: ${(err as Error).message}`);
       }
     }
-
     const mapper = new DescriptorPath(credential);
-    for (const inputDescriptor of inputDescriptors) {
-      const valid = this.validateInputDescriptor(
-        credential.id,
-        mapper,
-        inputDescriptor
-      );
-      if (!valid) {
-        return false;
-      }
-    }
-    return true;
+    return this.validateInputDescriptor(
+      credential.id,
+      mapper,
+      inputDescriptor
+    );
   }
 
   private async verifySDJWTClaims(
     ctx: Context,
-    inputDescriptors: DIF.Presentation.Definition.InputDescriptor[],
+    inputDescriptor: DIF.Presentation.Definition.InputDescriptor,
     credential: SDJWTCredential,
   ) {
-
     const claims = await ctx.SDJWT.reveal(
       credential.core.jwt?.payload ?? {},
       credential.core.disclosures ?? [],
     );
     const mapper = new DescriptorPath(claims);
-
-    for (const inputDescriptor of inputDescriptors) {
-      const valid = this.validateInputDescriptor(
-        credential.id,
-        mapper,
-        inputDescriptor
-      );
-      if (!valid) {
-        return false;
-      }
-    }
-
-    return true;
+    return this.validateInputDescriptor(
+      credential.id,
+      mapper,
+      inputDescriptor
+    );
   }
 
   private async processDescriptorItem(
     ctx: Context,
-    inputDescriptors: DIF.Presentation.Definition.InputDescriptor[],
+    inputDescriptor: DIF.Presentation.Definition.InputDescriptor,
     descriptorItem: DIF.Presentation.Submission.DescriptorItem,
     value: any,
   ): Promise<boolean> {
@@ -181,7 +165,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
       }
       return this.processDescriptorItem(
         ctx,
-        inputDescriptors,
+        inputDescriptor,
         descriptorItem.path_nested,
         nestedValue,
       );
@@ -197,8 +181,8 @@ export class PresentationVerify extends Plugins.Task<Args> {
     }
 
     return credential instanceof JWTCredential ?
-      this.verifyJWTClaims(ctx, inputDescriptors, credential) :
-      this.verifySDJWTClaims(ctx, inputDescriptors, credential);
+      this.verifyJWTClaims(ctx, inputDescriptor, credential) :
+      this.verifySDJWTClaims(ctx, inputDescriptor, credential);
   }
 
   private async verify(
@@ -220,7 +204,7 @@ export class PresentationVerify extends Plugins.Task<Args> {
       const value = presentationSubmissionMapper.getValue(descriptorItem.path);
       const valid = await this.processDescriptorItem(
         ctx,
-        inputDescriptors,
+        inputDescriptor,
         descriptorItem,
         value
       );
