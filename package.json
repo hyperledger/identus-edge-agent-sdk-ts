@@ -1,5 +1,5 @@
 {
-  "name": "@hyperledger/identus-edge-agent-sdk",
+  "name": "@hyperledger/identus-sdk",
   "version": "6.5.1",
   "description": "Identus SDK - Typescript",
   "main": "./index.cjs",
@@ -46,12 +46,13 @@
     "postinstall": "sh postinstall.sh",
     "protos": "npm run protos:node && npm run protos:common",
     "protos:node": "protoc -I=src --proto_path=castor/protos --ts_out=castor/protos  castor/protos/node_models.proto",
-    "protos:common": "protoc -I=src --proto_path=castor/protos --ts_out=castor/protos  castor/protos/common_models.proto"
+    "protos:common": "protoc -I=src --proto_path=castor/protos --ts_out=castor/protos  castor/protos/common_models.proto",
+    "release": "npm run build && npm publish --access public && npm run docs"
   },
   "author": "IOHK",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hyperledger/identus-edge-agent-sdk-ts.git"
+    "url": "https://github.com/hyperledger-identus/sdk-ts.git"
   },
   "license": "Apache-2.0",
   "keywords": [],

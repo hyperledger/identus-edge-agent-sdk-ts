@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / VerifiableKey
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / VerifiableKey
 
 # Class: VerifiableKey
 
@@ -43,4 +43,4 @@
 
 #### Defined in
 
-[src/domain/models/keyManagement/VerifiableKey.ts:2](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/keyManagement/VerifiableKey.ts#L2)
+[src/domain/models/keyManagement/VerifiableKey.ts:2](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/keyManagement/VerifiableKey.ts#L2)

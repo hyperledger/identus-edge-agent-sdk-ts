@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Message
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / Message
 
 # Class: Message
 
@@ -34,10 +34,6 @@ define properties a Domain object must implement to be compatible with Pluto
 - [thid](Domain.Message-1.md#thid)
 - [to](Domain.Message-1.md#to)
 - [uuid](Domain.Message-1.md#uuid)
-
-### Accessors
-
-- [credentialFormat](Domain.Message-1.md#credentialformat)
 
 ### Methods
 
@@ -76,7 +72,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/Message.ts:25](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L25)
+[src/domain/models/Message.ts:24](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L24)
 
 ## Properties
 
@@ -86,7 +82,7 @@ define properties a Domain object must implement to be compatible with Pluto
 
 #### Defined in
 
-[src/domain/models/Message.ts:36](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L36)
+[src/domain/models/Message.ts:35](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L35)
 
 ___
 
@@ -96,7 +92,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:31](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L31)
+[src/domain/models/Message.ts:30](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L30)
 
 ___
 
@@ -106,7 +102,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L23)
+[src/domain/models/Message.ts:22](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L22)
 
 ___
 
@@ -116,7 +112,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:34](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L34)
+[src/domain/models/Message.ts:33](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L33)
 
 ___
 
@@ -126,7 +122,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L37)
+[src/domain/models/Message.ts:36](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L36)
 
 ___
 
@@ -136,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L35)
+[src/domain/models/Message.ts:34](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L34)
 
 ___
 
@@ -146,7 +142,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L33)
+[src/domain/models/Message.ts:32](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L32)
 
 ___
 
@@ -156,7 +152,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:29](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L29)
+[src/domain/models/Message.ts:28](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L28)
 
 ___
 
@@ -166,7 +162,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:38](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L38)
+[src/domain/models/Message.ts:37](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L37)
 
 ___
 
@@ -176,7 +172,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:27](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L27)
+[src/domain/models/Message.ts:26](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L26)
 
 ___
 
@@ -186,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:28](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L28)
+[src/domain/models/Message.ts:27](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L27)
 
 ___
 
@@ -196,7 +192,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L39)
+[src/domain/models/Message.ts:38](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L38)
 
 ___
 
@@ -206,7 +202,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L32)
+[src/domain/models/Message.ts:31](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L31)
 
 ___
 
@@ -216,7 +212,7 @@ ___
 
 #### Defined in
 
-[src/domain/models/Message.ts:30](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L30)
+[src/domain/models/Message.ts:29](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L29)
 
 ___
 
@@ -233,21 +229,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Message.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L22)
-
-## Accessors
-
-### credentialFormat
-
-• `get` **credentialFormat**(): [`JWT`](../enums/Domain.CredentialType.md#jwt) \| [`SDJWT`](../enums/Domain.CredentialType.md#sdjwt) \| [`AnonCreds`](../enums/Domain.CredentialType.md#anoncreds) \| [`Unknown`](../enums/Domain.CredentialType.md#unknown)
-
-#### Returns
-
-[`JWT`](../enums/Domain.CredentialType.md#jwt) \| [`SDJWT`](../enums/Domain.CredentialType.md#sdjwt) \| [`AnonCreds`](../enums/Domain.CredentialType.md#anoncreds) \| [`Unknown`](../enums/Domain.CredentialType.md#unknown)
-
-#### Defined in
-
-[src/domain/models/Message.ts:45](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L45)
+[src/domain/models/Message.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L21)
 
 ## Methods
 
@@ -267,7 +249,7 @@ should be unique across all items.
 
 #### Defined in
 
-[src/domain/models/Message.ts:70](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L70)
+[src/domain/models/Message.ts:44](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L44)
 
 ___
 
@@ -287,7 +269,7 @@ data is AttachmentBase64
 
 #### Defined in
 
-[src/domain/models/Message.ts:166](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L166)
+[src/domain/models/Message.ts:140](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L140)
 
 ___
 
@@ -307,4 +289,4 @@ data is AttachmentJsonData
 
 #### Defined in
 
-[src/domain/models/Message.ts:170](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/models/Message.ts#L170)
+[src/domain/models/Message.ts:144](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/models/Message.ts#L144)

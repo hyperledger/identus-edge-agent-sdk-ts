@@ -1,21 +1,17 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / RequestPresentationBody
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / RequestPresentationBody
 
 # Interface: RequestPresentationBody
 
-## Hierarchy
-
-- [`PresentationBody`](PresentationBody.md)
-
-  ↳ **`RequestPresentationBody`**
+Specification:
+https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md#request-presentation
 
 ## Table of contents
 
 ### Properties
 
 - [comment](RequestPresentationBody.md#comment)
-- [goalCode](RequestPresentationBody.md#goalcode)
-- [proofTypes](RequestPresentationBody.md#prooftypes)
-- [willConfirm](RequestPresentationBody.md#willconfirm)
+- [goal\_code](RequestPresentationBody.md#goal_code)
+- [will\_confirm](RequestPresentationBody.md#will_confirm)
 
 ## Properties
 
@@ -23,44 +19,26 @@
 
 • `Optional` **comment**: `string`
 
-#### Inherited from
-
-[PresentationBody](PresentationBody.md).[comment](PresentationBody.md#comment)
-
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L66)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L16)
 
 ___
 
-### goalCode
+### goal\_code
 
-• `Optional` **goalCode**: `string`
-
-#### Inherited from
-
-[PresentationBody](PresentationBody.md).[goalCode](PresentationBody.md#goalcode)
+• `Optional` **goal\_code**: `string`
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L65)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L14)
 
 ___
 
-### proofTypes
+### will\_confirm
 
-• **proofTypes**: [`ProofTypes`](ProofTypes.md)[]
-
-#### Defined in
-
-[src/edge-agent/protocols/types.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L83)
-
-___
-
-### willConfirm
-
-• `Optional` **willConfirm**: `boolean`
+• `Optional` **will\_confirm**: `boolean`
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L82)
+[src/edge-agent/protocols/proofPresentation/RequestPresentation.ts:18](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/proofPresentation/RequestPresentation.ts#L18)

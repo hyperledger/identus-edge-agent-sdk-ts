@@ -1,19 +1,16 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / PresentationBody
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / PresentationBody
 
 # Interface: PresentationBody
 
-## Hierarchy
-
-- **`PresentationBody`**
-
-  ↳ [`RequestPresentationBody`](RequestPresentationBody.md)
+Specification:
+https://github.com/decentralized-identity/waci-didcomm/blob/main/present_proof/present-proof-v3.md#presentation
 
 ## Table of contents
 
 ### Properties
 
 - [comment](PresentationBody.md#comment)
-- [goalCode](PresentationBody.md#goalcode)
+- [goal\_code](PresentationBody.md#goal_code)
 
 ## Properties
 
@@ -23,14 +20,14 @@
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:66](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L66)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/proofPresentation/Presentation.ts#L16)
 
 ___
 
-### goalCode
+### goal\_code
 
-• `Optional` **goalCode**: `string`
+• `Optional` **goal\_code**: `string`
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:65](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L65)
+[src/edge-agent/protocols/proofPresentation/Presentation.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/proofPresentation/Presentation.ts#L14)

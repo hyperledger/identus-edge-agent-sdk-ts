@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / OIDCAgent
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / OIDCAgent
 
 # Class: OIDCAgent
 
@@ -22,8 +22,8 @@ define the structure of a Startable entity
 - [apollo](OIDCAgent.md#apollo)
 - [castor](OIDCAgent.md#castor)
 - [connections](OIDCAgent.md#connections)
+- [plugins](OIDCAgent.md#plugins)
 - [pluto](OIDCAgent.md#pluto)
-- [pollux](OIDCAgent.md#pollux)
 - [seed](OIDCAgent.md#seed)
 - [state](OIDCAgent.md#state)
 
@@ -76,7 +76,7 @@ define the structure of a Startable entity
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:35](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L35)
+[src/edge-agent/oidc/Agent.ts:39](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L39)
 
 ## Properties
 
@@ -86,7 +86,7 @@ define the structure of a Startable entity
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:40](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L40)
+[src/edge-agent/oidc/Agent.ts:44](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L44)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:36](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L36)
+[src/edge-agent/oidc/Agent.ts:40](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L40)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:37](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L37)
+[src/edge-agent/oidc/Agent.ts:41](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L41)
 
 ___
 
@@ -116,7 +116,17 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:32](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L32)
+[src/edge-agent/oidc/Agent.ts:36](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L36)
+
+___
+
+### plugins
+
+• `Readonly` **plugins**: `PluginManager`
+
+#### Defined in
+
+[src/edge-agent/oidc/Agent.ts:37](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L37)
 
 ___
 
@@ -126,17 +136,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:38](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L38)
-
-___
-
-### pollux
-
-• `Readonly` **pollux**: [`Pollux`](Pollux.md)
-
-#### Defined in
-
-[src/edge-agent/oidc/Agent.ts:33](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L33)
+[src/edge-agent/oidc/Agent.ts:42](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L42)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:39](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L39)
+[src/edge-agent/oidc/Agent.ts:43](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L43)
 
 ___
 
@@ -162,7 +162,7 @@ current status of the entity
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/protocols/Startable.ts#L42)
+[src/domain/protocols/Startable.ts:42](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/Startable.ts#L42)
 
 ## Methods
 
@@ -186,7 +186,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L77)
+[src/edge-agent/oidc/Agent.ts:83](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L83)
 
 ___
 
@@ -210,7 +210,7 @@ implement with `protected` to keep hidden from class interface
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L82)
+[src/edge-agent/oidc/Agent.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L87)
 
 ___
 
@@ -333,7 +333,7 @@ manage the creation of an Authorization Request
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:241](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L241)
+[src/edge-agent/oidc/Agent.ts:250](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L250)
 
 ___
 
@@ -371,7 +371,7 @@ a connection with the relevant Issuer must have already been established
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:303](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L303)
+[src/edge-agent/oidc/Agent.ts:312](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L312)
 
 ___
 
@@ -397,7 +397,7 @@ Asyncronously create a new PrismDID
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:142](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L142)
+[src/edge-agent/oidc/Agent.ts:151](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L151)
 
 ___
 
@@ -420,7 +420,7 @@ try to retrieve Authorization Server Metadata from the give URI
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:224](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L224)
+[src/edge-agent/oidc/Agent.ts:233](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L233)
 
 ___
 
@@ -447,7 +447,7 @@ https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#name-c
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:212](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L212)
+[src/edge-agent/oidc/Agent.ts:221](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L221)
 
 ___
 
@@ -471,7 +471,7 @@ establishing a connection for future use
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:271](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L271)
+[src/edge-agent/oidc/Agent.ts:280](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L280)
 
 ___
 
@@ -491,7 +491,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:108](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L108)
+[src/edge-agent/oidc/Agent.ts:110](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L110)
 
 ___
 
@@ -514,7 +514,7 @@ returns the offer Typed as such
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:198](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L198)
+[src/edge-agent/oidc/Agent.ts:207](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L207)
 
 ___
 
@@ -559,7 +559,7 @@ steps
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:334](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L334)
+[src/edge-agent/oidc/Agent.ts:343](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L343)
 
 ___
 
@@ -606,13 +606,13 @@ steps
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:357](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L357)
+[src/edge-agent/oidc/Agent.ts:366](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L366)
 
 ___
 
 ### revealCredentialFields
 
-▸ **revealCredentialFields**(`credential`, `fields`, `linkSecret`): `Promise`\<`Record`\<`string`, `any`\>\>
+▸ **revealCredentialFields**(`credential`, `fields`, `linkSecret`): `Promise`\<`JsonObj`\<`any`\>\>
 
 This method can be used by holders in order to disclose the value of a Credential
 JWT are just encoded plainText
@@ -628,11 +628,11 @@ Anoncreds will really need to be disclosed as the fields are encoded.
 
 #### Returns
 
-`Promise`\<`Record`\<`string`, `any`\>\>
+`Promise`\<`JsonObj`\<`any`\>\>
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:120](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L120)
+[src/edge-agent/oidc/Agent.ts:128](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L128)
 
 ___
 
@@ -658,7 +658,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:90](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L90)
+[src/edge-agent/oidc/Agent.ts:93](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L93)
 
 ___
 
@@ -680,7 +680,7 @@ handle sending the given request and return the appropriate response
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:175](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L175)
+[src/edge-agent/oidc/Agent.ts:184](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L184)
 
 ▸ **send**(`request`): `Promise`\<`TokenResponse`\>
 
@@ -696,7 +696,7 @@ handle sending the given request and return the appropriate response
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:176](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L176)
+[src/edge-agent/oidc/Agent.ts:185](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L185)
 
 ___
 
@@ -721,7 +721,7 @@ Asyncronously sign a message with a DID
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:159](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L159)
+[src/edge-agent/oidc/Agent.ts:168](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L168)
 
 ___
 
@@ -743,7 +743,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/protocols/Startable.ts#L62)
+[src/domain/protocols/Startable.ts:62](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/Startable.ts#L62)
 
 ___
 
@@ -765,7 +765,7 @@ updates `state` according to lifecycle
 
 #### Defined in
 
-[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/protocols/Startable.ts#L72)
+[src/domain/protocols/Startable.ts:72](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/Startable.ts#L72)
 
 ___
 
@@ -781,7 +781,7 @@ Asyncronously get all verifiable credentials
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:129](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L129)
+[src/edge-agent/oidc/Agent.ts:138](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L138)
 
 ___
 
@@ -809,4 +809,4 @@ allowing default instantiation, omitting all but the absolute necessary paramete
 
 #### Defined in
 
-[src/edge-agent/oidc/Agent.ts:60](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/oidc/Agent.ts#L60)
+[src/edge-agent/oidc/Agent.ts:66](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/oidc/Agent.ts#L66)

@@ -394,7 +394,7 @@ describe("Plugins - DIF", () => {
       await expect(result).rejects.toThrow('Verification failed for credential (eyJ0eXAiOi...): reason -> Invalid Claim: Expected the $.vc.credentialSubject.firstname field to be "not hola" but got "hola"');
     });
 
-    // for use with PresentationFrame feature [https://github.com/hyperledger/identus-edge-agent-sdk-ts/issues/362]
+    // for use with PresentationFrame feature [https://github.com/hyperledger-identus/sdk-ts/issues/362]
     // test("Should Verify false when the verifier asks for a field that was not disclosed by the user", async () => {
     /*
       //At the presentation level the holder chooses which fields it wants to disclose to verifier

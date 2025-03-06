@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Protocols](Domain.Protocols.md) / Startable
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / [Domain](Domain.md) / [Protocols](Domain.Protocols.md) / Startable
 
 # Namespace: Startable
 

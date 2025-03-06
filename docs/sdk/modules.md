@@ -1,6 +1,6 @@
-[@hyperledger/identus-edge-agent-sdk](README.md) / Exports
+[@hyperledger/identus-sdk](README.md) / Exports
 
-# @hyperledger/identus-edge-agent-sdk
+# @hyperledger/identus-sdk
 
 ## Table of contents
 
@@ -43,7 +43,6 @@
 - [PeerDID](classes/PeerDID-1.md)
 - [PeerDIDService](classes/PeerDIDService.md)
 - [Pluto](classes/Pluto-1.md)
-- [Pollux](classes/Pollux.md)
 - [Presentation](classes/Presentation.md)
 - [ProposePresentation](classes/ProposePresentation.md)
 - [PublicMediatorStore](classes/PublicMediatorStore.md)
@@ -56,15 +55,11 @@
 - [AgentMessageEvents](interfaces/AgentMessageEvents.md)
 - [BasicMessageBody](interfaces/BasicMessageBody.md)
 - [ConnectionsManagerInterface](interfaces/ConnectionsManagerInterface.md)
-- [CredentialBody](interfaces/CredentialBody.md)
 - [DIDCommProtocol](interfaces/DIDCommProtocol.md)
 - [HandshakeRequestBody](interfaces/HandshakeRequestBody.md)
-- [IssueCredentialBody](interfaces/IssueCredentialBody.md)
 - [MediationGrantBody](interfaces/MediationGrantBody.md)
 - [MediationKeysUpdateListBody](interfaces/MediationKeysUpdateListBody.md)
 - [MediatorStore](interfaces/MediatorStore.md)
-- [OfferCredentialBody](interfaces/OfferCredentialBody.md)
-- [ParsedCredentialFormat](interfaces/ParsedCredentialFormat.md)
 - [PeerDIDEncoded](interfaces/PeerDIDEncoded.md)
 - [PickupAttachment](interfaces/PickupAttachment.md)
 - [PickupReceivedBody](interfaces/PickupReceivedBody.md)
@@ -73,8 +68,7 @@
 - [PrismOnboardingInvitationBody](interfaces/PrismOnboardingInvitationBody.md)
 - [PrismRevocationBody](interfaces/PrismRevocationBody.md)
 - [ProblemReportBody](interfaces/ProblemReportBody.md)
-- [ProofTypes](interfaces/ProofTypes.md)
-- [ProposeCredentialBody](interfaces/ProposeCredentialBody.md)
+- [ProposePresentationBody](interfaces/ProposePresentationBody.md)
 - [RequestPresentationBody](interfaces/RequestPresentationBody.md)
 
 ### Type Aliases
@@ -84,18 +78,17 @@
 - [EventCallback](modules.md#eventcallback)
 - [MessageEventArg](modules.md#messageeventarg)
 - [OutOfBandInvitationBody](modules.md#outofbandinvitationbody)
-- [ProposePresentationBody](modules.md#proposepresentationbody)
 - [RevokeEventArg](modules.md#revokeeventarg)
 
 ### Variables
 
 - [AnonCredsRecoveryId](modules.md#anoncredsrecoveryid)
 - [JWTVerifiableCredentialRecoveryId](modules.md#jwtverifiablecredentialrecoveryid)
+- [Plugins](modules.md#plugins)
 - [SDJWTVerifiableCredentialRecoveryId](modules.md#sdjwtverifiablecredentialrecoveryid)
 
 ### Functions
 
-- [isPresentationDefinitionRequestType](modules.md#ispresentationdefinitionrequesttype)
 - [makeCollections](modules.md#makecollections)
 
 ## References
@@ -112,7 +105,7 @@ Re-exports [KeyProperties](enums/Domain.KeyProperties.md)
 
 #### Defined in
 
-[src/pluto/rxdb/collections.ts:17](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/rxdb/collections.ts#L17)
+[src/pluto/rxdb/collections.ts:17](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/collections.ts#L17)
 
 ___
 
@@ -122,7 +115,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:49](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L49)
+[src/edge-agent/types/index.ts:50](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L50)
 
 ___
 
@@ -146,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:51](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L51)
+[src/edge-agent/types/index.ts:52](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L52)
 
 ___
 
@@ -156,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:48](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L48)
+[src/edge-agent/types/index.ts:49](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L49)
 
 ___
 
@@ -166,17 +159,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/protocols/types.ts:101](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L101)
-
-___
-
-### ProposePresentationBody
-
-Ƭ **ProposePresentationBody**: [`RequestPresentationBody`](interfaces/RequestPresentationBody.md)
-
-#### Defined in
-
-[src/edge-agent/protocols/types.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/protocols/types.ts#L86)
+[src/edge-agent/protocols/types.ts:54](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/protocols/types.ts#L54)
 
 ___
 
@@ -186,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:50](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L50)
+[src/edge-agent/types/index.ts:51](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L51)
 
 ## Variables
 
@@ -196,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
+[src/pollux/models/AnonCredsVerifiableCredential.ts:21](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/AnonCredsVerifiableCredential.ts#L21)
 
 ___
 
@@ -206,7 +189,23 @@ ___
 
 #### Defined in
 
-[src/pollux/models/JWTVerifiableCredential.ts:22](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/JWTVerifiableCredential.ts#L22)
+[src/pollux/models/JWTVerifiableCredential.ts:16](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/JWTVerifiableCredential.ts#L16)
+
+___
+
+### Plugins
+
+• `Const` **Plugins**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `Anoncreds` | `Plugin` |
+
+#### Defined in
+
+[src/index.ts:56](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/index.ts#L56)
 
 ___
 
@@ -216,36 +215,9 @@ ___
 
 #### Defined in
 
-[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
+[src/pollux/models/SDJWTVerifiableCredential.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pollux/models/SDJWTVerifiableCredential.ts#L19)
 
 ## Functions
-
-### isPresentationDefinitionRequestType
-
-▸ **isPresentationDefinitionRequestType**\<`Type`\>(`request`, `type`): request is PresentationDefinitionRequest\<Type\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `Type` | extends [`CredentialType`](enums/Domain.CredentialType.md) = [`JWT`](enums/Domain.CredentialType.md#jwt) |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `request` | [`PresentationDefinitionRequest`](modules/Domain.md#presentationdefinitionrequest)\<`Type`\> |
-| `type` | `Type` |
-
-#### Returns
-
-request is PresentationDefinitionRequest\<Type\>
-
-#### Defined in
-
-[src/pollux/utils/claims.ts:88](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pollux/utils/claims.ts#L88)
-
-___
 
 ### makeCollections
 
@@ -263,4 +235,4 @@ ___
 
 #### Defined in
 
-[src/pluto/rxdb/collections.ts:19](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/pluto/rxdb/collections.ts#L19)
+[src/pluto/rxdb/collections.ts:19](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/pluto/rxdb/collections.ts#L19)

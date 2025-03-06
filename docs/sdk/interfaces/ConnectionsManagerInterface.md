@@ -1,10 +1,6 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / ConnectionsManagerInterface
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / ConnectionsManagerInterface
 
 # Interface: ConnectionsManagerInterface
-
-## Implemented by
-
-- [`ConnectionsManager`](../classes/ConnectionsManager.md)
 
 ## Table of contents
 
@@ -37,7 +33,7 @@
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:81](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L81)
+[src/edge-agent/types/index.ts:82](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L82)
 
 ___
 
@@ -47,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:75](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L75)
+[src/edge-agent/types/index.ts:76](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L76)
 
 ___
 
@@ -57,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:78](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L78)
+[src/edge-agent/types/index.ts:79](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L79)
 
 ___
 
@@ -67,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:76](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L76)
+[src/edge-agent/types/index.ts:77](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L77)
 
 ___
 
@@ -77,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:79](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L79)
+[src/edge-agent/types/index.ts:80](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L80)
 
 ___
 
@@ -87,7 +83,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:77](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L77)
+[src/edge-agent/types/index.ts:78](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L78)
 
 ___
 
@@ -97,7 +93,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:82](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L82)
+[src/edge-agent/types/index.ts:83](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L83)
 
 ## Methods
 
@@ -117,7 +113,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:84](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L84)
+[src/edge-agent/types/index.ts:85](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L85)
 
 ___
 
@@ -137,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:86](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L86)
+[src/edge-agent/types/index.ts:87](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L87)
 
 ___
 
@@ -157,7 +153,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:87](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L87)
+[src/edge-agent/types/index.ts:88](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L88)
 
 ___
 
@@ -177,7 +173,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:93](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L93)
+[src/edge-agent/types/index.ts:94](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L94)
 
 ___
 
@@ -197,7 +193,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:85](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L85)
+[src/edge-agent/types/index.ts:86](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L86)
 
 ___
 
@@ -217,7 +213,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:91](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L91)
+[src/edge-agent/types/index.ts:92](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L92)
 
 ___
 
@@ -231,7 +227,7 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:92](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L92)
+[src/edge-agent/types/index.ts:93](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L93)
 
 ___
 
@@ -245,4 +241,4 @@ ___
 
 #### Defined in
 
-[src/edge-agent/types/index.ts:83](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/edge-agent/types/index.ts#L83)
+[src/edge-agent/types/index.ts:84](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/edge-agent/types/index.ts#L84)

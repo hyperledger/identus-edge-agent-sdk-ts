@@ -1,4 +1,4 @@
-[@hyperledger/identus-edge-agent-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Protocols](../modules/Domain.Protocols.md) / KeyRestoration
+[@hyperledger/identus-sdk](../README.md) / [Exports](../modules.md) / [Domain](../modules/Domain.md) / [Protocols](../modules/Domain.Protocols.md) / KeyRestoration
 
 # Interface: KeyRestoration
 
@@ -43,7 +43,7 @@ if the restoration process fails
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:14](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/protocols/KeyRestoration.ts#L14)
+[src/domain/protocols/KeyRestoration.ts:14](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/KeyRestoration.ts#L14)
 
 ___
 
@@ -71,4 +71,4 @@ if the restoration process fails, this method throws an error
 
 #### Defined in
 
-[src/domain/protocols/KeyRestoration.ts:23](https://github.com/hyperledger/identus-edge-agent-sdk-ts/blob/b1a74ed6fd4a9050ce3bb69d50435414a88a059a/src/domain/protocols/KeyRestoration.ts#L23)
+[src/domain/protocols/KeyRestoration.ts:23](https://github.com/hyperledger-identus/sdk-ts/blob/966e04ee4b9d4ba9d1e404c4d3d062abcf854530/src/domain/protocols/KeyRestoration.ts#L23)
