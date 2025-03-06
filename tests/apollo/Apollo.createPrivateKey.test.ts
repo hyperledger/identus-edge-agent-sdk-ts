@@ -20,18 +20,8 @@ describe("Apollo", () => {
     const seedHex = "947877896c61a5c64f266adbebbc69a2a01f1a2cfbf72c08a11c693d0429ccded34bdc0c28b5be910a5095b97e7bc6e3e209527ce8e75f9964d25cd6f6ad63e0";
 
     describe("Secp256k1", () => {
-      it("KeyProperties.type - missing - throws", () => {
-        const sut = () => apollo.createPrivateKey({
-          [KeyProperties.curve]: Curve.SECP256K1,
-          [KeyProperties.seed]: seedHex,
-        });
-
-        expect(sut).to.throw(ApolloError.InvalidKeyType);
-      });
-
       it("KeyProperties.curve - missing - throws", () => {
         const sut = () => apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.seed]: seedHex,
         });
 
@@ -40,7 +30,6 @@ describe("Apollo", () => {
 
       it("KeyProperties.seed - missing - throws", () => {
         const sut = () => apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
         });
 
@@ -50,7 +39,6 @@ describe("Apollo", () => {
 
       it("KeyProperties.seed - invalid (non hex) - throws", () => {
         const sut = () => apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.seed]: "notAHexSeed",
         });
@@ -62,7 +50,6 @@ describe("Apollo", () => {
 
       it("KeyProperties.derivationPath - invalid - throws", () => {
         const sut = () => apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.seed]: seedHex,
           [KeyProperties.derivationPath]: "invalid"
@@ -75,7 +62,6 @@ describe("Apollo", () => {
       Fixtures.Keys.Derivations.forEach(fixture => {
         test('key.derive is equal to apollo.createPrivateKey with derivationPath', function () {
           const master = apollo.createPrivateKey({
-            [KeyProperties.type]: KeyTypes.EC,
             [KeyProperties.curve]: Curve.SECP256K1,
             [KeyProperties.seed]: fixture.seed,
           });
@@ -89,7 +75,6 @@ describe("Apollo", () => {
             : null;
 
           const derived = apollo.createPrivateKey({
-            [KeyProperties.type]: KeyTypes.EC,
             [KeyProperties.curve]: Curve.SECP256K1,
             [KeyProperties.seed]: fixture.seed,
             [KeyProperties.derivationPath]: fixture.path
@@ -103,7 +88,6 @@ describe("Apollo", () => {
 
       it("KeyProperties.derivationPath - `m/0'/0'/0'` - returns key", () => {
         const result = apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.seed]: seedHex,
           [KeyProperties.derivationPath]: `m/0'/0'/0'`
@@ -121,7 +105,6 @@ describe("Apollo", () => {
 
       it("KeyProperties.derivationPath - `m/1'/0'/0'` - returns key", () => {
         const result = apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.seed]: seedHex,
           [KeyProperties.derivationPath]: `m/1'/0'/0'`
@@ -141,7 +124,6 @@ describe("Apollo", () => {
         const derivationPath = DerivationPath.fromPath(`m/2'/0'/0'`, [DeprecatedDerivationPath, PrismDerivationPath]);
 
         const result = apollo.createPrivateKey({
-          [KeyProperties.type]: KeyTypes.EC,
           [KeyProperties.curve]: Curve.SECP256K1,
           [KeyProperties.seed]: seedHex,
           [KeyProperties.derivationPath]: derivationPath.toString()

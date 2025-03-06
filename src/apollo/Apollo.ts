@@ -6,7 +6,6 @@ import {
   getKeyCurveByNameAndIndex,
   ApolloError,
   Curve,
-  KeyTypes,
   KeyProperties,
   MnemonicWordList,
   PrivateKey,
@@ -29,7 +28,6 @@ import { X25519PublicKey } from "./utils/X25519PublicKey";
 import { isEmpty, notEmptyString } from "../utils";
 import ApolloPKG from "@hyperledger/identus-apollo";
 import { PrismDerivationPath } from "../domain/models/derivation/schemas/PrismDerivation";
-
 const ApolloSDK = ApolloPKG.org.hyperledger.identus.apollo;
 const Mnemonic = ApolloSDK.derivation.Mnemonic.Companion;
 const HDKey = ApolloSDK.derivation.HDKey;
@@ -44,7 +42,6 @@ const BigIntegerWrapper = ApolloSDK.derivation.BigIntegerWrapper;
  *
  * ```ts
  *  const privateKey = apollo.createPrivateKey({
- *    type: KeyTypes.EC,
  *    curve: Curve.ED25519,
  *  });
  * ```
@@ -114,7 +111,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   static Secp256k1PrivateKey = Secp256k1PrivateKey;
   static Ed25519PrivateKey = Ed25519PrivateKey;
   static X25519PrivateKey = X25519PrivateKey;
-
 
   /**
    * Creates a random set of mnemonic phrases that can be used as a seed for generating a private key.
@@ -197,7 +193,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   *
   * ```ts
   *  const privateKey = apollo.createPublicKey({
-  *    type: KeyTypes.EC,
   *    curve: Curve.SECP256K1,
   *    raw: Buffer.from(new Arra(64).fill(1)),
   *  });
@@ -209,12 +204,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   createPublicKey(parameters: {
     [name: KeyProperties | string]: any;
   }): PublicKey {
-    const keyType = parameters[KeyProperties.type];
     const keyCurve = parameters[KeyProperties.curve];
-
-    if (isEmpty(keyType)) {
-      throw new ApolloError.InvalidKeyType();
-    }
 
     if (isEmpty(keyCurve)) {
       throw new ApolloError.InvalidKeyCurve();
@@ -223,42 +213,39 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     const { curve } = getKeyCurveByNameAndIndex(keyCurve);
     const keyData = parameters[KeyProperties.rawKey];
 
-    if (keyType === KeyTypes.EC) {
-      if (curve === Curve.ED25519) {
-        if (keyData) {
-          return new Ed25519PublicKey(keyData);
-        }
-
-        throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey);
+    if (curve === Curve.ED25519) {
+      if (keyData) {
+        return new Ed25519PublicKey(keyData);
       }
 
-      if (curve === Curve.SECP256K1) {
-        if (keyData) {
-          return new Secp256k1PublicKey(keyData);
-        } else {
-          const xData = parameters[KeyProperties.curvePointX];
-          const yData = parameters[KeyProperties.curvePointY];
-
-          if (xData && yData) {
-            return Secp256k1PublicKey.secp256k1FromByteCoordinates(xData, yData);
-          }
-        }
-
-        throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey, KeyProperties.curvePointX, KeyProperties.curvePointY);
-      }
+      throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey);
     }
 
-    if (keyType === KeyTypes.Curve25519) {
-      if (curve === Curve.X25519) {
-        if (keyData) {
-          return new X25519PublicKey(keyData);
-        }
+    if (curve === Curve.SECP256K1) {
+      if (keyData) {
+        return new Secp256k1PublicKey(keyData);
+      } else {
+        const xData = parameters[KeyProperties.curvePointX];
+        const yData = parameters[KeyProperties.curvePointY];
 
-        throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey);
+        if (xData && yData) {
+          return Secp256k1PublicKey.secp256k1FromByteCoordinates(xData, yData);
+        }
       }
+
+      throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey, KeyProperties.curvePointX, KeyProperties.curvePointY);
     }
 
-    throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey);
+
+    if (curve === Curve.X25519) {
+      if (keyData) {
+        return new X25519PublicKey(keyData);
+      }
+
+      throw new ApolloError.MissingKeyParameters(KeyProperties.rawKey);
+    }
+
+    throw new ApolloError.InvalidKeyCurve();
   }
 
   /**
@@ -270,7 +257,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
    *
    * ```ts
    *  const privateKey = apollo.createPrivateKey({
-   *    type: KeyTypes.EC,
    *    curve: Curve.SECP256K1,
    *    seed: Buffer.from(seed.value).toString("hex"),
    *  });
@@ -282,7 +268,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
    *
    * ```ts
    *  const privateKey = apollo.createPrivateKey({
-   *    type: KeyTypes.EC,
    *    curve: Curve.SECP256K1,
    *    seed: Buffer.from(seed.value).toString("hex"),
    *    derivationPath: "m/0'/0'/0'"
@@ -297,7 +282,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
    *
    * ```ts
    *  const privateKey = apollo.createPrivateKey({
-   *    type: KeyTypes.EC,
    *    curve: Curve.ED25519,
    *  });
    * ```
@@ -310,7 +294,6 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
    *
    * ```ts
    *  const privateKey = apollo.createPrivateKey({
-   *    type: KeyTypes.Curve25519,
    *    curve: Curve.X25519,
    *  });
    * ```
@@ -321,12 +304,7 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
   createPrivateKey(parameters: {
     [name: KeyProperties | string]: any;
   }): PrivateKey {
-    const keyType = parameters[KeyProperties.type];
     const keyCurve = parameters[KeyProperties.curve];
-
-    if (isEmpty(keyType)) {
-      throw new ApolloError.InvalidKeyType();
-    }
 
     if (isEmpty(keyCurve)) {
       throw new ApolloError.InvalidKeyCurve();
@@ -335,69 +313,20 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
     const { curve } = getKeyCurveByNameAndIndex(parameters[KeyProperties.curve]);
     const keyData = parameters[KeyProperties.rawKey];
 
-    if (keyType === KeyTypes.EC) {
-      if (curve === Curve.ED25519) {
-        if (keyData) {
-          return new Ed25519PrivateKey(keyData);
-        }
-
-        const seedHex = parameters[KeyProperties.seed];
-        if (notEmptyString(seedHex)) {
-          const derivationIndex = parameters[KeyProperties.index] ?? "0";
-          const derivationParam = parameters[KeyProperties.derivationPath];
-          const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString();
-          const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
-          const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed);
-          const baseKey = new Ed25519PrivateKey(Uint8Array.from(hdKey.privateKey));
-
-          baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
-          baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
-          baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
-
-          if (derivationParam) {
-            const privateKey = baseKey.derive(defaultPath);
-            return privateKey;
-          }
-
-          return baseKey;
-        }
-
-        const keyPair = Ed25519KeyPair.generateKeyPair();
-        return keyPair.privateKey;
+    if (curve === Curve.ED25519) {
+      if (keyData) {
+        return new Ed25519PrivateKey(keyData);
       }
 
-      if (curve === Curve.SECP256K1) {
-        if (keyData) {
-          return new Secp256k1PrivateKey(keyData);
-        }
-
-        const seedHex = parameters[KeyProperties.seed];
-        if (isEmpty(seedHex)) {
-          throw new ApolloError.MissingKeyParameters(KeyProperties.seed);
-        }
-
-        const seed = Buffer.from(seedHex, "hex");
+      const seedHex = parameters[KeyProperties.seed];
+      if (notEmptyString(seedHex)) {
         const derivationIndex = parameters[KeyProperties.index] ?? "0";
         const derivationParam = parameters[KeyProperties.derivationPath];
-        const defaultPath: string = derivationParam ?? PrismDerivationPath.init(
-          derivationIndex
-        ).toString();
+        const defaultPath: string = derivationParam ?? PrismDerivationPath.init(derivationIndex).toString();
+        const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
+        const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed);
+        const baseKey = new Ed25519PrivateKey(Uint8Array.from(hdKey.privateKey));
 
-        const hdKey = HDKey.InitFromSeed(
-          Int8Array.from(seed),
-          defaultPath.split("/").slice(1).length,
-          BigIntegerWrapper.initFromInt(0)
-        );
-
-        if (hdKey.privateKey == null) {
-          throw new ApolloError.ApolloLibError("Key generated incorrectly: missing privateKey");
-        }
-
-        if (hdKey.chainCode == null) {
-          throw new ApolloError.ApolloLibError("Key generated incorrectly: missing chainCode");
-        }
-
-        const baseKey = new Secp256k1PrivateKey(Uint8Array.from(hdKey.privateKey));
         baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
         baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
         baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
@@ -409,37 +338,82 @@ export default class Apollo implements ApolloInterface, KeyRestoration {
 
         return baseKey;
       }
+
+      const keyPair = Ed25519KeyPair.generateKeyPair();
+      return keyPair.privateKey;
     }
 
-    if (keyType === KeyTypes.Curve25519) {
-      if (curve === Curve.X25519) {
-        if (keyData) {
-          return new X25519PrivateKey(keyData);
-        }
-
-        const seedHex = parameters[KeyProperties.seed];
-        if (notEmptyString(seedHex)) {
-          const derivationIndex = parameters[KeyProperties.index] ?? "0";
-          const derivationParam: string = parameters[KeyProperties.derivationPath] ?? PrismDerivationPath.init(derivationIndex).toString();
-
-          const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
-          const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed).derive(derivationParam);
-          const edKey = Ed25519PrivateKey.from.Buffer(Buffer.from(hdKey.privateKey));
-          const xKey = edKey.x25519();
-
-          xKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(hdKey.chainCode).toString("hex"));
-          xKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationParam).toString("hex"));
-          xKey.keySpecification.set(KeyProperties.index, derivationIndex);
-
-          return xKey;
-        }
-
-        const keyPair = X25519KeyPair.generateKeyPair();
-        return keyPair.privateKey;
+    if (curve === Curve.SECP256K1) {
+      if (keyData) {
+        return new Secp256k1PrivateKey(keyData);
       }
+
+      const seedHex = parameters[KeyProperties.seed];
+      if (isEmpty(seedHex)) {
+        throw new ApolloError.MissingKeyParameters(KeyProperties.seed);
+      }
+
+      const seed = Buffer.from(seedHex, "hex");
+      const derivationIndex = parameters[KeyProperties.index] ?? "0";
+      const derivationParam = parameters[KeyProperties.derivationPath];
+      const defaultPath: string = derivationParam ?? PrismDerivationPath.init(
+        derivationIndex
+      ).toString();
+
+      const hdKey = HDKey.InitFromSeed(
+        Int8Array.from(seed),
+        defaultPath.split("/").slice(1).length,
+        BigIntegerWrapper.initFromInt(0)
+      );
+
+      if (hdKey.privateKey == null) {
+        throw new ApolloError.ApolloLibError("Key generated incorrectly: missing privateKey");
+      }
+
+      if (hdKey.chainCode == null) {
+        throw new ApolloError.ApolloLibError("Key generated incorrectly: missing chainCode");
+      }
+
+      const baseKey = new Secp256k1PrivateKey(Uint8Array.from(hdKey.privateKey));
+      baseKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(Uint8Array.from(hdKey.chainCode)).toString("hex"));
+      baseKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(defaultPath).toString("hex"));
+      baseKey.keySpecification.set(KeyProperties.index, derivationIndex);
+
+      if (derivationParam) {
+        const privateKey = baseKey.derive(defaultPath);
+        return privateKey;
+      }
+
+      return baseKey;
     }
 
-    throw new ApolloError.InvalidKeyType(keyType);
+    if (curve === Curve.X25519) {
+      if (keyData) {
+        return new X25519PrivateKey(keyData);
+      }
+
+      const seedHex = parameters[KeyProperties.seed];
+      if (notEmptyString(seedHex)) {
+        const derivationIndex = parameters[KeyProperties.index] ?? "0";
+        const derivationParam: string = parameters[KeyProperties.derivationPath] ?? PrismDerivationPath.init(derivationIndex).toString();
+
+        const seed = Int8Array.from(Buffer.from(seedHex, "hex"));
+        const hdKey = ApolloSDK.derivation.EdHDKey.Companion.initFromSeed(seed).derive(derivationParam);
+        const edKey = Ed25519PrivateKey.from.Buffer(Buffer.from(hdKey.privateKey));
+        const xKey = edKey.x25519();
+
+        xKey.keySpecification.set(KeyProperties.chainCode, Buffer.from(hdKey.chainCode).toString("hex"));
+        xKey.keySpecification.set(KeyProperties.derivationPath, Buffer.from(derivationParam).toString("hex"));
+        xKey.keySpecification.set(KeyProperties.index, derivationIndex);
+
+        return xKey;
+      }
+
+      const keyPair = X25519KeyPair.generateKeyPair();
+      return keyPair.privateKey;
+    }
+
+    throw new ApolloError.InvalidKeyCurve();
   }
 
   restorePrivateKey(key: StorableKey): PrivateKey {

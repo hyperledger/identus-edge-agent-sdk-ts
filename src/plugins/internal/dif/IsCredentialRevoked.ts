@@ -151,7 +151,6 @@ export class IsCredentialRevoked extends Plugins.Task<Args> {
         }
         const { x, y } = decodedVerificationMethod.publicKeyJwk;
         const pk = ctx.Apollo.createPublicKey({
-          [Domain.KeyProperties.type]: Domain.KeyTypes.EC,
           [Domain.KeyProperties.curve]: Domain.Curve.SECP256K1,
           [Domain.KeyProperties.curvePointX]: Buffer.from(base64url.baseDecode(x)),
           [Domain.KeyProperties.curvePointY]: Buffer.from(base64url.baseDecode(y))
